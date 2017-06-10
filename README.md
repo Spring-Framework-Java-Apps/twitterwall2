@@ -1,6 +1,9 @@
 # twitterwall2
 Twitterwall with spring:boot for heroku
 
+#Spring-Boot:
+mvn spring-boot:run
+
 #Devlopment Docu
 - https://devcenter.heroku.com/articles/deploying-spring-boot-apps-to-heroku
 - https://blog.codecentric.de/2015/10/spring-boot-anwendungen-bei-heroku-deployen/
