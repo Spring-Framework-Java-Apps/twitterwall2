@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm;
+package org.woehlke.twitterwall.oodm.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyUrlEntity extends MyTwitterObject implements Serializable {
+public class MyTickerSymbolEntity extends MyTwitterObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,24 +20,21 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
     private Long id;
 
     @Column
-    private String display;
-
-    @Column
-    private String expanded;
+    private String tickerSymbol;
 
     @Column
     private String url;
 
+    @Column
     private int[] indices;
 
-    public MyUrlEntity(String display, String expanded, String url, int[] indices) {
-        this.display = display;
-        this.expanded = expanded;
+    public MyTickerSymbolEntity(String tickerSymbol, String url, int[] indices) {
+        this.tickerSymbol = tickerSymbol;
         this.url = url;
         this.indices = indices;
     }
 
-    private MyUrlEntity() {
+    private MyTickerSymbolEntity() {
     }
 
     public static long getSerialVersionUID() {
@@ -52,20 +49,12 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
         this.id = id;
     }
 
-    public String getDisplay() {
-        return display;
+    public String getTickerSymbol() {
+        return tickerSymbol;
     }
 
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    public String getExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(String expanded) {
-        this.expanded = expanded;
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
 
     public String getUrl() {
@@ -87,20 +76,20 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MyUrlEntity)) return false;
+        if (!(o instanceof MyTickerSymbolEntity)) return false;
 
-        MyUrlEntity that = (MyUrlEntity) o;
+        MyTickerSymbolEntity that = (MyTickerSymbolEntity) o;
 
-        if (display != null ? !display.equals(that.display) : that.display != null) return false;
-        if (expanded != null ? !expanded.equals(that.expanded) : that.expanded != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (tickerSymbol != null ? !tickerSymbol.equals(that.tickerSymbol) : that.tickerSymbol != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         return Arrays.equals(indices, that.indices);
     }
 
     @Override
     public int hashCode() {
-        int result = display != null ? display.hashCode() : 0;
-        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (tickerSymbol != null ? tickerSymbol.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(indices);
         return result;

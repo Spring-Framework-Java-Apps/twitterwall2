@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm;
+package org.woehlke.twitterwall.oodm.entities;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 

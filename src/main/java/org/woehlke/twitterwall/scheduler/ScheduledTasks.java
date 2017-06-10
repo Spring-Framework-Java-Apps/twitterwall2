@@ -2,12 +2,15 @@ package org.woehlke.twitterwall.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
+import org.woehlke.twitterwall.oodm.service.MyTweetService;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.List;
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
+    private final MyTweetService myTweetService;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -39,6 +44,11 @@ public class ScheduledTasks {
 
     @Value("${twitter.searchQuery}")
     private String searchQuery;
+
+    @Autowired
+    public ScheduledTasks(MyTweetService myTweetService) {
+        this.myTweetService = myTweetService;
+    }
 
     @Scheduled(fixedRate = 6000000)
     public void reportCurrentTime() {
