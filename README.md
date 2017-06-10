@@ -1,9 +1,6 @@
 # twitterwall2
 Twitterwall with spring:boot for heroku
 
-#Spring-Boot:
-mvn spring-boot:run
-
 #Devlopment Docu
 - https://devcenter.heroku.com/articles/deploying-spring-boot-apps-to-heroku
 - https://blog.codecentric.de/2015/10/spring-boot-anwendungen-bei-heroku-deployen/
@@ -14,5 +11,10 @@ mvn spring-boot:run
 - https://www.frank-rahn.de/spring-boot-webanwendung-die-ersten-schritte-tutorial/
 - https://github.com/frank-rahn/microservices
 - http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
+
+
+#Testing on Localhost
+- export JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/postgres?user=postgres
+- mvn spring-boot:run
 
 
