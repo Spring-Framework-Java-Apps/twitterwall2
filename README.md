@@ -9,4 +9,7 @@ Twitterwall with spring:boot for heroku
 - http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/#using-boot
 - https://spring.io/guides/gs/spring-boot/
 - https://www.frank-rahn.de/spring-boot-webanwendung-die-ersten-schritte-tutorial/
+- https://github.com/frank-rahn/microservices
+- http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
+
 
