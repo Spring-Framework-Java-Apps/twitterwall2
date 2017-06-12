@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by tw on 10.06.17.
@@ -17,29 +17,29 @@ public class MyEntities extends MyTwitterObject implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @OneToMany
-    private List<MyUrlEntity> urls = new LinkedList<MyUrlEntity>();
+    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    private Set<MyUrlEntity> urls = new LinkedHashSet<MyUrlEntity>();
 
-    @OneToMany
-    private List<MyHashTagEntity> tags = new LinkedList<MyHashTagEntity>();
+    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    private Set<MyHashTagEntity> tags = new LinkedHashSet<MyHashTagEntity>();
 
-    @OneToMany
-    private List<MyMentionEntity> mentions = new LinkedList<MyMentionEntity>();
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    private Set<MyMentionEntity> mentions = new LinkedHashSet<>();
 
-    @OneToMany
-    private List<MyMediaEntity> media = new LinkedList<MyMediaEntity>();
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    private Set<MyMediaEntity> media = new LinkedHashSet<MyMediaEntity>();
 
-    @OneToMany
-    private List<MyTickerSymbolEntity> tickerSymbols = new LinkedList<MyTickerSymbolEntity>();
+    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    private Set<MyTickerSymbolEntity> tickerSymbols = new LinkedHashSet<MyTickerSymbolEntity>();
 
-    public MyEntities(List<MyUrlEntity> urls, List<MyHashTagEntity> tags, List<MyMentionEntity> mentions, List<MyMediaEntity> media) {
+    public MyEntities(Set<MyUrlEntity> urls, Set<MyHashTagEntity> tags, Set<MyMentionEntity> mentions, Set<MyMediaEntity> media) {
         this.urls = urls;
         this.tags = tags;
-        this.mentions = mentions;
-        this.media = media;
+        this.mentions=mentions;
+        this.media=media;
     }
 
-    public MyEntities(List<MyUrlEntity> urls, List<MyHashTagEntity> tags, List<MyMentionEntity> mentions, List<MyMediaEntity> media, List<MyTickerSymbolEntity> tickerSymbols) {
+    public MyEntities(Set<MyUrlEntity> urls, Set<MyHashTagEntity> tags, Set<MyMentionEntity> mentions, Set<MyMediaEntity> media, Set<MyTickerSymbolEntity> tickerSymbols) {
         this(urls, tags, mentions, media);
         this.tickerSymbols = tickerSymbols;
     }
@@ -55,43 +55,43 @@ public class MyEntities extends MyTwitterObject implements Serializable {
         this.id = id;
     }
 
-    public List<MyUrlEntity> getUrls() {
+    public Set<MyUrlEntity> getUrls() {
         return urls;
     }
 
-    public void setUrls(List<MyUrlEntity> urls) {
+    public void setUrls(Set<MyUrlEntity> urls) {
         this.urls = urls;
     }
 
-    public List<MyHashTagEntity> getTags() {
+    public Set<MyHashTagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(List<MyHashTagEntity> tags) {
+    public void setTags(Set<MyHashTagEntity> tags) {
         this.tags = tags;
     }
 
-    public List<MyMentionEntity> getMentions() {
+    public Set<MyMentionEntity> getMentions() {
         return mentions;
     }
 
-    public void setMentions(List<MyMentionEntity> mentions) {
+    public void setMentions(Set<MyMentionEntity> mentions) {
         this.mentions = mentions;
     }
 
-    public List<MyMediaEntity> getMedia() {
+    public Set<MyMediaEntity> getMedia() {
         return media;
     }
 
-    public void setMedia(List<MyMediaEntity> media) {
+    public void setMedia(Set<MyMediaEntity> media) {
         this.media = media;
     }
 
-    public List<MyTickerSymbolEntity> getTickerSymbols() {
+    public Set<MyTickerSymbolEntity> getTickerSymbols() {
         return tickerSymbols;
     }
 
-    public void setTickerSymbols(List<MyTickerSymbolEntity> tickerSymbols) {
+    public void setTickerSymbols(Set<MyTickerSymbolEntity> tickerSymbols) {
         this.tickerSymbols = tickerSymbols;
     }
 

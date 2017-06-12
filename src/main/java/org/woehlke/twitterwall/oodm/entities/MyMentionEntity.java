@@ -19,7 +19,7 @@ public class MyMentionEntity extends MyTwitterObject implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(unique=true,nullable=false)
     private long idTwitter;
 
     @Column

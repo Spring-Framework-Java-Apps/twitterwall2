@@ -28,6 +28,7 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
     @Column
     private String url;
 
+    @Column
     private int[] indices;
 
     public MyUrlEntity(String display, String expanded, String url, int[] indices) {

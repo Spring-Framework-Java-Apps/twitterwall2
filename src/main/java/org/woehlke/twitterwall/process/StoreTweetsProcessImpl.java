@@ -3,15 +3,12 @@ package org.woehlke.twitterwall.process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.twitter.api.Tweet;
-import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
-import org.woehlke.twitterwall.oodm.entities.MyTweet;
-import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
-import org.woehlke.twitterwall.oodm.service.MyTweetService;
-import org.woehlke.twitterwall.oodm.service.MyTwitterProfileService;
+import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.service.*;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by tw on 11.06.17.
@@ -21,15 +18,32 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
 
     private static final Logger log = LoggerFactory.getLogger(StoreTweetsProcessImpl.class);
 
-
     private final MyTweetService myTweetService;
 
     private final MyTwitterProfileService myTwitterProfileService;
 
+    private final MyEntitiesService myEntitiesService;
+
+    private final MyHashTagEntityService myHashTagEntityService;
+
+    private final MyMediaEntityService myMediaEntityService;
+
+    private final MyMentionEntityService myMentionEntityService;
+
+    private final MyTickerSymbolEntityService myTickerSymbolEntityService;
+
+    private final MyUrlEntityService myUrlEntityService;
+
     @Autowired
-    public StoreTweetsProcessImpl(MyTweetService myTweetService, MyTwitterProfileService myTwitterProfileService) {
+    public StoreTweetsProcessImpl(MyTweetService myTweetService, MyTwitterProfileService myTwitterProfileService, MyEntitiesService myEntitiesService, MyHashTagEntityService myHashTagEntityService, MyMediaEntityService myMediaEntityService, MyMentionEntityService myMentionEntityService, MyTickerSymbolEntityService myTickerSymbolEntityService, MyUrlEntityService myUrlEntityService) {
         this.myTweetService = myTweetService;
         this.myTwitterProfileService = myTwitterProfileService;
+        this.myEntitiesService = myEntitiesService;
+        this.myHashTagEntityService = myHashTagEntityService;
+        this.myMediaEntityService = myMediaEntityService;
+        this.myMentionEntityService = myMentionEntityService;
+        this.myTickerSymbolEntityService = myTickerSymbolEntityService;
+        this.myUrlEntityService = myUrlEntityService;
     }
 
     @Override
@@ -40,18 +54,20 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private MyTweet storeOneTweet(MyTweet tweet) {
-        //The User
+        /** The User */
         MyTwitterProfile user = tweet.getUser();
         user=storeOneUser(user);
         tweet.setUser(user);
-        // Retweeted Tweet
+        /** Retweeted Tweet */
         MyTweet retweetedStatus = tweet.getRetweetedStatus();
         if(retweetedStatus!=null){
             retweetedStatus=storeOneTweet(retweetedStatus);
             tweet.setRetweetedStatus(retweetedStatus);
         }
-        //TODO: store Twitter-Entities
-        // Tweet itself
+        /** Tweet itself */
+        MyEntities myEntities = tweet.getEntities();
+        myEntities = storeEntities(myEntities);
+        tweet.setEntities(myEntities);
         tweet=storeOneTweetItself(tweet);
         return tweet;
     }
@@ -109,8 +125,8 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             TwitterProfile twitterProfile = tweet.getUser();
             MyTwitterProfile myTwitterProfile  = transformTwitterProfile(twitterProfile);
             myTweet.setUser(myTwitterProfile);
-            //TODO: transform Twitter-Entities
-            //myTweet.setEntities();
+            MyEntities myEntities = transformTwitterEntities(tweet.getEntities());
+            myTweet.setEntities(myEntities);
             return myTweet;
         } else {
             return null;
@@ -168,5 +184,128 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         MyTwitterProfile myTwitterProfile = transformTwitterProfile(friend);
         myTwitterProfile.setFriend(true);
         return storeOneUser(myTwitterProfile);
+    }
+
+    private MyEntities transformTwitterEntities(Entities entities) {
+        Set<MyUrlEntity> urls = transformTwitterEntitiesUrls(entities.getUrls());
+        Set<MyHashTagEntity> tags = transformTwitterEntitiesHashTags(entities.getHashTags());
+        Set<MyMentionEntity> mentions = transformTwitterEntitiesMentions(entities.getMentions());
+        Set<MyMediaEntity> media = transformTwitterEntitiesMedia(entities.getMedia());
+        Set<MyTickerSymbolEntity> tickerSymbols = transformTwitterEntitiesTickerSymbols(entities.getTickerSymbols());
+        MyEntities myEntities = new MyEntities(urls,tags,mentions,media,tickerSymbols);
+        return myEntities;
+    }
+
+    private Set<MyTickerSymbolEntity> transformTwitterEntitiesTickerSymbols(List<TickerSymbolEntity> tickerSymbols) {
+        Set<MyTickerSymbolEntity> myTickerSymbolEntities = new LinkedHashSet<MyTickerSymbolEntity>();
+        for(TickerSymbolEntity tickerSymbol:tickerSymbols){
+            String tickerSymbolString = tickerSymbol.getTickerSymbol();
+            String url = tickerSymbol.getUrl();
+            int[] indices = tickerSymbol.getIndices();
+            MyTickerSymbolEntity myTickerSymbolEntity = new MyTickerSymbolEntity(tickerSymbolString, url, indices);
+            myTickerSymbolEntities.add(myTickerSymbolEntity);
+        }
+        return myTickerSymbolEntities;
+    }
+
+    private Set<MyMediaEntity> transformTwitterEntitiesMedia(List<MediaEntity> media) {
+        Set<MyMediaEntity> myMediaEntities = new LinkedHashSet<MyMediaEntity>();
+        for(MediaEntity medium:media){
+            long idTwitter = medium.getId();
+            String mediaHttp = medium.getMediaUrl();
+            String mediaHttps = medium.getMediaSecureUrl();
+            String url = medium.getUrl();
+            String display = medium.getDisplayUrl();
+            String expanded = medium.getExpandedUrl();
+            String type = medium.getType();
+            int[] indices = medium.getIndices();
+            MyMediaEntity myMediaEntity = new MyMediaEntity(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, indices);
+            myMediaEntities.add(myMediaEntity);
+        }
+        return myMediaEntities;
+    }
+
+    private Set<MyMentionEntity> transformTwitterEntitiesMentions(List<MentionEntity> mentions) {
+        Set<MyMentionEntity> myMentionEntities = new LinkedHashSet<MyMentionEntity>();
+        for(MentionEntity mention:mentions){
+            long idTwitter = mention.getId();
+            String screenName = mention.getScreenName();
+            String name = mention.getName();
+            int[] indices = mention.getIndices();
+            MyMentionEntity myMentionEntity = new MyMentionEntity(idTwitter, screenName, name, indices);
+            myMentionEntities.add(myMentionEntity);
+        }
+        return myMentionEntities;
+    }
+
+    private Set<MyHashTagEntity> transformTwitterEntitiesHashTags(List<HashTagEntity> hashTags) {
+        Set<MyHashTagEntity> myHashTagEntities = new LinkedHashSet<MyHashTagEntity>();
+        for(HashTagEntity hashTag:hashTags){
+            String text = hashTag.getText();
+            int[] indices = hashTag.getIndices();
+            MyHashTagEntity myHashTagEntity = new MyHashTagEntity(text, indices);
+            myHashTagEntities.add(myHashTagEntity);
+        }
+        return myHashTagEntities;
+    }
+
+    private Set<MyUrlEntity> transformTwitterEntitiesUrls(List<UrlEntity> urls) {
+        Set<MyUrlEntity> myUrls = new LinkedHashSet<MyUrlEntity>();
+        for(UrlEntity url:urls){
+            String display = url.getDisplayUrl();
+            String expanded = url.getExpandedUrl();
+            String urlStr = url.getUrl();
+            int[] indices = url.getIndices();
+            MyUrlEntity myUrlEntity = new MyUrlEntity(display, expanded, urlStr, indices);
+            myUrls.add(myUrlEntity);
+        }
+        return myUrls;
+    }
+
+    private MyEntities storeEntities(MyEntities myEntities) {
+        Set<MyUrlEntity> urls = new LinkedHashSet<>();
+        Set<MyHashTagEntity> tags = new LinkedHashSet<MyHashTagEntity>();
+        Set<MyMentionEntity> mentions = new LinkedHashSet<MyMentionEntity>();
+        Set<MyMediaEntity> medias = new LinkedHashSet<MyMediaEntity>();
+        Set<MyTickerSymbolEntity> tickerSymbols = new LinkedHashSet<MyTickerSymbolEntity>();
+        for(MyTickerSymbolEntity tickerSymbol:myEntities.getTickerSymbols()){
+            tickerSymbol=myTickerSymbolEntityService.store(tickerSymbol);
+            tickerSymbols.add(tickerSymbol);
+        }
+        for(MyMentionEntity mention:myEntities.getMentions()){
+            MyMentionEntity mentionPers = myMentionEntityService.findByIdTwitter(mention.getIdTwitter());
+            if(mentionPers != null){
+                mention.setId(mentionPers.getId());
+                mention=myMentionEntityService.update(mention);
+            } else {
+                mention=myMentionEntityService.store(mention);
+            }
+            mentions.add(mention);
+        }
+        for(MyMediaEntity media:myEntities.getMedia()){
+            MyMediaEntity mediaPers = myMediaEntityService.findByIdTwitter(media.getIdTwitter());
+            if(mediaPers != null){
+                media.setId(mediaPers.getId());
+                media=myMediaEntityService.update(media);
+            } else {
+                media=myMediaEntityService.store(media);
+            }
+            medias.add(media);
+        }
+        for(MyHashTagEntity tag:myEntities.getTags()){
+            tag=myHashTagEntityService.store(tag);
+            tags.add(tag);
+        }
+        for(MyUrlEntity url:myEntities.getUrls()){
+            url=myUrlEntityService.store(url);
+            urls.add(url);
+        }
+        myEntities.setMedia(medias);
+        myEntities.setMentions(mentions);
+        myEntities.setTags(tags);
+        myEntities.setTickerSymbols(tickerSymbols);
+        myEntities.setUrls(urls);
+        myEntities=myEntitiesService.store(myEntities);
+        return myEntities;
     }
 }
