@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
 import org.woehlke.twitterwall.oodm.repository.MyTwitterProfileRepository;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
@@ -33,6 +34,21 @@ public class MyTwitterProfileServiceImpl implements MyTwitterProfileService {
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public MyTwitterProfile update(MyTwitterProfile myTwitterProfile) {
         return myTwitterProfileRepository.update(myTwitterProfile);
+    }
+
+    @Override
+    public List<MyTwitterProfile> getFollower() {
+        return myTwitterProfileRepository.getFollower();
+    }
+
+    @Override
+    public List<MyTwitterProfile> getFriends() {
+        return myTwitterProfileRepository.getFriends();
+    }
+
+    @Override
+    public List<MyTwitterProfile> getAll() {
+        return myTwitterProfileRepository.getAll();
     }
 
     @Override

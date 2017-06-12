@@ -119,6 +119,12 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
     private boolean showAllInlineMedia;
 
     @Column
+    private boolean follower;
+
+    @Column
+    private boolean friend;
+
+    @Column
     private String profileBannerUrl;
 
     public MyTwitterProfile(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
@@ -383,5 +389,19 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
         this.profileBannerUrl = profileBannerUrl;
     }
 
+    public boolean isFollower() {
+        return follower;
+    }
 
+    public void setFollower(boolean follower) {
+        this.follower = follower;
+    }
+
+    public boolean isFriend() {
+        return friend;
+    }
+
+    public void setFriend(boolean friend) {
+        this.friend = friend;
+    }
 }

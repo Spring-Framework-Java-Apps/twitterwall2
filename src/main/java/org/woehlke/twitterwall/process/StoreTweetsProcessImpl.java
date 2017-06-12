@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.process;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -16,6 +18,9 @@ import java.util.Date;
  */
 @Service
 public class StoreTweetsProcessImpl implements StoreTweetsProcess {
+
+    private static final Logger log = LoggerFactory.getLogger(StoreTweetsProcessImpl.class);
+
 
     private final MyTweetService myTweetService;
 
@@ -66,6 +71,8 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         MyTwitterProfile userPers = this.myTwitterProfileService.findByIdTwitter(user.getIdTwitter());
         if(userPers != null) {
             user.setId(userPers.getId());
+            user.setFriend(userPers.isFriend());
+            user.setFollower(userPers.isFollower());
             user = this.myTwitterProfileService.update(user);
         } else {
             user = this.myTwitterProfileService.persist(user);
@@ -147,5 +154,19 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         myTwitterProfile.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
         myTwitterProfile.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
         return myTwitterProfile;
+    }
+
+    @Override
+    public MyTwitterProfile storeFollower(TwitterProfile follower) {
+        MyTwitterProfile myTwitterProfile = transformTwitterProfile(follower);
+        myTwitterProfile.setFollower(true);
+        return storeOneUser(myTwitterProfile);
+    }
+
+    @Override
+    public MyTwitterProfile storeFriend(TwitterProfile friend) {
+        MyTwitterProfile myTwitterProfile = transformTwitterProfile(friend);
+        myTwitterProfile.setFriend(true);
+        return storeOneUser(myTwitterProfile);
     }
 }

@@ -5,8 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.social.RateLimitExceededException;
+import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.process.StoreTweetsProcess;
@@ -52,12 +55,8 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 6000000)
     public void fetchTweetsFromTwitterSearch() {
-        log.info("The time is now {}", dateFormat.format(new Date()));
-        Twitter twitter = new TwitterTemplate(
-                twitterConsumerKey,
-                twitterConsumerSecret,
-                twitterAccessToken,
-                twitterAccessTokenSecret);
+        log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
+        Twitter twitter = getTwitterProxy();
         List<Tweet> tweets = twitter.searchOperations().search(searchQuery,pageSize).getTweets();
         log.info("---------------------------------------");
         for(Tweet tweet: tweets){
@@ -67,5 +66,68 @@ public class ScheduledTasks {
             this.storeTweetsProcess.storeOneTweet(tweet);
         }
         log.info("---------------------------------------");
+    }
+
+    private Twitter getTwitterProxy(){
+        Twitter twitter = new TwitterTemplate(
+                twitterConsumerKey,
+                twitterConsumerSecret,
+                twitterAccessToken,
+                twitterAccessTokenSecret);
+        return twitter;
+    }
+
+    @Scheduled(fixedRate = 12000000)
+    public void fetchFollowersFromTwitter() {
+        log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
+        Twitter twitter = getTwitterProxy();
+        try {
+            Thread.sleep(20000);
+            CursoredList<TwitterProfile> followers = twitter.friendOperations().getFollowers();
+            boolean run = true;
+            while(run) {
+                for(TwitterProfile follower: followers){
+                    storeTweetsProcess.storeFollower(follower);
+                }
+                if(followers.hasNext()){
+                    long cursor = followers.getNextCursor();
+                    followers = twitter.friendOperations().getFriendsInCursor(cursor);
+                } else {
+                    run = false;
+                }
+                Thread.sleep(600000);
+            }
+        } catch (RateLimitExceededException e){
+            log.error("Twitter: "+e.getMessage());
+        } catch (InterruptedException e) {
+            log.error("InterruptedException: "+e.getMessage());
+        }
+    }
+
+    @Scheduled(fixedRate = 12000000)
+    public void fetchFriendsFromTwitter() {
+        log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
+        Twitter twitter = getTwitterProxy();
+        try {
+            Thread.sleep(20000);
+            CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
+            boolean run = true;
+            while (run) {
+                for (TwitterProfile friend : friends) {
+                    storeTweetsProcess.storeFriend(friend);
+                }
+                if (friends.hasNext()) {
+                    long cursor = friends.getNextCursor();
+                    friends = twitter.friendOperations().getFriendsInCursor(cursor);
+                } else {
+                    run = false;
+                }
+                Thread.sleep(600000);
+            }
+        } catch (RateLimitExceededException e){
+            log.error("Twitter: "+e.getMessage());
+        } catch (InterruptedException e) {
+            log.error("InterruptedException: "+e.getMessage());
+        }
     }
 }

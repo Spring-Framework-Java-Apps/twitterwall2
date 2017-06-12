@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
@@ -36,7 +37,6 @@ public class MyTwitterProfileRepositoryImpl implements MyTwitterProfileRepositor
     @Override
     public MyTwitterProfile persist(MyTwitterProfile myTwitterProfile) {
         entityManager.persist(myTwitterProfile);
-        //entityManager.flush();
         myTwitterProfile=findByIdTwitter(myTwitterProfile.getIdTwitter());
         log.debug("persisted: "+myTwitterProfile.getIdTwitter());
         return myTwitterProfile;
@@ -45,9 +45,29 @@ public class MyTwitterProfileRepositoryImpl implements MyTwitterProfileRepositor
     @Override
     public MyTwitterProfile update(MyTwitterProfile myTwitterProfile) {
         myTwitterProfile=entityManager.merge(myTwitterProfile);
-        //entityManager.flush();
         myTwitterProfile=findByIdTwitter(myTwitterProfile.getIdTwitter());
         log.debug("updated: "+myTwitterProfile.getIdTwitter());
         return myTwitterProfile;
+    }
+
+    @Override
+    public List<MyTwitterProfile> getFollower() {
+        String SQL = "select t from MyTwitterProfile as t where t.follower=true";
+        TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<MyTwitterProfile> getFriends() {
+        String SQL = "select t from MyTwitterProfile as t where t.friend=true";
+        TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<MyTwitterProfile> getAll() {
+        String SQL = "select t from MyTwitterProfile as t";
+        TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
+        return query.getResultList();
     }
 }
