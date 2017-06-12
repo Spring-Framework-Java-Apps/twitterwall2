@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.MyTweet;
 import org.woehlke.twitterwall.oodm.repository.MyTweetRepository;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -33,6 +34,11 @@ public class MyTweetServiceImpl implements MyTweetService {
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public MyTweet update(MyTweet myTweet) {
         return myTweetRepository.update(myTweet);
+    }
+
+    @Override
+    public List<MyTweet> getLatestTweets() {
+        return myTweetRepository.getLatestTweets();
     }
 
     @Override

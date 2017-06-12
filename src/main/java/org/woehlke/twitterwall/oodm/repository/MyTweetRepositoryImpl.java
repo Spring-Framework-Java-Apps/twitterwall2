@@ -2,10 +2,12 @@ package org.woehlke.twitterwall.oodm.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.MyTweet;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
@@ -18,6 +20,9 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int frontendMaxResults;
 
     @Override
     public MyTweet findByIdTwitter(long idTwitter) {
@@ -50,5 +55,13 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
         myTweet=findByIdTwitter(myTweet.getIdTwitter());
         log.debug("updated: "+myTweet.getIdTwitter());
         return myTweet;
+    }
+
+    @Override
+    public List<MyTweet> getLatestTweets() {
+        String SQL = "select t from MyTweet as t order by t.createdAt DESC";
+        TypedQuery<MyTweet> query = entityManager.createQuery(SQL,MyTweet.class);
+        query.setMaxResults(frontendMaxResults);
+        return query.getResultList();
     }
 }

@@ -56,9 +56,14 @@
                 <h1>cities</h1>
                 <table class="table table-striped table-hover">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>State</th>
+                        <th>fromUser</th>
+                        <th>Date</th>
+                        <th>Text</th>
+                    </tr>
+                    <tr th:each="tweet : ${latestTweets}">
+                        <td th:text="${tweet.fromUser}">fromUser</td>
+                        <td th:datetime="${tweet.createdAt}">Date</td>
+                        <td th:text="${tweet.text}">Text</td>
                     </tr>
                 </table>
             </div>
