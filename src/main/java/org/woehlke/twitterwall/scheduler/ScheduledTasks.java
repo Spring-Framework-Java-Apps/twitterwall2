@@ -9,7 +9,7 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.service.MyTweetService;
+import org.woehlke.twitterwall.process.StoreTweetsProcess;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,8 +22,6 @@ import java.util.List;
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
-
-    private final MyTweetService myTweetService;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -46,12 +44,14 @@ public class ScheduledTasks {
     private String searchQuery;
 
     @Autowired
-    public ScheduledTasks(MyTweetService myTweetService) {
-        this.myTweetService = myTweetService;
+    public ScheduledTasks(StoreTweetsProcess storeTweetsProcess) {
+        this.storeTweetsProcess = storeTweetsProcess;
     }
 
+    private final StoreTweetsProcess storeTweetsProcess;
+
     @Scheduled(fixedRate = 6000000)
-    public void reportCurrentTime() {
+    public void fetchTweetsFromTwitterSearch() {
         log.info("The time is now {}", dateFormat.format(new Date()));
         Twitter twitter = new TwitterTemplate(
                 twitterConsumerKey,
@@ -61,9 +61,10 @@ public class ScheduledTasks {
         List<Tweet> tweets = twitter.searchOperations().search(searchQuery,pageSize).getTweets();
         log.info("---------------------------------------");
         for(Tweet tweet: tweets){
-            log.info(tweet.getFromUser());
-            log.info(tweet.getText());
-            log.info(tweet.getProfileImageUrl());
+            log.info("usee: @"+tweet.getFromUser());
+            log.info("Text:  "+tweet.getText());
+            log.info("Image: "+tweet.getProfileImageUrl());
+            this.storeTweetsProcess.storeOneTweet(tweet);
         }
         log.info("---------------------------------------");
     }

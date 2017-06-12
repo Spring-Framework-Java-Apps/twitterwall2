@@ -16,7 +16,7 @@ public class MyTweet extends MyTwitterObject implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique=true)
     private long idTwitter;
 
     @Column(nullable = false)
@@ -61,7 +61,7 @@ public class MyTweet extends MyTwitterObject implements Serializable {
     @Column
     private boolean retweeted;
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = true)
     private MyTweet retweetedStatus;
 
     @Column
@@ -70,10 +70,10 @@ public class MyTweet extends MyTwitterObject implements Serializable {
     @Column
     private Integer favoriteCount;
 
-    @OneToOne
+    @OneToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = true)
     private MyEntities entities;
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = false)
     private MyTwitterProfile user;
 
     public MyTweet(long idTwitter, String idStr, String text, Date createdAt) {

@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.MyTweet;
 import org.woehlke.twitterwall.oodm.repository.MyTweetRepository;
+
+import javax.persistence.NoResultException;
 
 /**
  * Created by tw on 10.06.17.
@@ -18,5 +21,22 @@ public class MyTweetServiceImpl implements MyTweetService {
     @Autowired
     public MyTweetServiceImpl(MyTweetRepository myTweetRepository) {
         this.myTweetRepository = myTweetRepository;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    public MyTweet persist(MyTweet myTweet) {
+        return myTweetRepository.persist(myTweet);
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    public MyTweet update(MyTweet myTweet) {
+        return myTweetRepository.update(myTweet);
+    }
+
+    @Override
+    public MyTweet findByIdTwitter(long idTwitter) {
+        return myTweetRepository.findByIdTwitter(idTwitter);
     }
 }

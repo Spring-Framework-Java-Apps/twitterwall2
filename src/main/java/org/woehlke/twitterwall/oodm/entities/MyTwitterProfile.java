@@ -19,7 +19,7 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique=true)
     private long idTwitter;
 
     @Column(nullable = false)
@@ -28,16 +28,16 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String url;
 
-    @Column(nullable = false)
+    @Column
     private String profileImageUrl;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
-    @Column(nullable = false)
+    @Column
     private String location;
 
     @Column(nullable = false)

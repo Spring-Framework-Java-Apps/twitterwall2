@@ -39,7 +39,7 @@ public class TimelineController {
     private Twitter twitter = null;
 
     @RequestMapping("/")
-    public String greeting(Model model) {
+    public String index(Model model) {
         /*
         Twitter twitter = getTwitterApi();
         TwitterProfile profile = twitter.userOperations().getUserProfile();
