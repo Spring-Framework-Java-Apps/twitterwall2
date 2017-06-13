@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.service.MyTweetService;
 
 /**
@@ -25,8 +26,24 @@ public class TimelineController {
 
     @RequestMapping("/")
     public String index(Model model) {
+        model = setupPage(model);
         model.addAttribute("latestTweets",myTweetService.getLatestTweets());
         return "timeline";
+    }
+
+    @RequestMapping("/tweets")
+    public String tweets(Model model) {
+        model = setupPage(model);
+        model.addAttribute("latestTweets",myTweetService.getLatestTweets());
+        return "timeline";
+    }
+
+    private Model setupPage(Model model){
+        Page page = new Page();
+        page.setTitle("Twitterwall");
+        page.setSubtitle("Tweets with #TYPO3 OR #t3cb");
+        model.addAttribute("page",page);
+        return model;
     }
 
 }

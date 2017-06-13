@@ -60,7 +60,7 @@ public class ScheduledTasks {
         List<Tweet> tweets = twitter.searchOperations().search(searchQuery,pageSize).getTweets();
         log.info("---------------------------------------");
         for(Tweet tweet: tweets){
-            log.info("usee: @"+tweet.getFromUser());
+            log.info("User: @"+tweet.getFromUser());
             log.info("Text:  "+tweet.getText());
             log.info("Image: "+tweet.getProfileImageUrl());
             this.storeTweetsProcess.storeOneTweet(tweet);
