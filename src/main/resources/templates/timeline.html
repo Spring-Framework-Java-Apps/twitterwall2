@@ -27,11 +27,12 @@
                 </table>
                 -->
                 <div class="thumbnail tw-col-3-box" th:each="tweet : ${latestTweets}">
-                    <img src="" alt="Alt-Text"
-                         th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description}" />
+                    <a href="" th:href="@{|https://twitter.com/${tweet.user.screenName}|}" target="_blank"><img
+                            src="" alt="Alt-Text"
+                            th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description}" /></a>
                     <div class="caption">
-                        <h2><span th:text="${tweet.user.name}">Username</span></h2>
-                        <h3><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></h3>
+                        <h2><a href="" th:href="@{|https://twitter.com/${tweet.user.screenName}|}" target="_blank"><span th:text="${tweet.user.name}">Username</span></a></h2>
+                        <h3><a href="" th:href="@{|https://twitter.com/${tweet.user.screenName}|}" target="_blank"><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></a></h3>
                         <p th:text="${tweet.text}">Text</p>
                     </div>
                 </div>
