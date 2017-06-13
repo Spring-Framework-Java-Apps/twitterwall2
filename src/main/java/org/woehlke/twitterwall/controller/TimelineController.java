@@ -40,8 +40,8 @@ public class TimelineController {
 
     private Model setupPage(Model model){
         Page page = new Page();
-        page.setTitle("Twitterwall");
-        page.setSubtitle("Tweets with #TYPO3 OR #t3cb");
+        page.setTitle("Tweets");
+        page.setSubtitle("#TYPO3 OR #t3cb");
         model.addAttribute("page",page);
         return model;
     }

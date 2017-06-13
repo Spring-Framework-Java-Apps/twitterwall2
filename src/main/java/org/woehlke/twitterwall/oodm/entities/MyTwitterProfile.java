@@ -138,6 +138,12 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
         this.createdDate = createdDate;
     }
 
+    public String getBigProfileImageUrl(){
+        String bigProfileImageUrl = this.profileImageUrl;
+        bigProfileImageUrl = bigProfileImageUrl.replace("_normal.jpg","_400x400.jpg");
+        return bigProfileImageUrl;
+    }
+
     private MyTwitterProfile() {
     }
 

@@ -10,7 +10,8 @@
 <section>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 tw-col-3-wrapper">
+                <!--
                 <h2 th:text="${page.title}">cities</h2>
                 <table class="table table-striped table-hover">
                     <tr>
@@ -24,6 +25,16 @@
                         <td th:text="${tweet.text}">Text</td>
                     </tr>
                 </table>
+                -->
+                <div class="thumbnail tw-col-3-box" th:each="tweet : ${latestTweets}">
+                    <img src="" alt="Alt-Text"
+                         th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description}" />
+                    <div class="caption">
+                        <h2><span th:text="${tweet.user.name}">Username</span></h2>
+                        <h3><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></h3>
+                        <p th:text="${tweet.text}">Text</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

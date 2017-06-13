@@ -38,6 +38,27 @@
     .navbar-right {
         margin-right: 0px;
     }
+
+    .thumbnail {
+        float: left;
+        margin: 8px;
+    }
+
+    .thumbnail img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .tw-col-3-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    .tw-col-3-box {
+        grid-column: auto / span 1;
+        grid-row: auto / span 1;
+    }
 }
 
 @media screen and (max-width: 767px) {
