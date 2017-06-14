@@ -21,6 +21,9 @@
                         <p th:text="${tweet.text}">Text</p>
                     </div>
                 </div>
+                <span th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                </span>
             </div>
         </div>
     </div>

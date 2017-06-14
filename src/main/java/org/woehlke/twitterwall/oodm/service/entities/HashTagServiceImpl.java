@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository;
+
+import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -25,5 +28,10 @@ public class HashTagServiceImpl implements HashTagService {
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public HashTag store(HashTag tag) {
         return this.hashTagRepository.persist(tag);
+    }
+
+    @Override
+    public List<HashTagCounted> getHashTags() {
+        return this.hashTagRepository.getHashTags();
     }
 }

@@ -5,7 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.Entities;
 /**
  * Created by tw on 12.06.17.
  */
-public interface MyEntitiesRepository {
+public interface EntitiesRepository {
 
     Entities persist(Entities myEntities);
 

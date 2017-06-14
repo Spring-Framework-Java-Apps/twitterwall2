@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by tw on 10.06.17.
  */
-public interface MyTweetService {
+public interface TweetService {
 
     Tweet findByIdTwitter(long idTwitter);
 
@@ -18,4 +18,7 @@ public interface MyTweetService {
     List<Tweet> getLatestTweets();
 
     boolean isNotYetStored(Tweet tweet);
+
+    List<Tweet> getTweetsForHashTag(String hashtagText);
+
 }

@@ -13,9 +13,9 @@ import java.util.List;
  * Created by tw on 11.06.17.
  */
 @Repository
-public class MyTweetRepositoryImpl implements MyTweetRepository {
+public class TweetRepositoryImpl implements TweetRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(MyTweetRepositoryImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(TweetRepositoryImpl.class);
 
 
     @PersistenceContext
@@ -68,5 +68,13 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
     @Override
     public boolean isNotYetStored(Tweet tweet) {
         return null == findByIdTwitter(tweet.getIdTwitter());
+    }
+
+    @Override
+    public List<Tweet> getTweetsForHashTag(String hashtagText) {
+        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText";
+        TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
+        query.setParameter("hashtagText",hashtagText);
+        return query.getResultList();
     }
 }

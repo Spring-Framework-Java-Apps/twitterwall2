@@ -22,11 +22,11 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
 
     private static final Logger log = LoggerFactory.getLogger(StoreTweetsProcessImpl.class);
 
-    private final MyTweetService myTweetService;
+    private final TweetService tweetService;
 
     private final UserService userService;
 
-    private final MyEntitiesService myEntitiesService;
+    private final EntitiesService entitiesService;
 
     private final HashTagService hashTagService;
 
@@ -39,10 +39,10 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     private final UrlService urlService;
 
     @Autowired
-    public StoreTweetsProcessImpl(MyTweetService myTweetService, UserService userService, MyEntitiesService myEntitiesService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
-        this.myTweetService = myTweetService;
+    public StoreTweetsProcessImpl(TweetService tweetService, UserService userService, EntitiesService entitiesService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
+        this.tweetService = tweetService;
         this.userService = userService;
-        this.myEntitiesService = myEntitiesService;
+        this.entitiesService = entitiesService;
         this.hashTagService = hashTagService;
         this.mediaService = mediaService;
         this.mentionService = mentionService;
@@ -58,7 +58,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private Tweet storeOneTweet(Tweet tweet) {
-        //if(this.myTweetService.isNotYetStored(tweet)) {
+        //if(this.tweetService.isNotYetStored(tweet)) {
             /** The User */
             User user = tweet.getUser();
             user = storeOneUser(user);
@@ -79,12 +79,12 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private Tweet storeOneTweetItself(Tweet tweet) {
-        Tweet tweetPersistent = this.myTweetService.findByIdTwitter(tweet.getIdTwitter());
+        Tweet tweetPersistent = this.tweetService.findByIdTwitter(tweet.getIdTwitter());
         if(tweetPersistent != null){
             tweet.setId(tweetPersistent.getId());
-            tweet = this.myTweetService.update(tweet);
+            tweet = this.tweetService.update(tweet);
         } else {
-            tweet = this.myTweetService.persist(tweet);
+            tweet = this.tweetService.persist(tweet);
         }
         return tweet;
     }
@@ -312,7 +312,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         myEntities.setTags(tags);
         myEntities.setTickerSymbols(tickerSymbols);
         myEntities.setUrls(urls);
-        myEntities=myEntitiesService.store(myEntities);
+        myEntities= entitiesService.store(myEntities);
         return myEntities;
     }
 }

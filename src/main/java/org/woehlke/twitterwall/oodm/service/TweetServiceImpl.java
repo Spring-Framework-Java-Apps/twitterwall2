@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.repository.MyTweetRepository;
+import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 
 import java.util.List;
 
@@ -14,39 +14,44 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation= Propagation.REQUIRED,readOnly = true)
-public class MyTweetServiceImpl implements MyTweetService {
+public class TweetServiceImpl implements TweetService {
 
-    private final MyTweetRepository myTweetRepository;
+    private final TweetRepository tweetRepository;
 
     @Autowired
-    public MyTweetServiceImpl(MyTweetRepository myTweetRepository) {
-        this.myTweetRepository = myTweetRepository;
+    public TweetServiceImpl(TweetRepository tweetRepository) {
+        this.tweetRepository = tweetRepository;
     }
 
     @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public Tweet persist(Tweet myTweet) {
-        return myTweetRepository.persist(myTweet);
+        return tweetRepository.persist(myTweet);
     }
 
     @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public Tweet update(Tweet myTweet) {
-        return myTweetRepository.update(myTweet);
+        return tweetRepository.update(myTweet);
     }
 
     @Override
     public List<Tweet> getLatestTweets() {
-        return myTweetRepository.getLatestTweets();
+        return tweetRepository.getLatestTweets();
     }
 
     @Override
     public boolean isNotYetStored(Tweet tweet) {
-        return myTweetRepository.isNotYetStored(tweet);
+        return tweetRepository.isNotYetStored(tweet);
+    }
+
+    @Override
+    public List<Tweet> getTweetsForHashTag(String hashtagText) {
+        return tweetRepository.getTweetsForHashTag(hashtagText);
     }
 
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
-        return myTweetRepository.findByIdTwitter(idTwitter);
+        return tweetRepository.findByIdTwitter(idTwitter);
     }
 }

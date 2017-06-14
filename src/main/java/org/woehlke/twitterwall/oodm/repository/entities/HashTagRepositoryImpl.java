@@ -1,11 +1,13 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
+import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -26,5 +28,12 @@ public class HashTagRepositoryImpl implements HashTagRepository {
     @Override
     public HashTag update(HashTag hashTag) {
         return entityManager.merge(hashTag);
+    }
+
+    @Override
+    public List<HashTagCounted> getHashTags() {
+        String SQL = "select new org.woehlke.twitterwall.model.HashTagCounted(count(h.text),h.text) from HashTag as h group by h.text";
+        TypedQuery<HashTagCounted> query = entityManager.createQuery(SQL,HashTagCounted.class);
+        return query.getResultList();
     }
 }
