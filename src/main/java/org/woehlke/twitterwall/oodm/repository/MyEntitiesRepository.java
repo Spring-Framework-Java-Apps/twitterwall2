@@ -1,13 +1,13 @@
 package org.woehlke.twitterwall.oodm.repository;
 
-import org.woehlke.twitterwall.oodm.entities.MyEntities;
+import org.woehlke.twitterwall.oodm.entities.Entities;
 
 /**
  * Created by tw on 12.06.17.
  */
 public interface MyEntitiesRepository {
 
-    MyEntities persist(MyEntities myEntities);
+    Entities persist(Entities myEntities);
 
-    MyEntities update(MyEntities myEntities);
+    Entities update(Entities myEntities);
 }

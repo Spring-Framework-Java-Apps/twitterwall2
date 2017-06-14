@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.MyTweet;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,12 +25,12 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
     private int frontendMaxResults;
 
     @Override
-    public MyTweet findByIdTwitter(long idTwitter) {
+    public Tweet findByIdTwitter(long idTwitter) {
         try {
-            String SQL = "select t from MyTweet as t where t.idTwitter=:idTwitter";
-            TypedQuery<MyTweet> query = entityManager.createQuery(SQL,MyTweet.class);
+            String SQL = "select t from Tweet as t where t.idTwitter=:idTwitter";
+            TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
             query.setParameter("idTwitter",idTwitter);
-            MyTweet result = query.getSingleResult();
+            Tweet result = query.getSingleResult();
             log.debug("found: "+result.getIdTwitter());
             return result;
         } catch (NoResultException e){
@@ -40,7 +40,7 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
     }
 
     @Override
-    public MyTweet persist(MyTweet myTweet) {
+    public Tweet persist(Tweet myTweet) {
         entityManager.persist(myTweet);
         entityManager.flush();
         myTweet=findByIdTwitter(myTweet.getIdTwitter());
@@ -49,7 +49,7 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
     }
 
     @Override
-    public MyTweet update(MyTweet myTweet) {
+    public Tweet update(Tweet myTweet) {
         myTweet = entityManager.merge(myTweet);
         entityManager.flush();
         myTweet=findByIdTwitter(myTweet.getIdTwitter());
@@ -58,15 +58,15 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
     }
 
     @Override
-    public List<MyTweet> getLatestTweets() {
-        String SQL = "select t from MyTweet as t order by t.createdAt DESC";
-        TypedQuery<MyTweet> query = entityManager.createQuery(SQL,MyTweet.class);
+    public List<Tweet> getLatestTweets() {
+        String SQL = "select t from Tweet as t order by t.createdAt DESC";
+        TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
         query.setMaxResults(frontendMaxResults);
         return query.getResultList();
     }
 
     @Override
-    public boolean isNotYetStored(MyTweet tweet) {
+    public boolean isNotYetStored(Tweet tweet) {
         return null == findByIdTwitter(tweet.getIdTwitter());
     }
 }

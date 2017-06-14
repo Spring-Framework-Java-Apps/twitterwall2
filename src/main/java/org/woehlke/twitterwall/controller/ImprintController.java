@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
-import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
-import org.woehlke.twitterwall.oodm.service.MyTwitterProfileService;
+import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.service.UserService;
 
 /**
  * Created by tw on 14.06.17.
@@ -20,11 +20,11 @@ public class ImprintController {
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
-    private final MyTwitterProfileService myTwitterProfileService;
+    private final UserService userService;
 
     @Autowired
-    public ImprintController(MyTwitterProfileService myTwitterProfileService) {
-        this.myTwitterProfileService = myTwitterProfileService;
+    public ImprintController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/imprint")
@@ -35,8 +35,8 @@ public class ImprintController {
         page.setSubtitle("www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com");
         model.addAttribute("page",page);
         String screenName = "port80guru";
-        MyTwitterProfile myTwitterProfile = myTwitterProfileService.findByScreenName(screenName);
-        model.addAttribute("user",myTwitterProfile);
+        User user = userService.findByScreenName(screenName);
+        model.addAttribute("user", user);
         return "imprint";
     }
 }

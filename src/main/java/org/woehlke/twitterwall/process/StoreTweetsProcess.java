@@ -1,17 +1,16 @@
 package org.woehlke.twitterwall.process;
 
-import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.MyTweet;
-import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 
 /**
  * Created by tw on 11.06.17.
  */
 public interface StoreTweetsProcess {
-    MyTweet storeOneTweet(Tweet tweet);
+    Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweet);
 
-    MyTwitterProfile storeFollower(TwitterProfile follower);
+    User storeFollower(TwitterProfile follower);
 
-    MyTwitterProfile storeFriend(TwitterProfile friend);
+    User storeFriend(TwitterProfile friend);
 }

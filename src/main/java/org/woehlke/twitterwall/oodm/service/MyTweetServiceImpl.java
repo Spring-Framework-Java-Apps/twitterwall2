@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.MyTweet;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.repository.MyTweetRepository;
 
 import java.util.List;
@@ -25,28 +25,28 @@ public class MyTweetServiceImpl implements MyTweetService {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
-    public MyTweet persist(MyTweet myTweet) {
+    public Tweet persist(Tweet myTweet) {
         return myTweetRepository.persist(myTweet);
     }
 
     @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
-    public MyTweet update(MyTweet myTweet) {
+    public Tweet update(Tweet myTweet) {
         return myTweetRepository.update(myTweet);
     }
 
     @Override
-    public List<MyTweet> getLatestTweets() {
+    public List<Tweet> getLatestTweets() {
         return myTweetRepository.getLatestTweets();
     }
 
     @Override
-    public boolean isNotYetStored(MyTweet tweet) {
+    public boolean isNotYetStored(Tweet tweet) {
         return myTweetRepository.isNotYetStored(tweet);
     }
 
     @Override
-    public MyTweet findByIdTwitter(long idTwitter) {
+    public Tweet findByIdTwitter(long idTwitter) {
         return myTweetRepository.findByIdTwitter(idTwitter);
     }
 }

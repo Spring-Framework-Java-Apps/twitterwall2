@@ -11,12 +11,12 @@
         <div class="row">
             <div class="col-md-12 tw-col-4-wrapper">
                 <div class="thumbnail tw-col-4-box" th:each="user : ${users}">
-                    <a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><img
+                    <a href="" th:href="@{|/profile/${user.screenName}|}"><img
                             src="" alt="Alt-Text"
                             th:attr="src=${user.bigProfileImageUrl},alt=${user.description}" /></a>
                     <div class="caption">
-                        <h2><a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
-                        <h3><a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                        <h2><a href="" th:href="@{|/profile/${user.screenName}|}"><span th:text="${user.name}">name</span></a></h2>
+                        <h3><a href="" th:href="@{|/profile/${user.screenName}|}"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
                         <p th:if="${user.description}"><span th:text="${user.description}">description</span></p>
                         <p th:if="${user.location}"><span class="map-icon map-icon-postal-code"></span> <span th:text="${user.location}">location</span></p>
                         <p th:if="${user.url}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.url}" target="_blank"><span th:text="${user.url}">url</span></a></p>

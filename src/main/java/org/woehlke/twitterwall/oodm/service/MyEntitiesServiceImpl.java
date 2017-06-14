@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.MyEntities;
+import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.repository.MyEntitiesRepository;
 
 /**
@@ -23,7 +23,7 @@ public class MyEntitiesServiceImpl implements MyEntitiesService {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
-    public MyEntities store(MyEntities myEntities) {
+    public Entities store(Entities myEntities) {
         return this.myEntitiesRepository.persist(myEntities);
     }
 }

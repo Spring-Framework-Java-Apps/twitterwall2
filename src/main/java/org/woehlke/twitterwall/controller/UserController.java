@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
-import org.woehlke.twitterwall.oodm.service.MyTwitterProfileService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 
 /**
  * Created by tw on 12.06.17.
@@ -14,40 +14,40 @@ import org.woehlke.twitterwall.oodm.service.MyTwitterProfileService;
 @Controller
 public class UserController {
 
-    private final MyTwitterProfileService myTwitterProfileService;
+    private final UserService userService;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
     @Autowired
-    public UserController(MyTwitterProfileService myTwitterProfileService) {
-        this.myTwitterProfileService = myTwitterProfileService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/user/follower")
     public String follower(Model model) {
-        model.addAttribute("users",myTwitterProfileService.getFollower());
+        model.addAttribute("users", userService.getFollower());
         model = setupPage(model,"Follower");
         return "user/user";
     }
 
     @RequestMapping("/user/friends")
     public String friends(Model model) {
-        model.addAttribute("users",myTwitterProfileService.getFriends());
+        model.addAttribute("users", userService.getFriends());
         model = setupPage(model,"Friends");
         return "user/user";
     }
 
     @RequestMapping("/user/all")
     public String all(Model model) {
-        model.addAttribute("users",myTwitterProfileService.getAll());
+        model.addAttribute("users", userService.getAll());
         model = setupPage(model,"All");
         return "user/user";
     }
 
     @RequestMapping("/user/tweets")
     public String getTweetingUsers(Model model) {
-        model.addAttribute("users",myTwitterProfileService.getTweetingUsers());
+        model.addAttribute("users", userService.getTweetingUsers());
         model = setupPage(model,"Tweets");
         return "user/user";
     }

@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
-import org.woehlke.twitterwall.oodm.entities.MyTwitterProfile;
-import org.woehlke.twitterwall.oodm.service.MyTwitterProfileService;
+import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.service.UserService;
 
 import javax.xml.ws.http.HTTPException;
 import java.util.regex.Matcher;
@@ -23,11 +23,11 @@ public class ProfileController {
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
-    private final MyTwitterProfileService myTwitterProfileService;
+    private final UserService userService;
 
     @Autowired
-    public ProfileController(MyTwitterProfileService myTwitterProfileService) {
-        this.myTwitterProfileService = myTwitterProfileService;
+    public ProfileController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/profile/{screenName}")
@@ -35,13 +35,13 @@ public class ProfileController {
         Pattern p = Pattern.compile("^[a-zA-Z0-9_]{1,15}$");
         Matcher m = p.matcher(screenName);
         if(m.matches()){
-            MyTwitterProfile myTwitterProfile = myTwitterProfileService.findByScreenName(screenName);
+            User user = userService.findByScreenName(screenName);
             Page page = new Page();
             page.setMenuAppName(menuAppName);
-            page.setTitle("@"+myTwitterProfile.getScreenName());
-            page.setSubtitle(myTwitterProfile.getName());
+            page.setTitle("@"+ user.getScreenName());
+            page.setSubtitle(user.getName());
             model.addAttribute("page",page);
-            model.addAttribute("user",myTwitterProfile);
+            model.addAttribute("user", user);
             return "user/profile";
         } else {
             int statusCode = 404;

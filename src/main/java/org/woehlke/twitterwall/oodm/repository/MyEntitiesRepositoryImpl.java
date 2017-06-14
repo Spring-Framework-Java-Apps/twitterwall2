@@ -1,7 +1,8 @@
 package org.woehlke.twitterwall.oodm.repository;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.MyEntities;
+import org.woehlke.twitterwall.oodm.entities.Entities;
+import org.woehlke.twitterwall.oodm.repository.MyEntitiesRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,13 +17,13 @@ public class MyEntitiesRepositoryImpl implements MyEntitiesRepository {
     private EntityManager entityManager;
 
     @Override
-    public MyEntities persist(MyEntities myEntities) {
+    public Entities persist(Entities myEntities) {
         entityManager.persist(myEntities);
         return myEntities;
     }
 
     @Override
-    public MyEntities update(MyEntities myEntities) {
+    public Entities update(Entities myEntities) {
         return entityManager.merge(myEntities);
     }
 }

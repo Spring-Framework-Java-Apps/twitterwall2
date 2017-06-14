@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.service;
 
-import org.woehlke.twitterwall.oodm.entities.MyTweet;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public interface MyTweetService {
 
-    MyTweet findByIdTwitter(long idTwitter);
+    Tweet findByIdTwitter(long idTwitter);
 
-    MyTweet persist(MyTweet myTweet);
+    Tweet persist(Tweet myTweet);
 
-    MyTweet update(MyTweet myTweet);
+    Tweet update(Tweet myTweet);
 
-    List<MyTweet> getLatestTweets();
+    List<Tweet> getLatestTweets();
 
-    boolean isNotYetStored(MyTweet tweet);
+    boolean isNotYetStored(Tweet tweet);
 }
