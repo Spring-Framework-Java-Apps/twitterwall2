@@ -20,4 +20,5 @@ public interface MyTweetRepository {
 
     List<MyTweet> getLatestTweets();
 
+    boolean isNotYetStored(MyTweet tweet);
 }

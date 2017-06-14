@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyHashTagEntity extends MyTwitterObject implements Serializable {
+@Table(name="hashtag")
+public class MyHashTagEntity extends MyTwitterObject implements Serializable,Comparable<MyHashTagEntity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +63,7 @@ public class MyHashTagEntity extends MyTwitterObject implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MyHashTagEntity)) return false;
+        if (!super.equals(o)) return false;
 
         MyHashTagEntity that = (MyHashTagEntity) o;
 
@@ -72,9 +74,15 @@ public class MyHashTagEntity extends MyTwitterObject implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(indices);
         return result;
+    }
+
+    @Override
+    public int compareTo(MyHashTagEntity other) {
+        return text.compareTo(other.getText());
     }
 }

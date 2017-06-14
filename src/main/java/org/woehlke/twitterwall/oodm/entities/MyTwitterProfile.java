@@ -1,9 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,7 +8,8 @@ import java.util.Date;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyTwitterProfile extends MyTwitterObject implements Serializable {
+@Table(name="userprofile")
+public class MyTwitterProfile extends MyTwitterObject implements Serializable,Comparable<MyTwitterProfile>  {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,6 +121,9 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
 
     @Column
     private boolean friend;
+
+    @Column
+    private boolean tweeting;
 
     @Column
     private String profileBannerUrl;
@@ -409,5 +410,36 @@ public class MyTwitterProfile extends MyTwitterObject implements Serializable {
 
     public void setFriend(boolean friend) {
         this.friend = friend;
+    }
+
+    public boolean isTweeting() {
+        return tweeting;
+    }
+
+    public void setTweeting(boolean tweeting) {
+        this.tweeting = tweeting;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyTwitterProfile)) return false;
+        if (!super.equals(o)) return false;
+
+        MyTwitterProfile that = (MyTwitterProfile) o;
+
+        return idTwitter == that.idTwitter;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
+        return result;
+    }
+
+    @Override
+    public int compareTo(MyTwitterProfile other) {
+        return screenName.compareTo(other.getScreenName());
     }
 }

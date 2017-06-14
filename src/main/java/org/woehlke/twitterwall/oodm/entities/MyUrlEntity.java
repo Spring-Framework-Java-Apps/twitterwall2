@@ -1,9 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -11,7 +8,8 @@ import java.util.Arrays;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyUrlEntity extends MyTwitterObject implements Serializable {
+@Table(name="url")
+public class MyUrlEntity extends MyTwitterObject implements Serializable,Comparable<MyUrlEntity>  {
 
     private static final long serialVersionUID = 1L;
 
@@ -89,9 +87,11 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MyUrlEntity)) return false;
+        if (!super.equals(o)) return false;
 
         MyUrlEntity that = (MyUrlEntity) o;
 
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (display != null ? !display.equals(that.display) : that.display != null) return false;
         if (expanded != null ? !expanded.equals(that.expanded) : that.expanded != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
@@ -100,10 +100,17 @@ public class MyUrlEntity extends MyTwitterObject implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = display != null ? display.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (display != null ? display.hashCode() : 0);
         result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(indices);
         return result;
+    }
+
+    @Override
+    public int compareTo(MyUrlEntity other) {
+        return display.compareTo(other.getDisplay());
     }
 }

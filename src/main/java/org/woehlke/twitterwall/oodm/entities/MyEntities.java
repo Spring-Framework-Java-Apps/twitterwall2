@@ -9,6 +9,7 @@ import java.util.Set;
  * Created by tw on 10.06.17.
  */
 @Entity
+@Table(name="entity")
 public class MyEntities extends MyTwitterObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,19 +18,24 @@ public class MyEntities extends MyTwitterObject implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @JoinTable(name="entity_url")
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
     private Set<MyUrlEntity> urls = new LinkedHashSet<MyUrlEntity>();
 
-    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @JoinTable(name="entity_hashtag")
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
     private Set<MyHashTagEntity> tags = new LinkedHashSet<MyHashTagEntity>();
 
+    @JoinTable(name="entity_mention")
     @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
     private Set<MyMentionEntity> mentions = new LinkedHashSet<>();
 
+    @JoinTable(name="entity_media")
     @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
     private Set<MyMediaEntity> media = new LinkedHashSet<MyMediaEntity>();
 
-    @OneToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @JoinTable(name="entity_tickersymbol")
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
     private Set<MyTickerSymbolEntity> tickerSymbols = new LinkedHashSet<MyTickerSymbolEntity>();
 
     public MyEntities(Set<MyUrlEntity> urls, Set<MyHashTagEntity> tags, Set<MyMentionEntity> mentions, Set<MyMediaEntity> media) {
@@ -95,5 +101,31 @@ public class MyEntities extends MyTwitterObject implements Serializable {
         this.tickerSymbols = tickerSymbols;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyEntities)) return false;
+        if (!super.equals(o)) return false;
 
+        MyEntities that = (MyEntities) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (urls != null ? !urls.equals(that.urls) : that.urls != null) return false;
+        if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
+        if (mentions != null ? !mentions.equals(that.mentions) : that.mentions != null) return false;
+        if (media != null ? !media.equals(that.media) : that.media != null) return false;
+        return tickerSymbols != null ? tickerSymbols.equals(that.tickerSymbols) : that.tickerSymbols == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (urls != null ? urls.hashCode() : 0);
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        result = 31 * result + (mentions != null ? mentions.hashCode() : 0);
+        result = 31 * result + (media != null ? media.hashCode() : 0);
+        result = 31 * result + (tickerSymbols != null ? tickerSymbols.hashCode() : 0);
+        return result;
+    }
 }

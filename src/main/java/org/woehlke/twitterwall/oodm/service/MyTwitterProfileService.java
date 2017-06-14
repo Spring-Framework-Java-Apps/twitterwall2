@@ -20,4 +20,8 @@ public interface MyTwitterProfileService {
     List<MyTwitterProfile> getFriends();
 
     List<MyTwitterProfile> getAll();
+
+    MyTwitterProfile findByScreenName(String screenName);
+
+    List<MyTwitterProfile> getTweetingUsers();
 }

@@ -54,21 +54,23 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private MyTweet storeOneTweet(MyTweet tweet) {
-        /** The User */
-        MyTwitterProfile user = tweet.getUser();
-        user=storeOneUser(user);
-        tweet.setUser(user);
-        /** Retweeted Tweet */
-        MyTweet retweetedStatus = tweet.getRetweetedStatus();
-        if(retweetedStatus!=null){
-            retweetedStatus=storeOneTweet(retweetedStatus);
-            tweet.setRetweetedStatus(retweetedStatus);
-        }
-        /** Tweet itself */
-        MyEntities myEntities = tweet.getEntities();
-        myEntities = storeEntities(myEntities);
-        tweet.setEntities(myEntities);
-        tweet=storeOneTweetItself(tweet);
+        //if(this.myTweetService.isNotYetStored(tweet)) {
+            /** The User */
+            MyTwitterProfile user = tweet.getUser();
+            user = storeOneUser(user);
+            tweet.setUser(user);
+            /** Retweeted Tweet */
+            MyTweet retweetedStatus = tweet.getRetweetedStatus();
+            if (retweetedStatus != null) {
+                retweetedStatus = storeOneTweet(retweetedStatus);
+                tweet.setRetweetedStatus(retweetedStatus);
+            }
+            /** Tweet itself */
+            MyEntities myEntities = tweet.getEntities();
+            myEntities = storeEntities(myEntities);
+            tweet.setEntities(myEntities);
+            tweet = storeOneTweetItself(tweet);
+        //}
         return tweet;
     }
 
@@ -143,6 +145,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         String location=twitterProfile.getLocation();
         Date createdDate=twitterProfile.getCreatedDate();
         MyTwitterProfile myTwitterProfile = new MyTwitterProfile(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
+        myTwitterProfile.setTweeting(true);
         myTwitterProfile.setLanguage(twitterProfile.getLanguage());
         myTwitterProfile.setStatusesCount(twitterProfile.getStatusesCount());
         myTwitterProfile.setFriendsCount(twitterProfile.getFriendsCount());

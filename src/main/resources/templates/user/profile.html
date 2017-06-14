@@ -5,18 +5,19 @@
 <head  th:include="layout :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" ></header>
+<header th:include="layout :: tw-header" >
+</header>
 <section>
     <div class="container">
         <div class="row">
-            <div class="col-md-12 tw-col-4-wrapper">
-                <div class="thumbnail tw-col-4-box" th:each="user : ${users}">
-                    <a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><img
+            <div class="col-md-12 tw-col-3-wrapper">
+                <div class="thumbnail tw-col-3-box-center">
+                    <a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><img
                             src="" alt="Alt-Text"
                             th:attr="src=${user.bigProfileImageUrl},alt=${user.description}" /></a>
                     <div class="caption">
-                        <h2><a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
-                        <h3><a href="" th:href="@{|/profile/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                        <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
+                        <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
                         <p th:if="${user.description}"><span th:text="${user.description}">description</span></p>
                         <p th:if="${user.location}"><span class="map-icon map-icon-postal-code"></span> <span th:text="${user.location}">location</span></p>
                         <p th:if="${user.url}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.url}" target="_blank"><span th:text="${user.url}">url</span></a></p>
@@ -31,11 +32,13 @@
                         <p><i class="fa fa-twitter" aria-hidden="true"></i> <a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">fromUser</span></b></a></p>
                     </div>
                 </div>
+                <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
             </div>
         </div>
     </div>
 </section>
 <footer th:include="layout :: footer" >
+
 </footer>
 </body>
 </html>

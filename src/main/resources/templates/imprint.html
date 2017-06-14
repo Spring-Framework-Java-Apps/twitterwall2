@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:spring="http://www.springframework.org/tags">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" >
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                Dieses ist ein privates und nicht kommerzielles Angebot von:
+                <div class="tw-col-3-wrapper">
+                    <div class="thumbnail tw-col-3-box-center">
+                        <a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><img
+                                src="" alt="Alt-Text"
+                                th:attr="src=${user.bigProfileImageUrl},alt=${user.description}" /></a>
+                        <div class="caption">
+                            <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
+                            <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                            <p th:if="${user.description}"><span th:text="${user.description}">description</span></p>
+                            <p th:if="${user.location}"><span class="map-icon map-icon-postal-code"></span> <span th:text="${user.location}">location</span></p>
+                            <p th:if="${user.url}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.url}" target="_blank"><span th:text="${user.url}">url</span></a></p>
+                            <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i> Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
+                            <p><hr/></p>
+                            <p>Tweets: <span th:text="${user.statusesCount}">statusesCount</span></p>
+                            <p>Folge ich: <span th:text="${user.friendsCount}">friendsCount</span></p>
+                            <p>Follower: <span th:text="${user.followersCount}">followersCount</span></p>
+                            <p>Gefällt mir: <span th:text="${user.favoritesCount}">favoritesCount</span></p>
+                            <p>Listen: <span th:text="${user.listedCount}">listedCount</span></p>
+                            <p><hr/></p>
+                            <p><i class="fa fa-twitter" aria-hidden="true"></i> <a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">fromUser</span></b></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:include="layout :: footer" >
+
+</footer>
+</body>
+</html>

@@ -8,7 +8,8 @@ import java.util.Date;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyTweet extends MyTwitterObject implements Serializable {
+@Table(name="tweet")
+public class MyTweet extends MyTwitterObject implements Serializable,Comparable<MyTweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -269,63 +270,22 @@ public class MyTweet extends MyTwitterObject implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MyTweet)) return false;
+        if (!super.equals(o)) return false;
 
         MyTweet myTweet = (MyTweet) o;
 
-        if (idTwitter != myTweet.idTwitter) return false;
-        if (fromUserId != myTweet.fromUserId) return false;
-        if (retweeted != myTweet.retweeted) return false;
-        if (favorited != myTweet.favorited) return false;
-        if (id != null ? !id.equals(myTweet.id) : myTweet.id != null) return false;
-        if (idStr != null ? !idStr.equals(myTweet.idStr) : myTweet.idStr != null) return false;
-        if (text != null ? !text.equals(myTweet.text) : myTweet.text != null) return false;
-        if (createdAt != null ? !createdAt.equals(myTweet.createdAt) : myTweet.createdAt != null) return false;
-        if (fromUser != null ? !fromUser.equals(myTweet.fromUser) : myTweet.fromUser != null) return false;
-        if (profileImageUrl != null ? !profileImageUrl.equals(myTweet.profileImageUrl) : myTweet.profileImageUrl != null)
-            return false;
-        if (toUserId != null ? !toUserId.equals(myTweet.toUserId) : myTweet.toUserId != null) return false;
-        if (inReplyToStatusId != null ? !inReplyToStatusId.equals(myTweet.inReplyToStatusId) : myTweet.inReplyToStatusId != null)
-            return false;
-        if (inReplyToUserId != null ? !inReplyToUserId.equals(myTweet.inReplyToUserId) : myTweet.inReplyToUserId != null)
-            return false;
-        if (inReplyToScreenName != null ? !inReplyToScreenName.equals(myTweet.inReplyToScreenName) : myTweet.inReplyToScreenName != null)
-            return false;
-        if (languageCode != null ? !languageCode.equals(myTweet.languageCode) : myTweet.languageCode != null)
-            return false;
-        if (source != null ? !source.equals(myTweet.source) : myTweet.source != null) return false;
-        if (retweetCount != null ? !retweetCount.equals(myTweet.retweetCount) : myTweet.retweetCount != null)
-            return false;
-        if (retweetedStatus != null ? !retweetedStatus.equals(myTweet.retweetedStatus) : myTweet.retweetedStatus != null)
-            return false;
-        if (favoriteCount != null ? !favoriteCount.equals(myTweet.favoriteCount) : myTweet.favoriteCount != null)
-            return false;
-        if (entities != null ? !entities.equals(myTweet.entities) : myTweet.entities != null) return false;
-        return user != null ? user.equals(myTweet.user) : myTweet.user == null;
+        return idTwitter == myTweet.idTwitter;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = super.hashCode();
         result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        result = 31 * result + (idStr != null ? idStr.hashCode() : 0);
-        result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (fromUser != null ? fromUser.hashCode() : 0);
-        result = 31 * result + (profileImageUrl != null ? profileImageUrl.hashCode() : 0);
-        result = 31 * result + (toUserId != null ? toUserId.hashCode() : 0);
-        result = 31 * result + (inReplyToStatusId != null ? inReplyToStatusId.hashCode() : 0);
-        result = 31 * result + (inReplyToUserId != null ? inReplyToUserId.hashCode() : 0);
-        result = 31 * result + (inReplyToScreenName != null ? inReplyToScreenName.hashCode() : 0);
-        result = 31 * result + (int) (fromUserId ^ (fromUserId >>> 32));
-        result = 31 * result + (languageCode != null ? languageCode.hashCode() : 0);
-        result = 31 * result + (source != null ? source.hashCode() : 0);
-        result = 31 * result + (retweetCount != null ? retweetCount.hashCode() : 0);
-        result = 31 * result + (retweeted ? 1 : 0);
-        result = 31 * result + (retweetedStatus != null ? retweetedStatus.hashCode() : 0);
-        result = 31 * result + (favorited ? 1 : 0);
-        result = 31 * result + (favoriteCount != null ? favoriteCount.hashCode() : 0);
-        result = 31 * result + (entities != null ? entities.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(MyTweet other) {
+        return createdAt.compareTo(other.getCreatedAt());
     }
 }

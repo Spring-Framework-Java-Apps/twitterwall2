@@ -11,6 +11,7 @@
     <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="webjars/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web" type="text/css" media="all" rel="stylesheet" />
+    <link href="map-icons/css/map-icons.min.css" th:href="@{/map-icons/css/map-icons.min.css}" rel="stylesheet"/>
     <link href="css/my.css" th:href="@{/css/my.css}" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -32,7 +33,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="active"><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></span>
+                <span class="active"><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> <small th:text="${page.menuAppName}">AppName</small></a></span>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="tw-navbar-collapse-1">
@@ -46,11 +47,8 @@
                             <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i> all</a></li>
                         </ul>
                     </li>
-                    <li><a href="/start"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Job <span class="sr-only">(current)</span></a></li>
-                    <li><a href="/people"><i class="fa fa-user-circle-o"></i>People</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#"><i class="fa fa-android"></i>Link</a></li>
+                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i> Users</a></li>
+                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i> Impressum</a></li>
                 </ul>
                 <form class="navbar-form navbar-right">
                     <div class="form-group">
@@ -66,8 +64,8 @@
             <div class="col-md-12">
                 <div class="page-header">
                 <h1><i class="fa fa-play-circle"></i>
-                    <span th:text="${page.title}"  class="header-h1">Titel</span><br/>
-                    <small th:text="${page.subtitle}">Untertitel</small>
+                    <span th:utext="${page.title}"  class="header-h1">Titel</span><br/>
+                    <small th:utext="${page.subtitle}">Untertitel</small>
                 </h1>
                 </div>
             </div>
@@ -95,6 +93,7 @@ Hello, footer!
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" th:attr="src=@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <!-- my own JavaScript -->
+    <script src="map-icons/js/map-icons.min.js" th:attr="src=@{/map-icons/js/map-icons.min.js}"></script>
     <script src="js/my.js" th:attr="src=@{/js/my.js}"></script>
 </footer>
 </body>

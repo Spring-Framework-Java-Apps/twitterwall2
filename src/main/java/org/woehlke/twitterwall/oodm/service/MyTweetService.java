@@ -16,4 +16,6 @@ public interface MyTweetService {
     MyTweet update(MyTweet myTweet);
 
     List<MyTweet> getLatestTweets();
+
+    boolean isNotYetStored(MyTweet tweet);
 }

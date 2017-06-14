@@ -52,6 +52,16 @@ public class MyTwitterProfileServiceImpl implements MyTwitterProfileService {
     }
 
     @Override
+    public MyTwitterProfile findByScreenName(String screenName) {
+        return myTwitterProfileRepository.findByScreenName(screenName);
+    }
+
+    @Override
+    public List<MyTwitterProfile> getTweetingUsers() {
+        return myTwitterProfileRepository.getTweetingUsers();
+    }
+
+    @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = true)
     public MyTwitterProfile findByIdTwitter(long idTwitter) {
         return myTwitterProfileRepository.findByIdTwitter(idTwitter);

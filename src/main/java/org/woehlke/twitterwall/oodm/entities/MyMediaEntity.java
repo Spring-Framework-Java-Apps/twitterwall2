@@ -1,9 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -11,7 +8,8 @@ import java.util.Arrays;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyMediaEntity extends MyTwitterObject implements Serializable {
+@Table(name="media")
+public class MyMediaEntity extends MyTwitterObject implements Serializable,Comparable<MyMediaEntity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -137,31 +135,22 @@ public class MyMediaEntity extends MyTwitterObject implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MyMediaEntity)) return false;
+        if (!super.equals(o)) return false;
 
         MyMediaEntity that = (MyMediaEntity) o;
 
-        if (idTwitter != that.idTwitter) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (mediaHttp != null ? !mediaHttp.equals(that.mediaHttp) : that.mediaHttp != null) return false;
-        if (mediaHttps != null ? !mediaHttps.equals(that.mediaHttps) : that.mediaHttps != null) return false;
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
-        if (display != null ? !display.equals(that.display) : that.display != null) return false;
-        if (expanded != null ? !expanded.equals(that.expanded) : that.expanded != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        return Arrays.equals(indices, that.indices);
+        return idTwitter == that.idTwitter;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = super.hashCode();
         result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        result = 31 * result + (mediaHttp != null ? mediaHttp.hashCode() : 0);
-        result = 31 * result + (mediaHttps != null ? mediaHttps.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (display != null ? display.hashCode() : 0);
-        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(indices);
         return result;
+    }
+
+    @Override
+    public int compareTo(MyMediaEntity other) {
+        return Long.compare(idTwitter,other.getIdTwitter());
     }
 }

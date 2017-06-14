@@ -70,4 +70,26 @@ public class MyTwitterProfileRepositoryImpl implements MyTwitterProfileRepositor
         TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
         return query.getResultList();
     }
+
+    @Override
+    public MyTwitterProfile findByScreenName(String screenName) {
+        try {
+            String SQL = "select t from MyTwitterProfile as t where t.screenName=:screenName";
+            TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
+            query.setParameter("screenName",screenName);
+            MyTwitterProfile result = query.getSingleResult();
+            log.debug("found: "+result.getIdTwitter());
+            return result;
+        } catch (NoResultException e){
+            log.debug("not found: "+screenName);
+            return null;
+        }
+    }
+
+    @Override
+    public List<MyTwitterProfile> getTweetingUsers() {
+        String SQL = "select t from MyTwitterProfile as t where t.tweeting=true";
+        TypedQuery<MyTwitterProfile> query = entityManager.createQuery(SQL,MyTwitterProfile.class);
+        return query.getResultList();
+    }
 }

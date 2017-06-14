@@ -64,4 +64,9 @@ public class MyTweetRepositoryImpl implements MyTweetRepository {
         query.setMaxResults(frontendMaxResults);
         return query.getResultList();
     }
+
+    @Override
+    public boolean isNotYetStored(MyTweet tweet) {
+        return null == findByIdTwitter(tweet.getIdTwitter());
+    }
 }

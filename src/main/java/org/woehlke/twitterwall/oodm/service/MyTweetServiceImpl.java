@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.MyTweet;
 import org.woehlke.twitterwall.oodm.repository.MyTweetRepository;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -39,6 +38,11 @@ public class MyTweetServiceImpl implements MyTweetService {
     @Override
     public List<MyTweet> getLatestTweets() {
         return myTweetRepository.getLatestTweets();
+    }
+
+    @Override
+    public boolean isNotYetStored(MyTweet tweet) {
+        return myTweetRepository.isNotYetStored(tweet);
     }
 
     @Override

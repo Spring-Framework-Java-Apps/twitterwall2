@@ -31,4 +31,19 @@ public class MyTwitterObject {
     protected void add(String key, Object value) {
         extraData.put(key, value);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyTwitterObject)) return false;
+
+        MyTwitterObject that = (MyTwitterObject) o;
+
+        return extraData != null ? extraData.equals(that.extraData) : that.extraData == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return extraData != null ? extraData.hashCode() : 0;
+    }
 }

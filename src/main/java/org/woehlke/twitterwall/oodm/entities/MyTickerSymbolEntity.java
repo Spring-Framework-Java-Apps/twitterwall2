@@ -1,9 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -11,7 +8,8 @@ import java.util.Arrays;
  * Created by tw on 10.06.17.
  */
 @Entity
-public class MyTickerSymbolEntity extends MyTwitterObject implements Serializable {
+@Table(name="tickersymbol")
+public class MyTickerSymbolEntity extends MyTwitterObject implements Serializable,Comparable<MyTickerSymbolEntity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -77,6 +75,7 @@ public class MyTickerSymbolEntity extends MyTwitterObject implements Serializabl
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MyTickerSymbolEntity)) return false;
+        if (!super.equals(o)) return false;
 
         MyTickerSymbolEntity that = (MyTickerSymbolEntity) o;
 
@@ -88,10 +87,16 @@ public class MyTickerSymbolEntity extends MyTwitterObject implements Serializabl
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (tickerSymbol != null ? tickerSymbol.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(indices);
         return result;
+    }
+
+    @Override
+    public int compareTo(MyTickerSymbolEntity other) {
+        return tickerSymbol.compareTo(other.getTickerSymbol());
     }
 }

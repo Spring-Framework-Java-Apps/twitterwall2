@@ -21,4 +21,9 @@ public interface MyTwitterProfileRepository {
     List<MyTwitterProfile> getFriends();
 
     List<MyTwitterProfile> getAll();
+
+    MyTwitterProfile findByScreenName(String screenName);
+
+    List<MyTwitterProfile> getTweetingUsers();
+
 }

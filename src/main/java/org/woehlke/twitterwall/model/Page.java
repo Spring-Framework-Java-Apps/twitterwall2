@@ -9,6 +9,7 @@ public class Page implements Serializable {
 
     private String title;
     private String subtitle;
+    private String menuAppName;
 
     public String getTitle() {
         return title;
@@ -24,5 +25,13 @@ public class Page implements Serializable {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public String getMenuAppName() {
+        return menuAppName;
+    }
+
+    public void setMenuAppName(String menuAppName) {
+        this.menuAppName = menuAppName;
     }
 }
