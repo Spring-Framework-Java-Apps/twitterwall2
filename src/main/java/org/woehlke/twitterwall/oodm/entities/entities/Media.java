@@ -9,22 +9,22 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="media")
+@Table(name="media",uniqueConstraints=@UniqueConstraint(columnNames={"display","expanded","media_http","media_https","media_type"}))
 public class Media extends AbstractTwitterObject implements Serializable,Comparable<Media> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(unique=true,nullable=false)
+    @Column(nullable=false)
     private long idTwitter;
 
-    @Column
+    @Column(name="media_http")
     private String mediaHttp;
 
-    @Column
+    @Column(name="media_https")
     private String mediaHttps;
 
     @Column
@@ -36,20 +36,20 @@ public class Media extends AbstractTwitterObject implements Serializable,Compara
     @Column
     private String expanded;
 
-    @Column
-    private String type;
+    @Column(name="media_type")
+    private String mediaType;
 
-    @Column
+    @Transient
     private int[] indices;
 
-    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String type, int[] indices) {
+    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
         this.url = url;
         this.display = display;
         this.expanded = expanded;
-        this.type = type;
+        this.mediaType = mediaType;
         this.indices = indices;
     }
 
@@ -116,12 +116,12 @@ public class Media extends AbstractTwitterObject implements Serializable,Compara
         this.expanded = expanded;
     }
 
-    public String getType() {
-        return type;
+    public String getMediaType() {
+        return mediaType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
     public int[] getIndices() {
@@ -138,15 +138,25 @@ public class Media extends AbstractTwitterObject implements Serializable,Compara
         if (!(o instanceof Media)) return false;
         if (!super.equals(o)) return false;
 
-        Media that = (Media) o;
+        Media media = (Media) o;
 
-        return idTwitter == that.idTwitter;
+        if (mediaHttp != null ? !mediaHttp.equals(media.mediaHttp) : media.mediaHttp != null) return false;
+        if (mediaHttps != null ? !mediaHttps.equals(media.mediaHttps) : media.mediaHttps != null) return false;
+        if (url != null ? !url.equals(media.url) : media.url != null) return false;
+        if (display != null ? !display.equals(media.display) : media.display != null) return false;
+        if (expanded != null ? !expanded.equals(media.expanded) : media.expanded != null) return false;
+        return mediaType != null ? mediaType.equals(media.mediaType) : media.mediaType == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
+        result = 31 * result + (mediaHttp != null ? mediaHttp.hashCode() : 0);
+        result = 31 * result + (mediaHttps != null ? mediaHttps.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (display != null ? display.hashCode() : 0);
+        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
+        result = 31 * result + (mediaType != null ? mediaType.hashCode() : 0);
         return result;
     }
 

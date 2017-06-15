@@ -26,4 +26,15 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     public TickerSymbol store(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.persist(tickerSymbol);
     }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    public TickerSymbol update(TickerSymbol tickerSymbol) {
+        return this.tickerSymbolRepository.merge(tickerSymbol);
+    }
+
+    @Override
+    public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
+        return this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol,url);
+    }
 }

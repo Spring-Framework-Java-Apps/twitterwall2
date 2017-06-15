@@ -7,4 +7,8 @@ import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
  */
 public interface TickerSymbolService {
     TickerSymbol store(TickerSymbol tickerSymbol);
+
+    TickerSymbol update(TickerSymbol tickerSymbol);
+
+    TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
 }

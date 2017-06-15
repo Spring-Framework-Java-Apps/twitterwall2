@@ -276,43 +276,82 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         Set<Media> medias = new LinkedHashSet<Media>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         for(TickerSymbol tickerSymbol:myEntities.getTickerSymbols()){
-            tickerSymbol= tickerSymbolService.store(tickerSymbol);
-            tickerSymbols.add(tickerSymbol);
+            TickerSymbol tickerSymbolPers = tickerSymbolService.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(),tickerSymbol.getUrl());
+            if(tickerSymbolPers != null) {
+                tickerSymbolPers.setUrl(tickerSymbol.getUrl());
+                tickerSymbolPers.setIndices(tickerSymbol.getIndices());
+                tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
+                tickerSymbolPers = tickerSymbolService.update(tickerSymbolPers);
+                tickerSymbols.add(tickerSymbolPers);
+            } else {
+                tickerSymbol = tickerSymbolService.store(tickerSymbol);
+                tickerSymbols.add(tickerSymbol);
+            }
         }
         for(Mention mention:myEntities.getMentions()){
-            Mention mentionPers = mentionService.findByIdTwitter(mention.getIdTwitter());
+            Mention mentionPers = mentionService.findByScreenNameAndName(mention);
             if(mentionPers != null){
-                mention.setId(mentionPers.getId());
-                mention= mentionService.update(mention);
+                mentionPers.setIndices(mention.getIndices());
+                mentionPers.setIdTwitter(mention.getIdTwitter());
+                mentionPers.setName(mention.getName());
+                mentionPers.setScreenName(mention.getScreenName());
+                mentionPers = mentionService.update(mentionPers);
+                mentions.add(mentionPers);
             } else {
-                mention= mentionService.store(mention);
+                mention = mentionService.store(mention);
+                mentions.add(mention);
             }
-            mentions.add(mention);
         }
         for(Media media:myEntities.getMedia()){
-            Media mediaPers = mediaService.findByIdTwitter(media.getIdTwitter());
+            Media mediaPers = mediaService.findByFields(media);
             if(mediaPers != null){
-                media.setId(mediaPers.getId());
-                media= mediaService.update(media);
+                mediaPers.setDisplay(media.getDisplay());
+                mediaPers.setExpanded(media.getExpanded());
+                mediaPers.setIdTwitter(media.getIdTwitter());
+                mediaPers.setIndices(media.getIndices());
+                mediaPers.setMediaHttp(media.getMediaHttp());
+                mediaPers.setMediaHttps(media.getMediaHttps());
+                mediaPers.setMediaType(media.getMediaType());
+                mediaPers.setUrl(media.getUrl());
+                mediaPers = mediaService.update(mediaPers);
+                medias.add(mediaPers);
             } else {
-                media= mediaService.store(media);
+                media = mediaService.store(media);
+                medias.add(media);
             }
-            medias.add(media);
         }
         for(HashTag tag:myEntities.getTags()){
-            tag= hashTagService.store(tag);
-            tags.add(tag);
+            HashTag tagPers = hashTagService.findByText(tag.getText());
+            if(tagPers != null) {
+                tagPers.setText(tag.getText());
+                tagPers.setIndices(tag.getIndices());
+                tags.add(tagPers);
+                tagPers = hashTagService.update(tagPers);
+            } else {
+                tag = hashTagService.store(tag);
+                tags.add(tag);
+            }
         }
         for(Url url:myEntities.getUrls()){
-            url= urlService.store(url);
-            urls.add(url);
+            Url urlPers = urlService.findByDisplayExpandedUrl(url.getDisplay(),url.getExpanded(),url.getUrl());
+            if(urlPers != null) {
+                urlPers.setIndices(url.getIndices());
+                urlPers.setDisplay(url.getDisplay());
+                urlPers.setExpanded(url.getExpanded());
+                urlPers.setUrl(url.getUrl());
+                urlPers = urlService.update(urlPers);
+                urls.add(urlPers);
+            } else {
+                url = urlService.store(url);
+                urls.add(url);
+            }
         }
         myEntities.setMedia(medias);
         myEntities.setMentions(mentions);
         myEntities.setTags(tags);
         myEntities.setTickerSymbols(tickerSymbols);
         myEntities.setUrls(urls);
-        myEntities= entitiesService.store(myEntities);
+        myEntities = entitiesService.store(myEntities);
         return myEntities;
     }
 }

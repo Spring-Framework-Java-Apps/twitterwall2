@@ -53,7 +53,13 @@ public class ScheduledTasks {
 
     private final StoreTweetsProcess storeTweetsProcess;
 
-    @Scheduled(fixedRate = 6000000)
+    private final static long FIXED_RATE_FOR_SCHEDULAR_MINUTEN = 5;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR = FIXED_RATE_FOR_SCHEDULAR_MINUTEN * 60 * 1000;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_TEXT = 30 * 1000;
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR)
     public void fetchTweetsFromTwitterSearch() {
         log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         Twitter twitter = getTwitterProxy();
@@ -77,7 +83,7 @@ public class ScheduledTasks {
         return twitter;
     }
 
-    @Scheduled(fixedRate = 12000000)
+    //@Scheduled(fixedRate = 12000000)
     public void fetchFollowersFromTwitter() {
         log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
         Twitter twitter = getTwitterProxy();
@@ -104,7 +110,7 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(fixedRate = 12000000)
+    //@Scheduled(fixedRate = 12000000)
     public void fetchFriendsFromTwitter() {
         log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
         Twitter twitter = getTwitterProxy();

@@ -40,4 +40,18 @@ public class MentionRepositoryImpl implements MentionRepository {
             return null;
         }
     }
+
+    @Override
+    public Mention findByScreenNameAndName(String screenName,String name) {
+        try {
+            String SQL = "select t from Mention as t where t.screenName=:screenName and t.name=:name";
+            TypedQuery<Mention> query = entityManager.createQuery(SQL,Mention.class);
+            query.setParameter("screenName",screenName);
+            query.setParameter("name",name);
+            Mention result = query.getSingleResult();
+            return result;
+        } catch (NoResultException e){
+            return null;
+        }
+    }
 }

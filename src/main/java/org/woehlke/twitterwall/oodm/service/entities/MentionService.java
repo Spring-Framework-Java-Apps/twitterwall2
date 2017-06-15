@@ -12,4 +12,6 @@ public interface MentionService {
     Mention findByIdTwitter(long idTwitter);
 
     Mention update(Mention mention);
+
+    Mention findByScreenNameAndName(Mention mention);
 }

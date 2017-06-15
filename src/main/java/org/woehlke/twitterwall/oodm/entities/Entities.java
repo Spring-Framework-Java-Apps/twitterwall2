@@ -17,27 +17,27 @@ public class Entities extends AbstractTwitterObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @JoinTable(name="entity_url")
-    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
 
     @JoinTable(name="entity_hashtag")
-    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<HashTag> tags = new LinkedHashSet<HashTag>();
 
     @JoinTable(name="entity_mention")
-    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
 
     @JoinTable(name="entity_media")
-    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<Media> media = new LinkedHashSet<Media>();
 
     @JoinTable(name="entity_tickersymbol")
-    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
     public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media) {

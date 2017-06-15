@@ -7,4 +7,8 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
  */
 public interface UrlService {
     Url store(Url url);
+
+    Url update(Url url);
+
+    Url findByDisplayExpandedUrl(String display, String expanded, String url);
 }

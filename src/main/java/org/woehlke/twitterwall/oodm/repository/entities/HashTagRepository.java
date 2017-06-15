@@ -16,4 +16,5 @@ public interface HashTagRepository {
 
     List<HashTagCounted> getHashTags();
 
+    HashTag findByText(String text);
 }

@@ -12,4 +12,6 @@ public interface MediaService {
     Media findByIdTwitter(long idTwitter);
 
     Media update(Media media);
+
+    Media findByFields(Media media);
 }

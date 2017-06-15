@@ -3,8 +3,10 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -35,5 +37,18 @@ public class HashTagRepositoryImpl implements HashTagRepository {
         String SQL = "select new org.woehlke.twitterwall.model.HashTagCounted(count(h.text),h.text) from HashTag as h group by h.text";
         TypedQuery<HashTagCounted> query = entityManager.createQuery(SQL,HashTagCounted.class);
         return query.getResultList();
+    }
+
+    @Override
+    public HashTag findByText(String text) {
+        try {
+            String SQL = "select t from HashTag as t where t.text=:text";
+            TypedQuery<HashTag> query = entityManager.createQuery(SQL,HashTag.class);
+            query.setParameter("text",text);
+            HashTag result = query.getSingleResult();
+            return result;
+        } catch (NoResultException e){
+            return null;
+        }
     }
 }

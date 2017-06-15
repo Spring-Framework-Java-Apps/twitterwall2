@@ -10,4 +10,6 @@ public interface UrlRepository {
     Url persist(Url url);
 
     Url update(Url url);
+
+    Url findByDisplayExpandedUrl(String display, String expanded, String url);
 }

@@ -40,4 +40,22 @@ public class MediaRepositoryImpl implements MediaRepository {
             return null;
         }
     }
+
+    @Override
+    public Media findByFields(String mediaHttp,String mediaHttps,String url,String display,String expanded, String mediaType) {
+        try {
+            String SQL = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType";
+            TypedQuery<Media> query = entityManager.createQuery(SQL,Media.class);
+            query.setParameter("mediaHttp",mediaHttp);
+            query.setParameter("mediaHttps",mediaHttps);
+            query.setParameter("url",url);
+            query.setParameter("display",display);
+            query.setParameter("expanded",expanded);
+            query.setParameter("mediaType",mediaType);
+            Media result = query.getSingleResult();
+            return result;
+        } catch (NoResultException e){
+            return null;
+        }
+    }
 }

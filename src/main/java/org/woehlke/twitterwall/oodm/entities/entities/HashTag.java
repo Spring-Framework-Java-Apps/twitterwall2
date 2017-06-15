@@ -5,24 +5,25 @@ import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="hashtag")
+@Table(name="hashtag",uniqueConstraints=@UniqueConstraint(columnNames={"text"}))
 public class HashTag extends AbstractTwitterObject implements Serializable,Comparable<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
     private String text;
 
-    @Column
+    @Transient
     private int[] indices;
 
     public String getText() {
@@ -67,19 +68,15 @@ public class HashTag extends AbstractTwitterObject implements Serializable,Compa
         if (!(o instanceof HashTag)) return false;
         if (!super.equals(o)) return false;
 
-        HashTag that = (HashTag) o;
+        HashTag hashTag = (HashTag) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (text != null ? !text.equals(that.text) : that.text != null) return false;
-        return Arrays.equals(indices, that.indices);
+        return text != null ? text.equals(hashTag.text) : hashTag.text == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(indices);
         return result;
     }
 

@@ -9,25 +9,25 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="mention")
+@Table(name="mention",uniqueConstraints=@UniqueConstraint(columnNames={"screen_name","name"}))
 public class Mention extends AbstractTwitterObject implements Serializable,Comparable<Mention> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(unique=true,nullable=false)
+    @Column(nullable=false)
     private long idTwitter;
 
-    @Column
+    @Column(name="screen_name")
     private String screenName;
 
     @Column
     private String name;
 
-    @Column
+    @Transient
     private int[] indices;
 
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
@@ -90,15 +90,17 @@ public class Mention extends AbstractTwitterObject implements Serializable,Compa
         if (!(o instanceof Mention)) return false;
         if (!super.equals(o)) return false;
 
-        Mention that = (Mention) o;
+        Mention mention = (Mention) o;
 
-        return idTwitter == that.idTwitter;
+        if (screenName != null ? !screenName.equals(mention.screenName) : mention.screenName != null) return false;
+        return name != null ? name.equals(mention.name) : mention.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
+        result = 31 * result + (screenName != null ? screenName.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 

@@ -5,18 +5,19 @@ import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="url")
+@Table(name="url",uniqueConstraints=@UniqueConstraint(columnNames={"display","expanded","url"}))
 public class Url extends AbstractTwitterObject implements Serializable,Comparable<Url>  {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column
@@ -28,7 +29,7 @@ public class Url extends AbstractTwitterObject implements Serializable,Comparabl
     @Column
     private String url;
 
-    @Column
+    @Transient
     private int[] indices;
 
     public Url(String display, String expanded, String url, int[] indices) {
@@ -91,23 +92,19 @@ public class Url extends AbstractTwitterObject implements Serializable,Comparabl
         if (!(o instanceof Url)) return false;
         if (!super.equals(o)) return false;
 
-        Url that = (Url) o;
+        Url url1 = (Url) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (display != null ? !display.equals(that.display) : that.display != null) return false;
-        if (expanded != null ? !expanded.equals(that.expanded) : that.expanded != null) return false;
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
-        return Arrays.equals(indices, that.indices);
+        if (display != null ? !display.equals(url1.display) : url1.display != null) return false;
+        if (expanded != null ? !expanded.equals(url1.expanded) : url1.expanded != null) return false;
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (display != null ? display.hashCode() : 0);
         result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(indices);
         return result;
     }
 

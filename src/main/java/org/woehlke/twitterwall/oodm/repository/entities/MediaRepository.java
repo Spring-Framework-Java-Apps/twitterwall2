@@ -12,4 +12,6 @@ public interface MediaRepository {
     Media update(Media myMediaEntity);
 
     Media findByIdTwitter(long idTwitter);
+
+    Media findByFields(String mediaHttp,String mediaHttps,String url,String display,String expanded, String type);
 }

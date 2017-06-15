@@ -12,4 +12,6 @@ public interface MentionRepository {
     Mention update(Mention myMentionEntity);
 
     Mention findByIdTwitter(long idTwitter);
+
+    Mention findByScreenNameAndName(String screenName,String name);
 }

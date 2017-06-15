@@ -37,4 +37,9 @@ public class MentionServiceImpl implements MentionService {
     public Mention update(Mention mention) {
         return this.mentionRepository.update(mention);
     }
+
+    @Override
+    public Mention findByScreenNameAndName(Mention mention) {
+        return this.mentionRepository.findByScreenNameAndName(mention.getScreenName(),mention.getName());
+    }
 }

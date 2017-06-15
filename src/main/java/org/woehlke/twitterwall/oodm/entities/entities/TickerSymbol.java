@@ -5,27 +5,28 @@ import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="tickersymbol")
+@Table(name="tickersymbol",uniqueConstraints=@UniqueConstraint(columnNames={"ticker_symbol","url"}))
 public class TickerSymbol extends AbstractTwitterObject implements Serializable,Comparable<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column
+    @Column(name="ticker_symbol")
     private String tickerSymbol;
 
     @Column
     private String url;
 
-    @Column
+    @Transient
     private int[] indices;
 
     public TickerSymbol(String tickerSymbol, String url, int[] indices) {
@@ -81,19 +82,15 @@ public class TickerSymbol extends AbstractTwitterObject implements Serializable,
 
         TickerSymbol that = (TickerSymbol) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (tickerSymbol != null ? !tickerSymbol.equals(that.tickerSymbol) : that.tickerSymbol != null) return false;
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
-        return Arrays.equals(indices, that.indices);
+        if (!tickerSymbol.equals(that.tickerSymbol)) return false;
+        return url.equals(that.url);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (tickerSymbol != null ? tickerSymbol.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(indices);
+        result = 31 * result + tickerSymbol.hashCode();
+        result = 31 * result + url.hashCode();
         return result;
     }
 

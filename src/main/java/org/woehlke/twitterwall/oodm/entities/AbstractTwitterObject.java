@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
+import javax.persistence.Transient;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
  */
 public abstract class AbstractTwitterObject {
 
+    @Transient
     private Map<String, Object> extraData;
 
     public AbstractTwitterObject() {

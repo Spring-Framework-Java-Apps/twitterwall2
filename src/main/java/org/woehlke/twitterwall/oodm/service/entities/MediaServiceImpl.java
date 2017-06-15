@@ -37,4 +37,9 @@ public class MediaServiceImpl implements MediaService {
     public Media update(Media media) {
         return this.mediaRepository.update(media);
     }
+
+    @Override
+    public Media findByFields(Media media) {
+        return this.mediaRepository.findByFields(media.getMediaHttp(),media.getMediaHttps(),media.getUrl(),media.getDisplay(),media.getExpanded(),media.getMediaType());
+    }
 }

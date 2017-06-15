@@ -9,5 +9,7 @@ public interface TickerSymbolRepository {
 
     TickerSymbol persist(TickerSymbol myTickerSymbolEntity);
 
-    TickerSymbol update(TickerSymbol myTickerSymbolEntity);
+    TickerSymbol merge(TickerSymbol tickerSymbol);
+
+    TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
 }
