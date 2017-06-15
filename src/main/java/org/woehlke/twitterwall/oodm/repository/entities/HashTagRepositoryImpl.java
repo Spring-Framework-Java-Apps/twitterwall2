@@ -33,13 +33,6 @@ public class HashTagRepositoryImpl implements HashTagRepository {
     }
 
     @Override
-    public List<HashTagCounted> getHashTags() {
-        String SQL = "select new org.woehlke.twitterwall.model.HashTagCounted(count(h.text),h.text) from HashTag as h group by h.text";
-        TypedQuery<HashTagCounted> query = entityManager.createQuery(SQL,HashTagCounted.class);
-        return query.getResultList();
-    }
-
-    @Override
     public HashTag findByText(String text) {
         try {
             String SQL = "select t from HashTag as t where t.text=:text";
@@ -50,5 +43,12 @@ public class HashTagRepositoryImpl implements HashTagRepository {
         } catch (NoResultException e){
             return null;
         }
+    }
+
+    @Override
+    public List<HashTag> getAll() {
+        String SQL = "select h from HashTag as h";
+        TypedQuery<HashTag> query = entityManager.createQuery(SQL,HashTag.class);
+        return query.getResultList();
     }
 }

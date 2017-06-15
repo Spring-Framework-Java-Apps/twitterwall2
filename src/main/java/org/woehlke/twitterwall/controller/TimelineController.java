@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
 import javax.xml.ws.http.HTTPException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,7 +59,13 @@ public class TimelineController {
     @RequestMapping("/hashtags")
     public String hashTags(Model model) {
         model = setupPage(model);
-        List<HashTagCounted> hashTags = this.hashTagService.getHashTags();
+        List<HashTagCounted> hashTags = new ArrayList<>();
+        for(HashTag hashTag : hashTagService.getAll()){
+            long number=tweetService.countTweetsForHashTag(hashTag.getText());
+            String text=hashTag.getText();
+            HashTagCounted c = new HashTagCounted(number,text);
+            hashTags.add(c);
+        }
         model.addAttribute("hashTags",hashTags);
         return "tags";
     }

@@ -77,4 +77,12 @@ public class TweetRepositoryImpl implements TweetRepository {
         query.setParameter("hashtagText",hashtagText);
         return query.getResultList();
     }
+
+    @Override
+    public long countTweetsForHashTag(String hashtagText) {
+        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText";
+        TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
+        query.setParameter("hashtagText",hashtagText);
+        return this.getTweetsForHashTag(hashtagText).size();
+    }
 }

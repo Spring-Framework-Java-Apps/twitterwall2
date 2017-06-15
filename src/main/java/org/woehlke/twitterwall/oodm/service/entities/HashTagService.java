@@ -11,10 +11,9 @@ import java.util.List;
 public interface HashTagService {
     HashTag store(HashTag tag);
 
-    List<HashTagCounted> getHashTags();
-
     HashTag update(HashTag tag);
 
     HashTag findByText(String text);
 
+    List<HashTag> getAll();
 }

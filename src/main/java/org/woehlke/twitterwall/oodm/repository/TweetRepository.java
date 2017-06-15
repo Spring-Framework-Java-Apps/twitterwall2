@@ -20,4 +20,6 @@ public interface TweetRepository {
     boolean isNotYetStored(Tweet tweet);
 
     List<Tweet> getTweetsForHashTag(String hashtagText);
+
+    long countTweetsForHashTag(String hashtagText);
 }

@@ -14,7 +14,7 @@ public interface HashTagRepository {
 
     HashTag update(HashTag hashTag);
 
-    List<HashTagCounted> getHashTags();
-
     HashTag findByText(String text);
+
+    List<HashTag> getAll();
 }

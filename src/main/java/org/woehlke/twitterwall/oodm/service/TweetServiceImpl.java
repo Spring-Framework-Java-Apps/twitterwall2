@@ -51,6 +51,11 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
+    public long countTweetsForHashTag(String hashtagText) {
+        return tweetRepository.countTweetsForHashTag(hashtagText);
+    }
+
+    @Override
     public Tweet findByIdTwitter(long idTwitter) {
         return tweetRepository.findByIdTwitter(idTwitter);
     }

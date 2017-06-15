@@ -14,7 +14,7 @@
                 <span th:each="hashTag : ${hashTags}">
                     <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
                     <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
-                    </a>
+                    </a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
             </div>
         </div>

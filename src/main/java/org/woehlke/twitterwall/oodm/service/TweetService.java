@@ -21,4 +21,6 @@ public interface TweetService {
 
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
+    long countTweetsForHashTag(String hashtagText);
+
 }

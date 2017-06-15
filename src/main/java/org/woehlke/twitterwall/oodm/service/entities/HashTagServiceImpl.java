@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +32,6 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    public List<HashTagCounted> getHashTags() {
-        return this.hashTagRepository.getHashTags();
-    }
-
-    @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
     public HashTag update(HashTag tag) {
         return this.hashTagRepository.update(tag);
@@ -44,5 +40,10 @@ public class HashTagServiceImpl implements HashTagService {
     @Override
     public HashTag findByText(String text) {
         return this.hashTagRepository.findByText(text);
+    }
+
+    @Override
+    public List<HashTag> getAll() {
+        return this.hashTagRepository.getAll();
     }
 }
