@@ -1,8 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.entities.Url;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -118,13 +121,51 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
 
     public String getFormattedText(){
         String formattedText = this.text;
-        Pattern userPattern = Pattern.compile("@([a-zA-Z0-9_]{1,15})");
-        Pattern hashTagPattern = Pattern.compile("#([a-zA-Z0-9_]*)\\s+");
-        Matcher m1  =userPattern.matcher(formattedText);
-        String formattedText2 = m1.replaceAll("<a class=\"tweet-action\" href=\"/profile/$1\">@$1</a>");
-        Matcher m2  = hashTagPattern.matcher(formattedText2);
-        String formattedText3 = m2.replaceAll("<a class=\"tweet-action\" href=\"/hashtag/$1\">#$1</a> ");
-        return formattedText3;
+
+        Pattern userPattern = Pattern.compile("@([a-zA-Z0-9_]{1,15})"+stopChar);
+        Matcher m1 = userPattern.matcher(formattedText);
+        formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
+
+        Pattern userPattern2 = Pattern.compile("@([a-zA-Z0-9_]{1,15})$");
+        Matcher m2 = userPattern2.matcher(formattedText);
+        formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
+
+        Pattern hashTagPattern = Pattern.compile("#([a-zA-Z0-9_]*)"+stopChar);
+        Matcher m3 = hashTagPattern.matcher(formattedText);
+        formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
+
+        Pattern hashTagPattern2 = Pattern.compile("#([a-zA-Z0-9_]*)$");
+        Matcher m4 = hashTagPattern2.matcher(formattedText);
+        formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
+
+        Set<Url> urls = this.entities.getUrls();
+        for(Url url:urls){
+            Pattern myUrl1 = Pattern.compile("("+url.getUrl()+")"+stopChar);
+            Matcher m10  = myUrl1.matcher(formattedText);
+            formattedText = m10.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl2 = Pattern.compile("("+url.getDisplay()+")"+stopChar);
+            Matcher m11  = myUrl2.matcher(formattedText);
+            formattedText = m11.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl3 = Pattern.compile("("+url.getExpanded()+")"+stopChar);
+            Matcher m12  = myUrl3.matcher(formattedText);
+            formattedText = m12.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl4 = Pattern.compile("("+url.getUrl()+")$");
+            Matcher m20  = myUrl4.matcher(formattedText);
+            formattedText = m20.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl5 = Pattern.compile("("+url.getDisplay()+")$");
+            Matcher m21  = myUrl5.matcher(formattedText);
+            formattedText = m21.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl6 = Pattern.compile("("+url.getExpanded()+")$");
+            Matcher m22  = myUrl6.matcher(formattedText);
+            formattedText = m22.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+        }
+
+        return formattedText;
     }
 
     public Long getId() {
@@ -300,5 +341,41 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     @Override
     public int compareTo(Tweet other) {
         return createdAt.compareTo(other.getCreatedAt());
+    }
+
+    static private String stopChar;
+
+    static {
+        StringBuffer x = new StringBuffer("[\\s");
+        x.append("\\!");
+        x.append("\\%");
+        x.append("\\&");
+        x.append("\\'");
+        x.append("\\(");
+        x.append("\\)");
+        x.append("\\*");
+        x.append("\\+");
+        x.append("\\,");
+        x.append("\\-");
+        x.append("\\.");
+        x.append("\\/");
+        x.append("\\:");
+        x.append("\\;");
+        //x.append("\\<");
+        x.append("\\=");
+        //x.append("\\>");
+        x.append("\\?");
+        x.append("\\[");
+        x.append("\\]");
+        x.append("\\^");
+        x.append("\\_");
+        x.append("\\`");
+        x.append("\\{");
+        x.append("\\|");
+        x.append("\\}");
+        x.append("\\~");
+        x.append("\\\\z");
+        x.append("]");
+        stopChar = x.toString();
     }
 }

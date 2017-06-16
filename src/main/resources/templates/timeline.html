@@ -14,16 +14,24 @@
                 <div class="thumbnail tw-col-4-box" th:each="tweet : ${latestTweets}">
                     <a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><img
                             src="" alt="Alt-Text"
-                            th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description}" /></a>
+                            th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description},title=${tweet.user.description}"/></a>
                     <div class="caption">
                         <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></a></h3>
                         <p th:utext="${tweet.formattedText}">Text</p>
+                        <!--
+                        <p><hr/></p>
+                        <p th:text="${tweet.text}">Text</p>
+                        <p><hr/></p>
+                        <p th:text="${tweet.idTwitter}">idTwitter</p>
+                        <p><hr/></p>
+                        -->
                     </div>
                 </div>
                 <span th:if="${page.historyBack}">
                     <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
                 </span>
+
             </div>
         </div>
     </div>

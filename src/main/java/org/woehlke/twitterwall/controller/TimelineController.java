@@ -36,6 +36,9 @@ public class TimelineController {
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
     @Autowired
     public TimelineController(TweetService tweetService, HashTagService hashTagService) {
         this.tweetService = tweetService;
@@ -94,7 +97,7 @@ public class TimelineController {
         Page page = new Page();
         page.setMenuAppName(menuAppName);
         page.setTitle("Tweets");
-        page.setSubtitle("#TYPO3 OR #t3cb");
+        page.setSubtitle(searchterm);
         model.addAttribute("page",page);
         return model;
     }
