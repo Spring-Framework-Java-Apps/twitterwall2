@@ -7,4 +7,9 @@ import org.woehlke.twitterwall.oodm.entities.Entities;
  */
 public interface EntitiesService {
     Entities store(Entities myEntities);
+
+    Entities findByIdTwitterFromTweet(long idTwitterFromTweet);
+
+    Entities update(Entities myEntitiesPers);
+
 }

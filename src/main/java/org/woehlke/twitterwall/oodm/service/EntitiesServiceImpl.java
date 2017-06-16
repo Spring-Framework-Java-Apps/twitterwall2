@@ -26,4 +26,15 @@ public class EntitiesServiceImpl implements EntitiesService {
     public Entities store(Entities myEntities) {
         return this.entitiesRepository.persist(myEntities);
     }
+
+    @Override
+    public Entities findByIdTwitterFromTweet(long idTwitterFromTweet) {
+        return this.entitiesRepository.findByIdTwitterFromTweet(idTwitterFromTweet);
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    public Entities update(Entities myEntitiesPers) {
+        return this.entitiesRepository.update(myEntitiesPers);
+    }
 }

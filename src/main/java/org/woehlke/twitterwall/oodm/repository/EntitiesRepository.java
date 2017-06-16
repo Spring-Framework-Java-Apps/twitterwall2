@@ -10,4 +10,6 @@ public interface EntitiesRepository {
     Entities persist(Entities myEntities);
 
     Entities update(Entities myEntities);
+
+    Entities findByIdTwitterFromTweet(long idTwitterFromTweet);
 }

@@ -20,6 +20,9 @@ public class Entities extends AbstractTwitterObject implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(nullable = false, unique=true)
+    private long idTwitterFromTweet;
+
     @JoinTable(name="entity_url")
     @ManyToMany(fetch=FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
@@ -40,15 +43,16 @@ public class Entities extends AbstractTwitterObject implements Serializable {
     @ManyToMany(fetch=FetchType.EAGER)
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
-    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media) {
+    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media,long idTwitterFromTweet) {
         this.urls = urls;
         this.tags = tags;
         this.mentions=mentions;
         this.media=media;
+        this.idTwitterFromTweet = idTwitterFromTweet;
     }
 
-    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
-        this(urls, tags, mentions, media);
+    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media, long idTwitterFromTweet, Set<TickerSymbol> tickerSymbols) {
+        this(urls, tags, mentions, media, idTwitterFromTweet);
         this.tickerSymbols = tickerSymbols;
     }
 
@@ -103,31 +107,29 @@ public class Entities extends AbstractTwitterObject implements Serializable {
         this.tickerSymbols = tickerSymbols;
     }
 
+    public long getIdTwitterFromTweet() {
+        return idTwitterFromTweet;
+    }
+
+    public void setIdTwitterFromTweet(long idTwitterFromTweet) {
+        this.idTwitterFromTweet = idTwitterFromTweet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Entities)) return false;
         if (!super.equals(o)) return false;
 
-        Entities that = (Entities) o;
+        Entities entities = (Entities) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (urls != null ? !urls.equals(that.urls) : that.urls != null) return false;
-        if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
-        if (mentions != null ? !mentions.equals(that.mentions) : that.mentions != null) return false;
-        if (media != null ? !media.equals(that.media) : that.media != null) return false;
-        return tickerSymbols != null ? tickerSymbols.equals(that.tickerSymbols) : that.tickerSymbols == null;
+        return idTwitterFromTweet == entities.idTwitterFromTweet;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (urls != null ? urls.hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
-        result = 31 * result + (mentions != null ? mentions.hashCode() : 0);
-        result = 31 * result + (media != null ? media.hashCode() : 0);
-        result = 31 * result + (tickerSymbols != null ? tickerSymbols.hashCode() : 0);
+        result = 31 * result + (int) (idTwitterFromTweet ^ (idTwitterFromTweet >>> 32));
         return result;
     }
 }

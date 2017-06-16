@@ -131,7 +131,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             TwitterProfile twitterProfile = tweet.getUser();
             User user = transformTwitterProfile(twitterProfile);
             myTweet.setUser(user);
-            Entities myEntities = transformTwitterEntities(tweet.getEntities());
+            Entities myEntities = transformTwitterEntities(tweet.getEntities(),tweet.getId());
             myTweet.setEntities(myEntities);
             return myTweet;
         } else {
@@ -193,13 +193,13 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         return storeOneUser(user);
     }
 
-    private Entities transformTwitterEntities(org.springframework.social.twitter.api.Entities entities) {
+    private Entities transformTwitterEntities(org.springframework.social.twitter.api.Entities entities,long idTwitterFromTweet) {
         Set<Url> urls = transformTwitterEntitiesUrls(entities.getUrls());
         Set<HashTag> tags = transformTwitterEntitiesHashTags(entities.getHashTags());
         Set<Mention> mentions = transformTwitterEntitiesMentions(entities.getMentions());
         Set<Media> media = transformTwitterEntitiesMedia(entities.getMedia());
         Set<TickerSymbol> tickerSymbols = transformTwitterEntitiesTickerSymbols(entities.getTickerSymbols());
-        Entities myEntities = new Entities(urls,tags,mentions,media,tickerSymbols);
+        Entities myEntities = new Entities(urls,tags,mentions,media,idTwitterFromTweet,tickerSymbols);
         return myEntities;
     }
 
@@ -346,12 +346,23 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 urls.add(url);
             }
         }
-        myEntities.setMedia(medias);
-        myEntities.setMentions(mentions);
-        myEntities.setTags(tags);
-        myEntities.setTickerSymbols(tickerSymbols);
-        myEntities.setUrls(urls);
-        myEntities = entitiesService.store(myEntities);
-        return myEntities;
+        Entities myEntitiesPers = entitiesService.findByIdTwitterFromTweet(myEntities.getIdTwitterFromTweet());
+        if(myEntitiesPers != null){
+            myEntitiesPers.setMedia(medias);
+            myEntitiesPers.setMentions(mentions);
+            myEntitiesPers.setTags(tags);
+            myEntitiesPers.setTickerSymbols(tickerSymbols);
+            myEntitiesPers.setUrls(urls);
+            myEntitiesPers = entitiesService.update(myEntitiesPers);
+            return myEntitiesPers;
+        } else {
+            myEntities.setMedia(medias);
+            myEntities.setMentions(mentions);
+            myEntities.setTags(tags);
+            myEntities.setTickerSymbols(tickerSymbols);
+            myEntities.setUrls(urls);
+            myEntities = entitiesService.store(myEntities);
+            return myEntities;
+        }
     }
 }
