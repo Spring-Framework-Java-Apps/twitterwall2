@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.entities.Media;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 
 import javax.persistence.*;
@@ -165,6 +167,18 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
             formattedText = m22.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
         }
 
+        Set<Media> media = this.entities.getMedia();
+        for(Media medium:media) {
+            if (medium.getMediaType().compareTo("photo")==0) {
+                Pattern myUrl1 = Pattern.compile("(" + medium.getUrl() + ")" + stopChar);
+                Matcher m10 = myUrl1.matcher(formattedText);
+                formattedText = m10.replaceAll("<br/><br/><a class=\"tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
+
+                Pattern myUrl2 = Pattern.compile("(" + medium.getUrl() + ")$");
+                Matcher m11 = myUrl2.matcher(formattedText);
+                formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
+            }
+        }
         return formattedText;
     }
 

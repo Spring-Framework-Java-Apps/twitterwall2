@@ -12,13 +12,28 @@
         <div class="row">
             <div class="col-md-12 tw-col-4-wrapper">
                 <div class="thumbnail tw-col-4-box" th:each="tweet : ${latestTweets}">
+                    <p></p>
                     <a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><img
                             src="" alt="Alt-Text"
                             th:attr="src=${tweet.user.bigProfileImageUrl},alt=${tweet.user.description},title=${tweet.user.description}"/></a>
                     <div class="caption">
                         <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></a></h3>
-                        <p th:utext="${tweet.formattedText}">Text</p>
+                        <p th:if="${tweet.retweetedStatus} == null"><span th:utext="${tweet.formattedText}">Text</span></p>
+                        <p th:if="${tweet.retweetedStatus} != null">
+                            RT<br/>
+                            <div class="thumbnail">
+                                <p></p>
+                                <a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><img
+                                        src="" alt="Alt-Text"
+                                        th:attr="src=${tweet.retweetedStatus.user.bigProfileImageUrl},alt=${tweet.retweetedStatus.user.description},title=${tweet.retweetedStatus.user.description}"/></a>
+                                <div class="caption">
+                                    <h2><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
+                                    <h3><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
+                                    <p th:utext="${tweet.formattedText}">Text</p>
+                                </div>
+                            </div>
+                        </p>
                         <!--
                         <p><hr/></p>
                         <p th:text="${tweet.text}">Text</p>
