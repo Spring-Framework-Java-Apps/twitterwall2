@@ -32,3 +32,6 @@ Twitterwall with spring:boot for heroku
 - run with: mvn clean spring-boot:run
 
 
+&copy; 2017 Thomas Wöhlke
+
+
