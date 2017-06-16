@@ -42,7 +42,7 @@ public class ProfileController {
             page.setSubtitle(user.getName());
             model.addAttribute("page",page);
             model.addAttribute("user", user);
-            return "user/profile";
+            return "profile";
         } else {
             int statusCode = 404;
             throw new HTTPException(statusCode);

@@ -28,28 +28,28 @@ public class UserController {
     public String follower(Model model) {
         model.addAttribute("users", userService.getFollower());
         model = setupPage(model,"Follower");
-        return "user/user";
+        return "user";
     }
 
     @RequestMapping("/user/friends")
     public String friends(Model model) {
         model.addAttribute("users", userService.getFriends());
         model = setupPage(model,"Friends");
-        return "user/user";
+        return "user";
     }
 
     @RequestMapping("/user/all")
     public String all(Model model) {
         model.addAttribute("users", userService.getAll());
         model = setupPage(model,"All");
-        return "user/user";
+        return "user";
     }
 
     @RequestMapping("/user/tweets")
     public String getTweetingUsers(Model model) {
         model.addAttribute("users", userService.getTweetingUsers());
         model = setupPage(model,"Tweets");
-        return "user/user";
+        return "user";
     }
 
     private Model setupPage(Model model,String subtitle){

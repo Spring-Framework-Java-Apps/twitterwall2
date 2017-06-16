@@ -3,6 +3,8 @@ package org.woehlke.twitterwall.oodm.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
@@ -112,6 +114,17 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     }
 
     private Tweet() {
+    }
+
+    public String getFormattedText(){
+        String formattedText = this.text;
+        Pattern userPattern = Pattern.compile("@([a-zA-Z0-9_]{1,15})");
+        Pattern hashTagPattern = Pattern.compile("#([a-zA-Z0-9_]*)\\s+");
+        Matcher m1  =userPattern.matcher(formattedText);
+        String formattedText2 = m1.replaceAll("<a class=\"tweet-action\" href=\"/profile/$1\">@$1</a>");
+        Matcher m2  = hashTagPattern.matcher(formattedText2);
+        String formattedText3 = m2.replaceAll("<a class=\"tweet-action\" href=\"/hashtag/$1\">#$1</a> ");
+        return formattedText3;
     }
 
     public Long getId() {

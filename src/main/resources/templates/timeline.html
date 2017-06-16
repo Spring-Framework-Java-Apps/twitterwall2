@@ -18,7 +18,7 @@
                     <div class="caption">
                         <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><b>@<span th:text="${tweet.user.screenName}">fromUser</span></b></a></h3>
-                        <p th:text="${tweet.text}">Text</p>
+                        <p th:utext="${tweet.formattedText}">Text</p>
                     </div>
                 </div>
                 <span th:if="${page.historyBack}">
