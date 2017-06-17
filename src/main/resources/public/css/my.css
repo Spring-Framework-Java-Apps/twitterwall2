@@ -49,6 +49,89 @@
         height: 200px;
     }
 
+    .tweet-photo {
+        width: 100%;
+        height: auto;
+    }
+
+    .thumbnail .thumbnail {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+
+/*
+Standad Breakpoints Bootstrap:
+xs: Extra small devices - Phones (<768px)
+sm: Small devices - Tablets (≥768px)
+md: Medium devices - Desktops (≥992px)
+lg: Large devices - Desktops (≥1200px)
+*/
+
+
+/* xs: Extra small devices - Phones (<768px) */
+@media screen and (max-width: 767px) {
+    .navbar-nav .open .dropdown-menu {
+        background-color: #317eac !important;
+    }
+
+    /* https://css-tricks.com/snippets/css/complete-guide-grid/ */
+
+    .tw-col-4-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr; /* 1 x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    .tw-col-4s-box {
+        grid-column: auto / span 1;
+        grid-row: auto / span 1;
+    }
+
+    .tw-col-3-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr; /* 1 x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    .tw-col-3-box-center {
+        grid-column: 1/ span 1;
+        grid-row: 1 / span 1;
+    }
+}
+
+/* sm: Small devices - Tablets (≥768px) */
+@media screen and (min-width: 768px) and (max-width: 991px){
+
+    .tw-col-4-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr 1fr 1fr; /* 3 x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    /* https://css-tricks.com/snippets/css/complete-guide-grid/ */
+
+    .tw-col-4s-box {
+        grid-column: auto / span 1;
+        grid-row: auto / span 1;
+    }
+
+    .tw-col-3-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr 1fr 1fr; /* 3 x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    .tw-col-3-box-center {
+        grid-column: 2/ span 1;
+        grid-row: 1 / span 1;
+    }
+}
+
+/* md: Medium devices - Desktops (≥992px)  */
+@media screen and (min-width: 992px) and (max-width: 1199px){
+
     /* https://css-tricks.com/snippets/css/complete-guide-grid/ */
 
     .tw-col-4-wrapper {
@@ -73,22 +156,36 @@
         grid-row: 1 / span 1;
     }
 
-    .tweet-photo {
-        width: 100%;
-        height: auto;
+}
+
+/* lg: Large devices - Desktops (≥1200px)  */
+@media screen and (min-width: 1200px) {
+
+    /* https://css-tricks.com/snippets/css/complete-guide-grid/ */
+
+    .tw-col-4-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 x 1 fraction */
+        grid-gap: 8px;
     }
 
-    .thumbnail .thumbnail {
-        margin-left: 0;
-        margin-right: 0;
+    .tw-col-4s-box {
+        grid-column: auto / span 1;
+        grid-row: auto / span 1;
+    }
+
+    .tw-col-3-wrapper {
+        display: grid; /* display: inline-grid;*/
+        grid-template-columns: 1fr 1fr 1fr; /* 3ss x 1 fraction */
+        grid-gap: 8px;
+    }
+
+    .tw-col-3-box-center {
+        grid-column: 2/ span 1;
+        grid-row: 1 / span 1;
     }
 }
 
-@media screen and (max-width: 767px) {
-    .navbar-nav .open .dropdown-menu {
-        background-color: #317eac !important;
-    }
-}
 
 
 
