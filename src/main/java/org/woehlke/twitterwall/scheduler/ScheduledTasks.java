@@ -12,6 +12,7 @@ import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.process.StoreTweetsProcess;
 
 import java.text.SimpleDateFormat;
@@ -63,15 +64,20 @@ public class ScheduledTasks {
     public void fetchTweetsFromTwitterSearch() {
         log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         Twitter twitter = getTwitterProxy();
-        List<Tweet> tweets = twitter.searchOperations().search(searchQuery,pageSize).getTweets();
-        log.info("---------------------------------------");
-        for(Tweet tweet: tweets){
-            log.info("User: @"+tweet.getFromUser());
-            log.info("Text:  "+tweet.getText());
-            log.info("Image: "+tweet.getProfileImageUrl());
-            this.storeTweetsProcess.storeOneTweet(tweet);
+        try {
+            List<Tweet> tweets = twitter.searchOperations().search(searchQuery, pageSize).getTweets();
+            log.info("---------------------------------------");
+            for (Tweet tweet : tweets) {
+                log.info("User: @" + tweet.getFromUser());
+                log.info("Text:  " + tweet.getText());
+                log.info("Image: " + tweet.getProfileImageUrl());
+                this.storeTweetsProcess.storeOneTweet(tweet);
+                log.info("---------------------------------------");
+            }
+        } catch (ResourceAccessException e){
+            log.error("Twitter: "+e.getMessage());
+            log.error("Twitter: check your Network Connection!");
         }
-        log.info("---------------------------------------");
     }
 
     private Twitter getTwitterProxy(){
@@ -103,10 +109,13 @@ public class ScheduledTasks {
                 }
                 Thread.sleep(600000);
             }
-        } catch (RateLimitExceededException e){
+        } catch (ResourceAccessException e){
             log.error("Twitter: "+e.getMessage());
+            log.error("Twitter: check your Network Connection!");
+        } catch (RateLimitExceededException e){
+            log.warn("Twitter: "+e.getMessage());
         } catch (InterruptedException e) {
-            log.error("InterruptedException: "+e.getMessage());
+            log.warn("InterruptedException: "+e.getMessage());
         }
     }
 
@@ -130,6 +139,9 @@ public class ScheduledTasks {
                 }
                 Thread.sleep(600000);
             }
+        } catch (ResourceAccessException e){
+            log.error("Twitter: "+e.getMessage());
+            log.error("Twitter: check your Network Connection!");
         } catch (RateLimitExceededException e){
             log.error("Twitter: "+e.getMessage());
         } catch (InterruptedException e) {
