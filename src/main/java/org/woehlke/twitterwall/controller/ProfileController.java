@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.exceptions.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 import javax.xml.ws.http.HTTPException;
@@ -44,8 +45,7 @@ public class ProfileController {
             model.addAttribute("user", user);
             return "profile";
         } else {
-            int statusCode = 404;
-            throw new HTTPException(statusCode);
+            throw new ControllerRequestParameterSyntaxException("/profile/{screenName}",screenName);
         }
     }
 }

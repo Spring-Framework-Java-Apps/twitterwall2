@@ -15,8 +15,6 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 @Controller
 public class ImprintController {
 
-
-
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 

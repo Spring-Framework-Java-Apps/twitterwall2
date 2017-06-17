@@ -12,6 +12,7 @@ import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.exceptions.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
@@ -88,8 +89,7 @@ public class TimelineController {
             model.addAttribute("latestTweets", tweets);
             return "timeline";
         } else {
-            int statusCode = 404;
-            throw new HTTPException(statusCode);
+            throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}",hashtagText);
         }
     }
 

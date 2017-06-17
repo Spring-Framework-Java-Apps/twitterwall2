@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.repository;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.exceptions.FindEntitiesByIdTwitterFromTweetException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -38,7 +38,7 @@ public class EntitiesRepositoryImpl implements EntitiesRepository {
             Entities result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            return null;
+            throw new FindEntitiesByIdTwitterFromTweetException(e,idTwitterFromTweet);
         }
     }
 }

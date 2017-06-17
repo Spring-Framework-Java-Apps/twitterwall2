@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.exceptions.FindTweetByIdTwitter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TweetRepositoryImpl implements TweetRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+idTwitter);
-            return null;
+            throw new FindTweetByIdTwitter(e,idTwitter);
         }
     }
 

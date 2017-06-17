@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.exceptions.FindTickerSymbolByTickerSymbolAndUrl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -39,7 +40,7 @@ public class TickerSymbolRepositoryImpl implements TickerSymbolRepository {
             TickerSymbol result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            return null;
+            throw new FindTickerSymbolByTickerSymbolAndUrl(e,tickerSymbol,url);
         }
     }
 }

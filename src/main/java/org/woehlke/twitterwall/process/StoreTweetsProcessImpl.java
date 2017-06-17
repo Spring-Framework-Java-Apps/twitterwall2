@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.exceptions.*;
 import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 
@@ -58,48 +59,44 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private Tweet storeOneTweet(Tweet tweet) {
-        //if(this.tweetService.isNotYetStored(tweet)) {
-            /** The User */
-            User user = tweet.getUser();
-            user = storeOneUser(user);
-            tweet.setUser(user);
-            /** Retweeted Tweet */
-            Tweet retweetedStatus = tweet.getRetweetedStatus();
-            if (retweetedStatus != null) {
-                retweetedStatus = storeOneTweet(retweetedStatus);
-                tweet.setRetweetedStatus(retweetedStatus);
-            }
-            /** Tweet itself */
-            Entities myEntities = tweet.getEntities();
-            myEntities = storeEntities(myEntities);
-            tweet.setEntities(myEntities);
-            tweet = storeOneTweetItself(tweet);
-        //}
+        /** The User */
+        User user = tweet.getUser();
+        user = storeOneUser(user);
+        tweet.setUser(user);
+        /** Retweeted Tweet */
+        Tweet retweetedStatus = tweet.getRetweetedStatus();
+        if (retweetedStatus != null) {
+            retweetedStatus = storeOneTweet(retweetedStatus);
+            tweet.setRetweetedStatus(retweetedStatus);
+        }
+        /** Tweet itself */
+        Entities myEntities = tweet.getEntities();
+        myEntities = storeEntities(myEntities);
+        tweet.setEntities(myEntities);
+        tweet = storeOneTweetItself(tweet);
         return tweet;
     }
 
     private Tweet storeOneTweetItself(Tweet tweet) {
-        Tweet tweetPersistent = this.tweetService.findByIdTwitter(tweet.getIdTwitter());
-        if(tweetPersistent != null){
+        try {
+            Tweet tweetPersistent = this.tweetService.findByIdTwitter(tweet.getIdTwitter());
             tweet.setId(tweetPersistent.getId());
-            tweet = this.tweetService.update(tweet);
-        } else {
-            tweet = this.tweetService.persist(tweet);
+            return this.tweetService.update(tweet);
+        } catch (FindTweetByIdTwitter e){
+            return this.tweetService.persist(tweet);
         }
-        return tweet;
     }
 
     private User storeOneUser(User user) {
-        User userPers = this.userService.findByIdTwitter(user.getIdTwitter());
-        if(userPers != null) {
+        try {
+            User userPers = this.userService.findByIdTwitter(user.getIdTwitter());
             user.setId(userPers.getId());
             user.setFriend(userPers.isFriend());
             user.setFollower(userPers.isFollower());
-            user = this.userService.update(user);
-        } else {
-            user = this.userService.persist(user);
+            return this.userService.update(user);
+        } catch (FindUserByIdTwitter e){
+            return this.userService.persist(user);
         }
-        return user;
     }
 
     private Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet){
@@ -276,35 +273,35 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         Set<Media> medias = new LinkedHashSet<Media>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         for(TickerSymbol tickerSymbol:myEntities.getTickerSymbols()){
-            TickerSymbol tickerSymbolPers = tickerSymbolService.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(),tickerSymbol.getUrl());
-            if(tickerSymbolPers != null) {
+            try {
+                TickerSymbol tickerSymbolPers = tickerSymbolService.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
                 tickerSymbolPers.setUrl(tickerSymbol.getUrl());
                 tickerSymbolPers.setIndices(tickerSymbol.getIndices());
                 tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
                 tickerSymbolPers = tickerSymbolService.update(tickerSymbolPers);
                 tickerSymbols.add(tickerSymbolPers);
-            } else {
+            } catch (FindTickerSymbolByTickerSymbolAndUrl e){
                 tickerSymbol = tickerSymbolService.store(tickerSymbol);
                 tickerSymbols.add(tickerSymbol);
             }
         }
         for(Mention mention:myEntities.getMentions()){
-            Mention mentionPers = mentionService.findByScreenNameAndName(mention);
-            if(mentionPers != null){
+            try {
+                Mention mentionPers = mentionService.findByScreenNameAndName(mention);
                 mentionPers.setIndices(mention.getIndices());
                 mentionPers.setIdTwitter(mention.getIdTwitter());
                 mentionPers.setName(mention.getName());
                 mentionPers.setScreenName(mention.getScreenName());
                 mentionPers = mentionService.update(mentionPers);
                 mentions.add(mentionPers);
-            } else {
+            } catch (FindMentionByScreenNameAndName e){
                 mention = mentionService.store(mention);
                 mentions.add(mention);
             }
         }
         for(Media media:myEntities.getMedia()){
-            Media mediaPers = mediaService.findByFields(media);
-            if(mediaPers != null){
+            try {
+                Media mediaPers = mediaService.findByFields(media);
                 mediaPers.setDisplay(media.getDisplay());
                 mediaPers.setExpanded(media.getExpanded());
                 mediaPers.setIdTwitter(media.getIdTwitter());
@@ -315,39 +312,39 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 mediaPers.setUrl(media.getUrl());
                 mediaPers = mediaService.update(mediaPers);
                 medias.add(mediaPers);
-            } else {
+            } catch (FindMediaByFieldsException e){
                 media = mediaService.store(media);
                 medias.add(media);
             }
         }
         for(HashTag tag:myEntities.getTags()){
-            HashTag tagPers = hashTagService.findByText(tag.getText());
-            if(tagPers != null) {
+            try {
+                HashTag tagPers = hashTagService.findByText(tag.getText());
                 tagPers.setText(tag.getText());
                 tagPers.setIndices(tag.getIndices());
-                tags.add(tagPers);
                 tagPers = hashTagService.update(tagPers);
-            } else {
+                tags.add(tagPers);
+            } catch (FindHashTagByTextException e){
                 tag = hashTagService.store(tag);
                 tags.add(tag);
             }
         }
         for(Url url:myEntities.getUrls()){
-            Url urlPers = urlService.findByDisplayExpandedUrl(url.getDisplay(),url.getExpanded(),url.getUrl());
-            if(urlPers != null) {
+            try {
+                Url urlPers = urlService.findByDisplayExpandedUrl(url.getDisplay(),url.getExpanded(),url.getUrl());
                 urlPers.setIndices(url.getIndices());
                 urlPers.setDisplay(url.getDisplay());
                 urlPers.setExpanded(url.getExpanded());
                 urlPers.setUrl(url.getUrl());
                 urlPers = urlService.update(urlPers);
                 urls.add(urlPers);
-            } else {
+            } catch (FindUrlByDisplayExpandedUrl e){
                 url = urlService.store(url);
                 urls.add(url);
             }
         }
-        Entities myEntitiesPers = entitiesService.findByIdTwitterFromTweet(myEntities.getIdTwitterFromTweet());
-        if(myEntitiesPers != null){
+        try {
+            Entities myEntitiesPers = entitiesService.findByIdTwitterFromTweet(myEntities.getIdTwitterFromTweet());
             myEntitiesPers.setMedia(medias);
             myEntitiesPers.setMentions(mentions);
             myEntitiesPers.setTags(tags);
@@ -355,7 +352,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             myEntitiesPers.setUrls(urls);
             myEntitiesPers = entitiesService.update(myEntitiesPers);
             return myEntitiesPers;
-        } else {
+        } catch (FindEntitiesByIdTwitterFromTweetException e){
             myEntities.setMedia(medias);
             myEntities.setMentions(mentions);
             myEntities.setTags(tags);

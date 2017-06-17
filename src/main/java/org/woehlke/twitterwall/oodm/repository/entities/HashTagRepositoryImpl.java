@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.exceptions.FindHashTagByTextException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -41,7 +42,7 @@ public class HashTagRepositoryImpl implements HashTagRepository {
             HashTag result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            return null;
+            throw new FindHashTagByTextException(e,text);
         }
     }
 

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.exceptions.FindUserByIdTwitter;
+import org.woehlke.twitterwall.oodm.exceptions.FindUserByScreenName;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+idTwitter);
-            return null;
+            throw new FindUserByIdTwitter(e,idTwitter);
         }
     }
 
@@ -82,7 +84,7 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+screenName);
-            return null;
+            throw new FindUserByScreenName(e,screenName);
         }
     }
 
