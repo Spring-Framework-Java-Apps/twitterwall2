@@ -58,6 +58,11 @@
         margin-left: 0;
         margin-right: 0;
     }
+
+    .tw-debug {
+        visibility: hidden;
+        display: none;
+    }
 }
 
 
