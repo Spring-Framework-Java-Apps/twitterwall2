@@ -73,7 +73,7 @@ public class TweetRepositoryImpl implements TweetRepository {
 
     @Override
     public List<Tweet> getTweetsForHashTag(String hashtagText) {
-        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText";
+        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC";
         TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
         query.setParameter("hashtagText",hashtagText);
         return query.getResultList();
