@@ -24,6 +24,9 @@ public class ProfileController {
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
+    @Value("${twitterwall.frontend.menu.users}")
+    private boolean showMenuUsers;
+
     private final UserService userService;
 
     @Autowired
@@ -41,6 +44,7 @@ public class ProfileController {
             page.setMenuAppName(menuAppName);
             page.setTitle("@"+ user.getScreenName());
             page.setSubtitle(user.getName());
+            page.setShowMenuUsers(showMenuUsers);
             model.addAttribute("page",page);
             model.addAttribute("user", user);
             return "profile";

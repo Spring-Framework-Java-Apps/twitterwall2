@@ -40,6 +40,9 @@ public class TimelineController {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
+    @Value("${twitterwall.frontend.menu.users}")
+    private boolean showMenuUsers;
+
     @Autowired
     public TimelineController(TweetService tweetService, HashTagService hashTagService) {
         this.tweetService = tweetService;
@@ -84,6 +87,7 @@ public class TimelineController {
             page.setTitle("Tweets für HashTag");
             page.setSubtitle("#"+hashtagText);
             page.setHistoryBack(true);
+            page.setShowMenuUsers(showMenuUsers);
             model.addAttribute("page",page);
             List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
             model.addAttribute("latestTweets", tweets);
@@ -98,6 +102,7 @@ public class TimelineController {
         page.setMenuAppName(menuAppName);
         page.setTitle("Tweets");
         page.setSubtitle(searchterm);
+        page.setShowMenuUsers(showMenuUsers);
         model.addAttribute("page",page);
         return model;
     }

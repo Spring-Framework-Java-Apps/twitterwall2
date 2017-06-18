@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getNotYetFriendUsers() {
+        return userRepository.getNotYetFriendUsers();
+    }
+
+    @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = true)
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter);

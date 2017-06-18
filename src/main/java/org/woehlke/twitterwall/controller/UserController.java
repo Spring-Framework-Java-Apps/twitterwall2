@@ -16,6 +16,9 @@ public class UserController {
 
     private final UserService userService;
 
+    @Value("${twitterwall.frontend.menu.users}")
+    private boolean showMenuUsers;
+
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
@@ -52,11 +55,19 @@ public class UserController {
         return "user";
     }
 
+    @RequestMapping("/user/notyetfriends")
+    public String getNotYetFriendUsers(Model model) {
+        model.addAttribute("users", userService.getNotYetFriendUsers());
+        model = setupPage(model,"Not Yet Friends");
+        return "user";
+    }
+
     private Model setupPage(Model model,String subtitle){
         Page page = new Page();
         page.setMenuAppName(menuAppName);
         page.setTitle("Users");
         page.setSubtitle(subtitle);
+        page.setShowMenuUsers(showMenuUsers);
         model.addAttribute("page",page);
         return model;
     }

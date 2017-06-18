@@ -24,4 +24,6 @@ public interface UserService {
     User findByScreenName(String screenName);
 
     List<User> getTweetingUsers();
+
+    List<User> getNotYetFriendUsers();
 }

@@ -94,4 +94,11 @@ public class UserRepositoryImpl implements UserRepository {
         TypedQuery<User> query = entityManager.createQuery(SQL,User.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<User> getNotYetFriendUsers() {
+        String SQL = "select t from User as t where t.following=false";
+        TypedQuery<User> query = entityManager.createQuery(SQL,User.class);
+        return query.getResultList();
+    }
 }

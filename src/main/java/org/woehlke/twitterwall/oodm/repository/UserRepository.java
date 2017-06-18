@@ -25,4 +25,6 @@ public interface UserRepository {
 
     List<User> getTweetingUsers();
 
+    List<User> getNotYetFriendUsers();
+
 }

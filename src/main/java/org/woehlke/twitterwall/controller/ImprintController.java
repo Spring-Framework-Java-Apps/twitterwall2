@@ -18,6 +18,9 @@ public class ImprintController {
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
+    @Value("${twitterwall.frontend.menu.users}")
+    private boolean showMenuUsers;
+
     private final UserService userService;
 
     @Autowired
@@ -29,6 +32,7 @@ public class ImprintController {
     public String index(Model model) {
         Page page = new Page();
         page.setMenuAppName(menuAppName);
+        page.setShowMenuUsers(showMenuUsers);
         page.setTitle("Impressum");
         page.setSubtitle("www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com");
         model.addAttribute("page",page);

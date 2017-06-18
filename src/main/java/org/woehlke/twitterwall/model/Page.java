@@ -10,6 +10,7 @@ public class Page implements Serializable {
     private String title;
     private String subtitle;
     private String menuAppName;
+    private boolean showMenuUsers=false;
     private boolean historyBack=false;
 
     public String getTitle() {
@@ -42,5 +43,13 @@ public class Page implements Serializable {
 
     public void setHistoryBack(boolean historyBack) {
         this.historyBack = historyBack;
+    }
+
+    public boolean isShowMenuUsers() {
+        return showMenuUsers;
+    }
+
+    public void setShowMenuUsers(boolean showMenuUsers) {
+        this.showMenuUsers = showMenuUsers;
     }
 }
