@@ -29,6 +29,9 @@ Twitterwall with spring:boot for heroku
   - export TWITTER_CONSUMER_SECRET={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN_SECRET={Credentials from your Twitter-Account}
+  - export TWITTER_SEARCH_TERM='#t3cb'
+  - export TWITTERWALL_FRONTEND_MAX_RESULTS=60
+  - export TWITTERWALL_APP_NAME='TYPO3 Camp Berlin 2017'
 - run with: mvn clean spring-boot:run
 
 
