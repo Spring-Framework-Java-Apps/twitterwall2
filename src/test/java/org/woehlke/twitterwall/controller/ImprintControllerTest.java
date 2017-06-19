@@ -36,8 +36,8 @@ public class ImprintControllerTest {
     private MockMvc mockMvc;
     
     @Test
-    public void imprintTest(){
-        log.info("imprintTest");
+    public void controllerIsPresentTest(){
+        log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
