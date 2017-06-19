@@ -25,6 +25,10 @@ import java.util.List;
 @Component
 public class ScheduledTasks {
 
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
     @Autowired
     public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
         this.scheduledTasksFacade = scheduledTasksFacade;
@@ -40,6 +44,8 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR)
     public void fetchTweetsFromTwitterSearch() {
+        log.info("ScheduledTasks.fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
+
         this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
     }
 

@@ -3,9 +3,10 @@ package org.woehlke.twitterwall.oodm.repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.exceptions.FindUserByIdTwitter;
-import org.woehlke.twitterwall.oodm.exceptions.FindUserByScreenName;
+import org.woehlke.twitterwall.oodm.exceptions.FindUserByIdTwitterException;
+import org.woehlke.twitterwall.oodm.exceptions.FindUserByScreenNameException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+idTwitter);
-            throw new FindUserByIdTwitter(e,idTwitter);
+            throw new FindUserByIdTwitterException(e,idTwitter);
         }
     }
 
@@ -84,7 +85,7 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+screenName);
-            throw new FindUserByScreenName(e,screenName);
+            throw new FindUserByScreenNameException(e,screenName);
         }
     }
 
@@ -100,5 +101,13 @@ public class UserRepositoryImpl implements UserRepository {
         String SQL = "select t from User as t where t.following=false";
         TypedQuery<User> query = entityManager.createQuery(SQL,User.class);
         return query.getResultList();
+    }
+
+    @Override
+    public long count() {
+        String SQL = "select count(t) from User as t";
+        TypedQuery<Long> query = entityManager.createQuery(SQL,Long.class);
+        long count = query.getSingleResult();
+        return count;
     }
 }

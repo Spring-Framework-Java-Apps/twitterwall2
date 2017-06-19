@@ -27,4 +27,5 @@ public interface UserRepository {
 
     List<User> getNotYetFriendUsers();
 
+    long count();
 }

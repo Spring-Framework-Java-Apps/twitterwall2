@@ -26,4 +26,6 @@ public interface UserService {
     List<User> getTweetingUsers();
 
     List<User> getNotYetFriendUsers();
+
+    long count();
 }

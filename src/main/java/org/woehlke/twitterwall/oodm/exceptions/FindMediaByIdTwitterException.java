@@ -9,11 +9,11 @@ import javax.persistence.NoResultException;
  * Created by tw on 17.06.17.
  */
 @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Media Not Found") //404
-public class FindMediaByFieldsException extends RuntimeException {
+public class FindMediaByIdTwitterException extends RuntimeException  {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    public FindMediaByFieldsException(NoResultException e,String mediaHttp,String mediaHttps,String url,String display,String expanded, String mediaType){
-        super("Media not found for mediaHttp="+mediaHttp+", mediaHttps="+mediaHttps+",url="+url+",display="+display+",expanded="+expanded+",mediaType="+mediaType,e);
+    public FindMediaByIdTwitterException(NoResultException e, long idTwitter){
+        super("Media not found for idTwitter="+idTwitter,e);
     }
 }

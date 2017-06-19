@@ -8,12 +8,12 @@ import javax.persistence.NoResultException;
 /**
  * Created by tw on 17.06.17.
  */
-@ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Tweet Not Found") //404
-public class FindTweetByIdTwitter extends RuntimeException  {
+@ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Mention Not Found") //404
+public class FindMentionByIdTwitterException extends RuntimeException  {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    public FindTweetByIdTwitter(NoResultException e,long idTwitter){
-        super("Tweet not found for idTwitter="+idTwitter,e);
+    public FindMentionByIdTwitterException(NoResultException e, long idTwitter){
+        super("Mention not found for idTwitter="+idTwitter,e);
     }
 }

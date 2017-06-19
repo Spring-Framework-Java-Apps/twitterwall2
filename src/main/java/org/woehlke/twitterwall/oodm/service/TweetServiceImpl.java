@@ -56,6 +56,11 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
+    public long count() {
+        return tweetRepository.count();
+    }
+
+    @Override
     public Tweet findByIdTwitter(long idTwitter) {
         return tweetRepository.findByIdTwitter(idTwitter);
     }

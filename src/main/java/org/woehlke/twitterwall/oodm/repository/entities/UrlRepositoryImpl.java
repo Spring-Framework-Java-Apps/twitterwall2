@@ -1,10 +1,8 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.FindTickerSymbolByTickerSymbolAndUrl;
-import org.woehlke.twitterwall.oodm.exceptions.FindUrlByDisplayExpandedUrl;
+import org.woehlke.twitterwall.oodm.exceptions.FindUrlByDisplayExpandedUrlException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -42,7 +40,7 @@ public class UrlRepositoryImpl implements UrlRepository {
             Url result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            throw new FindUrlByDisplayExpandedUrl(e, display, expanded, url);
+            throw new FindUrlByDisplayExpandedUrlException(e, display, expanded, url);
         }
     }
 }

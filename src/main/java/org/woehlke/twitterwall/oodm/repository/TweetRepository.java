@@ -22,4 +22,7 @@ public interface TweetRepository {
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
     long countTweetsForHashTag(String hashtagText);
+
+    long count();
+    
 }

@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.exceptions.FindMentionByIdTwitter;
-import org.woehlke.twitterwall.oodm.exceptions.FindMentionByScreenNameAndName;
+import org.woehlke.twitterwall.oodm.exceptions.FindMentionByIdTwitterException;
+import org.woehlke.twitterwall.oodm.exceptions.FindMentionByScreenNameAndNameException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -39,7 +39,7 @@ public class MentionRepositoryImpl implements MentionRepository {
             Mention result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            throw new FindMentionByIdTwitter(e,idTwitter);
+            throw new FindMentionByIdTwitterException(e,idTwitter);
         }
     }
 
@@ -53,7 +53,7 @@ public class MentionRepositoryImpl implements MentionRepository {
             Mention result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            throw new FindMentionByScreenNameAndName(e,screenName,name);
+            throw new FindMentionByScreenNameAndNameException(e,screenName,name);
         }
     }
 }

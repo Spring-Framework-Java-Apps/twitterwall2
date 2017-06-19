@@ -21,14 +21,7 @@ import javax.sql.DataSource;
 @ComponentScan
 @EnableScheduling
 public class Application {
-
-    @Bean
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
-    }
-
+    
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

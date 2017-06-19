@@ -66,8 +66,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = true)
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter);
+    }
+    
+    @Override
+    public long count() {
+        return userRepository.count();
     }
 }

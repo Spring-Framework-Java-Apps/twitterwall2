@@ -9,11 +9,11 @@ import javax.persistence.NoResultException;
  * Created by tw on 17.06.17.
  */
 @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="User Not Found") //404
-public class FindUserByIdTwitter extends RuntimeException {
+public class FindUserByScreenNameException extends RuntimeException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    public FindUserByIdTwitter(NoResultException e, long idTwitter) {
-        super("User not found for idTwitter="+idTwitter, e);
+    public FindUserByScreenNameException(NoResultException e, String screenName){
+        super("User not found for screenName="+screenName,e);
     }
 }

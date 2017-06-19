@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.exceptions.FindTweetByIdTwitter;
+import org.woehlke.twitterwall.oodm.exceptions.FindTweetByIdTwitterException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TweetRepositoryImpl implements TweetRepository {
             return result;
         } catch (NoResultException e){
             log.debug("not found: "+idTwitter);
-            throw new FindTweetByIdTwitter(e,idTwitter);
+            throw new FindTweetByIdTwitterException(e,idTwitter);
         }
     }
 
@@ -85,5 +85,13 @@ public class TweetRepositoryImpl implements TweetRepository {
         TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
         query.setParameter("hashtagText",hashtagText);
         return this.getTweetsForHashTag(hashtagText).size();
+    }
+
+    @Override
+    public long count() {
+        String SQL = "select count(t) from Tweet as t";
+        TypedQuery<Long> query = entityManager.createQuery(SQL,Long.class);
+        long count = query.getSingleResult();
+        return count;
     }
 }

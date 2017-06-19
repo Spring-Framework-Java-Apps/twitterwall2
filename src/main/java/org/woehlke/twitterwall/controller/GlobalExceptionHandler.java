@@ -10,7 +10,6 @@ import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.exceptions.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.http.HTTPException;
 
 /**
  * Created by tw on 17.06.17.
@@ -40,63 +39,63 @@ public class GlobalExceptionHandler {
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindMediaByFieldsException.class)
+    @ExceptionHandler(FindMediaByFieldsExceptionException.class)
     public ModelAndView handleFindMediaByFieldsException(HttpServletRequest request, Exception ex){
         log.warn("FindMediaByFieldsException occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindMediaByIdTwitter.class)
+    @ExceptionHandler(FindMediaByIdTwitterException.class)
     public ModelAndView handleFindMediaByIdTwitter(HttpServletRequest request, Exception ex){
         log.warn("FindMediaByIdTwitter occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindMentionByIdTwitter.class)
+    @ExceptionHandler(FindMentionByIdTwitterException.class)
     public ModelAndView handleFindMentionByIdTwitter(HttpServletRequest request, Exception ex){
         log.warn("FindMediaByIdTwitter occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindMentionByScreenNameAndName.class)
+    @ExceptionHandler(FindMentionByScreenNameAndNameException.class)
     public ModelAndView handleFindMentionByScreenNameAndName(HttpServletRequest request, Exception ex){
         log.warn("FindMentionByScreenNameAndName occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindTickerSymbolByTickerSymbolAndUrl.class)
+    @ExceptionHandler(FindTickerSymbolByTickerSymbolAndUrlException.class)
     public ModelAndView handleFindTickerSymbolByTickerSymbolAndUrl(HttpServletRequest request, Exception ex){
         log.warn("FindTickerSymbolByTickerSymbolAndUrl occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindTweetByIdTwitter.class)
+    @ExceptionHandler(FindTweetByIdTwitterException.class)
     public ModelAndView handleFindTweetByIdTwitterl(HttpServletRequest request, Exception ex){
         log.warn("FindTweetByIdTwitter occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindUrlByDisplayExpandedUrl.class)
+    @ExceptionHandler(FindUrlByDisplayExpandedUrlException.class)
     public ModelAndView handleFindUrlByDisplayExpandedUrl(HttpServletRequest request, Exception ex){
         log.warn("FindTweetByIdTwitter occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindUserByIdTwitter.class)
+    @ExceptionHandler(FindUserByIdTwitterException.class)
     public ModelAndView handleFindUserByIdTwitter(HttpServletRequest request, Exception ex){
         log.warn("FindUserByIdTwitter occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
 
-    @ExceptionHandler(FindUserByScreenName.class)
+    @ExceptionHandler(FindUserByScreenNameException.class)
     public ModelAndView handleFindUserByScreenName(HttpServletRequest request, Exception ex){
         log.warn("FindUserByScreenName occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());

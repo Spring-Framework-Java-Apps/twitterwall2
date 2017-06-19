@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -19,6 +21,7 @@ import java.util.*;
  * Created by tw on 11.06.17.
  */
 @Service
+@javax.transaction.Transactional(javax.transaction.Transactional.TxType.NOT_SUPPORTED)
 public class StoreTweetsProcessImpl implements StoreTweetsProcess {
 
     private static final Logger log = LoggerFactory.getLogger(StoreTweetsProcessImpl.class);
@@ -54,26 +57,26 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     @Override
     public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweet) {
         Tweet myTweet = transformTweet(tweet);
-        myTweet=storeOneTweet(myTweet);
+        myTweet=storeOneTweetPerform(myTweet);
         return myTweet;
     }
 
-    private Tweet storeOneTweet(Tweet tweet) {
-        /** The User */
-        User user = tweet.getUser();
-        user = storeOneUser(user);
-        tweet.setUser(user);
+    private Tweet storeOneTweetPerform(Tweet tweet) {
         /** Retweeted Tweet */
         Tweet retweetedStatus = tweet.getRetweetedStatus();
         if (retweetedStatus != null) {
-            retweetedStatus = storeOneTweet(retweetedStatus);
+            retweetedStatus = this.storeOneTweetPerform(retweetedStatus);
             tweet.setRetweetedStatus(retweetedStatus);
         }
+        /** The User */
+        User user = tweet.getUser();
+        user = this.storeOneUser(user);
+        tweet.setUser(user);
         /** Tweet itself */
         Entities myEntities = tweet.getEntities();
-        myEntities = storeEntities(myEntities);
+        myEntities = this.storeEntities(myEntities);
         tweet.setEntities(myEntities);
-        tweet = storeOneTweetItself(tweet);
+        tweet = this.storeOneTweetItself(tweet);
         return tweet;
     }
 
@@ -82,7 +85,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             Tweet tweetPersistent = this.tweetService.findByIdTwitter(tweet.getIdTwitter());
             tweet.setId(tweetPersistent.getId());
             return this.tweetService.update(tweet);
-        } catch (FindTweetByIdTwitter e){
+        } catch (FindTweetByIdTwitterException e){
             return this.tweetService.persist(tweet);
         }
     }
@@ -94,7 +97,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             user.setFriend(userPers.isFriend());
             user.setFollower(userPers.isFollower());
             return this.userService.update(user);
-        } catch (FindUserByIdTwitter e){
+        } catch (FindUserByIdTwitterException e){
             return this.userService.persist(user);
         }
     }
@@ -280,7 +283,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
                 tickerSymbolPers = tickerSymbolService.update(tickerSymbolPers);
                 tickerSymbols.add(tickerSymbolPers);
-            } catch (FindTickerSymbolByTickerSymbolAndUrl e){
+            } catch (FindTickerSymbolByTickerSymbolAndUrlException e){
                 tickerSymbol = tickerSymbolService.store(tickerSymbol);
                 tickerSymbols.add(tickerSymbol);
             }
@@ -294,7 +297,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 mentionPers.setScreenName(mention.getScreenName());
                 mentionPers = mentionService.update(mentionPers);
                 mentions.add(mentionPers);
-            } catch (FindMentionByScreenNameAndName e){
+            } catch (FindMentionByScreenNameAndNameException e){
                 mention = mentionService.store(mention);
                 mentions.add(mention);
             }
@@ -312,7 +315,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 mediaPers.setUrl(media.getUrl());
                 mediaPers = mediaService.update(mediaPers);
                 medias.add(mediaPers);
-            } catch (FindMediaByFieldsException e){
+            } catch (FindMediaByFieldsExceptionException e){
                 media = mediaService.store(media);
                 medias.add(media);
             }
@@ -338,7 +341,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
                 urlPers.setUrl(url.getUrl());
                 urlPers = urlService.update(urlPers);
                 urls.add(urlPers);
-            } catch (FindUrlByDisplayExpandedUrl e){
+            } catch (FindUrlByDisplayExpandedUrlException e){
                 url = urlService.store(url);
                 urls.add(url);
             }

@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
-import org.woehlke.twitterwall.oodm.exceptions.FindMediaByFieldsException;
-import org.woehlke.twitterwall.oodm.exceptions.FindMediaByIdTwitter;
+import org.woehlke.twitterwall.oodm.exceptions.FindMediaByFieldsExceptionException;
+import org.woehlke.twitterwall.oodm.exceptions.FindMediaByIdTwitterException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -39,7 +39,7 @@ public class MediaRepositoryImpl implements MediaRepository {
             Media result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            throw new FindMediaByIdTwitter(e,idTwitter);
+            throw new FindMediaByIdTwitterException(e,idTwitter);
         }
     }
 
@@ -57,7 +57,7 @@ public class MediaRepositoryImpl implements MediaRepository {
             Media result = query.getSingleResult();
             return result;
         } catch (NoResultException e){
-            throw new FindMediaByFieldsException(e,mediaHttp,mediaHttps,url,display,expanded,mediaType);
+            throw new FindMediaByFieldsExceptionException(e,mediaHttp,mediaHttps,url,display,expanded,mediaType);
         }
     }
 }

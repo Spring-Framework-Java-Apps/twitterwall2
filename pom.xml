@@ -40,7 +40,9 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <!--<version>9.4-1201-jdbc4</version>-->
+            <!--
             <version>42.1.1</version>
+            -->
         </dependency>
         <!-- tag::actuator[] -->
         <dependency>
@@ -72,6 +74,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
             <version>4.7.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

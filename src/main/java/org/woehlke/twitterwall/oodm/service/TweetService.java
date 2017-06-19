@@ -23,4 +23,6 @@ public interface TweetService {
 
     long countTweetsForHashTag(String hashtagText);
 
+    long count();
+
 }
