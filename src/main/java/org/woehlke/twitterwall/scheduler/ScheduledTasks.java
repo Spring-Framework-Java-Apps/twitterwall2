@@ -13,7 +13,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.process.StoreTweetsProcess;
+import org.woehlke.twitterwall.process.ScheduledTasksFacade;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,34 +25,12 @@ import java.util.List;
 @Component
 public class ScheduledTasks {
 
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    @Value("${twitter.consumerKey}")
-    private String twitterConsumerKey;
-
-    @Value("${twitter.consumerSecret}")
-    private String twitterConsumerSecret;
-
-    @Value("${twitter.accessToken}")
-    private String twitterAccessToken;
-
-    @Value("${twitter.accessTokenSecret}")
-    private String twitterAccessTokenSecret;
-
-    @Value("${twitter.pageSize}")
-    private int pageSize = 100;
-
-    @Value("${twitter.searchQuery}")
-    private String searchQuery;
-
     @Autowired
-    public ScheduledTasks(StoreTweetsProcess storeTweetsProcess) {
-        this.storeTweetsProcess = storeTweetsProcess;
+    public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
+        this.scheduledTasksFacade = scheduledTasksFacade;
     }
 
-    private final StoreTweetsProcess storeTweetsProcess;
+    private final ScheduledTasksFacade scheduledTasksFacade;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_MINUTEN = 5;
 
@@ -62,90 +40,16 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR)
     public void fetchTweetsFromTwitterSearch() {
-        log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
-        Twitter twitter = getTwitterProxy();
-        try {
-            List<Tweet> tweets = twitter.searchOperations().search(searchQuery, pageSize).getTweets();
-            log.info("---------------------------------------");
-            for (Tweet tweet : tweets) {
-                log.info("User: @" + tweet.getFromUser());
-                log.info("Text:  " + tweet.getText());
-                log.info("Image: " + tweet.getProfileImageUrl());
-                this.storeTweetsProcess.storeOneTweet(tweet);
-                log.info("---------------------------------------");
-            }
-        } catch (ResourceAccessException e){
-            log.error("Twitter: "+e.getMessage());
-            log.error("Twitter: check your Network Connection!");
-        }
-    }
-
-    private Twitter getTwitterProxy(){
-        Twitter twitter = new TwitterTemplate(
-                twitterConsumerKey,
-                twitterConsumerSecret,
-                twitterAccessToken,
-                twitterAccessTokenSecret);
-        return twitter;
+        this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
     }
 
     //@Scheduled(fixedRate = 12000000)
     public void fetchFollowersFromTwitter() {
-        log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
-        Twitter twitter = getTwitterProxy();
-        try {
-            Thread.sleep(20000);
-            CursoredList<TwitterProfile> followers = twitter.friendOperations().getFollowers();
-            boolean run = true;
-            while(run) {
-                for(TwitterProfile follower: followers){
-                    storeTweetsProcess.storeFollower(follower);
-                }
-                if(followers.hasNext()){
-                    long cursor = followers.getNextCursor();
-                    followers = twitter.friendOperations().getFriendsInCursor(cursor);
-                } else {
-                    run = false;
-                }
-                Thread.sleep(600000);
-            }
-        } catch (ResourceAccessException e){
-            log.error("Twitter: "+e.getMessage());
-            log.error("Twitter: check your Network Connection!");
-        } catch (RateLimitExceededException e){
-            log.warn("Twitter: "+e.getMessage());
-        } catch (InterruptedException e) {
-            log.warn("InterruptedException: "+e.getMessage());
-        }
+        this.scheduledTasksFacade.fetchFollowersFromTwitter();
     }
 
     //@Scheduled(fixedRate = 12000000)
     public void fetchFriendsFromTwitter() {
-        log.info("fetchFollowersFromTwitter: The time is now {}", dateFormat.format(new Date()));
-        Twitter twitter = getTwitterProxy();
-        try {
-            Thread.sleep(20000);
-            CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
-            boolean run = true;
-            while (run) {
-                for (TwitterProfile friend : friends) {
-                    storeTweetsProcess.storeFriend(friend);
-                }
-                if (friends.hasNext()) {
-                    long cursor = friends.getNextCursor();
-                    friends = twitter.friendOperations().getFriendsInCursor(cursor);
-                } else {
-                    run = false;
-                }
-                Thread.sleep(600000);
-            }
-        } catch (ResourceAccessException e){
-            log.error("Twitter: "+e.getMessage());
-            log.error("Twitter: check your Network Connection!");
-        } catch (RateLimitExceededException e){
-            log.error("Twitter: "+e.getMessage());
-        } catch (InterruptedException e) {
-            log.error("InterruptedException: "+e.getMessage());
-        }
+        this.scheduledTasksFacade.fetchFriendsFromTwitter();
     }
 }
