@@ -81,14 +81,14 @@ public class TweetTest {
         try {
             Tweet tweet = tweetService.findByIdTwitter(idTwitter);
             log.info("text:          " + tweet.getText());
-            log.info("FormattedText: " + tweet.getFormattedText() + "---");
-            log.info("output:        " + output);
+            log.info("Expected:      " + output + "---");
             String formattedText;
             if (retweet) {
                 formattedText = tweet.getRetweetedStatus().getFormattedText();
             } else {
                 formattedText = tweet.getFormattedText();
             }
+            log.info("FormattedText: " + formattedText + "---");
             Assert.assertEquals(output, formattedText);
         } catch (FindTweetByIdTwitterException e){
             log.error(e.getMessage());
@@ -156,7 +156,6 @@ public class TweetTest {
         performTest(idTwitter,output,retweet);
     }
 
-    //@Ignore
     @Test
     public void testText8() {
         long idTwitter = 876513930478313472L;
@@ -165,7 +164,6 @@ public class TweetTest {
         performTest(idTwitter,output,retweet);
     }
 
-    //@Ignore
     @Test
     public void testText9() {
         long idTwitter = 876511554962903040L;
@@ -174,7 +172,6 @@ public class TweetTest {
         performTest(idTwitter,output,retweet);
     }
 
-    //@Ignore
     @Test
     public void testText10() {
         long idTwitter = 876510758632386563L;
@@ -183,7 +180,6 @@ public class TweetTest {
         performTest(idTwitter,output,retweet);
     }
 
-    //@Ignore
     @Test
     public void testText11() {
         long idTwitter = 876496934676180992L;
