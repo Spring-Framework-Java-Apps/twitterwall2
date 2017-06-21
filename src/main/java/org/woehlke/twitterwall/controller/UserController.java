@@ -70,8 +70,10 @@ public class UserController {
            String url = user.getUrl();
            try {
                if (url != null) {
+                   log.info("url: "+url);
                    Url myUrl = urlService.findByUrl(url);
-                   user.setUrl(myUrl.getExpanded());
+                   user.setUrlDisplay(myUrl.getDisplay());
+                   user.setUrlExpanded(myUrl.getExpanded());
                }
            } catch (FindUrlByUrlException e){
                log.error(e.getMessage());

@@ -147,6 +147,9 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         String profileImageUrl=twitterProfile.getProfileImageUrl();
         String description=twitterProfile.getDescription();
         String location=twitterProfile.getLocation();
+        if(twitterProfile.getLocation().isEmpty()){
+            location=null;
+        }
         Date createdDate=twitterProfile.getCreatedDate();
         User user = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
         user.setTweeting(true);

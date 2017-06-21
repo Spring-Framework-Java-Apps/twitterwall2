@@ -10,7 +10,11 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.exceptions.FetchUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
@@ -32,10 +36,12 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private boolean fetchTestData;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(StoreTweetsProcess storeTweetsProcess, TwitterApiService twitterApiService, UserService userService) {
+    public ScheduledTasksFacadeImpl(StoreTweetsProcess storeTweetsProcess, TwitterApiService twitterApiService, UserService userService, UrlHelper urlHelper, UrlService urlService) {
         this.storeTweetsProcess = storeTweetsProcess;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
+        this.urlHelper = urlHelper;
+        this.urlService = urlService;
     }
 
     private final StoreTweetsProcess storeTweetsProcess;
@@ -43,6 +49,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private final TwitterApiService twitterApiService;
 
     private final UserService userService;
+
+    private final UrlHelper urlHelper;
+
+    private final UrlService urlService;
     
     @Override
     public void fetchTweetsFromTwitterSearch() {
@@ -61,16 +71,28 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     handleTweet(tweet,loopId);
                 }
             }
-            this.updateUrlsInUserProfiles();
+            loopId = 0;
+            List<User> userList = userService.getAll();
+            for(User user:userList){
+                try {
+                    Url url = urlService.findByUrl(user.getUrl());
+                    loopId++;
+                    log.info("Id: "+loopId+","+url.toString());
+                } catch (FindUrlByUrlException e) {
+                    try {
+                        Url url = urlHelper.fetchUrl(user.getUrl());
+                        url = urlService.store(url);
+                        loopId++;
+                        log.info("Id: "+loopId+","+url.toString());
+                    } catch (FetchUrlException ex){
+                        log.warn(ex.getMessage());
+                    }
+                }
+            }
         } catch (ResourceAccessException e){
             log.error("Twitter: "+e.getMessage());
             log.error("Twitter: check your Network Connection!");
         }
-    }
-
-    private void updateUrlsInUserProfiles() {
-        List<User> userList = userService.getAll();
-        //TODO: #34 https://github.com/phasenraum2010/twitterwall2/issues/34
     }
 
     private void handleTweet(Tweet tweet, int loopId){

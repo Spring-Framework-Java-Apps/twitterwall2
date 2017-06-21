@@ -27,7 +27,8 @@ public class TestHelperServiceImpl implements TestHelperService {
     
     private static final Logger log = LoggerFactory.getLogger(TestHelperServiceImpl.class);
 
-    private final static long millisToWaitForFetchTweetsFromTwitterSearch = 20000;
+    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    private long millisToWaitForFetchTweetsFromTwitterSearch = 20000;
 
     @Value("${twitterwall.twitter.fetchTestData}")
     private boolean fetchTestData;
@@ -76,7 +77,22 @@ public class TestHelperServiceImpl implements TestHelperService {
                 }
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+           log.warn(e.getMessage());
+        }
+        log.info("number of tweets: "+tweetService.count());
+        log.info("------------------------------------------------");
+    }
+
+    @Override
+    public void waitForImport(){
+        log.info("Hello, Testing-World.");
+        log.info("We are waiting for fetchTweetsFromTwitterSearch.");
+        try {
+            log.info("number of tweets: "+tweetService.count());
+            Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+            log.info("number of tweets: "+tweetService.count());
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage());
         }
         log.info("number of tweets: "+tweetService.count());
         log.info("------------------------------------------------");

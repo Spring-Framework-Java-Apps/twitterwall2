@@ -112,4 +112,14 @@ public class Url extends AbstractTwitterObject implements Serializable,Comparabl
     public int compareTo(Url other) {
         return display.compareTo(other.getDisplay());
     }
+
+    @Override
+    public String toString() {
+        return "Url{" +
+                "id=" + id +
+                ", display='" + display + '\'' +
+                ", expanded='" + expanded + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

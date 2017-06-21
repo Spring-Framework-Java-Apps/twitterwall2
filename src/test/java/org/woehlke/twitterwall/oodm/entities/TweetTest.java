@@ -28,8 +28,6 @@ public class TweetTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetTest.class);
 
-
-
     @Autowired
     private TestHelperService testHelperService;
 

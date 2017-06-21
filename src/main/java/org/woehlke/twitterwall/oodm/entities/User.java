@@ -29,6 +29,12 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
     @Column
     private String url;
 
+    @Transient
+    private String urlDisplay;
+
+    @Transient
+    private String urlExpanded;
+
     @Column
     private String profileImageUrl;
 
@@ -450,6 +456,22 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getUrlDisplay() {
+        return urlDisplay;
+    }
+
+    public void setUrlDisplay(String urlDisplay) {
+        this.urlDisplay = urlDisplay;
+    }
+
+    public String getUrlExpanded() {
+        return urlExpanded;
+    }
+
+    public void setUrlExpanded(String urlExpanded) {
+        this.urlExpanded = urlExpanded;
     }
 
     @Override
