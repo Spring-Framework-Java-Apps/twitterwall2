@@ -205,6 +205,8 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
         Set<Url> urls = this.entities.getUrls();
         formattedText = getFormattedTextForUrls(urls,formattedText);
 
+        Set<Mention> mentions = this.entities.getMentions();
+
         return formattedText;
     }
 
