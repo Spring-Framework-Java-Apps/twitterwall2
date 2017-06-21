@@ -121,9 +121,8 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     private Tweet() {
     }
 
-    public String getFormattedText(){
-        String formattedText = this.text;
 
+    private String getFormattedTextForUseerProfiles(String formattedText){
         Pattern userPattern = Pattern.compile("@([a-zA-Z0-9_]{1,15})"+stopChar);
         Matcher m1 = userPattern.matcher(formattedText);
         formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
@@ -132,6 +131,10 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
         Matcher m2 = userPattern2.matcher(formattedText);
         formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
 
+        return formattedText;
+    }
+
+    private String getFormattedTextForHashTags(String formattedText) {
         Pattern hashTagPattern = Pattern.compile("#([a-zA-Z0-9_]*)"+stopChar);
         Matcher m3 = hashTagPattern.matcher(formattedText);
         formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
@@ -140,34 +143,10 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
         Matcher m4 = hashTagPattern2.matcher(formattedText);
         formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
 
-        Set<Url> urls = this.entities.getUrls();
-        for(Url url:urls){
-            Pattern myUrl1 = Pattern.compile("("+url.getUrl()+")"+stopChar);
-            Matcher m10  = myUrl1.matcher(formattedText);
-            formattedText = m10.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+        return formattedText;
+    }
 
-            Pattern myUrl2 = Pattern.compile("("+url.getDisplay()+")"+stopChar);
-            Matcher m11  = myUrl2.matcher(formattedText);
-            formattedText = m11.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-            Pattern myUrl3 = Pattern.compile("("+url.getExpanded()+")"+stopChar);
-            Matcher m12  = myUrl3.matcher(formattedText);
-            formattedText = m12.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-            Pattern myUrl4 = Pattern.compile("("+url.getUrl()+")$");
-            Matcher m20  = myUrl4.matcher(formattedText);
-            formattedText = m20.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-            Pattern myUrl5 = Pattern.compile("("+url.getDisplay()+")$");
-            Matcher m21  = myUrl5.matcher(formattedText);
-            formattedText = m21.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-            Pattern myUrl6 = Pattern.compile("("+url.getExpanded()+")$");
-            Matcher m22  = myUrl6.matcher(formattedText);
-            formattedText = m22.replaceAll("<a href=\""+url.getExpanded()+"\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-        }
-
-        Set<Media> media = this.entities.getMedia();
+    private String getFormattedTextForMedia(Set<Media> media ,String formattedText) {
         for(Media medium:media) {
             if (medium.getMediaType().compareTo("photo")==0) {
                 Pattern myUrl1 = Pattern.compile("(" + medium.getUrl() + ")" + stopChar);
@@ -179,6 +158,61 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
                 formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
             }
         }
+        return formattedText;
+    }
+
+    private String getFormattedTextForUrls(Set<Url> urls, String formattedText) {
+        for(Url url:urls){
+
+            Pattern myUrl1 = Pattern.compile("("+url.getUrl()+")"+stopChar);
+            Matcher m10  = myUrl1.matcher(formattedText);
+            boolean url1 = m10.matches();
+            formattedText = m10.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-url1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl4 = Pattern.compile("("+url.getUrl()+")$");
+            Matcher m20  = myUrl4.matcher(formattedText);
+            boolean url2 = m20.matches();
+            formattedText = m20.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-url2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+
+            Pattern myUrl2 = Pattern.compile("("+url.getDisplay()+")"+stopChar);
+            Matcher m11  = myUrl2.matcher(formattedText);
+            boolean display1 = m11.matches();
+            formattedText = m11.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-display1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl5 = Pattern.compile("("+url.getDisplay()+")$");
+            Matcher m21  = myUrl5.matcher(formattedText);
+            boolean display2 = m21.matches();
+            formattedText = m21.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-display2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+
+            Pattern myUrl3 = Pattern.compile("("+url.getExpanded()+")"+stopChar);
+            Matcher m12  = myUrl3.matcher(formattedText);
+            boolean expanded1 = m12.matches();
+            formattedText = m12.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-expanded1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+            Pattern myUrl6 = Pattern.compile("("+url.getExpanded()+")$");
+            Matcher m22  = myUrl6.matcher(formattedText);
+            boolean expanded2 = m22.matches();
+            formattedText = m22.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-expanded2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+
+        }
+        return formattedText;
+    }
+
+    public String getFormattedText(){
+        String formattedText = this.text;
+
+        formattedText = getFormattedTextForUseerProfiles(formattedText);
+
+        formattedText = getFormattedTextForHashTags(formattedText);
+
+        Set<Media> media = this.entities.getMedia();
+        formattedText = getFormattedTextForMedia(media,formattedText);
+
+        Set<Url> urls = this.entities.getUrls();
+        formattedText = getFormattedTextForUrls(urls,formattedText);
+
         return formattedText;
     }
 

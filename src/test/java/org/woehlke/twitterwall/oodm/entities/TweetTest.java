@@ -53,7 +53,8 @@ public class TweetTest {
     public void testText1() {
         log.info("testText1");
         long idTwitter = 876329508009279488L;
-        String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>  <a href=\"http://www.<a href=\"http://www.doctrine-project.org/\" target=\"_blank\">doctrine-project.org</a> \" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        //String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>  <a href=\"http://www.<a href=\"http://www.doctrine-project.org/\" target=\"_blank\">doctrine-project.org</a> \" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>  <a href=\"http://www.<a href=\"http://www.doctrine-project.org/\" class=\"tw-display1\" target=\"_blank\">doctrine-project.org</a> \" class=\"tw-url1\" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -62,7 +63,8 @@ public class TweetTest {
     public void testText2() {
         log.info("testText2");
         long idTwitter = 876356335784394752L;
-        String output = "Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://<a href=\"http://natural-born-coder.de/\" target=\"_blank\">natural-born-coder.de</a> \" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
+        //String output = "Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://<a href=\"http://natural-born-coder.de/\" target=\"_blank\">natural-born-coder.de</a> \" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
+        String output ="Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://<a href=\"http://natural-born-coder.de/\" class=\"tw-display1\" target=\"_blank\">natural-born-coder.de</a> \" class=\"tw-url1\" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -89,7 +91,8 @@ public class TweetTest {
     public void testText5() {
         log.info("testText5");
         long idTwitter = 876563676395962368L;
-        String output = "Empfehlenswert nicht nur für Neulinge. Danke Wolfgang für das kostenlose <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> als Preis im Newbie-Jeopard… <a href=\"https://twitter.com/i/web/status/876563676395962368\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        //String output = "Empfehlenswert nicht nur für Neulinge. Danke Wolfgang für das kostenlose <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> als Preis im Newbie-Jeopard… <a href=\"https://twitter.com/i/web/status/876563676395962368\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        String output = "Empfehlenswert nicht nur für Neulinge. Danke Wolfgang für das kostenlose <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> als Preis im Newbie-Jeopard… <a href=\"https://twitter.com/i/web/status/876563676395962368\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -98,7 +101,8 @@ public class TweetTest {
     public void testText6() {
         log.info("testText6");
         long idTwitter = 876514968933478400L;
-        String output = "In 3 Stunden endet die Sonderaktion zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a>  15% günstiger mit dem Gutscheincode t3cb -&gt; <a href=\"https://wwagner.net/t3cb\" target=\"_blank\">wwagner.net/t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> ";
+        //String output = "In 3 Stunden endet die Sonderaktion zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a>  15% günstiger mit dem Gutscheincode t3cb -&gt; <a href=\"https://wwagner.net/t3cb\" target=\"_blank\">wwagner.net/t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> ";
+        String output = "In 3 Stunden endet die Sonderaktion zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a>  15% günstiger mit dem Gutscheincode t3cb -&gt; <a href=\"https://wwagner.net/t3cb\" class=\"tw-url1\" target=\"_blank\">wwagner.net/t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -107,6 +111,7 @@ public class TweetTest {
     public void testText7() {
         log.info("testText7");
         long idTwitter = 876514568671023104L;
+        //String output = "Ich hätte schon vorher mal zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> gehen sollen. Es war 2017 super und wird es hoffentlich 2018 wieder werden. Danke Orga-Team!";
         String output = "Ich hätte schon vorher mal zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> gehen sollen. Es war 2017 super und wird es hoffentlich 2018 wieder werden. Danke Orga-Team!";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
@@ -116,7 +121,8 @@ public class TweetTest {
     public void testText8() {
         log.info("testText8");
         long idTwitter = 876513930478313472L;
-        String output = "Passend zur Session \"Barrierefreie Websites\" heute nachmittag. <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"https://twitter.com/Real_CSS_Tricks/status/876483677991075841\" target=\"_blank\">twitter.com/Real_CSS_Trick…</a> ";
+        //String output = "Passend zur Session \"Barrierefreie Websites\" heute nachmittag. <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"https://twitter.com/Real_CSS_Tricks/status/876483677991075841\" target=\"_blank\">twitter.com/Real_CSS_Trick…</a> ";
+        String output = "Passend zur Session \"Barrierefreie Websites\" heute nachmittag. <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"https://twitter.com/Real_CSS_Tricks/status/876483677991075841\" class=\"tw-url2\" target=\"_blank\">twitter.com/Real_CSS_Trick…</a> ";
         boolean retweet = true;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -134,7 +140,8 @@ public class TweetTest {
     public void testText10() {
         log.info("testText10");
         long idTwitter = 876510758632386563L;
-        String output = "So, jetzt kann der entspannte Teil vom TYPO3camp an der CPS-IT Bar losgehen <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/caipis\">#caipis</a> #gintonic… <a href=\"https://twitter.com/i/web/status/876090162102636544\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        //String output = "So, jetzt kann der entspannte Teil vom TYPO3camp an der CPS-IT Bar losgehen <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/caipis\">#caipis</a> #gintonic… <a href=\"https://twitter.com/i/web/status/876090162102636544\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
+        String output = "So, jetzt kann der entspannte Teil vom TYPO3camp an der CPS-IT Bar losgehen <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/caipis\">#caipis</a> #gintonic… <a href=\"https://twitter.com/i/web/status/876090162102636544\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = true;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
@@ -143,7 +150,8 @@ public class TweetTest {
     public void testText11() {
         log.info("testText11");
         long idTwitter = 876496934676180992L;
-        String output = "Abschlussrede. War toll mit euch. DANKE! <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a href=\"https://www.instagram.com/p/BVe6_ULAnEt/\" target=\"_blank\">instagram.com/p/BVe6_ULAnEt/</a> ";
+        //String output = "Abschlussrede. War toll mit euch. DANKE! <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a href=\"https://www.instagram.com/p/BVe6_ULAnEt/\" target=\"_blank\">instagram.com/p/BVe6_ULAnEt/</a> ";
+        String output = "Abschlussrede. War toll mit euch. DANKE! <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a href=\"https://www.instagram.com/p/BVe6_ULAnEt/\" class=\"tw-url2\" target=\"_blank\">instagram.com/p/BVe6_ULAnEt/</a> ";
         boolean retweet = true;
         testHelperService.performTweetTest(idTwitter,output,retweet);
     }
