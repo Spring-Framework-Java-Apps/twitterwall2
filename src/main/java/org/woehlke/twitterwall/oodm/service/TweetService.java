@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 
 import java.util.List;
 
@@ -26,5 +27,7 @@ public interface TweetService {
     long count();
 
     List<Tweet> getTestTweetsForTweetTest();
+
+    List<Tweet> getTweetsForUser(User user);
 
 }

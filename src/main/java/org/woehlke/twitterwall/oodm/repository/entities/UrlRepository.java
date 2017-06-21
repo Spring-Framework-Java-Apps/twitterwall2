@@ -12,4 +12,6 @@ public interface UrlRepository {
     Url update(Url url);
 
     Url findByDisplayExpandedUrl(String display, String expanded, String url);
+
+    Url findByUrl(String url);
 }

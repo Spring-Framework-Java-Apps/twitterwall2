@@ -37,4 +37,9 @@ public class UrlServiceImpl implements UrlService {
     public Url findByDisplayExpandedUrl(String display, String expanded, String url) {
         return this.urlRepository.findByDisplayExpandedUrl(display,expanded,url);
     }
+
+    @Override
+    public Url findByUrl(String url) {
+        return this.urlRepository.findByUrl(url);
+    }
 }

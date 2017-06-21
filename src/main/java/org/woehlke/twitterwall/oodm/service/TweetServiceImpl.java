@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 
 import java.util.ArrayList;
@@ -71,6 +72,11 @@ public class TweetServiceImpl implements TweetService {
             list.add(tweet);
         }
         return list;
+    }
+
+    @Override
+    public List<Tweet> getTweetsForUser(User user) {
+        return tweetRepository.getTweetsForUser(user);
     }
 
     @Override

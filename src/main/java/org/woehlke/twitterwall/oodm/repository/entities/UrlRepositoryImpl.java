@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.FindUrlByDisplayExpandedUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.FindUrlByUrlException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -41,6 +42,19 @@ public class UrlRepositoryImpl implements UrlRepository {
             return result;
         } catch (NoResultException e){
             throw new FindUrlByDisplayExpandedUrlException(e, display, expanded, url);
+        }
+    }
+
+    @Override
+    public Url findByUrl(String url) {
+        try {
+            String SQL = "select t from Url as t where t.url=:url";
+            TypedQuery<Url> query = entityManager.createQuery(SQL,Url.class);
+            query.setParameter("url",url);
+            Url result = query.getSingleResult();
+            return result;
+        } catch (NoResultException e){
+            throw new FindUrlByUrlException(e, url);
         }
     }
 }

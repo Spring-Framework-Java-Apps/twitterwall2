@@ -123,4 +123,11 @@ public class GlobalExceptionHandler {
         return getTemplate(request, ex);
     }
 
+    @ExceptionHandler(FindUrlByUrlException.class)
+    public ModelAndView handleFindUrlByUrlException(HttpServletRequest request, Exception ex){
+        log.warn("FindUrlByUrlException occured :: URL="+request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
+
 }

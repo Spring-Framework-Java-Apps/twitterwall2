@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.exceptions.FindTweetByIdTwitterException;
 
 import javax.persistence.*;
@@ -93,5 +94,13 @@ public class TweetRepositoryImpl implements TweetRepository {
         TypedQuery<Long> query = entityManager.createQuery(SQL,Long.class);
         long count = query.getSingleResult();
         return count;
+    }
+
+    @Override
+    public List<Tweet> getTweetsForUser(User user) {
+        String SQL = "select t from Tweet as t WHERE t.user=:user";
+        TypedQuery<Tweet> query = entityManager.createQuery(SQL,Tweet.class);
+        query.setParameter("user",user);
+        return query.getResultList();
     }
 }

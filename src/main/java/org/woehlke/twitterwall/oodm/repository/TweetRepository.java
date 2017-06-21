@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.repository;
 
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface TweetRepository {
     long countTweetsForHashTag(String hashtagText);
 
     long count();
-    
+
+    List<Tweet> getTweetsForUser(User user);
 }

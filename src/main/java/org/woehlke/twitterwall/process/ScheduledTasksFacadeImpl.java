@@ -9,10 +9,13 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.service.UserService;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tw on 19.06.17.
@@ -29,15 +32,17 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private boolean fetchTestData;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(StoreTweetsProcess storeTweetsProcess, TwitterApiService twitterApiService) {
+    public ScheduledTasksFacadeImpl(StoreTweetsProcess storeTweetsProcess, TwitterApiService twitterApiService, UserService userService) {
         this.storeTweetsProcess = storeTweetsProcess;
         this.twitterApiService = twitterApiService;
+        this.userService = userService;
     }
 
     private final StoreTweetsProcess storeTweetsProcess;
 
     private final TwitterApiService twitterApiService;
 
+    private final UserService userService;
     
     @Override
     public void fetchTweetsFromTwitterSearch() {
@@ -56,10 +61,16 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     handleTweet(tweet,loopId);
                 }
             }
+            this.updateUrlsInUserProfiles();
         } catch (ResourceAccessException e){
             log.error("Twitter: "+e.getMessage());
             log.error("Twitter: check your Network Connection!");
         }
+    }
+
+    private void updateUrlsInUserProfiles() {
+        List<User> userList = userService.getAll();
+        //TODO: #34 https://github.com/phasenraum2010/twitterwall2/issues/34
     }
 
     private void handleTweet(Tweet tweet, int loopId){
