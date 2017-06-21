@@ -44,7 +44,6 @@ public class TweetTest {
     public void testText1() {
         log.info("testText1");
         long idTwitter = 876329508009279488L;
-        //String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>  <a href=\"http://www.<a href=\"http://www.doctrine-project.org/\" class=\"tw-display1\" target=\"_blank\">doctrine-project.org</a> \" class=\"tw-url1\" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>  <a href=\"http://www.doctrine-project.org/\" class=\"tw-url1\" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
@@ -54,7 +53,6 @@ public class TweetTest {
     public void testText2() {
         log.info("testText2");
         long idTwitter = 876356335784394752L;
-        //String output ="Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://<a href=\"http://natural-born-coder.de/\" class=\"tw-display1\" target=\"_blank\">natural-born-coder.de</a> \" class=\"tw-url1\" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
         String output = "Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://natural-born-coder.de/\" class=\"tw-url1\" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-action tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
         boolean retweet = false;
         testHelperService.performTweetTest(idTwitter,output,retweet);
