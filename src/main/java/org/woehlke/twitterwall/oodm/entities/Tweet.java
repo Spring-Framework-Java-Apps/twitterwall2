@@ -151,51 +151,68 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
             if (medium.getMediaType().compareTo("photo")==0) {
                 Pattern myUrl1 = Pattern.compile("(" + medium.getUrl() + ")" + stopChar);
                 Matcher m10 = myUrl1.matcher(formattedText);
-                formattedText = m10.replaceAll("<br/><br/><a class=\"tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
+                formattedText = m10.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
 
                 Pattern myUrl2 = Pattern.compile("(" + medium.getUrl() + ")$");
                 Matcher m11 = myUrl2.matcher(formattedText);
-                formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
+                formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
             }
         }
         return formattedText;
     }
-
+    
     private String getFormattedTextForUrls(Set<Url> urls, String formattedText) {
         for(Url url:urls){
-
-            Pattern myUrl1 = Pattern.compile("("+url.getUrl()+")"+stopChar);
-            Matcher m10  = myUrl1.matcher(formattedText);
-            boolean url1 = m10.matches();
-            formattedText = m10.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-url1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-            Pattern myUrl4 = Pattern.compile("("+url.getUrl()+")$");
-            Matcher m20  = myUrl4.matcher(formattedText);
-            boolean url2 = m20.matches();
-            formattedText = m20.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-url2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
-
-            Pattern myUrl2 = Pattern.compile("("+url.getDisplay()+")"+stopChar);
+            
+            Pattern myUrl2 = Pattern.compile("("+url.getDisplay()+")"+ stopChar);
+            //Pattern myUrl2a = Pattern.compile("href=\""+url.getDisplay()+ stopChar);
             Matcher m11  = myUrl2.matcher(formattedText);
-            boolean display1 = m11.matches();
-            formattedText = m11.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-display1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //Matcher m11a  = myUrl2a.matcher(formattedText);
+            //if(!m11a.matches()){
+                formattedText = m11.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-display1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //}
 
             Pattern myUrl5 = Pattern.compile("("+url.getDisplay()+")$");
+            //Pattern myUrl5a = Pattern.compile("href=\""+url.getDisplay()+"$");
             Matcher m21  = myUrl5.matcher(formattedText);
-            boolean display2 = m21.matches();
-            formattedText = m21.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-display2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //Matcher m21a  = myUrl5a.matcher(formattedText);
+            //if(!m21a.matches()) {
+                formattedText = m21.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-display2\" target=\"_blank\">" + url.getDisplay() + "</a> ");
+            //}
 
-
-            Pattern myUrl3 = Pattern.compile("("+url.getExpanded()+")"+stopChar);
+            
+            Pattern myUrl3 = Pattern.compile("("+url.getExpanded()+")"+ stopChar);
+            //Pattern myUrl3a = Pattern.compile("href=\""+url.getExpanded()+stopChar);
             Matcher m12  = myUrl3.matcher(formattedText);
-            boolean expanded1 = m12.matches();
-            formattedText = m12.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-expanded1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
-
+            //Matcher m12a  = myUrl3a.matcher(formattedText);
+            //if(!m12a.matches()) {
+                formattedText = m12.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-expanded1\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //}
+            
             Pattern myUrl6 = Pattern.compile("("+url.getExpanded()+")$");
+            //Pattern myUrl6a = Pattern.compile("href=\""+url.getExpanded()+"$");
             Matcher m22  = myUrl6.matcher(formattedText);
-            boolean expanded2 = m22.matches();
-            formattedText = m22.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-expanded2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //Matcher m22a  = myUrl6a.matcher(formattedText);
+            //if(!m22a.matches()) {
+                formattedText = m22.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-expanded2\" target=\"_blank\">" + url.getDisplay() + "</a> ");
+            //}
 
+
+            Pattern myUrl1 = Pattern.compile("("+url.getUrl()+")"+ stopChar);
+            //Pattern myUrl1a = Pattern.compile("href=\""+url.getUrl()+stopChar);
+            Matcher m10  = myUrl1.matcher(formattedText);
+            //Matcher m10a  = myUrl1a.matcher(formattedText);
+            //if(!m10a.matches()) {
+                formattedText = m10.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url1\" target=\"_blank\">" + url.getDisplay() + "</a> ");
+            //}
+
+            Pattern myUrl4 = Pattern.compile("("+url.getUrl()+")$");
+            //Pattern myUrl4a = Pattern.compile("href=\""+url.getUrl()+"$");
+            Matcher m20  = myUrl4.matcher(formattedText);
+            //Matcher m20a  = myUrl4a.matcher(formattedText);
+            //if(!m20a.matches()){
+                formattedText = m20.replaceAll("<a href=\""+url.getExpanded()+"\" class=\"tw-url2\" target=\"_blank\">"+url.getDisplay()+"</a> ");
+            //}
         }
         return formattedText;
     }

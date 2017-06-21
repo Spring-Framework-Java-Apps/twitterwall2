@@ -14,6 +14,8 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.helper.TestHelperService;
 import javax.transaction.Transactional;
 
+import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+
 
 /**
  * Created by tw on 18.06.17.
@@ -26,18 +28,7 @@ public class TweetTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetTest.class);
 
-    private static final long idTwitterToFetch[] = {
-            876329508009279488L,
-            876356335784394752L,
-            876676270913880066L,
-            876566077836337152L,
-            876563676395962368L,
-            876514968933478400L,
-            876514568671023104L,
-            876513930478313472L,
-            876510758632386563L,
-            876496934676180992L
-    };
+
 
     @Autowired
     private TestHelperService testHelperService;
@@ -45,7 +36,7 @@ public class TweetTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        testHelperService.fetchTweetsFromTwitterSearchTest(idTwitterToFetch);
+        testHelperService.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
         Assert.assertTrue(true);
     }
 

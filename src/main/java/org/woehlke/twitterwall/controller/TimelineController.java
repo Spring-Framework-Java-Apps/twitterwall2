@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+
 /**
  * Created by tw on 10.06.17.
  */
@@ -43,6 +45,9 @@ public class TimelineController {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
+    @Value("${twitterwall.twitter.fetchTestData}")
+    private boolean fetchTestData;
+
     @Autowired
     public TimelineController(TweetService tweetService, HashTagService hashTagService) {
         this.tweetService = tweetService;
@@ -52,14 +57,30 @@ public class TimelineController {
     @RequestMapping("/")
     public String index(Model model) {
         model = setupPage(model);
-        model.addAttribute("latestTweets", tweetService.getLatestTweets());
+        if(fetchTestData) {
+            List<Tweet> list = tweetService.getTestTweetsForTweetTest();
+            List<Tweet> latest = tweetService.getLatestTweets();
+            list.addAll(latest);
+            model.addAttribute("latestTweets", list);
+        } else {
+            List<Tweet> latest = tweetService.getLatestTweets();
+            model.addAttribute("latestTweets", latest);
+        }
         return "timeline";
     }
 
     @RequestMapping("/tweets")
     public String tweets(Model model) {
         model = setupPage(model);
-        model.addAttribute("latestTweets", tweetService.getLatestTweets());
+        if(fetchTestData) {
+            List<Tweet> list = tweetService.getTestTweetsForTweetTest();
+            List<Tweet> latest = tweetService.getLatestTweets();
+            list.addAll(latest);
+            model.addAttribute("latestTweets", list);
+        } else {
+            List<Tweet> latest = tweetService.getLatestTweets();
+            model.addAttribute("latestTweets", latest);
+        }
         return "timeline";
     }
 

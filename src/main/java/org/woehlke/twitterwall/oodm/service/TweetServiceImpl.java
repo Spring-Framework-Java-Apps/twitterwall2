@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 /**
  * Created by tw on 10.06.17.
@@ -58,6 +61,16 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public long count() {
         return tweetRepository.count();
+    }
+
+    @Override
+    public List<Tweet> getTestTweetsForTweetTest() {
+        List<Tweet> list = new ArrayList<>();
+        for(long idTwitter:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
+            Tweet tweet = this.findByIdTwitter(idTwitter);
+            list.add(tweet);
+        }
+        return list;
     }
 
     @Override

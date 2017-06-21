@@ -32,6 +32,9 @@ Twitterwall with spring:boot for heroku
   - export TWITTER_SEARCH_TERM='#t3cb'
   - export TWITTERWALL_FRONTEND_MAX_RESULTS=60
   - export TWITTERWALL_APP_NAME='TYPO3 Camp Berlin 2017'
+  - export TWITTER_SEARCH_SINCE_ID
+  - export TWITTER_SEARCH_MAX_ID
+  - export TWITTER_FETCH_TESTDATA=false
 - run with: mvn clean spring-boot:run
 
 

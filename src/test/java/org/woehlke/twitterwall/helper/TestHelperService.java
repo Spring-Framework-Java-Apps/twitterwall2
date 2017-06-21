@@ -6,6 +6,6 @@ package org.woehlke.twitterwall.helper;
 public interface TestHelperService {
 
     void fetchTweetsFromTwitterSearchTest(long[] idTwitterToFetch);
-
+    
     void performTweetTest(long idTwitter,String output, boolean retweet);
 }

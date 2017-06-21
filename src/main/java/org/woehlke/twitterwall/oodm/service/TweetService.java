@@ -25,4 +25,6 @@ public interface TweetService {
 
     long count();
 
+    List<Tweet> getTestTweetsForTweetTest();
+
 }

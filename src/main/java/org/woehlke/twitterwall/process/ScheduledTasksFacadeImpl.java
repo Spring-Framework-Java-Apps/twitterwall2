@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -24,6 +25,9 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     
+    @Value("${twitterwall.twitter.fetchTestData}")
+    private boolean fetchTestData;
+
     @Autowired
     public ScheduledTasksFacadeImpl(StoreTweetsProcess storeTweetsProcess, TwitterApiService twitterApiService) {
         this.storeTweetsProcess = storeTweetsProcess;
@@ -34,28 +38,24 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     private final TwitterApiService twitterApiService;
 
+    
     @Override
     public void fetchTweetsFromTwitterSearch() {
         log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         try {
             log.info("---------------------------------------");
             int loopId = 0;
-            long lastId = 0L;
             for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
                 loopId++;
-                lastId=tweet.getId();
                 handleTweet(tweet,loopId);
             }
-            /*
-            if(lastId>0L){
-               for(int i=0; i<5; i++){
-                   for (Tweet tweet : twitterApiService.findTweetsForSearchQueryStartingWith(lastId)) {
-                       loopId++;
-                       lastId=tweet.getId();
-                       handleTweet(tweet,loopId);
-                   }
-               }
-            } */
+            if(fetchTestData){
+                for(long idTwitter:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
+                    Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
+                    loopId++;
+                    handleTweet(tweet,loopId);
+                }
+            }
         } catch (ResourceAccessException e){
             log.error("Twitter: "+e.getMessage());
             log.error("Twitter: check your Network Connection!");

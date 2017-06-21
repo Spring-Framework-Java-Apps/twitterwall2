@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
 
 /**
  * Created by tw on 19.06.17.
@@ -54,19 +55,7 @@ public class ProfileControllerTest {
 
     @Autowired
     private TestHelperService testHelperService;
-
-    private static long idTwitterToFetch[] = {
-            876433563561938944L, // t3c_berlin
-            876456051016597504L, // Codemonkey1988
-            876420491329892354L, // Walter_kran
-            876425220147564544L, // tobenschmidt
-            876819177746649088L, // Oliver1973
-            876514968933478400L, // wowa_TYPO3
-            876441863191920641L, // dirscherl17
-            876441015523192832L, // Markus306
-            876440419416109056L  // mattLefaux
-    };
-
+    
     @Test
     public void controllerIsPresentTest() throws Exception {
         log.info("controllerIsPresentTest");
@@ -76,7 +65,7 @@ public class ProfileControllerTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        testHelperService.fetchTweetsFromTwitterSearchTest(idTwitterToFetch);
+        testHelperService.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
         Assert.assertTrue(true);
     }
 
