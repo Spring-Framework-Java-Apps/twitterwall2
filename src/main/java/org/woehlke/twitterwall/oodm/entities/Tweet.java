@@ -122,12 +122,12 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     }
 
 
-    private String getFormattedTextForUseerProfiles(String formattedText){
-        Pattern userPattern = Pattern.compile("@([a-zA-Z0-9_]{1,15})"+stopChar);
+    private String getFormattedTextForUserProfiles(String formattedText){
+        Pattern userPattern = Pattern.compile("@(\\w{1,15})"+stopChar);
         Matcher m1 = userPattern.matcher(formattedText);
         formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
 
-        Pattern userPattern2 = Pattern.compile("@([a-zA-Z0-9_]{1,15})$");
+        Pattern userPattern2 = Pattern.compile("@(\\w{1,15})$");
         Matcher m2 = userPattern2.matcher(formattedText);
         formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/profile/$1\">@$1</a> ");
 
@@ -135,11 +135,11 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     }
 
     private String getFormattedTextForHashTags(String formattedText) {
-        Pattern hashTagPattern = Pattern.compile("#([a-zA-Z0-9_]*)"+stopChar);
+        Pattern hashTagPattern = Pattern.compile("#(\\w*)"+stopChar);
         Matcher m3 = hashTagPattern.matcher(formattedText);
         formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
 
-        Pattern hashTagPattern2 = Pattern.compile("#([a-zA-Z0-9_]*)$");
+        Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(formattedText);
         formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
 
@@ -195,7 +195,7 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
     public String getFormattedText(){
         String formattedText = this.text;
 
-        formattedText = getFormattedTextForUseerProfiles(formattedText);
+        formattedText = getFormattedTextForUserProfiles(formattedText);
 
         formattedText = getFormattedTextForHashTags(formattedText);
 
@@ -410,7 +410,7 @@ public class Tweet extends AbstractTwitterObject implements Serializable,Compara
         x.append("\\[");
         x.append("\\]");
         x.append("\\^");
-        x.append("\\_");
+        //x.append("\\_");
         x.append("\\`");
         x.append("\\{");
         x.append("\\|");
