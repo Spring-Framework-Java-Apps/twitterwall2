@@ -144,8 +144,14 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         String screenName=twitterProfile.getScreenName();
         String name=twitterProfile.getName();
         String url=twitterProfile.getUrl();
+        if(url==null || twitterProfile.getUrl().isEmpty()){
+            url=null;
+        }
         String profileImageUrl=twitterProfile.getProfileImageUrl();
         String description=twitterProfile.getDescription();
+        if(twitterProfile.getDescription().isEmpty()){
+            description=null;
+        }
         String location=twitterProfile.getLocation();
         if(twitterProfile.getLocation().isEmpty()){
             location=null;

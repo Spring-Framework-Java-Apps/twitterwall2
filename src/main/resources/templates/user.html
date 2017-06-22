@@ -17,9 +17,9 @@
                     <div class="caption">
                         <h2><a href="" th:href="@{|/profile/${user.screenName}|}"><span th:text="${user.name}">name</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${user.screenName}|}"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
-                        <p th:if="${user.description}"><span th:text="${user.description}">description</span></p>
+                        <p th:if="${user.description != null}"><span th:text="${user.description}">description</span></p>
                         <p th:if="${user.location != null}"><span class="map-icon map-icon-postal-code"></span> <span th:text="${user.location}">location</span></p>
-                        <p th:if="${user.url}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.urlExpanded}" target="_blank"><span th:text="${user.urlDisplay}">url</span></a></p>
+                        <p th:if="${user.url != null}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.urlExpanded}" target="_blank"><span th:text="${user.urlDisplay}">url</span></a></p>
                         <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i> Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
                         <p><hr/></p>
                         <p>Tweets: <span th:text="${user.statusesCount}">statusesCount</span></p>
