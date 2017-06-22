@@ -1,8 +1,14 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.entities.Url;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by tw on 10.06.17.
@@ -133,6 +139,18 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
 
     @Column
     private String profileBannerUrl;
+
+    @JoinTable(name="userprofile_url")
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<Url> urls = new LinkedHashSet<Url>();
+
+    @JoinTable(name="userprofile_hashtag")
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<HashTag> tags = new LinkedHashSet<HashTag>();
+
+    @JoinTable(name="userprofile_mention")
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<Mention> mentions = new LinkedHashSet<>();
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         this.idTwitter = idTwitter;
@@ -472,6 +490,30 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
 
     public void setUrlExpanded(String urlExpanded) {
         this.urlExpanded = urlExpanded;
+    }
+
+    public Set<Url> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Set<Url> urls) {
+        this.urls = urls;
+    }
+
+    public Set<HashTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<HashTag> tags) {
+        this.tags = tags;
+    }
+
+    public Set<Mention> getMentions() {
+        return mentions;
+    }
+
+    public void setMentions(Set<Mention> mentions) {
+        this.mentions = mentions;
     }
 
     @Override

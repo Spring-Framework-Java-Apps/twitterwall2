@@ -110,4 +110,11 @@ public class UserRepositoryImpl implements UserRepository {
         long count = query.getSingleResult();
         return count;
     }
+
+    @Override
+    public List<String> getAllDescriptions() {
+        String SQL = "select t.description from User as t where t.description is not null";
+        TypedQuery<String> query = entityManager.createQuery(SQL,String.class);
+        return query.getResultList();
+    }
 }

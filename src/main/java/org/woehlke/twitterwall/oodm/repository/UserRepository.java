@@ -28,4 +28,7 @@ public interface UserRepository {
     List<User> getNotYetFriendUsers();
 
     long count();
+
+    List<String> getAllDescriptions();
+
 }

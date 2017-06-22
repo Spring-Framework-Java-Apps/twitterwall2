@@ -74,4 +74,9 @@ public class UserServiceImpl implements UserService {
     public long count() {
         return userRepository.count();
     }
+
+    @Override
+    public List<String> getAllDescriptions() {
+        return userRepository.getAllDescriptions();
+    }
 }

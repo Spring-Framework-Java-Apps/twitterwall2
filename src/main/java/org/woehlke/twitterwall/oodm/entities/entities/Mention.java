@@ -108,4 +108,14 @@ public class Mention extends AbstractTwitterObject implements Serializable,Compa
     public int compareTo(Mention other) {
         return screenName.compareTo(other.getScreenName());
     }
+
+    @Override
+    public String toString() {
+        return "Mention{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", screenName='" + screenName + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

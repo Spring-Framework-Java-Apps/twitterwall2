@@ -84,4 +84,12 @@ public class HashTag extends AbstractTwitterObject implements Serializable,Compa
     public int compareTo(HashTag other) {
         return text.compareTo(other.getText());
     }
+
+    @Override
+    public String toString() {
+        return "HashTag{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

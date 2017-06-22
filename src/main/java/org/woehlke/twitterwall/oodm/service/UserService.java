@@ -28,4 +28,9 @@ public interface UserService {
     List<User> getNotYetFriendUsers();
 
     long count();
+
+    List<String> getAllDescriptions();
+
+
+
 }

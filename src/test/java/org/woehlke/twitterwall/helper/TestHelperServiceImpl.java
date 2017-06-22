@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.exceptions.FindTweetByIdTwitterException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.process.StoreTweetsProcess;
 import org.woehlke.twitterwall.process.TwitterApiService;
 
