@@ -92,6 +92,9 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     }
 
     private User storeOneUser(User user) {
+        if(user == null){
+            return null;
+        }
         Set<Url> urls = new LinkedHashSet<>();
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
@@ -146,7 +149,6 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
             myTweet.setRetweetedStatus(retweetedStatus);
             TwitterProfile twitterProfile = tweet.getUser();
             User user = transformTwitterProfile(twitterProfile);
-            user = this.userHelperService.getEntitiesForUrlDescription(user);
             myTweet.setUser(user);
             Entities myEntities = transformTwitterEntities(tweet.getEntities(),tweet.getId());
             myTweet.setEntities(myEntities);
@@ -202,6 +204,7 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
         user.setLinkColor(twitterProfile.getLinkColor());
         user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
         user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
+        user = this.userHelperService.getEntitiesForUrlDescription(user);
         return user;
     }
 
@@ -216,6 +219,12 @@ public class StoreTweetsProcessImpl implements StoreTweetsProcess {
     public User storeFriend(TwitterProfile friend) {
         User user = transformTwitterProfile(friend);
         user.setFriend(true);
+        return storeOneUser(user);
+    }
+
+    @Override
+    public User storeUserProfile(TwitterProfile userProfile) {
+        User user = transformTwitterProfile(userProfile);
         return storeOneUser(user);
     }
 

@@ -106,4 +106,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         }
         return list;
     }
+
+    @Override
+    public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
+        return getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+    }
 }

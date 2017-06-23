@@ -40,13 +40,22 @@ public class ScheduledTasks {
 
     private final static long FIXED_RATE_FOR_SCHEDULAR = FIXED_RATE_FOR_SCHEDULAR_MINUTEN * 60 * 1000;
 
-    private final static long FIXED_RATE_FOR_SCHEDULAR_TEXT = 30 * 1000;
+    private final static long FIXED_RATE_FOR_SCHEDULAR_MINUTEN_USER = 12 * 60;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_USER = FIXED_RATE_FOR_SCHEDULAR_MINUTEN_USER * 60 * 1000;
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR)
     public void fetchTweetsFromTwitterSearch() {
         log.info("ScheduledTasks.fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
 
         this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
+    }
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_USER)
+    public void updateUserProfiles(){
+        log.info("ScheduledTasks.updateUserProfiles: The time is now {}", dateFormat.format(new Date()));
+
+        this.scheduledTasksFacade.updateUserProfiles();
     }
 
     //@Scheduled(fixedRate = 12000000)

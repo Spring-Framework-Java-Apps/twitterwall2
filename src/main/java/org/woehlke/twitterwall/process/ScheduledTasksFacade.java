@@ -100,4 +100,6 @@ public interface ScheduledTasksFacade {
             "https://t.co/cbsEBiSW2E",
     };
 
+    void updateUserProfiles();
+
 }

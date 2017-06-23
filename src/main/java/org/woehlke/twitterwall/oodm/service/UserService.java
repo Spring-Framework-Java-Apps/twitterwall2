@@ -31,6 +31,6 @@ public interface UserService {
 
     List<String> getAllDescriptions();
 
-
+    List<Long> getAllTwitterIds();
 
 }

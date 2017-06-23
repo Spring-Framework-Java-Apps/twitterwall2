@@ -137,4 +137,17 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
             log.error("Twitter: "+e.getMessage());
         }
     }
+
+    @Override
+    public void updateUserProfiles() {
+        log.info("updateUserProfiles: The time is now {}", dateFormat.format(new Date()));
+        log.info("---------------------------------------");
+        List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
+        for(Long userProfileTwitterId:userProfileTwitterIds){
+            TwitterProfile userProfile=twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
+            User user = storeTweetsProcess.storeUserProfile(userProfile);
+            log.info("updated user: "+user.toString());
+            log.info("---------------------------------------");
+        }
+    }
 }

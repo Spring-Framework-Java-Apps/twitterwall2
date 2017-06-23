@@ -79,4 +79,9 @@ public class UserServiceImpl implements UserService {
     public List<String> getAllDescriptions() {
         return userRepository.getAllDescriptions();
     }
+
+    @Override
+    public List<Long> getAllTwitterIds() {
+        return userRepository.getAllTwitterIds();
+    }
 }

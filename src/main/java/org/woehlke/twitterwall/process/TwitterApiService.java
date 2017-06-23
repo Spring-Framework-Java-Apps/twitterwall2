@@ -19,5 +19,6 @@ public interface TwitterApiService {
     List<TwitterProfile>  getFollowers();
 
     List<TwitterProfile>  getFriends();
-    
+
+    TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId);
 }

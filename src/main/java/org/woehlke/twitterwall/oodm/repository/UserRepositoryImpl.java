@@ -117,4 +117,11 @@ public class UserRepositoryImpl implements UserRepository {
         TypedQuery<String> query = entityManager.createQuery(SQL,String.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Long> getAllTwitterIds() {
+        String SQL = "select t.idTwitter from User as t";
+        TypedQuery<Long> query = entityManager.createQuery(SQL,Long.class);
+        return query.getResultList();
+    }
 }

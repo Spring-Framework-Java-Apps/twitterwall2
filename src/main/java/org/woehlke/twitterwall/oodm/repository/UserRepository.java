@@ -31,4 +31,6 @@ public interface UserRepository {
 
     List<String> getAllDescriptions();
 
+    List<Long> getAllTwitterIds();
+
 }

@@ -538,4 +538,72 @@ public class User extends AbstractFormattedText implements Serializable,Comparab
     public int compareTo(User other) {
         return screenName.compareTo(other.getScreenName());
     }
+
+    @Override
+    public String toString() {
+        StringBuffer myUrls = new StringBuffer();
+        myUrls.append("\n[ ");
+        for(Url url:urls){
+            myUrls.append(url.toString());
+            myUrls.append(", ");
+        }
+        myUrls.append(" ]\n");
+        StringBuffer myTags = new StringBuffer();
+        myTags.append("\n[ ");
+        for(HashTag tag:tags){
+            myTags.append(tag.toString());
+            myTags.append(", ");
+        }
+        myTags.append(" ]\n");
+        StringBuffer myMentions = new StringBuffer();
+        myMentions.append("\n[ ");
+        for(Mention mention:mentions){
+            myMentions.append(mention.toString());
+            myMentions.append(", ");
+        }
+        myMentions.append(" ]\n");
+        return "User{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", screenName='" + screenName + '\'' +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", createdDate=" + createdDate +
+                ", language='" + language + '\'' +
+                ", statusesCount=" + statusesCount +
+                ", friendsCount=" + friendsCount +
+                ", followersCount=" + followersCount +
+                ", favoritesCount=" + favoritesCount +
+                ", listedCount=" + listedCount +
+                ", following=" + following +
+                ", followRequestSent=" + followRequestSent +
+                ", isProtected=" + isProtected +
+                ", notificationsEnabled=" + notificationsEnabled +
+                ", verified=" + verified +
+                ", geoEnabled=" + geoEnabled +
+                ", contributorsEnabled=" + contributorsEnabled +
+                ", translator=" + translator +
+                ", timeZone='" + timeZone + '\'' +
+                ", utcOffset=" + utcOffset +
+                ", sidebarBorderColor='" + sidebarBorderColor + '\'' +
+                ", sidebarFillColor='" + sidebarFillColor + '\'' +
+                ", backgroundColor='" + backgroundColor + '\'' +
+                ", useBackgroundImage=" + useBackgroundImage +
+                ", backgroundImageUrl='" + backgroundImageUrl + '\'' +
+                ", backgroundImageTiled=" + backgroundImageTiled +
+                ", textColor='" + textColor + '\'' +
+                ", linkColor='" + linkColor + '\'' +
+                ", showAllInlineMedia=" + showAllInlineMedia +
+                ", follower=" + follower +
+                ", friend=" + friend +
+                ", tweeting=" + tweeting +
+                ", profileBannerUrl='" + profileBannerUrl + '\'' +
+                ", urls=" + myUrls.toString() +
+                ", tags=" + myTags.toString() +
+                ", mentions=" + myMentions.toString() +
+                '}';
+    }
 }
