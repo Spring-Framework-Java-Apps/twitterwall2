@@ -47,10 +47,10 @@ public class UserHelperServiceImpl implements UserHelperService {
 
     @Override
     public User getEntitiesForUrlDescription(User user){
-        Url myUrl = this.fetchUrl(user.getUrl());
         String description = user.getDescription();
         user.setMentions(this.getMentions(description));
         Set<Url> urls = this.getUrls(description);
+        Url myUrl = this.fetchUrl(user.getUrl());
         if(myUrl!=null){
             urls.add(myUrl);
         }
