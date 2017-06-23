@@ -27,6 +27,12 @@ public class ProfileController {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.info.webpage}")
+    private String infoWebpage;
+
     private final UserService userService;
 
     @Autowired
@@ -41,10 +47,13 @@ public class ProfileController {
         if(m.matches()){
             User user = userService.findByScreenName(screenName);
             Page page = new Page();
+            page.setSymbol("<i class=\"fa fa-users\" aria-hidden=\"true\"></i>");
             page.setMenuAppName(menuAppName);
             page.setTitle("@"+ user.getScreenName());
             page.setSubtitle(user.getName());
             page.setShowMenuUsers(showMenuUsers);
+            page.setTwitterSearchTerm(searchterm);
+            page.setInfoWebpage(infoWebpage);
             model.addAttribute("page",page);
             model.addAttribute("user", user);
             return "profile";

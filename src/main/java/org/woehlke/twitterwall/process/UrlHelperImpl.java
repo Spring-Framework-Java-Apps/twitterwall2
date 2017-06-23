@@ -9,6 +9,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.FetchUrlException;
@@ -154,16 +155,29 @@ public class UrlHelperImpl implements UrlHelper {
         urls.put("http://t.co/CudjEZGLVT", "http://sebastian.kreideweiss.info/");
     }
 
+    @Value("${twitterwall.url.fetchTestDataVerbose}")
+    private boolean fetchTestDataVerbose;
+
     public List<Url> getTestData(){
+        Map<String,String> hostsTest = new HashMap<>();
+        hostsTest.put("https://t.co/lQlse7u93G", "port80guru.tumblr.com");
+        Map<String,String> urlsTest = new HashMap<>();
+        urlsTest.put("https://t.co/lQlse7u93G", "https://port80guru.tumblr.com/");
+
+        if(fetchTestDataVerbose){
+            hostsTest = hosts;
+            urlsTest = urls;
+        }
+
         String urlSrc;
         String display;
         String expanded;
         int[] indices = {};
         List<Url> testData = new ArrayList<>();
-        for(Map.Entry<String,String> url:urls.entrySet()){
+        for(Map.Entry<String,String> url:urlsTest.entrySet()){
             urlSrc = url.getKey();
             expanded = url.getValue();
-            display = hosts.get(urlSrc);
+            display = hostsTest.get(urlSrc);
             Url myUrl = new Url(display, expanded, urlSrc, indices);
             testData.add(myUrl);
         }

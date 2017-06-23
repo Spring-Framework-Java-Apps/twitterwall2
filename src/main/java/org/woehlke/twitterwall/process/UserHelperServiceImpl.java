@@ -8,8 +8,15 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
+import org.woehlke.twitterwall.oodm.exceptions.FindUrlByUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.FindUrlCacheByUrlException;
+import org.woehlke.twitterwall.oodm.service.entities.UrlCacheService;
+import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
 import javax.transaction.Transactional;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -27,16 +34,27 @@ public class UserHelperServiceImpl implements UserHelperService {
 
     private final UrlHelper urlHelper;
 
+    private final UrlCacheService urlCacheService;
+
+    private final UrlService urlService;
+
     @Autowired
-    public UserHelperServiceImpl(UrlHelper urlHelper) {
+    public UserHelperServiceImpl(UrlHelper urlHelper, UrlCacheService urlCacheService, UrlService urlService) {
         this.urlHelper = urlHelper;
+        this.urlCacheService = urlCacheService;
+        this.urlService = urlService;
     }
 
     @Override
     public User getEntitiesForUrlDescription(User user){
+        Url myUrl = this.fetchUrl(user.getUrl());
         String description = user.getDescription();
         user.setMentions(this.getMentions(description));
-        user.setUrls(this.getUrls(description));
+        Set<Url> urls = this.getUrls(description);
+        if(myUrl!=null){
+            urls.add(myUrl);
+        }
+        user.setUrls(urls);
         user.setTags(this.getHashTags(description));
         log.info("description "+ description);
         log.info("++++++++++++++++++++");
@@ -76,15 +94,45 @@ public class UserHelperServiceImpl implements UserHelperService {
             Pattern hashTagPattern = Pattern.compile("(https://t\\.co/\\w*)(" + stopChar + ")");
             Matcher m3 = hashTagPattern.matcher(description);
             while (m3.find()) {
-                urls.add(this.urlHelper.fetchUrl(m3.group(1)));
+                urls.add(this.fetchUrl(m3.group(1)));
             }
             Pattern hashTagPattern2 = Pattern.compile("(https://t\\.co/\\w*)$");
             Matcher m4 = hashTagPattern2.matcher(description);
             while (m4.find()) {
-                urls.add(this.urlHelper.fetchUrl(m4.group(1)));
+                urls.add(this.fetchUrl(m4.group(1)));
             }
         }
         return urls;
+    }
+
+    private Url fetchUrl(String url){
+        if(url == null) {
+            return null;
+        } else {
+            try {
+                Url urlPers = urlService.findByUrl(url);
+                return urlPers;
+            } catch (FindUrlByUrlException ex) {
+                try {
+                    UrlCache urlCache = urlCacheService.findByUrl(url);
+                    String displayUrl = urlCache.getExpanded();
+                    try {
+                        URL myURL = new URL(urlCache.getExpanded());
+                        displayUrl = myURL.getHost();
+                    } catch (MalformedURLException exe) {
+                    }
+                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
+                    return newUrl;
+                } catch (FindUrlCacheByUrlException e) {
+                    Url myUrl = this.urlHelper.fetchUrl(url);
+                    UrlCache urlCache = new UrlCache();
+                    urlCache.setUrl(myUrl.getUrl());
+                    urlCache.setExpanded(myUrl.getExpanded());
+                    urlCacheService.store(urlCache);
+                    return myUrl;
+                }
+            }
+        }
     }
 
     private Set<Mention> getMentions(String description){

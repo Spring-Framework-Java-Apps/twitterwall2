@@ -16,17 +16,28 @@
 
                 <h3>Debug Information:</h3>
 
-                Requested URL= <span th:text="${url}">url</span><br/><br/>
-
-                Exception= <span th:text="${exception.message}">exception.message</span><br/><br/>
-
-                <!--
-                <strong>Exception Stack Trace</strong><br/>
-                <ul th:each="ste : ${exception.stackTrace}">
-                    <li th:text="${ste}">ste</li>
-                </ul>
-                -->
-
+                <div class="row">
+                    <div class="col-md-6">Requested URL=</div>
+                    <div class="col-md-6">
+                        <span th:text="${url}">url</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">Exception=</div>
+                    <div class="col-md-6">
+                        <span th:text="${exception.message}">exception.message</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--
+                        <strong>Exception Stack Trace</strong><br/>
+                        <ul th:each="ste : ${exception.stackTrace}">
+                            <li th:text="${ste}">ste</li>
+                        </ul>
+                        -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>

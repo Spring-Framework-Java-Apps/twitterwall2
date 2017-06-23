@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name="userprofile")
-public class User extends AbstractTwitterObject implements Serializable,Comparable<User>  {
+public class User extends AbstractFormattedText implements Serializable,Comparable<User>  {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,12 +34,6 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
 
     @Column
     private String url;
-
-    @Transient
-    private String urlDisplay;
-
-    @Transient
-    private String urlExpanded;
 
     @Column
     private String profileImageUrl;
@@ -170,6 +164,28 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
     }
 
     private User() {
+    }
+
+    public String getFormattedDescription(){
+        String formattedDescription = this.description;
+
+        Set<Url> urls = this.getUrls();
+        formattedDescription = getFormattedUrlForUrls(urls,formattedDescription);
+
+        Set<Mention> mentions = this.getMentions();
+        formattedDescription = getFormattedTextForMentions(mentions,formattedDescription);
+
+        Set<HashTag> tags = this.getTags();
+        formattedDescription = getFormattedTextForHashTags(tags,formattedDescription);
+
+        return formattedDescription;
+    }
+
+    public String getFormattedUrl(){
+        String formattedUrl = this.url;
+        Set<Url> urls = this.getUrls();
+        formattedUrl = getFormattedUrlForUrls(urls,formattedUrl);
+        return formattedUrl;
     }
 
     public Long getId() {
@@ -474,22 +490,6 @@ public class User extends AbstractTwitterObject implements Serializable,Comparab
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public String getUrlDisplay() {
-        return urlDisplay;
-    }
-
-    public void setUrlDisplay(String urlDisplay) {
-        this.urlDisplay = urlDisplay;
-    }
-
-    public String getUrlExpanded() {
-        return urlExpanded;
-    }
-
-    public void setUrlExpanded(String urlExpanded) {
-        this.urlExpanded = urlExpanded;
     }
 
     public Set<Url> getUrls() {

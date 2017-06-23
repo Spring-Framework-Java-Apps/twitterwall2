@@ -25,6 +25,12 @@ public class GlobalExceptionHandler {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.info.webpage}")
+    private String infoWebpage;
+
     @ExceptionHandler(FindEntitiesByIdTwitterFromTweetException.class)
     public ModelAndView handleFindByIdTwitterFromTweetException(HttpServletRequest request, Exception ex){
         log.warn("FindEntitiesByIdTwitterFromTweetException occured :: URL="+request.getRequestURL());
@@ -104,10 +110,13 @@ public class GlobalExceptionHandler {
 
     private ModelAndView getTemplate(HttpServletRequest request, Exception ex){
         Page page = new Page();
+        page.setSymbol("<i class=\"fa fa-bolt\" aria-hidden=\"true\"></i>");
         page.setMenuAppName(menuAppName);
         page.setTitle("Exception");
         page.setSubtitle(ex.getMessage());
         page.setShowMenuUsers(showMenuUsers);
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", ex);
         mav.addObject("url", request.getRequestURL());
@@ -126,6 +135,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FindUrlByUrlException.class)
     public ModelAndView handleFindUrlByUrlException(HttpServletRequest request, Exception ex){
         log.warn("FindUrlByUrlException occured :: URL="+request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
+
+    @ExceptionHandler(FindUrlCacheByUrlException.class)
+    public ModelAndView handleFindUrlCacheByUrlException(HttpServletRequest request, Exception ex){
+        log.warn("FindUrlCacheByUrlException occured :: URL="+request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }

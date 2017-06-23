@@ -64,6 +64,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                 loopId++;
                 handleTweet(tweet,loopId);
             }
+            log.info("---------------------------------------");
             if(fetchTestData){
                 for(long idTwitter:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
                     Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
@@ -71,6 +72,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     handleTweet(tweet,loopId);
                 }
             }
+            log.info("---------------------------------------");
             loopId = 0;
             List<User> userList = userService.getAll();
             for(User user:userList){
@@ -89,6 +91,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     }
                 }
             }
+            log.info("---------------------------------------");
         } catch (ResourceAccessException e){
             log.error("Twitter: "+e.getMessage());
             log.error("Twitter: check your Network Connection!");

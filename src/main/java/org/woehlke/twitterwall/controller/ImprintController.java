@@ -21,6 +21,12 @@ public class ImprintController {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.info.webpage}")
+    private String infoWebpage;
+
     private final UserService userService;
 
     @Autowired
@@ -31,10 +37,13 @@ public class ImprintController {
     @RequestMapping("/imprint")
     public String index(Model model) {
         Page page = new Page();
+        page.setSymbol("<i class=\"fa fa-university\" aria-hidden=\"true\"></i>");
         page.setMenuAppName(menuAppName);
         page.setShowMenuUsers(showMenuUsers);
         page.setTitle("Impressum");
         page.setSubtitle("www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com");
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
         model.addAttribute("page",page);
         String screenName = "port80guru";
         User user = userService.findByScreenName(screenName);

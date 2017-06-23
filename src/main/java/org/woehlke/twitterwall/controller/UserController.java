@@ -27,77 +27,78 @@ public class UserController {
 
     private final UserService userService;
 
-    private final UrlService urlService;
-
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.info.webpage}")
+    private String infoWebpage;
+
     @Autowired
-    public UserController(UserService userService, UrlService urlService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.urlService = urlService;
     }
 
     @RequestMapping("/user/follower")
     public String follower(Model model) {
         model.addAttribute("users", userService.getFollower());
-        model = setupPage(model,"Follower");
+        String symbol = "<i class=\"fa fa-user-circle\"></i>";
+        String subtitle = "Follower";
+        model = setupPage(model,subtitle,symbol);
         return "user";
     }
 
     @RequestMapping("/user/friends")
     public String friends(Model model) {
         model.addAttribute("users", userService.getFriends());
-        model = setupPage(model,"Friends");
+        String symbol = "<i class=\"fa fa-user-circle-o\"></i>";
+        String subtitle = "Friends";
+        model = setupPage(model,subtitle,symbol);
         return "user";
     }
 
     @RequestMapping("/user/all")
     public String all(Model model) {
         model.addAttribute("users", userService.getAll());
-        model = setupPage(model,"All");
+        String symbol = "<i class=\"fa fa-user\" aria-hidden=\"true\"></i>";
+        String subtitle = "All";
+        model = setupPage(model,subtitle,symbol);
         return "user";
     }
 
     @RequestMapping("/user/tweets")
     public String getTweetingUsers(Model model) {
-        List<User> myTweetingUsers = new ArrayList<>();
         List<User> tweetingUsers = userService.getTweetingUsers();
-        for(User user : tweetingUsers){
-           String url = user.getUrl();
-           try {
-               if (url != null) {
-                   log.info("url: "+url);
-                   Url myUrl = urlService.findByUrl(url);
-                   user.setUrlDisplay(myUrl.getDisplay());
-                   user.setUrlExpanded(myUrl.getExpanded());
-               }
-           } catch (FindUrlByUrlException e){
-               log.error(e.getMessage());
-           }
-           myTweetingUsers.add(user);
-        }
-        model.addAttribute("users", myTweetingUsers);
-        model = setupPage(model,"Tweets");
+        model.addAttribute("users", tweetingUsers);
+        String symbol = "<i class=\"fa fa-users\" aria-hidden=\"true\"></i>";
+        String subtitle = "With one or more Tweets";
+        model = setupPage(model,subtitle,symbol);
         return "user";
     }
 
     @RequestMapping("/user/notyetfriends")
     public String getNotYetFriendUsers(Model model) {
         model.addAttribute("users", userService.getNotYetFriendUsers());
-        model = setupPage(model,"Not Yet Friends");
+        String symbol = "<i class=\"fa fa-plus-square\" aria-hidden=\"true\"></i>";
+        String subtitle = "Not Yet Friends";
+        model = setupPage(model,subtitle,symbol);
         return "user";
     }
 
-    private Model setupPage(Model model,String subtitle){
+    private Model setupPage(Model model,String subtitle,String symbol){
         Page page = new Page();
+        page.setSymbol(symbol);
         page.setMenuAppName(menuAppName);
-        page.setTitle("Users");
-        page.setSubtitle(subtitle);
+        page.setTitle(subtitle);
+        page.setSubtitle("Users");
         page.setShowMenuUsers(showMenuUsers);
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
         model.addAttribute("page",page);
         return model;
     }

@@ -50,24 +50,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="active"><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> <small th:text="${page.menuAppName}">AppName</small></a></span>
+                <span class="active"><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;&nbsp;<small th:text="${page.menuAppName}">AppName</small></a></span>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="tw-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="dropdown" th:if="${page.showMenuUsers}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i>
-                            Profile <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;Profile <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/follower" th:href="@{/user/follower}"><i class="fa fa-user-circle"></i> Follower</a></li>
-                            <li><a href="/user/friends" th:href="@{/user/friends}"><i class="fa fa-user-circle-o"></i> Friends</a></li>
-                            <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i> All</a></li>
-                            <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i> Not Yet Friends</a></li>
+                            <li><a href="/user/follower" th:href="@{/user/follower}"><i class="fa fa-user-circle"></i>&nbsp;&nbsp;Follower</a></li>
+                            <li><a href="/user/friends" th:href="@{/user/friends}"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Friends</a></li>
+                            <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;All</a></li>
+                            <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;Not Yet Friends</a></li>
                         </ul>
                     </li>
-                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i> Users</a></li>
-                    <li><a href="/hashtags" th:href="@{/hashtags}"><i class="fa fa-hashtag" aria-hidden="true"></i> HashTags</a></li>
-                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i> Impressum</a></li>
+                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Users</a></li>
+                    <li><a href="/hashtags" th:href="@{/hashtags}"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;HashTags</a></li>
+                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i>&nbsp;&nbsp;Impressum</a></li>
                 </ul>
                 <!--
                 <form class="navbar-form navbar-right">
@@ -84,8 +83,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="page-header">
-                <h1><i class="fa fa-play-circle"></i>
-                    <span th:utext="${page.title}"  class="header-h1">Titel</span><br/>
+                <h1><span th:utext="${page.symbol}" >symbol</span>&nbsp;&nbsp;<span th:utext="${page.title}" class="header-h1">Titel</span><br/>
                     <small th:utext="${page.subtitle}">Untertitel</small>
                 </h1>
                 </div>

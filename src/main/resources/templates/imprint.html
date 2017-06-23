@@ -19,26 +19,42 @@
                                 src="" alt="Alt-Text"
                                 th:attr="src=${user.bigProfileImageUrl},alt=${user.description}" /></a>
                         <div class="caption">
-                            <h2><a href="" th:href="@{|/profile/${user.screenName}|}"><span th:text="${user.name}">name</span></a></h2>
-                            <h3><a href="" th:href="@{|/profile/${user.screenName}|}"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
-                            <p th:if="${user.description}"><span th:text="${user.description}">description</span></p>
-                            <p th:if="${user.location}"><span class="map-icon map-icon-postal-code"></span> <span th:text="${user.location}">location</span></p>
-                            <p th:if="${user.url}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="" th:href="${user.url}" target="_blank"><span th:text="${user.url}">url</span></a></p>
-                            <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i> Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
-                            <p><hr/></p>
-                            <p>Tweets: <span th:text="${user.statusesCount}">statusesCount</span></p>
-                            <p>Folge ich: <span th:text="${user.friendsCount}">friendsCount</span></p>
-                            <p>Follower: <span th:text="${user.followersCount}">followersCount</span></p>
-                            <p>Gefällt mir: <span th:text="${user.favoritesCount}">favoritesCount</span></p>
-                            <p>Listen: <span th:text="${user.listedCount}">listedCount</span></p>
-                            <p><hr/></p>
-                            <p><i class="fa fa-twitter" aria-hidden="true"></i> <a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">fromUser</span></b></a></p>
-                            <p><i class="fa fa-github" aria-hidden="true"></i> <a href="" th:href="@{|https://github.com/phasenraum2010/twitterwall2/issues|}" target="_blank"><b>Bug-Reports &amp; Co: Github</b></a> </p>
+                            <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
+                            <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                            <p th:if="${user.description != null}"><span th:utext="${user.formattedDescription}">description</span></p>
+                            <p th:if="${user.location != null}"><span class="map-icon map-icon-postal-code"></span>&nbsp;&nbsp;<span th:text="${user.location}">location</span></p>
+                            <p th:if="${user.url != null}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;&nbsp;<span th:utext="${user.formattedUrl}">url</span></p>
+                            <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
                             <p><hr/></p>
                             <p>
-                                Offizielle Webseite der Veranstaltung: #t3cb<br/><br/>
-                                <a href="http://www.typo3camp-berlin.de/" target="_blank">www.typo3camp-berlin.de</a>
+                            <div class="row">
+                                <div class="col-md-8"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Tweets:</div>
+                                <div class="col-md-4 text-right"><span th:text="${user.statusesCount}">statusesCount</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;Folge ich:</div>
+                                <div class="col-md-4 text-right"><span th:text="${user.friendsCount}">friendsCount</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;Follower:</div>
+                                <div class="col-md-4 text-right"><span th:text="${user.followersCount}">followersCount</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;Gefällt mir:</div>
+                                <div class="col-md-4 text-right"><span th:text="${user.favoritesCount}">favoritesCount</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;Listen:</div>
+                                <div class="col-md-4 text-right"><span th:text="${user.listedCount}">listedCount</span></div>
+                            </div>
                             </p>
+                            <p><hr/></p>
+                            <p><i class="fa fa-twitter" aria-hidden="true"></i>&nbsp;&nbsp;<a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">fromUser</span></b></a></p>
+                            <p><i class="fa fa-github" aria-hidden="true"></i>&nbsp;&nbsp;<a href="" th:href="@{|https://github.com/phasenraum2010/twitterwall2/issues|}" target="_blank"><b>Bug-Reports &amp; Co: Github</b></a></p>
+                            <p><hr/></p>
+                            <p>Offizielle Webseite der Veranstaltung:</p>
+                            <p><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;<b th:text="${page.twitterSearchTerm}">#t3cb</b></p>
+                            <p><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;&nbsp;<a href="" th:href="${page.infoWebpage}" target="_blank"><span th:text="${page.infoWebpage}">www.typo3camp-berlin.de</span></a></p>
                         </div>
                     </div>
                 </div>

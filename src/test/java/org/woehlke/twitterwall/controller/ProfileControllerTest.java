@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.controller;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -69,13 +70,10 @@ public class ProfileControllerTest {
         Assert.assertTrue(true);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
-        //this.mockMvc.perform(get("/profile/t3c_berlin")).andDo(print()).andExpect(status().isOk())
-        //        .andExpect(content().string(containsString("t3c_berlin")));
-
-        MvcResult result = this.mockMvc.perform(get("/profile/wowa_TYPO3"))
+        MvcResult result = this.mockMvc.perform(get("/profile/port80guru"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("profile"))
                 .andExpect(model().attributeExists("user"))

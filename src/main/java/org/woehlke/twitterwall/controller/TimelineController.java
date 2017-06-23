@@ -48,6 +48,9 @@ public class TimelineController {
     @Value("${twitterwall.twitter.fetchTestData}")
     private boolean fetchTestData;
 
+    @Value("${twitterwall.info.webpage}")
+    private String infoWebpage;
+
     @Autowired
     public TimelineController(TweetService tweetService, HashTagService hashTagService) {
         this.tweetService = tweetService;
@@ -86,7 +89,15 @@ public class TimelineController {
 
     @RequestMapping("/hashtags")
     public String hashTags(Model model) {
-        model = setupPage(model);
+        Page page = new Page();
+        page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
+        page.setMenuAppName(menuAppName);
+        page.setTitle("HashTags");
+        page.setSubtitle(searchterm);
+        page.setShowMenuUsers(showMenuUsers);
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
+        model.addAttribute("page",page);
         List<HashTagCounted> hashTags = new ArrayList<>();
         for(HashTag hashTag : hashTagService.getAll()){
             long number=tweetService.countTweetsForHashTag(hashTag.getText());
@@ -104,11 +115,14 @@ public class TimelineController {
         Matcher m = p.matcher(hashtagText);
         if(m.matches()) {
             Page page = new Page();
+            page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
             page.setMenuAppName(menuAppName);
             page.setTitle("Tweets für HashTag");
             page.setSubtitle("#"+hashtagText);
             page.setHistoryBack(true);
             page.setShowMenuUsers(showMenuUsers);
+            page.setTwitterSearchTerm(searchterm);
+            page.setInfoWebpage(infoWebpage);
             model.addAttribute("page",page);
             List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
             model.addAttribute("latestTweets", tweets);
@@ -120,10 +134,13 @@ public class TimelineController {
 
     private Model setupPage(Model model){
         Page page = new Page();
+        page.setSymbol("<span class=\"glyphicon glyphicon-home\" aria-hidden=\"true\"></span>");
         page.setMenuAppName(menuAppName);
         page.setTitle("Tweets");
         page.setSubtitle(searchterm);
         page.setShowMenuUsers(showMenuUsers);
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
         model.addAttribute("page",page);
         return model;
     }
