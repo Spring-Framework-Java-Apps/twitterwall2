@@ -14,7 +14,7 @@ public class FindUserByIdTwitterException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "User not found for idTwitter=";
+    private static final String MSG = FindUserByIdTwitterException.class.getCanonicalName()+" User not found for idTwitter=";
 
     public FindUserByIdTwitterException(NoResultException e, long idTwitter) {
         super(MSG + idTwitter, e);

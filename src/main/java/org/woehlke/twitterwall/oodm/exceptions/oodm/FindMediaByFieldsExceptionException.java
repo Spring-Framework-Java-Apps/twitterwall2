@@ -14,7 +14,7 @@ public class FindMediaByFieldsExceptionException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Media not found for mediaHttp=";
+    private static final String MSG = FindMediaByFieldsExceptionException.class.getCanonicalName()+" Media not found for mediaHttp=";
 
     public FindMediaByFieldsExceptionException(NoResultException e, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
         super(MSG + mediaHttp + ", mediaHttps=" + mediaHttps + ",url=" + url + ",display=" + display + ",expanded=" + expanded + ",mediaType=" + mediaType, e);

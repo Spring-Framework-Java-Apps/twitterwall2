@@ -14,7 +14,7 @@ public class FindTweetByIdTwitterException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Tweet not found for idTwitter=";
+    private static final String MSG = FindTweetByIdTwitterException.class.getCanonicalName()+"Tweet not found for idTwitter=";
 
     public FindTweetByIdTwitterException(NoResultException e, long idTwitter) {
         super(MSG + idTwitter + " " + e.getMessage(), e);

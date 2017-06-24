@@ -14,7 +14,7 @@ public class FindHashTagByTextException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "HashTag not found for text=";
+    private static final String MSG = FindHashTagByTextException.class.getCanonicalName()+" HashTag not found for text=";
 
     public FindHashTagByTextException(NoResultException e, String text) {
         super(MSG + text + " " + e.getMessage(), e);

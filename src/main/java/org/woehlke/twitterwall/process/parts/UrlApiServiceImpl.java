@@ -209,7 +209,9 @@ public class UrlApiServiceImpl implements UrlApiService {
             throw new FetchUrlException(urlSrc, e);
         } catch (IOException e) {
             throw new FetchUrlException(urlSrc, e);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
+            throw new FetchUrlException(urlSrc, ex);
+        }catch (Exception ex) {
             throw new FetchUrlException(urlSrc, ex);
         }
     }

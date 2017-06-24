@@ -14,7 +14,7 @@ public class FindMentionByIdTwitterException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Mention not found for idTwitter=";
+    private static final String MSG = FindMentionByIdTwitterException.class.getCanonicalName()+ " Mention not found for idTwitter=";
 
     public FindMentionByIdTwitterException(NoResultException e, long idTwitter) {
         super(MSG + idTwitter + " " + e.getMessage(), e);

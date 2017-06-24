@@ -14,7 +14,7 @@ public class FindUserByScreenNameException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "User not found for screenName=";
+    private static final String MSG = FindUserByScreenNameException.class.getCanonicalName()+" User not found for screenName=";
 
     public FindUserByScreenNameException(NoResultException e, String screenName) {
         super(MSG + screenName + " " + e.getMessage(), e);

@@ -14,7 +14,7 @@ public class FindMentionByScreenNameAndNameException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Mention not found for screenName=";
+    private static final String MSG = FindMentionByScreenNameAndNameException.class.getCanonicalName()+" Mention not found for screenName=";
 
     public FindMentionByScreenNameAndNameException(NoResultException e, String screenName, String name) {
         super(MSG + screenName + ",name=" + name + " " + e.getMessage(), e);

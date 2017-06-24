@@ -14,7 +14,7 @@ public class FindMediaByIdTwitterException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Mention not found for idTwitter=";
+    private static final String MSG = FindMediaByIdTwitterException.class.getCanonicalName()+" Media found for idTwitter=";
 
     public FindMediaByIdTwitterException(NoResultException e, long idTwitter) {
         super(MSG + idTwitter + " " + e.getMessage(), e);

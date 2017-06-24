@@ -21,40 +21,40 @@ public abstract class TwitterwallException extends RuntimeException {
         log.debug("......................................................");
     }
 
-    protected TwitterwallException(String urlSrc, Exception ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, Exception ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    protected TwitterwallException(String urlSrc, RuntimeException ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, RuntimeException ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    protected TwitterwallException(String urlSrc, PersistenceException ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, PersistenceException ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    protected TwitterwallException(String urlSrc, IOException ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, IOException ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    protected TwitterwallException(String urlSrc, URISyntaxException ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, URISyntaxException ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    protected TwitterwallException(String urlSrc, NullPointerException ex) {
-        super(urlSrc, ex);
-        writeLogDebug(urlSrc, ex);
+    protected TwitterwallException(String msg, NullPointerException ex) {
+        super(msg, ex);
+        writeLog(msg, ex);
     }
 
-    private void writeLogDebug(String msg, Exception ex) {
-            log.debug(msg + "......................................................");
-            log.info(msg + ex.getMessage());
-            writeLogStracktrace(msg, ex);
+    private void writeLog(String msg, Exception ex){
+        log.debug("......................................................");
+        log.info(msg + ex.getMessage());
+        writeLogStracktrace(msg, ex);
     }
 
     private void writeLogStracktrace(String msg, Exception ex) {

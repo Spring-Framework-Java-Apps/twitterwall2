@@ -14,7 +14,7 @@ public class FindUrlCacheByUrlException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "urlCache not found for url=";
+    private static final String MSG = FindUrlCacheByUrlException.class.getCanonicalName()+" UrlCache not found for url=";
 
     public FindUrlCacheByUrlException(NoResultException e, String url) {
         super(MSG + url + " " + e.getMessage(), e);

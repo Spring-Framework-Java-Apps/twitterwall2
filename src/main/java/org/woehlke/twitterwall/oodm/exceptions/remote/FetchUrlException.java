@@ -15,7 +15,7 @@ public class FetchUrlException extends TwitterwallException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Fetch Url Exception for urlSrc = ";
+    private static final String MSG = FetchUrlException.class.getCanonicalName() +" for urlSrc = ";
 
     public FetchUrlException(String urlSrc, IOException ex) {
         super(MSG + urlSrc + " " + ex.getMessage(), ex);

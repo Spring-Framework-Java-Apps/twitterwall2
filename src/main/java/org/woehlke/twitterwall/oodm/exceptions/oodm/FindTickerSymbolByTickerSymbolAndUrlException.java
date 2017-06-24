@@ -14,7 +14,7 @@ public class FindTickerSymbolByTickerSymbolAndUrlException extends OodmException
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "TickerSymbol not found for tickerSymbol=";
+    private static final String MSG = FindTickerSymbolByTickerSymbolAndUrlException.class.getCanonicalName()+" TickerSymbol not found for tickerSymbol=";
 
     public FindTickerSymbolByTickerSymbolAndUrlException(NoResultException e, String tickerSymbol, String url) {
         super(MSG + tickerSymbol + ",url=" + url + " " + e.getMessage(), e);

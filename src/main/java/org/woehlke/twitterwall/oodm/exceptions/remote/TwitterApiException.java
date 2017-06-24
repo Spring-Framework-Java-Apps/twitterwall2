@@ -14,7 +14,7 @@ public class TwitterApiException extends TwitterwallException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Twitter Api Exception = ";
+    private static final String MSG = TwitterApiException.class.getCanonicalName()+" Twitter Api Exception = ";
 
     public TwitterApiException(String urlSrc, RuntimeException ex) {
         super(MSG + urlSrc + " " + ex.getMessage(), ex);

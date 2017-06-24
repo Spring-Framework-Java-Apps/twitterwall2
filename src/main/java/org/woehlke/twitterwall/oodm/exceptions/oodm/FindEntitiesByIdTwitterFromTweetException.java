@@ -14,7 +14,7 @@ public class FindEntitiesByIdTwitterFromTweetException extends OodmException {
 
     private static final long serialVersionUID = -3332292346834265371L;
 
-    private static final String MSG = "Entities not found for idTwitterFromTweet=";
+    private static final String MSG = FindEntitiesByIdTwitterFromTweetException.class.getCanonicalName()+" Entities not found for idTwitterFromTweet=";
 
     public FindEntitiesByIdTwitterFromTweetException(NoResultException e, long idTwitterFromTweet) {
         super(MSG + idTwitterFromTweet + " " + e.getMessage(), e);
