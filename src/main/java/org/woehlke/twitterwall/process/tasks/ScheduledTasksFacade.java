@@ -7,9 +7,9 @@ public interface ScheduledTasksFacade {
 
     void fetchTweetsFromTwitterSearch();
 
-    void fetchFollowersFromTwitter();
+    void updateUserProfiles();
 
-    void fetchFriendsFromTwitter();
+    void updateTweets();
 
     long ID_TWITTER_TO_FETCH_FOR_TWEET_TEST[] = {
             876329508009279488L,
@@ -96,8 +96,4 @@ public interface ScheduledTasksFacade {
             "https://t.co/hMMJBGFFKR",
             "https://t.co/cbsEBiSW2E",
     };
-
-    void updateUserProfiles();
-
-    void updateTweets();
 }

@@ -133,4 +133,54 @@ public class Entities extends AbstractTwitterObject implements DomainObject {
         result = 31 * result + (int) (idTwitterFromTweet ^ (idTwitterFromTweet >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        StringBuffer myUrls = new StringBuffer();
+        myUrls.append("[ ");
+        for (Url url : urls) {
+            myUrls.append(url.toString());
+            myUrls.append(", ");
+        }
+        myUrls.append(" ]");
+        StringBuffer myTags = new StringBuffer();
+        myTags.append("[ ");
+        for (HashTag tag : tags) {
+            myTags.append(tag.toString());
+            myTags.append(", ");
+        }
+        myTags.append(" ]");
+        StringBuffer myMentions = new StringBuffer();
+        myMentions.append("[ ");
+        for (Mention mention : mentions) {
+            myMentions.append(mention.toString());
+            myMentions.append(", ");
+        }
+        myMentions.append(" ]");
+
+        StringBuffer myMedia = new StringBuffer();
+        myMedia.append("[ ");
+        for (Media medium : media) {
+            myMedia.append(medium.toString());
+            myMedia.append(", ");
+        }
+        myMedia.append(" ]");
+
+        StringBuffer myTickerSymbols = new StringBuffer();
+        myTickerSymbols.append("[ ");
+        for (TickerSymbol medium : tickerSymbols) {
+            myTickerSymbols.append(medium.toString());
+            myTickerSymbols.append(", ");
+        }
+        myTickerSymbols.append(" ]");
+        return "Entities{" +
+                "id=" + id +
+                ", idTwitterFromTweet=" + idTwitterFromTweet +
+                ",\n urls=" + myUrls.toString() +
+                ",\n tags=" + myTags.toString() +
+                ",\n mentions=" + myMentions.toString() +
+                ",\n media=" + myMedia.toString() +
+                ",\n tickerSymbols=" + myTickerSymbols.toString() +
+                "\n}";
+    }
 }

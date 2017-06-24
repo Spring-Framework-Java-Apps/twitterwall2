@@ -16,6 +16,10 @@ public class FindUrlByUrlException extends OodmException {
 
     private static final String MSG = FindUrlByUrlException.class.getCanonicalName()+" url not found for url=";
 
+    public FindUrlByUrlException(){
+        super(MSG+"null");
+    }
+
     public FindUrlByUrlException(NoResultException e, String url) {
         super(MSG + url + " " + e.getMessage(), e);
     }

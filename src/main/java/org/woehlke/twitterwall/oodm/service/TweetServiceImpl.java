@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacade.ID_TWIT
  * Created by tw on 10.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class TweetServiceImpl implements TweetService {
 
     private final TweetRepository tweetRepository;
@@ -44,18 +46,21 @@ public class TweetServiceImpl implements TweetService {
         return tweetRepository.getLatestTweets();
     }
 
-    @Override
-    public boolean isNotYetStored(Tweet tweet) {
-        return tweetRepository.isNotYetStored(tweet);
-    }
+    private final static String MSG = "hashtagText is not valid";
 
     @Override
     public List<Tweet> getTweetsForHashTag(String hashtagText) {
+        if(!HashTag.isValidText(hashtagText)){
+            throw new OodmException("getTweetsForHashTag: "+MSG);
+        }
         return tweetRepository.getTweetsForHashTag(hashtagText);
     }
 
     @Override
     public long countTweetsForHashTag(String hashtagText) {
+        if(!HashTag.isValidText(hashtagText)){
+            throw new OodmException("countTweetsForHashTag: "+MSG);
+        }
         return tweetRepository.countTweetsForHashTag(hashtagText);
     }
 
@@ -76,6 +81,9 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<Tweet> getTweetsForUser(User user) {
+        if(user == null){
+            throw new OodmException("getTweetsForUser: user is null");
+        }
         return tweetRepository.getTweetsForUser(user);
     }
 

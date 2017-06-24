@@ -16,10 +16,6 @@ public interface UserRepository extends OodmRepository {
 
     User update(User user);
 
-    List<User> getFollower();
-
-    List<User> getFriends();
-
     List<User> getAll();
 
     User findByScreenName(String screenName);
@@ -27,8 +23,6 @@ public interface UserRepository extends OodmRepository {
     List<User> getTweetingUsers();
 
     List<User> getNotYetFriendUsers();
-
-    long count();
 
     List<String> getAllDescriptions();
 

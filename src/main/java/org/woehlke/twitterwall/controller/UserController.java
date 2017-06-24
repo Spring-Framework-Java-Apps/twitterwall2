@@ -35,27 +35,12 @@ public class UserController {
     @Value("${twitterwall.info.webpage}")
     private String infoWebpage;
 
+    @Value("${twitterwall.theme}")
+    private String theme;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @RequestMapping("/user/follower")
-    public String follower(Model model) {
-        model.addAttribute("users", userService.getFollower());
-        String symbol = "<i class=\"fa fa-user-circle\"></i>";
-        String subtitle = "Follower";
-        model = setupPage(model, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/user/friends")
-    public String friends(Model model) {
-        model.addAttribute("users", userService.getFriends());
-        String symbol = "<i class=\"fa fa-user-circle-o\"></i>";
-        String subtitle = "Friends";
-        model = setupPage(model, subtitle, symbol);
-        return "user";
     }
 
     @RequestMapping("/user/all")

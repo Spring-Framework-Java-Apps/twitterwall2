@@ -97,4 +97,13 @@ public class TickerSymbol extends AbstractTwitterObject implements DomainObject,
     public int compareTo(TickerSymbol other) {
         return tickerSymbol.compareTo(other.getTickerSymbol());
     }
+
+    @Override
+    public String toString() {
+        return "TickerSymbol{" +
+                "id=" + id +
+                ", tickerSymbol='" + tickerSymbol + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

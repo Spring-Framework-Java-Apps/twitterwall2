@@ -11,9 +11,5 @@ public interface PersistDataFromTwitter {
 
     Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweet);
 
-    User storeFollower(TwitterProfile follower);
-
-    User storeFriend(TwitterProfile friend);
-
     User updateUserProfile(TwitterProfile userProfile);
 }

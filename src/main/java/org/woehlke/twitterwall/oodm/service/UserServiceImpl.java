@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by tw on 11.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -36,22 +37,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getFollower() {
-        return userRepository.getFollower();
-    }
-
-    @Override
-    public List<User> getFriends() {
-        return userRepository.getFriends();
-    }
-
-    @Override
     public List<User> getAll() {
         return userRepository.getAll();
     }
 
     @Override
     public User findByScreenName(String screenName) {
+        if (!User.isValidScreenName(screenName)) {
+            throw new FindUserByScreenNameException(screenName);
+        }
         return userRepository.findByScreenName(screenName);
     }
 
@@ -68,11 +62,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter);
-    }
-
-    @Override
-    public long count() {
-        return userRepository.count();
     }
 
     @Override

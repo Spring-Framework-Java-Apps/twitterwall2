@@ -13,6 +13,7 @@ public class Page implements Serializable {
     private String twitterSearchTerm;
     private String infoWebpage;
     private String symbol;
+    private String theme;
     private boolean showMenuUsers = false;
     private boolean historyBack = false;
 
@@ -78,5 +79,13 @@ public class Page implements Serializable {
 
     public void setShowMenuUsers(boolean showMenuUsers) {
         this.showMenuUsers = showMenuUsers;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

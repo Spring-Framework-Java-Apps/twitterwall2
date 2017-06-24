@@ -16,6 +16,10 @@ public class FindUrlByDisplayExpandedUrlException extends OodmException {
 
     private static final String msg = FindUrlByDisplayExpandedUrlException.class.getCanonicalName()+ "Url not found for display=";
 
+    public FindUrlByDisplayExpandedUrlException(String display, String expanded, String url) {
+        super(msg + display + ",expanded=" + expanded + ",url=" + url);
+    }
+
     public FindUrlByDisplayExpandedUrlException(NoResultException e, String display, String expanded, String url) {
         super(msg + display + ",expanded=" + expanded + ",url=" + url + " " + e.getMessage(), e);
     }

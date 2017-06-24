@@ -16,6 +16,10 @@ public class FindUserByScreenNameException extends OodmException {
 
     private static final String MSG = FindUserByScreenNameException.class.getCanonicalName()+" User not found for screenName=";
 
+    public FindUserByScreenNameException(String screenName) {
+        super(MSG + screenName);
+    }
+
     public FindUserByScreenNameException(NoResultException e, String screenName) {
         super(MSG + screenName + " " + e.getMessage(), e);
     }

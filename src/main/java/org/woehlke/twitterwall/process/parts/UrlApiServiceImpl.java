@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.process.parts;
 
 import org.apache.http.HttpHost;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -11,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tw on 21.06.17.
  */
 @Service
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class UrlApiServiceImpl implements UrlApiService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlApiServiceImpl.class);
@@ -188,11 +187,12 @@ public class UrlApiServiceImpl implements UrlApiService {
 
     @Override
     public Url fetchUrl(String urlSrc) {
+        Url newUrl = null;
         try {
             String display;
             String expanded;
             int[] indices = {};
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+            CloseableHttpClient httpclient = HttpClients.createMinimal();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
             CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
@@ -201,18 +201,30 @@ public class UrlApiServiceImpl implements UrlApiService {
             URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
             display = location.getHost();
             expanded = location.toExternalForm();
+            newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
-            return new Url(display, expanded, urlSrc, indices);
+        } catch (ClientProtocolException e) {
+            throw new FetchUrlException(urlSrc, e);
         } catch (NullPointerException e) {
+            throw new FetchUrlException(urlSrc, e);
+        } catch (IllegalArgumentException e){
             throw new FetchUrlException(urlSrc, e);
         } catch (URISyntaxException e) {
             throw new FetchUrlException(urlSrc, e);
         } catch (IOException e) {
+            if(newUrl != null){
+                return newUrl;
+            }
             throw new FetchUrlException(urlSrc, e);
         } catch (RuntimeException ex) {
             throw new FetchUrlException(urlSrc, ex);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new FetchUrlException(urlSrc, ex);
+        }
+        if(newUrl == null){
+            throw new FetchUrlException(urlSrc);
+        } else {
+            return newUrl;
         }
     }
 }

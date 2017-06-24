@@ -19,8 +19,6 @@ public interface TweetRepository extends OodmRepository {
 
     List<Tweet> getLatestTweets();
 
-    boolean isNotYetStored(Tweet tweet);
-
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
     long countTweetsForHashTag(String hashtagText);

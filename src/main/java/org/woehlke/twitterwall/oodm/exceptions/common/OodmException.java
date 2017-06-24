@@ -5,7 +5,9 @@ import javax.persistence.*;
 /**
  * Created by tw on 24.06.17.
  */
-public abstract class OodmException extends TwitterwallException {
+public class OodmException extends TwitterwallException {
+
+    public OodmException(String urlSrc){ super(urlSrc); }
 
     protected OodmException(String urlSrc, NoResultException ex) {
         super(urlSrc, ex);

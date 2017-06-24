@@ -315,4 +315,30 @@ public class Tweet extends AbstractFormattedText implements DomainObject, Compar
         return createdAt.compareTo(other.getCreatedAt());
     }
 
+    @Override
+    public String toString() {
+        return "Tweet{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", idStr='" + idStr + '\'' +
+                ", text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                ", fromUser='" + fromUser + '\'' +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                ", toUserId=" + toUserId +
+                ", inReplyToStatusId=" + inReplyToStatusId +
+                ", inReplyToUserId=" + inReplyToUserId +
+                ", inReplyToScreenName='" + inReplyToScreenName + '\'' +
+                ", fromUserId=" + fromUserId +
+                ", languageCode='" + languageCode + '\'' +
+                ", source='" + source + '\'' +
+                ", retweetCount=" + retweetCount +
+                ", retweeted=" + retweeted +
+                ", retweetedStatus=" + retweetedStatus +
+                ", favorited=" + favorited +
+                ", favoriteCount=" + favoriteCount +
+                "\n, entities=" + entities.toString() +
+                "\n, user=" + user.toString() +
+                '}';
+    }
 }

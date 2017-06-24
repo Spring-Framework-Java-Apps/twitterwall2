@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
@@ -16,7 +18,6 @@ import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.entities.UrlCacheService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
-import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
  * Created by tw on 22.06.17.
  */
 @Service
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserApiServiceImpl implements UserApiService {
 
     private static final Logger log = LoggerFactory.getLogger(UserApiServiceImpl.class);

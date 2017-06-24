@@ -165,4 +165,18 @@ public class Media extends AbstractTwitterObject implements DomainObject, Compar
     public int compareTo(Media other) {
         return Long.compare(idTwitter, other.getIdTwitter());
     }
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", mediaHttp='" + mediaHttp + '\'' +
+                ", mediaHttps='" + mediaHttps + '\'' +
+                ", url='" + url + '\'' +
+                ", display='" + display + '\'' +
+                ", expanded='" + expanded + '\'' +
+                ", mediaType='" + mediaType + '\'' +
+                '}';
+    }
 }

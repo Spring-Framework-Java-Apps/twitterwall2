@@ -48,6 +48,9 @@ public class TimelineController {
     @Value("${twitterwall.info.webpage}")
     private String infoWebpage;
 
+    @Value("${twitterwall.theme}")
+    private String theme;
+
     @Autowired
     public TimelineController(TweetService tweetService, HashTagService hashTagService) {
         this.tweetService = tweetService;
@@ -56,17 +59,7 @@ public class TimelineController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        model = setupPage(model);
-        if (fetchTestData) {
-            List<Tweet> list = tweetService.getTestTweetsForTweetTest();
-            List<Tweet> latest = tweetService.getLatestTweets();
-            list.addAll(latest);
-            model.addAttribute("latestTweets", list);
-        } else {
-            List<Tweet> latest = tweetService.getLatestTweets();
-            model.addAttribute("latestTweets", latest);
-        }
-        return "timeline";
+        return tweets(model);
     }
 
     @RequestMapping("/tweets")
@@ -94,6 +87,7 @@ public class TimelineController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
         model.addAttribute("page", page);
         List<HashTagCounted> hashTags = new ArrayList<>();
         for (HashTag hashTag : hashTagService.getAll()) {
@@ -120,6 +114,7 @@ public class TimelineController {
             page.setShowMenuUsers(showMenuUsers);
             page.setTwitterSearchTerm(searchterm);
             page.setInfoWebpage(infoWebpage);
+            page.setTheme(theme);
             model.addAttribute("page", page);
             List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
             model.addAttribute("latestTweets", tweets);
@@ -138,6 +133,7 @@ public class TimelineController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
         model.addAttribute("page", page);
         return model;
     }

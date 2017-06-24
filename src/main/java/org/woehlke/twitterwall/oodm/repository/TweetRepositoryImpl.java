@@ -46,7 +46,7 @@ public class TweetRepositoryImpl implements TweetRepository {
         entityManager.persist(myTweet);
         entityManager.flush();
         myTweet = findByIdTwitter(myTweet.getIdTwitter());
-        log.debug("persisted: " + myTweet.getIdTwitter());
+        log.info("persisted: " + myTweet.toString());
         return myTweet;
     }
 
@@ -55,7 +55,7 @@ public class TweetRepositoryImpl implements TweetRepository {
         myTweet = entityManager.merge(myTweet);
         entityManager.flush();
         myTweet = findByIdTwitter(myTweet.getIdTwitter());
-        log.debug("updated: " + myTweet.getIdTwitter());
+        log.info("updated: " + myTweet.toString());
         return myTweet;
     }
 
@@ -65,11 +65,6 @@ public class TweetRepositoryImpl implements TweetRepository {
         TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
         query.setMaxResults(frontendMaxResults);
         return query.getResultList();
-    }
-
-    @Override
-    public boolean isNotYetStored(Tweet tweet) {
-        return null == findByIdTwitter(tweet.getIdTwitter());
     }
 
     @Override

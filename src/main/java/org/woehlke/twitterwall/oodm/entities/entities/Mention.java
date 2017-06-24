@@ -10,7 +10,11 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "mention", uniqueConstraints = @UniqueConstraint(columnNames = {"screen_name", "name"}))
+@Table(name = "mention", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id_twitter"}),
+        @UniqueConstraint(columnNames = {"screen_name", "name"}),
+        @UniqueConstraint(columnNames = {"id_twitter", "screen_name", "name"})
+})
 public class Mention extends AbstractTwitterObject implements DomainObject, Comparable<Mention> {
 
     private static final long serialVersionUID = 1L;
@@ -19,13 +23,13 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "id_twitter")
     private long idTwitter;
 
     @Column(name = "screen_name")
     private String screenName;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
     @Transient

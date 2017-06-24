@@ -5,6 +5,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
@@ -18,6 +20,14 @@ public class HashTag extends AbstractTwitterObject implements DomainObject, Comp
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    public final static String HASHTAG_TEXT_PATTERN = "^\\w*$";
+
+    public static boolean isValidText(String hashtagText){
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        return m.matches();
+    }
 
     @Column(nullable = false)
     private String text;

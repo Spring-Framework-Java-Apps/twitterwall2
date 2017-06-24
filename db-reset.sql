@@ -1,0 +1,17 @@
+delete from userprofile_url;
+delete from userprofile_mention;
+delete from userprofile_hashtag;
+delete from entity_tickersymbol;
+delete from entity_mention;
+delete from entity_media;
+delete from entity_hashtag;
+delete from entity_url;
+delete from url_cache;
+delete from url;
+delete from tickersymbol;
+delete from mention;
+delete from media;
+delete from hashtag;
+delete from tweet;
+delete from entity;
+delete from userprofile;

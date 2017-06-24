@@ -16,6 +16,10 @@ public class FindTickerSymbolByTickerSymbolAndUrlException extends OodmException
 
     private static final String MSG = FindTickerSymbolByTickerSymbolAndUrlException.class.getCanonicalName()+" TickerSymbol not found for tickerSymbol=";
 
+    public FindTickerSymbolByTickerSymbolAndUrlException(String tickerSymbol, String url) {
+        super(MSG + tickerSymbol + ",url=" + url);
+    }
+
     public FindTickerSymbolByTickerSymbolAndUrlException(NoResultException e, String tickerSymbol, String url) {
         super(MSG + tickerSymbol + ",url=" + url + " " + e.getMessage(), e);
     }

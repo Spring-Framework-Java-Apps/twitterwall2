@@ -16,6 +16,10 @@ public class FindUrlCacheByUrlException extends OodmException {
 
     private static final String MSG = FindUrlCacheByUrlException.class.getCanonicalName()+" UrlCache not found for url=";
 
+    public FindUrlCacheByUrlException(String url) {
+        super(MSG + url);
+    }
+
     public FindUrlCacheByUrlException(NoResultException e, String url) {
         super(MSG + url + " " + e.getMessage(), e);
     }

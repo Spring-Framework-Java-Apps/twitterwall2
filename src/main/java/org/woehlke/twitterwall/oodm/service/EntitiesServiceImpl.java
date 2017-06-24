@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.repository.EntitiesRepository;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class EntitiesServiceImpl implements EntitiesService {
 
     private final EntitiesRepository entitiesRepository;

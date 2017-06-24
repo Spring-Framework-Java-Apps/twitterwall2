@@ -16,6 +16,10 @@ public class FindMentionByScreenNameAndNameException extends OodmException {
 
     private static final String MSG = FindMentionByScreenNameAndNameException.class.getCanonicalName()+" Mention not found for screenName=";
 
+    public FindMentionByScreenNameAndNameException(String screenName, String name) {
+        super(MSG + screenName + ",name=" + name);
+    }
+
     public FindMentionByScreenNameAndNameException(NoResultException e, String screenName, String name) {
         super(MSG + screenName + ",name=" + name + " " + e.getMessage(), e);
     }

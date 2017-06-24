@@ -36,4 +36,8 @@ public class FetchUrlException extends TwitterwallException {
     public FetchUrlException(String urlSrc, Exception ex) {
         super(MSG + urlSrc + " " + ex.getMessage(), ex);
     }
+
+    public FetchUrlException(String urlSrc) {
+        super(MSG + urlSrc);
+    }
 }

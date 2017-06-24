@@ -1,8 +1,6 @@
 package org.woehlke.twitterwall.process.parts;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.RateLimitExceededException;
-import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -12,16 +10,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
-import org.woehlke.twitterwall.process.parts.TwitterApiService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tw on 19.06.17.
  */
 @Service
-//@javax.transaction.Transactional(javax.transaction.Transactional.TxType.NOT_SUPPORTED)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TwitterApiServiceImpl implements TwitterApiService {
 
@@ -60,76 +55,41 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
-        return getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
-    }
-
-    @Override
-    public List<Tweet> findTweetsForSearchQueryStartingWith(long id) {
-        return getTwitterProxy().searchOperations().search(searchQuery, pageSize, id, Long.MAX_VALUE).getTweets();
+        String msg = "findTweetsForSearchQuery: ";
+        try {
+            return getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        }
     }
 
     @Override
     public Tweet findOneTweetById(long id) {
-        String msg = "findOneTweetById: ";
+        String msg = "findOneTweetById: "+id;
         try {
             return getTwitterProxy().timelineOperations().getStatus(id);
         } catch (ResourceAccessException e) {
             throw new TwitterApiException(msg + " check your Network Connection!", e);
-        } catch (RateLimitExceededException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (Exception e) {
-            throw new TwitterApiException(msg, e);
         }
-    }
-
-    @Override
-    public List<TwitterProfile> getFollowers() {
-        List<TwitterProfile> list = new ArrayList<TwitterProfile>();
-        CursoredList<TwitterProfile> followers = getTwitterProxy().friendOperations().getFollowers();
-        boolean run = true;
-        while (run) {
-            for (TwitterProfile follower : followers) {
-                list.add(follower);
-            }
-            if (followers.hasNext()) {
-                long cursor = followers.getNextCursor();
-                followers = getTwitterProxy().friendOperations().getFriendsInCursor(cursor);
-            } else {
-                run = false;
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public List<TwitterProfile> getFriends() {
-        List<TwitterProfile> list = new ArrayList<TwitterProfile>();
-        try {
-            CursoredList<TwitterProfile> friends = getTwitterProxy().friendOperations().getFriends();
-            boolean run = true;
-            while (run) {
-                for (TwitterProfile friend : friends) {
-                    list.add(friend);
-                }
-                if (friends.hasNext()) {
-                    long cursor = friends.getNextCursor();
-                    friends = getTwitterProxy().friendOperations().getFriendsInCursor(cursor);
-                } else {
-                    run = false;
-                }
-            }
-        } catch (RuntimeException rte) {
-
-        } catch (Exception e) {
-
-        }
-        return list;
     }
 
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
-        return getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+        String msg = "findOneTweetById: "+userProfileTwitterId;
+        try {
+            return getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        }
+    }
+
+    @Override
+    public TwitterProfile getUserProfileForScreenName(String screenName) {
+        String msg = "getUserProfileForScreenName: "+screenName;
+        try {
+            return getTwitterProxy().userOperations().getUserProfile(screenName);
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        }
     }
 }

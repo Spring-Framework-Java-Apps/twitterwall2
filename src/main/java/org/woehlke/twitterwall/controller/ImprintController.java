@@ -2,12 +2,16 @@ package org.woehlke.twitterwall.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByScreenNameException;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.process.parts.TwitterApiService;
+import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitter;
 
 /**
  * Created by tw on 14.06.17.
@@ -27,11 +31,20 @@ public class ImprintController {
     @Value("${twitterwall.info.webpage}")
     private String infoWebpage;
 
+    @Value("${twitterwall.theme}")
+    private String theme;
+
     private final UserService userService;
 
+    private final TwitterApiService twitterApiService;
+
+    private final PersistDataFromTwitter persistDataFromTwitter;
+
     @Autowired
-    public ImprintController(UserService userService) {
+    public ImprintController(UserService userService, TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter) {
         this.userService = userService;
+        this.twitterApiService = twitterApiService;
+        this.persistDataFromTwitter = persistDataFromTwitter;
     }
 
     @RequestMapping("/imprint")
@@ -44,10 +57,17 @@ public class ImprintController {
         page.setSubtitle("www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com");
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
         model.addAttribute("page", page);
         String screenName = "port80guru";
-        User user = userService.findByScreenName(screenName);
-        model.addAttribute("user", user);
+        try {
+            User user = userService.findByScreenName(screenName);
+            model.addAttribute("user", user);
+        } catch (FindUserByScreenNameException e){
+            TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
+            User user = persistDataFromTwitter.updateUserProfile(twitterProfile);
+            model.addAttribute("user", user);
+        }
         return "imprint";
     }
 }

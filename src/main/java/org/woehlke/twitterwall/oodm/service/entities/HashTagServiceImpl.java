@@ -15,7 +15,7 @@ import java.util.List;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class HashTagServiceImpl implements HashTagService {
 
     private final HashTagRepository hashTagRepository;

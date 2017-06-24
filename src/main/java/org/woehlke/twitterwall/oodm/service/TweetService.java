@@ -19,8 +19,6 @@ public interface TweetService extends OodmService {
 
     List<Tweet> getLatestTweets();
 
-    boolean isNotYetStored(Tweet tweet);
-
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
     long countTweetsForHashTag(String hashtagText);

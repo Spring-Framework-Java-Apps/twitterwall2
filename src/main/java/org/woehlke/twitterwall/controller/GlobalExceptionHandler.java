@@ -32,6 +32,9 @@ public class GlobalExceptionHandler {
     @Value("${twitterwall.info.webpage}")
     private String infoWebpage;
 
+    @Value("${twitterwall.theme}")
+    private String theme;
+
     @ExceptionHandler(FindEntitiesByIdTwitterFromTweetException.class)
     public ModelAndView handleFindByIdTwitterFromTweetException(HttpServletRequest request, Exception ex) {
         log.warn("FindEntitiesByIdTwitterFromTweetException occured :: URL=" + request.getRequestURL());
@@ -118,6 +121,7 @@ public class GlobalExceptionHandler {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", ex);
         mav.addObject("url", request.getRequestURL());

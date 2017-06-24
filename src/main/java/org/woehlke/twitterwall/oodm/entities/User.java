@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
@@ -27,6 +29,14 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
 
     @Column(nullable = false)
     private long idTwitter;
+
+    public final static String SCREEN_NAME_PATTERN = "^[a-zA-Z0-9_]{1,15}$";
+
+    public static boolean isValidScreenName(String screenName){
+        Pattern p = Pattern.compile("^[a-zA-Z0-9_]{1,15}$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
 
     @Column(nullable = false)
     private String screenName;
@@ -544,26 +554,26 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
     @Override
     public String toString() {
         StringBuffer myUrls = new StringBuffer();
-        myUrls.append("\n[ ");
+        myUrls.append("[ ");
         for (Url url : urls) {
             myUrls.append(url.toString());
             myUrls.append(", ");
         }
-        myUrls.append(" ]\n");
+        myUrls.append(" ]");
         StringBuffer myTags = new StringBuffer();
-        myTags.append("\n[ ");
+        myTags.append("[ ");
         for (HashTag tag : tags) {
             myTags.append(tag.toString());
             myTags.append(", ");
         }
-        myTags.append(" ]\n");
+        myTags.append(" ]");
         StringBuffer myMentions = new StringBuffer();
-        myMentions.append("\n[ ");
+        myMentions.append("[ ");
         for (Mention mention : mentions) {
             myMentions.append(mention.toString());
             myMentions.append(", ");
         }
-        myMentions.append(" ]\n");
+        myMentions.append(" ]");
         return "User{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -603,9 +613,9 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ", urls=" + myUrls.toString() +
-                ", tags=" + myTags.toString() +
-                ", mentions=" + myMentions.toString() +
-                '}';
+                ",\n urls=" + myUrls.toString() +
+                ",\n tags=" + myTags.toString() +
+                ",\n mentions=" + myMentions.toString() +
+                "\n}";
     }
 }

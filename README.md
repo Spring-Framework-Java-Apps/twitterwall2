@@ -28,6 +28,12 @@ Twitterwall with spring:boot for heroku
   - export TWITTER_SEARCH_MAX_ID={TWITTER STATUS ID}
   - export TWITTER_FETCH_TESTDATA=true
   - export TWITTERWALL_WAIT_FOR_TEST=20000
+  - export TWITTERWALL_URL_TEST_DATA_VERBOSE=true
+  - export TWITTERWALL_INFO_WEBPAGE=http://lndw17.de/
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS=true
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS=true
+  - export TWITTERWALL_SCHEDULER_ALLOW_SEARCH=true
+  - export TWITTERWALL_THEME=lndw17
 - run with: mvn clean spring-boot:run
 
 

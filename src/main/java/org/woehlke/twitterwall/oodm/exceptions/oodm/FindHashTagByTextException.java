@@ -16,6 +16,10 @@ public class FindHashTagByTextException extends OodmException {
 
     private static final String MSG = FindHashTagByTextException.class.getCanonicalName()+" HashTag not found for text=";
 
+    public FindHashTagByTextException(String text) {
+        super(MSG + text);
+    }
+
     public FindHashTagByTextException(NoResultException e, String text) {
         super(MSG + text + " " + e.getMessage(), e);
     }

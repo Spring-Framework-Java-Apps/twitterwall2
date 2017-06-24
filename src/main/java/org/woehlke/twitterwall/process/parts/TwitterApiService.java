@@ -12,13 +12,9 @@ public interface TwitterApiService {
 
     List<Tweet> findTweetsForSearchQuery();
 
-    List<Tweet> findTweetsForSearchQueryStartingWith(long id);
-
     Tweet findOneTweetById(long id);
 
-    List<TwitterProfile> getFollowers();
-
-    List<TwitterProfile> getFriends();
-
     TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId);
+
+    TwitterProfile getUserProfileForScreenName(String screenName);
 }

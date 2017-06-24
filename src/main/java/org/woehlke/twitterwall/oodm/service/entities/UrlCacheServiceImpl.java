@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.common.UrlCache;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 
 /**
  * Created by tw on 23.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class UrlCacheServiceImpl implements UrlCacheService {
 
     private final UrlCacheRepository urlCacheRepository;
@@ -29,6 +30,9 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     @Override
     public UrlCache findByUrl(String url) {
+        if(url == null) {
+            throw new FindUrlCacheByUrlException(url);
+        }
         return this.urlCacheRepository.findByUrl(url);
     }
 }

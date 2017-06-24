@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -20,7 +22,7 @@ import java.util.*;
  * Created by tw on 11.06.17.
  */
 @Service
-@javax.transaction.Transactional(javax.transaction.Transactional.TxType.NOT_SUPPORTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
 
     private static final Logger log = LoggerFactory.getLogger(PersistDataFromTwitterImpl.class);
@@ -207,20 +209,6 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
         user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
         user = this.userApiService.getEntitiesForUrlDescription(user);
         return user;
-    }
-
-    @Override
-    public User storeFollower(TwitterProfile follower) {
-        User user = transformTwitterProfile(follower);
-        user.setFollower(true);
-        return storeOneUser(user);
-    }
-
-    @Override
-    public User storeFriend(TwitterProfile friend) {
-        User user = transformTwitterProfile(friend);
-        user.setFriend(true);
-        return storeOneUser(user);
     }
 
     @Override
