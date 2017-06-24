@@ -132,11 +132,19 @@ public class UserApiServiceImpl implements UserApiService {
                         urlCache.setUrl(myUrl.getUrl());
                         urlCache.setExpanded(myUrl.getExpanded());
                     }  catch (FetchUrlException fue)  {
+                        log.debug(fue.getMessage());
                         urlCache.setUrl(url);
                         urlCache.setExpanded(url);
                     }
                     urlCacheService.store(urlCache);
-                    Url newUrl = new Url(url, urlCache.getExpanded(), urlCache.getUrl(), indices);
+                    String displayUrl = urlCache.getExpanded();
+                    try {
+                        URL myURL = new URL(urlCache.getExpanded());
+                        displayUrl = myURL.getHost();
+                    } catch (MalformedURLException exe) {
+                        log.warn(exe.getMessage());
+                    }
+                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
                     return newUrl;
                 }
             }

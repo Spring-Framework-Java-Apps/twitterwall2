@@ -91,7 +91,7 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
 
             Pattern myUrl4 = Pattern.compile("(" + url.getUrl() + ")$");
             Matcher m20 = myUrl4.matcher(formattedText);
-            formattedText = m20.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a>");
+            formattedText = m20.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a> ");
         }
         return formattedText;
     }
