@@ -38,7 +38,7 @@ public class ScheduledTasks {
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = FUENF_MINUTEN;
 
-    private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER = EINE_STUNDE;
+    private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER = FUENF_MINUTEN; //EINE_STUNDE;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_FRIENDS = ZWOELF_STUNDEN;
 
