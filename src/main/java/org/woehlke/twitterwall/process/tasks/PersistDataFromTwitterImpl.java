@@ -282,7 +282,7 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
     }
 
     private Set<HashTag> transformTwitterEntitiesHashTags(List<HashTagEntity> hashTags) {
-        Set<HashTag> myHashTagEntities = new LinkedHashSet<HashTag>();
+        Set<HashTag> myHashTagEntities = new LinkedHashSet<>();
         for (HashTagEntity hashTag : hashTags) {
             String text = hashTag.getText();
             int[] indices = hashTag.getIndices();
@@ -293,7 +293,7 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
     }
 
     private Set<Url> transformTwitterEntitiesUrls(List<UrlEntity> urls) {
-        Set<Url> myUrls = new LinkedHashSet<Url>();
+        Set<Url> myUrls = new LinkedHashSet<>();
         for (UrlEntity url : urls) {
             String display = url.getDisplayUrl();
             String expanded = url.getExpandedUrl();

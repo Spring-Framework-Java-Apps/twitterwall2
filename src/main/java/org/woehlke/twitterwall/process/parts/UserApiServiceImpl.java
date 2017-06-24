@@ -11,6 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.common.UrlCache;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.entities.UrlCacheService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
@@ -125,12 +126,18 @@ public class UserApiServiceImpl implements UserApiService {
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
                     return newUrl;
                 } catch (FindUrlCacheByUrlException e) {
-                    Url myUrl = this.urlApiService.fetchUrl(url);
                     UrlCache urlCache = new UrlCache();
-                    urlCache.setUrl(myUrl.getUrl());
-                    urlCache.setExpanded(myUrl.getExpanded());
+                    try {
+                        Url myUrl = this.urlApiService.fetchUrl(url);
+                        urlCache.setUrl(myUrl.getUrl());
+                        urlCache.setExpanded(myUrl.getExpanded());
+                    }  catch (FetchUrlException fue)  {
+                        urlCache.setUrl(url);
+                        urlCache.setExpanded(url);
+                    }
                     urlCacheService.store(urlCache);
-                    return myUrl;
+                    Url newUrl = new Url(url, urlCache.getExpanded(), urlCache.getUrl(), indices);
+                    return newUrl;
                 }
             }
         }
