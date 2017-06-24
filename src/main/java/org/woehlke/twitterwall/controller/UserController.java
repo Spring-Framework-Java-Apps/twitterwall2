@@ -80,6 +80,7 @@ public class UserController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
         model.addAttribute("page", page);
         return model;
     }

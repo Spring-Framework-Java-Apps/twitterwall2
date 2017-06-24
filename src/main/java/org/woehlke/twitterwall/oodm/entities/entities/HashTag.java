@@ -21,7 +21,7 @@ public class HashTag extends AbstractTwitterObject implements DomainObject, Comp
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public final static String HASHTAG_TEXT_PATTERN = "^\\w*$";
+    public final static String HASHTAG_TEXT_PATTERN = "^[öÖäÄüÜßa-zA-Z0-9_]{1,139}$";
 
     public static boolean isValidText(String hashtagText){
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);

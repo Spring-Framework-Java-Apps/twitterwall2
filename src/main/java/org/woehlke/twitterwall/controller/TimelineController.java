@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEXT_PATTERN;
+
 /**
  * Created by tw on 10.06.17.
  */
@@ -102,7 +104,7 @@ public class TimelineController {
 
     @RequestMapping("/hashtag/{hashtagText}")
     public String hashTag(@PathVariable String hashtagText, Model model) {
-        Pattern p = Pattern.compile("^[öÖäÄüÜßa-zA-Z0-9_]{1,139}$");
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
             Page page = new Page();
