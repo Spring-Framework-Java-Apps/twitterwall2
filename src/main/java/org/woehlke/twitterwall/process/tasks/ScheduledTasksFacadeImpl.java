@@ -70,41 +70,41 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
             int loopId = 0;
             for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
                 loopId++;
-                storeOneTweet(tweet,loopId);
+                storeOneTweet(tweet, loopId);
             }
             log.debug("---------------------------------------");
-            if(fetchTestData){
-                for(long idTwitter:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
+            if (fetchTestData) {
+                for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
                     Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
-                    storeOneTweet(tweet,loopId);
+                    storeOneTweet(tweet, loopId);
                 }
             }
             log.debug("---------------------------------------");
             loopId = 0;
             List<User> userList = userService.getAll();
-            for(User user:userList){
+            for (User user : userList) {
                 try {
                     Url url = urlService.findByUrl(user.getUrl());
                     loopId++;
-                    log.debug("Id: "+loopId+","+url.toString());
+                    log.debug("Id: " + loopId + "," + url.toString());
                 } catch (FindUrlByUrlException e) {
                     try {
                         Url url = urlApiService.fetchUrl(user.getUrl());
                         url = urlService.store(url);
                         loopId++;
-                        log.debug("Id: "+loopId+","+url.toString());
-                    } catch (FetchUrlException ex){
+                        log.debug("Id: " + loopId + "," + url.toString());
+                    } catch (FetchUrlException ex) {
                         log.debug(ex.getMessage());
                     }
                 }
             }
             log.debug("---------------------------------------");
-        } catch (ResourceAccessException e){
-            throw new TwitterApiException(msg+" check your Network Connection!", e);
-        } catch (RateLimitExceededException e){
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
             throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
@@ -113,16 +113,16 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         }
     }
 
-    private void storeOneTweet(Tweet tweet, int loopId){
-        String msg ="store One Tweet: ";
-        log.debug(msg+loopId);
-        log.debug(msg+"Id:    " + tweet.getId());
-        log.debug(msg+"User: @" + tweet.getFromUser());
-        log.debug(msg+"Text:  " + tweet.getText());
-        log.debug(msg+"Image: " + tweet.getProfileImageUrl());
+    private void storeOneTweet(Tweet tweet, int loopId) {
+        String msg = "store One Tweet: ";
+        log.debug(msg + loopId);
+        log.debug(msg + "Id:    " + tweet.getId());
+        log.debug(msg + "User: @" + tweet.getFromUser());
+        log.debug(msg + "Text:  " + tweet.getText());
+        log.debug(msg + "Image: " + tweet.getProfileImageUrl());
         try {
             this.persistDataFromTwitter.storeOneTweet(tweet);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
@@ -133,100 +133,111 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     @Override
     public void fetchFollowersFromTwitter() {
-        String msg ="fetch Followers from Twitter: ";
-        log.debug(msg+"The time is now {}", dateFormat.format(new Date()));
+        String msg = "fetch Followers from Twitter: ";
+        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         log.debug("---------------------------------------");
         try {
-            for(TwitterProfile follower:twitterApiService.getFollowers()){
+            for (TwitterProfile follower : twitterApiService.getFollowers()) {
                 User myFollower = persistDataFromTwitter.storeFollower(follower);
                 log.debug(msg + myFollower.toString());
                 log.debug("---------------------------------------");
             }
-        } catch (ResourceAccessException e){
-            throw new TwitterApiException(msg+" check your Network Connection!", e);
-        } catch (RateLimitExceededException e){
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
             throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
-        }   finally {
+        } finally {
             log.debug("---------------------------------------");
         }
     }
 
     @Override
     public void fetchFriendsFromTwitter() {
-        String msg ="fetch Friends from Twitter: ";
-        log.debug(msg+"The time is now {}", dateFormat.format(new Date()));
+        String msg = "fetch Friends from Twitter: ";
+        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         log.debug("---------------------------------------");
         try {
-            for(TwitterProfile follower:twitterApiService.getFriends()){
+            for (TwitterProfile follower : twitterApiService.getFriends()) {
                 User myFriend = persistDataFromTwitter.storeFriend(follower);
                 log.debug(msg + myFriend.toString());
                 log.debug("---------------------------------------");
             }
-        } catch (ResourceAccessException e){
-            throw new TwitterApiException(msg+" check your Network Connection!", e);
-        } catch (RateLimitExceededException e){
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
             throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
-        }  finally {
+        } finally {
             log.debug("---------------------------------------");
         }
     }
 
     @Override
     public void updateUserProfiles() {
-        String msg ="update User Profiles: ";
-        log.debug(msg+"The time is now {}", dateFormat.format(new Date()));
+        String msg = "update User Profiles: ";
+        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         log.debug("---------------------------------------");
         try {
             List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
             for (Long userProfileTwitterId : userProfileTwitterIds) {
-                TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
-                User user = persistDataFromTwitter.updateUserProfile(userProfile);
-                log.debug(msg + user.toString());
-                log.debug("---------------------------------------");
+                try {
+                    TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
+                    User user = persistDataFromTwitter.updateUserProfile(userProfile);
+                    log.debug(msg + user.toString());
+                } catch (TwitterApiException e) {
+                    log.info(msg + e.getMessage());
+                } finally {
+                    log.debug("---------------------------------------");
+                }
             }
-        } catch (ResourceAccessException e){
-            throw new TwitterApiException(msg+"updateUserProfiles: check your Network Connection!", e);
-        } catch (RateLimitExceededException e){
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + "updateUserProfiles: check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
             throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new TwitterApiException("updateUserProfiles", e);
         } catch (Exception e) {
             throw new TwitterApiException("updateUserProfiles", e);
-        }  finally {
+        } finally {
             log.debug("---------------------------------------");
         }
     }
 
     @Override
     public void updateTweets() {
-        String msg ="update User Profiles: ";
-        log.debug(msg+"The time is now {}", dateFormat.format(new Date()));
+        String msg = "update Tweets: ";
+        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         try {
             int loopId = 0;
             List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
-            for(Long tweetTwitterId:tweetTwitterIds){
-                Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
-                loopId++;
-                storeOneTweet(tweet,loopId);
+            for (Long tweetTwitterId : tweetTwitterIds) {
+                try {
+                    Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
+                    loopId++;
+                    storeOneTweet(tweet, loopId);
+                } catch (TwitterApiException e) {
+                    log.info(msg + e.getMessage());
+                } finally {
+                    log.debug("---------------------------------------");
+                }
             }
-        } catch (ResourceAccessException e){
-        throw new TwitterApiException(msg+"updateUserProfiles: check your Network Connection!", e);
-    } catch (RateLimitExceededException e){
-        throw new TwitterApiException(msg, e);
-    } catch (RuntimeException e){
-        throw new TwitterApiException("updateUserProfiles", e);
-    } catch (Exception e) {
-        throw new TwitterApiException("updateUserProfiles", e);
-    }  finally {
-        log.debug("---------------------------------------");
-    }
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
+            throw new TwitterApiException(msg, e);
+        } catch (RuntimeException e) {
+            throw new TwitterApiException(msg, e);
+        } catch (Exception e) {
+            throw new TwitterApiException(msg, e);
+        } finally {
+            log.debug("---------------------------------------");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.process.parts;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
@@ -9,6 +10,8 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.process.parts.TwitterApiService;
 
 import java.util.ArrayList;
@@ -67,7 +70,18 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     @Override
     public Tweet findOneTweetById(long id) {
-        return getTwitterProxy().timelineOperations().getStatus(id);
+        String msg = "findOneTweetById: ";
+        try {
+            return getTwitterProxy().timelineOperations().getStatus(id);
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RateLimitExceededException e) {
+            throw new TwitterApiException(msg, e);
+        } catch (RuntimeException e) {
+            throw new TwitterApiException(msg, e);
+        } catch (Exception e) {
+            throw new TwitterApiException(msg, e);
+        }
     }
 
     @Override
