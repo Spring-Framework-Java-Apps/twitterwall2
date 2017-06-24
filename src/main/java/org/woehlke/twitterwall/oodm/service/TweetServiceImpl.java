@@ -80,6 +80,11 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
+    public List<Long> getAllTwitterIds() {
+        return tweetRepository.getAllTwitterIds();
+    }
+
+    @Override
     public Tweet findByIdTwitter(long idTwitter) {
         return tweetRepository.findByIdTwitter(idTwitter);
     }

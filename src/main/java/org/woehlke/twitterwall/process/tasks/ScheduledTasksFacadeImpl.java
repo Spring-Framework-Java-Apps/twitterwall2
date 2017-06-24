@@ -14,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 import org.woehlke.twitterwall.process.parts.TwitterApiService;
@@ -39,12 +40,13 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private boolean fetchTestData;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, UrlApiService urlApiService, UrlService urlService) {
+    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, UrlApiService urlApiService, UrlService urlService, TweetService tweetService) {
         this.persistDataFromTwitter = persistDataFromTwitter;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
         this.urlApiService = urlApiService;
         this.urlService = urlService;
+        this.tweetService = tweetService;
     }
 
     private final PersistDataFromTwitter persistDataFromTwitter;
@@ -56,6 +58,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private final UrlApiService urlApiService;
 
     private final UrlService urlService;
+
+    private final TweetService tweetService;
 
     @Override
     public void fetchTweetsFromTwitterSearch() {
@@ -199,5 +203,30 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         }  finally {
             log.debug("---------------------------------------");
         }
+    }
+
+    @Override
+    public void updateTweets() {
+        String msg ="update User Profiles: ";
+        log.debug(msg+"The time is now {}", dateFormat.format(new Date()));
+        try {
+            int loopId = 0;
+            List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
+            for(Long tweetTwitterId:tweetTwitterIds){
+                Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
+                loopId++;
+                storeOneTweet(tweet,loopId);
+            }
+        } catch (ResourceAccessException e){
+        throw new TwitterApiException(msg+"updateUserProfiles: check your Network Connection!", e);
+    } catch (RateLimitExceededException e){
+        throw new TwitterApiException(msg, e);
+    } catch (RuntimeException e){
+        throw new TwitterApiException("updateUserProfiles", e);
+    } catch (Exception e) {
+        throw new TwitterApiException("updateUserProfiles", e);
+    }  finally {
+        log.debug("---------------------------------------");
+    }
     }
 }

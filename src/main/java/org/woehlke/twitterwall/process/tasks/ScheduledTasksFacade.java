@@ -99,4 +99,5 @@ public interface ScheduledTasksFacade {
 
     void updateUserProfiles();
 
+    void updateTweets();
 }

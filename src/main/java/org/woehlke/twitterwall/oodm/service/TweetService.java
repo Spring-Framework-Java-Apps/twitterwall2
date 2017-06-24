@@ -31,4 +31,6 @@ public interface TweetService extends OodmService {
 
     List<Tweet> getTweetsForUser(User user);
 
+    List<Long> getAllTwitterIds();
+    
 }

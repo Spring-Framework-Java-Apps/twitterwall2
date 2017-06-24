@@ -28,4 +28,6 @@ public interface TweetRepository extends OodmRepository {
     long count();
 
     List<Tweet> getTweetsForUser(User user);
+
+    List<Long> getAllTwitterIds();
 }

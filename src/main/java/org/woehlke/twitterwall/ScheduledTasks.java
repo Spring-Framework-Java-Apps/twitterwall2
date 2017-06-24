@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.process.scheduler;
+package org.woehlke.twitterwall;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +50,25 @@ public class ScheduledTasks {
         log.info("START "+msg+": The time is now {}", dateFormat.format(new Date()));
         try {
             this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
+            log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
+        } catch (TwitterwallException e) {
+            log.warn(msg + e.getMessage());
+            log.warn(msg + " NOT DONE "+msg+" (NOK)");
+        } catch (RuntimeException e) {
+            log.warn(msg + e.getMessage());
+            log.warn(msg + " NOT DONE "+msg+" (NOK)");;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            log.error(msg + " NOT DONE "+msg+" (NOK)");
+        }
+    }
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
+    public void updateTweets() {
+        String msg = "update Tweets ";
+        log.info("START "+msg + ": The time is now {}", dateFormat.format(new Date()));
+        try {
+            this.scheduledTasksFacade.updateTweets();
             log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
         } catch (TwitterwallException e) {
             log.warn(msg + e.getMessage());

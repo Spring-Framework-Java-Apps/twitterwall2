@@ -15,9 +15,9 @@ import java.util.List;
  * Created by tw on 11.06.17.
  */
 @Repository
-public class OodmRepository implements TweetRepository {
+public class TweetRepositoryImpl implements TweetRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(OodmRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(TweetRepositoryImpl.class);
 
 
     @PersistenceContext
@@ -101,6 +101,13 @@ public class OodmRepository implements TweetRepository {
         String SQL = "select t from Tweet as t WHERE t.user=:user";
         TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
         query.setParameter("user", user);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Long> getAllTwitterIds() {
+        String SQL = "select t.idTwitter from Tweet as t";
+        TypedQuery<Long> query = entityManager.createQuery(SQL, Long.class);
         return query.getResultList();
     }
 }
