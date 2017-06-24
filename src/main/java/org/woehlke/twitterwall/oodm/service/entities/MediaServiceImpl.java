@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.repository.entities.MediaRepository;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class MediaServiceImpl implements MediaService {
 
     private final MediaRepository mediaRepository;
@@ -22,7 +22,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media store(Media media) {
         return this.mediaRepository.persist(media);
     }
@@ -33,13 +33,13 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media update(Media media) {
         return this.mediaRepository.update(media);
     }
 
     @Override
     public Media findByFields(Media media) {
-        return this.mediaRepository.findByFields(media.getMediaHttp(),media.getMediaHttps(),media.getUrl(),media.getDisplay(),media.getExpanded(),media.getMediaType());
+        return this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
     }
 }

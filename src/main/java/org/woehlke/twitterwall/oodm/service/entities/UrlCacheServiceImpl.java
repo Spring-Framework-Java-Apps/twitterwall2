@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
+import org.woehlke.twitterwall.oodm.entities.common.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 
 /**
  * Created by tw on 23.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlCacheServiceImpl implements UrlCacheService {
 
     private final UrlCacheRepository urlCacheRepository;
@@ -22,7 +22,7 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache) {
         return this.urlCacheRepository.persist(urlCache);
     }

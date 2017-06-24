@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.woehlke.twitterwall.process.ScheduledTasksFacade.PROFILE_URLS;
+import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacade.PROFILE_URLS;
 
 /**
  * Created by tw on 21.06.17.

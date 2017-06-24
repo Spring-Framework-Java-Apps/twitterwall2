@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by tw on 14.06.17.
  */
-public class HashTagCounted implements Serializable,Comparable<HashTagCounted> {
+public class HashTagCounted implements Serializable, Comparable<HashTagCounted> {
 
     private long number;
     private String text;
@@ -36,7 +36,7 @@ public class HashTagCounted implements Serializable,Comparable<HashTagCounted> {
 
     @Override
     public int compareTo(HashTagCounted other) {
-        return Long.compare(this.number,other.getNumber());
+        return Long.compare(this.number, other.getNumber());
     }
 
     @Override

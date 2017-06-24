@@ -44,7 +44,7 @@ public class ImprintController {
         page.setSubtitle("www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com");
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
-        model.addAttribute("page",page);
+        model.addAttribute("page", page);
         String screenName = "port80guru";
         User user = userService.findByScreenName(screenName);
         model.addAttribute("user", user);

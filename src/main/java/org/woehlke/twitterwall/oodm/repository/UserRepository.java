@@ -1,13 +1,14 @@
 package org.woehlke.twitterwall.oodm.repository;
 
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.repository.common.OodmRepository;
 
 import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
  */
-public interface UserRepository {
+public interface UserRepository extends OodmRepository {
 
     User findByIdTwitter(long idTwitter);
 

@@ -1,5 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -8,23 +11,21 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="tweet")
-public class Tweet extends AbstractFormattedText implements Serializable,Comparable<Tweet> {
+@Table(name = "tweet")
+public class Tweet extends AbstractFormattedText implements DomainObject, Comparable<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, unique=true)
+    @Column(nullable = false, unique = true)
     private long idTwitter;
 
     @Column(nullable = false)
@@ -69,7 +70,7 @@ public class Tweet extends AbstractFormattedText implements Serializable,Compara
     @Column
     private boolean retweeted;
 
-    @ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
     private Tweet retweetedStatus;
 
     @Column
@@ -78,10 +79,10 @@ public class Tweet extends AbstractFormattedText implements Serializable,Compara
     @Column
     private Integer favoriteCount;
 
-    @OneToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = true)
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
     private Entities entities;
 
-    @ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER,optional = false)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
     private User user;
 
     public Tweet(long idTwitter, String idStr, String text, Date createdAt) {
@@ -94,16 +95,16 @@ public class Tweet extends AbstractFormattedText implements Serializable,Compara
     /**
      * Constructs a Tweet
      *
-     * @param idTwitter The tweet's ID
-     * @param idStr The tweet's ID as a String
-     * @param text The tweet's text
-     * @param createdAt Date Tweet was created
-     * @param fromUser The username of the author of the tweet.
+     * @param idTwitter       The tweet's ID
+     * @param idStr           The tweet's ID as a String
+     * @param text            The tweet's text
+     * @param createdAt       Date Tweet was created
+     * @param fromUser        The username of the author of the tweet.
      * @param profileImageUrl The URL to the profile picture of the tweet's author.
-     * @param toUserId The user ID of the user to whom the tweet is targeted.
-     * @param fromUserId The user ID of the tweet's author.
-     * @param languageCode The language code
-     * @param source The source of the tweet.
+     * @param toUserId        The user ID of the user to whom the tweet is targeted.
+     * @param fromUserId      The user ID of the tweet's author.
+     * @param languageCode    The language code
+     * @param source          The source of the tweet.
      */
     public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
         this.idTwitter = idTwitter;
@@ -121,7 +122,7 @@ public class Tweet extends AbstractFormattedText implements Serializable,Compara
     private Tweet() {
     }
 
-    public String getFormattedText(){
+    public String getFormattedText() {
         String formattedText = this.text;
 
         formattedText = getFormattedTextForUserProfiles(formattedText);
@@ -129,10 +130,10 @@ public class Tweet extends AbstractFormattedText implements Serializable,Compara
         formattedText = getFormattedTextForHashTags(formattedText);
 
         Set<Media> media = this.entities.getMedia();
-        formattedText = getFormattedTextForMedia(media,formattedText);
+        formattedText = getFormattedTextForMedia(media, formattedText);
 
         Set<Url> urls = this.entities.getUrls();
-        formattedText = getFormattedTextForUrls(urls,formattedText);
+        formattedText = getFormattedTextForUrls(urls, formattedText);
 
         Set<Mention> mentions = this.entities.getMentions();
 

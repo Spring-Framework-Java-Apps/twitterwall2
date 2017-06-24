@@ -11,13 +11,13 @@ import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TweetServiceImpl implements TweetService {
 
     private final TweetRepository tweetRepository;
@@ -28,13 +28,13 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet persist(Tweet myTweet) {
         return tweetRepository.persist(myTweet);
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet update(Tweet myTweet) {
         return tweetRepository.update(myTweet);
     }
@@ -67,7 +67,7 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public List<Tweet> getTestTweetsForTweetTest() {
         List<Tweet> list = new ArrayList<>();
-        for(long idTwitter:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
+        for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
             Tweet tweet = this.findByIdTwitter(idTwitter);
             list.add(tweet);
         }

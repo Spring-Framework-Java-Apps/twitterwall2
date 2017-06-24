@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
-import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,19 +10,19 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="mention",uniqueConstraints=@UniqueConstraint(columnNames={"screen_name","name"}))
-public class Mention extends AbstractTwitterObject implements Serializable,Comparable<Mention> {
+@Table(name = "mention", uniqueConstraints = @UniqueConstraint(columnNames = {"screen_name", "name"}))
+public class Mention extends AbstractTwitterObject implements DomainObject, Comparable<Mention> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private long idTwitter;
 
-    @Column(name="screen_name")
+    @Column(name = "screen_name")
     private String screenName;
 
     @Column

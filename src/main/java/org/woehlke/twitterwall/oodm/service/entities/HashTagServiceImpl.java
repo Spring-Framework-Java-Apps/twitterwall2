@@ -15,7 +15,7 @@ import java.util.List;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class HashTagServiceImpl implements HashTagService {
 
     private final HashTagRepository hashTagRepository;
@@ -26,13 +26,13 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HashTag store(HashTag tag) {
         return this.hashTagRepository.persist(tag);
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HashTag update(HashTag tag) {
         return this.hashTagRepository.update(tag);
     }

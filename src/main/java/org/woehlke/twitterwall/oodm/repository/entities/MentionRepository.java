@@ -1,11 +1,12 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.repository.common.OodmRepository;
 
 /**
  * Created by tw on 12.06.17.
  */
-public interface MentionRepository {
+public interface MentionRepository extends OodmRepository {
 
     Mention persist(Mention myMentionEntity);
 
@@ -13,5 +14,5 @@ public interface MentionRepository {
 
     Mention findByIdTwitter(long idTwitter);
 
-    Mention findByScreenNameAndName(String screenName,String name);
+    Mention findByScreenNameAndName(String screenName, String name);
 }

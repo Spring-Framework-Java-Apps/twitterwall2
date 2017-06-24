@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.exceptions.FindTickerSymbolByTickerSymbolAndUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindTickerSymbolByTickerSymbolAndUrlException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -33,13 +33,13 @@ public class TickerSymbolRepositoryImpl implements TickerSymbolRepository {
     public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
         try {
             String SQL = "select t from TickerSymbol as t where t.tickerSymbol=:tickerSymbol and t.url=:url";
-            TypedQuery<TickerSymbol> query = entityManager.createQuery(SQL,TickerSymbol.class);
-            query.setParameter("tickerSymbol",tickerSymbol);
-            query.setParameter("url",url);
+            TypedQuery<TickerSymbol> query = entityManager.createQuery(SQL, TickerSymbol.class);
+            query.setParameter("tickerSymbol", tickerSymbol);
+            query.setParameter("url", url);
             TickerSymbol result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindTickerSymbolByTickerSymbolAndUrlException(e,tickerSymbol,url);
+        } catch (NoResultException e) {
+            throw new FindTickerSymbolByTickerSymbolAndUrlException(e, tickerSymbol, url);
         }
     }
 }

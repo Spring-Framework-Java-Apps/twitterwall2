@@ -1,26 +1,25 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
-import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="tickersymbol",uniqueConstraints=@UniqueConstraint(columnNames={"ticker_symbol","url"}))
-public class TickerSymbol extends AbstractTwitterObject implements Serializable,Comparable<TickerSymbol> {
+@Table(name = "tickersymbol", uniqueConstraints = @UniqueConstraint(columnNames = {"ticker_symbol", "url"}))
+public class TickerSymbol extends AbstractTwitterObject implements DomainObject, Comparable<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="ticker_symbol")
+    @Column(name = "ticker_symbol")
     private String tickerSymbol;
 
     @Column

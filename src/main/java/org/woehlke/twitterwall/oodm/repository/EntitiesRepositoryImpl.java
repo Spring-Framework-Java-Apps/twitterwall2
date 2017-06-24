@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.oodm.repository;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.exceptions.FindEntitiesByIdTwitterFromTweetException;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindEntitiesByIdTwitterFromTweetException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -33,12 +33,12 @@ public class EntitiesRepositoryImpl implements EntitiesRepository {
     public Entities findByIdTwitterFromTweet(long idTwitterFromTweet) {
         try {
             String SQL = "select e from Entities as e where e.idTwitterFromTweet=:idTwitterFromTweet";
-            TypedQuery<Entities> query = entityManager.createQuery(SQL,Entities.class);
-            query.setParameter("idTwitterFromTweet",idTwitterFromTweet);
+            TypedQuery<Entities> query = entityManager.createQuery(SQL, Entities.class);
+            query.setParameter("idTwitterFromTweet", idTwitterFromTweet);
             Entities result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindEntitiesByIdTwitterFromTweetException(e,idTwitterFromTweet);
+        } catch (NoResultException e) {
+            throw new FindEntitiesByIdTwitterFromTweetException(e, idTwitterFromTweet);
         }
     }
 }

@@ -9,7 +9,7 @@ Twitterwall with spring:boot for heroku
 #heroku CLI
 - heroku login
 - heroku pg:psql --app {app-name}
-- heroku logs --app {app-name}
+- heroku logs -t --app {app-name}
 
 #Setup Testing on Localhost
 - Get Credentials from your Twitter-Account: Refer to "Manage your Apps" on Twitter's dev pages: https://dev.twitter.com/apps

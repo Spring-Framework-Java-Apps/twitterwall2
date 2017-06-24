@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.exceptions.ControllerRequestParameterSyntaxException;
+import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
-import javax.xml.ws.http.HTTPException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,21 +43,21 @@ public class ProfileController {
     public String follower(@PathVariable String screenName, Model model) {
         Pattern p = Pattern.compile("^[a-zA-Z0-9_]{1,15}$");
         Matcher m = p.matcher(screenName);
-        if(m.matches()){
+        if (m.matches()) {
             User user = userService.findByScreenName(screenName);
             Page page = new Page();
             page.setSymbol("<i class=\"fa fa-users\" aria-hidden=\"true\"></i>");
             page.setMenuAppName(menuAppName);
-            page.setTitle("@"+ user.getScreenName());
+            page.setTitle("@" + user.getScreenName());
             page.setSubtitle(user.getName());
             page.setShowMenuUsers(showMenuUsers);
             page.setTwitterSearchTerm(searchterm);
             page.setInfoWebpage(infoWebpage);
-            model.addAttribute("page",page);
+            model.addAttribute("page", page);
             model.addAttribute("user", user);
             return "profile";
         } else {
-            throw new ControllerRequestParameterSyntaxException("/profile/{screenName}",screenName);
+            throw new ControllerRequestParameterSyntaxException("/profile/{screenName}", screenName);
         }
     }
 }

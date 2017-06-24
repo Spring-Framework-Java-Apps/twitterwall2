@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -14,16 +16,16 @@ import java.util.Set;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="userprofile")
-public class User extends AbstractFormattedText implements Serializable,Comparable<User>  {
+@Table(name = "userprofile", uniqueConstraints = @UniqueConstraint(columnNames = {"idTwitter", "screenName"}))
+public class User extends AbstractFormattedText implements DomainObject, Comparable<User> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, unique=true)
+    @Column(nullable = false)
     private long idTwitter;
 
     @Column(nullable = false)
@@ -134,16 +136,16 @@ public class User extends AbstractFormattedText implements Serializable,Comparab
     @Column
     private String profileBannerUrl;
 
-    @JoinTable(name="userprofile_url")
-    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "userprofile_url")
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
 
-    @JoinTable(name="userprofile_hashtag")
-    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "userprofile_hashtag")
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<HashTag> tags = new LinkedHashSet<HashTag>();
 
-    @JoinTable(name="userprofile_mention")
-    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "userprofile_mention")
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
@@ -157,34 +159,34 @@ public class User extends AbstractFormattedText implements Serializable,Comparab
         this.createdDate = createdDate;
     }
 
-    public String getBigProfileImageUrl(){
+    public String getBigProfileImageUrl() {
         String bigProfileImageUrl = this.profileImageUrl;
-        bigProfileImageUrl = bigProfileImageUrl.replace("_normal.jpg","_400x400.jpg");
+        bigProfileImageUrl = bigProfileImageUrl.replace("_normal.jpg", "_400x400.jpg");
         return bigProfileImageUrl;
     }
 
     private User() {
     }
 
-    public String getFormattedDescription(){
+    public String getFormattedDescription() {
         String formattedDescription = this.description;
 
         Set<Url> urls = this.getUrls();
-        formattedDescription = getFormattedUrlForUrls(urls,formattedDescription);
+        formattedDescription = getFormattedUrlForUrls(urls, formattedDescription);
 
         Set<Mention> mentions = this.getMentions();
-        formattedDescription = getFormattedTextForMentions(mentions,formattedDescription);
+        formattedDescription = getFormattedTextForMentions(mentions, formattedDescription);
 
         Set<HashTag> tags = this.getTags();
-        formattedDescription = getFormattedTextForHashTags(tags,formattedDescription);
+        formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
 
         return formattedDescription;
     }
 
-    public String getFormattedUrl(){
+    public String getFormattedUrl() {
         String formattedUrl = this.url;
         Set<Url> urls = this.getUrls();
-        formattedUrl = getFormattedUrlForUrls(urls,formattedUrl);
+        formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
     }
 
@@ -543,21 +545,21 @@ public class User extends AbstractFormattedText implements Serializable,Comparab
     public String toString() {
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("\n[ ");
-        for(Url url:urls){
+        for (Url url : urls) {
             myUrls.append(url.toString());
             myUrls.append(", ");
         }
         myUrls.append(" ]\n");
         StringBuffer myTags = new StringBuffer();
         myTags.append("\n[ ");
-        for(HashTag tag:tags){
+        for (HashTag tag : tags) {
             myTags.append(tag.toString());
             myTags.append(", ");
         }
         myTags.append(" ]\n");
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("\n[ ");
-        for(Mention mention:mentions){
+        for (Mention mention : mentions) {
             myMentions.append(mention.toString());
             myMentions.append(", ");
         }

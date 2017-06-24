@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class MentionServiceImpl implements MentionService {
 
     private final MentionRepository mentionRepository;
@@ -22,7 +22,7 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention store(Mention mention) {
         return this.mentionRepository.persist(mention);
     }
@@ -33,13 +33,13 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention update(Mention mention) {
         return this.mentionRepository.update(mention);
     }
 
     @Override
     public Mention findByScreenNameAndName(Mention mention) {
-        return this.mentionRepository.findByScreenNameAndName(mention.getScreenName(),mention.getName());
+        return this.mentionRepository.findByScreenNameAndName(mention.getScreenName(), mention.getName());
     }
 }

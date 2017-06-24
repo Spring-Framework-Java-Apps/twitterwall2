@@ -1,23 +1,22 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
-import org.woehlke.twitterwall.oodm.entities.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name="hashtag",uniqueConstraints=@UniqueConstraint(columnNames={"text"}))
-public class HashTag extends AbstractTwitterObject implements Serializable,Comparable<HashTag> {
+@Table(name = "hashtag", uniqueConstraints = @UniqueConstraint(columnNames = {"text"}))
+public class HashTag extends AbstractTwitterObject implements DomainObject, Comparable<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)

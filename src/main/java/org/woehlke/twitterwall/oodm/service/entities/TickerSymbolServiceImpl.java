@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TickerSymbolServiceImpl implements TickerSymbolService {
 
     private final TickerSymbolRepository tickerSymbolRepository;
@@ -22,19 +22,19 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol store(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.persist(tickerSymbol);
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol update(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.merge(tickerSymbol);
     }
 
     @Override
     public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
-        return this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol,url);
+        return this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol, url);
     }
 }

@@ -1,11 +1,12 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.repository.common.OodmRepository;
 
 /**
  * Created by tw on 12.06.17.
  */
-public interface UrlRepository {
+public interface UrlRepository extends OodmRepository {
 
     Url persist(Url url);
 

@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
-import org.woehlke.twitterwall.oodm.exceptions.FindMediaByFieldsExceptionException;
-import org.woehlke.twitterwall.oodm.exceptions.FindMediaByIdTwitterException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMediaByFieldsExceptionException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMediaByIdTwitterException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -34,30 +34,30 @@ public class MediaRepositoryImpl implements MediaRepository {
     public Media findByIdTwitter(long idTwitter) {
         try {
             String SQL = "select t from Media as t where t.idTwitter=:idTwitter";
-            TypedQuery<Media> query = entityManager.createQuery(SQL,Media.class);
-            query.setParameter("idTwitter",idTwitter);
+            TypedQuery<Media> query = entityManager.createQuery(SQL, Media.class);
+            query.setParameter("idTwitter", idTwitter);
             Media result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindMediaByIdTwitterException(e,idTwitter);
+        } catch (NoResultException e) {
+            throw new FindMediaByIdTwitterException(e, idTwitter);
         }
     }
 
     @Override
-    public Media findByFields(String mediaHttp,String mediaHttps,String url,String display,String expanded, String mediaType) {
+    public Media findByFields(String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
         try {
             String SQL = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType";
-            TypedQuery<Media> query = entityManager.createQuery(SQL,Media.class);
-            query.setParameter("mediaHttp",mediaHttp);
-            query.setParameter("mediaHttps",mediaHttps);
-            query.setParameter("url",url);
-            query.setParameter("display",display);
-            query.setParameter("expanded",expanded);
-            query.setParameter("mediaType",mediaType);
+            TypedQuery<Media> query = entityManager.createQuery(SQL, Media.class);
+            query.setParameter("mediaHttp", mediaHttp);
+            query.setParameter("mediaHttps", mediaHttps);
+            query.setParameter("url", url);
+            query.setParameter("display", display);
+            query.setParameter("expanded", expanded);
+            query.setParameter("mediaType", mediaType);
             Media result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindMediaByFieldsExceptionException(e,mediaHttp,mediaHttps,url,display,expanded,mediaType);
+        } catch (NoResultException e) {
+            throw new FindMediaByFieldsExceptionException(e, mediaHttp, mediaHttps, url, display, expanded, mediaType);
         }
     }
 }

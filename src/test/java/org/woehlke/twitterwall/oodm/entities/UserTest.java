@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.helper.TestHelperService;
+import org.woehlke.twitterwall.process.helper.TestHelperService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 import javax.transaction.Transactional;

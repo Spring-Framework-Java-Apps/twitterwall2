@@ -1,10 +1,8 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.exceptions.FindHashTagByTextException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindHashTagByTextException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -37,19 +35,19 @@ public class HashTagRepositoryImpl implements HashTagRepository {
     public HashTag findByText(String text) {
         try {
             String SQL = "select t from HashTag as t where t.text=:text";
-            TypedQuery<HashTag> query = entityManager.createQuery(SQL,HashTag.class);
-            query.setParameter("text",text);
+            TypedQuery<HashTag> query = entityManager.createQuery(SQL, HashTag.class);
+            query.setParameter("text", text);
             HashTag result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindHashTagByTextException(e,text);
+        } catch (NoResultException e) {
+            throw new FindHashTagByTextException(e, text);
         }
     }
 
     @Override
     public List<HashTag> getAll() {
         String SQL = "select h from HashTag as h";
-        TypedQuery<HashTag> query = entityManager.createQuery(SQL,HashTag.class);
+        TypedQuery<HashTag> query = entityManager.createQuery(SQL, HashTag.class);
         return query.getResultList();
     }
 }

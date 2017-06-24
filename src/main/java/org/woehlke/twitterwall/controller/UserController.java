@@ -9,12 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +45,7 @@ public class UserController {
         model.addAttribute("users", userService.getFollower());
         String symbol = "<i class=\"fa fa-user-circle\"></i>";
         String subtitle = "Follower";
-        model = setupPage(model,subtitle,symbol);
+        model = setupPage(model, subtitle, symbol);
         return "user";
     }
 
@@ -58,7 +54,7 @@ public class UserController {
         model.addAttribute("users", userService.getFriends());
         String symbol = "<i class=\"fa fa-user-circle-o\"></i>";
         String subtitle = "Friends";
-        model = setupPage(model,subtitle,symbol);
+        model = setupPage(model, subtitle, symbol);
         return "user";
     }
 
@@ -67,7 +63,7 @@ public class UserController {
         model.addAttribute("users", userService.getAll());
         String symbol = "<i class=\"fa fa-user\" aria-hidden=\"true\"></i>";
         String subtitle = "All";
-        model = setupPage(model,subtitle,symbol);
+        model = setupPage(model, subtitle, symbol);
         return "user";
     }
 
@@ -77,7 +73,7 @@ public class UserController {
         model.addAttribute("users", tweetingUsers);
         String symbol = "<i class=\"fa fa-users\" aria-hidden=\"true\"></i>";
         String subtitle = "With one or more Tweets";
-        model = setupPage(model,subtitle,symbol);
+        model = setupPage(model, subtitle, symbol);
         return "user";
     }
 
@@ -86,11 +82,11 @@ public class UserController {
         model.addAttribute("users", userService.getNotYetFriendUsers());
         String symbol = "<i class=\"fa fa-plus-square\" aria-hidden=\"true\"></i>";
         String subtitle = "Not Yet Friends";
-        model = setupPage(model,subtitle,symbol);
+        model = setupPage(model, subtitle, symbol);
         return "user";
     }
 
-    private Model setupPage(Model model,String subtitle,String symbol){
+    private Model setupPage(Model model, String subtitle, String symbol) {
         Page page = new Page();
         page.setSymbol(symbol);
         page.setMenuAppName(menuAppName);
@@ -99,7 +95,7 @@ public class UserController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
-        model.addAttribute("page",page);
+        model.addAttribute("page", page);
         return model;
     }
 }

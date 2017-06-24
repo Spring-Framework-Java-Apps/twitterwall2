@@ -13,8 +13,8 @@ public class Page implements Serializable {
     private String twitterSearchTerm;
     private String infoWebpage;
     private String symbol;
-    private boolean showMenuUsers=false;
-    private boolean historyBack=false;
+    private boolean showMenuUsers = false;
+    private boolean historyBack = false;
 
     public String getTitle() {
         return title;

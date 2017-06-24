@@ -12,17 +12,14 @@ import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.exceptions.ControllerRequestParameterSyntaxException;
+import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
-import javax.xml.ws.http.HTTPException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.woehlke.twitterwall.process.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 /**
  * Created by tw on 10.06.17.
@@ -60,7 +57,7 @@ public class TimelineController {
     @RequestMapping("/")
     public String index(Model model) {
         model = setupPage(model);
-        if(fetchTestData) {
+        if (fetchTestData) {
             List<Tweet> list = tweetService.getTestTweetsForTweetTest();
             List<Tweet> latest = tweetService.getLatestTweets();
             list.addAll(latest);
@@ -75,7 +72,7 @@ public class TimelineController {
     @RequestMapping("/tweets")
     public String tweets(Model model) {
         model = setupPage(model);
-        if(fetchTestData) {
+        if (fetchTestData) {
             List<Tweet> list = tweetService.getTestTweetsForTweetTest();
             List<Tweet> latest = tweetService.getLatestTweets();
             list.addAll(latest);
@@ -97,15 +94,15 @@ public class TimelineController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
-        model.addAttribute("page",page);
+        model.addAttribute("page", page);
         List<HashTagCounted> hashTags = new ArrayList<>();
-        for(HashTag hashTag : hashTagService.getAll()){
-            long number=tweetService.countTweetsForHashTag(hashTag.getText());
-            String text=hashTag.getText();
-            HashTagCounted c = new HashTagCounted(number,text);
+        for (HashTag hashTag : hashTagService.getAll()) {
+            long number = tweetService.countTweetsForHashTag(hashTag.getText());
+            String text = hashTag.getText();
+            HashTagCounted c = new HashTagCounted(number, text);
             hashTags.add(c);
         }
-        model.addAttribute("hashTags",hashTags);
+        model.addAttribute("hashTags", hashTags);
         return "tags";
     }
 
@@ -113,26 +110,26 @@ public class TimelineController {
     public String hashTag(@PathVariable String hashtagText, Model model) {
         Pattern p = Pattern.compile("^[öÖäÄüÜßa-zA-Z0-9_]{1,139}$");
         Matcher m = p.matcher(hashtagText);
-        if(m.matches()) {
+        if (m.matches()) {
             Page page = new Page();
             page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
             page.setMenuAppName(menuAppName);
             page.setTitle("Tweets für HashTag");
-            page.setSubtitle("#"+hashtagText);
+            page.setSubtitle("#" + hashtagText);
             page.setHistoryBack(true);
             page.setShowMenuUsers(showMenuUsers);
             page.setTwitterSearchTerm(searchterm);
             page.setInfoWebpage(infoWebpage);
-            model.addAttribute("page",page);
+            model.addAttribute("page", page);
             List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
             model.addAttribute("latestTweets", tweets);
             return "timeline";
         } else {
-            throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}",hashtagText);
+            throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}", hashtagText);
         }
     }
 
-    private Model setupPage(Model model){
+    private Model setupPage(Model model) {
         Page page = new Page();
         page.setSymbol("<span class=\"glyphicon glyphicon-home\" aria-hidden=\"true\"></span>");
         page.setMenuAppName(menuAppName);
@@ -141,7 +138,7 @@ public class TimelineController {
         page.setShowMenuUsers(showMenuUsers);
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
-        model.addAttribute("page",page);
+        model.addAttribute("page", page);
         return model;
     }
 

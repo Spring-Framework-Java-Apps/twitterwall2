@@ -13,7 +13,7 @@ import java.util.List;
  * Created by tw on 11.06.17.
  */
 @Service
-@Transactional(propagation= Propagation.REQUIRED,readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,13 +24,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User persist(User user) {
         return userRepository.persist(user);
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User update(User user) {
         return userRepository.update(user);
     }
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter);
     }
-    
+
     @Override
     public long count() {
         return userRepository.count();

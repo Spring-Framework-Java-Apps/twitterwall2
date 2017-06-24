@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.exceptions.FindMentionByIdTwitterException;
-import org.woehlke.twitterwall.oodm.exceptions.FindMentionByScreenNameAndNameException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameAndNameException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -34,26 +34,26 @@ public class MentionRepositoryImpl implements MentionRepository {
     public Mention findByIdTwitter(long idTwitter) {
         try {
             String SQL = "select t from Mention as t where t.idTwitter=:idTwitter";
-            TypedQuery<Mention> query = entityManager.createQuery(SQL,Mention.class);
-            query.setParameter("idTwitter",idTwitter);
+            TypedQuery<Mention> query = entityManager.createQuery(SQL, Mention.class);
+            query.setParameter("idTwitter", idTwitter);
             Mention result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindMentionByIdTwitterException(e,idTwitter);
+        } catch (NoResultException e) {
+            throw new FindMentionByIdTwitterException(e, idTwitter);
         }
     }
 
     @Override
-    public Mention findByScreenNameAndName(String screenName,String name) {
+    public Mention findByScreenNameAndName(String screenName, String name) {
         try {
             String SQL = "select t from Mention as t where t.screenName=:screenName and t.name=:name";
-            TypedQuery<Mention> query = entityManager.createQuery(SQL,Mention.class);
-            query.setParameter("screenName",screenName);
-            query.setParameter("name",name);
+            TypedQuery<Mention> query = entityManager.createQuery(SQL, Mention.class);
+            query.setParameter("screenName", screenName);
+            query.setParameter("name", name);
             Mention result = query.getSingleResult();
             return result;
-        } catch (NoResultException e){
-            throw new FindMentionByScreenNameAndNameException(e,screenName,name);
+        } catch (NoResultException e) {
+            throw new FindMentionByScreenNameAndNameException(e, screenName, name);
         }
     }
 }
