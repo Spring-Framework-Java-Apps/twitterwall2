@@ -156,7 +156,6 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
         x.append("\\|");
         x.append("\\}");
         x.append("\\~");
-        x.append("\\z");
         x.append("]");
         stopChar = x.toString();
     }
