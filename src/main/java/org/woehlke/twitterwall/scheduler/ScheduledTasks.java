@@ -40,7 +40,7 @@ public class ScheduledTasks {
 
     private final static long FIXED_RATE_FOR_SCHEDULAR = FIXED_RATE_FOR_SCHEDULAR_MINUTEN * 60 * 1000;
 
-    private final static long FIXED_RATE_FOR_SCHEDULAR_MINUTEN_USER = 12 * 60;
+    private final static long FIXED_RATE_FOR_SCHEDULAR_MINUTEN_USER = 5; //12 * 60;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_USER = FIXED_RATE_FOR_SCHEDULAR_MINUTEN_USER * 60 * 1000;
 
