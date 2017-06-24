@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -183,37 +184,6 @@ public class UserApiServiceImpl implements UserApiService {
 
     static private int[] indices = {};
 
-    static private String stopChar;
-
-    static {
-        StringBuffer x = new StringBuffer("[\\s");
-        x.append("\\!");
-        x.append("\\%");
-        x.append("\\&");
-        x.append("\\'");
-        x.append("\\(");
-        x.append("\\)");
-        x.append("\\*");
-        x.append("\\+");
-        x.append("\\,");
-        x.append("\\-");
-        x.append("\\.");
-        x.append("\\/");
-        x.append("\\:");
-        x.append("\\;");
-        x.append("\\=");
-        x.append("\\?");
-        x.append("\\[");
-        x.append("\\]");
-        x.append("\\^");
-        x.append("\\…");
-        x.append("\\`");
-        x.append("\\{");
-        x.append("\\|");
-        x.append("\\}");
-        x.append("\\~");
-        x.append("\\\\z");
-        x.append("]");
-        stopChar = x.toString();
-    }
+    static private String stopChar = AbstractFormattedText.stopChar;
+    
 }

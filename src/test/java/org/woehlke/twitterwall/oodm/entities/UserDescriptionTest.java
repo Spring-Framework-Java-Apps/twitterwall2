@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -142,37 +143,6 @@ public class UserDescriptionTest {
 
     static private int[] indices = {};
 
-    static private String stopChar;
-
-    static {
-        StringBuffer x = new StringBuffer("[\\s");
-        x.append("\\!");
-        x.append("\\%");
-        x.append("\\&");
-        x.append("\\'");
-        x.append("\\(");
-        x.append("\\)");
-        x.append("\\*");
-        x.append("\\+");
-        x.append("\\,");
-        x.append("\\-");
-        x.append("\\.");
-        x.append("\\/");
-        x.append("\\:");
-        x.append("\\;");
-        x.append("\\=");
-        x.append("\\?");
-        x.append("\\[");
-        x.append("\\]");
-        x.append("\\^");
-        x.append("\\…");
-        x.append("\\`");
-        x.append("\\{");
-        x.append("\\|");
-        x.append("\\}");
-        x.append("\\~");
-        x.append("\\\\z");
-        x.append("]");
-        stopChar = x.toString();
-    }
+    static private String stopChar = AbstractFormattedText.stopChar;
+    
 }

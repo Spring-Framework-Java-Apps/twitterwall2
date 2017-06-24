@@ -127,7 +127,7 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
         return formattedText;
     }
 
-    static private String stopChar;
+    static public String stopChar;
 
     static {
         StringBuffer x = new StringBuffer("[\\s");
@@ -156,7 +156,7 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
         x.append("\\|");
         x.append("\\}");
         x.append("\\~");
-        x.append("\\\\z");
+        x.append("\\z");
         x.append("]");
         stopChar = x.toString();
     }
