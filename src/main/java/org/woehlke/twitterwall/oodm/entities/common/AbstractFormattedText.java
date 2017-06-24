@@ -85,6 +85,11 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
     protected String getFormattedUrlForUrls(Set<Url> urls, String formattedText) {
         for (Url url : urls) {
 
+            Pattern myUrl1 = Pattern.compile(url.getUrl());
+            Matcher m10 = myUrl1.matcher(formattedText);
+            formattedText = m10.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a>");
+
+            /*
             Pattern myUrl1 = Pattern.compile("(" + url.getUrl() + ")(" + stopChar + ")");
             Matcher m10 = myUrl1.matcher(formattedText);
             formattedText = m10.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a>$2");
@@ -92,6 +97,7 @@ public abstract class AbstractFormattedText extends AbstractTwitterObject {
             Pattern myUrl4 = Pattern.compile("(" + url.getUrl() + ")$");
             Matcher m20 = myUrl4.matcher(formattedText);
             formattedText = m20.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a> ");
+            */
         }
         return formattedText;
     }
