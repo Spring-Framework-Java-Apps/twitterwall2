@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterAndScreenNameException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameAndNameException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -55,19 +57,33 @@ public class MentionRepositoryImpl implements MentionRepository {
     }
 
     @Override
-    public Mention findByScreenNameAndName(String screenName, String name) {
+    public Mention findByScreenName(String screenName) {
         try {
-            String qname="Mention.findByScreenNameAndName";
+            String qname="Mention.findByScreenName";
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("screenName", screenName);
-            query.setParameter("name", name);
             Mention result = query.getSingleResult();
             log.info("found: " + result.toString());
             return result;
         } catch (NoResultException e) {
             log.info("not found: " + screenName);
-            log.info("not found: " + name);
-            throw new FindMentionByScreenNameAndNameException(e, screenName, name);
+            throw new FindMentionByScreenNameException(e, screenName);
+        }
+    }
+
+    @Override
+    public Mention findByIdTwitterAndScreenName(Long idTwitter, String screenName) {
+        try {
+            String qname="Mention.findByIdTwitterAndScreenName";
+            TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
+            query.setParameter("idTwitter", idTwitter);
+            query.setParameter("screenName", screenName);
+            Mention result = query.getSingleResult();
+            log.info("found: " + result.toString());
+            return result;
+        } catch (NoResultException e) {
+            log.info("not found: " + screenName);
+            throw new FindMentionByIdTwitterAndScreenNameException(e, idTwitter, screenName);
         }
     }
 }

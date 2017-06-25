@@ -120,10 +120,28 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
             log.info("---------------------------------------");
             */
         } catch (ResourceAccessException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         } catch (RuntimeException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg, e);
         } finally {
             log.info("---------------------------------------");
@@ -143,20 +161,50 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                     User user = persistDataFromTwitter.storeUserProfile(userProfile);
                     log.info(msg + user.toString());
                 } catch (RateLimitExceededException e) {
+                    log.warn(msg + e.getMessage());
+                    Throwable t = e.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
                     throw new TwitterApiException(msg+userProfileTwitterId, e);
                 } catch (TwitterApiException e) {
+                    log.warn(msg + e.getMessage());
+                    Throwable t = e.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
                     log.info(msg+userProfileTwitterId + e.getMessage());
                 } finally {
                     log.info("---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg + "updateUserProfiles: check your Network Connection!", e);
         } catch (RateLimitExceededException e) {
             throw new TwitterApiException(msg, e);
         } catch (RuntimeException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException("updateUserProfiles", e);
         } catch (Exception e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException("updateUserProfiles", e);
         } finally {
             log.info("---------------------------------------");
@@ -178,22 +226,64 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                     this.persistDataFromTwitter.storeOneTweet(tweet);
                     Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
                 } catch (RateLimitExceededException e) {
+                    log.warn(msg + e.getMessage());
+                    Throwable t = e.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
                     throw new TwitterApiException(msg+tweetTwitterId, e);
                 } catch (InterruptedException ex){
+                    log.warn(msg + ex.getMessage());
+                    Throwable t = ex.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
                     log.info(msg+tweetTwitterId + ex.getMessage());
                 } catch (TwitterApiException e) {
+                    log.warn(msg + e.getMessage());
+                    Throwable t = e.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
                     log.info(msg+tweetTwitterId + e.getMessage());
                 } finally {
                     log.info("---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         } catch (RateLimitExceededException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg, e);
         } catch (RuntimeException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg, e);
         } catch (Exception e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
             throw new TwitterApiException(msg, e);
         } finally {
             log.info("---------------------------------------");

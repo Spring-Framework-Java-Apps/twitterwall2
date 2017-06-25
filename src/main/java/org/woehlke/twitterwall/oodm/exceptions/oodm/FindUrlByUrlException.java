@@ -20,6 +20,10 @@ public class FindUrlByUrlException extends OodmException {
         super(MSG+"null");
     }
 
+    public FindUrlByUrlException(String message){
+        super(MSG+message);
+    }
+
     public FindUrlByUrlException(NoResultException e, String url) {
         super(MSG + url + " " + e.getMessage(), e);
     }

@@ -48,6 +48,11 @@ public class Url extends AbstractTwitterObject implements DomainObject, Comparab
     @Transient
     private int[] indices;
 
+    @Transient
+    public boolean isUrlAndExpandedTheSame(){
+        return url.compareTo(expanded) == 0;
+    }
+
     public Url(String display, String expanded, String url, int[] indices) {
         this.display = display;
         this.expanded = expanded;

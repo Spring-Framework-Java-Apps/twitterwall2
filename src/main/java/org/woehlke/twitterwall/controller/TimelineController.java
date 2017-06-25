@@ -66,21 +66,24 @@ public class TimelineController {
 
     @RequestMapping("/tweets")
     public String tweets(Model model) {
+        logEnv();
         model = setupPage(model);
+        List<Tweet> latest = tweetService.getLatestTweets();
         if (fetchTestData) {
-            List<Tweet> list = tweetService.getTestTweetsForTweetTest();
-            List<Tweet> latest = tweetService.getLatestTweets();
-            list.addAll(latest);
-            model.addAttribute("latestTweets", list);
-        } else {
-            List<Tweet> latest = tweetService.getLatestTweets();
-            model.addAttribute("latestTweets", latest);
+            try {
+                List<Tweet> list = tweetService.getTestTweetsForTweetTest();
+                latest.addAll(list);
+            } catch (Exception e){
+                log.error("getTestTweetsForTweetTest: "+e.getMessage());
+            }
         }
+        model.addAttribute("latestTweets", latest);
         return "timeline";
     }
 
     @RequestMapping("/hashtags")
     public String hashTags(Model model) {
+        logEnv();
         Page page = new Page();
         page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
         page.setMenuAppName(menuAppName);
@@ -104,6 +107,7 @@ public class TimelineController {
 
     @RequestMapping("/hashtag/{hashtagText}")
     public String hashTag(@PathVariable String hashtagText, Model model) {
+        logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
@@ -124,6 +128,15 @@ public class TimelineController {
         } else {
             throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}", hashtagText);
         }
+    }
+
+    private void logEnv(){
+        log.info("twitterwall.theme = "+theme);
+        log.info("twitterwall.info.webpage = "+infoWebpage);
+        log.info("twitterwall.twitter.fetchTestData = "+fetchTestData);
+        log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
+        log.info("twitter.searchQuery = "+searchterm);
+        log.info("twitterwall.frontend.menu.appname = "+menuAppName);
     }
 
     private Model setupPage(Model model) {

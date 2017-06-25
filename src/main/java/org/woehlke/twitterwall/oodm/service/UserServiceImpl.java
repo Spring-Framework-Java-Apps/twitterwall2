@@ -101,26 +101,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUser(User user) {
-        try {
-            User userPers = userRepository.findByIdTwitter(user.getIdTwitter());
-            user.setId(userPers.getId());
-            user.setFriend(userPers.isFriend());
-            user.setFollower(userPers.isFollower());
-            return userRepository.update(user);
-        } catch (FindUserByIdTwitterException e) {
-            return userRepository.persist(user);
-        }
+        return storeUserProcess(user);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUserProcess(User user){
+        String msg = "User.storeUserProcess ";
         Set<Url> urls = new LinkedHashSet<>();
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
         for (Url myUrl : user.getUrls()) {
             urls.add(urlService.getPersistentUrlFor(myUrl.getUrl()));
         }
+        urls.add(urlService.getPersistentUrlFor(user.getUrl()));
         for (HashTag hashTag : user.getTags()) {
             hashTags.add(hashTagService.store(hashTag));
         }
@@ -130,8 +124,17 @@ public class UserServiceImpl implements UserService {
         user.setUrls(urls);
         user.setTags(hashTags);
         user.setMentions(mentions);
-        user = this.storeUser(user);
-        return user;
+        try {
+            User userPers = userRepository.findByIdTwitter(user.getIdTwitter());
+            user.setId(userPers.getId());
+            user.setFriend(userPers.isFriend());
+            user.setFollower(userPers.isFollower());
+            log.info(msg+" try to update user "+user.toString());
+            return userRepository.update(user);
+        } catch (FindUserByIdTwitterException e) {
+            log.info(msg+" try to persist user "+user.toString());
+            return userRepository.persist(user);
+        }
     }
 
     @Override

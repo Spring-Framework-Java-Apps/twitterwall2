@@ -14,8 +14,9 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Table(name = "mention", uniqueConstraints = {
+        @UniqueConstraint(name="unique_mention", columnNames = {"screen_name","id_twitter"})/*,
         @UniqueConstraint(name="unique_mention_screen_name", columnNames = {"screen_name"}),
-        @UniqueConstraint(name="unique_mention_id_twitter", columnNames = {"id_twitter"})
+        @UniqueConstraint(name="unique_mention_id_twitter", columnNames = {"id_twitter"})*/
 }, indexes = {
         @Index(name="idx_mention_name", columnList="name")
 })
@@ -25,9 +26,15 @@ import java.util.regex.Pattern;
                 query = "select t from Mention as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
-                name =  "Mention.findByScreenNameAndName",
-                query = "select t from Mention as t where t.screenName=:screenName and t.name=:name"
+                name =  "Mention.findByScreenName",
+                query = "select t from Mention as t where t.screenName=:screenName"
+        ),
+        @NamedQuery(
+                name =  "Mention.findByIdTwitterAndScreenName",
+                query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
         )
+
+
 })
 public class Mention extends AbstractTwitterObject implements DomainObject, Comparable<Mention> {
 

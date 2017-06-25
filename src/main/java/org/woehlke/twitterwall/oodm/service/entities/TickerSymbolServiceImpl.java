@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.TickerSymbolEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.Set;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TickerSymbolServiceImpl implements TickerSymbolService {
+
+    private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);
 
     private final TickerSymbolRepository tickerSymbolRepository;
 
@@ -47,14 +51,19 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
+        String msg = "TickerSymbol.storeTickerSymbol: ";
         try {
+            log.info(msg+"try to find: "+tickerSymbol.toString());
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
+            log.info(msg+"found: "+tickerSymbol.toString());
             tickerSymbolPers.setUrl(tickerSymbol.getUrl());
             tickerSymbolPers.setIndices(tickerSymbol.getIndices());
             tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
+            log.info(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.merge(tickerSymbolPers);
 
         } catch (FindTickerSymbolByTickerSymbolAndUrlException e) {
+            log.info(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }
     }

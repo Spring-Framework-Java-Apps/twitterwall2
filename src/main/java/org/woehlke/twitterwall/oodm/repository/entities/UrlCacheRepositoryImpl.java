@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.PersistUrlCacheException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -24,6 +25,9 @@ public class UrlCacheRepositoryImpl implements UrlCacheRepository {
 
     @Override
     public UrlCache persist(UrlCache urlCache) {
+        if(urlCache.isUrlAndExpandedTheSame()){
+            throw new PersistUrlCacheException(urlCache.toString());
+        }
         entityManager.persist(urlCache);
         entityManager.flush();
         log.info("persisted: "+urlCache.toString());

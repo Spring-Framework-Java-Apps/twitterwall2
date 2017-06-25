@@ -23,6 +23,7 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByDisplayExpandedUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.PersistUrlCacheException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
@@ -88,22 +89,14 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url store(Url url) {
-        if(url == null || url.getDisplay() == null || url.getExpanded() == null||url.getUrl()==null){
+        String msg = "Url.store: ";
+        log.info(msg+"try to store: "+url.toString());
+        if(url == null || url.getUrl()==null){
             throw new FindUrlByDisplayExpandedUrlException(url.getDisplay(), url.getExpanded(), url.getUrl());
         }
-        return getPersistentUrlFor(url.getUrl());
-          /*
-        try {
-            Url urlPers = this.urlRepository.findByDisplayExpandedUrl(url.getDisplay(), url.getExpanded(), url.getUrl());
-            urlPers.setIndices(url.getIndices());
-            urlPers.setDisplay(url.getDisplay());
-            urlPers.setExpanded(url.getExpanded());
-            urlPers.setUrl(url.getUrl());
-            return this.urlRepository.update(urlPers);
-        } catch (FindUrlByDisplayExpandedUrlException e) {
-            return this.urlRepository.persist(url);
-        }
-        */
+        String urlStr = url.getUrl();
+        log.info(msg+"try to store by getPersistentUrlFor url="+urlStr);
+        return getPersistentUrlFor(urlStr);
     }
 
     public List<Url> getTestData() {
@@ -184,16 +177,25 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url getPersistentUrlFor(String url) {
+        String msg = "Url.getPersistentUrlFor url="+url+" ";
         int indices[] = {};
         if (url == null) {
             return null;
         } else {
             try {
+                log.info(msg+" try to find ");
                 Url urlPers = this.urlRepository.findByUrl(url);
+                log.info(msg+" found: "+urlPers);
+                if(urlPers.isUrlAndExpandedTheSame()){
+                    log.info(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
+                }
                 return urlPers;
             } catch (FindUrlByUrlException ex) {
+                log.info(msg+" not found ");
                 try {
+                    log.info(msg+" try to find UrlCache");
                     UrlCache urlCache = urlCacheRepository.findByUrl(url);
+                    log.info(msg+" found: "+urlCache);
                     String displayUrl = urlCache.getExpanded();
                     try {
                         URL myURL = new URL(urlCache.getExpanded());
@@ -202,16 +204,31 @@ public class UrlServiceImpl implements UrlService {
                         log.warn(exe.getMessage());
                     }
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
-                    return this.urlRepository.persist(newUrl);
+                    log.info(msg+" try to persist: "+newUrl.toString());
+                    newUrl = this.urlRepository.persist(newUrl);
+                    log.info(msg+" persisted: "+newUrl.toString());
+                    return newUrl;
                 } catch (FindUrlCacheByUrlException e) {
                     UrlCache urlCache = new UrlCache();
                     try {
+                        log.info(msg + " try to fetchTransientUrl");
                         Url myUrl = this.fetchTransientUrl(url);
+                        log.info(msg + " found by fetchTransientUrl: " + myUrl);
                         urlCache.setUrl(myUrl.getUrl());
                         urlCache.setExpanded(myUrl.getExpanded());
-                        urlCache=urlCacheRepository.persist(urlCache);
-                    }  catch (FetchUrlException fue)  {
-                        log.info(fue.getMessage());
+                        log.info(msg + " try to persist: " + urlCache.toString());
+                        if (urlCache.isUrlAndExpandedTheSame()) {
+                            urlCache = urlCacheRepository.persist(urlCache);
+                            log.info(msg + " persisted: " + urlCache.toString());
+                        } else {
+                            log.info(msg + " not persisted: " + urlCache.toString());
+                        }
+                    } catch (PersistUrlCacheException puce){
+                        log.info(msg+puce.getMessage());
+                        urlCache.setUrl(url);
+                        urlCache.setExpanded(url);
+                    } catch (FetchUrlException fue)  {
+                        log.info(msg+fue.getMessage());
                         urlCache.setUrl(url);
                         urlCache.setExpanded(url);
                     }
@@ -223,7 +240,10 @@ public class UrlServiceImpl implements UrlService {
                         log.warn(exe.getMessage());
                     }
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
-                    return this.urlRepository.persist(newUrl);
+                    log.info(msg+" try to persist: "+newUrl.toString());
+                    newUrl =this.urlRepository.persist(newUrl);
+                    log.info(msg+" persisted: "+newUrl.toString());
+                    return newUrl;
                 }
             }
         }

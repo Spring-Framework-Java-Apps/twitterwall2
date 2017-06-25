@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.HashTagEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class HashTagServiceImpl implements HashTagService {
+
+    private static final Logger log = LoggerFactory.getLogger(HashTagServiceImpl.class);
 
     private final HashTagRepository hashTagRepository;
 
@@ -62,11 +66,18 @@ public class HashTagServiceImpl implements HashTagService {
     public HashTag store(HashTag hashTag) {
         try {
             HashTag tagPers = this.hashTagRepository.findByText(hashTag.getText());
+            log.info("found: "+tagPers.toString());
+            return tagPers;
+            /*
             tagPers.setText(hashTag.getText());
             tagPers.setIndices(hashTag.getIndices());
             return this.hashTagRepository.update(tagPers);
+            */
         } catch (FindHashTagByTextException e) {
-            return this.hashTagRepository.persist(hashTag);
+            log.info("try to persist: "+hashTag.toString());
+            HashTag tagPers = this.hashTagRepository.persist(hashTag);
+            log.info("persisted: "+tagPers.toString());
+            return tagPers;
         }
     }
 

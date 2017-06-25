@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +17,8 @@ import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UrlCacheServiceImpl implements UrlCacheService {
 
+    private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);
+
     private final UrlCacheRepository urlCacheRepository;
 
     @Autowired
@@ -25,14 +29,20 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache) {
+        log.info("UrlCache.store: try to persist: "+urlCache.toString());
         return this.urlCacheRepository.persist(urlCache);
     }
 
     @Override
     public UrlCache findByUrl(String url) {
         if(url == null) {
-            throw new FindUrlCacheByUrlException(url);
+            String msg = "UrlCache.findByUrl: url=null";
+            log.info(msg);
+            throw new FindUrlCacheByUrlException(msg);
         }
-        return this.urlCacheRepository.findByUrl(url);
+        log.info("UrlCache.findByUrl: try to find: "+url);
+        UrlCache urlCache = this.urlCacheRepository.findByUrl(url);
+        log.info("UrlCache.findByUrl: found: "+urlCache.toString());
+        return urlCache;
     }
 }

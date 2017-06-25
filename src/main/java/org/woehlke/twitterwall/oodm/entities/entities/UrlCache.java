@@ -32,6 +32,11 @@ public class UrlCache implements Serializable, Comparable<UrlCache> {
     @Column(nullable = false)
     private String url;
 
+    @Transient
+    public boolean isUrlAndExpandedTheSame(){
+       return  url.compareTo(expanded) == 0;
+    }
+
     public Long getId() {
         return id;
     }

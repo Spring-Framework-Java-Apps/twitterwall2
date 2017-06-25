@@ -14,5 +14,7 @@ public interface MentionRepository extends OodmRepository {
 
     Mention findByIdTwitter(long idTwitter);
 
-    Mention findByScreenNameAndName(String screenName, String name);
+    Mention findByScreenName(String screenName);
+
+    Mention findByIdTwitterAndScreenName(Long idTwitter, String screenName);
 }

@@ -19,8 +19,6 @@ public interface MentionService extends OodmService {
 
     Mention update(Mention mention);
 
-    Mention findByScreenNameAndName(Mention mention);
-
     Mention store(Mention mention);
 
     Set<Mention> getMentions(User user);

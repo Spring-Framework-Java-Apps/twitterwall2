@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterAndScreenNameException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameAndNameException;
+import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 
 import java.util.Date;
@@ -54,21 +57,40 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Mention findByScreenNameAndName(Mention mention) {
-        return this.mentionRepository.findByScreenNameAndName(mention.getScreenName(), mention.getName());
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention store(Mention mention) {
+        log.info("try to store Mention: "+mention.toString());
         try {
-            Mention mentionPers = this.mentionRepository.findByScreenNameAndName(mention.getScreenName(), mention.getName());
+            String screenName = mention.getScreenName();
+            Long idTwitter = mention.getIdTwitter();
+            Mention mentionPers = null;
+            if(screenName != null && idTwitter != null){
+                log.info("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
+                mentionPers = this.mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
+            } else if (screenName != null && idTwitter == null) {
+                log.info("try to find Mention.findByScreenName: "+mention.toString());
+                mentionPers = this.mentionRepository.findByScreenName(screenName);
+            } else if (screenName == null && idTwitter != null) {
+                log.info("try to find Mention.findByIdTwitter: "+mention.toString());
+                mentionPers = this.mentionRepository.findByIdTwitter(idTwitter);
+            }
             mentionPers.setIndices(mention.getIndices());
             mentionPers.setIdTwitter(mention.getIdTwitter());
             mentionPers.setName(mention.getName());
             mentionPers.setScreenName(mention.getScreenName());
+            log.info("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
-        } catch (FindMentionByScreenNameAndNameException e) {
+        } catch (FindMentionByIdTwitterAndScreenNameException e){
+            log.info(e.getMessage());
+            log.info("try to persist Mention: "+mention.toString());
+            return this.mentionRepository.persist(mention);
+        } catch (FindMentionByScreenNameException e){
+            log.info(e.getMessage());
+            log.info("try to persist Mention: "+mention.toString());
+            return this.mentionRepository.persist(mention);
+        } catch (FindMentionByIdTwitterException e){
+            log.info(e.getMessage());
+            log.info("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
         }
     }

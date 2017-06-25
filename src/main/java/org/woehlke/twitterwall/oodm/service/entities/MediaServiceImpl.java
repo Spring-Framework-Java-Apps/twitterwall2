@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.MediaEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.Set;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class MediaServiceImpl implements MediaService {
+
+    private static final Logger log = LoggerFactory.getLogger(MediaServiceImpl.class);
 
     private final MediaRepository mediaRepository;
 
@@ -52,8 +56,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media store(Media media) {
+        String msg = "Media.store: ";
         try {
+            log.info(msg+"try to find: "+media.toString());
             Media mediaPers = this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
+            log.info(msg+"found: "+media.toString());
             mediaPers.setDisplay(media.getDisplay());
             mediaPers.setExpanded(media.getExpanded());
             mediaPers.setIdTwitter(media.getIdTwitter());
@@ -62,8 +69,10 @@ public class MediaServiceImpl implements MediaService {
             mediaPers.setMediaHttps(media.getMediaHttps());
             mediaPers.setMediaType(media.getMediaType());
             mediaPers.setUrl(media.getUrl());
+            log.info(msg+"found and try to update: "+media.toString());
             return this.mediaRepository.update(mediaPers);
         } catch (FindMediaByFieldsExceptionException e) {
+            log.info(msg+"not found and try to persist: "+media.toString());
             return this.mediaRepository.persist(media);
         }
     }

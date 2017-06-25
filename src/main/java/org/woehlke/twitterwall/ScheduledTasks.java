@@ -62,17 +62,37 @@ public class ScheduledTasks {
                 this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
-                log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");
+                log.error(msg + e.getMessage());
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");
             } catch (TwitterwallException e) {
-                log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");
+                log.error(msg + e.getMessage());
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");
             } catch (RuntimeException e) {
-                log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");;
+                log.error(msg + e.getMessage());
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");;
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
-                log.error(msg + " NOT DONE "+msg+" (NOK)");
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.error("NOT DONE "+msg+" (NOK)");
             }
         }
     }
@@ -86,17 +106,37 @@ public class ScheduledTasks {
                 this.scheduledTasksFacade.updateTweets();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
-                log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");
+                log.error(msg + e.getMessage());
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");
             } catch (TwitterwallException e) {
-                log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");
+                log.error(msg + e.getMessage());
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");
             } catch (RuntimeException e) {
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE "+msg+" (NOK)");;
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn("NOT DONE "+msg+" (NOK)");;
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
-                log.error(msg + " NOT DONE "+msg+" (NOK)");
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.error("NOT DONE "+msg+" (NOK)");
             }
         }
     }
@@ -110,16 +150,35 @@ public class ScheduledTasks {
                 this.scheduledTasksFacade.updateUserProfiles();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
                 log.warn(msg + e.getMessage());
                 log.warn(msg + " NOT DONE " + msg + " (NOK)");
             } catch (TwitterwallException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
                 log.warn(msg + e.getMessage());
                 log.warn(msg + " NOT DONE " + msg + " (NOK)");
             } catch (RuntimeException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
                 log.warn(msg + e.getMessage());
                 log.warn(msg + " NOT DONE " + msg + " (NOK)");
-                ;
             } catch (Exception e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
                 log.error(msg + e.getMessage());
                 log.error(msg + " NOT DONE " + msg + " (NOK)");
             }

@@ -63,9 +63,23 @@ public class GlobalExceptionHandler {
         return getTemplate(request, ex);
     }
 
+    @ExceptionHandler(FindMentionByIdTwitterAndScreenNameException.class)
+    public ModelAndView handleFindMentionByIdTwitterAndScreenNameException(HttpServletRequest request, Exception ex) {
+        log.warn("FindMentionByIdTwitterAndScreenNameException occured :: URL=" + request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
+
     @ExceptionHandler(FindMentionByScreenNameAndNameException.class)
     public ModelAndView handleFindMentionByScreenNameAndName(HttpServletRequest request, Exception ex) {
         log.warn("FindMentionByScreenNameAndName occured :: URL=" + request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
+
+    @ExceptionHandler(FindMentionByScreenNameException.class)
+    public ModelAndView handleFindMentionByScreenNameException(HttpServletRequest request, Exception ex) {
+        log.warn("FindMentionByScreenNameException occured :: URL=" + request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
@@ -144,4 +158,10 @@ public class GlobalExceptionHandler {
         return getTemplate(request, ex);
     }
 
+    @ExceptionHandler(PersistUrlCacheException.class)
+    public ModelAndView handlePersistUrlCacheException(HttpServletRequest request, Exception ex) {
+        log.warn("PersistUrlCacheException occured :: URL=" + request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
 }

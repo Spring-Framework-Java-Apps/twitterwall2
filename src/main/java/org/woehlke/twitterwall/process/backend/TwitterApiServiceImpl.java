@@ -12,6 +12,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.process.backend.TwitterApiService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,10 +52,20 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
         String msg = "findTweetsForSearchQuery: ";
+        List<Tweet> tweets = new ArrayList<>();
         try {
-            return getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
+            List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
+            if(fetchedTweets == null){
+                return tweets;
+            } else {
+                return fetchedTweets;
+            }
         } catch (ResourceAccessException e) {
             throw new TwitterApiException(msg + " check your Network Connection!", e);
+        } catch (RuntimeException e){
+            throw new TwitterApiException(msg + " ", e);
+        } catch (Exception e) {
+            throw new TwitterApiException(msg + " ", e);
         }
     }
 
