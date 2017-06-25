@@ -7,7 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,7 +17,46 @@ import java.util.regex.Pattern;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "userprofile", uniqueConstraints = @UniqueConstraint(columnNames = {"idTwitter", "screenName"}))
+@Table(name = "userprofile", uniqueConstraints = {
+        @UniqueConstraint(name="unique_user_id",columnNames = {"id_twitter"}),
+        @UniqueConstraint(name="unique_user_screen_name",columnNames = {"screen_name"})
+}, indexes = {
+        @Index(name="idx_userprofile_created_date", columnList="created_date"),
+        @Index(name="idx_userprofile_screen_name", columnList="screen_name"),
+        @Index(name="idx_userprofile_description", columnList="description"),
+        @Index(name="idx_userprofile_location", columnList="location"),
+        @Index(name="idx_userprofile_url", columnList="url")
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "User.findByIdTwitter",
+                query = "select t from User as t where t.idTwitter=:idTwitter"
+        ),
+        @NamedQuery(
+                name = "User.getAll",
+                query = "select t from User as t"
+        ),
+        @NamedQuery(
+                name = "User.findByScreenName",
+                query = "select t from User as t where t.screenName=:screenName"
+        ),
+        @NamedQuery(
+                name = "User.getTweetingUsers",
+                query = "select t from User as t where t.tweeting=true"
+        ),
+        @NamedQuery(
+                name = "User.getNotYetFriendUsers",
+                query = "select t from User as t where t.following=false"
+        ),
+        @NamedQuery(
+                name = "User.getAllDescriptions",
+                query = "select t.description from User as t where t.description is not null"
+        ),
+        @NamedQuery(
+                name = "User.getAllTwitterIds",
+                query = "select t.idTwitter from User as t"
+        )
+})
 public class User extends AbstractFormattedText implements DomainObject, Comparable<User> {
 
     private static final long serialVersionUID = 1L;
@@ -27,18 +65,18 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="id_twitter",nullable = false)
     private long idTwitter;
 
-    public final static String SCREEN_NAME_PATTERN = "^[a-zA-Z0-9_]{1,15}$";
+    public final static String SCREEN_NAME_PATTERN = "\\w*";
 
     public static boolean isValidScreenName(String screenName){
-        Pattern p = Pattern.compile("^[a-zA-Z0-9_]{1,15}$");
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
         Matcher m = p.matcher(screenName);
         return m.matches();
     }
 
-    @Column(nullable = false)
+    @Column(name="screen_name", nullable = false)
     private String screenName;
 
     @Column(nullable = false)
@@ -56,7 +94,7 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
     @Column
     private String location;
 
-    @Column(nullable = false)
+    @Column(name="created_date",nullable = false)
     private Date createdDate;
 
     @Column
@@ -147,15 +185,15 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
     private String profileBannerUrl;
 
     @JoinTable(name = "userprofile_url")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
 
     @JoinTable(name = "userprofile_hashtag")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<HashTag> tags = new LinkedHashSet<HashTag>();
 
     @JoinTable(name = "userprofile_mention")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
@@ -504,29 +542,102 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
         this.createdDate = createdDate;
     }
 
+
+
     public Set<Url> getUrls() {
         return urls;
     }
 
     public void setUrls(Set<Url> urls) {
-        this.urls = urls;
+        this.urls.clear();
+        this.urls.addAll(urls);
     }
+
+    public boolean addAllUrls(Set<Url> urls) {
+        return this.urls.addAll(urls);
+    }
+
+    public boolean removeAllUrls(Set<Url> urls) {
+        return this.urls.removeAll(urls);
+    }
+
+    public boolean removeAllUrls() {
+        this.urls.clear();
+        return this.urls.isEmpty();
+    }
+
+    public boolean addUrl(Url url) {
+        return this.urls.add(url);
+    }
+
+    public boolean removetUrl(Url url) {
+        return this.urls.remove(url);
+    }
+
+
 
     public Set<HashTag> getTags() {
         return tags;
     }
 
     public void setTags(Set<HashTag> tags) {
-        this.tags = tags;
+        this.tags.clear();
+        this.tags.addAll(tags);
     }
+
+    public boolean addAllTags(Set<HashTag> tags) {
+        return this.tags.addAll(tags);
+    }
+
+    public boolean removeAllTags(Set<HashTag> tags) {
+        return this.tags.removeAll(tags);
+    }
+
+    public boolean removeAllTags() {
+        this.tags.clear();
+        return this.tags.isEmpty();
+    }
+
+    public boolean addTag(HashTag tag) {
+        return this.tags.add(tag);
+    }
+
+    public boolean removeTag(HashTag tag) {
+        return this.tags.remove(tag);
+    }
+    
 
     public Set<Mention> getMentions() {
         return mentions;
     }
 
     public void setMentions(Set<Mention> mentions) {
-        this.mentions = mentions;
+        this.mentions.clear();
+        this.mentions.addAll(mentions);
     }
+
+    public boolean addAllMentions(Set<Mention> mentions) {
+        return this.mentions.addAll(mentions);
+    }
+
+    public boolean removeAllMentions(Set<Mention> mentions) {
+        return this.mentions.removeAll(mentions);
+    }
+
+    public boolean removeAllMentions() {
+        this.mentions.clear();
+        return this.mentions.isEmpty();
+    }
+
+    public boolean addMention(Mention mention) {
+        return this.mentions.add(mention);
+    }
+
+    public boolean removeMention(Mention mention) {
+        return this.mentions.remove(mention);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

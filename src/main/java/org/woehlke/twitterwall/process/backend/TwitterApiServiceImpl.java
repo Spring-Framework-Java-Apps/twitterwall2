@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.process.parts;
+package org.woehlke.twitterwall.process.backend;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.process.backend.TwitterApiService;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * Created by tw on 19.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterApiServiceImpl implements TwitterApiService {
 
     @Value("${twitter.consumerKey}")
@@ -34,12 +35,6 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     @Value("${twitter.pageSize}")
     private int pageSize;
-
-    @Value("${twitterwall.twitter.search.sinceId}")
-    private long sinceId;
-
-    @Value("${twitterwall.twitter.search.maxId}")
-    private long maxId;
 
     @Value("${twitter.searchQuery}")
     private String searchQuery;

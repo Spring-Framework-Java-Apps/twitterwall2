@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.process.helper.TestHelperService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -27,9 +27,9 @@ import java.util.List;
 public class UserTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
-
+    
     @Autowired
-    private TestHelperService testHelperService;
+    private TweetApiServiceTest tweetApiServiceTest;
 
     @Autowired
     private UserService userService;
@@ -37,7 +37,7 @@ public class UserTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        testHelperService.waitForImport();
+        tweetApiServiceTest.waitForImport();
         Assert.assertTrue(true);
     }
 

@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
-import org.woehlke.twitterwall.oodm.entities.common.UrlCache;
+import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.common.OodmRepository;
 
 /**

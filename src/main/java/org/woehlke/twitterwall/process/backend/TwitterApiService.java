@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.process.parts;
+package org.woehlke.twitterwall.process.backend;
 
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;

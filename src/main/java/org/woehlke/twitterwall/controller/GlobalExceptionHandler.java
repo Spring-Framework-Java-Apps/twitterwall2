@@ -34,14 +34,7 @@ public class GlobalExceptionHandler {
 
     @Value("${twitterwall.theme}")
     private String theme;
-
-    @ExceptionHandler(FindEntitiesByIdTwitterFromTweetException.class)
-    public ModelAndView handleFindByIdTwitterFromTweetException(HttpServletRequest request, Exception ex) {
-        log.warn("FindEntitiesByIdTwitterFromTweetException occured :: URL=" + request.getRequestURL());
-        log.warn(ex.getMessage());
-        return getTemplate(request, ex);
-    }
-
+    
     @ExceptionHandler(FindHashTagByTextException.class)
     public ModelAndView handleFindHashTagByTextException(HttpServletRequest request, Exception ex) {
         log.warn("FindHashTagByTextException occured :: URL=" + request.getRequestURL());

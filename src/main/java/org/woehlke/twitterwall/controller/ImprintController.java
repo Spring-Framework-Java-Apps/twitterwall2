@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByScreenNameException;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.process.parts.TwitterApiService;
+import org.woehlke.twitterwall.process.backend.TwitterApiService;
 import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitter;
 
 /**
@@ -65,7 +65,7 @@ public class ImprintController {
             model.addAttribute("user", user);
         } catch (FindUserByScreenNameException e){
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-            User user = persistDataFromTwitter.updateUserProfile(twitterProfile);
+            User user = persistDataFromTwitter.storeUserProfile(twitterProfile);
             model.addAttribute("user", user);
         }
         return "imprint";

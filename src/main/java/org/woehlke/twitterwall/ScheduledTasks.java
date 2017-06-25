@@ -47,7 +47,7 @@ public class ScheduledTasks {
 
     private final static long ZWOELF_STUNDEN = 12 * EINE_STUNDE;
 
-    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = FUENF_MINUTEN;
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = EINE_STUNDE;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER = ZWOELF_STUNDEN;
 
@@ -75,7 +75,6 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE "+msg+" (NOK)");
             }
         }
-        updateUserProfiles();
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)

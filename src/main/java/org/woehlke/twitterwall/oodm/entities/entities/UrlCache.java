@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.common;
+package org.woehlke.twitterwall.oodm.entities.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,9 +7,19 @@ import java.io.Serializable;
  * Created by tw on 23.06.17.
  */
 @Entity
-@Table(name = "url_cache", uniqueConstraints = @UniqueConstraint(columnNames = {"expanded", "url"}))
+@Table(name = "url_cache",
+        uniqueConstraints = { @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
+}, indexes = {
+        @Index(name="idx_url_expanded", columnList="expanded")
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "UrlCache.findByUrl",
+                query = "select t from UrlCache as t where t.url=:url"
+        )
+})
 public class UrlCache implements Serializable, Comparable<UrlCache> {
-
+    
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -19,7 +29,7 @@ public class UrlCache implements Serializable, Comparable<UrlCache> {
     @Column
     private String expanded;
 
-    @Column
+    @Column(nullable = false)
     private String url;
 
     public Long getId() {
@@ -53,15 +63,12 @@ public class UrlCache implements Serializable, Comparable<UrlCache> {
 
         UrlCache urlCache = (UrlCache) o;
 
-        if (!expanded.equals(urlCache.expanded)) return false;
         return url.equals(urlCache.url);
     }
 
     @Override
     public int hashCode() {
-        int result = expanded.hashCode();
-        result = 31 * result + url.hashCode();
-        return result;
+        return url.hashCode();
     }
 
     @Override

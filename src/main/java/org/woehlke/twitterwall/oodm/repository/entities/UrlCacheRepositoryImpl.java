@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.common.UrlCache;
+import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
 
 import javax.persistence.EntityManager;
@@ -15,24 +17,30 @@ import javax.persistence.TypedQuery;
 @Repository
 public class UrlCacheRepositoryImpl implements UrlCacheRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(UrlCacheRepositoryImpl.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public UrlCache persist(UrlCache urlCache) {
         entityManager.persist(urlCache);
+        entityManager.flush();
+        log.info("persisted: "+urlCache.toString());
         return urlCache;
     }
 
     @Override
     public UrlCache findByUrl(String url) {
         try {
-            String SQL = "select t from UrlCache as t where t.url=:url";
-            TypedQuery<UrlCache> query = entityManager.createQuery(SQL, UrlCache.class);
+            String name = "UrlCache.findByUrl";
+            TypedQuery<UrlCache> query = entityManager.createNamedQuery(name, UrlCache.class);
             query.setParameter("url", url);
             UrlCache result = query.getSingleResult();
+            log.info("found: " + result.toString());
             return result;
         } catch (NoResultException e) {
+            log.info("not found: " + url);
             throw new FindUrlCacheByUrlException(e, url);
         }
     }

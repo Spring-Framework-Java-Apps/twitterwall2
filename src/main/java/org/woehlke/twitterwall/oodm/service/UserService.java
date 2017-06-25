@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.service;
 
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.common.OodmService;
 
@@ -28,4 +29,13 @@ public interface UserService extends OodmService {
 
     List<Long> getAllTwitterIds();
 
+    User storeUser(User user);
+
+    User storeUserProcess(User user);
+
+    User transform(TwitterProfile twitterProfile);
+
+    User getEntitiesForUrlDescription(User user);
+
+    User storeUserProfile(TwitterProfile userProfile);
 }

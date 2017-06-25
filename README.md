@@ -19,21 +19,22 @@ Twitterwall with spring:boot for heroku
   - export TWITTER_CONSUMER_SECRET={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN_SECRET={Credentials from your Twitter-Account}
-  - export TWITTER_SEARCH_TERM='#t3cb'
+ - Edit app behaviour
   - export TWITTERWALL_FRONTEND_MAX_RESULTS=60
-  - export TWITTERWALL_APP_NAME='TYPO3 Camp Berlin 2017'
   - export TWITTERWALL_SHOW_USERS_MENU=true
   - export TWITTER_PAGE_SIZE=500
-  - export TWITTER_SEARCH_SINCE_ID={TWITTER STATUS ID}
-  - export TWITTER_SEARCH_MAX_ID={TWITTER STATUS ID}
   - export TWITTER_FETCH_TESTDATA=true
   - export TWITTERWALL_WAIT_FOR_TEST=20000
   - export TWITTERWALL_URL_TEST_DATA_VERBOSE=true
-  - export TWITTERWALL_INFO_WEBPAGE=http://lndw17.de/
-  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS=true
-  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS=true
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS=false
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS=false
   - export TWITTERWALL_SCHEDULER_ALLOW_SEARCH=true
-  - export TWITTERWALL_THEME=lndw17
+- Edit Use Case  
+  - export TWITTER_SEARCH_TERM='#hibernate OR #java OR #TYPO3'
+  - export TWITTERWALL_INFO_WEBPAGE=https://github.com/phasenraum2010/twitterwall2
+  - export TWITTERWALL_THEME=typo3
+  - export TWITTERWALL_APP_NAME='Twitterwall'
+  
 - run with: mvn clean spring-boot:run
 
 

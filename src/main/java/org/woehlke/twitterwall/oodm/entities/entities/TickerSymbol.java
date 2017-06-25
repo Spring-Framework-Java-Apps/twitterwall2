@@ -10,7 +10,17 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "tickersymbol", uniqueConstraints = @UniqueConstraint(columnNames = {"ticker_symbol", "url"}))
+@Table(name = "tickersymbol", uniqueConstraints = {
+        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url"})
+}, indexes = {
+        @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "TickerSymbol.findByTickerSymbolAndUrl",
+                query = "select t from TickerSymbol as t where t.tickerSymbol=:tickerSymbol and t.url=:url"
+        )
+})
 public class TickerSymbol extends AbstractTwitterObject implements DomainObject, Comparable<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;

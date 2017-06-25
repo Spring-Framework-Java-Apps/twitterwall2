@@ -30,5 +30,11 @@ public interface TweetService extends OodmService {
     List<Tweet> getTweetsForUser(User user);
 
     List<Long> getAllTwitterIds();
+
+    Tweet store(Tweet tweet);
+
+    Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet);
+
+    //Tweet storeTweet(Tweet tweet);
     
 }

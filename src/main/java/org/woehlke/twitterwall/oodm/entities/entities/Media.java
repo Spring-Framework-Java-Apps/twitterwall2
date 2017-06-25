@@ -10,7 +10,26 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "media", uniqueConstraints = @UniqueConstraint(columnNames = {"display", "expanded", "media_http", "media_https", "media_type"}))
+@Table(name = "media", uniqueConstraints = {
+        @UniqueConstraint(name="unique_media_url", columnNames = {"url"}),
+        @UniqueConstraint(name="unique_media_id_twitter", columnNames = {"id_twitter"})
+}, indexes = {
+        @Index(name="idx_media_expanded", columnList="expanded"),
+        @Index(name="idx_media_display", columnList="display") ,
+        @Index(name="idx_media_media_http", columnList="media_http"),
+        @Index(name="idx_media_media_https", columnList="media_https"),
+        @Index(name="idx_media_media_type", columnList="media_type")
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "Media.findByIdTwitter",
+                query = "select t from Media as t where t.idTwitter=:idTwitter"
+        ),
+        @NamedQuery(
+                name =  "Media.findByFields",
+                query = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType"
+        )
+})
 public class Media extends AbstractTwitterObject implements DomainObject, Comparable<Media> {
 
     private static final long serialVersionUID = 1L;
@@ -19,7 +38,7 @@ public class Media extends AbstractTwitterObject implements DomainObject, Compar
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
     @Column(name = "media_http")

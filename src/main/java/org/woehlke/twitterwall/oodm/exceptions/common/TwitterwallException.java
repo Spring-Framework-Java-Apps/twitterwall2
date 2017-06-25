@@ -16,9 +16,9 @@ public abstract class TwitterwallException extends RuntimeException {
 
     protected TwitterwallException(String urlSrc) {
         super(urlSrc);
-        log.debug("......................................................");
+        log.info("......................................................");
         log.info(urlSrc);
-        log.debug("......................................................");
+        log.info("......................................................");
     }
 
     protected TwitterwallException(String msg, Exception ex) {
@@ -52,7 +52,7 @@ public abstract class TwitterwallException extends RuntimeException {
     }
 
     private void writeLog(String msg, Exception ex){
-        log.debug("......................................................");
+        log.info("......................................................");
         log.info(msg + ex.getMessage());
         writeLogStracktrace(msg, ex);
     }
@@ -60,14 +60,14 @@ public abstract class TwitterwallException extends RuntimeException {
     private void writeLogStracktrace(String msg, Exception ex) {
         if (log.isDebugEnabled()) {
         for (StackTraceElement stackTraceElement : ex.getStackTrace()) {
-            log.debug(msg + "------------------------------------------------------");
-            log.debug(msg + "ClassName:         " + stackTraceElement.getClassName());
-            log.debug(msg + "MethodName:        " + stackTraceElement.getMethodName());
-            log.debug(msg + "FileName:          " + stackTraceElement.getFileName());
-            log.debug(msg + "LineNumber:        " + stackTraceElement.getLineNumber());
-            log.debug(msg + "is a native method:" + stackTraceElement.isNativeMethod());
+            log.info(msg + "------------------------------------------------------");
+            log.info(msg + "ClassName:         " + stackTraceElement.getClassName());
+            log.info(msg + "MethodName:        " + stackTraceElement.getMethodName());
+            log.info(msg + "FileName:          " + stackTraceElement.getFileName());
+            log.info(msg + "LineNumber:        " + stackTraceElement.getLineNumber());
+            log.info(msg + "is a native method:" + stackTraceElement.isNativeMethod());
         }
-        log.debug(msg + "......................................................");
+        log.info(msg + "......................................................");
         }
     }
 }

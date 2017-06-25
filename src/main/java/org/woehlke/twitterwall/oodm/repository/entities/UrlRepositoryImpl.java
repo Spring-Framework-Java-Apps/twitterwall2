@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.repository.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByDisplayExpandedUrlException;
@@ -16,31 +18,42 @@ import javax.persistence.TypedQuery;
 @Repository
 public class UrlRepositoryImpl implements UrlRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(UrlCacheRepositoryImpl.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public Url persist(Url url) {
         entityManager.persist(url);
+        entityManager.flush();
+        log.info("persisted: "+url.toString());
         return url;
     }
 
     @Override
     public Url update(Url url) {
-        return entityManager.merge(url);
+        url = entityManager.merge(url);
+        entityManager.flush();
+        log.info("merged: "+url.toString());
+        return url;
     }
 
     @Override
     public Url findByDisplayExpandedUrl(String display, String expanded, String url) {
         try {
-            String SQL = "select t from Url as t where t.display=:display and t.expanded=:expanded and t.url=:url";
-            TypedQuery<Url> query = entityManager.createQuery(SQL, Url.class);
+            String name = "Url.findByDisplayExpandedUrl";
+            TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
             query.setParameter("display", display);
             query.setParameter("expanded", expanded);
             query.setParameter("url", url);
             Url result = query.getSingleResult();
+            log.info("found: " + result.toString());
             return result;
         } catch (NoResultException e) {
+            log.info("not found: " + display);
+            log.info("not found: " + expanded);
+            log.info("not found: " + url);
             throw new FindUrlByDisplayExpandedUrlException(e, display, expanded, url);
         }
     }
@@ -48,12 +61,14 @@ public class UrlRepositoryImpl implements UrlRepository {
     @Override
     public Url findByUrl(String url) {
         try {
-            String SQL = "select t from Url as t where t.url=:url";
-            TypedQuery<Url> query = entityManager.createQuery(SQL, Url.class);
+            String name = "Url.findByUrl";
+            TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
             query.setParameter("url", url);
             Url result = query.getSingleResult();
+            log.info("found: " + result.toString());
             return result;
         } catch (NoResultException e) {
+            log.info("not found: " + url);
             throw new FindUrlByUrlException(e, url);
         }
     }

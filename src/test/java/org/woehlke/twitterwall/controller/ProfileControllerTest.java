@@ -19,14 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.process.helper.TestHelperService;
+import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
+import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitterTest;
 
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacade.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
 
 /**
  * Created by tw on 19.06.17.
@@ -54,7 +55,10 @@ public class ProfileControllerTest {
     private ProfileController controller;
 
     @Autowired
-    private TestHelperService testHelperService;
+    private TweetApiServiceTest tweetApiServiceTest;
+
+    @Autowired
+    private PersistDataFromTwitterTest persistDataFromTwitterTest;
     
     @Test
     public void controllerIsPresentTest() throws Exception {
@@ -65,7 +69,8 @@ public class ProfileControllerTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        testHelperService.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
+        tweetApiServiceTest.waitForImport();
+        persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
         Assert.assertTrue(true);
     }
 

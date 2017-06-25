@@ -24,14 +24,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByIdTwitter(long idTwitter) {
         try {
-            String SQL = "select t from User as t where t.idTwitter=:idTwitter";
-            TypedQuery<User> query = entityManager.createQuery(SQL, User.class);
+            String name = "User.findByIdTwitter";
+            TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("idTwitter", idTwitter);
             User result = query.getSingleResult();
-            log.debug("found: " + result.getIdTwitter());
+            log.info("found: " + idTwitter);
             return result;
         } catch (NoResultException e) {
-            log.debug("not found: " + idTwitter);
+            log.info("not found: " + idTwitter);
             throw new FindUserByIdTwitterException(e, idTwitter);
         }
     }
@@ -54,51 +54,51 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        String SQL = "select t from User as t";
-        TypedQuery<User> query = entityManager.createQuery(SQL, User.class);
+        String name = "User.getAll";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         return query.getResultList();
     }
 
     @Override
     public User findByScreenName(String screenName) {
         try {
-            String SQL = "select t from User as t where t.screenName=:screenName";
-            TypedQuery<User> query = entityManager.createQuery(SQL, User.class);
+            String name = "User.findByScreenName";
+            TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("screenName", screenName);
             User result = query.getSingleResult();
-            log.debug("found: " + result.getIdTwitter());
+            log.info("found: " + screenName);
             return result;
         } catch (NoResultException e) {
-            log.debug("not found: " + screenName);
+            log.info("not found: " + screenName);
             throw new FindUserByScreenNameException(e, screenName);
         }
     }
 
     @Override
     public List<User> getTweetingUsers() {
-        String SQL = "select t from User as t where t.tweeting=true";
-        TypedQuery<User> query = entityManager.createQuery(SQL, User.class);
+        String name = "User.getTweetingUsers";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         return query.getResultList();
     }
 
     @Override
     public List<User> getNotYetFriendUsers() {
-        String SQL = "select t from User as t where t.following=false";
-        TypedQuery<User> query = entityManager.createQuery(SQL, User.class);
+        String name = "User.getNotYetFriendUsers";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         return query.getResultList();
     }
 
     @Override
     public List<String> getAllDescriptions() {
-        String SQL = "select t.description from User as t where t.description is not null";
-        TypedQuery<String> query = entityManager.createQuery(SQL, String.class);
+        String name= "User.getAllDescriptions";
+        TypedQuery<String> query = entityManager.createNamedQuery(name, String.class);
         return query.getResultList();
     }
 
     @Override
     public List<Long> getAllTwitterIds() {
-        String SQL = "select t.idTwitter from User as t";
-        TypedQuery<Long> query = entityManager.createQuery(SQL, Long.class);
+        String name ="User.getAllTwitterIds";
+        TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         return query.getResultList();
     }
 }

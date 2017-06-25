@@ -3,402 +3,143 @@ package org.woehlke.twitterwall.process.tasks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.*;
-import org.woehlke.twitterwall.oodm.service.*;
+import org.woehlke.twitterwall.oodm.service.TweetService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
-import org.woehlke.twitterwall.process.parts.UserApiService;
+import org.woehlke.twitterwall.process.backend.TwitterApiService;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 
 /**
  * Created by tw on 11.06.17.
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
+public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,PersistDataFromTwitterTest {
 
     private static final Logger log = LoggerFactory.getLogger(PersistDataFromTwitterImpl.class);
+    
+    private final UserService userService;
+    
+    private final TwitterApiService twitterApiService;
 
     private final TweetService tweetService;
 
-    private final UserService userService;
-
-    private final EntitiesService entitiesService;
-
-    private final HashTagService hashTagService;
+    private final MentionService mentionService;
 
     private final MediaService mediaService;
 
-    private final MentionService mentionService;
-
-    private final TickerSymbolService tickerSymbolService;
+    private final HashTagService hashTagService;
 
     private final UrlService urlService;
 
-    private final UserApiService userApiService;
+    private final TickerSymbolService tickerSymbolService;
+
+    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    private long millisToWaitForFetchTweetsFromTwitterSearch;
+
+    @Value("${twitterwall.twitter.fetchTestData}")
+    private boolean fetchTestData;
 
     @Autowired
-    public PersistDataFromTwitterImpl(TweetService tweetService, UserService userService, EntitiesService entitiesService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService, UserApiService userApiService) {
-        this.tweetService = tweetService;
+    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService) {
         this.userService = userService;
-        this.entitiesService = entitiesService;
-        this.hashTagService = hashTagService;
-        this.mediaService = mediaService;
+        this.twitterApiService = twitterApiService;
+        this.tweetService = tweetService;
         this.mentionService = mentionService;
-        this.tickerSymbolService = tickerSymbolService;
+        this.mediaService = mediaService;
+        this.hashTagService = hashTagService;
         this.urlService = urlService;
-        this.userApiService = userApiService;
+        this.tickerSymbolService = tickerSymbolService;
     }
 
     @Override
-    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweet) {
-        Tweet myTweet = transformTweet(tweet);
-        myTweet = storeOneTweetPerform(myTweet);
-        return myTweet;
+    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet) {
+        Tweet tweet = tweetService.transformTweet(myTweet);
+        tweet = this.storeOneTweetPerform(tweet);
+        return tweet;
     }
 
-    private Tweet storeOneTweetPerform(Tweet tweet) {
+    /** private Method because of recursive Method Call in this Method **/
+    private Tweet storeOneTweetPerform(Tweet tweet){
         /** Retweeted Tweet */
         Tweet retweetedStatus = tweet.getRetweetedStatus();
         if (retweetedStatus != null) {
+            /** private Method because of recursive Method Call in this Method **/
             retweetedStatus = this.storeOneTweetPerform(retweetedStatus);
             tweet.setRetweetedStatus(retweetedStatus);
         }
         /** The User */
         User user = tweet.getUser();
-        user = this.storeOneUser(user);
+        user = userService.storeUserProcess(user);
         tweet.setUser(user);
+        /** The Entities */
+        Set<Url> urls = new LinkedHashSet<>();
+        Set<HashTag> tags = new LinkedHashSet<HashTag>();
+        Set<Mention> mentions = new LinkedHashSet<Mention>();
+        Set<Media> media = new LinkedHashSet<Media>();
+        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
+        for (TickerSymbol tickerSymbol : tweet.getTickerSymbols()) {
+            tickerSymbols.add(tickerSymbolService.storeTickerSymbol(tickerSymbol));
+        }
+        for (Mention mention : tweet.getMentions()) {
+            mentions.add(mentionService.store(mention));
+        }
+        for (Media medium : tweet.getMedia()) {
+            media.add(mediaService.store(medium));
+        }
+        for (HashTag hashTag : tweet.getTags()) {
+            tags.add(hashTagService.store(hashTag));
+        }
+        for (Url url : tweet.getUrls()) {
+            urls.add(urlService.getPersistentUrlFor(url.getUrl()));
+        }
+        tweet.setUrls(urls);
+        tweet.setTags(tags);
+        tweet.setMentions(mentions);
+        tweet.setMedia(media);
+        tweet.setTickerSymbols(tickerSymbols);
         /** Tweet itself */
-        Entities myEntities = tweet.getEntities();
-        myEntities = this.storeEntities(myEntities);
-        tweet.setEntities(myEntities);
-        tweet = this.storeOneTweetItself(tweet);
+        tweet = tweetService.store(tweet);
         return tweet;
     }
-
-    private Tweet storeOneTweetItself(Tweet tweet) {
-        try {
-            Tweet tweetPersistent = this.tweetService.findByIdTwitter(tweet.getIdTwitter());
-            tweet.setId(tweetPersistent.getId());
-            return this.tweetService.update(tweet);
-        } catch (FindTweetByIdTwitterException e) {
-            return this.tweetService.persist(tweet);
-        }
-    }
-
-    private User storeOneUser(User user) {
-        if (user == null) {
-            return null;
-        }
-        Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        for (Url myUrl : user.getUrls()) {
-            urls.add(storeUrl(myUrl));
-        }
-        for (HashTag hashTag : user.getTags()) {
-            hashTags.add(storeHashTag(hashTag));
-        }
-        for (Mention mention : user.getMentions()) {
-            mentions.add(storeMention(mention));
-        }
-        user.setUrls(urls);
-        user.setTags(hashTags);
-        user.setMentions(mentions);
-        try {
-            User userPers = this.userService.findByIdTwitter(user.getIdTwitter());
-            user.setId(userPers.getId());
-            user.setFriend(userPers.isFriend());
-            user.setFollower(userPers.isFollower());
-            return this.userService.update(user);
-        } catch (FindUserByIdTwitterException e) {
-            return this.userService.persist(user);
-        }
-    }
-
-    private Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet) {
-        if (tweet != null) {
-            Tweet retweetedStatus = transformTweet(tweet.getRetweetedStatus());
-            long idTwitter = tweet.getId();
-            String idStr = tweet.getIdStr();
-            String text = tweet.getText();
-            Date createdAt = tweet.getCreatedAt();
-            String fromUser = tweet.getFromUser();
-            String profileImageUrl = tweet.getProfileImageUrl();
-            Long toUserId = tweet.getToUserId();
-            long fromUserId = tweet.getFromUserId();
-            String languageCode = tweet.getLanguageCode();
-            String source = tweet.getSource();
-            Tweet myTweet = new Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
-            myTweet.setFavoriteCount(tweet.getFavoriteCount());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToScreenName(tweet.getInReplyToScreenName());
-            myTweet.setInReplyToUserId(tweet.getInReplyToUserId());
-            myTweet.setLanguageCode(tweet.getLanguageCode());
-            myTweet.setRetweetCount(tweet.getRetweetCount());
-            myTweet.setRetweeted(tweet.isRetweeted());
-            myTweet.setSource(tweet.getSource());
-            myTweet.setFromUser(tweet.getFromUser());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToStatusId(tweet.getInReplyToStatusId());
-            myTweet.setRetweetedStatus(retweetedStatus);
-            TwitterProfile twitterProfile = tweet.getUser();
-            User user = transformTwitterProfile(twitterProfile);
-            myTweet.setUser(user);
-            Entities myEntities = transformTwitterEntities(tweet.getEntities(), tweet.getId());
-            myTweet.setEntities(myEntities);
-            return myTweet;
-        } else {
-            return null;
-        }
-    }
-
-    private User transformTwitterProfile(TwitterProfile twitterProfile) {
-        long idTwitter = twitterProfile.getId();
-        String screenName = twitterProfile.getScreenName();
-        String name = twitterProfile.getName();
-        String url = twitterProfile.getUrl();
-        if (url == null || twitterProfile.getUrl().isEmpty()) {
-            url = null;
-        }
-        String profileImageUrl = twitterProfile.getProfileImageUrl();
-        String description = twitterProfile.getDescription();
-        if (twitterProfile.getDescription().isEmpty()) {
-            description = null;
-        }
-        String location = twitterProfile.getLocation();
-        if (twitterProfile.getLocation().isEmpty()) {
-            location = null;
-        }
-        Date createdDate = twitterProfile.getCreatedDate();
-        User user = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
-        user.setTweeting(true);
-        user.setLanguage(twitterProfile.getLanguage());
-        user.setStatusesCount(twitterProfile.getStatusesCount());
-        user.setFriendsCount(twitterProfile.getFriendsCount());
-        user.setFollowersCount(twitterProfile.getFollowersCount());
-        user.setFavoritesCount(twitterProfile.getFavoritesCount());
-        user.setListedCount(twitterProfile.getListedCount());
-        user.setFollowing(twitterProfile.isFollowing());
-        user.setFollowRequestSent(twitterProfile.isFollowRequestSent());
-        user.setProtected(twitterProfile.isProtected());
-        user.setNotificationsEnabled(twitterProfile.isNotificationsEnabled());
-        user.setVerified(twitterProfile.isVerified());
-        user.setGeoEnabled(twitterProfile.isGeoEnabled());
-        user.setContributorsEnabled(twitterProfile.isContributorsEnabled());
-        user.setTranslator(twitterProfile.isTranslator());
-        user.setTimeZone(twitterProfile.getTimeZone());
-        user.setUtcOffset(twitterProfile.getUtcOffset());
-        user.setSidebarBorderColor(twitterProfile.getSidebarBorderColor());
-        user.setSidebarFillColor(twitterProfile.getSidebarFillColor());
-        user.setBackgroundColor(twitterProfile.getBackgroundColor());
-        user.setUseBackgroundImage(twitterProfile.useBackgroundImage());
-        user.setBackgroundImageUrl(twitterProfile.getBackgroundImageUrl());
-        user.setBackgroundImageTiled(twitterProfile.isBackgroundImageTiled());
-        user.setTextColor(twitterProfile.getTextColor());
-        user.setLinkColor(twitterProfile.getLinkColor());
-        user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
-        user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
-        user = this.userApiService.getEntitiesForUrlDescription(user);
+    
+    @Override
+    public User storeUserProfile(TwitterProfile userProfile) {
+        User user = userService.storeUserProfile(userProfile);
         return user;
     }
 
     @Override
-    public User updateUserProfile(TwitterProfile userProfile) {
-        User user = transformTwitterProfile(userProfile);
-        return storeOneUser(user);
-    }
-
-    private Entities transformTwitterEntities(org.springframework.social.twitter.api.Entities entities, long idTwitterFromTweet) {
-        Set<Url> urls = transformTwitterEntitiesUrls(entities.getUrls());
-        Set<HashTag> tags = transformTwitterEntitiesHashTags(entities.getHashTags());
-        Set<Mention> mentions = transformTwitterEntitiesMentions(entities.getMentions());
-        Set<Media> media = transformTwitterEntitiesMedia(entities.getMedia());
-        Set<TickerSymbol> tickerSymbols = transformTwitterEntitiesTickerSymbols(entities.getTickerSymbols());
-        Entities myEntities = new Entities(urls, tags, mentions, media, idTwitterFromTweet, tickerSymbols);
-        return myEntities;
-    }
-
-    private Set<TickerSymbol> transformTwitterEntitiesTickerSymbols(List<TickerSymbolEntity> tickerSymbols) {
-        Set<TickerSymbol> myTickerSymbolEntities = new LinkedHashSet<TickerSymbol>();
-        for (TickerSymbolEntity tickerSymbol : tickerSymbols) {
-            String tickerSymbolString = tickerSymbol.getTickerSymbol();
-            String url = tickerSymbol.getUrl();
-            int[] indices = tickerSymbol.getIndices();
-            TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url, indices);
-            myTickerSymbolEntities.add(myTickerSymbolEntity);
-        }
-        return myTickerSymbolEntities;
-    }
-
-    private Set<Media> transformTwitterEntitiesMedia(List<MediaEntity> media) {
-        Set<Media> myMediaEntities = new LinkedHashSet<Media>();
-        for (MediaEntity medium : media) {
-            long idTwitter = medium.getId();
-            String mediaHttp = medium.getMediaUrl();
-            String mediaHttps = medium.getMediaSecureUrl();
-            String url = medium.getUrl();
-            String display = medium.getDisplayUrl();
-            String expanded = medium.getExpandedUrl();
-            String type = medium.getType();
-            int[] indices = medium.getIndices();
-            Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, indices);
-            myMediaEntities.add(myMediaEntity);
-        }
-        return myMediaEntities;
-    }
-
-    private Set<Mention> transformTwitterEntitiesMentions(List<MentionEntity> mentions) {
-        Set<Mention> myMentionEntities = new LinkedHashSet<Mention>();
-        for (MentionEntity mention : mentions) {
-            long idTwitter = mention.getId();
-            String screenName = mention.getScreenName();
-            String name = mention.getName();
-            int[] indices = mention.getIndices();
-            Mention myMentionEntity = new Mention(idTwitter, screenName, name, indices);
-            myMentionEntities.add(myMentionEntity);
-        }
-        return myMentionEntities;
-    }
-
-    private Set<HashTag> transformTwitterEntitiesHashTags(List<HashTagEntity> hashTags) {
-        Set<HashTag> myHashTagEntities = new LinkedHashSet<>();
-        for (HashTagEntity hashTag : hashTags) {
-            String text = hashTag.getText();
-            int[] indices = hashTag.getIndices();
-            HashTag myHashTagEntity = new HashTag(text, indices);
-            myHashTagEntities.add(myHashTagEntity);
-        }
-        return myHashTagEntities;
-    }
-
-    private Set<Url> transformTwitterEntitiesUrls(List<UrlEntity> urls) {
-        Set<Url> myUrls = new LinkedHashSet<>();
-        for (UrlEntity url : urls) {
-            String display = url.getDisplayUrl();
-            String expanded = url.getExpandedUrl();
-            String urlStr = url.getUrl();
-            int[] indices = url.getIndices();
-            Url myUrlEntity = new Url(display, expanded, urlStr, indices);
-            myUrls.add(myUrlEntity);
-        }
-        return myUrls;
-    }
-
-
-    private TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
+    public void fetchTweetsFromTwitterSearchTest(long[] idTwitterToFetch) {
+        log.info("-----exampleTest-------------------------------------------");
+        log.info("Hello, Testing-World.");
+        log.info("We are waiting for fetchTweetsFromTwitterSearch.");
+        log.info("number of tweets: " + tweetService.count());
         try {
-            TickerSymbol tickerSymbolPers = tickerSymbolService.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
-            tickerSymbolPers.setUrl(tickerSymbol.getUrl());
-            tickerSymbolPers.setIndices(tickerSymbol.getIndices());
-            tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
-            return tickerSymbolService.update(tickerSymbolPers);
-
-        } catch (FindTickerSymbolByTickerSymbolAndUrlException e) {
-            return tickerSymbolService.store(tickerSymbol);
+            Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+            log.info("number of tweets: " + tweetService.count());
+            if (!fetchTestData) {
+                for (long id : idTwitterToFetch) {
+                    org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
+                    this.storeOneTweet(twitterTweet);
+                }
+            }
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage());
         }
+        log.info("number of tweets: " + tweetService.count());
+        log.info("------------------------------------------------");
     }
-
-    private Mention storeMention(Mention mention) {
-        try {
-            Mention mentionPers = mentionService.findByScreenNameAndName(mention);
-            mentionPers.setIndices(mention.getIndices());
-            mentionPers.setIdTwitter(mention.getIdTwitter());
-            mentionPers.setName(mention.getName());
-            mentionPers.setScreenName(mention.getScreenName());
-            return mentionService.update(mentionPers);
-        } catch (FindMentionByScreenNameAndNameException e) {
-            return mentionService.store(mention);
-        }
-    }
-
-    private Media storeMedia(Media media) {
-        try {
-            Media mediaPers = mediaService.findByFields(media);
-            mediaPers.setDisplay(media.getDisplay());
-            mediaPers.setExpanded(media.getExpanded());
-            mediaPers.setIdTwitter(media.getIdTwitter());
-            mediaPers.setIndices(media.getIndices());
-            mediaPers.setMediaHttp(media.getMediaHttp());
-            mediaPers.setMediaHttps(media.getMediaHttps());
-            mediaPers.setMediaType(media.getMediaType());
-            mediaPers.setUrl(media.getUrl());
-            return mediaService.update(mediaPers);
-        } catch (FindMediaByFieldsExceptionException e) {
-            return mediaService.store(media);
-        }
-    }
-
-    private Url storeUrl(Url url) {
-        try {
-            Url urlPers = urlService.findByDisplayExpandedUrl(url.getDisplay(), url.getExpanded(), url.getUrl());
-            urlPers.setIndices(url.getIndices());
-            urlPers.setDisplay(url.getDisplay());
-            urlPers.setExpanded(url.getExpanded());
-            urlPers.setUrl(url.getUrl());
-            return urlService.update(urlPers);
-        } catch (FindUrlByDisplayExpandedUrlException e) {
-            return urlService.store(url);
-        }
-    }
-
-    private HashTag storeHashTag(HashTag hashTag) {
-        try {
-            HashTag tagPers = hashTagService.findByText(hashTag.getText());
-            tagPers.setText(hashTag.getText());
-            tagPers.setIndices(hashTag.getIndices());
-            return hashTagService.update(tagPers);
-        } catch (FindHashTagByTextException e) {
-            return hashTagService.store(hashTag);
-        }
-    }
-
-    private Entities storeEntities(Entities myEntities) {
-        Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> tags = new LinkedHashSet<HashTag>();
-        Set<Mention> mentions = new LinkedHashSet<Mention>();
-        Set<Media> medias = new LinkedHashSet<Media>();
-        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
-        for (TickerSymbol tickerSymbol : myEntities.getTickerSymbols()) {
-            tickerSymbols.add(storeTickerSymbol(tickerSymbol));
-        }
-        for (Mention mention : myEntities.getMentions()) {
-            mentions.add(storeMention(mention));
-        }
-        for (Media media : myEntities.getMedia()) {
-            medias.add(storeMedia(media));
-        }
-        for (HashTag hashTag : myEntities.getTags()) {
-            tags.add(storeHashTag(hashTag));
-        }
-        for (Url url : myEntities.getUrls()) {
-            urls.add(storeUrl(url));
-        }
-        try {
-            Entities myEntitiesPers = entitiesService.findByIdTwitterFromTweet(myEntities.getIdTwitterFromTweet());
-            myEntitiesPers.setMedia(medias);
-            myEntitiesPers.setMentions(mentions);
-            myEntitiesPers.setTags(tags);
-            myEntitiesPers.setTickerSymbols(tickerSymbols);
-            myEntitiesPers.setUrls(urls);
-            myEntitiesPers = entitiesService.update(myEntitiesPers);
-            return myEntitiesPers;
-        } catch (FindEntitiesByIdTwitterFromTweetException e) {
-            myEntities.setMedia(medias);
-            myEntities.setMentions(mentions);
-            myEntities.setTags(tags);
-            myEntities.setTickerSymbols(tickerSymbols);
-            myEntities.setUrls(urls);
-            myEntities = entitiesService.store(myEntities);
-            return myEntities;
-        }
-    }
+    
 }

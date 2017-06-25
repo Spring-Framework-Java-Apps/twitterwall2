@@ -12,7 +12,19 @@ import java.util.regex.Pattern;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "hashtag", uniqueConstraints = @UniqueConstraint(columnNames = {"text"}))
+@Table(name = "hashtag", uniqueConstraints = {
+        @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "HashTag.findByText",
+                query = "select t from HashTag as t where t.text=:text"
+        ),
+        @NamedQuery(
+                name = "HashTag.getAll",
+                query = "select h from HashTag as h"
+        )
+})
 public class HashTag extends AbstractTwitterObject implements DomainObject, Comparable<HashTag> {
 
     private static final long serialVersionUID = 1L;
@@ -21,10 +33,10 @@ public class HashTag extends AbstractTwitterObject implements DomainObject, Comp
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public final static String HASHTAG_TEXT_PATTERN = "^[öÖäÄüÜßa-zA-Z0-9_]{1,139}$";
+    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
         Matcher m = p.matcher(hashtagText);
         return m.matches();
     }

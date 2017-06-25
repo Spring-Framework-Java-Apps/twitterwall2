@@ -10,9 +10,24 @@ import java.io.Serializable;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "url", uniqueConstraints = @UniqueConstraint(columnNames = {"display", "expanded", "url"}))
+@Table(name = "url", uniqueConstraints = {
+        @UniqueConstraint(name="unique_url", columnNames = {"url"})
+}, indexes = {
+        @Index(name="idx_url_expanded", columnList="expanded"),
+        @Index(name="idx_url_display", columnList="display")
+})
+@NamedQueries({
+        @NamedQuery(
+                name="Url.findByDisplayExpandedUrl",
+                query="select t from Url as t where t.display=:display and t.expanded=:expanded and t.url=:url"
+        ),
+        @NamedQuery(
+                name="Url.findByUrl",
+                query="select t from Url as t where t.url=:url"
+        )
+})
 public class Url extends AbstractTwitterObject implements DomainObject, Comparable<Url> {
-
+    
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -25,7 +40,9 @@ public class Url extends AbstractTwitterObject implements DomainObject, Comparab
     @Column
     private String expanded;
 
-    @Column
+    public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
+
+    @Column(nullable = false)
     private String url;
 
     @Transient
@@ -93,23 +110,19 @@ public class Url extends AbstractTwitterObject implements DomainObject, Comparab
 
         Url url1 = (Url) o;
 
-        if (display != null ? !display.equals(url1.display) : url1.display != null) return false;
-        if (expanded != null ? !expanded.equals(url1.expanded) : url1.expanded != null) return false;
-        return url != null ? url.equals(url1.url) : url1.url == null;
+        return url.equals(url1.url);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (display != null ? display.hashCode() : 0);
-        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + url.hashCode();
         return result;
     }
 
     @Override
     public int compareTo(Url other) {
-        return display.compareTo(other.getDisplay());
+        return url.compareTo(other.getUrl());
     }
 
     @Override

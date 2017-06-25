@@ -29,14 +29,14 @@ public class TweetRepositoryImpl implements TweetRepository {
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
         try {
-            String SQL = "select t from Tweet as t where t.idTwitter=:idTwitter";
-            TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
+            String name = "Tweet.findByIdTwitter";
+            TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
             query.setParameter("idTwitter", idTwitter);
             Tweet result = query.getSingleResult();
-            log.debug("found: " + result.getIdTwitter());
+            log.info("found: " + idTwitter);
             return result;
         } catch (NoResultException e) {
-            log.debug("not found: " + idTwitter);
+            log.info("not found: " + idTwitter);
             throw new FindTweetByIdTwitterException(e, idTwitter);
         }
     }
@@ -61,48 +61,48 @@ public class TweetRepositoryImpl implements TweetRepository {
 
     @Override
     public List<Tweet> getLatestTweets() {
-        String SQL = "select t from Tweet as t order by t.createdAt DESC";
-        TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
+        String name = "Tweet.getLatestTweets";
+        TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setMaxResults(frontendMaxResults);
         return query.getResultList();
     }
 
     @Override
     public List<Tweet> getTweetsForHashTag(String hashtagText) {
-        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC";
-        TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
+        String name = "Tweet.getTweetsForHashTag";
+        TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("hashtagText", hashtagText);
         return query.getResultList();
     }
 
     @Override
     public long countTweetsForHashTag(String hashtagText) {
-        String SQL = "select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText";
-        TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
+        String name = "Tweet.countTweetsForHashTag";
+        TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("hashtagText", hashtagText);
         return this.getTweetsForHashTag(hashtagText).size();
     }
 
     @Override
     public long count() {
-        String SQL = "select count(t) from Tweet as t";
-        TypedQuery<Long> query = entityManager.createQuery(SQL, Long.class);
+        String name = "Tweet.count";
+        TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         long count = query.getSingleResult();
         return count;
     }
 
     @Override
     public List<Tweet> getTweetsForUser(User user) {
-        String SQL = "select t from Tweet as t WHERE t.user=:user";
-        TypedQuery<Tweet> query = entityManager.createQuery(SQL, Tweet.class);
+        String name = "Tweet.getTweetsForUser";
+        TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("user", user);
         return query.getResultList();
     }
 
     @Override
     public List<Long> getAllTwitterIds() {
-        String SQL = "select t.idTwitter from Tweet as t";
-        TypedQuery<Long> query = entityManager.createQuery(SQL, Long.class);
+        String name = "Tweet.getAllTwitterIds";
+        TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         return query.getResultList();
     }
 }

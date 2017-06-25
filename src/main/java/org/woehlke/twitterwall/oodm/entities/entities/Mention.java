@@ -1,19 +1,33 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
 @Table(name = "mention", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id_twitter"}),
-        @UniqueConstraint(columnNames = {"screen_name", "name"}),
-        @UniqueConstraint(columnNames = {"id_twitter", "screen_name", "name"})
+        @UniqueConstraint(name="unique_mention_screen_name", columnNames = {"screen_name"}),
+        @UniqueConstraint(name="unique_mention_id_twitter", columnNames = {"id_twitter"})
+}, indexes = {
+        @Index(name="idx_mention_name", columnList="name")
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "Mention.findByIdTwitter",
+                query = "select t from Mention as t where t.idTwitter=:idTwitter"
+        ),
+        @NamedQuery(
+                name =  "Mention.findByScreenNameAndName",
+                query = "select t from Mention as t where t.screenName=:screenName and t.name=:name"
+        )
 })
 public class Mention extends AbstractTwitterObject implements DomainObject, Comparable<Mention> {
 
@@ -25,6 +39,12 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
 
     @Column(name = "id_twitter")
     private long idTwitter;
+
+    public static boolean isValidScreenName(String screenName){
+        Pattern p = Pattern.compile("^"+User.SCREEN_NAME_PATTERN+"$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
 
     @Column(name = "screen_name")
     private String screenName;

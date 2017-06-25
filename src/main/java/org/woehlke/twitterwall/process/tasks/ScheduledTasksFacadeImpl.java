@@ -8,6 +8,8 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -17,10 +19,8 @@ import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
-import org.woehlke.twitterwall.process.parts.TwitterApiService;
-import org.woehlke.twitterwall.process.parts.UrlApiService;
+import org.woehlke.twitterwall.process.backend.TwitterApiService;
 
-import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +29,8 @@ import java.util.List;
  * Created by tw on 19.06.17.
  */
 @Service
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
-public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledTasksFacadeTest {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasksFacadeImpl.class);
 
@@ -43,11 +43,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, UrlApiService urlApiService, UrlService urlService, TweetService tweetService) {
+    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, UrlService urlService, TweetService tweetService) {
         this.persistDataFromTwitter = persistDataFromTwitter;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
-        this.urlApiService = urlApiService;
         this.urlService = urlService;
         this.tweetService = tweetService;
     }
@@ -58,31 +57,31 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     private final UserService userService;
 
-    private final UrlApiService urlApiService;
-
     private final UrlService urlService;
 
     private final TweetService tweetService;
 
     @Override
     public void fetchTweetsFromTwitterSearch() {
-        String msg = "fetch Tweets from Twitter:";
-        log.debug("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
+        String msg = "fetch Tweets from Twitter: ";
+        log.info("fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         try {
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
             int loopId = 0;
             for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
                 loopId++;
-                storeOneTweet(tweet, loopId);
+                log.info(msg+loopId);
+                this.persistDataFromTwitter.storeOneTweet(tweet);
             }
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
             try {
                 if (fetchTestData) {
                     for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
                         try {
                             Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                             loopId++;
-                            storeOneTweet(tweet, loopId);
+                            log.info(msg+loopId);
+                            this.persistDataFromTwitter.storeOneTweet(tweet);
                         } catch (TwitterApiException ex){
                             log.warn(ex.getMessage());
                         }
@@ -91,30 +90,35 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
             } catch (RateLimitExceededException e){
                 log.info(e.getMessage());
             }
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
+            /*
             try {
                 loopId = 0;
                 List<User> userList = userService.getAll();
                 for (User user : userList) {
-                    try {
-                        Url url = urlService.findByUrl(user.getUrl());
-                        loopId++;
-                        log.debug("Id: " + loopId + "," + url.toString());
-                    } catch (FindUrlByUrlException e) {
+                    String urlstr = user.getUrl();
+                    if (urlstr != null){
+                        log.info(urlstr);
                         try {
-                            Url url = urlApiService.fetchUrl(user.getUrl());
-                            url = urlService.store(url);
+                            Url url = urlService.findByUrl(urlstr);
                             loopId++;
-                            log.debug("Id: " + loopId + "," + url.toString());
-                        } catch (FetchUrlException ex) {
-                            log.debug(ex.getMessage());
+                            log.info("Id: " + loopId + "," + url.toString());
+                        } catch (FindUrlByUrlException e) {
+                            try {
+                                Url url = urlService.getPersistentUrlFor(urlstr);
+                                loopId++;
+                                log.info("Id: " + loopId + "," + url.toString());
+                            } catch (FetchUrlException ex) {
+                                log.info(ex.getMessage());
+                            }
                         }
                     }
                 }
             } catch (RateLimitExceededException rlee){
                 log.info(rlee.getMessage());
             }
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
+            */
         } catch (ResourceAccessException e) {
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         } catch (RuntimeException e) {
@@ -122,46 +126,28 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
         } finally {
-            log.debug("---------------------------------------");
-        }
-    }
-
-    private void storeOneTweet(Tweet tweet, int loopId) {
-        String msg = "store One Tweet: ";
-        log.debug(msg + loopId);
-        log.debug(msg + "Id:    " + tweet.getId());
-        log.debug(msg + "User: @" + tweet.getFromUser());
-        log.debug(msg + "Text:  " + tweet.getText());
-        log.debug(msg + "Image: " + tweet.getProfileImageUrl());
-        try {
-            this.persistDataFromTwitter.storeOneTweet(tweet);
-        } catch (RuntimeException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (Exception e) {
-            throw new TwitterApiException(msg, e);
-        } finally {
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
         }
     }
 
     @Override
     public void updateUserProfiles() {
         String msg = "update User Profiles: ";
-        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
-        log.debug("---------------------------------------");
+        log.info(msg + "The time is now {}", dateFormat.format(new Date()));
+        log.info("---------------------------------------");
         try {
             List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
             for (Long userProfileTwitterId : userProfileTwitterIds) {
                 try {
                     TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
-                    User user = persistDataFromTwitter.updateUserProfile(userProfile);
-                    log.debug(msg + user.toString());
+                    User user = persistDataFromTwitter.storeUserProfile(userProfile);
+                    log.info(msg + user.toString());
                 } catch (RateLimitExceededException e) {
                     throw new TwitterApiException(msg+userProfileTwitterId, e);
                 } catch (TwitterApiException e) {
                     log.info(msg+userProfileTwitterId + e.getMessage());
                 } finally {
-                    log.debug("---------------------------------------");
+                    log.info("---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
@@ -173,14 +159,14 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } catch (Exception e) {
             throw new TwitterApiException("updateUserProfiles", e);
         } finally {
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
         }
     }
 
     @Override
     public void updateTweets() {
         String msg = "update Tweets: ";
-        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
+        log.info(msg + "The time is now {}", dateFormat.format(new Date()));
         try {
             int loopId = 0;
             List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
@@ -188,7 +174,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                 try {
                     Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
                     loopId++;
-                    storeOneTweet(tweet, loopId);
+                    log.info(""+loopId);
+                    this.persistDataFromTwitter.storeOneTweet(tweet);
                     Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
                 } catch (RateLimitExceededException e) {
                     throw new TwitterApiException(msg+tweetTwitterId, e);
@@ -197,7 +184,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                 } catch (TwitterApiException e) {
                     log.info(msg+tweetTwitterId + e.getMessage());
                 } finally {
-                    log.debug("---------------------------------------");
+                    log.info("---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
@@ -209,7 +196,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } catch (Exception e) {
             throw new TwitterApiException(msg, e);
         } finally {
-            log.debug("---------------------------------------");
+            log.info("---------------------------------------");
         }
     }
 }
