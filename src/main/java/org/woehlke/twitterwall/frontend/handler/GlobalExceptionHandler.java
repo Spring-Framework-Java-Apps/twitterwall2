@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.controller;
+package org.woehlke.twitterwall.frontend.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.model.Page;
+import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.*;
 
@@ -29,10 +29,10 @@ public class GlobalExceptionHandler {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.info.webpage}")
+    @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
 
-    @Value("${twitterwall.theme}")
+    @Value("${twitterwall.frontend.theme}")
     private String theme;
     
     @ExceptionHandler(FindHashTagByTextException.class)

@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
 import org.springframework.social.twitter.api.HashTagEntity;
-import org.woehlke.twitterwall.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.common.OodmService;

@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
-import org.woehlke.twitterwall.process.backend.TwitterApiService;
+import org.woehlke.twitterwall.backend.TwitterApiService;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,10 +45,10 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
 
     private final TickerSymbolService tickerSymbolService;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.twitter.fetchTestData}")
+    @Value("${twitterwall.backend.twitter.fetchTestData}")
     private boolean fetchTestData;
 
     @Autowired

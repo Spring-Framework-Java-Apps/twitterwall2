@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.controller;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.model.Page;
+import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
@@ -14,8 +14,6 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 14.06.17.
@@ -32,10 +30,10 @@ public class ProfileController {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.info.webpage}")
+    @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
 
-    @Value("${twitterwall.theme}")
+    @Value("${twitterwall.frontend.theme}")
     private String theme;
 
     private final UserService userService;

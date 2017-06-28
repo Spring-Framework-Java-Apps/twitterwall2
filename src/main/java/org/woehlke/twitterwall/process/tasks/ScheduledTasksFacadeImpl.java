@@ -12,14 +12,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
-import org.woehlke.twitterwall.process.backend.TwitterApiService;
+import org.woehlke.twitterwall.backend.TwitterApiService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,10 +33,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.twitter.fetchTestData}")
+    @Value("${twitterwall.backend.twitter.fetchTestData}")
     private boolean fetchTestData;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired

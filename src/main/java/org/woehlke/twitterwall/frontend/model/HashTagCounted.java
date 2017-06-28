@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.model;
+package org.woehlke.twitterwall.frontend.model;
 
 import java.io.Serializable;
 

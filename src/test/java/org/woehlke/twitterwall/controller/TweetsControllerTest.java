@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.frontend.controller.TweetsController;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -19,15 +20,15 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TimelineControllerTest {
+public class TweetsControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(TimelineControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(TweetsControllerTest.class);
     
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private TimelineController controller;
+    private TweetsController controller;
 
     @Test
     public void controllerIsPresentTest(){

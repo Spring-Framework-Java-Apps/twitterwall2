@@ -49,7 +49,7 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlCacheRepository urlCacheRepository;
 
-    @Value("${twitterwall.url.fetchTestDataVerbose}")
+    @Value("${twitterwall.batch.url.fetchTestDataVerbose}")
     private boolean fetchTestDataVerbose;
 
     @Autowired

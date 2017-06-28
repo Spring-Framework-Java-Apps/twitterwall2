@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.controller;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.model.Page;
+import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
@@ -32,10 +32,10 @@ public class UserController {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.info.webpage}")
+    @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
 
-    @Value("${twitterwall.theme}")
+    @Value("${twitterwall.frontend.theme}")
     private String theme;
 
     @Autowired

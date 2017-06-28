@@ -49,10 +49,10 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     private final TickerSymbolService tickerSymbolService;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.twitter.fetchTestData}")
+    @Value("${twitterwall.backend.twitter.fetchTestData}")
     private boolean fetchTestData;
 
     @Autowired
