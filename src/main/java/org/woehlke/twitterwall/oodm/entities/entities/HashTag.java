@@ -33,6 +33,10 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
@@ -44,6 +48,14 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Column(nullable = false)
     private String text;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 
     public String getText() {

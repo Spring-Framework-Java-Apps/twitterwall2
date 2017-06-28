@@ -42,6 +42,10 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
     @Column(name = "id_twitter")
     private long idTwitter;
 
@@ -71,7 +75,16 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-    
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public long getIdTwitter() {
         return idTwitter;

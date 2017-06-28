@@ -25,6 +25,10 @@ import java.io.Serializable;
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
     
     @Column(name = "ticker_symbol")
     private String tickerSymbol;
@@ -60,6 +64,15 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

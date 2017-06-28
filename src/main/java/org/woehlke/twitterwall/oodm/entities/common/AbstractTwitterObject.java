@@ -13,10 +13,6 @@ import java.util.Map;
  * Created by tw on 10.06.17.
  */
 public abstract class AbstractTwitterObject<T extends DomainObject> implements DomainObject<T> {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
     
     @Transient
     protected int[] indices;
@@ -57,15 +53,7 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
     public void setIndices(int[] indices) {
         this.indices = indices;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    
     @Override
     public boolean equals(T o) {
         if (this == o) return true;

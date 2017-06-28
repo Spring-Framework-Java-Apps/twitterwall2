@@ -35,7 +35,11 @@ import java.io.Serializable;
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
 
     private static final long serialVersionUID = 1L;
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
@@ -76,7 +80,16 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-    
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public long getIdTwitter() {
         return idTwitter;
     }

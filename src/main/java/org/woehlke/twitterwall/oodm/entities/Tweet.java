@@ -60,6 +60,10 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
@@ -195,6 +199,15 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         Set<Mention> mentions = this.getMentions();
 
         return formattedText;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public long getIdTwitter() {
