@@ -68,7 +68,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public Tweet persist(Tweet myTweet) {
+    public Tweet create(Tweet myTweet) {
         return tweetRepository.persist(myTweet);
     }
 
@@ -76,6 +76,11 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet update(Tweet myTweet) {
         return tweetRepository.update(myTweet);
+    }
+
+    @Override
+    public List<Tweet> getAll() {
+        return tweetRepository.getAll(Tweet.class);
     }
 
     @Override
@@ -103,7 +108,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     public long count() {
-        return tweetRepository.count();
+        return tweetRepository.count(Tweet.class);
     }
 
     @Override
@@ -131,67 +136,21 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
-        return tweetRepository.findByIdTwitter(idTwitter);
+        return tweetRepository.findByIdTwitter(idTwitter,Tweet.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet store(Tweet tweet) {
         try {
-            Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter());
+            Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
             tweet.setId(tweetPersistent.getId());
             return tweetRepository.update(tweet);
         } catch (FindTweetByIdTwitterException e) {
             return tweetRepository.persist(tweet);
         }
     }
-
-    @Override
-    public Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet) {
-        if (tweet == null) { return null; } else {
-            Tweet retweetedStatus = transformTweet(tweet.getRetweetedStatus());
-            long idTwitter = tweet.getId();
-            String idStr = tweet.getIdStr();
-            String text = tweet.getText();
-            Date createdAt = tweet.getCreatedAt();
-            String fromUser = tweet.getFromUser();
-            String profileImageUrl = tweet.getProfileImageUrl();
-            Long toUserId = tweet.getToUserId();
-            long fromUserId = tweet.getFromUserId();
-            String languageCode = tweet.getLanguageCode();
-            String source = tweet.getSource();
-            Tweet myTweet = new Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
-            myTweet.setFavoriteCount(tweet.getFavoriteCount());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToScreenName(tweet.getInReplyToScreenName());
-            myTweet.setInReplyToUserId(tweet.getInReplyToUserId());
-            myTweet.setLanguageCode(tweet.getLanguageCode());
-            myTweet.setRetweetCount(tweet.getRetweetCount());
-            myTweet.setRetweeted(tweet.isRetweeted());
-            myTweet.setSource(tweet.getSource());
-            myTweet.setFromUser(tweet.getFromUser());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToStatusId(tweet.getInReplyToStatusId());
-            myTweet.setRetweetedStatus(retweetedStatus);
-            TwitterProfile twitterProfile = tweet.getUser();
-            /* transform user */
-            User user = userService.transform(twitterProfile);
-            myTweet.setUser(user);
-            /* transformTwitterEntities */
-            Set<Url> urls = urlService.transformUrls(tweet.getEntities().getUrls());
-            Set<HashTag> tags = hashTagService.transformTwitterEntitiesHashTags(tweet.getEntities().getHashTags());
-            Set<Mention> mentions = mentionService.transformTwitterEntitiesMentions(tweet.getEntities().getMentions());
-            Set<Media> media = mediaService.transformTwitterEntitiesMedia(tweet.getEntities().getMedia());
-            Set<TickerSymbol> tickerSymbols = tickerSymbolService.transformTwitterEntitiesTickerSymbols(tweet.getEntities().getTickerSymbols());
-            myTweet.setUrls(urls);
-            myTweet.setTags(tags);
-            myTweet.setMentions(mentions);
-            myTweet.setMedia(media);
-            myTweet.setTickerSymbols(tickerSymbols);
-            return myTweet;
-        }
-    }
-
+    
     @Override
     public String performTweetTest(long idTwitter, String output, boolean retweet) {
         String msg = "performTweetTest: ";

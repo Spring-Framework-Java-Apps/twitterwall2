@@ -56,7 +56,12 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public List<HashTag> getAll() {
-        return this.hashTagRepository.getAll();
+        return this.hashTagRepository.getAll(HashTag.class);
+    }
+
+    @Override
+    public long count() {
+        return this.hashTagRepository.count(HashTag.class);
     }
 
     @Override
@@ -78,36 +83,5 @@ public class HashTagServiceImpl implements HashTagService {
             return tagPers;
         }
     }
-
-    @Override
-    public Set<HashTag> transform(List<HashTagEntity> hashTags) {
-        Set<HashTag> myHashTagEntities = new LinkedHashSet<>();
-        for (HashTagEntity hashTag : hashTags) {
-            String text = hashTag.getText();
-            int[] indices = hashTag.getIndices();
-            HashTag myHashTagEntity = new HashTag(text, indices);
-            myHashTagEntities.add(myHashTagEntity);
-        }
-        return myHashTagEntities;
-    }
-
-    @Override
-    public Set<HashTag> getHashTagsFor(User user) {
-        String description = user.getDescription();
-        int[] indices = {};
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        if (description != null) {
-            Pattern hashTagPattern = Pattern.compile("#("+HASHTAG_TEXT_PATTERN+")(" + AbstractFormattedText.stopChar + ")");
-            Matcher m3 = hashTagPattern.matcher(description);
-            while (m3.find()) {
-                hashTags.add(new HashTag(m3.group(1), indices));
-            }
-            Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
-            Matcher m4 = hashTagPattern2.matcher(description);
-            while (m4.find()) {
-                hashTags.add(new HashTag(m4.group(1), indices));
-            }
-        }
-        return hashTags;
-    }
+    
 }

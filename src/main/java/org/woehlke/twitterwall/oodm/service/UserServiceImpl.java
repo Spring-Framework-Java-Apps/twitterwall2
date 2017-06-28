@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User persist(User user) {
+    public User create(User user) {
         return userRepository.persist(user);
     }
 
@@ -62,7 +62,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return userRepository.getAll();
+        return userRepository.getAll(User.class);
+    }
+
+    @Override
+    public long count() {
+        return userRepository.count(User.class);
     }
 
     @Override
@@ -85,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByIdTwitter(long idTwitter) {
-        return userRepository.findByIdTwitter(idTwitter);
+        return userRepository.findByIdTwitter(idTwitter,User.class);
     }
 
     @Override
@@ -100,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User storeUser(User user) {
+    public User store(User user) {
         return storeUserProcess(user);
     }
 
@@ -125,7 +130,7 @@ public class UserServiceImpl implements UserService {
         user.setTags(hashTags);
         user.setMentions(mentions);
         try {
-            User userPers = userRepository.findByIdTwitter(user.getIdTwitter());
+            User userPers = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
             user.setId(userPers.getId());
             user.setFriend(userPers.isFriend());
             user.setFollower(userPers.isFollower());
@@ -135,86 +140,5 @@ public class UserServiceImpl implements UserService {
             log.info(msg+" try to persist user "+user.toString());
             return userRepository.persist(user);
         }
-    }
-
-    @Override
-    public User transform(TwitterProfile twitterProfile) {
-        long idTwitter = twitterProfile.getId();
-        String screenName = twitterProfile.getScreenName();
-        String name = twitterProfile.getName();
-        String url = twitterProfile.getUrl();
-        if (url == null || twitterProfile.getUrl().isEmpty()) {
-            url = null;
-        }
-        String profileImageUrl = twitterProfile.getProfileImageUrl();
-        String description = twitterProfile.getDescription();
-        if (twitterProfile.getDescription().isEmpty()) {
-            description = null;
-        }
-        String location = twitterProfile.getLocation();
-        if (twitterProfile.getLocation().isEmpty()) {
-            location = null;
-        }
-        Date createdDate = twitterProfile.getCreatedDate();
-        User user = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
-        user.setTweeting(true);
-        user.setLanguage(twitterProfile.getLanguage());
-        user.setStatusesCount(twitterProfile.getStatusesCount());
-        user.setFriendsCount(twitterProfile.getFriendsCount());
-        user.setFollowersCount(twitterProfile.getFollowersCount());
-        user.setFavoritesCount(twitterProfile.getFavoritesCount());
-        user.setListedCount(twitterProfile.getListedCount());
-        user.setFollowing(twitterProfile.isFollowing());
-        user.setFollowRequestSent(twitterProfile.isFollowRequestSent());
-        user.setProtected(twitterProfile.isProtected());
-        user.setNotificationsEnabled(twitterProfile.isNotificationsEnabled());
-        user.setVerified(twitterProfile.isVerified());
-        user.setGeoEnabled(twitterProfile.isGeoEnabled());
-        user.setContributorsEnabled(twitterProfile.isContributorsEnabled());
-        user.setTranslator(twitterProfile.isTranslator());
-        user.setTimeZone(twitterProfile.getTimeZone());
-        user.setUtcOffset(twitterProfile.getUtcOffset());
-        user.setSidebarBorderColor(twitterProfile.getSidebarBorderColor());
-        user.setSidebarFillColor(twitterProfile.getSidebarFillColor());
-        user.setBackgroundColor(twitterProfile.getBackgroundColor());
-        user.setUseBackgroundImage(twitterProfile.useBackgroundImage());
-        user.setBackgroundImageUrl(twitterProfile.getBackgroundImageUrl());
-        user.setBackgroundImageTiled(twitterProfile.isBackgroundImageTiled());
-        user.setTextColor(twitterProfile.getTextColor());
-        user.setLinkColor(twitterProfile.getLinkColor());
-        user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
-        user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
-        user = this.getEntitiesForUrlDescription(user);
-        return user;
-    }
-
-    @Override
-    public User getEntitiesForUrlDescription(User user) {
-        String description = user.getDescription();
-        user.setMentions(mentionService.getMentions(user));
-        Set<Url> urls = urlService.getUrlsFor(user);
-        user.setUrls(urls);
-        user.setTags(hashTagService.getHashTagsFor(user));
-        log.info("description " + description);
-        log.info("++++++++++++++++++++");
-        for (HashTag hashTag : user.getTags()) {
-            log.info("found hashTag: " + hashTag.toString());
-        }
-        for (Url url : user.getUrls()) {
-            log.info("found url: " + url.toString());
-        }
-        for (Mention mention : user.getMentions()) {
-            log.info("found mention: " + mention.toString());
-        }
-        log.info("++++++++++++++++++++");
-        return user;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User storeUserProfile(TwitterProfile userProfile) {
-        User user = this.transform(userProfile);
-        user = this.storeUserProcess(user);
-        return user;
     }
 }

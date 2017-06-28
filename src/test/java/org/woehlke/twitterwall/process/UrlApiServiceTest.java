@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
@@ -37,6 +38,9 @@ public class UrlApiServiceTest {
     @Autowired
     private TweetApiServiceTest tweetApiServiceTest;
 
+    @Autowired
+    private TwitterUrlService twitterUrlService;
+
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
@@ -53,7 +57,7 @@ public class UrlApiServiceTest {
         for(Url url:testData){
             try {
                 log.info("expected: " + url.toString());
-                Url foundUrl = urlService.fetchTransientUrl(url.getUrl());
+                Url foundUrl = twitterUrlService.fetchTransientUrl(url.getUrl());
                 Assert.assertEquals(foundUrl.getUrl(), url.getUrl());
                 Assert.assertEquals(foundUrl.getDisplay(), url.getDisplay());
                 Assert.assertEquals(foundUrl.getExpanded(), url.getExpanded());

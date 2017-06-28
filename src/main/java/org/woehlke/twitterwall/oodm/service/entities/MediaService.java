@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by tw on 12.06.17.
  */
-public interface MediaService extends DomainService<Media,MediaEntity> {
+public interface MediaService extends DomainService<Media> {
     
     Media findByIdTwitter(long idTwitter);
 

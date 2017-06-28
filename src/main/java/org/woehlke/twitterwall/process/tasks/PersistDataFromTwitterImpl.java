@@ -15,6 +15,8 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.process.backend.service.TweetTransformService;
+import org.woehlke.twitterwall.process.backend.service.UserTransformService;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,6 +47,10 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
 
     private final TickerSymbolService tickerSymbolService;
 
+    private final TweetTransformService tweetTransformService;
+
+    private final UserTransformService userTransformService;
+
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
@@ -52,7 +58,7 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
     private boolean fetchTestData;
 
     @Autowired
-    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService) {
+    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService, TweetTransformService tweetTransformService, UserTransformService userTransformService) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
@@ -61,11 +67,13 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         this.hashTagService = hashTagService;
         this.urlService = urlService;
         this.tickerSymbolService = tickerSymbolService;
+        this.tweetTransformService = tweetTransformService;
+        this.userTransformService = userTransformService;
     }
 
     @Override
     public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet) {
-        Tweet tweet = tweetService.transformTweet(myTweet);
+        Tweet tweet = tweetTransformService.transform(myTweet);
         tweet = this.storeOneTweetPerform(tweet);
         return tweet;
     }
@@ -113,10 +121,11 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         tweet = tweetService.store(tweet);
         return tweet;
     }
-    
+                    
     @Override
     public User storeUserProfile(TwitterProfile userProfile) {
-        User user = userService.storeUserProfile(userProfile);
+        User user = userTransformService.transform(userProfile);
+        user = userService.storeUserProcess(user);
         return user;
     }
 

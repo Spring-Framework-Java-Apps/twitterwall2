@@ -5,13 +5,14 @@ import org.springframework.social.twitter.api.TwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Created by tw on 24.06.17.
  */
-public interface DomainService<T extends DomainObject,SRC extends TwitterObject> {
+public interface DomainService<T extends DomainObject> {
 
     T store(T domainObject);
     
@@ -22,6 +23,5 @@ public interface DomainService<T extends DomainObject,SRC extends TwitterObject>
     List<T> getAll();
 
     long count();
-
-    Set<T> transform(List<SRC> twitterObject);
+    
 }

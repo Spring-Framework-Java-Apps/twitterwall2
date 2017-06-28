@@ -10,15 +10,10 @@ import java.util.Set;
 /**
  * Created by tw on 12.06.17.
  */
-public interface TickerSymbolService extends DomainService {
-
-    TickerSymbol store(TickerSymbol tickerSymbol);
-
-    TickerSymbol update(TickerSymbol tickerSymbol);
-
+public interface TickerSymbolService extends DomainService<TickerSymbol> {
+    
     TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
 
     TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol);
-
-    Set<TickerSymbol> transformTwitterEntitiesTickerSymbols(List<TickerSymbolEntity> tickerSymbols);
+    
 }

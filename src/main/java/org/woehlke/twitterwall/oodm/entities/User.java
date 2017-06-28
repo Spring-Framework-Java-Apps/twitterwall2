@@ -508,6 +508,11 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.idTwitter = idTwitter;
     }
 
+    @Override
+    public String getScreenName() {
+        return this.screenName;
+    }
+
     public void setScreenName(String screenName) {
         this.screenName = screenName;
     }

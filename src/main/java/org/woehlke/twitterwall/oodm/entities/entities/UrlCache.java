@@ -64,7 +64,7 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(UrlCache o) {
         if (this == o) return true;
         if (!(o instanceof UrlCache)) return false;
 

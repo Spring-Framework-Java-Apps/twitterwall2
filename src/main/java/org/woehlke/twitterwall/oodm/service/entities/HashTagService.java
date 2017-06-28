@@ -11,9 +11,8 @@ import java.util.Set;
 /**
  * Created by tw on 12.06.17.
  */
-public interface HashTagService extends DomainService<HashTag,HashTagEntity> {
+public interface HashTagService extends DomainService<HashTag> {
 
     HashTag findByText(String text);
     
-    Set<HashTag> getHashTagsFor(User user);
 }

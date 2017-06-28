@@ -11,9 +11,7 @@ import java.util.Set;
 /**
  * Created by tw on 12.06.17.
  */
-public interface MentionService extends DomainService<Mention, MentionEntity>  {
+public interface MentionService extends DomainService<Mention>  {
 
     Mention findByIdTwitter(long idTwitter);
-
-    Set<Mention> findByUser(User user);
 }

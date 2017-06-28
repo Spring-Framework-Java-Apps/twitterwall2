@@ -39,13 +39,23 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media findByIdTwitter(long idTwitter) {
-        return this.mediaRepository.findByIdTwitter(idTwitter);
+        return this.mediaRepository.findByIdTwitter(idTwitter,Media.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media update(Media media) {
         return this.mediaRepository.update(media);
+    }
+
+    @Override
+    public List<Media> getAll() {
+        return this.mediaRepository.getAll(Media.class);
+    }
+
+    @Override
+    public long count() {
+        return this.mediaRepository.count(Media.class);
     }
 
     @Override
@@ -77,21 +87,4 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
-    @Override
-    public Set<Media> transform(List<MediaEntity> media) {
-        Set<Media> myMediaEntities = new LinkedHashSet<Media>();
-        for (MediaEntity medium : media) {
-            long idTwitter = medium.getId();
-            String mediaHttp = medium.getMediaUrl();
-            String mediaHttps = medium.getMediaSecureUrl();
-            String url = medium.getUrl();
-            String display = medium.getDisplayUrl();
-            String expanded = medium.getExpandedUrl();
-            String type = medium.getType();
-            int[] indices = medium.getIndices();
-            Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, indices);
-            myMediaEntities.add(myMediaEntity);
-        }
-        return myMediaEntities;
-    }
 }

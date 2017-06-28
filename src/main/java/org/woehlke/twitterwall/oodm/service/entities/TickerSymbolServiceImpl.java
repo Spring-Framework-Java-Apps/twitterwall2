@@ -3,17 +3,14 @@ package org.woehlke.twitterwall.oodm.service.entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.twitter.api.TickerSymbolEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindTickerSymbolByTickerSymbolAndUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository;
 
-import java.util.LinkedHashSet;
+import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by tw on 12.06.17.
@@ -38,9 +35,24 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
+    public TickerSymbol create(TickerSymbol domainObject) {
+        return this.tickerSymbolRepository.persist(domainObject);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol update(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.update(tickerSymbol);
+    }
+
+    @Override
+    public List<TickerSymbol> getAll() {
+        return this.tickerSymbolRepository.getAll(TickerSymbol.class);
+    }
+
+    @Override
+    public long count() {
+        return this.tickerSymbolRepository.count(TickerSymbol.class);
     }
 
     @Override
@@ -52,7 +64,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
-        try {
+        try{
             log.info(msg+"try to find: "+tickerSymbol.toString());
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
             log.info(msg+"found: "+tickerSymbol.toString());
@@ -62,22 +74,9 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.info(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.update(tickerSymbolPers);
 
-        } catch (FindTickerSymbolByTickerSymbolAndUrlException e) {
+        } catch (NoResultException e) {
             log.info(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }
-    }
-
-    @Override
-    public Set<TickerSymbol> transformTwitterEntitiesTickerSymbols(List<TickerSymbolEntity> tickerSymbols) {
-        Set<TickerSymbol> myTickerSymbolEntities = new LinkedHashSet<TickerSymbol>();
-        for (TickerSymbolEntity tickerSymbol : tickerSymbols) {
-            String tickerSymbolString = tickerSymbol.getTickerSymbol();
-            String url = tickerSymbol.getUrl();
-            int[] indices = tickerSymbol.getIndices();
-            TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url, indices);
-            myTickerSymbolEntities.add(myTickerSymbolEntity);
-        }
-        return myTickerSymbolEntities;
     }
 }

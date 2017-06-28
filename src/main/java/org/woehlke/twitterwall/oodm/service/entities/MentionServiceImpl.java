@@ -58,6 +58,16 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
+    public List<Mention> getAll() {
+        return this.mentionRepository.getAll(Mention.class);
+    }
+
+    @Override
+    public long count() {
+        return this.mentionRepository.count(Mention.class);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention store(Mention mention) {
         log.info("try to store Mention: "+mention.toString());
@@ -86,51 +96,5 @@ public class MentionServiceImpl implements MentionService {
             log.info("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
         }
-    }
-
-    @Override
-    public Set<Mention> transform(List<MentionEntity> mentions) {
-        Set<Mention> myMentionEntities = new LinkedHashSet<Mention>();
-        for (MentionEntity mention : mentions) {
-            long idTwitter = mention.getId();
-            String screenName = mention.getScreenName();
-            String name = mention.getName();
-            int[] indices = mention.getIndices();
-            Mention myMentionEntity = new Mention(idTwitter, screenName, name, indices);
-            myMentionEntities.add(myMentionEntity);
-        }
-        return myMentionEntities;
-    }
-
-    @Override
-    public Set<Mention> findByUser(User user) {
-        String description = user.getDescription();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        if (description != null) {
-            Pattern mentionPattern1 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")(" + AbstractFormattedText.stopChar + ")");
-            Matcher m3 = mentionPattern1.matcher(description);
-            while (m3.find()) {
-                mentions.add(getMention(m3.group(1)));
-            }
-            Pattern mentionPattern2 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")$");
-            Matcher m4 = mentionPattern2.matcher(description);
-            while (m4.find()) {
-                mentions.add(getMention(m4.group(1)));
-            }
-        }
-        return mentions;
-    }
-
-    private Mention getMention(String mentionString) {
-        try {
-            Thread.sleep(100L);
-        } catch (InterruptedException e) {
-            log.warn(e.getMessage());
-        }
-        long idTwitter = new Date().getTime();
-        String screenName = mentionString;
-        String name = mentionString;
-        int[] myindices = {};
-        return new Mention(idTwitter, screenName, name, myindices);
     }
 }

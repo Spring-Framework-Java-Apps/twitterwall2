@@ -9,32 +9,20 @@ import java.util.List;
 /**
  * Created by tw on 10.06.17.
  */
-public interface TweetService extends DomainService {
+public interface TweetService extends DomainService<Tweet> {
 
     Tweet findByIdTwitter(long idTwitter);
-
-    Tweet persist(Tweet myTweet);
-
-    Tweet update(Tweet myTweet);
-
+    
     List<Tweet> getLatestTweets();
 
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
     long countTweetsForHashTag(String hashtagText);
 
-    long count();
-
     List<Tweet> getTestTweetsForTweetTest();
 
     List<Tweet> getTweetsForUser(User user);
 
     List<Long> getAllTwitterIds();
-
-    Tweet store(Tweet tweet);
-
-    Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet);
-
-    //Tweet storeTweet(Tweet tweet);
     
 }

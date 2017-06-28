@@ -10,6 +10,8 @@ import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 
+import java.util.List;
+
 /**
  * Created by tw on 23.06.17.
  */
@@ -34,12 +36,27 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     }
 
     @Override
+    public UrlCache create(UrlCache domainObject) {
+        return this.urlCacheRepository.persist(domainObject);
+    }
+
+    @Override
+    public UrlCache update(UrlCache domainObject) {
+        return domainObject;
+    }
+
+    @Override
+    public List<UrlCache> getAll() {
+        return this.urlCacheRepository.getAll(UrlCache.class);
+    }
+
+    @Override
+    public long count() {
+        return this.urlCacheRepository.count(UrlCache.class);
+    }
+
+    @Override
     public UrlCache findByUrl(String url) {
-        if(url == null) {
-            String msg = "UrlCache.findByUrl: url=null";
-            log.info(msg);
-            throw new FindUrlCacheByUrlException(msg);
-        }
         log.info("UrlCache.findByUrl: try to find: "+url);
         UrlCache urlCache = this.urlCacheRepository.findByUrl(url);
         log.info("UrlCache.findByUrl: found: "+urlCache.toString());
