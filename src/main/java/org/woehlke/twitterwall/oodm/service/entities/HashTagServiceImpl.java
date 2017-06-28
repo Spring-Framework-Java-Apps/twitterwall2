@@ -80,7 +80,7 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    public Set<HashTag> transformTwitterEntitiesHashTags(List<HashTagEntity> hashTags) {
+    public Set<HashTag> transform(List<HashTagEntity> hashTags) {
         Set<HashTag> myHashTagEntities = new LinkedHashSet<>();
         for (HashTagEntity hashTag : hashTags) {
             String text = hashTag.getText();

@@ -2,6 +2,9 @@ package org.woehlke.twitterwall.oodm.entities.common;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +12,22 @@ import java.util.Map;
 /**
  * Created by tw on 10.06.17.
  */
-public abstract class AbstractTwitterObject {
+public abstract class AbstractTwitterObject<T extends DomainObject> implements DomainObject<T> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+    
+    @Transient
+    protected int[] indices;
 
     @Transient
     private Map<String, Object> extraData;
+
+    public AbstractTwitterObject(int[] indices) {
+        this.indices = indices;
+        this.extraData = new HashMap<String, Object>();
+    }
 
     public AbstractTwitterObject() {
         this.extraData = new HashMap<String, Object>();
@@ -35,8 +50,24 @@ public abstract class AbstractTwitterObject {
         extraData.put(key, value);
     }
 
+    public int[] getIndices() {
+        return indices;
+    }
+
+    public void setIndices(int[] indices) {
+        this.indices = indices;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(T o) {
         if (this == o) return true;
         if (!(o instanceof AbstractTwitterObject)) return false;
 

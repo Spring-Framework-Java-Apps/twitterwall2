@@ -2,6 +2,8 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -57,13 +59,9 @@ import java.util.regex.Pattern;
                 query = "select t.idTwitter from User as t"
         )
 })
-public class User extends AbstractFormattedText implements DomainObject, Comparable<User> {
+public class User extends AbstractFormattedText<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     @Column(name="id_twitter",nullable = false)
     private long idTwitter;
@@ -249,11 +247,7 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
     public long getIdTwitter() {
         return idTwitter;
     }
-
-    public String getScreenName() {
-        return screenName;
-    }
-
+    
     public String getName() {
         return name;
     }
@@ -637,10 +631,9 @@ public class User extends AbstractFormattedText implements DomainObject, Compara
         return this.mentions.remove(mention);
     }
 
-
-
+    
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(User o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         if (!super.equals(o)) return false;

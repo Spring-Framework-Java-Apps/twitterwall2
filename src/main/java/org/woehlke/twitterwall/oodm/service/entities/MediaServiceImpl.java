@@ -78,7 +78,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Set<Media> transformTwitterEntitiesMedia(List<MediaEntity> media) {
+    public Set<Media> transform(List<MediaEntity> media) {
         Set<Media> myMediaEntities = new LinkedHashSet<Media>();
         for (MediaEntity medium : media) {
             long idTwitter = medium.getId();

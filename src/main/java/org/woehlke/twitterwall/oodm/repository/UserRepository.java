@@ -1,24 +1,15 @@
 package org.woehlke.twitterwall.oodm.repository;
 
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.repository.common.OodmRepository;
+import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitter;
+import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithScreenName;
 
 import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
  */
-public interface UserRepository extends OodmRepository {
-
-    User findByIdTwitter(long idTwitter);
-
-    User persist(User user);
-
-    User update(User user);
-
-    List<User> getAll();
-
-    User findByScreenName(String screenName);
+public interface UserRepository extends DomainRepositoryWithIdTwitter<User>,DomainRepositoryWithScreenName<User> {
 
     List<User> getTweetingUsers();
 

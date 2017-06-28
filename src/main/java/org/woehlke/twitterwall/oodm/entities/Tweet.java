@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 
 import javax.persistence.*;
@@ -55,13 +56,9 @@ import java.util.Set;
                 query="select t.idTwitter from Tweet as t"
         )
 })
-public class Tweet extends AbstractFormattedText implements DomainObject, Comparable<Tweet> {
+public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
@@ -198,14 +195,6 @@ public class Tweet extends AbstractFormattedText implements DomainObject, Compar
         Set<Mention> mentions = this.getMentions();
 
         return formattedText;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public long getIdTwitter() {

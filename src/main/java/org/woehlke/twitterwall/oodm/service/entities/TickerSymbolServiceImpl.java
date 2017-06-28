@@ -40,7 +40,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol update(TickerSymbol tickerSymbol) {
-        return this.tickerSymbolRepository.merge(tickerSymbol);
+        return this.tickerSymbolRepository.update(tickerSymbol);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             tickerSymbolPers.setIndices(tickerSymbol.getIndices());
             tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
             log.info(msg+"found and try to update: "+tickerSymbolPers.toString());
-            return this.tickerSymbolRepository.merge(tickerSymbolPers);
+            return this.tickerSymbolRepository.update(tickerSymbolPers);
 
         } catch (FindTickerSymbolByTickerSymbolAndUrlException e) {
             log.info(msg+"not found and try to persist: "+tickerSymbol.toString());

@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by tw on 23.06.17.
@@ -18,7 +20,7 @@ import java.io.Serializable;
                 query = "select t from UrlCache as t where t.url=:url"
         )
 })
-public class UrlCache implements Serializable, Comparable<UrlCache> {
+public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     
     private static final long serialVersionUID = 1L;
 

@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameAndNa
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 
+import javax.persistence.NoResultException;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -47,7 +48,7 @@ public class MentionServiceImpl implements MentionService {
 
     @Override
     public Mention findByIdTwitter(long idTwitter) {
-        return this.mentionRepository.findByIdTwitter(idTwitter);
+        return this.mentionRepository.findByIdTwitter(idTwitter,Mention.class);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class MentionServiceImpl implements MentionService {
                 mentionPers = this.mentionRepository.findByScreenName(screenName);
             } else if (screenName == null && idTwitter != null) {
                 log.info("try to find Mention.findByIdTwitter: "+mention.toString());
-                mentionPers = this.mentionRepository.findByIdTwitter(idTwitter);
+                mentionPers = this.mentionRepository.findByIdTwitter(idTwitter,Mention.class);
             }
             mentionPers.setIndices(mention.getIndices());
             mentionPers.setIdTwitter(mention.getIdTwitter());
@@ -80,15 +81,7 @@ public class MentionServiceImpl implements MentionService {
             mentionPers.setScreenName(mention.getScreenName());
             log.info("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
-        } catch (FindMentionByIdTwitterAndScreenNameException e){
-            log.info(e.getMessage());
-            log.info("try to persist Mention: "+mention.toString());
-            return this.mentionRepository.persist(mention);
-        } catch (FindMentionByScreenNameException e){
-            log.info(e.getMessage());
-            log.info("try to persist Mention: "+mention.toString());
-            return this.mentionRepository.persist(mention);
-        } catch (FindMentionByIdTwitterException e){
+        } catch (NoResultException e){
             log.info(e.getMessage());
             log.info("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
@@ -96,7 +89,7 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Set<Mention> transformTwitterEntitiesMentions(List<MentionEntity> mentions) {
+    public Set<Mention> transform(List<MentionEntity> mentions) {
         Set<Mention> myMentionEntities = new LinkedHashSet<Mention>();
         for (MentionEntity mention : mentions) {
             long idTwitter = mention.getId();
@@ -110,7 +103,7 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Set<Mention> getMentions(User user) {
+    public Set<Mention> findByUser(User user) {
         String description = user.getDescription();
         Set<Mention> mentions = new LinkedHashSet<>();
         if (description != null) {
