@@ -37,14 +37,14 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
 
     @Override
     public List<T> getAll(Class<T> myClass) {
-        String name = myClass.getName() + ".getAll";
+        String name = myClass.getSimpleName() + ".getAll";
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
         return query.getResultList();
     }
 
     @Override
     public long count(Class<T> myClass) {
-        String name = myClass.getName() + ".count";
+        String name = myClass.getSimpleName() + ".count";
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         return query.getSingleResult();
     }

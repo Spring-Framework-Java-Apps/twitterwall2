@@ -15,7 +15,7 @@ public class DomainRepositoryWithIdTwitterImpl<T extends DomainObjectWithIdTwitt
 
     @Override
     public T findByIdTwitter(long idTwitter,Class<T> myClass) {
-        String name = "Media.findByIdTwitter";
+        String name = myClass.getSimpleName()+ ".findByIdTwitter";
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
         query.setParameter("idTwitter", idTwitter);
         T result = query.getSingleResult();
