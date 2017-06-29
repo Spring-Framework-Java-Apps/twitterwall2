@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
@@ -140,8 +141,12 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
             log.info("number of tweets: " + tweetService.count());
             if (!fetchTestData) {
                 for (long id : idTwitterToFetch) {
-                    org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
-                    this.storeOneTweet(twitterTweet);
+                    try {
+                        org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
+                        this.storeOneTweet(twitterTweet);
+                    } catch (TwitterApiException e){
+                        log.error("twitterApiService.findOneTweetById: " + e.getMessage());
+                    }
                 }
             }
         } catch (InterruptedException e) {

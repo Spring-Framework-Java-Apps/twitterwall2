@@ -18,6 +18,7 @@ import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
 
+import javax.persistence.NoResultException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -138,7 +139,7 @@ public class UrlServiceImpl implements UrlService {
                     log.info(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
                 return urlPers;
-            } catch (FindUrlByUrlException ex) {
+            } catch (NoResultException ex) {
                 log.info(msg+" not found ");
                 try {
                     log.info(msg+" try to find UrlCache");
@@ -156,7 +157,7 @@ public class UrlServiceImpl implements UrlService {
                     newUrl = this.urlRepository.persist(newUrl);
                     log.info(msg+" persisted: "+newUrl.toString());
                     return newUrl;
-                } catch (FindUrlCacheByUrlException e) {
+                } catch (NoResultException e) {
                     UrlCache urlCache = new UrlCache();
                     try {
                         log.info(msg + " try to fetchTransientUrl");
@@ -171,10 +172,6 @@ public class UrlServiceImpl implements UrlService {
                         } else {
                             log.info(msg + " not persisted: " + urlCache.toString());
                         }
-                    } catch (PersistUrlCacheException puce){
-                        log.info(msg+puce.getMessage());
-                        urlCache.setUrl(url);
-                        urlCache.setExpanded(url);
                     } catch (FetchUrlException fue)  {
                         log.info(msg+fue.getMessage());
                         urlCache.setUrl(url);

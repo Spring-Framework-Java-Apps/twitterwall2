@@ -39,7 +39,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             String display;
             String expanded;
             int[] indices = {};
-            CloseableHttpClient httpclient = HttpClients.createMinimal();
+            CloseableHttpClient httpclient = HttpClients.createSystem();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
             CloseableHttpResponse response1 = httpclient.execute(httpGet, context);

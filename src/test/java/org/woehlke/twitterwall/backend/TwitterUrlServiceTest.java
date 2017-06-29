@@ -52,14 +52,14 @@ public class TwitterUrlServiceTest {
         log.info("------------------------------------");
         log.info("fetchUrlTest");
         List<Url> testData = urlService.getTestData();
-        for(Url url:testData){
+        for(Url exprected:testData){
             try {
-                log.info("expected: " + url.toString());
-                Url foundUrl = twitterUrlService.fetchTransientUrl(url.getUrl());
-                Assert.assertEquals(foundUrl.getUrl(), url.getUrl());
-                Assert.assertEquals(foundUrl.getDisplay(), url.getDisplay());
-                Assert.assertEquals(foundUrl.getExpanded(), url.getExpanded());
+                log.info("expected: " + exprected.toString());
+                Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl());
                 log.info("found:    " + foundUrl.toString());
+                Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());
+                Assert.assertEquals(exprected.getDisplay(),foundUrl.getDisplay());
+                Assert.assertEquals(exprected.getExpanded(), foundUrl.getExpanded());
             } catch (FetchUrlException e){
                 log.error(e.getMessage());
             }
