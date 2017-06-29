@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.process;
+package org.woehlke.twitterwall.backend;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,14 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 /**
@@ -28,9 +26,9 @@ import java.util.List;
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @Transactional(Transactional.TxType.NOT_SUPPORTED)
-public class UrlApiServiceTest {
+public class TwitterUrlServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UrlApiServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTest.class);
 
     @Autowired
     private UrlService urlService;
@@ -68,4 +66,5 @@ public class UrlApiServiceTest {
         }
         log.info("------------------------------------");
     }
+    
 }

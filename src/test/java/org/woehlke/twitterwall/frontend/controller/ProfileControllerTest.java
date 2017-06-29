@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.controller;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.frontend.controller.ProfileController;
 import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
 import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitterTest;
 

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.process;
+package org.woehlke.twitterwall.backend;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,10 +23,10 @@ import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.PRO
 /**
  * Created by tw on 21.06.17.
  */
-public class ScheduledTasksFacadeTest {
+public class TwitterUrlServiceTestDataTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasksFacadeTest.class);
-
+    private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTestDataTest.class);
+    
     @Test
     public void fetchUrlsTest(){
         Map<String,String> urls = new HashMap<>();
