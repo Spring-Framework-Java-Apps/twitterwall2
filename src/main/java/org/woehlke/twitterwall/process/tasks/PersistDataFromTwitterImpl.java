@@ -19,6 +19,7 @@ import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.process.backend.service.TweetTransformService;
 import org.woehlke.twitterwall.process.backend.service.UserTransformService;
 
+import javax.persistence.NoResultException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -146,6 +147,8 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
                         this.storeOneTweet(twitterTweet);
                     } catch (TwitterApiException e){
                         log.error("twitterApiService.findOneTweetById: " + e.getMessage());
+                    } catch (NoResultException ex){
+                        log.error("storeOneTweet: "+ex.getMessage());
                     }
                 }
             }

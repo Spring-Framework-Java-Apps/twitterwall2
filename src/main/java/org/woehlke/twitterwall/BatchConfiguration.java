@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall;
 
+/*
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -14,16 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+*/
+
 
 /**
  * Created by tw on 28.06.17.
  */
-@Configuration
-@EnableBatchProcessing
-@EnableAutoConfiguration
+//@Configuration
+//@EnableBatchProcessing
+//@EnableAutoConfiguration
 public class BatchConfiguration {
 
-    
+  /*
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
@@ -48,4 +51,5 @@ public class BatchConfiguration {
                 .start(step1)
                 .build();
     }
+    */
 }
