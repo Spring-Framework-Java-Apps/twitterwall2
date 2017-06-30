@@ -40,7 +40,8 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
-        Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
+        //Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         return m.matches();
     }
