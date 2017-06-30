@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindHashTagByTextException extends OodmException {
         super(MSG + text);
     }
 
-    public FindHashTagByTextException(NoResultException e, String text) {
+    public FindHashTagByTextException(EmptyResultDataAccessException e, String text) {
         super(MSG + text + " " + e.getMessage(), e);
     }
 

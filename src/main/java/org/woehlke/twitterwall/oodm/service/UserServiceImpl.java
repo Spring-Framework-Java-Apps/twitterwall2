@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -136,7 +137,7 @@ public class UserServiceImpl implements UserService {
             user.setFollower(userPers.isFollower());
             log.info(msg+" try to update user "+user.toString());
             return userRepository.update(user);
-        } catch (FindUserByIdTwitterException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info(msg+" try to persist user "+user.toString());
             return userRepository.persist(user);
         }

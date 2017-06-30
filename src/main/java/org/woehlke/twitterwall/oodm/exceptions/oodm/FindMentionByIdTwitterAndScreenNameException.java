@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
 
-import javax.persistence.NoResultException;
 
 /**
  * Created by tw on 25.06.17.
@@ -16,7 +16,7 @@ public class FindMentionByIdTwitterAndScreenNameException extends OodmException 
 
     private static final String MSG = FindMentionByIdTwitterAndScreenNameException.class.getCanonicalName()+ " Mention not found for idTwitter=";
 
-    public FindMentionByIdTwitterAndScreenNameException(NoResultException e, long idTwitter, String screenName) {
+    public FindMentionByIdTwitterAndScreenNameException(EmptyResultDataAccessException e, long idTwitter, String screenName) {
         super(MSG + idTwitter + " " + " screenName=" + screenName + " " + e.getMessage(), e);
     }
 }

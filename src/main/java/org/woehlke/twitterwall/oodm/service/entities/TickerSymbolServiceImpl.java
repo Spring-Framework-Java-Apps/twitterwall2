@@ -3,13 +3,13 @@ package org.woehlke.twitterwall.oodm.service.entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -74,7 +74,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.info(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.update(tickerSymbolPers);
 
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }

@@ -2,18 +2,14 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindTickerSymbolByTickerSymbolAndUrlException;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryImpl;
-import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitterImpl;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -36,7 +32,7 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
             TickerSymbol result = query.getSingleResult();
             log.info("found: " + result.toString());
             return result;
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("not found: " + tickerSymbol);
             log.info("not found: " + url);
             throw e;
@@ -52,7 +48,7 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
             TickerSymbol result = query.getSingleResult();
             log.info("found: " + result.toString());
             return result;
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("not found: " + url);
             throw e;
         }

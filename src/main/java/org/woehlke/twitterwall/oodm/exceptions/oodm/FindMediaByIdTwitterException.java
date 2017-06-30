@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -16,7 +17,7 @@ public class FindMediaByIdTwitterException extends OodmException {
 
     private static final String MSG = FindMediaByIdTwitterException.class.getCanonicalName()+" Media found for idTwitter=";
 
-    public FindMediaByIdTwitterException(NoResultException e, long idTwitter) {
+    public FindMediaByIdTwitterException(EmptyResultDataAccessException e, long idTwitter) {
         super(MSG + idTwitter + " " + e.getMessage(), e);
     }
 

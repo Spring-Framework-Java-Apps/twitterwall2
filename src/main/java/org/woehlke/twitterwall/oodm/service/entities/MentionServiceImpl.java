@@ -3,26 +3,15 @@ package org.woehlke.twitterwall.oodm.service.entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.twitter.api.MentionEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterAndScreenNameException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByIdTwitterException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameAndNameException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMentionByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 
-import javax.persistence.NoResultException;
-import java.util.Date;
-import java.util.LinkedHashSet;
+
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 12.06.17.
@@ -91,7 +80,7 @@ public class MentionServiceImpl implements MentionService {
             mentionPers.setScreenName(mention.getScreenName());
             log.info("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
-        } catch (NoResultException e){
+        } catch (EmptyResultDataAccessException e){
             log.info(e.getMessage());
             log.info("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);

@@ -2,17 +2,11 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindHashTagByTextException;
-import org.woehlke.twitterwall.oodm.repository.TweetRepositoryImpl;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryImpl;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -31,7 +25,7 @@ public class HashTagRepositoryImpl extends DomainRepositoryImpl<HashTag> impleme
             HashTag result = query.getSingleResult();
             log.info("found: " + result.toString());
             return result;
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("not found: " + text);
             throw e;
         }

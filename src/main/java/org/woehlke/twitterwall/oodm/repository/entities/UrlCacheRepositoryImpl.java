@@ -2,11 +2,11 @@ package org.woehlke.twitterwall.oodm.repository.entities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryImpl;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -26,7 +26,7 @@ public class UrlCacheRepositoryImpl extends DomainRepositoryImpl<UrlCache> imple
             UrlCache result = query.getSingleResult();
             log.info("found: " + result.toString());
             return result;
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("not found: " + url);
             throw e;
         }

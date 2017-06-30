@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.service.entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.HashTagEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -76,7 +77,7 @@ public class HashTagServiceImpl implements HashTagService {
             tagPers.setIndices(hashTag.getIndices());
             return this.hashTagRepository.update(tagPers);
             */
-        } catch (FindHashTagByTextException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("try to persist: "+hashTag.toString());
             HashTag tagPers = this.hashTagRepository.persist(hashTag);
             log.info("persisted: "+tagPers.toString());

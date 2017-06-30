@@ -2,11 +2,9 @@ package org.woehlke.twitterwall.oodm.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByIdTwitterException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitterImpl;
 
 import javax.persistence.*;
@@ -32,7 +30,7 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
             User result = query.getSingleResult();
             log.info("found: " + screenName);
             return result;
-        } catch (NoResultException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info("not found: " + screenName);
             throw e;
         }

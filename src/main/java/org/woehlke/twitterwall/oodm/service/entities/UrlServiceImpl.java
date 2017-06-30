@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,11 @@ import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByDisplayExpandedUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.PersistUrlCacheException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
 
-import javax.persistence.NoResultException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -139,7 +138,7 @@ public class UrlServiceImpl implements UrlService {
                     log.info(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
                 return urlPers;
-            } catch (NoResultException ex) {
+            } catch (EmptyResultDataAccessException ex) {
                 log.info(msg+" not found ");
                 try {
                     log.info(msg+" try to find UrlCache");
@@ -157,7 +156,7 @@ public class UrlServiceImpl implements UrlService {
                     newUrl = this.urlRepository.persist(newUrl);
                     log.info(msg+" persisted: "+newUrl.toString());
                     return newUrl;
-                } catch (NoResultException e) {
+                } catch (EmptyResultDataAccessException e) {
                     UrlCache urlCache = new UrlCache();
                     try {
                         log.info(msg + " try to fetchTransientUrl");

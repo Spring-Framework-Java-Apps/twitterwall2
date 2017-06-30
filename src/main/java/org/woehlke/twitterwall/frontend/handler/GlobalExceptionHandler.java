@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
+import org.woehlke.twitterwall.oodm.exceptions.controller.ImprintException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -161,6 +162,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PersistUrlCacheException.class)
     public ModelAndView handlePersistUrlCacheException(HttpServletRequest request, Exception ex) {
         log.warn("PersistUrlCacheException occured :: URL=" + request.getRequestURL());
+        log.warn(ex.getMessage());
+        return getTemplate(request, ex);
+    }
+    
+    @ExceptionHandler(ImprintException.class)
+    public ModelAndView handleImprintException(HttpServletRequest request, Exception ex) {
+        log.warn("ImprintException occured :: URL=" + request.getRequestURL());
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }

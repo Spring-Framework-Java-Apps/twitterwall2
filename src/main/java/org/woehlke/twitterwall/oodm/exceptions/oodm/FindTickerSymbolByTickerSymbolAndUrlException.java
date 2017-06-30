@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindTickerSymbolByTickerSymbolAndUrlException extends OodmException
         super(MSG + tickerSymbol + ",url=" + url);
     }
 
-    public FindTickerSymbolByTickerSymbolAndUrlException(NoResultException e, String tickerSymbol, String url) {
+    public FindTickerSymbolByTickerSymbolAndUrlException(EmptyResultDataAccessException e, String tickerSymbol, String url) {
         super(MSG + tickerSymbol + ",url=" + url + " " + e.getMessage(), e);
     }
 

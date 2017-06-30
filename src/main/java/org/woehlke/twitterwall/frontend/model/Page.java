@@ -88,4 +88,19 @@ public class Page implements Serializable {
     public void setTheme(String theme) {
         this.theme = theme;
     }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", menuAppName='" + menuAppName + '\'' +
+                ", twitterSearchTerm='" + twitterSearchTerm + '\'' +
+                ", infoWebpage='" + infoWebpage + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", theme='" + theme + '\'' +
+                ", showMenuUsers=" + showMenuUsers +
+                ", historyBack=" + historyBack +
+                '}';
+    }
 }

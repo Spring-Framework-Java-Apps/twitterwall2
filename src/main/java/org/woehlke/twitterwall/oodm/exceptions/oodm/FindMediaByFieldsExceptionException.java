@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindMediaByFieldsExceptionException extends OodmException {
         super(MSG + mediaHttp + ", mediaHttps=" + mediaHttps + ",url=" + url + ",display=" + display + ",expanded=" + expanded + ",mediaType=" + mediaType);
     }
 
-    public FindMediaByFieldsExceptionException(NoResultException e, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
+    public FindMediaByFieldsExceptionException(EmptyResultDataAccessException e, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
         super(MSG + mediaHttp + ", mediaHttps=" + mediaHttps + ",url=" + url + ",display=" + display + ",expanded=" + expanded + ",mediaType=" + mediaType, e);
     }
 

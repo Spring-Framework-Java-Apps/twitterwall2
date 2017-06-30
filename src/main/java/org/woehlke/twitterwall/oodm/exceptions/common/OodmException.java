@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.exceptions.common;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import javax.persistence.*;
 
 /**
@@ -9,7 +11,7 @@ public class OodmException extends TwitterwallException {
 
     public OodmException(String urlSrc){ super(urlSrc); }
 
-    protected OodmException(String urlSrc, NoResultException ex) {
+    protected OodmException(String urlSrc, EmptyResultDataAccessException ex) {
         super(urlSrc, ex);
     }
 

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -147,8 +148,10 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
                         this.storeOneTweet(twitterTweet);
                     } catch (TwitterApiException e){
                         log.error("twitterApiService.findOneTweetById: " + e.getMessage());
-                    } catch (NoResultException ex){
+                    } catch (EmptyResultDataAccessException ex){
                         log.error("storeOneTweet: "+ex.getMessage());
+                    } catch (NoResultException exe){
+                        log.error("storeOneTweet: "+exe.getMessage());
                     }
                 }
             }

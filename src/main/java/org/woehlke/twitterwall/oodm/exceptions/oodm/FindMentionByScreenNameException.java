@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
 
-import javax.persistence.NoResultException;
 
 /**
  * Created by tw on 25.06.17.
@@ -16,7 +16,7 @@ public class FindMentionByScreenNameException extends OodmException {
 
     private static final String MSG = FindMentionByScreenNameException.class.getCanonicalName()+" Mention not found for screenName=";
 
-    public FindMentionByScreenNameException(NoResultException e, String screenName) {
+    public FindMentionByScreenNameException(EmptyResultDataAccessException e, String screenName) {
         super(MSG + screenName + " " + e.getMessage(), e);
     }
 }
