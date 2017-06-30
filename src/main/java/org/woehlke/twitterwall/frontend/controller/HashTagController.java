@@ -12,6 +12,7 @@ import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
 import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
@@ -61,6 +62,7 @@ public class HashTagController {
 
     @RequestMapping("/hashtags")
     public String hashTags(Model model) {
+        String msg = "/hashtags: ";
         logEnv();
         Page page = new Page();
         page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
@@ -74,7 +76,12 @@ public class HashTagController {
         model.addAttribute("page", page);
         List<HashTagCounted> hashTags = new ArrayList<>();
         for (HashTag hashTag : hashTagService.getAll()) {
-            long number = tweetService.countTweetsForHashTag(hashTag.getText());
+            long number = 0;
+            try {
+                number = tweetService.countTweetsForHashTag(hashTag.getText());
+            } catch (OodmException e){
+                  log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
+            }
             String text = hashTag.getText();
             HashTagCounted c = new HashTagCounted(number, text);
             hashTags.add(c);
