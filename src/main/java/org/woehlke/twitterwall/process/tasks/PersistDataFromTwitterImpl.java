@@ -57,8 +57,8 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.backend.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Autowired
     public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService, TweetTransformService tweetTransformService, UserTransformService userTransformService) {
@@ -141,18 +141,16 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         try {
             Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
             log.info("number of tweets: " + tweetService.count());
-            if (!fetchTestData) {
-                for (long id : idTwitterToFetch) {
-                    try {
-                        org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
-                        this.storeOneTweet(twitterTweet);
-                    } catch (TwitterApiException e){
-                        log.error("twitterApiService.findOneTweetById: " + e.getMessage());
-                    } catch (EmptyResultDataAccessException ex){
-                        log.error("storeOneTweet: "+ex.getMessage());
-                    } catch (NoResultException exe){
-                        log.error("storeOneTweet: "+exe.getMessage());
-                    }
+            for (long id : idTwitterToFetch) {
+                try {
+                    org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
+                    this.storeOneTweet(twitterTweet);
+                } catch (TwitterApiException e){
+                    log.error("twitterApiService.findOneTweetById: " + e.getMessage());
+                } catch (EmptyResultDataAccessException ex){
+                    log.error("storeOneTweet: "+ex.getMessage());
+                } catch (NoResultException exe){
+                    log.error("storeOneTweet: "+exe.getMessage());
                 }
             }
         } catch (InterruptedException e) {

@@ -44,8 +44,8 @@ public class HashTagController {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
-    @Value("${twitterwall.backend.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
@@ -111,7 +111,7 @@ public class HashTagController {
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
+        //log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
         log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);

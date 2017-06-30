@@ -20,6 +20,7 @@ import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,8 +54,8 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.backend.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Autowired
     public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService) {
@@ -156,29 +157,50 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     public String performTweetTest(long idTwitter, String output, boolean retweet) {
         String msg = "performTweetTest: ";
         log.info("idTwitter: " + idTwitter);
-        try {
-            Tweet tweet = this.findByIdTwitter(idTwitter);
-            log.info("text:          " + tweet.getText());
-            log.info("Expected:      " + output + "---");
-            String formattedText;
-            if (retweet) {
-                formattedText = tweet.getRetweetedStatus().getFormattedText();
-            } else {
-                formattedText = tweet.getFormattedText();
+        //if(fetchTestData) {
+            try {
+                Tweet tweet = this.findByIdTwitter(idTwitter);
+                log.info("text:          " + tweet.getText());
+                log.info("Expected:      " + output + "---");
+                String formattedText;
+                if (retweet) {
+                    formattedText = tweet.getRetweetedStatus().getFormattedText();
+                } else {
+                    formattedText = tweet.getFormattedText();
+                }
+                log.info("FormattedText: " + formattedText + "---");
+                return formattedText;
+            } catch (EmptyResultDataAccessException e) {
+                log.warn(msg + e.getMessage());
+                throw e;
+            } catch (NoResultException e) {
+                log.warn(msg + e.getMessage());
+                throw e;
+            } catch (ResourceAccessException e) {
+                log.error(msg + " check your Network Connection!", e);
+                throw e;
+                //throw new TwitterApiException(msg + " check your Network Connection!", e);
+            } catch (RateLimitExceededException e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } catch (RuntimeException e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } catch (Exception e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } finally {
+                log.info("---------------------------------------");
             }
-            log.info("FormattedText: " + formattedText + "---");
-            return formattedText;
-        } catch (ResourceAccessException e) {
-            throw new TwitterApiException(msg + " check your Network Connection!", e);
-        } catch (RateLimitExceededException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (Exception e) {
-            throw new TwitterApiException(msg, e);
-        } finally {
-            log.info("---------------------------------------");
-        }
+            /*
+        } else {
+            String retVal = msg + "fetchTestData is "+fetchTestData+" must be configure true, to run this test successfull";
+            log.error(retVal);
+            return retVal;
+        }  */
     }
 
     @Override

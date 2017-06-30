@@ -35,8 +35,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.backend.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private int millisToWaitForFetchTweetsFromTwitterSearch;
@@ -81,6 +81,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 }
             }
             log.info("---------------------------------------");
+
+            /*
             try {
                 if (fetchTestData) {
                     for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
@@ -103,6 +105,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
             } catch (Exception e){
                 log.warn(e.getMessage());
             }
+            */
             log.info("---------------------------------------");
             /*
             try {
