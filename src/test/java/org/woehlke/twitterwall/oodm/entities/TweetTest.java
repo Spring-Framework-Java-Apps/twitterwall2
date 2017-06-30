@@ -46,7 +46,7 @@ public class TweetTest {
         Assert.assertTrue(true);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText1() {
@@ -58,7 +58,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText2() {
@@ -70,7 +70,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText3() {
@@ -82,7 +82,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText4() {
@@ -94,7 +94,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText5() {
@@ -106,7 +106,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText6() {
@@ -118,7 +118,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText7() {
@@ -130,7 +130,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText8() {
@@ -142,7 +142,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText9() {
@@ -154,7 +154,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText10() {
@@ -166,7 +166,7 @@ public class TweetTest {
         Assert.assertEquals(output, result);
     }
 
-    //@Ignore
+    @Ignore
     @Commit
     @Test
     public void testText11() {
