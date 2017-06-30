@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,22 +22,19 @@ import java.io.Serializable;
                 query = "select t from TickerSymbol as t where t.tickerSymbol=:tickerSymbol and t.url=:url"
         )
 })
-public class TickerSymbol extends AbstractTwitterObject implements DomainObject, Comparable<TickerSymbol> {
+public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    protected Long id;
+    
     @Column(name = "ticker_symbol")
     private String tickerSymbol;
 
     @Column
     private String url;
-
-    @Transient
-    private int[] indices;
 
     public TickerSymbol(String tickerSymbol, String url, int[] indices) {
         this.tickerSymbol = tickerSymbol;
@@ -50,15 +48,8 @@ public class TickerSymbol extends AbstractTwitterObject implements DomainObject,
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    
+    
     public String getTickerSymbol() {
         return tickerSymbol;
     }
@@ -75,16 +66,17 @@ public class TickerSymbol extends AbstractTwitterObject implements DomainObject,
         this.url = url;
     }
 
-    public int[] getIndices() {
-        return indices;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setIndices(int[] indices) {
-        this.indices = indices;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(TickerSymbol o) {
         if (this == o) return true;
         if (!(o instanceof TickerSymbol)) return false;
         if (!super.equals(o)) return false;

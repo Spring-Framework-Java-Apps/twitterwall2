@@ -47,6 +47,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText1() {
         log.info("testText1");
@@ -58,6 +59,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText2() {
         log.info("testText2");
@@ -69,6 +71,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText3() {
         log.info("testText3");
@@ -80,6 +83,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText4() {
         log.info("testText4");
@@ -91,6 +95,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText5() {
         log.info("testText5");
@@ -102,6 +107,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText6() {
         log.info("testText6");
@@ -113,6 +119,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText7() {
         log.info("testText7");
@@ -124,6 +131,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText8() {
         log.info("testText8");
@@ -135,6 +143,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText9() {
         log.info("testText9");
@@ -146,6 +155,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText10() {
         log.info("testText10");
@@ -157,6 +167,7 @@ public class TweetTest {
     }
 
     @Ignore
+    @Commit
     @Test
     public void testText11() {
         log.info("testText11");

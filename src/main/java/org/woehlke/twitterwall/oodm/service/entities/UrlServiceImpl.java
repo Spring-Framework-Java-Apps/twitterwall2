@@ -1,40 +1,26 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
-import org.apache.http.HttpHost;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.twitter.api.UrlEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByDisplayExpandedUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlCacheByUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.PersistUrlCacheException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
-import java.io.IOException;
+
+
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 12.06.17.
@@ -49,13 +35,16 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlCacheRepository urlCacheRepository;
 
-    @Value("${twitterwall.url.fetchTestDataVerbose}")
+    private final TwitterUrlService twitterUrlService;
+
+    @Value("${twitterwall.batch.url.fetchTestDataVerbose}")
     private boolean fetchTestDataVerbose;
 
     @Autowired
-    public UrlServiceImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository) {
+    public UrlServiceImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
         this.urlRepository = urlRepository;
         this.urlCacheRepository = urlCacheRepository;
+        this.twitterUrlService = twitterUrlService;
     }
 
     @Override
@@ -68,6 +57,16 @@ public class UrlServiceImpl implements UrlService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url update(Url url) {
         return this.urlRepository.update(url);
+    }
+
+    @Override
+    public List<Url> getAll() {
+        return this.urlRepository.getAll(Url.class);
+    }
+
+    @Override
+    public long count() {
+        return this.urlRepository.count(Url.class);
     }
 
     @Override
@@ -90,10 +89,6 @@ public class UrlServiceImpl implements UrlService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url store(Url url) {
         String msg = "Url.store: ";
-        log.info(msg+"try to store: "+url.toString());
-        if(url == null || url.getUrl()==null){
-            throw new FindUrlByDisplayExpandedUrlException(url.getDisplay(), url.getExpanded(), url.getUrl());
-        }
         String urlStr = url.getUrl();
         log.info(msg+"try to store by getPersistentUrlFor url="+urlStr);
         return getPersistentUrlFor(urlStr);
@@ -125,54 +120,7 @@ public class UrlServiceImpl implements UrlService {
         return testData;
     }
 
-    @Override
-    public Url fetchTransientUrl(String urlSrc) {
-        Url newUrl = null;
-        try {
-            String display;
-            String expanded;
-            int[] indices = {};
-            CloseableHttpClient httpclient = HttpClients.createMinimal();
-            HttpGet httpGet = new HttpGet(urlSrc);
-            HttpClientContext context = HttpClientContext.create();
-            CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
-            HttpHost target = context.getTargetHost();
-            List<URI> redirectLocations = context.getRedirectLocations();
-            URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
-            display = location.getHost();
-            expanded = location.toExternalForm();
-            newUrl = new Url(display, expanded, urlSrc, indices);
-            response1.close();
-        } catch (ClientProtocolException e) {
-            //throw new FetchUrlException(urlSrc, e);
-            log.warn(e.getMessage());
-        } catch (NullPointerException e) {
-            //throw new FetchUrlException(urlSrc, e);
-            log.warn(e.getMessage());
-        } catch (IllegalArgumentException e){
-            //throw new FetchUrlException(urlSrc, e);
-            log.warn(e.getMessage());
-        } catch (URISyntaxException e) {
-            //throw new FetchUrlException(urlSrc, e);
-        } catch (IOException e) {
-            log.warn(e.getMessage());
-            if(newUrl != null){
-                return newUrl;
-            }
-            //throw new FetchUrlException(urlSrc, e);
-        } catch (RuntimeException ex) {
-            log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
-        } catch (Exception ex) {
-            log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
-        }
-        if(newUrl == null){
-            throw new FetchUrlException(urlSrc);
-        } else {
-            return newUrl;
-        }
-    }
+    
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
@@ -190,7 +138,7 @@ public class UrlServiceImpl implements UrlService {
                     log.info(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
                 return urlPers;
-            } catch (FindUrlByUrlException ex) {
+            } catch (EmptyResultDataAccessException ex) {
                 log.info(msg+" not found ");
                 try {
                     log.info(msg+" try to find UrlCache");
@@ -208,11 +156,11 @@ public class UrlServiceImpl implements UrlService {
                     newUrl = this.urlRepository.persist(newUrl);
                     log.info(msg+" persisted: "+newUrl.toString());
                     return newUrl;
-                } catch (FindUrlCacheByUrlException e) {
+                } catch (EmptyResultDataAccessException e) {
                     UrlCache urlCache = new UrlCache();
                     try {
                         log.info(msg + " try to fetchTransientUrl");
-                        Url myUrl = this.fetchTransientUrl(url);
+                        Url myUrl = twitterUrlService.fetchTransientUrl(url);
                         log.info(msg + " found by fetchTransientUrl: " + myUrl);
                         urlCache.setUrl(myUrl.getUrl());
                         urlCache.setExpanded(myUrl.getExpanded());
@@ -223,10 +171,6 @@ public class UrlServiceImpl implements UrlService {
                         } else {
                             log.info(msg + " not persisted: " + urlCache.toString());
                         }
-                    } catch (PersistUrlCacheException puce){
-                        log.info(msg+puce.getMessage());
-                        urlCache.setUrl(url);
-                        urlCache.setExpanded(url);
                     } catch (FetchUrlException fue)  {
                         log.info(msg+fue.getMessage());
                         urlCache.setUrl(url);
@@ -249,46 +193,8 @@ public class UrlServiceImpl implements UrlService {
         }
     }
 
-    @Override
-    public Set<Url> transformUrls(List<UrlEntity> urls) {
-        Set<Url> myUrls = new LinkedHashSet<>();
-        for (UrlEntity url : urls) {
-            String display = url.getDisplayUrl();
-            String expanded = url.getExpandedUrl();
-            String urlStr = url.getUrl();
-            int[] indices = url.getIndices();
-            Url myUrlEntity = new Url(display, expanded, urlStr, indices);
-            myUrls.add(myUrlEntity);
-        }
-        return myUrls;
-    }
+    
 
-    @Override
-    public Set<Url> getUrlsFor(User user) {
-        Set<Url> urls = new LinkedHashSet<>();
-        String description = user.getDescription();
-        if (description != null) {
-            Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + AbstractFormattedText.stopChar + ")");
-            Matcher m3 = urlPattern.matcher(description);
-            while (m3.find()) {
-                urls.add(this.fetchTransientUrl(m3.group(1)));
-            }
-            Pattern urlPattern2 = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")$");
-            Matcher m4 = urlPattern2.matcher(description);
-            while (m4.find()) {
-                urls.add(this.fetchTransientUrl(m4.group(1)));
-            }
-        }
-        String userWebpage = user.getUrl();
-        if(userWebpage != null) {
-            Pattern urlPattern3 = Pattern.compile("^("+Url.URL_PATTTERN_FOR_USER+")$");
-            Matcher m5 = urlPattern3.matcher(description);
-            while (m5.find()) {
-                urls.add(this.fetchTransientUrl(m5.group(1)));
-            }
-        }
-        return urls;
-    }
 
 
     private static Map<String, String> hosts = new HashMap<>();

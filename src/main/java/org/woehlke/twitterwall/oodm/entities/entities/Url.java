@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,13 +27,13 @@ import java.io.Serializable;
                 query="select t from Url as t where t.url=:url"
         )
 })
-public class Url extends AbstractTwitterObject implements DomainObject, Comparable<Url> {
+public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {
     
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column
     private String display;
@@ -44,9 +45,6 @@ public class Url extends AbstractTwitterObject implements DomainObject, Comparab
 
     @Column(nullable = false)
     private String url;
-
-    @Transient
-    private int[] indices;
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){

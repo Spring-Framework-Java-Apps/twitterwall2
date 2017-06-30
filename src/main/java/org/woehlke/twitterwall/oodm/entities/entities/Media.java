@@ -2,6 +2,8 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,13 +32,13 @@ import java.io.Serializable;
                 query = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType"
         )
 })
-public class Media extends AbstractTwitterObject implements DomainObject, Comparable<Media> {
+public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
@@ -59,10 +61,9 @@ public class Media extends AbstractTwitterObject implements DomainObject, Compar
     @Column(name = "media_type")
     private String mediaType;
 
-    @Transient
-    private int[] indices;
 
     public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
+        super(indices);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -70,15 +71,16 @@ public class Media extends AbstractTwitterObject implements DomainObject, Compar
         this.display = display;
         this.expanded = expanded;
         this.mediaType = mediaType;
-        this.indices = indices;
     }
 
     private Media() {
+        super();
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
+
 
     public Long getId() {
         return id;
@@ -142,14 +144,6 @@ public class Media extends AbstractTwitterObject implements DomainObject, Compar
 
     public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
-    }
-
-    public int[] getIndices() {
-        return indices;
-    }
-
-    public void setIndices(int[] indices) {
-        this.indices = indices;
     }
 
     @Override

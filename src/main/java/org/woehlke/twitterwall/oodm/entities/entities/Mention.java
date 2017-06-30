@@ -3,6 +3,8 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -36,13 +38,13 @@ import java.util.regex.Pattern;
 
 
 })
-public class Mention extends AbstractTwitterObject implements DomainObject, Comparable<Mention> {
+public class Mention extends AbstractTwitterObject<Mention>implements DomainObjectWithIdTwitter<Mention>,DomainObjectWithScreenName<Mention> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column(name = "id_twitter")
     private long idTwitter;
@@ -59,8 +61,6 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
     @Column(name = "name")
     private String name;
 
-    @Transient
-    private int[] indices;
 
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
         this.idTwitter = idTwitter;
@@ -76,6 +76,7 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
         return serialVersionUID;
     }
 
+
     public Long getId() {
         return id;
     }
@@ -83,6 +84,7 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
     public void setId(Long id) {
         this.id = id;
     }
+
 
     public long getIdTwitter() {
         return idTwitter;
@@ -106,14 +108,6 @@ public class Mention extends AbstractTwitterObject implements DomainObject, Comp
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int[] getIndices() {
-        return indices;
-    }
-
-    public void setIndices(int[] indices) {
-        this.indices = indices;
     }
 
     @Override

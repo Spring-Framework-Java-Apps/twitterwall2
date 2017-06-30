@@ -2,23 +2,17 @@ package org.woehlke.twitterwall.oodm.service;
 
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.service.common.OodmService;
+import org.woehlke.twitterwall.oodm.service.common.DomainService;
 
 import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
  */
-public interface UserService extends OodmService {
+public interface UserService extends DomainService<User> {
 
     User findByIdTwitter(long idTwitter);
-
-    User persist(User user);
-
-    User update(User user);
-
-    List<User> getAll();
-
+    
     User findByScreenName(String screenName);
 
     List<User> getTweetingUsers();
@@ -29,13 +23,5 @@ public interface UserService extends OodmService {
 
     List<Long> getAllTwitterIds();
 
-    User storeUser(User user);
-
     User storeUserProcess(User user);
-
-    User transform(TwitterProfile twitterProfile);
-
-    User getEntitiesForUrlDescription(User user);
-
-    User storeUserProfile(TwitterProfile userProfile);
 }

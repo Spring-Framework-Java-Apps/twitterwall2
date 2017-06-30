@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindUrlByDisplayExpandedUrlException extends OodmException {
         super(msg + display + ",expanded=" + expanded + ",url=" + url);
     }
 
-    public FindUrlByDisplayExpandedUrlException(NoResultException e, String display, String expanded, String url) {
+    public FindUrlByDisplayExpandedUrlException(EmptyResultDataAccessException e, String display, String expanded, String url) {
         super(msg + display + ",expanded=" + expanded + ",url=" + url + " " + e.getMessage(), e);
     }
 

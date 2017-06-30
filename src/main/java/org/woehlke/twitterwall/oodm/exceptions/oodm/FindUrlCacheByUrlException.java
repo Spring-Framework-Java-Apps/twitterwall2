@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindUrlCacheByUrlException extends OodmException {
         super(MSG + url);
     }
 
-    public FindUrlCacheByUrlException(NoResultException e, String url) {
+    public FindUrlCacheByUrlException(EmptyResultDataAccessException e, String url) {
         super(MSG + url + " " + e.getMessage(), e);
     }
 

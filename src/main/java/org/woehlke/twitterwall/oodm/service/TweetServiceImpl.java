@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,11 +51,11 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     private final TickerSymbolService tickerSymbolService;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Autowired
     public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService) {
@@ -68,7 +70,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public Tweet persist(Tweet myTweet) {
+    public Tweet create(Tweet myTweet) {
         return tweetRepository.persist(myTweet);
     }
 
@@ -76,6 +78,11 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet update(Tweet myTweet) {
         return tweetRepository.update(myTweet);
+    }
+
+    @Override
+    public List<Tweet> getAll() {
+        return tweetRepository.getAll(Tweet.class);
     }
 
     @Override
@@ -103,7 +110,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     public long count() {
-        return tweetRepository.count();
+        return tweetRepository.count(Tweet.class);
     }
 
     @Override
@@ -131,94 +138,69 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
 
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
-        return tweetRepository.findByIdTwitter(idTwitter);
+        return tweetRepository.findByIdTwitter(idTwitter,Tweet.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet store(Tweet tweet) {
         try {
-            Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter());
+            Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
             tweet.setId(tweetPersistent.getId());
             return tweetRepository.update(tweet);
-        } catch (FindTweetByIdTwitterException e) {
+        } catch (EmptyResultDataAccessException e) {
             return tweetRepository.persist(tweet);
         }
     }
-
-    @Override
-    public Tweet transformTweet(org.springframework.social.twitter.api.Tweet tweet) {
-        if (tweet == null) { return null; } else {
-            Tweet retweetedStatus = transformTweet(tweet.getRetweetedStatus());
-            long idTwitter = tweet.getId();
-            String idStr = tweet.getIdStr();
-            String text = tweet.getText();
-            Date createdAt = tweet.getCreatedAt();
-            String fromUser = tweet.getFromUser();
-            String profileImageUrl = tweet.getProfileImageUrl();
-            Long toUserId = tweet.getToUserId();
-            long fromUserId = tweet.getFromUserId();
-            String languageCode = tweet.getLanguageCode();
-            String source = tweet.getSource();
-            Tweet myTweet = new Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
-            myTweet.setFavoriteCount(tweet.getFavoriteCount());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToScreenName(tweet.getInReplyToScreenName());
-            myTweet.setInReplyToUserId(tweet.getInReplyToUserId());
-            myTweet.setLanguageCode(tweet.getLanguageCode());
-            myTweet.setRetweetCount(tweet.getRetweetCount());
-            myTweet.setRetweeted(tweet.isRetweeted());
-            myTweet.setSource(tweet.getSource());
-            myTweet.setFromUser(tweet.getFromUser());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToStatusId(tweet.getInReplyToStatusId());
-            myTweet.setRetweetedStatus(retweetedStatus);
-            TwitterProfile twitterProfile = tweet.getUser();
-            /* transform user */
-            User user = userService.transform(twitterProfile);
-            myTweet.setUser(user);
-            /* transformTwitterEntities */
-            Set<Url> urls = urlService.transformUrls(tweet.getEntities().getUrls());
-            Set<HashTag> tags = hashTagService.transformTwitterEntitiesHashTags(tweet.getEntities().getHashTags());
-            Set<Mention> mentions = mentionService.transformTwitterEntitiesMentions(tweet.getEntities().getMentions());
-            Set<Media> media = mediaService.transformTwitterEntitiesMedia(tweet.getEntities().getMedia());
-            Set<TickerSymbol> tickerSymbols = tickerSymbolService.transformTwitterEntitiesTickerSymbols(tweet.getEntities().getTickerSymbols());
-            myTweet.setUrls(urls);
-            myTweet.setTags(tags);
-            myTweet.setMentions(mentions);
-            myTweet.setMedia(media);
-            myTweet.setTickerSymbols(tickerSymbols);
-            return myTweet;
-        }
-    }
-
+    
     @Override
     public String performTweetTest(long idTwitter, String output, boolean retweet) {
         String msg = "performTweetTest: ";
         log.info("idTwitter: " + idTwitter);
-        try {
-            Tweet tweet = this.findByIdTwitter(idTwitter);
-            log.info("text:          " + tweet.getText());
-            log.info("Expected:      " + output + "---");
-            String formattedText;
-            if (retweet) {
-                formattedText = tweet.getRetweetedStatus().getFormattedText();
-            } else {
-                formattedText = tweet.getFormattedText();
+        //if(fetchTestData) {
+            try {
+                Tweet tweet = this.findByIdTwitter(idTwitter);
+                log.info("text:          " + tweet.getText());
+                log.info("Expected:      " + output + "---");
+                String formattedText;
+                if (retweet) {
+                    formattedText = tweet.getRetweetedStatus().getFormattedText();
+                } else {
+                    formattedText = tweet.getFormattedText();
+                }
+                log.info("FormattedText: " + formattedText + "---");
+                return formattedText;
+            } catch (EmptyResultDataAccessException e) {
+                log.warn(msg + e.getMessage());
+                throw e;
+            } catch (NoResultException e) {
+                log.warn(msg + e.getMessage());
+                throw e;
+            } catch (ResourceAccessException e) {
+                log.error(msg + " check your Network Connection!", e);
+                throw e;
+                //throw new TwitterApiException(msg + " check your Network Connection!", e);
+            } catch (RateLimitExceededException e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } catch (RuntimeException e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } catch (Exception e) {
+                log.error(msg + e.getMessage());
+                throw e;
+                //throw new TwitterApiException(msg, e);
+            } finally {
+                log.info("---------------------------------------");
             }
-            log.info("FormattedText: " + formattedText + "---");
-            return formattedText;
-        } catch (ResourceAccessException e) {
-            throw new TwitterApiException(msg + " check your Network Connection!", e);
-        } catch (RateLimitExceededException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (RuntimeException e) {
-            throw new TwitterApiException(msg, e);
-        } catch (Exception e) {
-            throw new TwitterApiException(msg, e);
-        } finally {
-            log.info("---------------------------------------");
-        }
+            /*
+        } else {
+            String retVal = msg + "fetchTestData is "+fetchTestData+" must be configure true, to run this test successfull";
+            log.error(retVal);
+            return retVal;
+        }  */
     }
 
     @Override

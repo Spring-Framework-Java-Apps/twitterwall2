@@ -12,9 +12,8 @@ import java.util.regex.Pattern;
 /**
  * Created by tw on 23.06.17.
  */
-public abstract class AbstractFormattedText extends AbstractTwitterObject {
-
-
+public abstract class AbstractFormattedText<T extends DomainObject> extends AbstractTwitterObject<T> {
+    
     protected String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
 

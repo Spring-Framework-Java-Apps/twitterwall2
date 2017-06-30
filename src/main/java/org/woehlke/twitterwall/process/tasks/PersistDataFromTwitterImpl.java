@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,11 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
-import org.woehlke.twitterwall.process.backend.TwitterApiService;
+import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.process.backend.service.TweetTransformService;
+import org.woehlke.twitterwall.process.backend.service.UserTransformService;
 
+import javax.persistence.NoResultException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -45,14 +50,18 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
 
     private final TickerSymbolService tickerSymbolService;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    private final TweetTransformService tweetTransformService;
+
+    private final UserTransformService userTransformService;
+
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
-    @Value("${twitterwall.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
     @Autowired
-    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService) {
+    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService, TweetTransformService tweetTransformService, UserTransformService userTransformService) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
@@ -61,11 +70,13 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         this.hashTagService = hashTagService;
         this.urlService = urlService;
         this.tickerSymbolService = tickerSymbolService;
+        this.tweetTransformService = tweetTransformService;
+        this.userTransformService = userTransformService;
     }
 
     @Override
     public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet) {
-        Tweet tweet = tweetService.transformTweet(myTweet);
+        Tweet tweet = tweetTransformService.transform(myTweet);
         tweet = this.storeOneTweetPerform(tweet);
         return tweet;
     }
@@ -113,10 +124,11 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         tweet = tweetService.store(tweet);
         return tweet;
     }
-    
+                    
     @Override
     public User storeUserProfile(TwitterProfile userProfile) {
-        User user = userService.storeUserProfile(userProfile);
+        User user = userTransformService.transform(userProfile);
+        user = userService.storeUserProcess(user);
         return user;
     }
 
@@ -129,10 +141,16 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter,Persis
         try {
             Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
             log.info("number of tweets: " + tweetService.count());
-            if (!fetchTestData) {
-                for (long id : idTwitterToFetch) {
+            for (long id : idTwitterToFetch) {
+                try {
                     org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
                     this.storeOneTweet(twitterTweet);
+                } catch (TwitterApiException e){
+                    log.error("twitterApiService.findOneTweetById: " + e.getMessage());
+                } catch (EmptyResultDataAccessException ex){
+                    log.error("storeOneTweet: "+ex.getMessage());
+                } catch (NoResultException exe){
+                    log.error("storeOneTweet: "+exe.getMessage());
                 }
             }
         } catch (InterruptedException e) {

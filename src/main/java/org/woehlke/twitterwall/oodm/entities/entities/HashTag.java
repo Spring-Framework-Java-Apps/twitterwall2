@@ -23,20 +23,25 @@ import java.util.regex.Pattern;
         @NamedQuery(
                 name = "HashTag.getAll",
                 query = "select h from HashTag as h"
+        ),
+        @NamedQuery(
+                name = "HashTag.count" ,
+                query = "select count(h) from HashTag as h"
         )
 })
-public class HashTag extends AbstractTwitterObject implements DomainObject, Comparable<HashTag> {
+public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
-        Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
+        //Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         return m.matches();
     }
@@ -44,24 +49,6 @@ public class HashTag extends AbstractTwitterObject implements DomainObject, Comp
     @Column(nullable = false)
     private String text;
 
-    @Transient
-    private int[] indices;
-
-    public String getText() {
-        return this.text;
-    }
-
-    public HashTag(String text, int[] indices) {
-        this.text = text;
-        this.indices = indices;
-    }
-
-    private HashTag() {
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public Long getId() {
         return id;
@@ -71,17 +58,27 @@ public class HashTag extends AbstractTwitterObject implements DomainObject, Comp
         this.id = id;
     }
 
-    public void setText(String text) {
+
+    public String getText() {
+        return this.text;
+    }
+
+    public HashTag(String text, int[] indices) {
+        super(indices);
         this.text = text;
     }
 
-    public int[] getIndices() {
-        return indices;
+    private HashTag() {
     }
 
-    public void setIndices(int[] indices) {
-        this.indices = indices;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+    
 
     @Override
     public boolean equals(Object o) {

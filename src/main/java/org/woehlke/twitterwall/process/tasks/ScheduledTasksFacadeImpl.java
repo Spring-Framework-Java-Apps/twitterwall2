@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -12,15 +13,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
-import org.woehlke.twitterwall.process.backend.TwitterApiService;
+import org.woehlke.twitterwall.backend.TwitterApiService;
 
+import javax.persistence.NoResultException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -36,10 +35,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.twitter.fetchTestData}")
-    private boolean fetchTestData;
+    //@Value("${twitterwall.backend.twitter.fetchTestData}")
+    //private boolean fetchTestData;
 
-    @Value("${twitterwall.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
@@ -71,9 +70,19 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
             for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
                 loopId++;
                 log.info(msg+loopId);
-                this.persistDataFromTwitter.storeOneTweet(tweet);
+                try {
+                    this.persistDataFromTwitter.storeOneTweet(tweet);
+                } catch (EmptyResultDataAccessException e)  {
+                    log.warn(e.getMessage());
+                }catch (NoResultException e){
+                    log.warn(e.getMessage());
+                } catch (Exception e){
+                    log.warn(e.getMessage());
+                }
             }
             log.info("---------------------------------------");
+
+            /*
             try {
                 if (fetchTestData) {
                     for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
@@ -82,14 +91,21 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                             loopId++;
                             log.info(msg+loopId);
                             this.persistDataFromTwitter.storeOneTweet(tweet);
+                        } catch (EmptyResultDataAccessException e)  {
+                            log.warn(e.getMessage());
                         } catch (TwitterApiException ex){
                             log.warn(ex.getMessage());
+                        } catch (NoResultException e){
+                            log.warn(e.getMessage());
                         }
                     }
                 }
             } catch (RateLimitExceededException e){
                 log.info(e.getMessage());
+            } catch (Exception e){
+                log.warn(e.getMessage());
             }
+            */
             log.info("---------------------------------------");
             /*
             try {
@@ -126,7 +142,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg + " check your Network Connection!", e);
+            throw e;
+            //throw new TwitterApiException(msg + " check your Network Connection!", e);
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -134,7 +151,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg, e);
+            throw e;
+            //throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -142,7 +160,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg, e);
+            throw e;
+            //throw new TwitterApiException(msg, e);
         } finally {
             log.info("---------------------------------------");
         }
@@ -187,9 +206,12 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg + "updateUserProfiles: check your Network Connection!", e);
+            //throw new TwitterApiException(msg + "updateUserProfiles: check your Network Connection!", e);
+            log.error(msg + " check your Network Connection!");
+            throw e;
         } catch (RateLimitExceededException e) {
-            throw new TwitterApiException(msg, e);
+            //throw new TwitterApiException(msg, e);
+            throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -197,7 +219,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException("updateUserProfiles", e);
+            throw e;
+            //throw new TwitterApiException("updateUserProfiles", e);
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -205,7 +228,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException("updateUserProfiles", e);
+            throw e;
+            //throw new TwitterApiException("updateUserProfiles", e);
         } finally {
             log.info("---------------------------------------");
         }
@@ -260,7 +284,9 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg + " check your Network Connection!", e);
+            log.error(msg + " check your Network Connection!");
+            throw e;
+            //throw new TwitterApiException(, e);
         } catch (RateLimitExceededException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -268,7 +294,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg, e);
+            throw e;
+            //throw new TwitterApiException(msg, e);
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -276,7 +303,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg, e);
+            throw e;
+           // throw new TwitterApiException(msg, e);
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -284,7 +312,8 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade,ScheduledT
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            throw new TwitterApiException(msg, e);
+            throw e;
+            //throw new TwitterApiException(msg, e);
         } finally {
             log.info("---------------------------------------");
         }

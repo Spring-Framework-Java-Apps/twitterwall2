@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.exceptions.oodm;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
@@ -20,7 +21,7 @@ public class FindMentionByScreenNameAndNameException extends OodmException {
         super(MSG + screenName + ",name=" + name);
     }
 
-    public FindMentionByScreenNameAndNameException(NoResultException e, String screenName, String name) {
+    public FindMentionByScreenNameAndNameException(EmptyResultDataAccessException e, String screenName, String name) {
         super(MSG + screenName + ",name=" + name + " " + e.getMessage(), e);
     }
 

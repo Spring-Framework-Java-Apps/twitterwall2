@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.service.entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.MediaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,13 +40,23 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media findByIdTwitter(long idTwitter) {
-        return this.mediaRepository.findByIdTwitter(idTwitter);
+        return this.mediaRepository.findByIdTwitter(idTwitter,Media.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media update(Media media) {
         return this.mediaRepository.update(media);
+    }
+
+    @Override
+    public List<Media> getAll() {
+        return this.mediaRepository.getAll(Media.class);
+    }
+
+    @Override
+    public long count() {
+        return this.mediaRepository.count(Media.class);
     }
 
     @Override
@@ -59,7 +70,8 @@ public class MediaServiceImpl implements MediaService {
         String msg = "Media.store: ";
         try {
             log.info(msg+"try to find: "+media.toString());
-            Media mediaPers = this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
+            //Media mediaPers = this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
+            Media mediaPers = this.mediaRepository.findByIdTwitter(media.getIdTwitter(),Media.class);
             log.info(msg+"found: "+media.toString());
             mediaPers.setDisplay(media.getDisplay());
             mediaPers.setExpanded(media.getExpanded());
@@ -71,27 +83,10 @@ public class MediaServiceImpl implements MediaService {
             mediaPers.setUrl(media.getUrl());
             log.info(msg+"found and try to update: "+media.toString());
             return this.mediaRepository.update(mediaPers);
-        } catch (FindMediaByFieldsExceptionException e) {
+        } catch (EmptyResultDataAccessException e) {
             log.info(msg+"not found and try to persist: "+media.toString());
             return this.mediaRepository.persist(media);
         }
     }
 
-    @Override
-    public Set<Media> transformTwitterEntitiesMedia(List<MediaEntity> media) {
-        Set<Media> myMediaEntities = new LinkedHashSet<Media>();
-        for (MediaEntity medium : media) {
-            long idTwitter = medium.getId();
-            String mediaHttp = medium.getMediaUrl();
-            String mediaHttps = medium.getMediaSecureUrl();
-            String url = medium.getUrl();
-            String display = medium.getDisplayUrl();
-            String expanded = medium.getExpandedUrl();
-            String type = medium.getType();
-            int[] indices = medium.getIndices();
-            Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, indices);
-            myMediaEntities.add(myMediaEntity);
-        }
-        return myMediaEntities;
-    }
 }
