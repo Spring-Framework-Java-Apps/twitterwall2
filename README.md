@@ -19,7 +19,7 @@ Twitterwall with spring:boot for heroku
   - export TWITTER_CONSUMER_SECRET={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN_SECRET={Credentials from your Twitter-Account}
- - Edit app behaviour
+- Edit app behaviour
   - export TWITTERWALL_FRONTEND_MAX_RESULTS=60
   - export TWITTERWALL_SHOW_USERS_MENU=true
   - export TWITTER_PAGE_SIZE=500
@@ -34,7 +34,8 @@ Twitterwall with spring:boot for heroku
   - export TWITTERWALL_INFO_WEBPAGE=https://github.com/phasenraum2010/twitterwall2
   - export TWITTERWALL_THEME=typo3
   - export TWITTERWALL_APP_NAME='Twitterwall'
-  
+  - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
+    
 - run with: mvn clean spring-boot:run
 
 
