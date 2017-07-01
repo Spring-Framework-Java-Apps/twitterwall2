@@ -4,17 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.twitter.api.MediaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindMediaByFieldsExceptionException;
 import org.woehlke.twitterwall.oodm.repository.entities.MediaRepository;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by tw on 12.06.17.
@@ -60,17 +56,11 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media findByFields(Media media) {
-        return this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media store(Media media) {
         String msg = "Media.store: ";
         try {
             log.info(msg+"try to find: "+media.toString());
-            //Media mediaPers = this.mediaRepository.findByFields(media.getMediaHttp(), media.getMediaHttps(), media.getUrl(), media.getDisplay(), media.getExpanded(), media.getMediaType());
             Media mediaPers = this.mediaRepository.findByIdTwitter(media.getIdTwitter(),Media.class);
             log.info(msg+"found: "+media.toString());
             mediaPers.setDisplay(media.getDisplay());

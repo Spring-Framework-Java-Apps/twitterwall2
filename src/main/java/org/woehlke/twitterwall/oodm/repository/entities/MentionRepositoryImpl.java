@@ -19,31 +19,31 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
     
     @Override
     public Mention findByScreenName(String screenName) {
+        String qname="Mention.findByScreenName";
         try {
-            String qname="Mention.findByScreenName";
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("screenName", screenName);
             Mention result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(qname+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + screenName);
+            log.info(qname+" not found: " + screenName);
             throw e;
         }
     }
 
     @Override
     public Mention findByIdTwitterAndScreenName(Long idTwitter, String screenName) {
+        String qname="Mention.findByIdTwitterAndScreenName";
         try {
-            String qname="Mention.findByIdTwitterAndScreenName";
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("idTwitter", idTwitter);
             query.setParameter("screenName", screenName);
             Mention result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(qname+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + screenName);
+            log.info(qname+" not found: " + screenName);
             throw e;
         }
     }

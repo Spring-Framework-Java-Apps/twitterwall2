@@ -1,21 +1,19 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
 @Table(name = "media", uniqueConstraints = {
-        @UniqueConstraint(name="unique_media_url", columnNames = {"url"}),
         @UniqueConstraint(name="unique_media_id_twitter", columnNames = {"id_twitter"})
 }, indexes = {
+        @Index(name="idx_media_url", columnList= "url"),
         @Index(name="idx_media_expanded", columnList="expanded"),
         @Index(name="idx_media_display", columnList="display") ,
         @Index(name="idx_media_media_http", columnList="media_http"),
@@ -28,8 +26,16 @@ import java.io.Serializable;
                 query = "select t from Media as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
-                name =  "Media.findByFields",
-                query = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType"
+            name = "Media.count",
+            query = "select count(t) from Media as t"
+        ),
+        @NamedQuery(
+                name = "Media.getAll",
+                query = "select t from Media as t"
+        ) ,
+        @NamedQuery(
+                name = "Media.findByUrl",
+                query = "select t from Media as t where t.url=:url"
         )
 })
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {

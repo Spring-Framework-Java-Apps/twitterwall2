@@ -8,13 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
-import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class HashTagController {
 
     private final HashTagService hashTagService;
 
+    private final UserService userService;
+
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
@@ -45,9 +48,6 @@ public class HashTagController {
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
 
-    //@Value("${twitterwall.backend.twitter.fetchTestData}")
-    //private boolean fetchTestData;
-
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
 
@@ -55,38 +55,45 @@ public class HashTagController {
     private String theme;
 
     @Autowired
-    public HashTagController(TweetService tweetService, HashTagService hashTagService) {
+    public HashTagController(TweetService tweetService, HashTagService hashTagService, UserService userService) {
         this.tweetService = tweetService;
         this.hashTagService = hashTagService;
+        this.userService = userService;
     }
 
     @RequestMapping("/hashtags")
     public String hashTags(Model model) {
         String msg = "/hashtags: ";
         logEnv();
-        Page page = new Page();
-        page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
-        page.setMenuAppName(menuAppName);
-        page.setTitle("HashTags");
-        page.setSubtitle(searchterm);
-        page.setShowMenuUsers(showMenuUsers);
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
-        model.addAttribute("page", page);
-        List<HashTagCounted> hashTags = new ArrayList<>();
+        String title = "HashTags";
+        String subtitle = searchterm;
+        String symbol = Symbols.HASHTAG.toString();
+        model = setupPage(model,title,subtitle,symbol);
+        List<HashTagCounted> hashTagsTweets = new ArrayList<>();
+        List<HashTagCounted> hashTagsUsers = new ArrayList<>();
         for (HashTag hashTag : hashTagService.getAll()) {
-            long number = 0;
-            try {
-                number = tweetService.countTweetsForHashTag(hashTag.getText());
-            } catch (OodmException e){
-                  log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
-            }
             String text = hashTag.getText();
-            HashTagCounted c = new HashTagCounted(number, text);
-            hashTags.add(c);
+            try {
+                long numberTweets = tweetService.countTweetsForHashTag(hashTag.getText());
+                if(numberTweets > 0) {
+                    HashTagCounted c = new HashTagCounted(numberTweets, text);
+                    hashTagsTweets.add(c);
+                }
+            } catch (IllegalArgumentException e){
+                log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
+            }
+            try {
+                long numberUsers = userService.countUsersForHashTag(hashTag.getText());
+                if(numberUsers > 0){
+                    HashTagCounted c = new HashTagCounted(numberUsers,text);
+                    hashTagsUsers.add(c);
+                }
+            } catch (IllegalArgumentException e){
+                log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
+            }
         }
-        model.addAttribute("hashTags", hashTags);
+        model.addAttribute("hashTagsTweets", hashTagsTweets);
+        model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "tags";
     }
 
@@ -96,29 +103,54 @@ public class HashTagController {
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
-            Page page = new Page();
-            page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
-            page.setMenuAppName(menuAppName);
-            page.setTitle("Tweets für HashTag");
-            page.setSubtitle("#" + hashtagText);
-            page.setHistoryBack(true);
-            page.setShowMenuUsers(showMenuUsers);
-            page.setTwitterSearchTerm(searchterm);
-            page.setInfoWebpage(infoWebpage);
-            page.setTheme(theme);
-            model.addAttribute("page", page);
+            String title = "Tweets für HashTag";
+            String subtitle = "#" + hashtagText;
+            String symbol = Symbols.HASHTAG.toString();
+            model = setupPage(model,title,subtitle,symbol);
             List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
             model.addAttribute("latestTweets", tweets);
             return "timeline";
         } else {
-            throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}", hashtagText);
+            throw new IllegalArgumentException("/hashtag/"+hashtagText);
         }
+    }
+
+    @RequestMapping("/user/hashtag/{hashtagText}")
+    public String hashTagForUsers(@PathVariable String hashtagText, Model model) {
+        logEnv();
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        if (m.matches()) {
+            String title = "Users für HashTag";
+            String subtitle = "#" + hashtagText;
+            String symbol = Symbols.HASHTAG.toString();
+            model = setupPage(model,title,subtitle,symbol);
+            List<User> users = userService.getUsersForHashTag(hashtagText);
+            model.addAttribute("users", users);
+            return "user";
+        } else {
+            throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
+        }
+    }
+
+    private Model setupPage(Model model, String title, String subtitle, String symbol) {
+        Page page = new Page();
+        page.setSymbol(symbol);
+        page.setMenuAppName(menuAppName);
+        page.setTitle(title);
+        page.setSubtitle(subtitle);
+        page.setHistoryBack(true);
+        page.setShowMenuUsers(showMenuUsers);
+        page.setTwitterSearchTerm(searchterm);
+        page.setInfoWebpage(infoWebpage);
+        page.setTheme(theme);
+        model.addAttribute("page", page);
+        return model;
     }
 
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        //log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
         log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);

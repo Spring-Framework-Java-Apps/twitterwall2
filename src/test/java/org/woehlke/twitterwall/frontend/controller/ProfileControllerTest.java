@@ -19,15 +19,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
-import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitterTest;
+import org.woehlke.twitterwall.test.TweetServiceTest;
+import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
+
 
 import javax.transaction.Transactional;
 
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+import static org.woehlke.twitterwall.test.ScheduledTasksFacadeTest.*;
 
 /**
  * Created by tw on 19.06.17.
@@ -36,7 +38,7 @@ import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @DataJpaTest(showSql=false)
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
+@Transactional(REQUIRES_NEW)
 @AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
 public class ProfileControllerTest {
 
@@ -55,7 +57,7 @@ public class ProfileControllerTest {
     private ProfileController controller;
 
     @Autowired
-    private TweetApiServiceTest tweetApiServiceTest;
+    private TweetServiceTest tweetServiceTest;
 
     @Autowired
     private PersistDataFromTwitterTest persistDataFromTwitterTest;
@@ -69,11 +71,21 @@ public class ProfileControllerTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        tweetApiServiceTest.waitForImport();
+        log.info("------------------------------------");
+        log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
+        tweetServiceTest.waitForImport();
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
+        log.info("------------------------------------");
+        log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
+        for(long id:ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST){
+            log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST: "+id);
+        }
         persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
         Assert.assertTrue(true);
+        log.info("------------------------------------");
     }
-
+    
     @Ignore
     @Test
     public void shouldReturnDefaultMessage() throws Exception {

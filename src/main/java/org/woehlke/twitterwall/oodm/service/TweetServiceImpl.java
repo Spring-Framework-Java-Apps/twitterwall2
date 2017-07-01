@@ -3,69 +3,30 @@ package org.woehlke.twitterwall.oodm.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.RateLimitExceededException;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindTweetByIdTwitterException;
-import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
-import org.woehlke.twitterwall.oodm.service.entities.*;
-
-import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
+public class TweetServiceImpl implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
 
     private final TweetRepository tweetRepository;
 
-    private final UserService userService;
-
-    private final UrlService urlService;
-
-    private final HashTagService hashTagService;
-
-    private final MentionService mentionService;
-
-    private final MediaService mediaService;
-
-    private final TickerSymbolService tickerSymbolService;
-
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private long millisToWaitForFetchTweetsFromTwitterSearch;
-
-    //@Value("${twitterwall.backend.twitter.fetchTestData}")
-    //private boolean fetchTestData;
-
     @Autowired
-    public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService) {
+    public TweetServiceImpl(TweetRepository tweetRepository) {
         this.tweetRepository = tweetRepository;
-        this.userService = userService;
-        this.urlService = urlService;
-        this.hashTagService = hashTagService;
-        this.mentionService = mentionService;
-        this.mediaService = mediaService;
-        this.tickerSymbolService = tickerSymbolService;
     }
 
     @Override
@@ -95,7 +56,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     @Override
     public List<Tweet> getTweetsForHashTag(String hashtagText) {
         if(!HashTag.isValidText(hashtagText)){
-            throw new OodmException("getTweetsForHashTag: "+MSG);
+            throw new IllegalArgumentException("getTweetsForHashTag: "+MSG);
         }
         return tweetRepository.getTweetsForHashTag(hashtagText);
     }
@@ -103,7 +64,7 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     @Override
     public long countTweetsForHashTag(String hashtagText) {
         if(!HashTag.isValidText(hashtagText)){
-            throw new OodmException("countTweetsForHashTag: "+MSG);
+            throw new IllegalArgumentException("countTweetsForHashTag: "+MSG);
         }
         return tweetRepository.countTweetsForHashTag(hashtagText);
     }
@@ -114,19 +75,9 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
     }
 
     @Override
-    public List<Tweet> getTestTweetsForTweetTest() {
-        List<Tweet> list = new ArrayList<>();
-        for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
-            Tweet tweet = this.findByIdTwitter(idTwitter);
-            list.add(tweet);
-        }
-        return list;
-    }
-
-    @Override
     public List<Tweet> getTweetsForUser(User user) {
         if(user == null){
-            throw new OodmException("getTweetsForUser: user is null");
+            throw new IllegalArgumentException("getTweetsForUser: user is null");
         }
         return tweetRepository.getTweetsForUser(user);
     }
@@ -151,70 +102,5 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
         } catch (EmptyResultDataAccessException e) {
             return tweetRepository.persist(tweet);
         }
-    }
-    
-    @Override
-    public String performTweetTest(long idTwitter, String output, boolean retweet) {
-        String msg = "performTweetTest: ";
-        log.info("idTwitter: " + idTwitter);
-        //if(fetchTestData) {
-            try {
-                Tweet tweet = this.findByIdTwitter(idTwitter);
-                log.info("text:          " + tweet.getText());
-                log.info("Expected:      " + output + "---");
-                String formattedText;
-                if (retweet) {
-                    formattedText = tweet.getRetweetedStatus().getFormattedText();
-                } else {
-                    formattedText = tweet.getFormattedText();
-                }
-                log.info("FormattedText: " + formattedText + "---");
-                return formattedText;
-            } catch (EmptyResultDataAccessException e) {
-                log.warn(msg + e.getMessage());
-                throw e;
-            } catch (NoResultException e) {
-                log.warn(msg + e.getMessage());
-                throw e;
-            } catch (ResourceAccessException e) {
-                log.error(msg + " check your Network Connection!", e);
-                throw e;
-                //throw new TwitterApiException(msg + " check your Network Connection!", e);
-            } catch (RateLimitExceededException e) {
-                log.error(msg + e.getMessage());
-                throw e;
-                //throw new TwitterApiException(msg, e);
-            } catch (RuntimeException e) {
-                log.error(msg + e.getMessage());
-                throw e;
-                //throw new TwitterApiException(msg, e);
-            } catch (Exception e) {
-                log.error(msg + e.getMessage());
-                throw e;
-                //throw new TwitterApiException(msg, e);
-            } finally {
-                log.info("---------------------------------------");
-            }
-            /*
-        } else {
-            String retVal = msg + "fetchTestData is "+fetchTestData+" must be configure true, to run this test successfull";
-            log.error(retVal);
-            return retVal;
-        }  */
-    }
-
-    @Override
-    public void waitForImport() {
-        log.info("Hello, Testing-World.");
-        log.info("We are waiting for fetchTweetsFromTwitterSearch.");
-        try {
-            log.info("number of tweets: " + this.count());
-            Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
-            log.info("number of tweets: " + this.count());
-        } catch (InterruptedException e) {
-            log.warn(e.getMessage());
-        }
-        log.info("number of tweets: " + this.count());
-        log.info("------------------------------------------------");
     }
 }

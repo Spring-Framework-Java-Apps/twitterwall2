@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "url_cache",
         uniqueConstraints = { @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
 }, indexes = {
-        @Index(name="idx_url_expanded", columnList="expanded")
+        @Index(name="idx_url_cache_expanded", columnList="expanded")
 })
 @NamedQueries({
         @NamedQuery(
@@ -28,10 +28,10 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(length=2048)
     private String expanded;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=1024)
     private String url;
 
     @Transient

@@ -1,11 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by tw on 10.06.17.
@@ -19,10 +17,6 @@ import java.io.Serializable;
 })
 @NamedQueries({
         @NamedQuery(
-                name="Url.findByDisplayExpandedUrl",
-                query="select t from Url as t where t.display=:display and t.expanded=:expanded and t.url=:url"
-        ),
-        @NamedQuery(
                 name="Url.findByUrl",
                 query="select t from Url as t where t.url=:url"
         )
@@ -35,15 +29,15 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column
+    @Column(length=2048)
     private String display;
 
-    @Column
+    @Column(length=2048)
     private String expanded;
 
     public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=1024)
     private String url;
 
     @Transient

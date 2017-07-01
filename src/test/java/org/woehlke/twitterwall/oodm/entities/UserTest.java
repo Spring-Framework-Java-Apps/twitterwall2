@@ -12,10 +12,12 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
+import org.woehlke.twitterwall.test.TweetServiceTest;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 /**
  * Created by tw on 22.06.17.
@@ -23,13 +25,13 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
+@Transactional(REQUIRES_NEW)
 public class UserTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
     
     @Autowired
-    private TweetApiServiceTest tweetApiServiceTest;
+    private TweetServiceTest tweetServiceTest;
 
     @Autowired
     private UserService userService;
@@ -37,10 +39,15 @@ public class UserTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        tweetApiServiceTest.waitForImport();
-        Assert.assertTrue(true);
+        log.info("getAllDescriptionsTest");
+        log.info("------------------------------------------------");
+        tweetServiceTest.waitForImport();
+        String message = "tweetApiServiceTest.waitForImport(); ";
+        Assert.assertTrue(message,true);
+        log.info("------------------------------------------------");
     }
 
+    @Commit
     @Test
     public void getAllDescriptionsTest() {
         log.info("getAllDescriptionsTest");
@@ -50,6 +57,8 @@ public class UserTest {
         for(String description:descriptions){
             log.info("description: "+description);
         }
+        String message = "userService.getAllDescriptions(); ";
+        Assert.assertTrue(message,true);
         log.info("------------------------------------------------");
     }
 

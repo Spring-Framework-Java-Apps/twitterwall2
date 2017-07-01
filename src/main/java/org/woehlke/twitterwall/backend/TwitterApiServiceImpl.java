@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 
 import java.util.ArrayList;
 import java.util.List;

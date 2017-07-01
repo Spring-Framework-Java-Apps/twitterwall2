@@ -9,5 +9,4 @@ import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithUrl;
  */
 public interface UrlRepository extends DomainRepository<Url>, DomainRepositoryWithUrl<Url> {
     
-    Url findByDisplayExpandedUrl(String display, String expanded, String url);
 }

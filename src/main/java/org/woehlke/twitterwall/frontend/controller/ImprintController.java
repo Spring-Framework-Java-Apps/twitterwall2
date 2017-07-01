@@ -9,11 +9,12 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.backend.TwitterApiService;
-import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitter;
+import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
 import javax.persistence.NoResultException;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class ImprintController {
         log.info("-----------------------------------------");
         logEnv();
         Page page = new Page();
-        page.setSymbol("<i class=\"fa fa-university\" aria-hidden=\"true\"></i>");
+        page.setSymbol(Symbols.IMPRINT.toString());
         page.setMenuAppName(menuAppName);
         page.setShowMenuUsers(showMenuUsers);
         page.setTitle("Impressum");
@@ -70,6 +71,7 @@ public class ImprintController {
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
         page.setTheme(theme);
+        page.setHistoryBack(true);
         log.info(page.toString());
         model.addAttribute("page", page);
         String screenName = imprintScreenName;
@@ -123,7 +125,6 @@ public class ImprintController {
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        //log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
         log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);

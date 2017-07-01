@@ -23,15 +23,15 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
 
     @Override
     public User findByScreenName(String screenName) {
+        String name = "User.findByScreenName";
         try {
-            String name = "User.findByScreenName";
             TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("screenName", screenName);
             User result = query.getSingleResult();
-            log.info("found: " + screenName);
+            log.info(name+" found: " + screenName);
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + screenName);
+            log.info(name+" not found: " + screenName);
             throw e;
         }
     }
@@ -62,5 +62,29 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
         String name ="User.getAllTwitterIds";
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         return query.getResultList();
+    }
+
+    @Override
+    public List<User> getUsersForHashTag(String hashtagText) {
+        String name = "User.getUsersForHashTag";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
+        query.setParameter("hashtagText", hashtagText);
+        return query.getResultList();
+    }
+
+    @Override
+    public long countUsersForHashTag(String hashtagText) {
+        long usersForHashTag = 0L;
+        String name = "User.countUsersForHashTag";
+        try {
+            TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
+            query.setParameter("hashtagText", hashtagText);
+            usersForHashTag = query.getSingleResult();
+            log.info(name+" found: " + hashtagText);
+            return usersForHashTag;
+        } catch (EmptyResultDataAccessException e) {
+            log.info(name+" not found: " + hashtagText);
+            throw e;
+        }
     }
 }

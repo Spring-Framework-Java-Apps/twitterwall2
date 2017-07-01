@@ -13,7 +13,4 @@ import java.util.Set;
 public interface MediaService extends DomainService<Media> {
     
     Media findByIdTwitter(long idTwitter);
-
-    Media findByFields(Media media);
-    
 }

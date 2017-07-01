@@ -16,9 +16,7 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Table(name = "mention", uniqueConstraints = {
-        @UniqueConstraint(name="unique_mention", columnNames = {"screen_name","id_twitter"})/*,
-        @UniqueConstraint(name="unique_mention_screen_name", columnNames = {"screen_name"}),
-        @UniqueConstraint(name="unique_mention_id_twitter", columnNames = {"id_twitter"})*/
+        @UniqueConstraint(name="unique_mention", columnNames = {"screen_name","id_twitter"})
 }, indexes = {
         @Index(name="idx_mention_name", columnList="name")
 })

@@ -48,7 +48,9 @@
                         </p>
                     </div>
                 </div>
-                <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                <div th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -91,9 +93,9 @@
                     <p class="tw-debug"><hr class="tw-debug"/></p>
                 </div>
             </div>
-            <span th:if="${page.historyBack}">
+            <div th:if="${page.historyBack}">
                     <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
-            </span>
+            </div>
         </div>
         </div>
     </div>

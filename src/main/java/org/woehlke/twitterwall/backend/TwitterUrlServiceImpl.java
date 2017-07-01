@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
+import org.woehlke.twitterwall.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.entities.UrlServiceImpl;
 
 import java.io.IOException;
@@ -51,28 +51,21 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
         } catch (ClientProtocolException e) {
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (NullPointerException e) {
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (IllegalArgumentException e){
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (URISyntaxException e) {
-            //throw new FetchUrlException(urlSrc, e);
         } catch (IOException e) {
             log.warn(e.getMessage());
             if(newUrl != null){
                 return newUrl;
             }
-            //throw new FetchUrlException(urlSrc, e);
         } catch (RuntimeException ex) {
             log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
         } catch (Exception ex) {
             log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
         }
         if(newUrl == null){
             throw new FetchUrlException(urlSrc);

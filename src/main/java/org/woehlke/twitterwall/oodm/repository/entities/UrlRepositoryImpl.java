@@ -17,35 +17,16 @@ public class UrlRepositoryImpl extends DomainRepositoryImpl<Url> implements UrlR
     private static final Logger log = LoggerFactory.getLogger(UrlRepositoryImpl.class);
     
     @Override
-    public Url findByDisplayExpandedUrl(String display, String expanded, String url) {
-        try {
-            String name = "Url.findByDisplayExpandedUrl";
-            TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
-            query.setParameter("display", display);
-            query.setParameter("expanded", expanded);
-            query.setParameter("url", url);
-            Url result = query.getSingleResult();
-            log.info("found: " + result.toString());
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + display);
-            log.info("not found: " + expanded);
-            log.info("not found: " + url);
-            throw e;
-        }
-    }
-
-    @Override
     public Url findByUrl(String url) {
+        String name = "Url.findByUrl";
         try {
-            String name = "Url.findByUrl";
             TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
             query.setParameter("url", url);
             Url result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + url);
+            log.info(name+" not found: " + url);
             throw e;
         }
     }

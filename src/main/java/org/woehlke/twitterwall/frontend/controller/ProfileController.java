@@ -6,10 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
+import org.woehlke.twitterwall.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
@@ -52,7 +53,7 @@ public class ProfileController {
             User user = userService.findByScreenName(screenName);
             List<Tweet> tweetsForUser = tweetService.getTweetsForUser(user);
             Page page = new Page();
-            page.setSymbol("<i class=\"fa fa-users\" aria-hidden=\"true\"></i>");
+            page.setSymbol(Symbols.PROFILE.toString());
             page.setMenuAppName(menuAppName);
             page.setTitle("@" + user.getScreenName());
             page.setSubtitle(user.getName());
@@ -60,6 +61,7 @@ public class ProfileController {
             page.setTwitterSearchTerm(searchterm);
             page.setInfoWebpage(infoWebpage);
             page.setTheme(theme);
+            page.setHistoryBack(true);
             model.addAttribute("page", page);
             model.addAttribute("user", user);
             model.addAttribute("latestTweets",tweetsForUser);
