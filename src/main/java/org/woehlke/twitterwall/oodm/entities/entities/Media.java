@@ -1,21 +1,19 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
 @Table(name = "media", uniqueConstraints = {
-        @UniqueConstraint(name="unique_media_url", columnNames = {"url"}),
         @UniqueConstraint(name="unique_media_id_twitter", columnNames = {"id_twitter"})
 }, indexes = {
+        @Index(name="idx_media_url", columnList= "url"),
         @Index(name="idx_media_expanded", columnList="expanded"),
         @Index(name="idx_media_display", columnList="display") ,
         @Index(name="idx_media_media_http", columnList="media_http"),
@@ -45,7 +43,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
     @Column(name="id_twitter", nullable = false)

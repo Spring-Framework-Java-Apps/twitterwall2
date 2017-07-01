@@ -24,4 +24,8 @@ public interface UserService extends DomainService<User> {
     List<Long> getAllTwitterIds();
 
     User storeUserProcess(User user);
+
+    List<User> getUsersForHashTag(String hashtagText);
+
+    long countUsersForHashTag(String hashtagText);
 }

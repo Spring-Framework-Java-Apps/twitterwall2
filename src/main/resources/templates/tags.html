@@ -11,11 +11,25 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <span th:each="hashTag : ${hashTags}">
+                <h3>Tweets HashTags</h3>
+                <span th:each="hashTag : ${hashTagsTweets}">
                     <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
                     <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
                     </a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
+            </div>
+            <div class="col-md-12">
+                <h3>User HashTags</h3>
+                <span th:each="hashTag : ${hashTagsUsers}">
+                    <a href="" th:href="@{|/user/hashtag/${hashTag.text}|}">
+                    <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
+                    </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+            </div>
+            <div class="col-md-12">
+                <div th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                </div>
             </div>
         </div>
     </div>

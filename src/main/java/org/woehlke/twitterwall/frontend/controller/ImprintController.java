@@ -71,6 +71,7 @@ public class ImprintController {
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
         page.setTheme(theme);
+        page.setHistoryBack(true);
         log.info(page.toString());
         model.addAttribute("page", page);
         String screenName = imprintScreenName;

@@ -61,6 +61,7 @@ public class ProfileController {
             page.setTwitterSearchTerm(searchterm);
             page.setInfoWebpage(infoWebpage);
             page.setTheme(theme);
+            page.setHistoryBack(true);
             model.addAttribute("page", page);
             model.addAttribute("user", user);
             model.addAttribute("latestTweets",tweetsForUser);

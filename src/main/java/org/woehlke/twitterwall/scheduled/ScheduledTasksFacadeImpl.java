@@ -137,7 +137,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     }
                     log.info(msg+userProfileTwitterId + e.getMessage());
                 } finally {
-                    log.info("---------------------------------------");
+                    log.info(msg +"---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
@@ -168,7 +168,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
             }
             throw e;
         } finally {
-            log.info("---------------------------------------");
+            log.info(msg +"---------------------------------------");
         }
     }
 

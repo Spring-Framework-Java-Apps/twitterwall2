@@ -35,20 +35,28 @@ import java.util.regex.Pattern;
                 query = "select t from User as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
-                name = "User.getAll",
-                query = "select t from User as t"
-        ),
-        @NamedQuery(
                 name = "User.findByScreenName",
                 query = "select t from User as t where t.screenName=:screenName"
         ),
         @NamedQuery(
+                name = "User.getAll",
+                query = "select t from User as t order by t.screenName"
+        ),
+        @NamedQuery(
                 name = "User.getTweetingUsers",
-                query = "select t from User as t where t.tweeting=true"
+                query = "select t from User as t where t.tweeting=true order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.getNotYetFriendUsers",
-                query = "select t from User as t where t.following=false"
+                query = "select t from User as t where t.following=false order by t.screenName"
+        ),
+        @NamedQuery(
+                name = "User.getUsersForHashTag",
+                query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
+        ),
+        @NamedQuery(
+                name = "User.countUsersForHashTag",
+                query = "select count(t) from User as t join t.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name = "User.getAllDescriptions",
@@ -64,7 +72,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
     @Column(name="id_twitter",nullable = false)
@@ -84,7 +92,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 1024)
     private String url;
 
     @Column

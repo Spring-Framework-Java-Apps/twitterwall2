@@ -138,4 +138,16 @@ public class UserServiceImpl implements UserService {
             return userRepository.persist(user);
         }
     }
+
+    @Override
+    public List<User> getUsersForHashTag(String hashtagText) {
+        List<User> users = userRepository.getUsersForHashTag(hashtagText);
+        return users;
+    }
+
+    @Override
+    public long countUsersForHashTag(String hashtagText) {
+        long numberUsers = userRepository.countUsersForHashTag(hashtagText);
+        return numberUsers;
+    }
 }

@@ -31,7 +31,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
     
     @Column(name = "ticker_symbol")

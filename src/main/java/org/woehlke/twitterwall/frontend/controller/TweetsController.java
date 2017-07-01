@@ -80,6 +80,7 @@ public class TweetsController {
         page.setTwitterSearchTerm(searchterm);
         page.setInfoWebpage(infoWebpage);
         page.setTheme(theme);
+        page.setHistoryBack(true);
         model.addAttribute("page", page);
         return model;
     }

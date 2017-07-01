@@ -36,7 +36,7 @@ public class HashTagCounted implements Serializable, Comparable<HashTagCounted> 
 
     @Override
     public int compareTo(HashTagCounted other) {
-        return Long.compare(this.number, other.getNumber());
+        return this.text.compareTo(other.getText());
     }
 
     @Override
@@ -46,14 +46,11 @@ public class HashTagCounted implements Serializable, Comparable<HashTagCounted> 
 
         HashTagCounted that = (HashTagCounted) o;
 
-        if (number != that.number) return false;
         return text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (number ^ (number >>> 32));
-        result = 31 * result + text.hashCode();
-        return result;
+        return text.hashCode();
     }
 }

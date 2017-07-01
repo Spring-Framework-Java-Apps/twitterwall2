@@ -26,18 +26,18 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column
+    @Column(length=2048)
     private String display;
 
-    @Column
+    @Column(length=2048)
     private String expanded;
 
     public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=1024)
     private String url;
 
     @Transient

@@ -25,13 +25,13 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(length=2048)
     private String expanded;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=1024)
     private String url;
 
     @Transient
