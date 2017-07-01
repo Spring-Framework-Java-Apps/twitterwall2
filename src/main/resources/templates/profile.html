@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
                 </div>
             </div>
         </div>
@@ -64,6 +64,7 @@
                         <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}">@<span th:text="${tweet.user.screenName}">screenName</span></a></h3>
                         <p th:if="${tweet.retweetedStatus} == null"><span th:utext="${tweet.formattedText}">Text</span></p>
+                        <p th:if="${tweet.retweetedStatus} == null"><hr/></p>
                         <p th:if="${tweet.retweetedStatus} == null">
                             <i class="fa fa-retweet" aria-hidden="true"></i> <span th:text="${tweet.retweetCount}">12</span>&nbsp;
                             <i class="fa fa-heart-o" aria-hidden="true"></i> <span th:text="${tweet.favoriteCount}">23</span>
@@ -79,6 +80,7 @@
                             <h2><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
                             <h3><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
                             <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
+                            <p><hr/></p>
                             <p>
                                 <i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;<span th:text="${tweet.retweetedStatus.retweetCount}">12</span>&nbsp;
                                 <i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;<span th:text="${tweet.retweetedStatus.favoriteCount}">23</span>
@@ -94,7 +96,7 @@
                 </div>
             </div>
             <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
             </div>
         </div>
         </div>

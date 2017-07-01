@@ -1,21 +1,16 @@
 package org.woehlke.twitterwall.frontend.controller;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.test.TweetServiceTest;
-import org.woehlke.twitterwall.test.UserServiceTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,29 +19,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
- * Created by tw on 19.06.17.
+ * Created by tw on 01.07.17.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class TestControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UserControllerTest.class);
-    
+    private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
+
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private UserController controller;
-
-    @Autowired
-    private TweetServiceTest tweetServiceTest;
-
-    @Autowired
-    private UserServiceTest userServiceTest;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
+    private  TestController controller;
 
     @Test
     public void controllerIsPresentTest(){
@@ -54,25 +40,12 @@ public class UserControllerTest {
         assertThat(controller).isNotNull();
     }
 
-    private final static String screenName = "port80guru";
-
-    @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        log.info("------------------------------------");
-        tweetServiceTest.createTestData();
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+screenName+")");
-        userServiceTest.createUser(screenName);
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+screenName+")");
-        Assert.assertTrue(true);
-        log.info("------------------------------------");
-    }
-
-    @Test
-    public void shouldReturnDefaultMessage() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/profile/"+screenName))
+    public void getTestDataTest() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/getTestData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("profile"))
+                .andExpect(view().name( "timeline"))
+                .andExpect(model().attributeExists("latestTweets"))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeExists("page")).andReturn();
 

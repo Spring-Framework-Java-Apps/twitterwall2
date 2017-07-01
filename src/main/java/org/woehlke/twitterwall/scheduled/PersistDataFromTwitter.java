@@ -16,4 +16,6 @@ public interface PersistDataFromTwitter {
     long countTweets();
 
     long countUsers();
+
+    User findUserByScreenName(String screenName);
 }

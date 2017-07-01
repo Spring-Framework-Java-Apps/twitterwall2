@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 import javax.persistence.NoResultException;
 import java.util.Date;
 
-import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
 
 /**
  * Created by tw on 01.07.17.

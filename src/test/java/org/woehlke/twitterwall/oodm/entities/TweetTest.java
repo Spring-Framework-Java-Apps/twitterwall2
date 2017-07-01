@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,11 +15,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.test.TweetServiceTest;
 import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
+import org.woehlke.twitterwall.test.UserServiceTest;
 
 import javax.transaction.Transactional;
 
 import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
-import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 
 /**
@@ -41,14 +41,13 @@ public class TweetTest {
     @Autowired
     private PersistDataFromTwitterTest persistDataFromTwitterTest;
 
+    @Autowired
+    private UserServiceTest userServiceTest;
 
+    
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        log.info("------------------------------------");
-        //log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
-        //tweetServiceTest.waitForImport();
-        //log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
         for(long id:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
@@ -57,7 +56,10 @@ public class TweetTest {
         persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
         Assert.assertTrue(true);
-        log.info("------------------------------------");
+        log.info("------------------------------------------------");
+        userServiceTest.createTestData();
+        Assert.assertTrue(true);
+        log.info("------------------------------------------------");
     }
     
     //@Ignore

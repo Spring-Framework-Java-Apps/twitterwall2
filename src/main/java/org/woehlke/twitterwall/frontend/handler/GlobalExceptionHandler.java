@@ -2,14 +2,15 @@ package org.woehlke.twitterwall.frontend.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.frontend.model.Page;
-import org.woehlke.twitterwall.exceptions.controller.ControllerRequestParameterSyntaxException;
-import org.woehlke.twitterwall.exceptions.controller.ImprintException;
+import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,15 +18,12 @@ import javax.servlet.http.HttpServletRequest;
  * Created by tw on 17.06.17.
  */
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
-
-    @Value("${twitterwall.frontend.menu.users}")
-    private boolean showMenuUsers;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
@@ -35,7 +33,23 @@ public class GlobalExceptionHandler {
 
     @Value("${twitterwall.frontend.theme}")
     private String theme;
-    
+
+    @Value("${twitterwall.context.test}")
+    private boolean contextTest;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
+    private final TwitterApiService twitterApiService;
+
+    private final PersistDataFromTwitter persistDataFromTwitter;
+
+    @Autowired
+    public GlobalExceptionHandler(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter) {
+        this.twitterApiService = twitterApiService;
+        this.persistDataFromTwitter = persistDataFromTwitter;
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView handleIllegalArgumentException(HttpServletRequest request, Exception ex) {
         log.warn("IllegalArgumentException occured :: URL=" + request.getRequestURL());
@@ -44,34 +58,19 @@ public class GlobalExceptionHandler {
     }
     
     private ModelAndView getTemplate(HttpServletRequest request, Exception ex) {
-        Page page = new Page();
-        page.setSymbol(Symbols.EXCEPTION.toString());
-        page.setMenuAppName(menuAppName);
-        page.setTitle("Exception");
-        page.setSubtitle(ex.getMessage());
-        page.setShowMenuUsers(showMenuUsers);
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
         ModelAndView mav = new ModelAndView();
+        String symbol = Symbols.EXCEPTION.toString();
+        String title = "Exception";
+        String subtitle = ex.getMessage();
+        mav = super.setupPage(mav, title, subtitle, symbol);
         mav.addObject("exception", ex);
         mav.addObject("url", request.getRequestURL());
-        mav.addObject("page", page);
         mav.setViewName("persistentObjectNotFound");
         return mav;
     }
 
-    @ExceptionHandler(ControllerRequestParameterSyntaxException.class)
-    public ModelAndView handleControllerRequestParameterSyntaxException(HttpServletRequest request, Exception ex) {
-        log.warn("ControllerRequestParameterSyntaxException occured :: URL=" + request.getRequestURL());
-        log.warn(ex.getMessage());
-        return getTemplate(request, ex);
-    }
-    
-    @ExceptionHandler(ImprintException.class)
-    public ModelAndView handleImprintException(HttpServletRequest request, Exception ex) {
-        log.warn("ImprintException occured :: URL=" + request.getRequestURL());
-        log.warn(ex.getMessage());
-        return getTemplate(request, ex);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
     }
 }
