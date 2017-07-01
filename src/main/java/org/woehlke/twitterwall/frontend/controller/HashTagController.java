@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
-import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;

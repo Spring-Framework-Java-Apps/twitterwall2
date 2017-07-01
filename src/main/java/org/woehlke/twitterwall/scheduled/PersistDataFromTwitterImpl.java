@@ -13,7 +13,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
-import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.UserTransformService;
 
@@ -31,8 +30,6 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
     private static final Logger log = LoggerFactory.getLogger(PersistDataFromTwitterImpl.class);
     
     private final UserService userService;
-    
-    private final TwitterApiService twitterApiService;
 
     private final TweetService tweetService;
 
@@ -51,9 +48,8 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
     private final UserTransformService userTransformService;
 
     @Autowired
-    public PersistDataFromTwitterImpl(UserService userService, TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService, TweetTransformService tweetTransformService, UserTransformService userTransformService) {
+    public PersistDataFromTwitterImpl(UserService userService, TweetService tweetService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, TickerSymbolService tickerSymbolService, TweetTransformService tweetTransformService, UserTransformService userTransformService) {
         this.userService = userService;
-        this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
