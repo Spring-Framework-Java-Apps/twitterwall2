@@ -10,13 +10,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
+import org.woehlke.twitterwall.test.TweetServiceTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
+
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 /**
  * Created by tw on 22.06.17.
@@ -24,13 +25,13 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(REQUIRES_NEW)
 public class UserTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
     
     @Autowired
-    private TweetApiServiceTest tweetApiServiceTest;
+    private TweetServiceTest tweetServiceTest;
 
     @Autowired
     private UserService userService;
@@ -40,7 +41,7 @@ public class UserTest {
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("getAllDescriptionsTest");
         log.info("------------------------------------------------");
-        tweetApiServiceTest.waitForImport();
+        tweetServiceTest.waitForImport();
         String message = "tweetApiServiceTest.waitForImport(); ";
         Assert.assertTrue(message,true);
         log.info("------------------------------------------------");

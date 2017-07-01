@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.backend.TwitterApiService;
-import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitter;
+import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
 import javax.persistence.NoResultException;
 import java.util.Date;

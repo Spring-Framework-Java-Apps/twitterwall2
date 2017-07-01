@@ -3,19 +3,14 @@ package org.woehlke.twitterwall.oodm.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.RateLimitExceededException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
-
-import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -23,14 +18,11 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
+public class TweetServiceImpl implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
 
     private final TweetRepository tweetRepository;
-    
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private long millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
     public TweetServiceImpl(TweetRepository tweetRepository) {
@@ -82,18 +74,6 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
         return tweetRepository.count(Tweet.class);
     }
 
-    /*
-    @Override
-    public List<Tweet> getTestTweetsForTweetTest() {
-        List<Tweet> list = new ArrayList<>();
-        for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
-            Tweet tweet = this.findByIdTwitter(idTwitter);
-            list.add(tweet);
-        }
-        return list;
-    }
-    */
-
     @Override
     public List<Tweet> getTweetsForUser(User user) {
         if(user == null){
@@ -122,59 +102,5 @@ public class TweetServiceImpl implements TweetService, TweetApiServiceTest {
         } catch (EmptyResultDataAccessException e) {
             return tweetRepository.persist(tweet);
         }
-    }
-    
-    @Override
-    public String performTweetTest(long idTwitter, String output, boolean retweet) {
-        String msg = "performTweetTest: ";
-        log.info("idTwitter: " + idTwitter);
-            try {
-                Tweet tweet = this.findByIdTwitter(idTwitter);
-                log.info("text:          " + tweet.getText());
-                log.info("Expected:      " + output + "---");
-                String formattedText;
-                if (retweet) {
-                    formattedText = tweet.getRetweetedStatus().getFormattedText();
-                } else {
-                    formattedText = tweet.getFormattedText();
-                }
-                log.info("FormattedText: " + formattedText + "---");
-                return formattedText;
-            } catch (EmptyResultDataAccessException e) {
-                log.warn(msg + e.getMessage());
-                throw e;
-            } catch (NoResultException e) {
-                log.warn(msg + e.getMessage());
-                throw e;
-            } catch (ResourceAccessException e) {
-                log.error(msg + " check your Network Connection!", e);
-                throw e;
-            } catch (RateLimitExceededException e) {
-                log.error(msg + e.getMessage());
-                throw e;
-            } catch (RuntimeException e) {
-                log.error(msg + e.getMessage());
-                throw e;
-            } catch (Exception e) {
-                log.error(msg + e.getMessage());
-                throw e;
-            } finally {
-                log.info("---------------------------------------");
-            }
-    }
-
-    @Override
-    public void waitForImport() {
-        log.info("Hello, Testing-World.");
-        log.info("We are waiting for fetchTweetsFromTwitterSearch.");
-        try {
-            log.info("number of tweets: " + this.count());
-            Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
-            log.info("number of tweets: " + this.count());
-        } catch (InterruptedException e) {
-            log.warn(e.getMessage());
-        }
-        log.info("number of tweets: " + this.count());
-        log.info("------------------------------------------------");
     }
 }

@@ -11,13 +11,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
-import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitterTest;
+import org.woehlke.twitterwall.test.TweetServiceTest;
+import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
 
-import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+import javax.transaction.Transactional;
+
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
+import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 
 /**
@@ -26,13 +27,13 @@ import static org.woehlke.twitterwall.process.tasks.ScheduledTasksFacadeTest.ID_
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(REQUIRES_NEW)
 public class TweetTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetTest.class);
 
     @Autowired
-    private TweetApiServiceTest tweetApiServiceTest;
+    private TweetServiceTest tweetServiceTest;
 
     @Autowired
     private PersistDataFromTwitterTest persistDataFromTwitterTest;
@@ -43,7 +44,7 @@ public class TweetTest {
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
-        tweetApiServiceTest.waitForImport();
+        tweetServiceTest.waitForImport();
         log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
@@ -64,7 +65,7 @@ public class TweetTest {
         long idTwitter = 876329508009279488L;
         String output = "Neu in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> 8 LTS: <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Doctrine\">#Doctrine</a> ein <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/ORM\">#ORM</a> für PHP nach dem Vorbild  <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Hibernate\">#Hibernate</a> in <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Java\">#Java</a>: <a href=\"http://www.doctrine-project.org/\" class=\"tw-url1\" target=\"_blank\">doctrine-project.org</a> Kenn… <a href=\"https://twitter.com/i/web/status/876329508009279488\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText1 DONE");
     }
@@ -77,7 +78,7 @@ public class TweetTest {
         long idTwitter = 876356335784394752L;
         String output = "Twitterwall zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"http://natural-born-coder.de/\" class=\"tw-url1\" target=\"_blank\">natural-born-coder.de</a> <br/><br/><a class=\"tweet-action tweet-photo\" href=\"https://twitter.com/port80guru/status/876356335784394752/photo/1\" target=\"_blank\"><img class=\"tweet-photo\" src=\"https://pbs.twimg.com/media/DClxcLmXsAAW1t6.jpg\" /></a> ";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText2 DONE");
     }
@@ -90,7 +91,7 @@ public class TweetTest {
         long idTwitter = 876676270913880066L;
         String output = "War schön gestern auf dem <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> … freu mich auf das nächste Jahr. Hoffentlich dann ohne Stau bei der Rückfahrt :)";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText3 DONE");
     }
@@ -103,7 +104,7 @@ public class TweetTest {
         long idTwitter = 876566077836337152L;
         String output = "War ein sehr geiles Berlin Wochenende. Danke <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> und natürlich ans Orga Team. <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> rockt";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText4 DONE");
     }
@@ -116,7 +117,7 @@ public class TweetTest {
         long idTwitter = 876563676395962368L;
         String output = "Empfehlenswert nicht nur für Neulinge. Danke Wolfgang für das kostenlose <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> als Preis im Newbie-Jeopard… <a href=\"https://twitter.com/i/web/status/876563676395962368\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText5 DONE");
     }
@@ -129,7 +130,7 @@ public class TweetTest {
         long idTwitter = 876514968933478400L;
         String output = "In 3 Stunden endet die Sonderaktion zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a>. 15% günstiger mit dem Gutscheincode t3cb -&gt; <a href=\"https://wwagner.net/t3cb\" class=\"tw-url1\" target=\"_blank\">wwagner.net/t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/Videotraining\">#Videotraining</a> ";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText6 DONE");
     }
@@ -142,7 +143,7 @@ public class TweetTest {
         long idTwitter = 876514568671023104L;
         String output = "Ich hätte schon vorher mal zum <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> gehen sollen. Es war 2017 super und wird es hoffentlich 2018 wieder werden. Danke Orga-Team!";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText7 DONE");
     }
@@ -155,7 +156,7 @@ public class TweetTest {
         long idTwitter = 876513930478313472L;
         String output = "Passend zur Session \"Barrierefreie Websites\" heute nachmittag. <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a href=\"https://twitter.com/Real_CSS_Tricks/status/876483677991075841\" class=\"tw-url2\" target=\"_blank\">twitter.com/Real_CSS_Trick…</a> ";
         boolean retweet = true;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText8 DONE");
     }
@@ -168,7 +169,7 @@ public class TweetTest {
         long idTwitter = 876511554962903040L;
         String output = "<a class=\"tweet-action tweet-profile\" href=\"/profile/cpsitgmbh\">@cpsitgmbh</a> <a class=\"tweet-action tweet-profile\" href=\"/profile/t3c_berlin\">@t3c_berlin</a> Dank dem Orga- Team für das tolle <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> 2017 - ein rundum gelungener Event.";
         boolean retweet = false;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText9 DONE");
     }
@@ -181,7 +182,7 @@ public class TweetTest {
         long idTwitter = 876510758632386563L;
         String output = "So, jetzt kann der entspannte Teil vom TYPO3camp an der CPS-IT Bar losgehen <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/caipis\">#caipis</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/gintonic\">#gintonic</a>… <a href=\"https://twitter.com/i/web/status/876090162102636544\" class=\"tw-url2\" target=\"_blank\">twitter.com/i/web/status/8…</a> ";
         boolean retweet = true;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText10 DONE");
     }
@@ -194,7 +195,7 @@ public class TweetTest {
         long idTwitter = 876496934676180992L;
         String output = "Abschlussrede. War toll mit euch. DANKE! <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/t3cb\">#t3cb</a> <a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/TYPO3\">#TYPO3</a> <a href=\"https://www.instagram.com/p/BVe6_ULAnEt/\" class=\"tw-url2\" target=\"_blank\">instagram.com/p/BVe6_ULAnEt/</a> ";
         boolean retweet = true;
-        String result = tweetApiServiceTest.performTweetTest(idTwitter,output,retweet);
+        String result = tweetServiceTest.performTweetTest(idTwitter,output,retweet);
         Assert.assertEquals(output, result);
         log.info("testText11 DONE");
     }

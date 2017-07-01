@@ -16,7 +16,5 @@ public interface UrlService extends DomainService<Url> {
     Url findByUrl(String url);
 
     Url getPersistentUrlFor(String url);
-
-    List<Url> getTestData();
     
 }

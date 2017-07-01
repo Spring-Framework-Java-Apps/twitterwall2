@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.exceptions.common.TwitterwallException;
-import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
-import org.woehlke.twitterwall.process.tasks.ScheduledTasksFacade;
+import org.woehlke.twitterwall.exceptions.common.TwitterwallException;
+import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.scheduled.ScheduledTasksFacade;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

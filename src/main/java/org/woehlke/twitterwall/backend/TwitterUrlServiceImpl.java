@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
+import org.woehlke.twitterwall.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.entities.UrlServiceImpl;
 
 import java.io.IOException;
