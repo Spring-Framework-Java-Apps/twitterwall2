@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
@@ -27,6 +29,7 @@ import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWIT
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
+@AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
 @Transactional(REQUIRES_NEW)
 public class TweetTest {
 
@@ -43,9 +46,9 @@ public class TweetTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
-        tweetServiceTest.waitForImport();
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
+        //log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
+        //tweetServiceTest.waitForImport();
+        //log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
         for(long id:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
@@ -57,7 +60,7 @@ public class TweetTest {
         log.info("------------------------------------");
     }
     
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText1() {
@@ -70,7 +73,7 @@ public class TweetTest {
         log.info("testText1 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText2() {
@@ -83,7 +86,7 @@ public class TweetTest {
         log.info("testText2 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText3() {
@@ -96,7 +99,7 @@ public class TweetTest {
         log.info("testText3 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText4() {
@@ -109,7 +112,7 @@ public class TweetTest {
         log.info("testText4 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText5() {
@@ -122,7 +125,7 @@ public class TweetTest {
         log.info("testText5 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText6() {
@@ -135,7 +138,7 @@ public class TweetTest {
         log.info("testText6 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText7() {
@@ -148,7 +151,7 @@ public class TweetTest {
         log.info("testText7 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText8() {
@@ -161,7 +164,7 @@ public class TweetTest {
         log.info("testText8 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText9() {
@@ -174,7 +177,7 @@ public class TweetTest {
         log.info("testText9 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText10() {
@@ -187,7 +190,7 @@ public class TweetTest {
         log.info("testText10 DONE");
     }
 
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void testText11() {

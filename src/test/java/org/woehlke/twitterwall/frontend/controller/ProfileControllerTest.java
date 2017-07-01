@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.test.TweetServiceTest;
 import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
+import org.woehlke.twitterwall.test.UserServiceTest;
 
 
 import javax.transaction.Transactional;
@@ -29,6 +31,8 @@ import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 import static org.woehlke.twitterwall.test.ScheduledTasksFacadeTest.*;
 
 /**
@@ -60,7 +64,10 @@ public class ProfileControllerTest {
     private TweetServiceTest tweetServiceTest;
 
     @Autowired
-    private PersistDataFromTwitterTest persistDataFromTwitterTest;
+    private UserServiceTest userServiceTest;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
     
     @Test
     public void controllerIsPresentTest() throws Exception {
@@ -68,28 +75,23 @@ public class ProfileControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    private final static String screenName = "port80guru";
+
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
-        tweetServiceTest.waitForImport();
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
-        log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        for(long id:ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST){
-            log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST: "+id);
-        }
-        persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
+        tweetServiceTest.createTestData();
+        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+screenName+")");
+        userServiceTest.createUser(screenName);
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+screenName+")");
         Assert.assertTrue(true);
         log.info("------------------------------------");
     }
     
-    @Ignore
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/profile/port80guru"))
+        MvcResult result = this.mockMvc.perform(get("/profile/"+screenName))
                 .andExpect(status().isOk())
                 .andExpect(view().name("profile"))
                 .andExpect(model().attributeExists("user"))

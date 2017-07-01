@@ -15,6 +15,8 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 
 import javax.persistence.NoResultException;
 
+import static org.woehlke.twitterwall.frontend.controller.TestController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+
 /**
  * Created by tw on 01.07.17.
  */
@@ -29,9 +31,12 @@ public class TweetServiceTestImpl implements TweetServiceTest {
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
+    private final PersistDataFromTwitterTest persistDataFromTwitterTest;
+
     @Autowired
-    public TweetServiceTestImpl(TweetService tweetService) {
+    public TweetServiceTestImpl(TweetService tweetService, PersistDataFromTwitterTest persistDataFromTwitterTest) {
         this.tweetService = tweetService;
+        this.persistDataFromTwitterTest = persistDataFromTwitterTest;
     }
 
     @Override
@@ -90,5 +95,13 @@ public class TweetServiceTestImpl implements TweetServiceTest {
         }
         log.info(msg+"number of tweets: " + tweetService.count());
         log.info(msg+"------------------------------------------------");
+    }
+
+    @Override
+    public void createTestData() {
+        for(long id:ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST){
+            log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST: "+id);
+        }
+        persistDataFromTwitterTest.fetchUserFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
     }
 }

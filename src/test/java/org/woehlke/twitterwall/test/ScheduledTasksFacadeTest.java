@@ -5,18 +5,6 @@ package org.woehlke.twitterwall.test;
  */
 public interface ScheduledTasksFacadeTest {
     
-    long ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST[] = {
-            876433563561938944L, // t3c_berlin
-            876456051016597504L, // Codemonkey1988
-            876420491329892354L, // Walter_kran
-            876425220147564544L, // tobenschmidt
-            876819177746649088L, // Oliver1973
-            876514968933478400L, // wowa_TYPO3
-            876441863191920641L, // dirscherl17
-            876441015523192832L, // Markus306
-            876440419416109056L  // mattLefaux
-    };
-
     String PROFILE_URLS[] = {
             "http://t.co/hIxL9WeoP1",
             "http://t.co/FGRp2dcyII",

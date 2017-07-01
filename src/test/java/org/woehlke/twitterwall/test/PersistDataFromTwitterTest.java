@@ -6,4 +6,6 @@ package org.woehlke.twitterwall.test;
 public interface PersistDataFromTwitterTest {
 
     void fetchTweetsFromTwitterSearchTest(long[] idTwitterToFetch);
+
+    void fetchUserFromTwitterSearchTest(long[] idTwitterToFetchForProfileControllerTest);
 }

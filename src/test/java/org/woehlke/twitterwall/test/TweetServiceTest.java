@@ -8,4 +8,7 @@ public interface TweetServiceTest {
     String performTweetTest(long idTwitter, String output, boolean retweet);
 
     void waitForImport();
+
+    void createTestData();
+
 }
