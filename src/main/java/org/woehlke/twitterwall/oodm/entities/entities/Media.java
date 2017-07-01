@@ -28,8 +28,16 @@ import java.io.Serializable;
                 query = "select t from Media as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
-                name =  "Media.findByFields",
-                query = "select t from Media as t where t.mediaHttp=:mediaHttp and t.mediaHttps=:mediaHttps and t.url=:url and t.display=:display and t.expanded=:expanded and t.mediaType=:mediaType"
+            name = "Media.count",
+            query = "select count(t) from Media as t"
+        ),
+        @NamedQuery(
+                name = "Media.getAll",
+                query = "select t from Media as t"
+        ) ,
+        @NamedQuery(
+                name = "Media.findByUrl",
+                query = "select t from Media as t where t.url=:url"
         )
 })
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
@@ -37,7 +45,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
     @Column(name="id_twitter", nullable = false)

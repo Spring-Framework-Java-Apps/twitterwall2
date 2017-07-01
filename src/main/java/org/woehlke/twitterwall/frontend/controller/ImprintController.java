@@ -9,6 +9,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -62,7 +63,7 @@ public class ImprintController {
         log.info("-----------------------------------------");
         logEnv();
         Page page = new Page();
-        page.setSymbol("<i class=\"fa fa-university\" aria-hidden=\"true\"></i>");
+        page.setSymbol(Symbols.IMPRINT.toString());
         page.setMenuAppName(menuAppName);
         page.setShowMenuUsers(showMenuUsers);
         page.setTitle("Impressum");
@@ -123,7 +124,6 @@ public class ImprintController {
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        //log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
         log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);

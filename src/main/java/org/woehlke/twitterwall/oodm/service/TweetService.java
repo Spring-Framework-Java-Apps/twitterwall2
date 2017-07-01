@@ -18,9 +18,7 @@ public interface TweetService extends DomainService<Tweet> {
     List<Tweet> getTweetsForHashTag(String hashtagText);
 
     long countTweetsForHashTag(String hashtagText);
-
-    List<Tweet> getTestTweetsForTweetTest();
-
+    
     List<Tweet> getTweetsForUser(User user);
 
     List<Long> getAllTwitterIds();

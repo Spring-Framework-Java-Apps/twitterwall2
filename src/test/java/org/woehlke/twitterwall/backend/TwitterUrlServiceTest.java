@@ -10,13 +10,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.service.TweetApiServiceTest;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
-@Transactional(Transactional.TxType.NOT_SUPPORTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterUrlServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTest.class);
@@ -42,26 +43,31 @@ public class TwitterUrlServiceTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
+        log.info("------------------------------------");
+        log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
         tweetApiServiceTest.waitForImport();
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
         Assert.assertTrue(true);
+        log.info("------------------------------------");
     }
 
     @Commit
     @Test
     public void fetchUrlTest(){
+        String msg = "fetchUrlTest ";
         log.info("------------------------------------");
-        log.info("fetchUrlTest");
+        log.info(msg);
         List<Url> testData = urlService.getTestData();
         for(Url exprected:testData){
             try {
-                log.info("expected: " + exprected.toString());
+                log.info(msg+"expected: " + exprected.toString());
                 Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl());
-                log.info("found:    " + foundUrl.toString());
+                log.info(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());
                 Assert.assertEquals(exprected.getDisplay(),foundUrl.getDisplay());
                 Assert.assertEquals(exprected.getExpanded(), foundUrl.getExpanded());
             } catch (FetchUrlException e){
-                log.error(e.getMessage());
+                log.error(msg+e.getMessage());
             }
         }
         log.info("------------------------------------");

@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,14 +11,11 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByIdTwitterException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUserByScreenNameException;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByScreenName(String screenName) {
         if (!User.isValidScreenName(screenName)) {
-            throw new FindUserByScreenNameException(screenName);
+            throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
         }
         return userRepository.findByScreenName(screenName);
     }

@@ -21,45 +21,18 @@ public class MediaRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Media
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Override
-    public Media findByFields(String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
-        try {
-            String name = "Media.findByFields";
-            TypedQuery<Media> query = entityManager.createNamedQuery(name, Media.class);
-            query.setParameter("mediaHttp", mediaHttp);
-            query.setParameter("mediaHttps", mediaHttps);
-            query.setParameter("url", url);
-            query.setParameter("display", display);
-            query.setParameter("expanded", expanded);
-            query.setParameter("mediaType", mediaType);
-            Media result = query.getSingleResult();
-            log.info("found: " + result.toString());
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            log.info("not found: mediaHttp", mediaHttp);
-            log.info("not found: mediaHttps", mediaHttps);
-            log.info("not found: url", url);
-            log.info("not found: display", display);
-            log.info("not found: expanded", expanded);
-            log.info("not found: mediaType", mediaType);
-            throw e;
-        }
-    }
-
-
-
+    
     @Override
     public Media findByUrl(String url) {
+        String name = "Media.findByUrl";
         try {
-            String name = "Media.findByUrl";
             TypedQuery<Media> query = entityManager.createNamedQuery(name, Media.class);
             query.setParameter("url", url);
             Media result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + url);
+            log.info(name+" not found: " + url);
             throw e;
         }
     }

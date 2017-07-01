@@ -64,7 +64,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
     @Column(name="id_twitter",nullable = false)

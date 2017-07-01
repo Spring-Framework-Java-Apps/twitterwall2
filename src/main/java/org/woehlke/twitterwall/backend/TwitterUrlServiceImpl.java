@@ -51,28 +51,21 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
         } catch (ClientProtocolException e) {
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (NullPointerException e) {
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (IllegalArgumentException e){
-            //throw new FetchUrlException(urlSrc, e);
             log.warn(e.getMessage());
         } catch (URISyntaxException e) {
-            //throw new FetchUrlException(urlSrc, e);
         } catch (IOException e) {
             log.warn(e.getMessage());
             if(newUrl != null){
                 return newUrl;
             }
-            //throw new FetchUrlException(urlSrc, e);
         } catch (RuntimeException ex) {
             log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
         } catch (Exception ex) {
             log.warn(ex.getMessage());
-            //throw new FetchUrlException(urlSrc, ex);
         }
         if(newUrl == null){
             throw new FetchUrlException(urlSrc);

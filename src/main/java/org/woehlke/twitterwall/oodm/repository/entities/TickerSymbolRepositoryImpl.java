@@ -21,35 +21,34 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
 
     @PersistenceContext
     private EntityManager entityManager;
-
+    
     @Override
-    public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
+    public TickerSymbol findByUrl(String url) {
+        String name = "TickerSymbols.findByUrl";
         try {
-            String name = "TickerSymbol.findByTickerSymbolAndUrl";
             TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name, TickerSymbol.class);
-            query.setParameter("tickerSymbol", tickerSymbol);
             query.setParameter("url", url);
             TickerSymbol result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + tickerSymbol);
-            log.info("not found: " + url);
+            log.info(name+" not found: " + url);
             throw e;
         }
     }
 
     @Override
-    public TickerSymbol findByUrl(String url) {
+    public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
+        String name = "TickerSymbols.findByTickerSymbolAndUrl";
         try {
-            String name = "TickerSymbols.findByUrl";
             TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name, TickerSymbol.class);
             query.setParameter("url", url);
+            query.setParameter("tickerSymbol", tickerSymbol);
             TickerSymbol result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + url);
+            log.info(name+" not found: " + url);
             throw e;
         }
     }

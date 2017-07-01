@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -46,7 +47,7 @@ public class UserController {
     @RequestMapping("/user/all")
     public String all(Model model) {
         model.addAttribute("users", userService.getAll());
-        String symbol = "<i class=\"fa fa-user\" aria-hidden=\"true\"></i>";
+        String symbol = Symbols.USER_ALL.toString();
         String subtitle = "All";
         model = setupPage(model, subtitle, symbol);
         return "user";
@@ -56,7 +57,7 @@ public class UserController {
     public String getTweetingUsers(Model model) {
         List<User> tweetingUsers = userService.getTweetingUsers();
         model.addAttribute("users", tweetingUsers);
-        String symbol = "<i class=\"fa fa-users\" aria-hidden=\"true\"></i>";
+        String symbol = Symbols.USER_TWEETS.toString();
         String subtitle = "With one or more Tweets";
         model = setupPage(model, subtitle, symbol);
         return "user";
@@ -65,7 +66,7 @@ public class UserController {
     @RequestMapping("/user/notyetfriends")
     public String getNotYetFriendUsers(Model model) {
         model.addAttribute("users", userService.getNotYetFriendUsers());
-        String symbol = "<i class=\"fa fa-plus-square\" aria-hidden=\"true\"></i>";
+        String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String subtitle = "Not Yet Friends";
         model = setupPage(model, subtitle, symbol);
         return "user";

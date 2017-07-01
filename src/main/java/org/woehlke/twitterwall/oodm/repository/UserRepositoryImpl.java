@@ -23,15 +23,15 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
 
     @Override
     public User findByScreenName(String screenName) {
+        String name = "User.findByScreenName";
         try {
-            String name = "User.findByScreenName";
             TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("screenName", screenName);
             User result = query.getSingleResult();
-            log.info("found: " + screenName);
+            log.info(name+" found: " + screenName);
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + screenName);
+            log.info(name+" not found: " + screenName);
             throw e;
         }
     }

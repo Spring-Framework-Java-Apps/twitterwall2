@@ -18,15 +18,15 @@ public class HashTagRepositoryImpl extends DomainRepositoryImpl<HashTag> impleme
     
     @Override
     public HashTag findByText(String text) {
+        String name ="HashTag.findByText";
         try {
-            String name ="HashTag.findByText";
             TypedQuery<HashTag> query = entityManager.createNamedQuery(name, HashTag.class);
             query.setParameter("text", text);
             HashTag result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + text);
+            log.info(name+" not found: " + text);
             throw e;
         }
     }

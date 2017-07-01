@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByDisplayExpandedUrlException;
-import org.woehlke.twitterwall.oodm.exceptions.oodm.FindUrlByUrlException;
 import org.woehlke.twitterwall.oodm.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
@@ -68,19 +66,11 @@ public class UrlServiceImpl implements UrlService {
     public long count() {
         return this.urlRepository.count(Url.class);
     }
-
-    @Override
-    public Url findByDisplayExpandedUrl(String display, String expanded, String url) {
-        if(url == null || expanded == null || display == null){
-            throw new FindUrlByDisplayExpandedUrlException(display, expanded, url);
-        }
-        return this.urlRepository.findByDisplayExpandedUrl(display, expanded, url);
-    }
-
+    
     @Override
     public Url findByUrl(String url) {
         if(url == null){
-            throw new FindUrlByUrlException();
+            throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
         return this.urlRepository.findByUrl(url);
     }
@@ -194,9 +184,6 @@ public class UrlServiceImpl implements UrlService {
     }
 
     
-
-
-
     private static Map<String, String> hosts = new HashMap<>();
 
     static {

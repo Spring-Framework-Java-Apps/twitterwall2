@@ -8,12 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.exceptions.common.OodmException;
-import org.woehlke.twitterwall.oodm.exceptions.controller.ControllerRequestParameterSyntaxException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
@@ -44,9 +43,6 @@ public class HashTagController {
 
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
-
-    //@Value("${twitterwall.backend.twitter.fetchTestData}")
-    //private boolean fetchTestData;
 
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
@@ -79,7 +75,7 @@ public class HashTagController {
             long number = 0;
             try {
                 number = tweetService.countTweetsForHashTag(hashTag.getText());
-            } catch (OodmException e){
+            } catch (IllegalArgumentException e){
                   log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
             }
             String text = hashTag.getText();
@@ -97,7 +93,7 @@ public class HashTagController {
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
             Page page = new Page();
-            page.setSymbol("<i class=\"fa fa-hashtag\" aria-hidden=\"true\"></i>");
+            page.setSymbol(Symbols.HASHTAG.toString());
             page.setMenuAppName(menuAppName);
             page.setTitle("Tweets für HashTag");
             page.setSubtitle("#" + hashtagText);
@@ -111,14 +107,13 @@ public class HashTagController {
             model.addAttribute("latestTweets", tweets);
             return "timeline";
         } else {
-            throw new ControllerRequestParameterSyntaxException("/hashtag/{hashtagText}", hashtagText);
+            throw new IllegalArgumentException("/hashtag/"+hashtagText);
         }
     }
 
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        //log.info("twitterwall.backend.twitter.fetchTestData = "+fetchTestData);
         log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);

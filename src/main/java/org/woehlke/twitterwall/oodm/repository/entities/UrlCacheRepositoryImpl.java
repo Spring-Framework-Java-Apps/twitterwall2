@@ -19,15 +19,15 @@ public class UrlCacheRepositoryImpl extends DomainRepositoryImpl<UrlCache> imple
 
     @Override
     public UrlCache findByUrl(String url) {
+        String name = "UrlCache.findByUrl";
         try {
-            String name = "UrlCache.findByUrl";
             TypedQuery<UrlCache> query = entityManager.createNamedQuery(name, UrlCache.class);
             query.setParameter("url", url);
             UrlCache result = query.getSingleResult();
-            log.info("found: " + result.toString());
+            log.info(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info("not found: " + url);
+            log.info(name+" not found: " + url);
             throw e;
         }
     }

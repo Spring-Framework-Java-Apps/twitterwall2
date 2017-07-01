@@ -13,8 +13,6 @@ import java.util.Set;
  */
 public interface UrlService extends DomainService<Url> {
 
-    Url findByDisplayExpandedUrl(String display, String expanded, String url);
-
     Url findByUrl(String url);
 
     Url getPersistentUrlFor(String url);

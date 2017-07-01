@@ -18,8 +18,12 @@ import java.io.Serializable;
 })
 @NamedQueries({
         @NamedQuery(
+                name = "TickerSymbol.findByUrl",
+                query = "select t from TickerSymbol as t where t.url=:url"
+        ),
+        @NamedQuery(
                 name = "TickerSymbol.findByTickerSymbolAndUrl",
-                query = "select t from TickerSymbol as t where t.tickerSymbol=:tickerSymbol and t.url=:url"
+                query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
         )
 })
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
@@ -27,7 +31,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
     
     @Column(name = "ticker_symbol")

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.process.tasks.PersistDataFromTwitter;
@@ -43,9 +44,6 @@ public class TestController {
 
     @Value("${twitterwall.frontend.menu.users}")
     private boolean showMenuUsers;
-
-    //@Value("${twitterwall.backend.twitter.fetchTestData}")
-    //private boolean fetchTestData;
 
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
@@ -100,8 +98,6 @@ public class TestController {
         return "timeline";
     }
 
-
-
     private void logEnv(){
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
@@ -113,7 +109,7 @@ public class TestController {
 
     private Model setupPage(Model model) {
         Page page = new Page();
-        page.setSymbol("<span class=\"glyphicon glyphicon-home\" aria-hidden=\"true\"></span>");
+        page.setSymbol(Symbols.HOME.toString());
         page.setMenuAppName(menuAppName);
         page.setTitle("Tweets");
         page.setSubtitle(searchterm);
