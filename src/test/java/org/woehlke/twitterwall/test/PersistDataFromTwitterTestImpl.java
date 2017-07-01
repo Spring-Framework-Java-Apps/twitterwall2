@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,9 +61,29 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
                 }
             }
         } catch (InterruptedException e) {
-            log.warn(e.getMessage());
+            log.warn(msg+e.getMessage());
         }
         log.info(msg + "number of tweets: " + persistDataFromTwitter.countTweets());
+        log.info(msg + "------------------------------------------------");
+    }
+
+    @Override
+    public void fetchUserFromTwitterSearchTest(long[] idTwitterToFetchForProfileControllerTest) {
+        String msg = "fetchUserFromTwitterSearchTest : ";
+        log.info(msg + "-----exampleTest-------------------------------------------");
+        log.info(msg + "Hello, Testing-World.");
+        log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
+        try {
+            Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+            log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
+            for (long id : idTwitterToFetchForProfileControllerTest) {
+                TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(id);
+                persistDataFromTwitter.storeUserProfile(twitterProfile);
+            }
+        } catch (InterruptedException e) {
+            log.warn(msg+e.getMessage());
+        }
+        log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
         log.info(msg + "------------------------------------------------");
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.Page;
@@ -29,7 +30,7 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
  * Created by tw on 28.06.17.
  */
 @Controller
-public class HashTagController {
+public class HashTagController extends AbstractTwitterwallController {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
 
@@ -45,14 +46,17 @@ public class HashTagController {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.frontend.menu.users}")
-    private boolean showMenuUsers;
-
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
+    
+    @Value("${twitterwall.context.test}")
+    private boolean contextTest;
 
     @Value("${twitterwall.frontend.theme}")
     private String theme;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
 
     @Autowired
     public HashTagController(TweetService tweetService, HashTagService hashTagService, UserService userService) {
@@ -132,27 +136,9 @@ public class HashTagController {
             throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
         }
     }
-
-    private Model setupPage(Model model, String title, String subtitle, String symbol) {
-        Page page = new Page();
-        page.setSymbol(symbol);
-        page.setMenuAppName(menuAppName);
-        page.setTitle(title);
-        page.setSubtitle(subtitle);
-        page.setHistoryBack(true);
-        page.setShowMenuUsers(showMenuUsers);
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
-        model.addAttribute("page", page);
-        return model;
-    }
-
-    private void logEnv(){
-        log.info("twitterwall.frontend.theme = "+theme);
-        log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
-        log.info("twitter.searchQuery = "+searchterm);
-        log.info("twitterwall.frontend.menu.appname = "+menuAppName);
+    
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
     }
 }

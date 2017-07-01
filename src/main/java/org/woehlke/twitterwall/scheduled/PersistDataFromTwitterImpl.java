@@ -127,4 +127,14 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
         return tweetService.count();
     }
 
+    @Override
+    public long countUsers() {
+        return this.userService.count();
+    }
+
+    @Override
+    public User findUserByScreenName(String screenName) {
+        return this.userService.findByScreenName(screenName);
+    }
+
 }

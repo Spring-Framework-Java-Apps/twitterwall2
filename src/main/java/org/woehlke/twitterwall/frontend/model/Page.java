@@ -14,8 +14,8 @@ public class Page implements Serializable {
     private String infoWebpage;
     private String symbol;
     private String theme;
-    private boolean showMenuUsers = false;
     private boolean historyBack = false;
+    private boolean contextTest;
 
     public String getTitle() {
         return title;
@@ -72,21 +72,21 @@ public class Page implements Serializable {
     public void setHistoryBack(boolean historyBack) {
         this.historyBack = historyBack;
     }
-
-    public boolean isShowMenuUsers() {
-        return showMenuUsers;
-    }
-
-    public void setShowMenuUsers(boolean showMenuUsers) {
-        this.showMenuUsers = showMenuUsers;
-    }
-
+    
     public String getTheme() {
         return theme;
     }
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public boolean isContextTest() {
+        return contextTest;
+    }
+
+    public void setContextTest(boolean contextTest) {
+        this.contextTest = contextTest;
     }
 
     @Override
@@ -99,8 +99,8 @@ public class Page implements Serializable {
                 ", infoWebpage='" + infoWebpage + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", theme='" + theme + '\'' +
-                ", showMenuUsers=" + showMenuUsers +
                 ", historyBack=" + historyBack +
+                ", contextTest=" + contextTest +
                 '}';
     }
 }

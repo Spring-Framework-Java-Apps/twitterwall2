@@ -14,4 +14,8 @@ public interface PersistDataFromTwitter {
     User storeUserProfile(TwitterProfile userProfile);
 
     long countTweets();
+
+    long countUsers();
+
+    User findUserByScreenName(String screenName);
 }

@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
+import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
 import java.util.List;
 
@@ -19,13 +22,11 @@ import java.util.List;
  * Created by tw on 10.06.17.
  */
 @Controller
-public class TweetsController {
+public class TweetsController extends AbstractTwitterwallController {
 
     private static final Logger log = LoggerFactory.getLogger(TweetsController.class);
 
     private final TweetService tweetService;
-
-    private final HashTagService hashTagService;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
@@ -33,19 +34,21 @@ public class TweetsController {
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.frontend.menu.users}")
-    private boolean showMenuUsers;
-
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
 
     @Value("${twitterwall.frontend.theme}")
     private String theme;
 
+    @Value("${twitterwall.context.test}")
+    private boolean contextTest;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
     @Autowired
-    public TweetsController(TweetService tweetService, HashTagService hashTagService) {
+    public TweetsController(TweetService tweetService) {
         this.tweetService = tweetService;
-        this.hashTagService = hashTagService;
     }
 
     @RequestMapping("/")
@@ -56,33 +59,14 @@ public class TweetsController {
     @RequestMapping("/tweets")
     public String tweets(Model model) {
         logEnv();
-        model = setupPage(model);
+        model = super.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
         List<Tweet> latest = tweetService.getLatestTweets();
         model.addAttribute("latestTweets", latest);
         return "timeline";
     }
-
-    private void logEnv(){
-        log.info("twitterwall.frontend.theme = "+theme);
-        log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        log.info("twitterwall.frontend.menu.users = "+showMenuUsers);
-        log.info("twitter.searchQuery = "+searchterm);
-        log.info("twitterwall.frontend.menu.appname = "+menuAppName);
+    
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
     }
-
-    private Model setupPage(Model model) {
-        Page page = new Page();
-        page.setSymbol(Symbols.HOME.toString());
-        page.setMenuAppName(menuAppName);
-        page.setTitle("Tweets");
-        page.setSubtitle(searchterm);
-        page.setShowMenuUsers(showMenuUsers);
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
-        page.setHistoryBack(true);
-        model.addAttribute("page", page);
-        return model;
-    }
-
 }

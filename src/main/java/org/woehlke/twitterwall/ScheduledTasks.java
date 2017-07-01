@@ -32,6 +32,11 @@ public class ScheduledTasks {
     @Value("${twitterwall.scheduler.allowFetchTweetsFromTwitterSearch}")
     private boolean allowFetchTweetsFromTwitterSearch;
 
+    @Value("${twitterwall.scheduler.skipFortesting}")
+    private boolean skipFortesting;
+
+
+
     @Autowired
     public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
         this.scheduledTasksFacade = scheduledTasksFacade;
@@ -55,7 +60,7 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
-        if(allowFetchTweetsFromTwitterSearch){
+        if(allowFetchTweetsFromTwitterSearch  && !skipFortesting){
             String msg = "fetch Tweets From TwitterSearch ";
             log.info("START "+msg+": The time is now {}", dateFormat.format(new Date()));
             try {
@@ -99,7 +104,7 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
-        if(allowUpdateTweets){
+        if(allowUpdateTweets  && !skipFortesting){
             String msg = "update Tweets ";
             log.info("START "+msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
@@ -143,7 +148,7 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
-        if(allowUpdateUserProfiles) {
+        if(allowUpdateUserProfiles  && !skipFortesting) {
             String msg = "update User Profiles ";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
