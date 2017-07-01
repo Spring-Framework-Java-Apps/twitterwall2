@@ -45,9 +45,10 @@
                                 <div class="col-md-4 text-right"><span th:text="${user.listedCount}">listedCount</span></div>
                             </div>
                         </p>
-                    </div>
-                    <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                        <p><hr/></p>
+                        <p th:if="${page.historyBack}">
+                            <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                        </p>
                     </div>
                 </div>
             </div>
