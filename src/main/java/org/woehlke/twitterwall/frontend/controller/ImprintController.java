@@ -4,21 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.frontend.model.Page;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
-import javax.persistence.NoResultException;
-import java.util.Date;
 
 /**
  * Created by tw on 14.06.17.

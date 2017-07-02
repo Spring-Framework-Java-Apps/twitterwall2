@@ -16,7 +16,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.entities.UrlService;
 import org.woehlke.twitterwall.backend.TwitterApiService;
 
 import javax.persistence.NoResultException;
@@ -39,11 +38,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, UrlService urlService, TweetService tweetService) {
+    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, TweetService tweetService) {
         this.persistDataFromTwitter = persistDataFromTwitter;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
-        this.urlService = urlService;
         this.tweetService = tweetService;
     }
 
@@ -52,8 +50,6 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private final TwitterApiService twitterApiService;
 
     private final UserService userService;
-
-    private final UrlService urlService;
 
     private final TweetService tweetService;
 

@@ -30,16 +30,10 @@ public class UserTransformServiceImpl implements UserTransformService {
 
     private final MentionTransformService mentionTransformService;
 
-    private final MediaTransformService mediaTransformService;
-
-    private final TickerSymbolTransformService tickerSymbolTransformService;
-
-    public UserTransformServiceImpl(UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService, MediaTransformService mediaTransformService, TickerSymbolTransformService tickerSymbolTransformService) {
+    public UserTransformServiceImpl(UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService) {
         this.urlTransformService = urlTransformService;
         this.hashTagTransformService = hashTagTransformService;
         this.mentionTransformService = mentionTransformService;
-        this.mediaTransformService = mediaTransformService;
-        this.tickerSymbolTransformService = tickerSymbolTransformService;
     }
 
     @Override
