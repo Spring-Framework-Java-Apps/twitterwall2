@@ -57,6 +57,9 @@ public class HashTagController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
+
     @Autowired
     public HashTagController(TweetService tweetService, HashTagService hashTagService, UserService userService) {
         this.tweetService = tweetService;
@@ -138,6 +141,6 @@ public class HashTagController extends AbstractTwitterwallController {
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
+        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }
