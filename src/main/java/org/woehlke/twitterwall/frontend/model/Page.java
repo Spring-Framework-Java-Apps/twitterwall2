@@ -14,8 +14,17 @@ public class Page implements Serializable {
     private String infoWebpage;
     private String symbol;
     private String theme;
-    private boolean historyBack = false;
+    private String googleAnalyticScriptHtml;
+    private boolean historyBack;
     private boolean contextTest;
+
+    public String getGoogleAnalyticScriptHtml() {
+        return googleAnalyticScriptHtml;
+    }
+
+    public void setGoogleAnalyticScriptHtml(String googleAnalyticScriptHtml) {
+        this.googleAnalyticScriptHtml = googleAnalyticScriptHtml;
+    }
 
     public String getTitle() {
         return title;
@@ -99,6 +108,7 @@ public class Page implements Serializable {
                 ", infoWebpage='" + infoWebpage + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", theme='" + theme + '\'' +
+                ", googleAnalyticScriptHtml='" + googleAnalyticScriptHtml + '\'' +
                 ", historyBack=" + historyBack +
                 ", contextTest=" + contextTest +
                 '}';

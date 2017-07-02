@@ -262,6 +262,7 @@
                     <generateReports>true</generateReports>
                 </configuration>
                 <dependencies>
+                    <!-- http://andriusvelykis.github.io/reflow-maven-skin/skin/ -->
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
                         <artifactId>reflow-velocity-tools</artifactId>
