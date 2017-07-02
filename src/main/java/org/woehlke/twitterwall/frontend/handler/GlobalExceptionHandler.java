@@ -40,6 +40,10 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
+
+
     private final TwitterApiService twitterApiService;
 
     private final PersistDataFromTwitter persistDataFromTwitter;
@@ -71,6 +75,6 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
+        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }
