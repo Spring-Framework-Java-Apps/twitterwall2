@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ScheduledTasksFacadeTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/org/woehlke/twitterwall/test/ScheduledTasksFacadeTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.woehlke.twitterwall.test;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> * Created by tw on 25.06.17.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../org/woehlke/twitterwall/test/ScheduledTasksFacadeTest.html">ScheduledTasksFacadeTest</a> {
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>       
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>       String PROFILE_URLS[] = {
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>               <span class="jxr_string">"http://t.co/hIxL9WeoP1"</span>,
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>              <span class="jxr_string">"http://t.co/FGRp2dcyII"</span>,
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>              <span class="jxr_string">"https://t.co/t72OfGzzfd"</span>,
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>              <span class="jxr_string">"http://t.co/gnmbZ3HLPC"</span>,
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>              <span class="jxr_string">"http://t.co/5uLiz5mReg"</span>,
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>              <span class="jxr_string">"https://t.co/Lp00eOlYYK"</span>,
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>              <span class="jxr_string">"https://t.co/4g5pdzrWkM"</span>,
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>              <span class="jxr_string">"https://t.co/feV9khihK3"</span>,
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>              <span class="jxr_string">"https://t.co/Lq9HDdbM1S"</span>,
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>              <span class="jxr_string">"http://t.co/ZK8jQ2KEJD"</span>,
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>              <span class="jxr_string">"https://t.co/uzzouytYxh"</span>,
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>              <span class="jxr_string">"http://t.co/7ccMD0G00p"</span>,
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>              <span class="jxr_string">"http://t.co/mNdNHD0dLO"</span>,
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>              <span class="jxr_string">"https://t.co/lQlse7u93G"</span>,
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>              <span class="jxr_string">"https://t.co/f2vtNkiwTJ"</span>,
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>              <span class="jxr_string">"http://t.co/sgSySSyjol"</span>,
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>              <span class="jxr_string">"https://t.co/Fb3UEeVWWk"</span>,
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>              <span class="jxr_string">"https://t.co/n9LlZXFjTc"</span>,
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>              <span class="jxr_string">"http://t.co/a7oWdQhTin"</span>,
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>              <span class="jxr_string">"http://t.co/8EuxwYs0va"</span>,
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>              <span class="jxr_string">"http://t.co/75Hf3JV6JU"</span>,
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>              <span class="jxr_string">"https://t.co/qIDUMVN3WY"</span>,
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>              <span class="jxr_string">"https://t.co/kM9PIn3BgS"</span>,
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <span class="jxr_string">"https://t.co/46Dz7qCB8L"</span>,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>              <span class="jxr_string">"http://t.co/RzkVNLQLx6"</span>,
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>              <span class="jxr_string">"http://t.co/nWxOAD6WNC"</span>,
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>              <span class="jxr_string">"http://t.co/9YEDGUjbqK"</span>,
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>              <span class="jxr_string">"https://t.co/lQlse7u93G"</span>,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>              <span class="jxr_string">"https://t.co/4tDiIJ74eR"</span>,
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>              <span class="jxr_string">"https://t.co/xnOcVzUTkm"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>              <span class="jxr_string">"https://t.co/Ycl7ZCbRsy"</span>,
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>              <span class="jxr_string">"https://t.co/N7Rq7beH8n"</span>,
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>              <span class="jxr_string">"https://t.co/okIuRGVRi1"</span>,
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>              <span class="jxr_string">"https://t.co/OP7oBmBA3T"</span>,
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>              <span class="jxr_string">"http://t.co/N0wDJifTl8"</span>,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>              <span class="jxr_string">"https://t.co/NWnpbiSrFg"</span>,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>              <span class="jxr_string">"http://t.co/yspEKRBcSw"</span>,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>              <span class="jxr_string">"https://t.co/MuVYy9ahOi"</span>,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              <span class="jxr_string">"https://t.co/HQpP0PXtCY"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              <span class="jxr_string">"http://t.co/9P2qeHaGH7"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <span class="jxr_string">"http://t.co/tjFrOTqr1l"</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              <span class="jxr_string">"https://t.co/vFHaMjhQxK"</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              <span class="jxr_string">"http://t.co/TC1JsRY0sY"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              <span class="jxr_string">"https://t.co/DWliJ3cEUT"</span>,
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              <span class="jxr_string">"https://t.co/Yfcyk3aqh1"</span>,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              <span class="jxr_string">"https://t.co/5s5ggTRpIX"</span>,
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>              <span class="jxr_string">"https://t.co/z0lOKQCs0y"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>              <span class="jxr_string">"https://t.co/gnmbZ3qaY4"</span>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <span class="jxr_string">"http://t.co/9Ct4HFvTSM"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <span class="jxr_string">"http://t.co/gnmbZ3qaY4"</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <span class="jxr_string">"http://t.co/CudjEZGLVT"</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              <span class="jxr_string">"http://t.co/imtLrCUAko"</span>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              <span class="jxr_string">"https://t.co/RvKQvMMpzF"</span>,
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <span class="jxr_string">"https://t.co/7haKo3blhj"</span>,
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <span class="jxr_string">"http://t.co/MALJQIyYrt"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              <span class="jxr_string">"https://t.co/4HBxydWdIE"</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <span class="jxr_string">"https://t.co/hMMJBGFFKR"</span>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <span class="jxr_string">"https://t.co/cbsEBiSW2E"</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      };
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2017 <a href="https://github.com/phasenraum2010/twitterwall2">Thomas Woehlke</a>. All rights reserved.</div>
+</body>
+</html>
