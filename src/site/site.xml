@@ -68,7 +68,7 @@
         ]]>
         </bottomDescription>
         <pages>
-            <index project="reflow-parent">
+            <index project="twitterwall2">
                 <!-- Override the title -->
                 <titleTemplate>Twitterwall</titleTemplate>
                 <!-- no breadcrumbs on the main index page -->
