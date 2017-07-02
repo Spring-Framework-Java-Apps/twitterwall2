@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>UrlServiceTestImpl xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/org/woehlke/twitterwall/test/UrlServiceTestImpl.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.woehlke.twitterwall.test;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.annotation.Autowired;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.annotation.Value;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.springframework.dao.EmptyResultDataAccessException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.springframework.social.twitter.api.TwitterProfile;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.springframework.stereotype.Service;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.springframework.transaction.annotation.Propagation;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.springframework.transaction.annotation.Transactional;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.woehlke.twitterwall.backend.TwitterApiService;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.woehlke.twitterwall.oodm.entities.User;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.woehlke.twitterwall.oodm.entities.entities.Url;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.woehlke.twitterwall.oodm.service.UserService;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> javax.persistence.NoResultException;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * Created by tw on 01.07.17.</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  @Service
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  @Transactional(propagation = Propagation.REQUIRED, readOnly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/woehlke/twitterwall/test/UrlServiceTestImpl.html">UrlServiceTestImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../org/woehlke/twitterwall/test/UrlServiceTest.html">UrlServiceTest</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      @Value(<span class="jxr_string">"${twitterwall.batch.url.fetchTestDataVerbose}"</span>)
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> fetchTestDataVerbose;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      @Override
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> List&lt;Url&gt; getTestData() {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          Map&lt;String, String&gt; hostsTest = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          hostsTest.put(<span class="jxr_string">"https://t.co/lQlse7u93G"</span>, <span class="jxr_string">"port80guru.tumblr.com"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          Map&lt;String, String&gt; urlsTest = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          urlsTest.put(<span class="jxr_string">"https://t.co/lQlse7u93G"</span>, <span class="jxr_string">"https://port80guru.tumblr.com/"</span>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>          <strong class="jxr_keyword">if</strong> (fetchTestDataVerbose) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>              hostsTest = hosts;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>              urlsTest = urls;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          String urlSrc;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          String display;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          String expanded;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">int</strong>[] indices = {};
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          List&lt;Url&gt; testData = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">for</strong> (Map.Entry&lt;String, String&gt; url : urlsTest.entrySet()) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              urlSrc = url.getKey();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              expanded = url.getValue();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              display = hostsTest.get(urlSrc);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              Url myUrl = <strong class="jxr_keyword">new</strong> Url(display, expanded, urlSrc, indices);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              testData.add(myUrl);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">return</strong> testData;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String, String&gt; hosts = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          hosts.put(<span class="jxr_string">"https://t.co/4tDiIJ74eR"</span>, <span class="jxr_string">"www.ecentral.de"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          hosts.put(<span class="jxr_string">"https://t.co/n9LlZXFjTc"</span>, <span class="jxr_string">"www.davitec.de"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          hosts.put(<span class="jxr_string">"http://t.co/RzkVNLQLx6"</span>, <span class="jxr_string">"www.medien-kultur-it.net"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          hosts.put(<span class="jxr_string">"https://t.co/N7Rq7beH8n"</span>, <span class="jxr_string">"www.quizpalme.de"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          hosts.put(<span class="jxr_string">"https://t.co/Fb3UEeVWWk"</span>, <span class="jxr_string">"www.xing.com"</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          hosts.put(<span class="jxr_string">"https://t.co/Ycl7ZCbRsy"</span>, <span class="jxr_string">"www.thomaskieslich.de"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          hosts.put(<span class="jxr_string">"https://t.co/feV9khihK3"</span>, <span class="jxr_string">"querbeet.docma.de"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          hosts.put(<span class="jxr_string">"https://t.co/vFHaMjhQxK"</span>, <span class="jxr_string">"www.mittwald.de"</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          hosts.put(<span class="jxr_string">"https://t.co/4HBxydWdIE"</span>, <span class="jxr_string">"episch.org"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          hosts.put(<span class="jxr_string">"https://t.co/uzzouytYxh"</span>, <span class="jxr_string">"www.oliver-thiele.de"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          hosts.put(<span class="jxr_string">"http://t.co/7ccMD0G00p"</span>, <span class="jxr_string">"magic.hat-of-typo3.de"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          hosts.put(<span class="jxr_string">"http://t.co/gnmbZ3qaY4"</span>, <span class="jxr_string">"www.pega-sus.de"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          hosts.put(<span class="jxr_string">"https://t.co/Lp00eOlYYK"</span>, <span class="jxr_string">"www.chriwo.de"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          hosts.put(<span class="jxr_string">"http://t.co/ZK8jQ2KEJD"</span>, <span class="jxr_string">"www.renekreupl.de"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          hosts.put(<span class="jxr_string">"https://t.co/kM9PIn3BgS"</span>, <span class="jxr_string">"usetypo3.com"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          hosts.put(<span class="jxr_string">"https://t.co/46Dz7qCB8L"</span>, <span class="jxr_string">"www.portachtzig.com"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          hosts.put(<span class="jxr_string">"https://t.co/xnOcVzUTkm"</span>, <span class="jxr_string">"typo3worx.eu"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          hosts.put(<span class="jxr_string">"https://t.co/hMMJBGFFKR"</span>, <span class="jxr_string">"www.davitec.de"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          hosts.put(<span class="jxr_string">"http://t.co/imtLrCUAko"</span>, <span class="jxr_string">"christian-hellmuth.de"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          hosts.put(<span class="jxr_string">"https://t.co/RvKQvMMpzF"</span>, <span class="jxr_string">"wwagner.net"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          hosts.put(<span class="jxr_string">"https://t.co/cbsEBiSW2E"</span>, <span class="jxr_string">"www.web-vision.de"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          hosts.put(<span class="jxr_string">"http://t.co/FGRp2dcyII"</span>, <span class="jxr_string">"www.marit.ag"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          hosts.put(<span class="jxr_string">"https://t.co/Yfcyk3aqh1"</span>, <span class="jxr_string">"www.fanor.de"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          hosts.put(<span class="jxr_string">"http://t.co/mNdNHD0dLO"</span>, <span class="jxr_string">"www.interactive-tools.de"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          hosts.put(<span class="jxr_string">"http://t.co/a7oWdQhTin"</span>, <span class="jxr_string">"undkonsorten.com"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          hosts.put(<span class="jxr_string">"https://t.co/Lq9HDdbM1S"</span>, <span class="jxr_string">"www.wapplersystems.de"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          hosts.put(<span class="jxr_string">"https://t.co/7haKo3blhj"</span>, <span class="jxr_string">"www.tritum.de"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          hosts.put(<span class="jxr_string">"https://t.co/qIDUMVN3WY"</span>, <span class="jxr_string">"gosna.de"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          hosts.put(<span class="jxr_string">"https://t.co/t72OfGzzfd"</span>, <span class="jxr_string">"github.com"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          hosts.put(<span class="jxr_string">"http://t.co/TC1JsRY0sY"</span>, <span class="jxr_string">"www.typo3-ruhr.org"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          hosts.put(<span class="jxr_string">"http://t.co/hIxL9WeoP1"</span>, <span class="jxr_string">"www.schnittsteller.de"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          hosts.put(<span class="jxr_string">"http://t.co/yspEKRBcSw"</span>, <span class="jxr_string">"randomprojects.de"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          hosts.put(<span class="jxr_string">"https://t.co/lQlse7u93G"</span>, <span class="jxr_string">"port80guru.tumblr.com"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          hosts.put(<span class="jxr_string">"http://t.co/75Hf3JV6JU"</span>, <span class="jxr_string">"www.typo3camp-berlin.de"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          hosts.put(<span class="jxr_string">"https://t.co/gnmbZ3qaY4"</span>, <span class="jxr_string">"www.pega-sus.de"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          hosts.put(<span class="jxr_string">"https://t.co/4g5pdzrWkM"</span>, <span class="jxr_string">"alinbu.net"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          hosts.put(<span class="jxr_string">"http://t.co/nWxOAD6WNC"</span>, <span class="jxr_string">"www.agentur-brandung.de"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          hosts.put(<span class="jxr_string">"http://t.co/5uLiz5mReg"</span>, <span class="jxr_string">"www.foodfindr.de"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         hosts.put(<span class="jxr_string">"http://t.co/sgSySSyjol"</span>, <span class="jxr_string">"t3easy.de"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         hosts.put(<span class="jxr_string">"http://t.co/N0wDJifTl8"</span>, <span class="jxr_string">"blog.sammyb.de"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         hosts.put(<span class="jxr_string">"https://t.co/MuVYy9ahOi"</span>, <span class="jxr_string">"www.gkm.me"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         hosts.put(<span class="jxr_string">"https://t.co/DWliJ3cEUT"</span>, <span class="jxr_string">"www.frauliessmann.de"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         hosts.put(<span class="jxr_string">"https://t.co/OP7oBmBA3T"</span>, <span class="jxr_string">"spooner-web.de"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         hosts.put(<span class="jxr_string">"https://t.co/z0lOKQCs0y"</span>, <span class="jxr_string">"typo3.com"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         hosts.put(<span class="jxr_string">"https://t.co/okIuRGVRi1"</span>, <span class="jxr_string">"www.kay-strobach.de"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         hosts.put(<span class="jxr_string">"https://t.co/f2vtNkiwTJ"</span>, <span class="jxr_string">"netz-basis.com"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         hosts.put(<span class="jxr_string">"https://t.co/NWnpbiSrFg"</span>, <span class="jxr_string">"flyingcircus.io"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         hosts.put(<span class="jxr_string">"https://t.co/HQpP0PXtCY"</span>, <span class="jxr_string">"www.rodejohann.de"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         hosts.put(<span class="jxr_string">"http://t.co/tjFrOTqr1l"</span>, <span class="jxr_string">"www.cps-it.de"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         hosts.put(<span class="jxr_string">"http://t.co/9Ct4HFvTSM"</span>, <span class="jxr_string">"www.plusb.de"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         hosts.put(<span class="jxr_string">"http://t.co/8EuxwYs0va"</span>, <span class="jxr_string">"www.ideenwerft.com"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         hosts.put(<span class="jxr_string">"http://t.co/MALJQIyYrt"</span>, <span class="jxr_string">"www.arndtteunissen.de"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>         hosts.put(<span class="jxr_string">"http://t.co/9YEDGUjbqK"</span>, <span class="jxr_string">"www.in2code.de"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         hosts.put(<span class="jxr_string">"http://t.co/9P2qeHaGH7"</span>, <span class="jxr_string">"a-w.io"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         hosts.put(<span class="jxr_string">"https://t.co/5s5ggTRpIX"</span>, <span class="jxr_string">"www.sgalinski.de"</span>);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         hosts.put(<span class="jxr_string">"http://t.co/gnmbZ3HLPC"</span>, <span class="jxr_string">"www.pega-sus.de"</span>);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         hosts.put(<span class="jxr_string">"http://t.co/CudjEZGLVT"</span>, <span class="jxr_string">"sebastian.kreideweiss.info"</span>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String, String&gt; urls = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         urls.put(<span class="jxr_string">"https://t.co/4tDiIJ74eR"</span>, <span class="jxr_string">"http://www.ecentral.de/"</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         urls.put(<span class="jxr_string">"https://t.co/n9LlZXFjTc"</span>, <span class="jxr_string">"https://www.davitec.de/"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>         urls.put(<span class="jxr_string">"http://t.co/RzkVNLQLx6"</span>, <span class="jxr_string">"http://www.medien-kultur-it.net/"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>         urls.put(<span class="jxr_string">"https://t.co/N7Rq7beH8n"</span>, <span class="jxr_string">"http://www.quizpalme.de/"</span>);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         urls.put(<span class="jxr_string">"https://t.co/Fb3UEeVWWk"</span>, <span class="jxr_string">"https://www.xing.com/profile/Nicole_Cordes2"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         urls.put(<span class="jxr_string">"https://t.co/Ycl7ZCbRsy"</span>, <span class="jxr_string">"https://www.thomaskieslich.de/"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         urls.put(<span class="jxr_string">"https://t.co/feV9khihK3"</span>, <span class="jxr_string">"http://querbeet.docma.de/"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         urls.put(<span class="jxr_string">"https://t.co/vFHaMjhQxK"</span>, <span class="jxr_string">"https://www.mittwald.de/"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>         urls.put(<span class="jxr_string">"https://t.co/4HBxydWdIE"</span>, <span class="jxr_string">"https://episch.org/"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         urls.put(<span class="jxr_string">"https://t.co/uzzouytYxh"</span>, <span class="jxr_string">"https://www.oliver-thiele.de/"</span>);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         urls.put(<span class="jxr_string">"http://t.co/7ccMD0G00p"</span>, <span class="jxr_string">"http://magic.hat-of-typo3.de/"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         urls.put(<span class="jxr_string">"http://t.co/gnmbZ3qaY4"</span>, <span class="jxr_string">"https://www.pega-sus.de/home.html"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         urls.put(<span class="jxr_string">"https://t.co/Lp00eOlYYK"</span>, <span class="jxr_string">"http://www.chriwo.de/"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         urls.put(<span class="jxr_string">"http://t.co/ZK8jQ2KEJD"</span>, <span class="jxr_string">"http://www.renekreupl.de/"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         urls.put(<span class="jxr_string">"https://t.co/kM9PIn3BgS"</span>, <span class="jxr_string">"https://usetypo3.com/"</span>);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         urls.put(<span class="jxr_string">"https://t.co/46Dz7qCB8L"</span>, <span class="jxr_string">"https://www.portachtzig.com/"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         urls.put(<span class="jxr_string">"https://t.co/xnOcVzUTkm"</span>, <span class="jxr_string">"http://typo3worx.eu/"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         urls.put(<span class="jxr_string">"https://t.co/hMMJBGFFKR"</span>, <span class="jxr_string">"https://www.davitec.de/"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         urls.put(<span class="jxr_string">"http://t.co/imtLrCUAko"</span>, <span class="jxr_string">"https://christian-hellmuth.de/"</span>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         urls.put(<span class="jxr_string">"https://t.co/RvKQvMMpzF"</span>, <span class="jxr_string">"https://wwagner.net/"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         urls.put(<span class="jxr_string">"https://t.co/cbsEBiSW2E"</span>, <span class="jxr_string">"https://www.web-vision.de/"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>         urls.put(<span class="jxr_string">"http://t.co/FGRp2dcyII"</span>, <span class="jxr_string">"http://www.marit.ag/"</span>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         urls.put(<span class="jxr_string">"https://t.co/Yfcyk3aqh1"</span>, <span class="jxr_string">"http://www.fanor.de/"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         urls.put(<span class="jxr_string">"http://t.co/mNdNHD0dLO"</span>, <span class="jxr_string">"https://www.interactive-tools.de/"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         urls.put(<span class="jxr_string">"http://t.co/a7oWdQhTin"</span>, <span class="jxr_string">"http://undkonsorten.com/"</span>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         urls.put(<span class="jxr_string">"https://t.co/Lq9HDdbM1S"</span>, <span class="jxr_string">"https://www.wapplersystems.de/profil-sven-wappler/"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         urls.put(<span class="jxr_string">"https://t.co/7haKo3blhj"</span>, <span class="jxr_string">"https://www.tritum.de/"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         urls.put(<span class="jxr_string">"https://t.co/qIDUMVN3WY"</span>, <span class="jxr_string">"http://gosna.de/"</span>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         urls.put(<span class="jxr_string">"https://t.co/t72OfGzzfd"</span>, <span class="jxr_string">"https://github.com/markusguenther"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         urls.put(<span class="jxr_string">"http://t.co/TC1JsRY0sY"</span>, <span class="jxr_string">"http://www.typo3-ruhr.org/"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         urls.put(<span class="jxr_string">"http://t.co/hIxL9WeoP1"</span>, <span class="jxr_string">"http://www.schnittsteller.de/"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         urls.put(<span class="jxr_string">"http://t.co/yspEKRBcSw"</span>, <span class="jxr_string">"http://randomprojects.de/ClubMate_RT/"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         urls.put(<span class="jxr_string">"https://t.co/lQlse7u93G"</span>, <span class="jxr_string">"https://port80guru.tumblr.com/"</span>);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         urls.put(<span class="jxr_string">"http://t.co/75Hf3JV6JU"</span>, <span class="jxr_string">"http://www.typo3camp-berlin.de/"</span>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         urls.put(<span class="jxr_string">"https://t.co/gnmbZ3qaY4"</span>, <span class="jxr_string">"https://www.pega-sus.de/home.html"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>         urls.put(<span class="jxr_string">"https://t.co/4g5pdzrWkM"</span>, <span class="jxr_string">"https://alinbu.net/"</span>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         urls.put(<span class="jxr_string">"http://t.co/nWxOAD6WNC"</span>, <span class="jxr_string">"https://www.agentur-brandung.de/"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         urls.put(<span class="jxr_string">"http://t.co/5uLiz5mReg"</span>, <span class="jxr_string">"http://www.foodfindr.de/"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         urls.put(<span class="jxr_string">"http://t.co/sgSySSyjol"</span>, <span class="jxr_string">"https://t3easy.de/index.php?id=2"</span>);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>         urls.put(<span class="jxr_string">"http://t.co/N0wDJifTl8"</span>, <span class="jxr_string">"https://blog.sammyb.de/"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         urls.put(<span class="jxr_string">"https://t.co/MuVYy9ahOi"</span>, <span class="jxr_string">"https://www.gkm.me/"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         urls.put(<span class="jxr_string">"https://t.co/DWliJ3cEUT"</span>, <span class="jxr_string">"http://www.frauliessmann.de/"</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         urls.put(<span class="jxr_string">"https://t.co/OP7oBmBA3T"</span>, <span class="jxr_string">"https://spooner-web.de/"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>         urls.put(<span class="jxr_string">"https://t.co/z0lOKQCs0y"</span>, <span class="jxr_string">"https://typo3.com/"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         urls.put(<span class="jxr_string">"https://t.co/okIuRGVRi1"</span>, <span class="jxr_string">"http://www.kay-strobach.de/willkommen/"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         urls.put(<span class="jxr_string">"https://t.co/f2vtNkiwTJ"</span>, <span class="jxr_string">"https://netz-basis.com/blog"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         urls.put(<span class="jxr_string">"https://t.co/NWnpbiSrFg"</span>, <span class="jxr_string">"https://flyingcircus.io/"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>         urls.put(<span class="jxr_string">"https://t.co/HQpP0PXtCY"</span>, <span class="jxr_string">"http://www.rodejohann.de/"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         urls.put(<span class="jxr_string">"http://t.co/tjFrOTqr1l"</span>, <span class="jxr_string">"http://www.cps-it.de/"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         urls.put(<span class="jxr_string">"http://t.co/9Ct4HFvTSM"</span>, <span class="jxr_string">"http://www.plusb.de/"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         urls.put(<span class="jxr_string">"http://t.co/8EuxwYs0va"</span>, <span class="jxr_string">"https://www.ideenwerft.com/"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         urls.put(<span class="jxr_string">"http://t.co/MALJQIyYrt"</span>, <span class="jxr_string">"https://www.arndtteunissen.de/"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         urls.put(<span class="jxr_string">"http://t.co/9YEDGUjbqK"</span>, <span class="jxr_string">"https://www.in2code.de/"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         urls.put(<span class="jxr_string">"http://t.co/9P2qeHaGH7"</span>, <span class="jxr_string">"http://a-w.io/"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         urls.put(<span class="jxr_string">"https://t.co/5s5ggTRpIX"</span>, <span class="jxr_string">"https://www.sgalinski.de/"</span>);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         urls.put(<span class="jxr_string">"http://t.co/gnmbZ3HLPC"</span>, <span class="jxr_string">"https://www.pega-sus.de/home.html"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         urls.put(<span class="jxr_string">"http://t.co/CudjEZGLVT"</span>, <span class="jxr_string">"http://sebastian.kreideweiss.info/"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2017 <a href="https://github.com/phasenraum2010/twitterwall2">Thomas Woehlke</a>. All rights reserved.</div>
+</body>
+</html>

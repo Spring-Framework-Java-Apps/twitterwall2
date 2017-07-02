@@ -6,7 +6,7 @@
     <artifactId>twitterwall2</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <name>twitterwall2</name>
-    <url>http://woehlke.org/p/twitterwall2</url>
+    <url>https://phasenraum2010.github.io/twitterwall2/</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -16,7 +16,7 @@
     
     <organization>
         <name>Thomas Woehlke</name>
-        <url>https://github.com/phasenraum2010/twitterwall2</url>
+        <url>https://twitter.com/ThomasWoehlke</url>
     </organization>
     <inceptionYear>2017</inceptionYear>
     <scm>
@@ -40,9 +40,15 @@
         <developer>
             <name>Thomas Wöhlke</name>
             <email>thomas@woehlke.org</email>
-            <url>https://github.com/phasenraum2010/twitterwall2</url>
+            <url>https://github.com/phasenraum2010</url>
         </developer>
     </developers>
+    <licenses>
+        <license>
+            <name>GNU General Public License v2.0</name>
+            <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
+        </license>
+    </licenses>
     
     <properties>
         <java.version>1.8</java.version>
