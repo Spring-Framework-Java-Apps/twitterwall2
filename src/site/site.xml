@@ -108,10 +108,15 @@
     </reflowSkin>
 </custom>
 
+
+
 <body>
+
     <!-- Add a rel to Google profile for all pages -->
     <head>
-        <link rel="author" href="https://plus.google.com/u/0/+ThomasW%C3%B6hlke"/>
+        <!--
+        <link rel="author" href="https://plus.google.com/u/0/103952923222929770455" ></link>
+        -->
     </head>
 
     <links>

@@ -20,19 +20,19 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>twitterwall2 - Checkstyle report</title>
-    <link>http://woehlke.org/p/twitterwall2</link>
+    <link>https://phasenraum2010.github.io/twitterwall2/</link>
     <description>twitterwall2 - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2017 Thomas Woehlke</copyright>
     <item>
       <title>File: 94,
-             Errors: 3403,
+             Errors: 3466,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://woehlke.org/p/twitterwall2/checkstyle.html</link>
+            <link>https://phasenraum2010.github.io/twitterwall2//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://woehlke.org/p/twitterwall2/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.Tweet.java">org/woehlke/twitterwall/oodm/entities/Tweet.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.Tweet.java">org/woehlke/twitterwall/oodm/entities/Tweet.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitter.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithIdTwitter.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitter.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithIdTwitter.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlService.java">org/woehlke/twitterwall/oodm/service/entities/UrlService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlService.java">org/woehlke/twitterwall/oodm/service/entities/UrlService.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.HashTagTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/HashTagTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.HashTagTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/HashTagTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepository.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepository.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepository.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MediaServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/MediaServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MediaServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/MediaServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.controller.ImprintController.java">org/woehlke/twitterwall/frontend/controller/ImprintController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.controller.ImprintController.java">org/woehlke/twitterwall/frontend/controller/ImprintController.java</a>
                 </td>
                 <td>
                   0
@@ -139,12 +139,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  34
+                  36
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/TickerSymbolRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/TickerSymbolRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MentionRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/MentionRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MentionRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/MentionRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MentionTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/MentionTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MentionTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/MentionTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -186,7 +186,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText.java">org/woehlke/twitterwall/oodm/entities/common/AbstractFormattedText.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText.java">org/woehlke/twitterwall/oodm/entities/common/AbstractFormattedText.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#application.properties">application.properties</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#application.properties">application.properties</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.HashTagTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/HashTagTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.HashTagTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/HashTagTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.exceptions.remote.TwitterApiException.java">org/woehlke/twitterwall/exceptions/remote/TwitterApiException.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.exceptions.remote.TwitterApiException.java">org/woehlke/twitterwall/exceptions/remote/TwitterApiException.java</a>
                 </td>
                 <td>
                   0
@@ -242,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.TickerSymbolTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/TickerSymbolTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.TickerSymbolTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/TickerSymbolTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -256,7 +256,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol.java">org/woehlke/twitterwall/oodm/entities/entities/TickerSymbol.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol.java">org/woehlke/twitterwall/oodm/entities/entities/TickerSymbol.java</a>
                 </td>
                 <td>
                   0
@@ -270,7 +270,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/UrlRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/UrlRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -284,7 +284,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.model.HashTagCounted.java">org/woehlke/twitterwall/frontend/model/HashTagCounted.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.model.HashTagCounted.java">org/woehlke/twitterwall/frontend/model/HashTagCounted.java</a>
                 </td>
                 <td>
                   0
@@ -298,7 +298,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.ScheduledTasksFacade.java">org/woehlke/twitterwall/scheduled/ScheduledTasksFacade.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.ScheduledTasksFacade.java">org/woehlke/twitterwall/scheduled/ScheduledTasksFacade.java</a>
                 </td>
                 <td>
                   0
@@ -312,7 +312,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.common.Symbols.java">org/woehlke/twitterwall/frontend/common/Symbols.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.common.Symbols.java">org/woehlke/twitterwall/frontend/common/Symbols.java</a>
                 </td>
                 <td>
                   0
@@ -326,7 +326,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.java">org/woehlke/twitterwall/frontend/common/AbstractTwitterwallController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.java">org/woehlke/twitterwall/frontend/common/AbstractTwitterwallController.java</a>
                 </td>
                 <td>
                   0
@@ -335,12 +335,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  175
+                  217
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.TweetService.java">org/woehlke/twitterwall/oodm/service/TweetService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.TweetService.java">org/woehlke/twitterwall/oodm/service/TweetService.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithScreenName.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithScreenName.java</a>
                 </td>
                 <td>
                   0
@@ -368,7 +368,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitterImpl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithIdTwitterImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitterImpl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithIdTwitterImpl.java</a>
                 </td>
                 <td>
                   0
@@ -382,7 +382,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.UserTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/UserTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.UserTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/UserTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -396,7 +396,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository.java">org/woehlke/twitterwall/oodm/repository/entities/TickerSymbolRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository.java">org/woehlke/twitterwall/oodm/repository/entities/TickerSymbolRepository.java</a>
                 </td>
                 <td>
                   0
@@ -410,7 +410,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.UserServiceImpl.java">org/woehlke/twitterwall/oodm/service/UserServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.UserServiceImpl.java">org/woehlke/twitterwall/oodm/service/UserServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -424,7 +424,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.controller.HashTagController.java">org/woehlke/twitterwall/frontend/controller/HashTagController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.controller.HashTagController.java">org/woehlke/twitterwall/frontend/controller/HashTagController.java</a>
                 </td>
                 <td>
                   0
@@ -433,12 +433,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  74
+                  76
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.UserService.java">org/woehlke/twitterwall/oodm/service/UserService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.UserService.java">org/woehlke/twitterwall/oodm/service/UserService.java</a>
                 </td>
                 <td>
                   0
@@ -452,7 +452,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.TweetTransformService.java">org/woehlke/twitterwall/scheduled/service/TweetTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.TweetTransformService.java">org/woehlke/twitterwall/scheduled/service/TweetTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -466,7 +466,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.UserRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/UserRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.UserRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/UserRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -480,7 +480,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlCacheServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/UrlCacheServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlCacheServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/UrlCacheServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -494,7 +494,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository.java">org/woehlke/twitterwall/oodm/repository/entities/HashTagRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository.java">org/woehlke/twitterwall/oodm/repository/entities/HashTagRepository.java</a>
                 </td>
                 <td>
                   0
@@ -508,7 +508,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MentionRepository.java">org/woehlke/twitterwall/oodm/repository/entities/MentionRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MentionRepository.java">org/woehlke/twitterwall/oodm/repository/entities/MentionRepository.java</a>
                 </td>
                 <td>
                   0
@@ -522,7 +522,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.ScheduledTasks.java">org/woehlke/twitterwall/ScheduledTasks.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.ScheduledTasks.java">org/woehlke/twitterwall/ScheduledTasks.java</a>
                 </td>
                 <td>
                   0
@@ -536,7 +536,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MediaTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/MediaTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MediaTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/MediaTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -550,7 +550,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.UrlTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/UrlTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.UrlTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/entities/UrlTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -564,7 +564,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MediaRepository.java">org/woehlke/twitterwall/oodm/repository/entities/MediaRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MediaRepository.java">org/woehlke/twitterwall/oodm/repository/entities/MediaRepository.java</a>
                 </td>
                 <td>
                   0
@@ -578,7 +578,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithUrl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithUrl.java</a>
                 </td>
                 <td>
                   0
@@ -592,7 +592,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject.java">org/woehlke/twitterwall/oodm/entities/common/AbstractTwitterObject.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject.java">org/woehlke/twitterwall/oodm/entities/common/AbstractTwitterObject.java</a>
                 </td>
                 <td>
                   0
@@ -606,7 +606,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.User.java">org/woehlke/twitterwall/oodm/entities/User.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.User.java">org/woehlke/twitterwall/oodm/entities/User.java</a>
                 </td>
                 <td>
                   0
@@ -620,7 +620,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.HashTagRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/HashTagRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.HashTagRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/HashTagRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -634,7 +634,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.controller.TestController.java">org/woehlke/twitterwall/frontend/controller/TestController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.controller.TestController.java">org/woehlke/twitterwall/frontend/controller/TestController.java</a>
                 </td>
                 <td>
                   0
@@ -643,12 +643,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  41
+                  43
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MentionService.java">org/woehlke/twitterwall/oodm/service/entities/MentionService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MentionService.java">org/woehlke/twitterwall/oodm/service/entities/MentionService.java</a>
                 </td>
                 <td>
                   0
@@ -662,7 +662,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.TickerSymbolServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/TickerSymbolServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.TickerSymbolServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/TickerSymbolServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -676,7 +676,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.backend.TwitterUrlService.java">org/woehlke/twitterwall/backend/TwitterUrlService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.backend.TwitterUrlService.java">org/woehlke/twitterwall/backend/TwitterUrlService.java</a>
                 </td>
                 <td>
                   0
@@ -690,7 +690,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Mention.java">org/woehlke/twitterwall/oodm/entities/entities/Mention.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Mention.java">org/woehlke/twitterwall/oodm/entities/entities/Mention.java</a>
                 </td>
                 <td>
                   0
@@ -704,7 +704,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.backend.TwitterApiService.java">org/woehlke/twitterwall/backend/TwitterApiService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.backend.TwitterApiService.java">org/woehlke/twitterwall/backend/TwitterApiService.java</a>
                 </td>
                 <td>
                   0
@@ -718,7 +718,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.TweetRepository.java">org/woehlke/twitterwall/oodm/repository/TweetRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.TweetRepository.java">org/woehlke/twitterwall/oodm/repository/TweetRepository.java</a>
                 </td>
                 <td>
                   0
@@ -732,7 +732,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.TweetServiceImpl.java">org/woehlke/twitterwall/oodm/service/TweetServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.TweetServiceImpl.java">org/woehlke/twitterwall/oodm/service/TweetServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -746,7 +746,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithIdTwitter.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter.java">org/woehlke/twitterwall/oodm/entities/common/DomainObjectWithIdTwitter.java</a>
                 </td>
                 <td>
                   0
@@ -760,7 +760,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.HashTagServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/HashTagServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.HashTagServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/HashTagServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -774,7 +774,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MentionServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/MentionServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MentionServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/MentionServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -788,7 +788,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.common.UrlPaths.java">org/woehlke/twitterwall/frontend/common/UrlPaths.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.common.UrlPaths.java">org/woehlke/twitterwall/frontend/common/UrlPaths.java</a>
                 </td>
                 <td>
                   0
@@ -802,7 +802,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.TickerSymbolService.java">org/woehlke/twitterwall/oodm/service/entities/TickerSymbolService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.TickerSymbolService.java">org/woehlke/twitterwall/oodm/service/entities/TickerSymbolService.java</a>
                 </td>
                 <td>
                   0
@@ -816,7 +816,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository.java">org/woehlke/twitterwall/oodm/repository/entities/UrlCacheRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository.java">org/woehlke/twitterwall/oodm/repository/entities/UrlCacheRepository.java</a>
                 </td>
                 <td>
                   0
@@ -830,7 +830,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.backend.TwitterUrlServiceImpl.java">org/woehlke/twitterwall/backend/TwitterUrlServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.backend.TwitterUrlServiceImpl.java">org/woehlke/twitterwall/backend/TwitterUrlServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -844,7 +844,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MediaRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/MediaRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.MediaRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/MediaRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -858,7 +858,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/UrlServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlServiceImpl.java">org/woehlke/twitterwall/oodm/service/entities/UrlServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -872,7 +872,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.common.TransformService.java">org/woehlke/twitterwall/scheduled/common/TransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.common.TransformService.java">org/woehlke/twitterwall/scheduled/common/TransformService.java</a>
                 </td>
                 <td>
                   0
@@ -886,7 +886,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MediaTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/MediaTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MediaTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/MediaTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -900,7 +900,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.controller.TweetsController.java">org/woehlke/twitterwall/frontend/controller/TweetsController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.controller.TweetsController.java">org/woehlke/twitterwall/frontend/controller/TweetsController.java</a>
                 </td>
                 <td>
                   0
@@ -909,12 +909,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  31
+                  33
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.common.DomainService.java">org/woehlke/twitterwall/oodm/service/common/DomainService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.common.DomainService.java">org/woehlke/twitterwall/oodm/service/common/DomainService.java</a>
                 </td>
                 <td>
                   0
@@ -928,7 +928,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.UserTransformService.java">org/woehlke/twitterwall/scheduled/service/UserTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.UserTransformService.java">org/woehlke/twitterwall/scheduled/service/UserTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -942,7 +942,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.DataSourceConf.java">org/woehlke/twitterwall/DataSourceConf.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.DataSourceConf.java">org/woehlke/twitterwall/DataSourceConf.java</a>
                 </td>
                 <td>
                   0
@@ -956,7 +956,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObject.java">org/woehlke/twitterwall/oodm/entities/common/DomainObject.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.common.DomainObject.java">org/woehlke/twitterwall/oodm/entities/common/DomainObject.java</a>
                 </td>
                 <td>
                   0
@@ -970,7 +970,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Url.java">org/woehlke/twitterwall/oodm/entities/entities/Url.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Url.java">org/woehlke/twitterwall/oodm/entities/entities/Url.java</a>
                 </td>
                 <td>
                   0
@@ -984,7 +984,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.PersistDataFromTwitterImpl.java">org/woehlke/twitterwall/scheduled/PersistDataFromTwitterImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.PersistDataFromTwitterImpl.java">org/woehlke/twitterwall/scheduled/PersistDataFromTwitterImpl.java</a>
                 </td>
                 <td>
                   0
@@ -998,7 +998,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.TweetRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/TweetRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.TweetRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/TweetRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1012,7 +1012,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.HashTagService.java">org/woehlke/twitterwall/oodm/service/entities/HashTagService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.HashTagService.java">org/woehlke/twitterwall/oodm/service/entities/HashTagService.java</a>
                 </td>
                 <td>
                   0
@@ -1026,7 +1026,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlRepository.java">org/woehlke/twitterwall/oodm/repository/entities/UrlRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlRepository.java">org/woehlke/twitterwall/oodm/repository/entities/UrlRepository.java</a>
                 </td>
                 <td>
                   0
@@ -1040,7 +1040,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/UrlCacheRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/entities/UrlCacheRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1054,7 +1054,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.model.Page.java">org/woehlke/twitterwall/frontend/model/Page.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.model.Page.java">org/woehlke/twitterwall/frontend/model/Page.java</a>
                 </td>
                 <td>
                   0
@@ -1063,12 +1063,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  75
+                  84
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MediaService.java">org/woehlke/twitterwall/oodm/service/entities/MediaService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.MediaService.java">org/woehlke/twitterwall/oodm/service/entities/MediaService.java</a>
                 </td>
                 <td>
                   0
@@ -1082,7 +1082,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.exceptions.remote.FetchUrlException.java">org/woehlke/twitterwall/exceptions/remote/FetchUrlException.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.exceptions.remote.FetchUrlException.java">org/woehlke/twitterwall/exceptions/remote/FetchUrlException.java</a>
                 </td>
                 <td>
                   0
@@ -1096,7 +1096,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.UrlTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/UrlTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.UrlTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/UrlTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -1110,7 +1110,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithScreenName.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithScreenName.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithScreenName.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithScreenName.java</a>
                 </td>
                 <td>
                   0
@@ -1124,7 +1124,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.UrlCache.java">org/woehlke/twitterwall/oodm/entities/entities/UrlCache.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.UrlCache.java">org/woehlke/twitterwall/oodm/entities/entities/UrlCache.java</a>
                 </td>
                 <td>
                   0
@@ -1138,7 +1138,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.UserRepository.java">org/woehlke/twitterwall/oodm/repository/UserRepository.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.UserRepository.java">org/woehlke/twitterwall/oodm/repository/UserRepository.java</a>
                 </td>
                 <td>
                   0
@@ -1152,7 +1152,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.backend.TwitterApiServiceImpl.java">org/woehlke/twitterwall/backend/TwitterApiServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.backend.TwitterApiServiceImpl.java">org/woehlke/twitterwall/backend/TwitterApiServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1166,7 +1166,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.Application.java">org/woehlke/twitterwall/Application.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.Application.java">org/woehlke/twitterwall/Application.java</a>
                 </td>
                 <td>
                   0
@@ -1180,7 +1180,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithUrl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithUrl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithUrl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryWithUrl.java</a>
                 </td>
                 <td>
                   0
@@ -1194,7 +1194,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Media.java">org/woehlke/twitterwall/oodm/entities/entities/Media.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.Media.java">org/woehlke/twitterwall/oodm/entities/entities/Media.java</a>
                 </td>
                 <td>
                   0
@@ -1208,7 +1208,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.controller.UserController.java">org/woehlke/twitterwall/frontend/controller/UserController.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.controller.UserController.java">org/woehlke/twitterwall/frontend/controller/UserController.java</a>
                 </td>
                 <td>
                   0
@@ -1217,12 +1217,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  41
+                  43
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlCacheService.java">org/woehlke/twitterwall/oodm/service/entities/UrlCacheService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.service.entities.UrlCacheService.java">org/woehlke/twitterwall/oodm/service/entities/UrlCacheService.java</a>
                 </td>
                 <td>
                   0
@@ -1236,7 +1236,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.ScheduledTasksFacadeImpl.java">org/woehlke/twitterwall/scheduled/ScheduledTasksFacadeImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.ScheduledTasksFacadeImpl.java">org/woehlke/twitterwall/scheduled/ScheduledTasksFacadeImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1250,7 +1250,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryImpl.java">org/woehlke/twitterwall/oodm/repository/common/DomainRepositoryImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1264,7 +1264,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.HashTag.java">org/woehlke/twitterwall/oodm/entities/entities/HashTag.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.oodm.entities.entities.HashTag.java">org/woehlke/twitterwall/oodm/entities/entities/HashTag.java</a>
                 </td>
                 <td>
                   0
@@ -1278,7 +1278,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.PersistDataFromTwitter.java">org/woehlke/twitterwall/scheduled/PersistDataFromTwitter.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.PersistDataFromTwitter.java">org/woehlke/twitterwall/scheduled/PersistDataFromTwitter.java</a>
                 </td>
                 <td>
                   0
@@ -1292,7 +1292,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.TickerSymbolTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/TickerSymbolTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.TickerSymbolTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/TickerSymbolTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -1306,7 +1306,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MentionTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/MentionTransformService.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.entities.MentionTransformService.java">org/woehlke/twitterwall/scheduled/service/entities/MentionTransformService.java</a>
                 </td>
                 <td>
                   0
@@ -1320,7 +1320,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.scheduled.service.TweetTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/TweetTransformServiceImpl.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.scheduled.service.TweetTransformServiceImpl.java">org/woehlke/twitterwall/scheduled/service/TweetTransformServiceImpl.java</a>
                 </td>
                 <td>
                   0
@@ -1334,7 +1334,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.exceptions.common.TwitterwallException.java">org/woehlke/twitterwall/exceptions/common/TwitterwallException.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.exceptions.common.TwitterwallException.java">org/woehlke/twitterwall/exceptions/common/TwitterwallException.java</a>
                 </td>
                 <td>
                   0
@@ -1348,7 +1348,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://woehlke.org/p/twitterwall2/checkstyle.html#org.woehlke.twitterwall.frontend.handler.GlobalExceptionHandler.java">org/woehlke/twitterwall/frontend/handler/GlobalExceptionHandler.java</a>
+                  <a href="https://phasenraum2010.github.io/twitterwall2//checkstyle.html#org.woehlke.twitterwall.frontend.handler.GlobalExceptionHandler.java">org/woehlke/twitterwall/frontend/handler/GlobalExceptionHandler.java</a>
                 </td>
                 <td>
                   0
@@ -1357,7 +1357,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  37
+                  39
                 </td>
               </tr>
                       </tbody>
