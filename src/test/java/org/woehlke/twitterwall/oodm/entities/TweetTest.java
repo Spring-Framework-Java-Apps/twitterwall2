@@ -12,14 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.test.TweetServiceTest;
 import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
-import javax.transaction.Transactional;
-
-import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 
@@ -30,7 +29,7 @@ import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallControl
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
-@Transactional(REQUIRES_NEW)
+@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class TweetTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetTest.class);

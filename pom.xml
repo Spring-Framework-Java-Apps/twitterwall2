@@ -7,7 +7,7 @@
     <artifactId>twitterwall2</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>twitterwall2</name>
-    <url>http://www.thomas-woehlke.de/p/twitterwall2</url>
+    <url>http://woehlke.org/p/twitterwall2</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -26,14 +26,15 @@
         <developerConnection>scm:git:https://github.com/phasenraum2010/twitterwall2.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+    
     <issueManagement>
-        <system>GitHub</system>
+        <system>GitHub Issues</system>
         <url>https://github.com/phasenraum2010/twitterwall2/issues</url>
     </issueManagement>
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file:///opt/local/apache2/htdocs/p/twitterwall2</url>
+            <url>file:///Users/tw/Desktop/woehlke_org/p/twitterwall2/</url>
         </site>
     </distributionManagement>
     <developers>
@@ -304,7 +305,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <!-- <version>2.10</version>   -->
-                    </plugin>
+                    </plugin>                                                               
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
@@ -320,10 +321,15 @@
 
     <reporting>
         <plugins>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.9</version>
+                <configuration>
+                    <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+                    <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -336,19 +342,20 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-
-            <!--
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
+                    <!--
                     <linksource>true</linksource>
+                    -->
                     <maxmemory>2048m</maxmemory>
                     <source>1.8</source>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
             </plugin>
-            -->
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -10,15 +10,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 /**
  * Created by tw on 22.06.17.
@@ -26,7 +26,7 @@ import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
-@Transactional(REQUIRES_NEW)
+@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class UserTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);

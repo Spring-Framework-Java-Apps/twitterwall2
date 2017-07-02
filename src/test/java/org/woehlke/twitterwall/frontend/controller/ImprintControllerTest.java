@@ -16,6 +16,8 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
@@ -35,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataJpaTest(showSql=false)
 @AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
 @AutoConfigureMockMvc
+@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class ImprintControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(ImprintControllerTest.class);
