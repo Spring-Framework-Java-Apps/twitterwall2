@@ -28,7 +28,7 @@
     </scm>
     
     <issueManagement>
-        <system>GitHub Issues</system>
+        <system>GitHub</system>
         <url>https://github.com/phasenraum2010/twitterwall2/issues</url>
     </issueManagement>
     <distributionManagement>
@@ -447,6 +447,13 @@
                 <version>2.7</version>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.12.1</version>
+                <reportSets><reportSet><reports><report>github-report</report></reports></reportSet></reportSets>
+            </plugin>
+            
         </plugins>
     </reporting>
 
