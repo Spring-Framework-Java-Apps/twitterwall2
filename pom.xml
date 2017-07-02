@@ -33,7 +33,7 @@
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file:///Users/tw/Desktop/woehlke_org/p/twitterwall2/</url>
+            <url>file://${project.basedir}/docs/maven</url>
         </site>
     </distributionManagement>
     <developers>
