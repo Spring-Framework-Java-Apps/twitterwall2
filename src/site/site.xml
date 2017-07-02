@@ -115,7 +115,6 @@
 
 
 <body>
-
     <!-- Add a rel to Google profile for all pages -->
     <head>
         <!--
@@ -124,12 +123,11 @@
     </head>
 
     <links>
-        <item name="Download" href="skin/index.html#Usage" />
         <item name="GitHub project" href="https://github.com/phasenraum2010/twitterwall2/" />
     </links>
 
     <breadcrumbs>
-        <item name="Reflow" href="/" />
+        <item name="Twitterwall" href="/" />
     </breadcrumbs>
 
     <menu name="Main" inherit="top">
@@ -143,24 +141,14 @@
         <item name="License" href="license.html" />
     </menu>
     <menu name="Documentation" inherit="bottom">
-        <item name="Usage" href="skin/" />
-        <item name="Configuration" href="skin/config.html" />
-        <item name="Themes" href="skin/themes/" />
-        <item name="Layouts" href="skin/layouts.html" />
-        <item name="Components" href="skin/components.html" />
-        <item name="Other" href="skin/misc.html" />
-        <item name="Multi-module site" href="skin/multi-module.html" />
-        <item name="Local resources" href="skin/resources.html" />
-    </menu>
-    <menu name="Tools" inherit="bottom">
-        <item name="Reflow Velocity tools" href="reflow-velocity-tools/" />
-        <item name="Tools Javadoc" href="reflow-velocity-tools/apidocs/" />
+        <item name="Development" href="development.html" />
+        <item name="Contribute" href="contribute.html" />
     </menu>
     <menu name="Contribute" inherit="bottom">
         <item name="Contribute" href="contribute.html" />
         <item name="Issues" href="https://github.com/phasenraum2010/twitterwall2/issues/" />
         <item name="Fork on GitHub" href="https://github.com/phasenraum2010/twitterwall2/" />
-        <item name="Donate" href="paypal.me/ThomasWoehlke" />
+        <item name="Donate" href="https://www.paypal.me/ThomasWoehlke" />
     </menu>
     <menu name="Maven documentation" ref="reports" inherit="bottom"/>
 </body>
