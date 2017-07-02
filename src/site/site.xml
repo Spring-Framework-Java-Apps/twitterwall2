@@ -7,7 +7,9 @@
 <bannerLeft>
     <!-- Reflow Maven Skin, but with "Reflow" highlighted -->
     <name><![CDATA[
-      <span class="color-highlight">Twitterwall</span> with spring:boot for heroku
+      <span class="color-highlight">Twitterwall</span>  with
+                  <a href="https://projects.spring.io/spring-boot/" title="spring:boot" target="_blank">spring:boot</a>
+               for <a href="https://heroku.com" title="heroku" target="_blank">heroku</a>
       ]]>
     </name>
     <href>https://phasenraum2010.github.io/twitterwall2</href>
@@ -36,7 +38,9 @@
             <!-- Brand text in top-left part of the site -->
             <name>
                 <![CDATA[
-          <span class="color-highlight">Twitterwall</span> with spring:boot for heroku
+          <span class="color-highlight">Twitterwall</span> with
+                  <a href="https://projects.spring.io/spring-boot/" title="spring:boot" target="_blank">spring:boot</a>
+               for <a href="https://heroku.com" title="heroku" target="_blank">heroku</a>
           ]]>
             </name>
             <href>https://phasenraum2010.github.io/twitterwall2/</href>
@@ -80,19 +84,19 @@
                 </sections>
             </index>
             <contribute>
-                <breadcrumbs>false</breadcrumbs>
+                <breadcrumbs>true</breadcrumbs>
             </contribute>
             <!-- Disable source highlighting for Maven reports -->
             <source-repository>
-                <highlightJs>false</highlightJs>
+                <highlightJs>true</highlightJs>
             </source-repository>
             <issue-tracking>
-                <highlightJs>false</highlightJs>
-                <toc>false</toc>
+                <highlightJs>true</highlightJs>
+                <toc>true</toc>
             </issue-tracking>
             <license>
-                <highlightJs>false</highlightJs>
-                <toc>false</toc>
+                <highlightJs>true</highlightJs>
+                <toc>true</toc>
             </license>
             <!-- Disable ToC for some Maven reports -->
             <project-info>
