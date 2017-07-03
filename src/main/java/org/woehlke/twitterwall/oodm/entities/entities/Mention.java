@@ -2,12 +2,13 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,27 +17,34 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Table(name = "mention", uniqueConstraints = {
-        @UniqueConstraint(name="unique_mention", columnNames = {"screen_name","id_twitter"})
+    @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
 }, indexes = {
-        @Index(name="idx_mention_name", columnList="name")
+    @Index(name = "idx_mention_name", columnList = "name")
 })
 @NamedQueries({
-        @NamedQuery(
-                name = "Mention.findByIdTwitter",
-                query = "select t from Mention as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name =  "Mention.findByScreenName",
-                query = "select t from Mention as t where t.screenName=:screenName"
-        ),
-        @NamedQuery(
-                name =  "Mention.findByIdTwitterAndScreenName",
-                query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
-        )
-
-
+    @NamedQuery(
+        name = "Mention.findByIdTwitter",
+        query = "select t from Mention as t where t.idTwitter=:idTwitter"
+    ),
+    @NamedQuery(
+        name = "Mention.findByScreenName",
+        query = "select t from Mention as t where t.screenName=:screenName"
+    ),
+    @NamedQuery(
+        name = "Mention.findByIdTwitterAndScreenName",
+        query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+    ),
+    @NamedQuery(
+        name = "Mention.count",
+        query = "select count(t) from Mention as t"
+    ),
+    @NamedQuery(
+        name = "Mention.getAll",
+        query = "select t from Mention as t"
+    )
 })
-public class Mention extends AbstractTwitterObject<Mention>implements DomainObjectWithIdTwitter<Mention>,DomainObjectWithScreenName<Mention> {
+@EntityListeners(MentionListener.class)
+public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,8 +55,8 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     @Column(name = "id_twitter")
     private long idTwitter;
 
-    public static boolean isValidScreenName(String screenName){
-        Pattern p = Pattern.compile("^"+User.SCREEN_NAME_PATTERN+"$");
+    public static boolean isValidScreenName(String screenName) {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
         Matcher m = p.matcher(screenName);
         return m.matches();
     }
@@ -60,11 +68,22 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     private String name;
 
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
+
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
+        setIndices(indices);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
-        this.indices = indices;
     }
 
     private Mention() {
@@ -108,6 +127,14 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
         this.name = name;
     }
 
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -135,11 +162,19 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "Mention{" +
-                "id=" + id +
-                ", idTwitter=" + idTwitter +
-                ", screenName='" + screenName + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+            "id=" + id +
+            ", idTwitter=" + idTwitter +
+            ", screenName='" + screenName + '\'' +
+            ", name='" + name + '\'' +
+            ", indices=" + myIndieces.toString() +
+            '}';
     }
 }

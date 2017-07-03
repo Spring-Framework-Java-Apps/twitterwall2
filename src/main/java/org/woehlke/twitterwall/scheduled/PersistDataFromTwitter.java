@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled;
 
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.woehlke.twitterwall.frontend.model.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 
@@ -18,4 +19,6 @@ public interface PersistDataFromTwitter {
     long countUsers();
 
     User findUserByScreenName(String screenName);
+
+    CountedEntities countAll();
 }

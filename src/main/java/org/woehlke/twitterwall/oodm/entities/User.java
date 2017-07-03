@@ -1,12 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,6 +42,10 @@ import java.util.regex.Pattern;
                 name = "User.getAll",
                 query = "select t from User as t order by t.screenName"
         ),
+    @NamedQuery(
+        name = "User.count",
+        query = "select count(t) from User as t"
+    ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
                 query = "select t from User as t where t.tweeting=true order by t.screenName"
@@ -67,6 +71,7 @@ import java.util.regex.Pattern;
                 query = "select t.idTwitter from User as t"
         )
 })
+@EntityListeners(UserListener.class)
 public class User extends AbstractFormattedText<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
 
     private static final long serialVersionUID = 1L;
@@ -259,7 +264,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public long getIdTwitter() {
         return idTwitter;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -616,7 +621,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public boolean removeTag(HashTag tag) {
         return this.tags.remove(tag);
     }
-    
+
 
     public Set<Mention> getMentions() {
         return mentions;
@@ -648,7 +653,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return this.mentions.remove(mention);
     }
 
-    
+
     @Override
     public boolean equals(User o) {
         if (this == o) return true;

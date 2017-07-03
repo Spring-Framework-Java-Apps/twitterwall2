@@ -1,11 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.listener.entities.TickerSymbolListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -24,8 +25,17 @@ import java.io.Serializable;
         @NamedQuery(
                 name = "TickerSymbol.findByTickerSymbolAndUrl",
                 query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
-        )
+        ),
+    @NamedQuery(
+        name = "TickerSymbol.count",
+        query = "select count(t) from TickerSymbol as t"
+    ),
+    @NamedQuery(
+        name = "TickerSymbol.getAll",
+        query = "select t from TickerSymbol as t"
+    )
 })
+@EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
@@ -33,17 +43,28 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-    
+
     @Column(name = "ticker_symbol")
     private String tickerSymbol;
 
     @Column
     private String url;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tickersymbol_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
+
     public TickerSymbol(String tickerSymbol, String url, int[] indices) {
+        setIndices(indices);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
-        this.indices = indices;
     }
 
     private TickerSymbol() {
@@ -52,8 +73,8 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-    
-    
+
+
     public String getTickerSymbol() {
         return tickerSymbol;
     }
@@ -77,6 +98,14 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
     }
 
     @Override
@@ -106,10 +135,18 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
                 ", url='" + url + '\'' +
+                ", indices=" + myIndieces.toString() +
                 '}';
     }
 }

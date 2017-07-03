@@ -1,12 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.listener.TweetListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -47,6 +46,10 @@ import java.util.Set;
                 name="Tweet.count",
                 query="select count(t) from Tweet as t"
         ),
+    @NamedQuery(
+        name="Tweet.getAll",
+        query="select t from Tweet as t"
+    ),
         @NamedQuery(
                 name="Tweet.getTweetsForUser",
                 query="select t from Tweet as t WHERE t.user=:user"
@@ -56,6 +59,7 @@ import java.util.Set;
                 query="select t.idTwitter from Tweet as t"
         )
 })
+@EntityListeners(TweetListener.class)
 public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
 
     private static final long serialVersionUID = 1L;
@@ -117,11 +121,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
 
     @Column
     private Integer favoriteCount;
-
-    /*
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
-    private Entities entities;
-    */
 
     @JoinTable(name = "tweet_url")
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
@@ -429,7 +428,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-    
+
     public Set<Mention> getMentions() {
         return mentions;
     }
@@ -451,7 +450,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.mentions.clear();
         return this.mentions.isEmpty();
     }
-    
+
     public boolean addMention(Mention mention) {
         return this.mentions.add(mention);
     }
@@ -493,7 +492,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-    
+
     public Set<TickerSymbol> getTickerSymbols() {
         return tickerSymbols;
     }
@@ -521,7 +520,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-    
+
     public User getUser() {
         return user;
     }
