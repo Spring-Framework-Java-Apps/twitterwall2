@@ -15,11 +15,12 @@
                 <br/>
                 <div class="tw-col-3-wrapper">
                     <div class="thumbnail tw-col-3-box-center">
-                        <span th:attr="style=${user.profileBannerUrlCss}">
-                        <a href="" th:href="@{|/profile/${user.screenName}|}"><img class="img-circle"
-                                                                                   src="" alt="Alt-Text"
-                                th:attr="src=${user.bigProfileImageUrl},alt=${user.description}" /></a>
-                        </span>
+                    <span>
+                    <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>
+                    <p>
+                    <a href="" th:href="@{|https://twitter.com/${user.screenName}|}"><img class="" src=""
+                         alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a></p>
+                    </span>
                         <div class="caption">
                             <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
                             <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
