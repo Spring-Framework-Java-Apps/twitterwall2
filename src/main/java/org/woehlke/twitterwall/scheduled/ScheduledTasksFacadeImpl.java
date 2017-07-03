@@ -179,7 +179,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     @Override
     public CountedEntities updateUserProfilesFromMentions(){
-        String msg = "update User Profiles from Mentions: "+ dateFormat.format(new Date());
+        String msg = "update User Profiles from Mentions: ";
         log.info(msg + "START - The time is now {}", dateFormat.format(new Date()));
         try {
             List<Mention> allPersMentions =  mentionService.getAll();
@@ -212,10 +212,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                 }
             }
         } catch (ResourceAccessException e) {
-            log.warn(msg + e.getMessage());
+            log.warn(msg + " ResourceAccessException: " + e.getMessage());
             Throwable t = e.getCause();
             while(t != null){
-                log.warn(msg + t.getMessage());
+                log.warn(msg + " caused by: "+ t.getMessage());
                 t = t.getCause();
             }
             log.error(msg + " check your Network Connection!");
