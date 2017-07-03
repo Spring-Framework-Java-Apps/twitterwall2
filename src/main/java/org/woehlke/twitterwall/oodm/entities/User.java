@@ -55,6 +55,14 @@ import java.util.regex.Pattern;
                 query = "select t from User as t where t.following=false order by t.screenName"
         ),
         @NamedQuery(
+            name = "User.getNotYetOnList",
+            query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
+        ),
+    @NamedQuery(
+        name = "User.getOnList",
+        query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+    ),
+        @NamedQuery(
                 name = "User.getUsersForHashTag",
                 query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
         ),
@@ -195,6 +203,9 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     @Column
     private boolean tweeting;
+
+    @Column
+    private boolean onDefinedUserList;
 
     @Column
     private String profileBannerUrl;
@@ -559,6 +570,13 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
 
+    public boolean isOnDefinedUserList() {
+        return onDefinedUserList;
+    }
+
+    public void setOnDefinedUserList(boolean onDefinedUserList) {
+        this.onDefinedUserList = onDefinedUserList;
+    }
 
     public Set<Url> getUrls() {
         return urls;

@@ -90,6 +90,7 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
         }
         /** The User */
         User user = tweet.getUser();
+        user.setOnDefinedUserList(false);
         user = userService.storeUserProcess(user);
         tweet.setUser(user);
         /** The Entities */
@@ -158,6 +159,20 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
     public User storeUserProfile(TwitterProfile userProfile) {
         String msg = "storeUserProfile: ";
         User user = userTransformService.transform(userProfile);
+        user.setOnDefinedUserList(false);
+        user = userService.storeUserProcess(user);
+        for(Mention mention:user.getMentions()){
+            String screenName = mention.getScreenName();
+            User userFromMention = storeUserProfileForScreenName(screenName);
+        }
+        return user;
+    }
+
+    @Override
+    public User storeUserProfileForUserList(TwitterProfile twitterProfile) {
+        String msg = "storeUserProfileForUserList: ";
+        User user = userTransformService.transform(twitterProfile);
+        user.setOnDefinedUserList(true);
         user = userService.storeUserProcess(user);
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();

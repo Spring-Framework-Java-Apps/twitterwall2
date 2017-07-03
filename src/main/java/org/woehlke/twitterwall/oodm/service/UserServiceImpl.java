@@ -86,6 +86,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getNotYetOnList() {
+        return userRepository.getNotYetOnList();
+    }
+
+    @Override
+    public List<User> getOnList() {
+        return userRepository.getOnList();
+    }
+
+    @Override
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter,User.class);
     }
@@ -131,6 +141,9 @@ public class UserServiceImpl implements UserService {
             user.setId(userPers.getId());
             user.setFriend(userPers.isFriend());
             user.setFollower(userPers.isFollower());
+            if(!user.isOnDefinedUserList()){
+                user.setOnDefinedUserList(userPers.isOnDefinedUserList());
+            }
             log.info(msg+" try to update user "+user.toString());
             return userRepository.update(user);
         } catch (EmptyResultDataAccessException e) {

@@ -42,6 +42,12 @@ public class ScheduledTasks {
     @Value("${twitterwall.scheduler.herokuDbRowsLimit}")
     private boolean herokuDbRowsLimit;
 
+    @Value("${twitterwall.scheduler.fetchUserList.name}")
+    private String fetchUserListName;
+
+    @Value("${twitterwall.scheduler.fetchUserList.allow}")
+    private boolean fetchUserListAllow;
+
     @Autowired
     public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
         this.scheduledTasksFacade = scheduledTasksFacade;
@@ -64,6 +70,8 @@ public class ScheduledTasks {
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS = ZWOELF_STUNDEN;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION = EINE_STUNDE;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST = ZWOELF_STUNDEN;
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
@@ -204,6 +212,50 @@ public class ScheduledTasks {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 CountedEntities countedEntities = this.scheduledTasksFacade.updateUserProfilesFromMentions();
+                log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
+            } catch (TwitterApiException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
+            } catch (TwitterwallException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
+            } catch (RuntimeException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
+            } catch (Exception e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.error(msg + e.getMessage());
+                log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
+    public void fetchUsersFromDefinedUserList(){
+        if(fetchUserListAllow  && !skipFortesting) {
+            String msg = "fetch Users from Defined User List ";
+            log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
+            try {
+                CountedEntities countedEntities = this.scheduledTasksFacade.fetchUsersFromDefinedUserList();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
                 Throwable t = e.getCause();

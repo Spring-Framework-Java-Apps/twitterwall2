@@ -12,12 +12,16 @@ import java.util.List;
 public interface UserService extends DomainService<User> {
 
     User findByIdTwitter(long idTwitter);
-    
+
     User findByScreenName(String screenName);
 
     List<User> getTweetingUsers();
 
     List<User> getNotYetFriendUsers();
+
+    List<User> getNotYetOnList();
+
+    List<User> getOnList();
 
     List<String> getAllDescriptions();
 
@@ -28,4 +32,5 @@ public interface UserService extends DomainService<User> {
     List<User> getUsersForHashTag(String hashtagText);
 
     long countUsersForHashTag(String hashtagText);
+
 }

@@ -40,6 +40,12 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
+    @Value("${twitterwall.scheduler.fetchUserList.name}")
+    private String fetchUserListName;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
     @Autowired
     public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, TweetService tweetService, MentionService mentionService) {
         this.persistDataFromTwitter = persistDataFromTwitter;
@@ -325,6 +331,19 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
             throw e;
         } finally {
             log.info(msg + "---------------------------------------");
+        }
+        return this.persistDataFromTwitter.countAll();
+    }
+
+    @Override
+    public CountedEntities fetchUsersFromDefinedUserList() {
+        String msg = "update Tweets: ";
+        log.info(msg + "---------------------------------------");
+        log.info(msg + "The time is now {}", dateFormat.format(new Date()));
+        log.info(msg + "---------------------------------------");
+        List<TwitterProfile> userProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUserListName);
+        for(TwitterProfile twitterProfile:userProfiles) {
+            User user = persistDataFromTwitter.storeUserProfileForUserList(twitterProfile);
         }
         return this.persistDataFromTwitter.countAll();
     }
