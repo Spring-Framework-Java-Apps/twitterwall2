@@ -42,6 +42,9 @@ public class TweetsController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
+
     @Autowired
     public TweetsController(TweetService tweetService) {
         this.tweetService = tweetService;
@@ -63,6 +66,6 @@ public class TweetsController extends AbstractTwitterwallController {
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName);
+        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

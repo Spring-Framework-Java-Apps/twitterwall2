@@ -19,6 +19,7 @@
                     <div class="caption">
                         <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
                         <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}">@<span th:text="${tweet.user.screenName}">screenName</span></a></h3>
+                        <p><hr/></p>
                         <p th:if="${tweet.retweetedStatus} == null"><span th:utext="${tweet.formattedText}">Text</span></p>
                         <p th:if="${tweet.retweetedStatus} == null"><hr/></p>
                         <p th:if="${tweet.retweetedStatus} == null">
@@ -35,6 +36,7 @@
                                 <div class="caption">
                                     <h2><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
                                     <h3><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
+                                    <p><hr/></p>
                                     <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
                                     <p><hr/></p>
                                     <p>

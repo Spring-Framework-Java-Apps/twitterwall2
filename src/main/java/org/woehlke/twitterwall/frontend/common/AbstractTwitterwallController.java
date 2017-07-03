@@ -67,13 +67,18 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
 
     private String imprintScreenName;
 
+    private String idGoogleAnalytics;
+    
     protected void logEnv(){
+        log.info("--------------------------------------------------------------------");
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);
         log.info("twitter.searchQuery = "+searchterm);
         log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
         log.info("twitterwall.frontend.theme = "+theme);
         log.info("twitterwall.context.test = "+contextTest);
         log.info("twitterwall.frontend.imprint.screenName = "+imprintScreenName);
+        log.info("twitterwall.frontend.idGoogleAnalytics = "+idGoogleAnalytics);
+        log.info("--------------------------------------------------------------------");
     }
     
     protected ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
@@ -102,12 +107,24 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         page.setTheme(theme);
         page.setContextTest(contextTest);
         page.setHistoryBack(true);
+        if(!idGoogleAnalytics.isEmpty()){
+            String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
+            html = html.replace("###GOOGLE_ANALYTICS_ID###",idGoogleAnalytics);
+            page.setGoogleAnalyticScriptHtml(html);
+        } else {
+            page.setGoogleAnalyticScriptHtml("");
+        }
+        logEnv();
+        log.info("--------------------------------------------------------------------");
+        log.info("setupPage = "+page.toString());
+        log.info("--------------------------------------------------------------------");
         return page;
     }
 
     protected void getTestDataTweets(String msg,Model model){
         List<Tweet> latest =  new ArrayList<>();
         try {
+            log.info(msg + "--------------------------------------------------------------------");
             int loopId = 0;
             for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
                 try {
@@ -115,6 +132,9 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     loopId++;
                     log.info(msg + loopId);
                     org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.persistDataFromTwitter.storeOneTweet(tweet);
+                    log.info(msg + "--------------------------------------------------------------------");
+                    log.info(msg + persTweet.toString());
+                    log.info(msg + "--------------------------------------------------------------------");
                     latest.add(persTweet);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
@@ -128,6 +148,8 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             log.info(msg + e.getMessage());
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
+        } finally {
+            log.info(msg + "--------------------------------------------------------------------");
         }
         model.addAttribute("latestTweets", latest);
     }
@@ -174,6 +196,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
 
     protected void addUserForScreenName(Model model, String screenName) {
         try {
+            log.info("--------------------------------------------------------------------");
             log.info("screenName = "+ screenName);
             User user = persistDataFromTwitter.findUserByScreenName(screenName); //userService.findByScreenName(screenName);
             log.info("userService.findByScreenName: found User = "+user.toString());
@@ -202,28 +225,34 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             }
         }  finally {
             log.info("... finally done ...");
+            log.info("--------------------------------------------------------------------");
         }
     }
 
-    protected void setupAfterPropertiesSetWithTesting(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest,String imprintScreenName) {
+    protected void setupAfterPropertiesSetWithTesting(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
         this.twitterApiService = twitterApiService;
         this.persistDataFromTwitter = persistDataFromTwitter;
+        this.setupAfterPropertiesSet(menuAppName, searchterm, infoWebpage, theme, contextTest, imprintScreenName, idGoogleAnalytics);
+    }
+
+    protected void setupAfterPropertiesSet(String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
         this.menuAppName = menuAppName;
         this.searchterm = searchterm;
         this.infoWebpage = infoWebpage;
         this.theme = theme;
         this.contextTest = contextTest;
         this.imprintScreenName = imprintScreenName;
+        this.idGoogleAnalytics = idGoogleAnalytics;
+        logEnv();
     }
 
-    protected void setupAfterPropertiesSet(String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest,String imprintScreenName) {
-        this.menuAppName = menuAppName;
-        this.searchterm = searchterm;
-        this.infoWebpage = infoWebpage;
-        this.theme = theme;
-        this.contextTest = contextTest;
-        this.imprintScreenName = imprintScreenName;
-    }
-
-
+    private final static String GOOGLE_ANALYTICS_SCRIPT_HTML = "<script>\n" +
+            "        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +
+            "                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n" +
+            "            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n" +
+            "        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n" +
+            "\n" +
+            "        ga('create', '###GOOGLE_ANALYTICS_ID###', 'auto');\n" +
+            "        ga('send', 'pageview');\n" +
+            "    </script>";
 }
