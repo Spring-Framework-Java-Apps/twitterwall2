@@ -74,7 +74,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
                     this.persistDataFromTwitter.storeOneTweet(tweet);
                 } catch (EmptyResultDataAccessException e)  {
                     log.warn(msg+e.getMessage());
-                }catch (NoResultException e){
+                } catch (NoResultException e){
                     log.warn(msg+e.getMessage());
                 } catch (Exception e){
                     log.warn(msg+e.getMessage());

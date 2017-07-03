@@ -39,6 +39,9 @@ public class ScheduledTasks {
     @Value("${twitterwall.scheduler.skipFortesting}")
     private boolean skipFortesting;
 
+    @Value("${twitterwall.scheduler.herokuDbRowsLimit}")
+    private boolean herokuDbRowsLimit;
+
     @Autowired
     public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
         this.scheduledTasksFacade = scheduledTasksFacade;
