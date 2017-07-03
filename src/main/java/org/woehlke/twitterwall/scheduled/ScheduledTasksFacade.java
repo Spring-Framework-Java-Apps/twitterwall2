@@ -1,13 +1,17 @@
 package org.woehlke.twitterwall.scheduled;
 
+import org.woehlke.twitterwall.frontend.model.CountedEntities;
+
 /**
  * Created by tw on 19.06.17.
  */
 public interface ScheduledTasksFacade {
 
-    void fetchTweetsFromTwitterSearch();
+    CountedEntities fetchTweetsFromTwitterSearch();
 
-    void updateUserProfiles();
+    CountedEntities updateUserProfiles();
 
-    void updateTweets();
+    CountedEntities updateUserProfilesFromMentions();
+
+    CountedEntities updateTweets();
 }

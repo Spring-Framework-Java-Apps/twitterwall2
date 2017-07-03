@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.frontend.model.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 
 import javax.persistence.NoResultException;
 import java.text.SimpleDateFormat;
@@ -38,11 +41,12 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     private int millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
-    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, TweetService tweetService) {
+    public ScheduledTasksFacadeImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService, UserService userService, TweetService tweetService, MentionService mentionService) {
         this.persistDataFromTwitter = persistDataFromTwitter;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
         this.tweetService = tweetService;
+        this.mentionService = mentionService;
     }
 
     private final PersistDataFromTwitter persistDataFromTwitter;
@@ -53,8 +57,10 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
 
     private final TweetService tweetService;
 
+    private final MentionService mentionService;
+
     @Override
-    public void fetchTweetsFromTwitterSearch() {
+    public CountedEntities fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets from Twitter: ";
         log.info(msg+"---------------------------------------");
         log.info(msg+ "fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
@@ -101,14 +107,14 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } finally {
             log.info(msg+"---------------------------------------");
         }
+        return this.persistDataFromTwitter.countAll();
     }
 
     @Override
-    public void updateUserProfiles() {
-        log.info("---------------------------------------");
-        String msg = "update User Profiles: ";
-        log.info(msg + "The time is now {}", dateFormat.format(new Date()));
-        log.info("---------------------------------------");
+    public CountedEntities updateUserProfiles(){
+        String msg = "update User Profiles From ProfileId: ";
+        log.info(msg+"---------------------------------------");
+        log.info(msg + "START - The time is now {}", dateFormat.format(new Date()));
         try {
             List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
             for (Long userProfileTwitterId : userProfileTwitterIds) {
@@ -166,10 +172,82 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } finally {
             log.info(msg +"---------------------------------------");
         }
+        log.info(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
+        log.info(msg+"---------------------------------------");
+        return this.persistDataFromTwitter.countAll();
     }
 
     @Override
-    public void updateTweets() {
+    public CountedEntities updateUserProfilesFromMentions(){
+        String msg = "update User Profiles from Mentions: "+ dateFormat.format(new Date());
+        log.info(msg + "START - The time is now {}", dateFormat.format(new Date()));
+        try {
+            List<Mention> allPersMentions =  mentionService.getAll();
+            for(Mention onePersMentions :allPersMentions){
+                String screenName = onePersMentions.getScreenName();
+                if((screenName != null) && (!screenName.isEmpty())) {
+                    try {
+                        TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
+                        User user = persistDataFromTwitter.storeUserProfile(twitterProfile);
+                        log.info(msg + user.toString());
+                    } catch (RateLimitExceededException e) {
+                        log.warn(msg + e.getMessage());
+                        Throwable t = e.getCause();
+                        while(t != null){
+                            log.warn(msg + t.getMessage());
+                            t = t.getCause();
+                        }
+                        throw new TwitterApiException(msg+screenName, e);
+                    } catch (TwitterApiException e) {
+                        log.warn(msg + e.getMessage());
+                        Throwable t = e.getCause();
+                        while(t != null){
+                            log.warn(msg + t.getMessage());
+                            t = t.getCause();
+                        }
+                        log.info(msg+screenName + e.getMessage());
+                    } finally {
+                        log.info(msg +"---------------------------------------");
+                    }
+                }
+            }
+        } catch (ResourceAccessException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
+            log.error(msg + " check your Network Connection!");
+            throw e;
+        } catch (RateLimitExceededException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
+            throw e;
+        } catch (Exception e) {
+            log.warn(msg + e.getMessage());
+            Throwable t = e.getCause();
+            while(t != null){
+                log.warn(msg + t.getMessage());
+                t = t.getCause();
+            }
+            throw e;
+        } finally {
+            log.info(msg +"---------------------------------------");
+        }
+        log.info(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
+        log.info(msg+"---------------------------------------");
+        return this.persistDataFromTwitter.countAll();
+    }
+
+    @Override
+    public CountedEntities updateTweets() {
         String msg = "update Tweets: ";
         log.info(msg + "---------------------------------------");
         log.info(msg + "The time is now {}", dateFormat.format(new Date()));
@@ -248,5 +326,6 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         } finally {
             log.info(msg + "---------------------------------------");
         }
+        return this.persistDataFromTwitter.countAll();
     }
 }

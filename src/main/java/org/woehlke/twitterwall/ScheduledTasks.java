@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.exceptions.common.TwitterwallException;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.frontend.model.CountedEntities;
 import org.woehlke.twitterwall.scheduled.ScheduledTasksFacade;
 
 import java.text.SimpleDateFormat;
@@ -29,13 +30,14 @@ public class ScheduledTasks {
     @Value("${twitterwall.scheduler.allowUpdateUserProfiles}")
     private boolean allowUpdateUserProfiles;
 
+    @Value("${twitterwall.scheduler.allowUpdateUserProfilesFromMention}")
+    private boolean allowUpdateUserProfilesFromMention;
+
     @Value("${twitterwall.scheduler.allowFetchTweetsFromTwitterSearch}")
     private boolean allowFetchTweetsFromTwitterSearch;
 
     @Value("${twitterwall.scheduler.skipFortesting}")
     private boolean skipFortesting;
-
-
 
     @Autowired
     public ScheduledTasks(ScheduledTasksFacade scheduledTasksFacade) {
@@ -58,13 +60,15 @@ public class ScheduledTasks {
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS = ZWOELF_STUNDEN;
 
+    private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION = EINE_STUNDE;
+
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         if(allowFetchTweetsFromTwitterSearch  && !skipFortesting){
             String msg = "fetch Tweets From TwitterSearch ";
             log.info("START "+msg+": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
+                CountedEntities countedEntities = this.scheduledTasksFacade.fetchTweetsFromTwitterSearch();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
                 log.error(msg + e.getMessage());
@@ -108,7 +112,7 @@ public class ScheduledTasks {
             String msg = "update Tweets ";
             log.info("START "+msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.scheduledTasksFacade.updateTweets();
+                CountedEntities countedEntities = this.scheduledTasksFacade.updateTweets();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
                 log.error(msg + e.getMessage());
@@ -152,7 +156,51 @@ public class ScheduledTasks {
             String msg = "update User Profiles ";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.scheduledTasksFacade.updateUserProfiles();
+                CountedEntities countedEntities = this.scheduledTasksFacade.updateUserProfiles();
+                log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
+            } catch (TwitterApiException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+            } catch (TwitterwallException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+            } catch (RuntimeException e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.warn(msg + e.getMessage());
+                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+            } catch (Exception e) {
+                Throwable t = e.getCause();
+                while(t != null){
+                    log.warn(msg + t.getMessage());
+                    t = t.getCause();
+                }
+                log.error(msg + e.getMessage());
+                log.error(msg + " NOT DONE " + msg + " (NOK)");
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
+    public void updateUserProfilesFromMentions(){
+        if(allowUpdateUserProfilesFromMention  && !skipFortesting) {
+            String msg = "update User Profiles From Mentions";
+            log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
+            try {
+                CountedEntities countedEntities = this.scheduledTasksFacade.updateUserProfilesFromMentions();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
                 Throwable t = e.getCause();
