@@ -6,6 +6,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.listener.entities.MediaListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -33,7 +35,7 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "Media.getAll",
                 query = "select t from Media as t"
-        ) ,
+        ),
         @NamedQuery(
                 name = "Media.findByUrl",
                 query = "select t from Media as t where t.url=:url"
@@ -69,9 +71,19 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @Column(name = "media_type")
     private String mediaType;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "media_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
 
     public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
-        super(indices);
+        setIndices(indices);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -154,6 +166,14 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.mediaType = mediaType;
     }
 
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -189,6 +209,13 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "Media{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -198,6 +225,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", mediaType='" + mediaType + '\'' +
+                ", indices=" + myIndieces.toString() +
                 '}';
     }
 }

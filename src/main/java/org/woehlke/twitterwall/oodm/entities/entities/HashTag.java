@@ -5,6 +5,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.listener.entities.HashTagListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +52,16 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Column(nullable = false)
     private String text;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "hashtag_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
 
     public Long getId() {
         return id;
@@ -65,7 +77,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public HashTag(String text, int[] indices) {
-        super(indices);
+        setIndices(indices);
         this.text = text;
     }
 
@@ -80,6 +92,14 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
+
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,9 +126,17 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "HashTag{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
+                  ", indices=" + myIndieces.toString() +
                 '}';
     }
 }

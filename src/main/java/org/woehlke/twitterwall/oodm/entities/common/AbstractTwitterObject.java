@@ -2,10 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.common;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,20 +10,11 @@ import java.util.Map;
  * Created by tw on 10.06.17.
  */
 public abstract class AbstractTwitterObject<T extends DomainObject> implements DomainObject<T> {
-    
-    @Transient
-    protected int[] indices;
 
     @Transient
-    private Map<String, Object> extraData;
-
-    public AbstractTwitterObject(int[] indices) {
-        this.indices = indices;
-        this.extraData = new HashMap<String, Object>();
-    }
+    private Map<String, Object> extraData = new HashMap<>();
 
     public AbstractTwitterObject() {
-        this.extraData = new HashMap<String, Object>();
     }
 
     /**
@@ -46,15 +34,11 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
         extraData.put(key, value);
     }
 
-    public int[] getIndices() {
-        return indices;
+    public void setExtraData(Map<String, Object> extraData) {
+      this.extraData = extraData;
     }
 
-    public void setIndices(int[] indices) {
-        this.indices = indices;
-    }
-    
-    @Override
+  @Override
     public boolean equals(T o) {
         if (this == o) return true;
         if (!(o instanceof AbstractTwitterObject)) return false;
@@ -68,4 +52,16 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
     public int hashCode() {
         return extraData != null ? extraData.hashCode() : 0;
     }
+
+  @Override
+  public String toString() {
+    StringBuffer myExtraData = new StringBuffer();
+    myExtraData.append("[ ");
+    for (String extraDatumKey : extraData.keySet()) {
+      myExtraData.append(extraDatumKey);
+      myExtraData.append(", ");
+    }
+    myExtraData.append(" ]");
+    return  ", extraData=" + myExtraData.toString();
+  }
 }

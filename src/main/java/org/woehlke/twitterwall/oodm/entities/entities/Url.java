@@ -5,6 +5,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -42,16 +44,27 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @Column(nullable = false,length=1024)
     private String url;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "url_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
+
     @Transient
     public boolean isUrlAndExpandedTheSame(){
         return url.compareTo(expanded) == 0;
     }
 
     public Url(String display, String expanded, String url, int[] indices) {
+        setIndices(indices);
         this.display = display;
         this.expanded = expanded;
         this.url = url;
-        this.indices = indices;
     }
 
     private Url() {
@@ -93,11 +106,11 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         this.url = url;
     }
 
-    public int[] getIndices() {
+    public List<Integer> getIndices() {
         return indices;
     }
 
-    public void setIndices(int[] indices) {
+    public void setIndices(List<Integer> indices) {
         this.indices = indices;
     }
 
@@ -126,11 +139,19 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "Url{" +
                 "id=" + id +
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
+                ", indices=" + myIndieces.toString() +
                 '}';
     }
 }

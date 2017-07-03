@@ -5,6 +5,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.listener.entities.TickerSymbolListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -40,10 +42,21 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Column
     private String url;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tickersymbol_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }
+
     public TickerSymbol(String tickerSymbol, String url, int[] indices) {
+        setIndices(indices);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
-        this.indices = indices;
     }
 
     private TickerSymbol() {
@@ -79,6 +92,14 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.id = id;
     }
 
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+    }
+
     @Override
     public boolean equals(TickerSymbol o) {
         if (this == o) return true;
@@ -106,10 +127,18 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     @Override
     public String toString() {
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
                 ", url='" + url + '\'' +
+                ", indices=" + myIndieces.toString() +
                 '}';
     }
 }

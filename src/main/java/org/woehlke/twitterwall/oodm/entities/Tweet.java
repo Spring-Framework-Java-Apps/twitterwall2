@@ -118,11 +118,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column
     private Integer favoriteCount;
 
-    /*
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
-    private Entities entities;
-    */
-
     @JoinTable(name = "tweet_url")
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
