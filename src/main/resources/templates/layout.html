@@ -110,6 +110,8 @@
 <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" th:attr="src=@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <!-- my own JavaScript -->
 <script src="map-icons/js/map-icons.min.js" th:attr="src=@{/map-icons/js/map-icons.min.js}"></script>
-<script src="js/my.js" th:attr="src=@{/js/my.js}"></script></footer>
+<script src="js/my.js" th:attr="src=@{/js/my.js}"></script>
+    <span th:if="${!page.contextTest}"><span th:utext="${page.googleAnalyticScriptHtml}" ></span></span>
+</footer>
 </body>
 </html>
