@@ -14,7 +14,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Twitterwall
-email: thomas.woehlke@gmail.com
+author: Thomas Wöhlke
+#email: thomas.woehlke@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Twitterwall with spring-boot for heroku
 baseurl: "/twitterwall2" # the subpath of your site, e.g. /blog
@@ -24,14 +25,16 @@ github_username:  phasenraum2010
 
 # Build settings
 markdown: kramdown
-theme: minima
-#theme: jekyll-theme-slate
+#theme: minima
+theme: jekyll-theme-tactile
 gems:
   - jekyll-feed
 exclude:
   - Gemfile
   - Gemfile.lock
 google_analytics: UA-17174370-7
-site:
-  google_analytics: UA-17174370-7
+minima:
+  date_format: "%b %-d, %Y"
+jekyll-theme-tactile:
+  date_format: "%b %-d, %Y"
 

@@ -4,19 +4,17 @@ title: Development
 permalink: /development/
 ---
 
-## Development
-
-### Repository:
+## Repository:
 - Get Source Code: git clone https://github.com/phasenraum2010/twitterwall2.git
 - Project: https://github.com/phasenraum2010/twitterwall2/projects/1
 - Issues: https://github.com/phasenraum2010/twitterwall2/issues
 
-### heroku CLI
+## heroku CLI
 - heroku login
 - heroku pg:psql --app {app-name}
 - heroku logs -t --app {app-name}
 
-### Setup Testing on Localhost
+## Setup Testing on Localhost
 - Get Credentials from your Twitter-Account: [Refer to "Manage your Apps" on Twitter's dev pages](https://dev.twitter.com/apps)
 - Edit your .profile with the Credentials from your Twitter-Account
   - export JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/postgres?user=postgres
@@ -41,3 +39,5 @@ permalink: /development/
   - export TWITTERWALL_APP_NAME='Twitterwall'
   - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
 - run with: mvn clean spring-boot:run
+
+#### [back](../)
