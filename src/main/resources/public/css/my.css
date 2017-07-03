@@ -67,6 +67,21 @@
     .thumbnail:hover {
         background-color: #DDDDDD;
     }
+
+    .img-responsive.my-background {
+        width: 100%;
+        height: auto;
+    }
+
+    .img-circle.my-profile-image {
+        width: 45%;
+        height: auto;
+    }
+
+    .img-circle.my-profile-image-with-bg {
+        margin-top: -50px;
+    }
+
 }
 
 

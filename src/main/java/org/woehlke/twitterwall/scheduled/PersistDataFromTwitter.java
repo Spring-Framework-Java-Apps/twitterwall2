@@ -14,6 +14,8 @@ public interface PersistDataFromTwitter {
 
     User storeUserProfile(TwitterProfile userProfile);
 
+    User storeUserProfileForUserList(TwitterProfile twitterProfile);
+
     long countTweets();
 
     long countUsers();
