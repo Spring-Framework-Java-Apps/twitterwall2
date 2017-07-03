@@ -25,7 +25,15 @@ import java.util.List;
         @NamedQuery(
                 name = "TickerSymbol.findByTickerSymbolAndUrl",
                 query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
-        )
+        ),
+    @NamedQuery(
+        name = "TickerSymbol.count",
+        query = "select count(t) from TickerSymbol as t"
+    ),
+    @NamedQuery(
+        name = "TickerSymbol.getAll",
+        query = "select t from TickerSymbol as t"
+    )
 })
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {

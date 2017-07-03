@@ -18,7 +18,15 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "UrlCache.findByUrl",
                 query = "select t from UrlCache as t where t.url=:url"
-        )
+        ) ,
+    @NamedQuery(
+        name = "UrlCache.count",
+        query = "select count(t) from UrlCache as t"
+    ),
+    @NamedQuery(
+        name = "UrlCache.getAll",
+        query = "select t from UrlCache as t"
+    )
 })
 @EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache> {

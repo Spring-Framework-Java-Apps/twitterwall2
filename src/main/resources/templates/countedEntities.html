@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:spring="http://www.springframework.org/tags">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" >
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p>Count Entities:</p>
+                <p><hr/></p>
+                <p>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-twitter-square" aria-hidden="true"></i>&nbsp;&nbsp;Tweets:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countTweets}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;User:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countUser}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;HashTags:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countHashTags}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;Media:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countMedia}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Mention:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countMention}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;TickerSymbol:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countTickerSymbol}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;&nbsp;Url:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countUrl}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-external-link" aria-hidden="true"></i>&nbsp;&nbsp;UrlCache:</div>
+                        <div class="col-md-1 text-right"><span th:text="${countedEntities.countUrlCache}">statusesCount</span></div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:include="layout :: footer" >
+
+</footer>
+</body>
+</html>

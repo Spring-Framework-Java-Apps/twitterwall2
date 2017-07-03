@@ -42,6 +42,10 @@ import java.util.regex.Pattern;
                 name = "User.getAll",
                 query = "select t from User as t order by t.screenName"
         ),
+    @NamedQuery(
+        name = "User.count",
+        query = "select count(t) from User as t"
+    ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
                 query = "select t from User as t where t.tweeting=true order by t.screenName"

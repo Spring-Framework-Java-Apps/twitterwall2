@@ -60,9 +60,10 @@
                         <ul class="dropdown-menu">
                             <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;All</a></li>
                             <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;Not Yet Friends</a></li>
+                            <li><a href="/getTestData" th:href="@{/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;Get Test Data</a></li>
+                            <li><a href="/service/count" th:href="@{/service/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Service Count</a></li>
                         </ul>
                     </li>
-                    <li th:if="${page.contextTest}"><a href="/getTestData" th:href="@{/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;getTestData</a></li>
                     <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Users</a></li>
                     <li><a href="/hashtags" th:href="@{/hashtags}"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;HashTags</a></li>
                     <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i>&nbsp;&nbsp;Impressum</a></li>

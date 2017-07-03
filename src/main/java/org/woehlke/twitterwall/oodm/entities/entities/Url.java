@@ -22,7 +22,11 @@ import java.util.List;
         @NamedQuery(
                 name="Url.findByUrl",
                 query="select t from Url as t where t.url=:url"
-        )
+        ) ,
+    @NamedQuery(
+        name = "Url.count",
+        query = "select count(t) from Url as t"
+    ),
 })
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {

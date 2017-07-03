@@ -46,6 +46,10 @@ import java.util.Set;
                 name="Tweet.count",
                 query="select count(t) from Tweet as t"
         ),
+    @NamedQuery(
+        name="Tweet.getAll",
+        query="select t from Tweet as t"
+    ),
         @NamedQuery(
                 name="Tweet.getTweetsForUser",
                 query="select t from Tweet as t WHERE t.user=:user"
