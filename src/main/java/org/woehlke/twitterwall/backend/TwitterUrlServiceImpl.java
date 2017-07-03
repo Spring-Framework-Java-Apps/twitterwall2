@@ -22,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by tw on 28.06.17.
@@ -39,7 +40,8 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             String display;
             String expanded;
             int[] indices = {};
-            CloseableHttpClient httpclient = HttpClients.createSystem();
+            long connTimeToLive = 30L;
+            CloseableHttpClient httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(connTimeToLive,TimeUnit.SECONDS).build();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
             CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
