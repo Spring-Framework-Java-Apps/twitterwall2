@@ -124,7 +124,7 @@ public class ScheduledTasks {
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn("NOT DONE "+msg+" (NOK)");
+                log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
@@ -132,7 +132,7 @@ public class ScheduledTasks {
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn("NOT DONE "+msg+" (NOK)");
+                log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 log.warn(msg + e.getMessage());
                 Throwable t = e.getCause();
@@ -140,7 +140,7 @@ public class ScheduledTasks {
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn("NOT DONE "+msg+" (NOK)");;
+                log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));;
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
@@ -148,7 +148,7 @@ public class ScheduledTasks {
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.error("NOT DONE "+msg+" (NOK)");
+                log.error("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             }
         }
     }
@@ -168,7 +168,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -176,7 +176,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -184,7 +184,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (Exception e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -192,7 +192,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.error(msg + e.getMessage());
-                log.error(msg + " NOT DONE " + msg + " (NOK)");
+                log.error(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             }
         }
     }
@@ -212,7 +212,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -220,7 +220,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -228,7 +228,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.warn(msg + e.getMessage());
-                log.warn(msg + " NOT DONE " + msg + " (NOK)");
+                log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             } catch (Exception e) {
                 Throwable t = e.getCause();
                 while(t != null){
@@ -236,7 +236,7 @@ public class ScheduledTasks {
                     t = t.getCause();
                 }
                 log.error(msg + e.getMessage());
-                log.error(msg + " NOT DONE " + msg + " (NOK)");
+                log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
     }
