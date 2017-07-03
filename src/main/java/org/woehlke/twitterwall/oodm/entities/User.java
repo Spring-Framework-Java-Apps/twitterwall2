@@ -108,7 +108,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column(length = 1024)
     private String url;
 
-    @Column
+    @Column(length = 1024)
     private String profileImageUrl;
 
     @Column
@@ -180,7 +180,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean useBackgroundImage;
 
-    @Column
+    @Column(length = 1024)
     private String backgroundImageUrl;
 
     @Column
@@ -207,7 +207,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean onDefinedUserList;
 
-    @Column
+    @Column(length = 1024)
     private String profileBannerUrl;
 
     @JoinTable(name = "userprofile_url")
@@ -262,6 +262,22 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         Set<Url> urls = this.getUrls();
         formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
+    }
+
+    public String getCssBackgroundImage(){
+        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+            return "img-responsive my-background";
+        } else {
+            return "hidden";
+        }
+    }
+
+    public String getCssProfileBannerUrl(){
+        String style ="img-circle my-profile-image";
+        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+            style += " my-profile-image-with-bg";
+        }
+        return style;
     }
 
     public Long getId() {
