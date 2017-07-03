@@ -15,7 +15,8 @@ public enum Symbols {
     GET_TEST_DATA("<i class=\"fa fa-cubes\" aria-hidden=\"true\"></i>\n"),
     EXCEPTION("<i class=\"fa fa-bolt\" aria-hidden=\"true\"></i>"),
     LEAF("<i class=\"fa fa-leaf\" aria-hidden=\"true\"></i>"),
-    DATABASE("<i class=\"fa fa-database\" aria-hidden=\"true\"></i>");
+    DATABASE("<i class=\"fa fa-database\" aria-hidden=\"true\"></i>"),
+    USER_NOT_YET_ON_LIST("<i class=\"fa fa-handshake-o\" aria-hidden=\"true\"></i>\n");
 
     Symbols(String html){
         this.html=html;

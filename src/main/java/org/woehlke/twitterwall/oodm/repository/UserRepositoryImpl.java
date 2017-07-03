@@ -51,6 +51,20 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
     }
 
     @Override
+    public List<User> getNotYetOnList() {
+        String name = "User.getNotYetOnList";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getOnList() {
+        String name = "User.getOnList";
+        TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
+        return query.getResultList();
+    }
+
+    @Override
     public List<String> getAllDescriptions() {
         String name= "User.getAllDescriptions";
         TypedQuery<String> query = entityManager.createNamedQuery(name, String.class);
@@ -87,4 +101,6 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
             throw e;
         }
     }
+
+
 }

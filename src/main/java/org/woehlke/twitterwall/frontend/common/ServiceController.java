@@ -46,7 +46,7 @@ public class ServiceController extends AbstractTwitterwallController {
     public String countedEntities(Model model) {
         String msg = "/hashtags: ";
         logEnv();
-        String title = "HashTags";
+        String title = "Counted Entities";
         String subtitle = searchterm;
         String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);

@@ -15,6 +15,10 @@ public interface UserRepository extends DomainRepositoryWithIdTwitter<User>,Doma
 
     List<User> getNotYetFriendUsers();
 
+    List<User> getNotYetOnList();
+
+    List<User> getOnList();
+
     List<String> getAllDescriptions();
 
     List<Long> getAllTwitterIds();
@@ -22,5 +26,5 @@ public interface UserRepository extends DomainRepositoryWithIdTwitter<User>,Doma
     List<User> getUsersForHashTag(String hashtagText);
 
     long countUsersForHashTag(String hashtagText);
-    
+
 }

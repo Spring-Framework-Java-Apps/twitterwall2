@@ -97,4 +97,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         }
     }
+
+    @Override
+    public List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName) {
+        String msg = "findUsersFromDefinedList: "+fetchUserListName;
+        try {
+            return getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
+        } catch (ResourceAccessException e) {
+            throw new TwitterApiException(msg + " check your Network Connection!", e);
+        }
+    }
 }
