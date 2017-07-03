@@ -13,5 +13,9 @@ buildNumber.properties
 
 .idea
 *.iml
-!/src/main/java/org/woehlke/twitterwall/oodm/MyTwitterProfile.java
-!/src/main/java/org/woehlke/twitterwall/process/ScheduledTasksFacade.java
+
+.bundle
+.sass-cache
+Gemfile.lock
+_site
+*.gem
