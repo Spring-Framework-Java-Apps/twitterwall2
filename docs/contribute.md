@@ -1,12 +1,10 @@
 ---
 layout: page
 title: Contribute
-permalink: /contribute/
+permalink: /contribute/ 
 ---
 
-## Contribute
-
-### Fork, patch and contribute code
+## Fork, patch and contribute code
 
 Feel free to fork Twitterwall [Git repository at GitHub][twitterwall-github] for your own use and
 updates.
@@ -17,7 +15,7 @@ Contribute your fixes and new features back to the main codebase using
 [twitterwall-github]: http://github.com/andriusvelykis/reflow-maven-skin/
 [github-pull-req]: http://help.github.com/articles/using-pull-requests
 
-### Issues (bug and feature tracker)
+## Issues (bug and feature tracker)
 
 Please report any bugs found, feature requests or other issues on
 [Twitterwall GitHub tracker][twitterwall-issues].
@@ -27,7 +25,7 @@ When creating a new issue, try following [necolas's guidelines][issue-guidelines
 [twitterwall-issues]: https://github.com/phasenraum2010/twitterwall2/issues
 [issue-guidelines]: http://github.com/necolas/issue-guidelines/#readme
 
-### Support
+## Support
 
 Let me know if you are using Twitterwall. I may get around to creating a showcase page listing user sites.
 
@@ -38,14 +36,14 @@ If you _really really_ like it and want to support the author, I will be glad to
 [av-site]: https://twitter.com/ThomasWoehlke
 [donate]: https://www.paypal.me/ThomasWoehlke
 
-### Author:  
+## Author:  
 
 **Thomas Wöhlke**
 + Twitter: https://twitter.com/ThomasWoehlke
 + Github: https://github.com/phasenraum2010
 + Blog: https://thomas-woehlke.blogspot.de
 
-### Acknowledgements
+## Acknowledgements
 
 + Twitterwall Frontend is built on [Bootstrap][bootstrap].
 + These include icons from [Glyphicons][glyphicons] and web fonts from [Google][webfonts].
@@ -66,11 +64,13 @@ If you _really really_ like it and want to support the author, I will be glad to
 [webfonts]: http://www.google.com/webfonts/
 [jquery]: http://jquery.org
 
-### Copyright and license
+## Copyright and license
 
 &copy; 2017 Thomas Wöhlke
 
 Licensed under the GNU General Public License Version 2.0
 
 http://www.gnu.org/licenses/old-licenses/gpl-2.0
+
+#### [back](../)
 
