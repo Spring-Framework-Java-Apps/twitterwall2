@@ -40,4 +40,3 @@ permalink: /development/
   - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
 - run with: mvn clean spring-boot:run
 
-#### [back](../)

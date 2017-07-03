@@ -14,5 +14,3 @@ The history of Twitterwall releases is documented below. For details of changes 
 
 -   Initial release of Twitterwall.
 
-
-#### [back](../)
