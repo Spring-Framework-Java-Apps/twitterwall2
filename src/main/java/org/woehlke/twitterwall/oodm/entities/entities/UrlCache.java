@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.listener.entities.UrlCacheListener;
 
 import javax.persistence.*;
 
@@ -20,8 +20,9 @@ import javax.persistence.*;
                 query = "select t from UrlCache as t where t.url=:url"
         )
 })
+@EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache> {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id

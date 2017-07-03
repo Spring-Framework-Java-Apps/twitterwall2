@@ -2,9 +2,9 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.listener.entities.HashTagListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
                 query = "select count(h) from HashTag as h"
         )
 })
+@EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag> {
 
     private static final long serialVersionUID = 1L;
@@ -78,7 +79,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     public void setText(String text) {
         this.text = text;
     }
-    
+
 
     @Override
     public boolean equals(Object o) {

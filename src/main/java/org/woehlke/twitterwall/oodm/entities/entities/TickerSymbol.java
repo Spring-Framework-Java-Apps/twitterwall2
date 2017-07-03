@@ -1,11 +1,10 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.listener.entities.TickerSymbolListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by tw on 10.06.17.
@@ -26,6 +25,7 @@ import java.io.Serializable;
                 query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
         )
 })
+@EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-    
+
     @Column(name = "ticker_symbol")
     private String tickerSymbol;
 
@@ -52,8 +52,8 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-    
-    
+
+
     public String getTickerSymbol() {
         return tickerSymbol;
     }

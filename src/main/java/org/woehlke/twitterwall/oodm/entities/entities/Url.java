@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
 
 import javax.persistence.*;
 
@@ -21,8 +22,9 @@ import javax.persistence.*;
                 query="select t from Url as t where t.url=:url"
         )
 })
+@EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -2,12 +2,11 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +35,7 @@ import java.util.regex.Pattern;
 
 
 })
+@EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention>implements DomainObjectWithIdTwitter<Mention>,DomainObjectWithScreenName<Mention> {
 
     private static final long serialVersionUID = 1L;

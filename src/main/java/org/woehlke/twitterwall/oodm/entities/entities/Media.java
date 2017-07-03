@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.listener.entities.MediaListener;
 
 import javax.persistence.*;
 
@@ -38,6 +39,7 @@ import javax.persistence.*;
                 query = "select t from Media as t where t.url=:url"
         )
 })
+@EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
 
     private static final long serialVersionUID = 1L;
