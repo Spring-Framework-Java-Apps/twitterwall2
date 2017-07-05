@@ -14,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.ScheduledTasksFacade;
 
 import java.util.List;
 
@@ -95,7 +96,8 @@ public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/user/onlist")
     public String getOnList(Model model) {
-        model.addAttribute("users", userService.getOnList());
+        List<User> usersOnList = userService.getOnList();
+        model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "On List";
         model = setupPage(model, title, subtitle, symbol);
