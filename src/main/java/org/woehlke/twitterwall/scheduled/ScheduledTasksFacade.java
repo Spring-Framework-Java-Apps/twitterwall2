@@ -15,6 +15,6 @@ public interface ScheduledTasksFacade {
 
     CountedEntities updateTweets();
 
-    CountedEntities fetchUsersFromDefinedUserList();
+    void fetchUsersFromDefinedUserList();
 
 }

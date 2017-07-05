@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,8 +78,11 @@ public class TestController extends AbstractTwitterwallController {
 
     @RequestMapping("/user/onlist/renew")
     public String getOnListRenew(Model model) {
-        scheduledTasksFacade.fetchUsersFromDefinedUserList();
+        String msg = "getOnListRenew: ";
+        startOnListRenew();
+        log.info(msg+"START userService.getOnList(): ");
         List<User> usersOnList = userService.getOnList();
+        log.info(msg+"DONE userService.getOnList(): ");
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";
@@ -89,5 +93,13 @@ public class TestController extends AbstractTwitterwallController {
     @Override
     public void afterPropertiesSet() throws Exception {
         super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+    }
+
+    @Async
+    private void startOnListRenew(){
+        String msg = "startOnListRenew: ";
+        log.info(msg+"START scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
+        scheduledTasksFacade.fetchUsersFromDefinedUserList();
+        log.info(msg+"DONE scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
     }
 }
