@@ -30,7 +30,7 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache) {
-        log.info("UrlCache.store: try to persist: "+urlCache.toString());
+        log.debug("UrlCache.store: try to persist: "+urlCache.toString());
         return this.urlCacheRepository.persist(urlCache);
     }
 
@@ -56,9 +56,9 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     @Override
     public UrlCache findByUrl(String url) {
-        log.info("UrlCache.findByUrl: try to find: "+url);
+        log.debug("UrlCache.findByUrl: try to find: "+url);
         UrlCache urlCache = this.urlCacheRepository.findByUrl(url);
-        log.info("UrlCache.findByUrl: found: "+urlCache.toString());
+        log.debug("UrlCache.findByUrl: found: "+urlCache.toString());
         return urlCache;
     }
 }

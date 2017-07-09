@@ -28,10 +28,10 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
             TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("screenName", screenName);
             User result = query.getSingleResult();
-            log.info(name+" found: " + screenName);
+            log.debug(name+" found: " + screenName);
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + screenName);
+            log.debug(name+" not found: " + screenName);
             throw e;
         }
     }
@@ -94,10 +94,10 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
             TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
             query.setParameter("hashtagText", hashtagText);
             usersForHashTag = query.getSingleResult();
-            log.info(name+" found: " + hashtagText);
+            log.debug(name+" found: " + hashtagText);
             return usersForHashTag;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + hashtagText);
+            log.debug(name+" not found: " + hashtagText);
             throw e;
         }
     }

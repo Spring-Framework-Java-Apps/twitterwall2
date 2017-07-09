@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 public class UrlRepositoryImpl extends DomainRepositoryImpl<Url> implements UrlRepository {
 
     private static final Logger log = LoggerFactory.getLogger(UrlRepositoryImpl.class);
-    
+
     @Override
     public Url findByUrl(String url) {
         String name = "Url.findByUrl";
@@ -23,10 +23,10 @@ public class UrlRepositoryImpl extends DomainRepositoryImpl<Url> implements UrlR
             TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
             query.setParameter("url", url);
             Url result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + url);
+            log.debug(name+" not found: " + url);
             throw e;
         }
     }

@@ -15,36 +15,36 @@ public class MentionListener {
 
   @PrePersist
   public void onPrePersist(Mention domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(Mention domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(Mention domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
   public void onPostPersist(Mention domainObject) {
-    log.info("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(Mention domainObject) {
-    log.info("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(Mention domainObject) {
-    log.info("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.toString());
   }
 
   @PostLoad
   public void onPostLoad(Mention domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 }

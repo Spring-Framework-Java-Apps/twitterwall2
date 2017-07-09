@@ -14,14 +14,14 @@ import javax.persistence.TypedQuery;
 /**
  * Created by tw on 12.06.17.
  */
-@Repository                                                                          
+@Repository
 public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbol> implements TickerSymbolRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolRepositoryImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     @Override
     public TickerSymbol findByUrl(String url) {
         String name = "TickerSymbols.findByUrl";
@@ -29,10 +29,10 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
             TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name, TickerSymbol.class);
             query.setParameter("url", url);
             TickerSymbol result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + url);
+            log.debug(name+" not found: " + url);
             throw e;
         }
     }
@@ -45,10 +45,10 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
             query.setParameter("url", url);
             query.setParameter("tickerSymbol", tickerSymbol);
             TickerSymbol result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + url);
+            log.debug(name+" not found: " + url);
             throw e;
         }
     }

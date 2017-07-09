@@ -23,15 +23,15 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
     public T persist(T domainObject) {
         entityManager.persist(domainObject);
         entityManager.flush();
-        log.info("persisted: "+domainObject.toString());
+        log.debug("persisted: "+domainObject.toString());
         return domainObject;
     }
-    
+
     @Override
     public T update(T domainObject) {
         domainObject = entityManager.merge(domainObject);
         entityManager.flush();
-        log.info("merged: "+domainObject.toString());
+        log.debug("merged: "+domainObject.toString());
         return domainObject;
     }
 
@@ -49,4 +49,3 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
         return query.getSingleResult();
     }
 }
-                                                           

@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.backend.TwitterApiService;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 
 /**
@@ -20,7 +23,7 @@ import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 public class ImprintController extends AbstractTwitterwallController {
 
     private static final Logger log = LoggerFactory.getLogger(ImprintController.class);
-    
+
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
@@ -35,7 +38,7 @@ public class ImprintController extends AbstractTwitterwallController {
 
     @Value("${twitterwall.context.test}")
     private boolean contextTest;
-    
+
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
@@ -47,12 +50,18 @@ public class ImprintController extends AbstractTwitterwallController {
 
     private final TwitterApiService twitterApiService;
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
+    private final StoreOneTweet storeOneTweet;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final UserService userService;
 
     @Autowired
-    public ImprintController(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter) {
+    public ImprintController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
+        this.userService = userService;
     }
 
     @RequestMapping("/imprint")
@@ -68,9 +77,9 @@ public class ImprintController extends AbstractTwitterwallController {
         log.info("-----------------------------------------");
         return "imprint";
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

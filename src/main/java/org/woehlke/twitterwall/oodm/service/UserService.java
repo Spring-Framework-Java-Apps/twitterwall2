@@ -1,6 +1,5 @@
 package org.woehlke.twitterwall.oodm.service;
 
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.common.DomainService;
 
@@ -26,8 +25,6 @@ public interface UserService extends DomainService<User> {
     List<String> getAllDescriptions();
 
     List<Long> getAllTwitterIds();
-
-    User storeUserProcess(User user);
 
     List<User> getUsersForHashTag(String hashtagText);
 

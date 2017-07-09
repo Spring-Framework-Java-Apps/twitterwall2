@@ -10,7 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,12 +48,18 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     private final TwitterApiService twitterApiService;
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
+    private final StoreOneTweet storeOneTweet;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final UserService userService;
 
     @Autowired
-    public GlobalExceptionHandler(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter) {
+    public GlobalExceptionHandler(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
+        this.userService = userService;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -60,7 +68,7 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
-    
+
     private ModelAndView getTemplate(HttpServletRequest request, Exception ex) {
         ModelAndView mav = new ModelAndView();
         String symbol = Symbols.EXCEPTION.toString();
@@ -75,6 +83,6 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

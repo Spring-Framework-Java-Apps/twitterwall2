@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 import java.util.Date;
@@ -35,16 +35,16 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private final TwitterApiService twitterApiService;
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
-
     private final PersistDataFromTwitterTest persistDataFromTwitterTest;
 
+    private final StoreUserProfile storeUserProfile;
+
     @Autowired
-    public UserServiceTestImpl(UserService userService, TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, PersistDataFromTwitterTest persistDataFromTwitterTest) {
+    public UserServiceTestImpl(UserService userService, TwitterApiService twitterApiService, PersistDataFromTwitterTest persistDataFromTwitterTest, StoreUserProfile storeUserProfile) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
         this.persistDataFromTwitterTest = persistDataFromTwitterTest;
+        this.storeUserProfile = storeUserProfile;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class UserServiceTestImpl implements UserServiceTest {
             log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = persistDataFromTwitter.storeUserProfile(twitterProfile);
+                User user = storeUserProfile.storeUserProfile(twitterProfile);
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
                 log.info("model.addAttribute user = "+user.toString());
                 return user;

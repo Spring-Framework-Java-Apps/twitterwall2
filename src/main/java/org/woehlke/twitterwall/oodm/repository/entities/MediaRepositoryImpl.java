@@ -21,7 +21,7 @@ public class MediaRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Media
 
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     @Override
     public Media findByUrl(String url) {
         String name = "Media.findByUrl";
@@ -29,10 +29,10 @@ public class MediaRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Media
             TypedQuery<Media> query = entityManager.createNamedQuery(name, Media.class);
             query.setParameter("url", url);
             Media result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + url);
+            log.debug(name+" not found: " + url);
             throw e;
         }
     }

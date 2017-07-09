@@ -24,10 +24,10 @@ public class UrlCacheRepositoryImpl extends DomainRepositoryImpl<UrlCache> imple
             TypedQuery<UrlCache> query = entityManager.createNamedQuery(name, UrlCache.class);
             query.setParameter("url", url);
             UrlCache result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + url);
+            log.debug(name+" not found: " + url);
             throw e;
         }
     }

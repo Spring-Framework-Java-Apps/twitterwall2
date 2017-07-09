@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
@@ -31,18 +32,21 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final MentionService mentionService;
-
-    private final HashTagService hashTagService;
-
-    private final UrlService urlService;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, MentionService mentionService, HashTagService hashTagService, UrlService urlService) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.mentionService = mentionService;
-        this.hashTagService = hashTagService;
-        this.urlService = urlService;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+    public User store(User user) {
+        try {
+            User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
+            user.setId(userPersistent.getId());
+            return userRepository.update(user);
+        } catch (EmptyResultDataAccessException e) {
+            return userRepository.persist(user);
+        }
     }
 
     @Override
@@ -108,48 +112,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Long> getAllTwitterIds() {
         return userRepository.getAllTwitterIds();
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User store(User user) {
-        return storeUserProcess(user);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User storeUserProcess(User user){
-        String msg = "User.storeUserProcess ";
-        Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        for (Url myUrl : user.getUrls()) {
-            urls.add(urlService.getPersistentUrlFor(myUrl.getUrl()));
-        }
-        urls.add(urlService.getPersistentUrlFor(user.getUrl()));
-        for (HashTag hashTag : user.getTags()) {
-            hashTags.add(hashTagService.store(hashTag));
-        }
-        for (Mention mention : user.getMentions()) {
-            mentions.add(mentionService.store(mention));
-        }
-        user.setUrls(urls);
-        user.setTags(hashTags);
-        user.setMentions(mentions);
-        try {
-            User userPers = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
-            user.setId(userPers.getId());
-            user.setFriend(userPers.isFriend());
-            user.setFollower(userPers.isFollower());
-            if(!user.isOnDefinedUserList()){
-                user.setOnDefinedUserList(userPers.isOnDefinedUserList());
-            }
-            log.info(msg+" try to update user "+user.toString());
-            return userRepository.update(user);
-        } catch (EmptyResultDataAccessException e) {
-            log.info(msg+" try to persist user "+user.toString());
-            return userRepository.persist(user);
-        }
     }
 
     @Override

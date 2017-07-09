@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 public class HashTagRepositoryImpl extends DomainRepositoryImpl<HashTag> implements HashTagRepository {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagRepositoryImpl.class);
-    
+
     @Override
     public HashTag findByText(String text) {
         String name ="HashTag.findByText";
@@ -23,12 +23,12 @@ public class HashTagRepositoryImpl extends DomainRepositoryImpl<HashTag> impleme
             TypedQuery<HashTag> query = entityManager.createNamedQuery(name, HashTag.class);
             query.setParameter("text", text);
             HashTag result = query.getSingleResult();
-            log.info(name+" found: " + result.toString());
+            log.debug(name+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(name+" not found: " + text);
+            log.debug(name+" not found: " + text);
             throw e;
         }
     }
-    
+
 }

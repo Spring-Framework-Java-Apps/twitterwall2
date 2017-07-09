@@ -60,9 +60,9 @@ public class MediaServiceImpl implements MediaService {
     public Media store(Media media) {
         String msg = "Media.store: ";
         try {
-            log.info(msg+"try to find: "+media.toString());
+            log.debug(msg+"try to find: "+media.toString());
             Media mediaPers = this.mediaRepository.findByIdTwitter(media.getIdTwitter(),Media.class);
-            log.info(msg+"found: "+media.toString());
+            log.debug(msg+"found: "+media.toString());
             mediaPers.setDisplay(media.getDisplay());
             mediaPers.setExpanded(media.getExpanded());
             mediaPers.setIdTwitter(media.getIdTwitter());
@@ -71,10 +71,10 @@ public class MediaServiceImpl implements MediaService {
             mediaPers.setMediaHttps(media.getMediaHttps());
             mediaPers.setMediaType(media.getMediaType());
             mediaPers.setUrl(media.getUrl());
-            log.info(msg+"found and try to update: "+media.toString());
+            log.debug(msg+"found and try to update: "+media.toString());
             return this.mediaRepository.update(mediaPers);
         } catch (EmptyResultDataAccessException e) {
-            log.info(msg+"not found and try to persist: "+media.toString());
+            log.debug(msg+"not found and try to persist: "+media.toString());
             return this.mediaRepository.persist(media);
         }
     }

@@ -65,17 +65,17 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
         try{
-            log.info(msg+"try to find: "+tickerSymbol.toString());
+            log.debug(msg+"try to find: "+tickerSymbol.toString());
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
-            log.info(msg+"found: "+tickerSymbol.toString());
+            log.debug(msg+"found: "+tickerSymbol.toString());
             tickerSymbolPers.setUrl(tickerSymbol.getUrl());
             tickerSymbolPers.setIndices(tickerSymbol.getIndices());
             tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
-            log.info(msg+"found and try to update: "+tickerSymbolPers.toString());
+            log.debug(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.update(tickerSymbolPers);
 
         } catch (EmptyResultDataAccessException e) {
-            log.info(msg+"not found and try to persist: "+tickerSymbol.toString());
+            log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }
     }

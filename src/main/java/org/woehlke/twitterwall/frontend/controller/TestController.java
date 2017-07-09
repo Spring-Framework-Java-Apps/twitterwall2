@@ -13,8 +13,9 @@ import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
-import org.woehlke.twitterwall.scheduled.ScheduledTasksFacade;
+import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import java.util.List;
 
@@ -29,11 +30,14 @@ public class TestController extends AbstractTwitterwallController {
 
     private final TwitterApiService twitterApiService;
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
+    private final StoreOneTweet storeOneTweet;
 
-    private final ScheduledTasksFacade scheduledTasksFacade;
+    private final StoreUserProfile storeUserProfile;
 
     private final UserService userService;
+
+    private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
+
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
@@ -56,12 +60,15 @@ public class TestController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
+
+
     @Autowired
-    public TestController(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, ScheduledTasksFacade scheduledTasksFacade, UserService userService) {
+    public TestController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList) {
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
-        this.scheduledTasksFacade = scheduledTasksFacade;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
     }
 
     @RequestMapping("/getTestData")
@@ -92,14 +99,14 @@ public class TestController extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 
     @Async
     private void startOnListRenew(){
         String msg = "startOnListRenew: ";
         log.info(msg+"START scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
-        scheduledTasksFacade.fetchUsersFromDefinedUserList();
+        fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
         log.info(msg+"DONE scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
     }
 }

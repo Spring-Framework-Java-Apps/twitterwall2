@@ -59,30 +59,30 @@ public class MentionServiceImpl implements MentionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention store(Mention mention) {
-        log.info("try to store Mention: "+mention.toString());
+        log.debug("try to store Mention: "+mention.toString());
         try {
             String screenName = mention.getScreenName();
             Long idTwitter = mention.getIdTwitter();
             Mention mentionPers = null;
             if(screenName != null && idTwitter != null){
-                log.info("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
+                log.debug("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
                 mentionPers = this.mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
             } else if (screenName != null && idTwitter == null) {
-                log.info("try to find Mention.findByScreenName: "+mention.toString());
+                log.debug("try to find Mention.findByScreenName: "+mention.toString());
                 mentionPers = this.mentionRepository.findByScreenName(screenName);
             } else if (screenName == null && idTwitter != null) {
-                log.info("try to find Mention.findByIdTwitter: "+mention.toString());
+                log.debug("try to find Mention.findByIdTwitter: "+mention.toString());
                 mentionPers = this.mentionRepository.findByIdTwitter(idTwitter,Mention.class);
             }
             mentionPers.setIndices(mention.getIndices());
             mentionPers.setIdTwitter(mention.getIdTwitter());
             mentionPers.setName(mention.getName());
             mentionPers.setScreenName(mention.getScreenName());
-            log.info("try to update Mention: "+mention.toString());
+            log.debug("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
         } catch (EmptyResultDataAccessException e){
-            log.info(e.getMessage());
-            log.info("try to persist Mention: "+mention.toString());
+            log.debug(e.getMessage());
+            log.debug("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
         }
     }

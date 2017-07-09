@@ -19,7 +19,7 @@ public class DomainRepositoryWithIdTwitterImpl<T extends DomainObjectWithIdTwitt
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
         query.setParameter("idTwitter", idTwitter);
         T result = query.getSingleResult();
-        log.info("found: " + result.toString());
+        log.debug("found: " + result.toString());
         return result;
     }
 }

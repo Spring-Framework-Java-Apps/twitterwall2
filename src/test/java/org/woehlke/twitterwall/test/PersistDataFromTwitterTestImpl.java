@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.backend.TwitterApiService;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitterImpl;
+import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 
@@ -23,19 +25,29 @@ import javax.persistence.NoResultException;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTest {
 
-    private static final Logger log = LoggerFactory.getLogger(PersistDataFromTwitterImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(PersistDataFromTwitterTestImpl.class);
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
 
     private final TwitterApiService twitterApiService;
+
+    private final StoreOneTweet storeOneTweet;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final UserService userService;
+
+    private final CountedEntitiesService countedEntitiesService;
 
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
-    public PersistDataFromTwitterTestImpl(PersistDataFromTwitter persistDataFromTwitter, TwitterApiService twitterApiService) {
-        this.persistDataFromTwitter = persistDataFromTwitter;
+    public PersistDataFromTwitterTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
+        this.userService = userService;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
     @Override
@@ -44,14 +56,14 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
         log.info(msg + "-----exampleTest-------------------------------------------");
         log.info(msg + "Hello, Testing-World.");
         log.info(msg + "We are waiting for fetchTweetsFromTwitterSearch.");
-        log.info(msg + "number of tweets: " + persistDataFromTwitter.countTweets());
+        log.info(msg + "number of tweets: " + countedEntitiesService.countTweets());
         try {
             Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
-            log.info(msg + "number of tweets: " + persistDataFromTwitter.countTweets());
+            log.info(msg + "number of tweets: " + countedEntitiesService.countTweets());
             for (long id : idTwitterToFetch) {
                 try {
                     org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
-                    persistDataFromTwitter.storeOneTweet(twitterTweet);
+                    storeOneTweet.storeOneTweet(twitterTweet);
                 } catch (TwitterApiException e){
                     log.error(msg + "twitterApiService.findOneTweetById: " + e.getMessage());
                 } catch (EmptyResultDataAccessException ex){
@@ -63,7 +75,7 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
         } catch (InterruptedException e) {
             log.warn(msg+e.getMessage());
         }
-        log.info(msg + "number of tweets: " + persistDataFromTwitter.countTweets());
+        log.info(msg + "number of tweets: " + countedEntitiesService.countTweets());
         log.info(msg + "------------------------------------------------");
     }
 
@@ -72,18 +84,18 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
         String msg = "fetchUserFromTwitterSearchTest : ";
         log.info(msg + "-----exampleTest-------------------------------------------");
         log.info(msg + "Hello, Testing-World.");
-        log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
+        log.info(msg + "number of users: " + countedEntitiesService.countUsers());
         try {
             Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
-            log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
+            log.info(msg + "number of users: " + countedEntitiesService.countUsers());
             for (long id : idTwitterToFetchForProfileControllerTest) {
                 TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(id);
-                persistDataFromTwitter.storeUserProfile(twitterProfile);
+                storeUserProfile.storeUserProfile(twitterProfile);
             }
         } catch (InterruptedException e) {
             log.warn(msg+e.getMessage());
         }
-        log.info(msg + "number of users: " + persistDataFromTwitter.countUsers());
+        log.info(msg + "number of users: " + countedEntitiesService.countUsers());
         log.info(msg + "------------------------------------------------");
     }
 }

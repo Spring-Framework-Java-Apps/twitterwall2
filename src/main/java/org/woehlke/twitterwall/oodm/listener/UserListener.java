@@ -15,36 +15,36 @@ public class UserListener {
 
   @PrePersist
   public void onPrePersist(User domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(User domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(User domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
   public void onPostPersist(User domainObject) {
-    log.info("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(User domainObject) {
-    log.info("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(User domainObject) {
-    log.info("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.toString());
   }
 
   @PostLoad
   public void onPostLoad(User domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 }

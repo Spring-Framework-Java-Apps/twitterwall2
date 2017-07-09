@@ -16,7 +16,7 @@ import javax.persistence.TypedQuery;
 public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Mention> implements MentionRepository {
 
     private static final Logger log = LoggerFactory.getLogger(MentionRepositoryImpl.class);
-    
+
     @Override
     public Mention findByScreenName(String screenName) {
         String qname="Mention.findByScreenName";
@@ -24,10 +24,10 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("screenName", screenName);
             Mention result = query.getSingleResult();
-            log.info(qname+" found: " + result.toString());
+            log.debug(qname+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(qname+" not found: " + screenName);
+            log.debug(qname+" not found: " + screenName);
             throw e;
         }
     }
@@ -40,10 +40,10 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
             query.setParameter("idTwitter", idTwitter);
             query.setParameter("screenName", screenName);
             Mention result = query.getSingleResult();
-            log.info(qname+" found: " + result.toString());
+            log.debug(qname+" found: " + result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
-            log.info(qname+" not found: " + screenName);
+            log.debug(qname+" not found: " + screenName);
             throw e;
         }
     }
