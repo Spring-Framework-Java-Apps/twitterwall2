@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -336,7 +337,7 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
     }
 
     @Override
-    public CountedEntities fetchUsersFromDefinedUserList() {
+    public void fetchUsersFromDefinedUserList() {
         String msg = "update Tweets: ";
         log.info(msg + "---------------------------------------");
         log.info(msg + "The time is now {}", dateFormat.format(new Date()));
@@ -345,6 +346,5 @@ public class ScheduledTasksFacadeImpl implements ScheduledTasksFacade {
         for(TwitterProfile twitterProfile:userProfiles) {
             User user = persistDataFromTwitter.storeUserProfileForUserList(twitterProfile);
         }
-        return this.persistDataFromTwitter.countAll();
     }
 }

@@ -604,11 +604,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllUrls(Set<Url> urls) {
-        return this.urls.addAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if(url != null){
+                this.urls.add(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls(Set<Url> urls) {
-        return this.urls.removeAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if(url != null){
+                this.urls.remove(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls() {
@@ -617,14 +631,20 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addUrl(Url url) {
-        return this.urls.add(url);
+        if(url == null){
+            return false;
+        } else {
+            return this.urls.add(url);
+        }
     }
 
     public boolean removetUrl(Url url) {
-        return this.urls.remove(url);
+        if(url == null) {
+            return true;
+        } else {
+            return this.urls.remove(url);
+        }
     }
-
-
 
     public Set<HashTag> getTags() {
         return tags;
@@ -716,22 +736,34 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
         for (Url url : urls) {
-            myUrls.append(url.toString());
-            myUrls.append(", ");
+            if(url != null) {
+                myUrls.append(url.toString());
+                myUrls.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
         }
         myUrls.append(" ]");
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
         for (HashTag tag : tags) {
-            myTags.append(tag.toString());
-            myTags.append(", ");
+            if(tag != null){
+                myTags.append(tag.toString());
+                myTags.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
         }
         myTags.append(" ]");
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("[ ");
         for (Mention mention : mentions) {
-            myMentions.append(mention.toString());
-            myMentions.append(", ");
+            if(mention != null){
+                myMentions.append(mention.toString());
+                myMentions.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
         }
         myMentions.append(" ]");
         return "User{" +

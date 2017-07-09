@@ -255,7 +255,7 @@ public class ScheduledTasks {
             String msg = "fetch Users from Defined User List ";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                CountedEntities countedEntities = this.scheduledTasksFacade.fetchUsersFromDefinedUserList();
+                this.scheduledTasksFacade.fetchUsersFromDefinedUserList();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
                 Throwable t = e.getCause();
