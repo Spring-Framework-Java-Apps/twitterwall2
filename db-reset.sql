@@ -19,3 +19,5 @@ delete from hashtag_indices;
 delete from hashtag;
 delete from tweet;
 delete from userprofile;
+
+

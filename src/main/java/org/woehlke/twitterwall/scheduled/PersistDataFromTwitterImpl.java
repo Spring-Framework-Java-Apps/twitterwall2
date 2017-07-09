@@ -21,7 +21,6 @@ import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.scheduled.service.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.UserTransformService;
 
-import javax.persistence.NoResultException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -116,7 +115,15 @@ public class PersistDataFromTwitterImpl implements PersistDataFromTwitter {
             tags.add(hashTagService.store(hashTag));
         }
         for (Url url : tweet.getUrls()) {
-            urls.add(urlService.getPersistentUrlFor(url.getUrl()));
+            if(url != null){
+                String urlStr = url.getUrl();
+                if(urlStr != null){
+                    Url urlObj = urlService.getPersistentUrlFor(urlStr);
+                    if(urlObj != null){
+                        urls.add(urlObj);
+                    }
+                }
+            }
         }
         tweet.setUrls(urls);
         tweet.setTags(tags);
