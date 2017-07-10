@@ -575,45 +575,83 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return createdAt.compareTo(other.getCreatedAt());
     }
 
-    @Override
-    public String toString() {
+    private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
         for (Url url : urls) {
-            myUrls.append(url.toString());
-            myUrls.append(", ");
+            if(url != null) {
+                myUrls.append(url.toString());
+                myUrls.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
         }
         myUrls.append(" ]");
+        return myUrls.toString();
+    }
+
+    private String toStringHashTags(){
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
         for (HashTag tag : tags) {
-            myTags.append(tag.toString());
-            myTags.append(", ");
+            if(tag != null){
+                myTags.append(tag.toString());
+                myTags.append(", ");
+            } else {
+                myTags.append(", null");
+            }
         }
         myTags.append(" ]");
+        return myTags.toString();
+    }
+
+    private String toStringMentions(){
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("[ ");
         for (Mention mention : mentions) {
-            myMentions.append(mention.toString());
-            myMentions.append(", ");
+            if(mention != null){
+                myMentions.append(mention.toString());
+                myMentions.append(", ");
+            } else {
+                myMentions.append(", null");
+            }
         }
         myMentions.append(" ]");
+        return myMentions.toString();
+    }
 
+    private String toStringMedia(){
         StringBuffer myMedia = new StringBuffer();
         myMedia.append("[ ");
         for (Media medium : media) {
-            myMedia.append(medium.toString());
-            myMedia.append(", ");
+            if(medium != null){
+                myMedia.append(medium.toString());
+                myMedia.append(", ");
+            } else {
+                myMedia.append(", null");
+            }
         }
         myMedia.append(" ]");
+        return myMedia.toString();
+    }
 
+    private String toStringTickerSymbols(){
         StringBuffer myTickerSymbols = new StringBuffer();
         myTickerSymbols.append("[ ");
-        for (TickerSymbol medium : tickerSymbols) {
-            myTickerSymbols.append(medium.toString());
-            myTickerSymbols.append(", ");
+        for (TickerSymbol tickerSymbol : tickerSymbols) {
+            if(tickerSymbol != null){
+                myTickerSymbols.append(tickerSymbol.toString());
+                myTickerSymbols.append(", ");
+            } else {
+                myTickerSymbols.append(", null");
+            }
         }
         myTickerSymbols.append(" ]");
+        return myTickerSymbols.toString();
+    }
+
+    @Override
+    public String toString() {
         return "Tweet{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -634,11 +672,11 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", retweetedStatus=" + retweetedStatus +
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
-                ",\n media=" + myMedia.toString() +
-                ",\n tickerSymbols=" + myTickerSymbols.toString() +
+                ",\n urls=" + toStringUrls() +
+                ",\n tags=" + toStringHashTags() +
+                ",\n mentions=" + toStringMentions() +
+                ",\n media=" +toStringMedia() +
+                ",\n tickerSymbols=" +toStringTickerSymbols() +
                 ",\n user=" + user.toString() +
                 "\n}";
     }

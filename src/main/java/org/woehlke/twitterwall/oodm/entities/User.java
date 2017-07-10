@@ -5,9 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;
@@ -232,6 +230,15 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @JoinTable(name = "userprofile_mention")
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
+
+    @JoinTable(name = "userprofile_media")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Set<Media> media = new LinkedHashSet<Media>();
+
+    @JoinTable(name = "userprofile_tickersymbol")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
+
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         this.idTwitter = idTwitter;
@@ -742,6 +749,61 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
 
+    public Set<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(Set<Media> media) {
+        this.media.clear();
+        this.media.addAll(media);
+    }
+
+    public boolean addAllMedia(Set<Media> media) {
+        return this.media.addAll(media);
+    }
+
+    public boolean removeAllMedia(Set<Media> media) {
+        return this.media.removeAll(media);
+    }
+
+    public boolean removeAllMedia() {
+        this.media.clear();
+        return this.media.isEmpty();
+    }
+
+    public boolean addMedia(Media media) {
+        return this.media.add(media);
+    }
+
+    public boolean removeMedia(Media media) {
+        return this.media.remove(media);
+    }
+
+    public Set<TickerSymbol> getTickerSymbols() {
+        return tickerSymbols;
+    }
+
+    public void setTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        this.tickerSymbols.clear();
+        this.tickerSymbols.addAll(tickerSymbols);
+    }
+
+    public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        return this.tickerSymbols.addAll(tickerSymbols);
+    }
+
+    public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        return this.tickerSymbols.removeAll(tickerSymbols);
+    }
+
+    public boolean addTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.add(tickerSymbol);
+    }
+
+    public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.remove(tickerSymbol);
+    }
+
     @Override
     public boolean equals(User o) {
         if (this == o) return true;
@@ -765,8 +827,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return screenName.compareTo(other.getScreenName());
     }
 
-    @Override
-    public String toString() {
+    private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
         for (Url url : urls) {
@@ -778,6 +839,10 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
             }
         }
         myUrls.append(" ]");
+        return myUrls.toString();
+    }
+
+    private String toStringHashTags(){
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
         for (HashTag tag : tags) {
@@ -785,10 +850,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 myTags.append(tag.toString());
                 myTags.append(", ");
             } else {
-                myUrls.append(", null");
+                myTags.append(", null");
             }
         }
         myTags.append(" ]");
+        return myTags.toString();
+    }
+
+    private String toStringMentions(){
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("[ ");
         for (Mention mention : mentions) {
@@ -796,10 +865,45 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 myMentions.append(mention.toString());
                 myMentions.append(", ");
             } else {
-                myUrls.append(", null");
+                myMentions.append(", null");
             }
         }
         myMentions.append(" ]");
+        return myMentions.toString();
+    }
+
+    private String toStringMedia(){
+        StringBuffer myMedia = new StringBuffer();
+        myMedia.append("[ ");
+        for (Media medium : media) {
+            if(medium != null){
+                myMedia.append(medium.toString());
+                myMedia.append(", ");
+            } else {
+                myMedia.append(", null");
+            }
+        }
+        myMedia.append(" ]");
+        return myMedia.toString();
+    }
+
+    private String toStringTickerSymbols(){
+        StringBuffer myTickerSymbols = new StringBuffer();
+        myTickerSymbols.append("[ ");
+        for (TickerSymbol tickerSymbol : tickerSymbols) {
+            if(tickerSymbol != null){
+                myTickerSymbols.append(tickerSymbol.toString());
+                myTickerSymbols.append(", ");
+            } else {
+                myTickerSymbols.append(", null");
+            }
+        }
+        myTickerSymbols.append(" ]");
+        return myTickerSymbols.toString();
+    }
+
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -839,9 +943,11 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
+                ",\n urls=" + toStringUrls() +
+                ",\n tags=" + toStringHashTags() +
+                ",\n mentions=" + toStringMentions() +
+                ",\n media=" +toStringMedia() +
+                ",\n tickerSymbols=" +toStringTickerSymbols() +
                 "\n}";
     }
 }

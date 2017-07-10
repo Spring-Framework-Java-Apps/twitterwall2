@@ -19,6 +19,6 @@ drop table hashtag_indices;
 drop table hashtag;
 drop table tweet;
 drop table userprofile;
-drop table task;
 drop table task_history;
+drop table task;
 drop sequence hibernate_sequence;
