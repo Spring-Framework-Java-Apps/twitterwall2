@@ -13,5 +13,4 @@ public interface StoreUserProfile {
 
     User storeUserProfileForScreenName(String screenName, Task task);
 
-    User findByScreenName(String screenName);
 }

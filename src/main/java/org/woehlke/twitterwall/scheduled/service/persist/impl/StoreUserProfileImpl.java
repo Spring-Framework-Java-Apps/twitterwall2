@@ -22,7 +22,7 @@ import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileImpl implements StoreUserProfile {
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
@@ -44,7 +44,6 @@ public class StoreUserProfileImpl implements StoreUserProfile {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUserProfile(TwitterProfile userProfile, Task task) {
         String msg = "storeUserProfile: ";
         User user = userTransformService.transform(userProfile);
@@ -59,7 +58,6 @@ public class StoreUserProfileImpl implements StoreUserProfile {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUserProfileForScreenName(String screenName, Task task){
         String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
         if(screenName != null && !screenName.isEmpty()) {
@@ -87,9 +85,10 @@ public class StoreUserProfileImpl implements StoreUserProfile {
         }
     }
 
+    /*
     @Override
     public User findByScreenName(String screenName) {
         return this.userService.findByScreenName(screenName);
     }
-
+*/
 }
