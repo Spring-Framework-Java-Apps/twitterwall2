@@ -12,10 +12,7 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
-import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweetPerform;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.scheduled.service.persist.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -44,6 +41,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
     private final StoreUserProcess storeUserProcess;
 
     private final CreatePersistentUrl createPersistentUrl;
+
 
     @Autowired
     public StoreOneTweetPerformImpl(TickerSymbolService tickerSymbolService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, TweetService tweetService, StoreUserProfile storeUserProfile, StoreUserProcess storeUserProcess, CreatePersistentUrl createPersistentUrl) {
@@ -79,22 +77,30 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
         Set<Media> media = new LinkedHashSet<Media>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         for (TickerSymbol tickerSymbol : tweet.getTickerSymbols()) {
-            tickerSymbols.add(tickerSymbolService.storeTickerSymbol(tickerSymbol,task));
+            if(tickerSymbol.isValid()){
+                tickerSymbols.add(tickerSymbolService.storeTickerSymbol(tickerSymbol,task));
+            }
         }
         for (Mention mention : tweet.getMentions()) {
-            mentions.add(mentionService.store(mention,task));
-            try {
-                User userFromMention = storeUserProfile.storeUserProfileForScreenName(mention.getScreenName(),task);
-                log.debug(msg+userFromMention.toString());
-            } catch (IllegalArgumentException exe){
-                log.debug(msg+exe.getMessage());
+            if(mention.isValid()){
+                mentions.add(mentionService.store(mention,task));
+                try {
+                    User userFromMention = storeUserProfile.storeUserProfileForScreenName(mention.getScreenName(),task);
+                    log.debug(msg+userFromMention.toString());
+                } catch (IllegalArgumentException exe){
+                    log.debug(msg+exe.getMessage());
+                }
             }
         }
         for (Media medium : tweet.getMedia()) {
-            media.add(mediaService.store(medium,task));
+            if(medium.isValid()){
+                media.add(mediaService.store(medium,task));
+            }
         }
         for (HashTag hashTag : tweet.getTags()) {
-            tags.add(hashTagService.store(hashTag,task));
+            if(hashTag.isValid()){
+                tags.add(hashTagService.store(hashTag,task));
+            }
         }
         for (Url url : tweet.getUrls()) {
             if(url == null) {
@@ -105,10 +111,10 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
                     log.debug(msg+"tweet.getUrls() -> url.getUrl() == null");
                 } else {
                     Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr,task);
-                    if(urlObj == null){
-                        log.debug(msg+"urlService.getPersistentUrlFor("+urlStr+") == null");
-                    } else {
+                    if((urlObj != null)&&(urlObj.isValid())){
                         urls.add(urlObj);
+                    } else {
+                        log.debug(msg+"urlService.getPersistentUrlFor("+urlStr+") == null");
                     }
                 }
             }
