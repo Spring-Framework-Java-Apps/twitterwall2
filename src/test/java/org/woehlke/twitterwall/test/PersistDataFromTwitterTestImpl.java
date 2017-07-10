@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -64,8 +63,6 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
                 try {
                     org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
                     storeOneTweet.storeOneTweet(twitterTweet);
-                } catch (TwitterApiException e){
-                    log.error(msg + "twitterApiService.findOneTweetById: " + e.getMessage());
                 } catch (EmptyResultDataAccessException ex){
                     log.error(msg + "storeOneTweet: "+ex.getMessage());
                 } catch (NoResultException exe){

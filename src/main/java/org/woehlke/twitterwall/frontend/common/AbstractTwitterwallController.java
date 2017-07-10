@@ -9,7 +9,6 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -144,8 +143,6 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     latest.add(persTweet);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
-                } catch (TwitterApiException ex) {
-                    log.warn(msg + ex.getMessage());
                 } catch (NoResultException e) {
                     log.warn(msg + e.getMessage());
                 }
@@ -173,8 +170,6 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     user.add(persUser);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
-                } catch (TwitterApiException ex) {
-                    log.warn(msg + ex.getMessage());
                 } catch (NoResultException e) {
                     log.warn(msg + e.getMessage());
                 }

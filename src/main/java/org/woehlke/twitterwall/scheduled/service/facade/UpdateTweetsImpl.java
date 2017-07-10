@@ -12,7 +12,6 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 
@@ -89,14 +88,6 @@ public class UpdateTweetsImpl implements UpdateTweets {
                         t = t.getCause();
                     }
                     log.debug(msg+tweetTwitterId + ex.getMessage());
-                } catch (TwitterApiException e) {
-                    log.warn(msg + e.getMessage());
-                    Throwable t = e.getCause();
-                    while(t != null){
-                        log.warn(msg + t.getMessage());
-                        t = t.getCause();
-                    }
-                    log.debug(msg+tweetTwitterId + e.getMessage());
                 } finally {
                     log.debug(msg + "---------------------------------------");
                 }

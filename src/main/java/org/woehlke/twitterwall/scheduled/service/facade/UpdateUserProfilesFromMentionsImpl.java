@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
@@ -84,15 +81,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                             t = t.getCause();
                         }
                         throw e;
-                    } catch (TwitterApiException e) {
-                        log.warn(msg + e.getMessage());
-                        Throwable t = e.getCause();
-                        while(t != null){
-                            log.warn(msg + t.getMessage());
-                            t = t.getCause();
-                        }
-                        log.debug(msg+screenName + e.getMessage());
-                    } finally {
+                    }  finally {
                         log.debug(msg +"---------------------------------------");
                     }
                 }

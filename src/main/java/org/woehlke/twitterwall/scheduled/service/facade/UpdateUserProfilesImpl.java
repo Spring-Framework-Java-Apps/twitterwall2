@@ -7,18 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.entities.MentionService;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import java.text.SimpleDateFormat;
@@ -80,16 +75,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                         log.warn(msg + t.getMessage());
                         t = t.getCause();
                     }
-                    throw new TwitterApiException(msg+userProfileTwitterId, e);
-                } catch (TwitterApiException e) {
-                    log.warn(msg + e.getMessage());
-                    Throwable t = e.getCause();
-                    while(t != null){
-                        log.warn(msg + t.getMessage());
-                        t = t.getCause();
-                    }
-                    log.debug(msg+userProfileTwitterId + e.getMessage());
-                } finally {
+                }  finally {
                     log.debug(msg +"---------------------------------------");
                 }
             }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -77,7 +76,7 @@ public class StoreUserProfileImpl implements StoreUserProfile {
                         log.warn(msg + t.getMessage());
                         t = t.getCause();
                     }
-                    throw new TwitterApiException(msg+screenName, ex);
+                    throw e;
                 }
             }
         } else  {
