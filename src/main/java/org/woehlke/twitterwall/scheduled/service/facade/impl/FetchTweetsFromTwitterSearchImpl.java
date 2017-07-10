@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
@@ -23,6 +25,7 @@ import java.util.Date;
  * Created by tw on 09.07.17.
  */
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterSearch {
 
     private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
@@ -55,7 +58,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets from Twitter: ";
         log.debug(msg+"---------------------------------------");
-        log.debug(msg+ "fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg+ "START fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
         Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH);
         try {
@@ -100,9 +103,10 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
             }
             task = taskService.error(task,e);
             //throw e;
-        } finally {
-            log.debug(msg+"---------------------------------------");
-            taskService.done(task);
         }
+        taskService.done(task);
+        log.debug(msg+"---------------------------------------");
+        log.debug(msg+ "DONE fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg+"---------------------------------------");
     }
 }

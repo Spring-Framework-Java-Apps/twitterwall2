@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
@@ -27,6 +29,7 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFromMentions {
 
 
@@ -88,7 +91,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 }
             }
         } catch (ResourceAccessException e) {
-            log.warn(msg + " ResourceAccessException: " + e.getMessage());
+            log.error(msg + " ResourceAccessException: " + e.getMessage());
             Throwable t = e.getCause();
             while(t != null){
                 log.warn(msg + " caused by: "+ t.getMessage());
@@ -98,12 +101,13 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             task = taskService.error(task,e);
             throw e;
         } catch (RateLimitExceededException e) {
+            log.error(msg + " RateLimitExceededException: " + e.getMessage());
             task = taskService.error(task,e);
             throw e;
         } finally {
-            log.debug(msg +"---------------------------------------");
             this.taskService.done(task);
         }
+        log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
     }

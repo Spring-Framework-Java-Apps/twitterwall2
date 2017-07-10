@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
@@ -24,6 +26,7 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateTweetsImpl implements UpdateTweets {
 
     private static final Logger log = LoggerFactory.getLogger(UpdateTweetsImpl.class);
@@ -60,7 +63,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
     public void updateTweets() {
         String msg = "update Tweets: ";
         log.debug(msg + "---------------------------------------");
-        log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg + "START: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
         Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
         try {
@@ -102,7 +105,6 @@ public class UpdateTweetsImpl implements UpdateTweets {
             }
             log.error(msg + " check your Network Connection!");
             task = taskService.error(task,e);
-            //throw e;
         } catch (RateLimitExceededException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -111,10 +113,10 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 t = t.getCause();
             }
             task = taskService.error(task,e);
-            //throw e;
-        } finally {
-            log.debug(msg + "---------------------------------------");
-            this.taskService.done(task);
         }
+        this.taskService.done(task);
+        log.debug(msg + "---------------------------------------");
+        log.debug(msg + "DONE: The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg + "---------------------------------------");
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
@@ -25,6 +27,7 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesImpl.class);
@@ -94,10 +97,9 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             this.taskService.error(task,e);
             log.warn(msg + e.getMessage());
             //throw e;
-        } finally {
-            log.debug(msg +"---------------------------------------");
-            this.taskService.done(task);
         }
+        this.taskService.done(task);
+        log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
     }
