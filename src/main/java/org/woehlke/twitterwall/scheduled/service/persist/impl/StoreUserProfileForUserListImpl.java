@@ -45,8 +45,10 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         user = storeUserProcess.storeUserProcess(user, task);
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();
-            User userFromMention = storeUserProfile.storeUserProfileForScreenName(screenName, task);
-            log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
+            if(screenName != null){
+                User userFromMention = storeUserProfile.storeUserProfileForScreenName(screenName, task);
+                log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
+            }
         }
         return user;
     }
