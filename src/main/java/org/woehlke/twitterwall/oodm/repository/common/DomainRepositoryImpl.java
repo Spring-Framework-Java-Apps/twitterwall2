@@ -21,6 +21,7 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
 
     @Override
     public T persist(T domainObject) {
+        log.debug("try to persist: "+domainObject.toString());
         entityManager.persist(domainObject);
         entityManager.flush();
         log.debug("persisted: "+domainObject.toString());
@@ -29,6 +30,7 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
 
     @Override
     public T update(T domainObject) {
+        log.debug("try to merge: "+domainObject.toString());
         domainObject = entityManager.merge(domainObject);
         entityManager.flush();
         log.debug("merged: "+domainObject.toString());
@@ -38,14 +40,20 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
     @Override
     public List<T> getAll(Class<T> myClass) {
         String name = myClass.getSimpleName() + ".getAll";
+        log.debug(name);
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
-        return query.getResultList();
+        List<T> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public long count(Class<T> myClass) {
         String name = myClass.getSimpleName() + ".count";
+        log.debug(name);
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
-        return query.getSingleResult();
+        long result = query.getSingleResult();
+        log.debug(name+"  "+result);
+        return result;
     }
 }

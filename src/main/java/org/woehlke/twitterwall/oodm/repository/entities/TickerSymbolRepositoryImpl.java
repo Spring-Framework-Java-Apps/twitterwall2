@@ -25,6 +25,7 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
     @Override
     public TickerSymbol findByUrl(String url) {
         String name = "TickerSymbols.findByUrl";
+        log.debug(name);
         try {
             TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name, TickerSymbol.class);
             query.setParameter("url", url);
@@ -40,6 +41,7 @@ public class TickerSymbolRepositoryImpl extends DomainRepositoryImpl<TickerSymbo
     @Override
     public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
         String name = "TickerSymbols.findByTickerSymbolAndUrl";
+        log.debug(name);
         try {
             TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name, TickerSymbol.class);
             query.setParameter("url", url);

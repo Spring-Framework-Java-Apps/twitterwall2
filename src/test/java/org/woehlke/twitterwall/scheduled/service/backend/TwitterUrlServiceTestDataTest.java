@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.backend;
+package org.woehlke.twitterwall.scheduled.service.backend;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -26,7 +26,7 @@ import static org.woehlke.twitterwall.test.ScheduledTasksFacadeTest.PROFILE_URLS
 public class TwitterUrlServiceTestDataTest {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTestDataTest.class);
-    
+
     @Test
     public void fetchUrlsTest(){
         Map<String,String> urls = new HashMap<>();

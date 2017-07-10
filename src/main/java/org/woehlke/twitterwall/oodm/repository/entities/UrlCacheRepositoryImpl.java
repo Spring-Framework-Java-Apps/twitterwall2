@@ -20,6 +20,7 @@ public class UrlCacheRepositoryImpl extends DomainRepositoryImpl<UrlCache> imple
     @Override
     public UrlCache findByUrl(String url) {
         String name = "UrlCache.findByUrl";
+        log.debug(name);
         try {
             TypedQuery<UrlCache> query = entityManager.createNamedQuery(name, UrlCache.class);
             query.setParameter("url", url);

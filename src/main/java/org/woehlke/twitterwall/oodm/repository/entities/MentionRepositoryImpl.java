@@ -20,6 +20,7 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
     @Override
     public Mention findByScreenName(String screenName) {
         String qname="Mention.findByScreenName";
+        log.debug(qname);
         try {
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("screenName", screenName);
@@ -35,6 +36,7 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
     @Override
     public Mention findByIdTwitterAndScreenName(Long idTwitter, String screenName) {
         String qname="Mention.findByIdTwitterAndScreenName";
+        log.debug(qname);
         try {
             TypedQuery<Mention> query = entityManager.createNamedQuery(qname, Mention.class);
             query.setParameter("idTwitter", idTwitter);

@@ -18,46 +18,61 @@ import java.util.List;
 public class TweetRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Tweet> implements TweetRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TweetRepositoryImpl.class);
-    
+
     @Value("${twitterwall.frontend.maxResults}")
     private int frontendMaxResults;
 
     @Override
     public List<Tweet> getLatestTweets() {
         String name = "Tweet.getLatestTweets";
+        log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setMaxResults(frontendMaxResults);
-        return query.getResultList();
+        List<Tweet> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<Tweet> getTweetsForHashTag(String hashtagText) {
         String name = "Tweet.getTweetsForHashTag";
+        log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("hashtagText", hashtagText);
-        return query.getResultList();
+        List<Tweet> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public long countTweetsForHashTag(String hashtagText) {
         String name = "Tweet.countTweetsForHashTag";
-        TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
+        log.debug(name);
+        TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         query.setParameter("hashtagText", hashtagText);
-        return this.getTweetsForHashTag(hashtagText).size();
+        long result = query.getSingleResult();
+        log.debug(name+"  "+result);
+        return result;
     }
-    
+
     @Override
     public List<Tweet> getTweetsForUser(User user) {
         String name = "Tweet.getTweetsForUser";
+        log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("user", user);
-        return query.getResultList();
+        List<Tweet> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<Long> getAllTwitterIds() {
         String name = "Tweet.getAllTwitterIds";
+        log.debug(name);
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
-        return query.getResultList();
+        List<Long> result  = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 }

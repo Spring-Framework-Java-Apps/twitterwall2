@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
@@ -53,20 +56,21 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final MentionService mentionService;
 
-    private final CountedEntitiesService countedEntitiesService;
+    private final TaskService taskService;
 
     @Autowired
-    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, UserService userService, TweetService tweetService, StoreUserProfile storeUserProfile, MentionService mentionService, CountedEntitiesService countedEntitiesService) {
+    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService) {
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
         this.mentionService = mentionService;
-        this.countedEntitiesService = countedEntitiesService;
+        this.taskService = taskService;
     }
 
     @Override
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles from Mentions: ";
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
+        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS);
         try {
             List<Mention> allPersMentions =  mentionService.getAll();
             for(Mention onePersMentions :allPersMentions){
@@ -126,9 +130,9 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             throw e;
         } finally {
             log.debug(msg +"---------------------------------------");
+            this.taskService.done(task);
         }
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
-        CountedEntities countedEntities = this.countedEntitiesService.countAll();
     }
 }

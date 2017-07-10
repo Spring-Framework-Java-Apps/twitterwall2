@@ -15,11 +15,12 @@ public class DomainRepositoryWithIdTwitterImpl<T extends DomainObjectWithIdTwitt
 
     @Override
     public T findByIdTwitter(long idTwitter,Class<T> myClass) {
-        String name = myClass.getSimpleName()+ ".findByIdTwitter";
+        String name = myClass.getSimpleName()+ ".findByIdTwitter ";
+        log.debug(name);
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
         query.setParameter("idTwitter", idTwitter);
         T result = query.getSingleResult();
-        log.debug("found: " + result.toString());
+        log.debug(name+"found: " + result.toString());
         return result;
     }
 }

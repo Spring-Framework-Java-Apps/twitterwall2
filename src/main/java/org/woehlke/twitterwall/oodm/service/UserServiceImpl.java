@@ -7,19 +7,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
-import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
-import org.woehlke.twitterwall.oodm.service.entities.MentionService;
-import org.woehlke.twitterwall.oodm.service.entities.UrlService;
-
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by tw on 11.06.17.

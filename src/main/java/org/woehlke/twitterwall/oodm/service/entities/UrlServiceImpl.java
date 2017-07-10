@@ -32,19 +32,30 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url store(Url domainObject) {
+        String name = "store "+domainObject.getUrl();
+        log.debug(name);
         if(domainObject == null){
-            throw new IllegalArgumentException("Url == null");
+            String msg = "Url == null";
+            log.debug(name+msg+domainObject.toString());
+            throw new IllegalArgumentException(msg);
         }
         String url = domainObject.getUrl();
         if(url == null){
-            throw new IllegalArgumentException("Url.getUrl() == null");
+            String msg = "Url.getUrl() == null";
+            log.debug(name+msg+domainObject.toString());
+            throw new IllegalArgumentException();
         }
+        Url result;
         try {
             Url urlPersistent = this.urlRepository.findByUrl(url);
             domainObject.setId(urlPersistent.getId());
-            return this.urlRepository.update(domainObject);
+            result = this.urlRepository.update(domainObject);
+            log.debug(name+result.toString());
+            return result;
         } catch (EmptyResultDataAccessException e) {
-            return this.urlRepository.persist(domainObject);
+            result = this.urlRepository.persist(domainObject);
+            log.debug(name+result.toString());
+            return result;
         }
     }
 
@@ -72,10 +83,13 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Url findByUrl(String url) {
+        String name = "findByUrl "+url+" ";
         if(url == null){
             throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
-        return this.urlRepository.findByUrl(url);
+        Url result = this.urlRepository.findByUrl(url);
+        log.debug(name+result.toString());
+        return result;
     }
 
 }

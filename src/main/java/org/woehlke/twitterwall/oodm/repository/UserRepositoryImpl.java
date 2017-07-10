@@ -24,6 +24,7 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
     @Override
     public User findByScreenName(String screenName) {
         String name = "User.findByScreenName";
+        log.debug(name);
         try {
             TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
             query.setParameter("screenName", screenName);
@@ -39,57 +40,79 @@ public class UserRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<User> 
     @Override
     public List<User> getTweetingUsers() {
         String name = "User.getTweetingUsers";
+        log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
-        return query.getResultList();
+        List<User> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<User> getNotYetFriendUsers() {
         String name = "User.getNotYetFriendUsers";
+        log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
-        return query.getResultList();
+        List<User> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<User> getNotYetOnList() {
         String name = "User.getNotYetOnList";
+        log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
-        return query.getResultList();
+        List<User> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<User> getOnList() {
         String name = "User.getOnList";
+        log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
-        return query.getResultList();
+        List<User> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<String> getAllDescriptions() {
         String name= "User.getAllDescriptions";
+        log.debug(name);
         TypedQuery<String> query = entityManager.createNamedQuery(name, String.class);
-        return query.getResultList();
+        List<String> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<Long> getAllTwitterIds() {
         String name ="User.getAllTwitterIds";
+        log.debug(name);
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
-        return query.getResultList();
+        List<Long> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public List<User> getUsersForHashTag(String hashtagText) {
         String name = "User.getUsersForHashTag";
+        log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         query.setParameter("hashtagText", hashtagText);
-        return query.getResultList();
+        List<User> result = query.getResultList();
+        log.debug(name+"  "+result.size());
+        return result;
     }
 
     @Override
     public long countUsersForHashTag(String hashtagText) {
         long usersForHashTag = 0L;
         String name = "User.countUsersForHashTag";
+        log.debug(name);
         try {
             TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
             query.setParameter("hashtagText", hashtagText);

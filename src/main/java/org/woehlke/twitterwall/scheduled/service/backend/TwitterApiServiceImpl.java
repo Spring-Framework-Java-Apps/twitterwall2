@@ -1,5 +1,7 @@
-package org.woehlke.twitterwall.backend;
+package org.woehlke.twitterwall.scheduled.service.backend;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.oodm.service.TweetServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.List;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterApiServiceImpl implements TwitterApiService {
+
+    private static final Logger log = LoggerFactory.getLogger(TwitterApiServiceImpl.class);
 
     @Value("${twitter.consumerKey}")
     private String twitterConsumerKey;
@@ -51,6 +56,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
         String msg = "findTweetsForSearchQuery: ";
+        log.debug(msg);
         List<Tweet> tweets = new ArrayList<>();
         try {
             List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
@@ -71,9 +77,13 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     @Override
     public Tweet findOneTweetById(long id) {
         String msg = "findOneTweetById: "+id;
+        log.debug(msg);
         try {
-            return getTwitterProxy().timelineOperations().getStatus(id);
+            Tweet result = getTwitterProxy().timelineOperations().getStatus(id);
+            log.debug(msg+result.getId());
+            return result;
         } catch (ResourceAccessException e) {
+            log.debug(msg+e.getMessage());
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         }
     }
@@ -81,9 +91,15 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
         String msg = "findOneTweetById: "+userProfileTwitterId;
+        log.debug(msg);
         try {
-            return getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+            TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+            log.debug(msg+result.getId());
+            log.debug(msg+result.getScreenName());
+            log.debug(msg+result.getName());
+            return result;
         } catch (ResourceAccessException e) {
+            log.debug(msg+e.getMessage());
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         }
     }
@@ -91,19 +107,28 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     @Override
     public TwitterProfile getUserProfileForScreenName(String screenName) {
         String msg = "getUserProfileForScreenName: "+screenName;
+        log.debug(msg);
         try {
-            return getTwitterProxy().userOperations().getUserProfile(screenName);
+            TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);log.debug(msg+result.getId());
+            log.debug(msg+result.getScreenName());
+            log.debug(msg+result.getName());
+            return result;
         } catch (ResourceAccessException e) {
+            log.debug(msg+e.getMessage());
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         }
     }
 
     @Override
     public List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName) {
-        String msg = "findUsersFromDefinedList: "+fetchUserListName;
+        String msg = "findUsersFromDefinedList: "+fetchUserListName+" ";
+        log.debug(msg);
         try {
-            return getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
+            List<TwitterProfile> result = getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
+            log.debug(msg+result.size());
+            return result;
         } catch (ResourceAccessException e) {
+            log.debug(msg+e.getMessage());
             throw new TwitterApiException(msg + " check your Network Connection!", e);
         }
     }

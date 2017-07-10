@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.oodm.service.UserService;

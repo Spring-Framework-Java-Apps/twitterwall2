@@ -5,13 +5,15 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.listener.application.TaskListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tw on 09.07.17.
  */
 @Entity
-@Table(name = "scheduled_task")
+@Table(name = "task")
 @NamedQueries({
     @NamedQuery(
         name = "Task.findById",
@@ -35,8 +37,14 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Column
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private TaskType taskType;
+
+    @Enumerated(EnumType.STRING)
+    private TaskStatus taskStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_started",nullable = false)
@@ -45,6 +53,10 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_finished")
     private Date timeFinished;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_history", joinColumns = @JoinColumn(name = "id"))
+    protected List<String> history = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
@@ -72,6 +84,15 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     })
     private CountedEntities countedEntitiesAtFinish;
 
+    public Task() {
+        taskStatus = TaskStatus.READY;
+    }
+
+    public Task(String description,TaskType taskType) {
+        this.taskType = taskType;
+        this.description = description;
+        taskStatus = TaskStatus.READY;
+    }
 
     public void fetchUsersFromDefinedUserList(){
         this.taskType = TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST;
@@ -153,6 +174,34 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
         this.countedEntitiesAtFinish = countedEntitiesAtFinish;
     }
 
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<String> history) {
+        this.history = history;
+    }
+
+    public void addHistory(String history) {
+        this.history.add(history);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -184,4 +233,29 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
             ", countedEntitiesAtFinish=" + countedEntitiesAtFinish.toString() +
             '}';
     }
+
+    public void ready() {
+        taskStatus = TaskStatus.READY;
+        this.timeStarted = new Date();
+        history.add("status changed: "+taskStatus.name());
+    }
+
+    public void start() {
+        taskStatus = TaskStatus.RUNNING;
+        this.timeStarted = new Date();
+        history.add("status changed: "+taskStatus.name());
+    }
+
+    public void done() {
+        taskStatus = TaskStatus.FINISHED;
+        this.timeFinished = new Date();
+        history.add("status changed: "+taskStatus.name());
+    }
+
+    public void error() {
+        taskStatus = TaskStatus.ERROR;
+        this.timeFinished = new Date();
+        history.add("status changed: "+taskStatus.name());
+    }
+
 }

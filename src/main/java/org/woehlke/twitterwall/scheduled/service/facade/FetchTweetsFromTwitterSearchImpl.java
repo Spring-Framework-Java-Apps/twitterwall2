@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -42,15 +45,15 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
 
     private final TwitterApiService twitterApiService;
 
-    private final CountedEntitiesService countedEntitiesService;
-
     private final StoreOneTweet storeOneTweet;
 
+    private final TaskService taskService;
+
     @Autowired
-    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, CountedEntitiesService countedEntitiesService, StoreOneTweet storeOneTweet) {
+    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, TaskService taskService) {
         this.twitterApiService = twitterApiService;
-        this.countedEntitiesService = countedEntitiesService;
         this.storeOneTweet = storeOneTweet;
+        this.taskService = taskService;
     }
 
     @Override
@@ -59,6 +62,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
         log.debug(msg+"---------------------------------------");
         log.debug(msg+ "fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
+        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH);
         try {
             int loopId = 0;
             for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
@@ -81,6 +85,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task.error();
             throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
@@ -89,6 +94,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task.error();
             throw e;
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
@@ -97,10 +103,11 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task.error();
             throw e;
         } finally {
             log.debug(msg+"---------------------------------------");
+            taskService.done(task);
         }
-        CountedEntities countedEntities = this.countedEntitiesService.countAll();
     }
 }

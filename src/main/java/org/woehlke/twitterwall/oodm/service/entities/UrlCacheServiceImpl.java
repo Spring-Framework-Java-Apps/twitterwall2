@@ -30,8 +30,10 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache) {
-        log.debug("UrlCache.store: try to persist: "+urlCache.toString());
-        return this.urlCacheRepository.persist(urlCache);
+        String name = "UrlCache.store: store";
+        UrlCache result = this.urlCacheRepository.persist(urlCache);
+        log.debug(name+result);
+        return result;
     }
 
     @Override

@@ -8,7 +8,10 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
 
@@ -41,15 +44,19 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
 
     private final TwitterApiService twitterApiService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService) {
+    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService) {
         this.storeUserProfileForUserList = storeUserProfileForUserList;
         this.twitterApiService = twitterApiService;
+        this.taskService = taskService;
     }
 
     @Override
     public void fetchUsersFromDefinedUserList() {
         String msg = "update Tweets: ";
+        Task task = taskService.create(msg, TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
@@ -57,5 +64,6 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         for(TwitterProfile twitterProfile:userProfiles) {
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile);
         }
+        taskService.done(task);
     }
 }

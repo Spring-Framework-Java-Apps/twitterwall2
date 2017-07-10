@@ -20,6 +20,7 @@ public class TaskRepositoryImpl extends DomainRepositoryImpl<Task> implements Ta
     @Override
     public Task findById(long id) {
         String name = "Task.findById";
+        log.debug(name);
         try {
             TypedQuery<Task> query = entityManager.createNamedQuery(name, Task.class);
             query.setParameter("id", id);

@@ -6,7 +6,7 @@ import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.backend.TwitterUrlService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;

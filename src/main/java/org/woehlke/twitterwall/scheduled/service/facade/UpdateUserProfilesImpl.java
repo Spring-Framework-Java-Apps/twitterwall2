@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
@@ -53,13 +55,16 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, MentionService mentionService, CountedEntitiesService countedEntitiesService) {
+    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService) {
         this.storeUserProfile = storeUserProfile;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
         this.mentionService = mentionService;
         this.countedEntitiesService = countedEntitiesService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -67,6 +72,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         String msg = "update User Profiles From ProfileId: ";
         log.debug(msg+"---------------------------------------");
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
+        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
         try {
             List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
             for (Long userProfileTwitterId : userProfileTwitterIds) {
@@ -123,9 +129,9 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             throw e;
         } finally {
             log.debug(msg +"---------------------------------------");
+            this.taskService.done(task);
         }
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
-        CountedEntities countedEntities = this.countedEntitiesService.countAll();
     }
 }

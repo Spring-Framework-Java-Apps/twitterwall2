@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.backend;
+package org.woehlke.twitterwall.scheduled.service.backend;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class TwitterUrlServiceTest {
 
     @Autowired
     private UrlServiceTest urlServiceTest;
-    
+
     @Autowired
     private TwitterUrlService twitterUrlService;
 
@@ -68,5 +68,5 @@ public class TwitterUrlServiceTest {
         }
         log.info("------------------------------------");
     }
-    
+
 }

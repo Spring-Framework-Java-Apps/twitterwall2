@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.backend;
+package org.woehlke.twitterwall.scheduled.service.backend;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.ClientProtocolException;
@@ -35,6 +35,8 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     @Override
     public Url fetchTransientUrl(String urlSrc) {
+        String msg = "fetchTransientUrl "+urlSrc+" ";
+        log.debug(msg);
         Url newUrl = null;
         try {
             String display;
@@ -59,6 +61,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
         } catch (IllegalArgumentException e){
             log.warn(e.getMessage());
         } catch (URISyntaxException e) {
+            log.warn(e.getMessage());
         } catch (IOException e) {
             log.warn(e.getMessage());
             if(newUrl != null){
@@ -70,8 +73,10 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             log.warn(ex.getMessage());
         }
         if(newUrl == null){
+            log.warn(msg+newUrl);
             throw new FetchUrlException(urlSrc);
         } else {
+            log.debug(msg+newUrl);
             return newUrl;
         }
     }

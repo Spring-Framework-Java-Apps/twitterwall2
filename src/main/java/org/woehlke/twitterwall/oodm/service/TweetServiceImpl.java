@@ -95,12 +95,19 @@ public class TweetServiceImpl implements TweetService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet store(Tweet tweet) {
+        String name = "try to store: "+tweet.getIdTwitter()+" ";
+        log.debug(name);
+        Tweet result;
         try {
             Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
             tweet.setId(tweetPersistent.getId());
-            return tweetRepository.update(tweet);
+            result = tweetRepository.update(tweet);
+            log.debug(name+result.toString());
+            return result;
         } catch (EmptyResultDataAccessException e) {
-            return tweetRepository.persist(tweet);
+            result = tweetRepository.persist(tweet);
+            log.debug(name+result.toString());
+            return result;
         }
     }
 }

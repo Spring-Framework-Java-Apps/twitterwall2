@@ -25,6 +25,7 @@ public class MediaRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Media
     @Override
     public Media findByUrl(String url) {
         String name = "Media.findByUrl";
+        log.debug(name);
         try {
             TypedQuery<Media> query = entityManager.createNamedQuery(name, Media.class);
             query.setParameter("url", url);

@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
@@ -51,12 +53,15 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, StoreOneTweet storeOneTweet, CountedEntitiesService countedEntitiesService) {
+    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, MentionService mentionService, StoreOneTweet storeOneTweet, CountedEntitiesService countedEntitiesService, TaskService taskService) {
         this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
         this.storeOneTweet = storeOneTweet;
         this.countedEntitiesService = countedEntitiesService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -65,6 +70,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
+        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
         try {
             int loopId = 0;
             List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
@@ -138,7 +144,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
             throw e;
         } finally {
             log.debug(msg + "---------------------------------------");
+            this.taskService.done(task);
         }
-        CountedEntities countedEntities = this.countedEntitiesService.countAll();
     }
 }

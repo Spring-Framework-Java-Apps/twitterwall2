@@ -19,6 +19,7 @@ public class UrlRepositoryImpl extends DomainRepositoryImpl<Url> implements UrlR
     @Override
     public Url findByUrl(String url) {
         String name = "Url.findByUrl";
+        log.debug(name);
         try {
             TypedQuery<Url> query = entityManager.createNamedQuery(name, Url.class);
             query.setParameter("url", url);
