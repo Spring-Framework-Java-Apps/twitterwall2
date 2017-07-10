@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_PATTERN" value="%d %5p %50.50c{50} - %m%n"/>
-    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-/tmp/}app.log}"/>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-        </encoder>
-    </appender>
-    <appender name="FILE"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-        </encoder>
-        <file>${LOG_FILE}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
-        </rollingPolicy>
-        <triggeringPolicy
-            class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
-    </appender>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.woehlke.twitterwall.oodm.listener" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.repositor" level="INFO" />
     <logger name="org.woehlke.twitterwall.oodm.service" level="INFO" />
@@ -37,8 +17,4 @@
     <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="INFO" />
     <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="INFO" />
     <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="INFO" />
-    <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-    </root>
 </configuration>

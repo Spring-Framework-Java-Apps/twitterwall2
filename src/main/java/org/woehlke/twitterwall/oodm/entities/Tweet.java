@@ -40,7 +40,7 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
-                query="select t from Tweet as t join t.tags tag WHERE tag.text=:hashtagText"
+                query="select count(t) from Tweet as t join t.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name="Tweet.count",
