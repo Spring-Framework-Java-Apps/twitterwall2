@@ -66,7 +66,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
             log.debug(msg+"found: "+tickerSymbol.toString());
             tickerSymbolPers.setUrl(tickerSymbol.getUrl());
-            tickerSymbolPers.setIndices(tickerSymbol.getIndices());
+            //tickerSymbolPers.setIndices(tickerSymbol.getIndices());
             tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
             log.debug(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.update(tickerSymbolPers);

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +46,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             String expanded;
             int[] indices = {};
             long connTimeToLive = 30L;
-            CloseableHttpClient httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(connTimeToLive,TimeUnit.SECONDS).build();
+            CloseableHttpClient httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(connTimeToLive, TimeUnit.SECONDS).build();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
             CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
@@ -56,6 +57,9 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             expanded = location.toExternalForm();
             newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
+        } catch (UnknownHostException e){
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (ClientProtocolException e) {
             e.printStackTrace();
             log.warn(msg+e.getMessage());

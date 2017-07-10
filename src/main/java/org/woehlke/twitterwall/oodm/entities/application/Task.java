@@ -230,18 +230,28 @@ public class Task implements DomainObject<Task> {
 
     @Override
     public String toString() {
+        String cef = "null";
+        if(countedEntitiesAtFinish != null){
+            cef = countedEntitiesAtFinish.toString();
+        }
         return "Task{" +
             "id=" + id +
             ", taskType=" + taskType +
             ", timeStarted=" + timeStarted +
             ", timeFinished=" + timeFinished +
             ", countedEntitiesAtStart=" + countedEntitiesAtStart.toString() +
-            ", countedEntitiesAtFinish=" + countedEntitiesAtFinish.toString() +
+            ", countedEntitiesAtFinish=" + cef +
             '}';
     }
 
+    public void event(String description,TaskStatus newTaskStatus) {
+        TaskHistory event = new TaskHistory(description,taskStatus,newTaskStatus);
+        taskStatus = TaskStatus.READY;
+        history.add(event);
+    }
+
     public void ready() {
-        TaskHistory event = new TaskHistory("event",taskStatus,TaskStatus.READY);
+        TaskHistory event = new TaskHistory("ready",taskStatus,TaskStatus.READY);
         taskStatus = TaskStatus.READY;
         history.add(event);
     }

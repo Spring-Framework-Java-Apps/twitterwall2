@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.TickerSymbolListener;
 
 import javax.persistence.*;
@@ -44,12 +46,22 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name = "ticker_symbol")
     private String tickerSymbol;
 
     @Column
     private String url;
 
+    /*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tickersymbol_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -59,10 +71,10 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         for(Integer index: indices){
             this.indices.add(index);
         }
-    }
+    }*/
 
     public TickerSymbol(String tickerSymbol, String url, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
     }
@@ -100,12 +112,28 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.id = id;
     }
 
-    public List<Integer> getIndices() {
-        return indices;
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -135,18 +163,19 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
             myIndieces.append(index.toString());
             myIndieces.append(", ");
         }
-        myIndieces.append(" ]");
+        myIndieces.append(" ]");*/
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
                 ", url='" + url + '\'' +
-                ", indices=" + myIndieces.toString() +
+                //", indices=" + myIndieces.toString() +
                 '}';
     }
 }

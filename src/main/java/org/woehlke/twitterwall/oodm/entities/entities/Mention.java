@@ -1,9 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
@@ -52,6 +54,15 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo  = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name = "id_twitter")
     private long idTwitter;
 
@@ -67,7 +78,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "name")
     private String name;
 
-
+/*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -77,10 +88,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         for(Integer index: indices){
             this.indices.add(index);
         }
-    }
+    }*/
 
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -126,13 +137,37 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     public void setName(String name) {
         this.name = name;
     }
-
+/*
     public List<Integer> getIndices() {
         return indices;
     }
 
     public void setIndices(List<Integer> indices) {
         this.indices = indices;
+    }
+*/
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -162,19 +197,20 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
 
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
             myIndieces.append(index.toString());
             myIndieces.append(", ");
         }
-        myIndieces.append(" ]");
+        myIndieces.append(" ]");*/
         return "Mention{" +
             "id=" + id +
             ", idTwitter=" + idTwitter +
             ", screenName='" + screenName + '\'' +
             ", name='" + name + '\'' +
-            ", indices=" + myIndieces.toString() +
+            //", indices=" + myIndieces.toString() +
             '}';
     }
 }

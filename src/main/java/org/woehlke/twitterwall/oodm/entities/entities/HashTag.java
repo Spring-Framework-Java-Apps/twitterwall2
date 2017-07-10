@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.HashTagListener;
 
 import javax.persistence.*;
@@ -40,6 +42,15 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
@@ -52,6 +63,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Column(nullable = false)
     private String text;
 
+    /*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "hashtag_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -62,6 +74,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
             this.indices.add(index);
         }
     }
+    */
 
     public Long getId() {
         return id;
@@ -77,7 +90,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public HashTag(String text, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.text = text;
     }
 
@@ -92,13 +105,28 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
-
-    public List<Integer> getIndices() {
-        return indices;
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -126,6 +154,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
@@ -133,10 +162,11 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
             myIndieces.append(", ");
         }
         myIndieces.append(" ]");
+        */
         return "HashTag{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                  ", indices=" + myIndieces.toString() +
+                  //", indices=" + myIndieces.toString() +
                 '}';
     }
 }

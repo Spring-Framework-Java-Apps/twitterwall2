@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.TweetListener;
 
@@ -67,6 +69,15 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
+
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
@@ -337,15 +348,21 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.favoriteCount = favoriteCount;
     }
 
-    /*
-    public Entities getEntities() {
-        return entities;
+    public Task getCreatedBy() {
+        return createdBy;
     }
 
-    public void setEntities(Entities entities) {
-        this.entities = entities;
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
     }
-    */
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 
     public void setIdTwitter(long idTwitter) {
         this.idTwitter = idTwitter;
@@ -363,7 +380,13 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.createdAt = createdAt;
     }
 
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
 
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
 
     public Set<Url> getUrls() {
         return urls;

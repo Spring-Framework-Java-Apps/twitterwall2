@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -87,6 +89,15 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
+
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
 
     @Column(name="id_twitter",nullable = false)
     private long idTwitter;
@@ -585,7 +596,6 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.createdDate = createdDate;
     }
 
-
     public boolean isOnDefinedUserList() {
         return onDefinedUserList;
     }
@@ -596,6 +606,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public Set<Url> getUrls() {
         return urls;
+    }
+
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
     }
 
     public void setUrls(Set<Url> urls) {

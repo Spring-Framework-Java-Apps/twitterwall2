@@ -1,6 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlCacheListener;
 
 import javax.persistence.*;
@@ -37,6 +39,15 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(length=2048)
     private String expanded;
 
@@ -70,6 +81,30 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override

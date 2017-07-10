@@ -63,7 +63,7 @@ public class MediaServiceImpl implements MediaService {
             mediaPers.setDisplay(media.getDisplay());
             mediaPers.setExpanded(media.getExpanded());
             mediaPers.setIdTwitter(media.getIdTwitter());
-            mediaPers.setIndices(media.getIndices());
+            //mediaPers.setIndices(media.getIndices());
             mediaPers.setMediaHttp(media.getMediaHttp());
             mediaPers.setMediaHttps(media.getMediaHttps());
             mediaPers.setMediaType(media.getMediaType());
