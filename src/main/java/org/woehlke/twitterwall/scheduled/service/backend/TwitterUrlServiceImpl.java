@@ -36,6 +36,9 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
     public Url fetchTransientUrl(String urlSrc) {
         String msg = "fetchTransientUrl "+urlSrc+" ";
         log.debug(msg);
+        if(urlSrc == null) {
+            throw new IllegalArgumentException(msg);
+        }
         Url newUrl = null;
         try {
             String display;
@@ -54,29 +57,21 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
         } catch (ClientProtocolException e) {
-            log.warn(e.getMessage());
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (NullPointerException e) {
-            log.warn(e.getMessage());
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (IllegalArgumentException e){
-            log.warn(e.getMessage());
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (URISyntaxException e) {
-            log.warn(e.getMessage());
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (IOException e) {
-            log.warn(e.getMessage());
-            if(newUrl != null){
-                return newUrl;
-            }
-        } catch (RuntimeException ex) {
-            log.warn(ex.getMessage());
-        } catch (Exception ex) {
-            log.warn(ex.getMessage());
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         }
-        if(newUrl == null){
-            log.warn(msg+newUrl);
-            throw new NullPointerException(urlSrc);
-        } else {
-            log.debug(msg+newUrl);
-            return newUrl;
-        }
+        return newUrl;
     }
 }

@@ -56,6 +56,7 @@ public class TwitterUrlServiceTest {
         for(Url exprected:testData){
                 log.info(msg+"expected: " + exprected.toString());
                 Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl());
+                Assert.assertNotNull(foundUrl);
                 log.info(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());
                 Assert.assertEquals(exprected.getDisplay(),foundUrl.getDisplay());

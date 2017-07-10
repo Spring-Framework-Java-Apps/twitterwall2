@@ -54,9 +54,15 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
         for (Url myUrl : user.getUrls()) {
-            urls.add(createPersistentUrl.getPersistentUrlFor(myUrl.getUrl()));
+            Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl());
+            if(urlPers != null){
+                urls.add(urlPers);
+            }
         }
-        urls.add(createPersistentUrl.getPersistentUrlFor(user.getUrl()));
+        Url urlPers = createPersistentUrl.getPersistentUrlFor(user.getUrl());
+        if(urlPers != null){
+            urls.add(urlPers);
+        }
         for (HashTag hashTag : user.getTags()) {
             hashTags.add(hashTagService.store(hashTag));
         }

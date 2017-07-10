@@ -73,30 +73,35 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     return newUrl;
                 } catch (EmptyResultDataAccessException e) {
                     UrlCache urlCache = new UrlCache();
-                        log.debug(msg + " try to fetchTransientUrl");
-                        Url myUrl = twitterUrlService.fetchTransientUrl(url);
+                    log.debug(msg + " try to fetchTransientUrl");
+                    Url myUrl = twitterUrlService.fetchTransientUrl(url);
+                    if(myUrl == null) {
+                        log.debug(msg + "nothing found by fetchTransientUrl");
+                        return null;
+                    } else {
                         log.debug(msg + " found by fetchTransientUrl: " + myUrl);
                         urlCache.setUrl(myUrl.getUrl());
                         urlCache.setExpanded(myUrl.getExpanded());
                         log.debug(msg + " try to persist: " + urlCache.toString());
                         if (urlCache.isUrlAndExpandedTheSame()) {
+                            log.debug(msg + " not persisted: " + urlCache.toString());
+                        } else {
                             urlCache = urlCacheRepository.persist(urlCache);
                             log.debug(msg + " persisted: " + urlCache.toString());
-                        } else {
-                            log.debug(msg + " not persisted: " + urlCache.toString());
                         }
-                    String displayUrl = urlCache.getExpanded();
-                    try {
-                        URL myURL = new URL(urlCache.getExpanded());
-                        displayUrl = myURL.getHost();
-                    } catch (MalformedURLException exe) {
-                        log.warn(exe.getMessage());
+                        String displayUrl = myUrl.getExpanded();
+                        try {
+                            URL newURL = new URL(myUrl.getExpanded());
+                            displayUrl = newURL.getHost();
+                        } catch (MalformedURLException exe) {
+                            log.warn(exe.getMessage());
+                        }
+                        Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
+                        log.debug(msg+" try to persist: "+newUrl.toString());
+                        newUrl =this.urlRepository.persist(newUrl);
+                        log.debug(msg+" persisted: "+newUrl.toString());
+                        return newUrl;
                     }
-                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
-                    log.debug(msg+" try to persist: "+newUrl.toString());
-                    newUrl =this.urlRepository.persist(newUrl);
-                    log.debug(msg+" persisted: "+newUrl.toString());
-                    return newUrl;
                 }
             }
         }

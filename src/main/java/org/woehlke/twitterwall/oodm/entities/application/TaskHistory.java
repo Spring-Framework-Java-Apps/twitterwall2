@@ -32,6 +32,9 @@ public class TaskHistory implements Comparable<TaskHistory>,Serializable {
     @Column(name="time_event",nullable = false)
     private Date timeEvent;
 
+    public TaskHistory() {
+    }
+
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow) {
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
