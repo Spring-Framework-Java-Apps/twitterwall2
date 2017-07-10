@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
-import org.woehlke.twitterwall.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
@@ -74,7 +73,6 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     return newUrl;
                 } catch (EmptyResultDataAccessException e) {
                     UrlCache urlCache = new UrlCache();
-                    try {
                         log.debug(msg + " try to fetchTransientUrl");
                         Url myUrl = twitterUrlService.fetchTransientUrl(url);
                         log.debug(msg + " found by fetchTransientUrl: " + myUrl);
@@ -87,11 +85,6 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         } else {
                             log.debug(msg + " not persisted: " + urlCache.toString());
                         }
-                    } catch (FetchUrlException fue)  {
-                        log.debug(msg+fue.getMessage());
-                        urlCache.setUrl(url);
-                        urlCache.setExpanded(url);
-                    }
                     String displayUrl = urlCache.getExpanded();
                     try {
                         URL myURL = new URL(urlCache.getExpanded());

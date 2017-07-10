@@ -14,7 +14,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.exceptions.remote.FetchUrlException;
 import org.woehlke.twitterwall.test.UrlServiceTest;
 
 import java.util.List;
@@ -55,16 +54,13 @@ public class TwitterUrlServiceTest {
         log.info(msg);
         List<Url> testData = urlServiceTest.getTestData();
         for(Url exprected:testData){
-            try {
                 log.info(msg+"expected: " + exprected.toString());
                 Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl());
                 log.info(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());
                 Assert.assertEquals(exprected.getDisplay(),foundUrl.getDisplay());
                 Assert.assertEquals(exprected.getExpanded(), foundUrl.getExpanded());
-            } catch (FetchUrlException e){
-                log.error(msg+e.getMessage());
-            }
+
         }
         log.info("------------------------------------");
     }
