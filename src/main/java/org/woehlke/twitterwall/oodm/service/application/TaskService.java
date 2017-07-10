@@ -12,4 +12,6 @@ public interface TaskService extends DomainService<Task> {
     Task create(String msg,TaskType type);
 
     Task done(Task task);
+
+    Task error(Task task, Exception e);
 }

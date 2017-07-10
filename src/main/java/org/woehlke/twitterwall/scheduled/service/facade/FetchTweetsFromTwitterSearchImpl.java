@@ -14,8 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 
 import javax.persistence.NoResultException;
@@ -26,7 +24,7 @@ import java.util.Date;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterSearch {
 
 
@@ -57,6 +55,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets from Twitter: ";
         log.debug(msg+"---------------------------------------");
@@ -85,7 +84,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            task.error();
+            task = taskService.error(task,e);
             throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
@@ -94,7 +93,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            task.error();
+            task = taskService.error(task,e);
             throw e;
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
@@ -103,7 +102,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
-            task.error();
+            task = taskService.error(task,e);
             throw e;
         } finally {
             log.debug(msg+"---------------------------------------");

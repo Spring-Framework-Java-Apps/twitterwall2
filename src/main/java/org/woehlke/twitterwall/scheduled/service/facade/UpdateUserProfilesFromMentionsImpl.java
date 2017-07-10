@@ -16,10 +16,7 @@ import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.TweetService;
-import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
@@ -109,8 +106,10 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 t = t.getCause();
             }
             log.error(msg + " check your Network Connection!");
+            task = taskService.error(task,e);
             throw e;
         } catch (RateLimitExceededException e) {
+            task = taskService.error(task,e);
             throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
@@ -119,6 +118,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task = taskService.error(task,e);
             throw e;
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
@@ -127,6 +127,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task = taskService.error(task,e);
             throw e;
         } finally {
             log.debug(msg +"---------------------------------------");

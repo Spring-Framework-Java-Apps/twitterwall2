@@ -117,6 +117,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 t = t.getCause();
             }
             log.error(msg + " check your Network Connection!");
+            task = taskService.error(task,e);
             throw e;
         } catch (RateLimitExceededException e) {
             log.warn(msg + e.getMessage());
@@ -125,6 +126,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task = taskService.error(task,e);
             throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
@@ -133,6 +135,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task = taskService.error(task,e);
             throw e;
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
@@ -141,6 +144,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 log.warn(msg + t.getMessage());
                 t = t.getCause();
             }
+            task = taskService.error(task,e);
             throw e;
         } finally {
             log.debug(msg + "---------------------------------------");

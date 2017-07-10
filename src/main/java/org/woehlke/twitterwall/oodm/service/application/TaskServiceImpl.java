@@ -82,4 +82,14 @@ public class TaskServiceImpl implements TaskService {
         task = taskRepository.update(task);
         return task;
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+    public Task error(Task task,Exception e) {
+        CountedEntities countedEntities = this.countedEntitiesService.countAll();
+        task.setCountedEntitiesAtFinish(countedEntities);
+        task.error(e);
+        task = taskRepository.update(task);
+        return task;
+    }
 }

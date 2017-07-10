@@ -54,9 +54,11 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     @Column(name="time_finished")
     private Date timeFinished;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "task_history", joinColumns = @JoinColumn(name = "id"))
-    protected List<String> history = new ArrayList<>();
+    //@ElementCollection(fetch = FetchType.EAGER)
+    //@CollectionTable(name = "task_history", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name="task_id")
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
+    protected List<TaskHistory> history = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
@@ -190,15 +192,15 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
         this.description = description;
     }
 
-    public List<String> getHistory() {
+    public List<TaskHistory> getHistory() {
         return history;
     }
 
-    public void setHistory(List<String> history) {
+    public void setHistory(List<TaskHistory> history) {
         this.history = history;
     }
 
-    public void addHistory(String history) {
+    public void addHistory(TaskHistory history) {
         this.history.add(history);
     }
 
@@ -235,27 +237,31 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     }
 
     public void ready() {
+        TaskHistory event = new TaskHistory("event",taskStatus,TaskStatus.READY);
         taskStatus = TaskStatus.READY;
-        this.timeStarted = new Date();
-        history.add("status changed: "+taskStatus.name());
+        history.add(event);
     }
 
     public void start() {
+        TaskHistory event = new TaskHistory("start",taskStatus,TaskStatus.RUNNING);
         taskStatus = TaskStatus.RUNNING;
         this.timeStarted = new Date();
-        history.add("status changed: "+taskStatus.name());
+        history.add(event);
     }
 
     public void done() {
+        TaskHistory event = new TaskHistory("done",taskStatus,TaskStatus.FINISHED);
         taskStatus = TaskStatus.FINISHED;
         this.timeFinished = new Date();
-        history.add("status changed: "+taskStatus.name());
+        history.add(event);
     }
 
-    public void error() {
-        taskStatus = TaskStatus.ERROR;
+    public void error(Exception e) {
+        TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.ERROR);
         this.timeFinished = new Date();
-        history.add("status changed: "+taskStatus.name());
+        history.add(event);
+        this.timeFinished = new Date();
+        taskStatus = TaskStatus.ERROR;
     }
 
 }
