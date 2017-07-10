@@ -29,13 +29,11 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HashTag create(HashTag tag) {
         return this.hashTagRepository.persist(tag);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HashTag update(HashTag tag) {
         return this.hashTagRepository.update(tag);
     }
@@ -56,7 +54,6 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HashTag store(HashTag hashTag) {
         try {
             HashTag tagPers = this.hashTagRepository.findByText(hashTag.getText());

@@ -23,7 +23,6 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedUserList {
 
 

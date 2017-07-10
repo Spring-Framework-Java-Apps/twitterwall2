@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskType;
@@ -24,9 +22,7 @@ import java.util.Date;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterSearch {
-
 
     private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
 
@@ -55,7 +51,6 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets from Twitter: ";
         log.debug(msg+"---------------------------------------");
@@ -85,7 +80,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 t = t.getCause();
             }
             task = taskService.error(task,e);
-            throw e;
+            //throw e;
         } catch (RuntimeException e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -94,7 +89,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 t = t.getCause();
             }
             task = taskService.error(task,e);
-            throw e;
+            //throw e;
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
@@ -103,7 +98,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 t = t.getCause();
             }
             task = taskService.error(task,e);
-            throw e;
+            //throw e;
         } finally {
             log.debug(msg+"---------------------------------------");
             taskService.done(task);

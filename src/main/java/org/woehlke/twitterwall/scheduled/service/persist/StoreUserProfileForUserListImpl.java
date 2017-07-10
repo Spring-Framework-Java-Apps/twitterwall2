@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserList {
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileForUserListImpl.class);
@@ -34,7 +34,6 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUserProfileForUserList(TwitterProfile twitterProfile) {
         String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
         User user = userTransformService.transform(twitterProfile);

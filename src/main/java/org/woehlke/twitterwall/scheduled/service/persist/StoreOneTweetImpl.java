@@ -13,7 +13,7 @@ import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetImpl implements StoreOneTweet {
 
     private static final Logger log = LoggerFactory.getLogger(StoreOneTweetImpl.class);
@@ -29,7 +29,6 @@ public class StoreOneTweetImpl implements StoreOneTweet {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet) {
         Tweet tweet = tweetTransformService.transform(myTweet);
         tweet = storeOneTweetPerform.storeOneTweetPerform(tweet);

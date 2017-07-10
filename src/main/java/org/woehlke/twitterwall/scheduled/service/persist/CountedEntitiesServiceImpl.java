@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.oodm.service.entities.*;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);

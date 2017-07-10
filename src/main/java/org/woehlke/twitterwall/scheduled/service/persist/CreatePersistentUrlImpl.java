@@ -21,7 +21,7 @@ import java.net.URL;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
@@ -40,7 +40,6 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url getPersistentUrlFor(String url) {
         String msg = "Url.getPersistentUrlFor url="+url+" ";
         int indices[] = {};

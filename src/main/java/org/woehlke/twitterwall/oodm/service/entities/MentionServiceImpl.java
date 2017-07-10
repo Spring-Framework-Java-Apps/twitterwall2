@@ -30,7 +30,6 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention create(Mention mention) {
         return this.mentionRepository.persist(mention);
     }
@@ -41,7 +40,6 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention update(Mention mention) {
         return this.mentionRepository.update(mention);
     }
@@ -57,7 +55,6 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention store(Mention mention) {
         log.debug("try to store Mention: "+mention.toString());
         try {

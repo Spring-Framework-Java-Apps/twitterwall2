@@ -2,19 +2,20 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.woehlke.twitterwall.oodm.listener" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.repositor" level="INFO" />
-    <logger name="org.woehlke.twitterwall.oodm.service" level="INFO" />
-    <logger name="org.woehlke.twitterwall.oodm.entities" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.repositor" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.rest" level="INFO" />
     <logger name="org.woehlke.twitterwall.frontend.model" level="INFO" />
     <logger name="org.woehlke.twitterwall.frontend.handler" level="INFO" />
     <logger name="org.woehlke.twitterwall.frontend.controller" level="INFO" />
     <logger name="org.woehlke.twitterwall.frontend.common" level="INFO" />
     <logger name="org.woehlke.twitterwall.frontend.application" level="INFO" />
-    <logger name="org.woehlke.twitterwall.exceptions.remote" level="INFO" />
-    <logger name="org.woehlke.twitterwall.exceptions.common" level="INFO" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="INFO" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="INFO" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="INFO" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="INFO" />
+    <logger name="org.woehlke.twitterwall.exceptions.remote" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.exceptions.common" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall" level="DEBUG" />
 </configuration>

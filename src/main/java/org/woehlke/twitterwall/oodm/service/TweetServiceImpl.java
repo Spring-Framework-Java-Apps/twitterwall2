@@ -30,13 +30,11 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet create(Tweet myTweet) {
         return tweetRepository.persist(myTweet);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet update(Tweet myTweet) {
         return tweetRepository.update(myTweet);
     }
@@ -93,7 +91,6 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Tweet store(Tweet tweet) {
         String name = "try to store: "+tweet.getIdTwitter()+" ";
         log.debug(name);

@@ -23,7 +23,7 @@ import java.util.Set;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProcessImpl implements StoreUserProcess {
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProcessImpl.class);
@@ -48,7 +48,6 @@ public class StoreUserProcessImpl implements StoreUserProcess {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User storeUserProcess(User user){
         String msg = "User.storeUserProcess ";
         Set<Url> urls = new LinkedHashSet<>();

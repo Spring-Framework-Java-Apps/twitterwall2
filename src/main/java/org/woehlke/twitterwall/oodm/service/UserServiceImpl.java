@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User store(User user) {
         try {
             User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
@@ -40,13 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User create(User user) {
         return userRepository.persist(user);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public User update(User user) {
         return userRepository.update(user);
     }

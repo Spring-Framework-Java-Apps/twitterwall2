@@ -29,7 +29,6 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesImpl.class);
@@ -51,19 +50,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private final UserService userService;
 
-    private final MentionService mentionService;
-
-    private final CountedEntitiesService countedEntitiesService;
-
     private final TaskService taskService;
 
     @Autowired
-    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService) {
+    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService) {
         this.storeUserProfile = storeUserProfile;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
-        this.mentionService = mentionService;
-        this.countedEntitiesService = countedEntitiesService;
         this.taskService = taskService;
     }
 
@@ -101,6 +94,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                 }
             }
         } catch (ResourceAccessException e) {
+            this.taskService.error(task,e);
             log.warn(msg + e.getMessage());
             Throwable t = e.getCause();
             while(t != null){
@@ -108,25 +102,11 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                 t = t.getCause();
             }
             log.error(msg + " check your Network Connection!");
-            throw e;
+            //throw e;
         } catch (RateLimitExceededException e) {
-            throw e;
-        } catch (RuntimeException e) {
+            this.taskService.error(task,e);
             log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            throw e;
-        } catch (Exception e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            throw e;
+            //throw e;
         } finally {
             log.debug(msg +"---------------------------------------");
             this.taskService.done(task);

@@ -17,7 +17,7 @@ import java.util.*;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UrlServiceImpl implements UrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
@@ -30,7 +30,6 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url store(Url domainObject) {
         String name = "store "+domainObject.getUrl();
         log.debug(name);
@@ -60,13 +59,11 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url create(Url url) {
         return this.urlRepository.persist(url);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Url update(Url url) {
         return this.urlRepository.update(url);
     }

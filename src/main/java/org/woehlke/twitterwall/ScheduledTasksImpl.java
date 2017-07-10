@@ -94,7 +94,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
-                log.error(msg + e.getMessage());
+                log.warn(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
@@ -102,7 +102,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 }
                 log.warn("NOT DONE "+msg+" (NOK)");
             } catch (TwitterwallException e) {
-                log.error(msg + e.getMessage());
+                log.warn(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
@@ -116,7 +116,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn("NOT DONE "+msg+" (NOK)");;
+                log.error("NOT DONE "+msg+" (NOK)");;
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
@@ -138,36 +138,44 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateTweets.updateTweets();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
+                String eMsg = e.getMessage();
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
+                log.warn(msg + eMsg);
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
+                String eMsg = e.getMessage();
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
+                log.warn(msg + eMsg);
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                String eMsg = e.getMessage();
                 log.warn(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
+                log.warn(msg + eMsg);
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));;
             } catch (Exception e) {
+                String eMsg = e.getMessage();
                 log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
+                log.warn(msg + eMsg);
                 log.error("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             }
         }
@@ -182,36 +190,40 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateUserProfiles.updateUserProfiles();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.error(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.error(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             }
         }
@@ -226,36 +238,40 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 Throwable t = e.getCause();
+                String eMsg = e.getMessage();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.error(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
@@ -270,36 +286,40 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (TwitterApiException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (TwitterwallException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.warn(msg + e.getMessage());
+                log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.error(msg + e.getMessage());
+                log.error(msg + eMsg);
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }

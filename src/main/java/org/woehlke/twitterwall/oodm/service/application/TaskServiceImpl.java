@@ -17,7 +17,7 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
@@ -41,13 +41,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task create(Task domainObject) {
         return taskRepository.persist(domainObject);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task update(Task domainObject) {
         return taskRepository.update(domainObject);
     }
@@ -63,7 +61,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task create(String msg,TaskType type) {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
         Task task = new Task(msg,type);
@@ -74,7 +71,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task done(Task task) {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
         task.setCountedEntitiesAtFinish(countedEntities);
@@ -84,7 +80,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task,Exception e) {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
         task.setCountedEntitiesAtFinish(countedEntities);

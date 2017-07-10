@@ -29,7 +29,6 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media create(Media media) {
         return this.mediaRepository.persist(media);
     }
@@ -40,7 +39,6 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media update(Media media) {
         return this.mediaRepository.update(media);
     }
@@ -56,7 +54,6 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Media store(Media media) {
         String msg = "Media.store: ";
         try {

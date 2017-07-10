@@ -19,7 +19,7 @@ import java.util.Set;
  * Created by tw on 28.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserTransformServiceImpl implements UserTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(UserTransformServiceImpl.class);

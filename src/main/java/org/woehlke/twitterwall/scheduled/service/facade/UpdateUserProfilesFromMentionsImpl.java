@@ -29,7 +29,6 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFromMentions {
 
 
@@ -84,7 +83,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                             log.warn(msg + t.getMessage());
                             t = t.getCause();
                         }
-                        throw new TwitterApiException(msg+screenName, e);
+                        throw e;
                     } catch (TwitterApiException e) {
                         log.warn(msg + e.getMessage());
                         Throwable t = e.getCause();
@@ -109,24 +108,6 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             task = taskService.error(task,e);
             throw e;
         } catch (RateLimitExceededException e) {
-            task = taskService.error(task,e);
-            throw e;
-        } catch (RuntimeException e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            task = taskService.error(task,e);
-            throw e;
-        } catch (Exception e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
             task = taskService.error(task,e);
             throw e;
         } finally {

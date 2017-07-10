@@ -34,7 +34,7 @@ import java.util.List;
     )
 })
 @EntityListeners(TaskListener.class)
-public class Task implements DomainObject<Task>,ScheduledTasks {
+public class Task implements DomainObject<Task> {
 
     private static final long serialVersionUID = 1L;
 

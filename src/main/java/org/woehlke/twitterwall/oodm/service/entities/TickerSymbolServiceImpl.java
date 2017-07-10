@@ -29,7 +29,6 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol store(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.persist(tickerSymbol);
     }
@@ -40,7 +39,6 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol update(TickerSymbol tickerSymbol) {
         return this.tickerSymbolRepository.update(tickerSymbol);
     }
@@ -61,7 +59,6 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
         try{
