@@ -92,21 +92,27 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
-                log.error(msg + e.getMessage());
+                msg += " (RuntimeException) ";
+                String eMesg = e.getMessage();
+                e.printStackTrace();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
+                log.error(msg +" : " + eMesg);
                 log.error("NOT DONE "+msg+" (NOK)");;
             } catch (Exception e) {
-                log.error(msg + e.getMessage());
+                msg += " (Exception) ";
+                String eMesg = e.getMessage();
+                e.printStackTrace();
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
-                log.error("NOT DONE "+msg+" (NOK)");
+                log.error(msg +" : " + eMesg);
+                log.error("NOT DONE "+msg+" (NOK)");;
             }
         }
     }
@@ -120,9 +126,11 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateTweets.updateTweets();
                 log.info("DONE "+msg+" (OK)"+": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                msg += " (RuntimeException) ";
                 String eMsg = e.getMessage();
                 log.warn(msg + e.getMessage());
                 Throwable t = e.getCause();
+                e.printStackTrace();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
@@ -130,15 +138,15 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 log.warn(msg + eMsg);
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));;
             } catch (Exception e) {
+                msg += " (Exception) ";
                 String eMsg = e.getMessage();
-                log.error(msg + e.getMessage());
                 Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
                 }
                 log.warn(msg + eMsg);
-                log.error("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
+                log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             }
         }
     }
@@ -152,6 +160,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateUserProfiles.updateUserProfiles();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                msg += " (RuntimeException) ";
                 String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
@@ -161,6 +170,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                msg += " (Exception) ";
                 String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
@@ -182,8 +192,9 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
-                Throwable t = e.getCause();
+                msg += " (RuntimeException) ";
                 String eMsg = e.getMessage();
+                Throwable t = e.getCause();
                 while(t != null){
                     log.warn(msg + t.getMessage());
                     t = t.getCause();
@@ -191,6 +202,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                msg += " (Exception) ";
                 String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
@@ -212,6 +224,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
+                msg += " (RuntimeException) ";
                 String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){
@@ -221,6 +234,7 @@ public class ScheduledTasksImpl implements ScheduledTasks {
                 log.warn(msg + eMsg);
                 log.warn(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             } catch (Exception e) {
+                msg += " (Exception) ";
                 String eMsg = e.getMessage();
                 Throwable t = e.getCause();
                 while(t != null){

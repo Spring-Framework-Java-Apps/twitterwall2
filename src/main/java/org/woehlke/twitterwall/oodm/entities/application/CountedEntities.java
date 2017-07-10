@@ -1,12 +1,13 @@
 package org.woehlke.twitterwall.oodm.entities.application;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  * Created by tw on 03.07.17.
  */
 @Embeddable
-public class CountedEntities {
+public class CountedEntities implements Serializable {
 
     private long countUser;
     private long countTweets;
@@ -16,6 +17,9 @@ public class CountedEntities {
     private long countTickerSymbol;
     private long countUrl;
     private long countUrlCache;
+
+    public CountedEntities() {
+    }
 
     public long getCountUser() {
         return countUser;
@@ -93,5 +97,35 @@ public class CountedEntities {
             ", countUrl=" + countUrl +
             ", countUrlCache=" + countUrlCache +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CountedEntities)) return false;
+
+        CountedEntities that = (CountedEntities) o;
+
+        if (countUser != that.countUser) return false;
+        if (countTweets != that.countTweets) return false;
+        if (countHashTags != that.countHashTags) return false;
+        if (countMedia != that.countMedia) return false;
+        if (countMention != that.countMention) return false;
+        if (countTickerSymbol != that.countTickerSymbol) return false;
+        if (countUrl != that.countUrl) return false;
+        return countUrlCache == that.countUrlCache;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (countUser ^ (countUser >>> 32));
+        result = 31 * result + (int) (countTweets ^ (countTweets >>> 32));
+        result = 31 * result + (int) (countHashTags ^ (countHashTags >>> 32));
+        result = 31 * result + (int) (countMedia ^ (countMedia >>> 32));
+        result = 31 * result + (int) (countMention ^ (countMention >>> 32));
+        result = 31 * result + (int) (countTickerSymbol ^ (countTickerSymbol >>> 32));
+        result = 31 * result + (int) (countUrl ^ (countUrl >>> 32));
+        result = 31 * result + (int) (countUrlCache ^ (countUrlCache >>> 32));
+        return result;
     }
 }

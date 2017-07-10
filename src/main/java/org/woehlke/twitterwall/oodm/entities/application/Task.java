@@ -1,6 +1,5 @@
 package org.woehlke.twitterwall.oodm.entities.application;
 
-import org.woehlke.twitterwall.ScheduledTasks;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.listener.application.TaskListener;
 
