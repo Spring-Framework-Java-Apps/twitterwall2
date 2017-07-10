@@ -13,7 +13,12 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Entity
-@Table(name = "task")
+@Table(name = "task", indexes = {
+    @Index(name = "idx_task_time_started", columnList = "time_started"),
+    @Index(name = "idx_task_time_finished", columnList = "time_finished"),
+    @Index(name = "idx_task_task_type", columnList = "task_type"),
+    @Index(name = "idx_task_task_status", columnList = "task_status")
+})
 @NamedQueries({
     @NamedQuery(
         name = "Task.findById",
@@ -40,9 +45,11 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     @Column
     private String description;
 
+    @Column(name="task_type",nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskType taskType;
 
+    @Column(name="task_status",nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
@@ -51,12 +58,10 @@ public class Task implements DomainObject<Task>,ScheduledTasks {
     private Date timeStarted;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="time_finished")
+    @Column(name="time_finished",nullable = true)
     private Date timeFinished;
 
-    //@ElementCollection(fetch = FetchType.EAGER)
-    //@CollectionTable(name = "task_history", joinColumns = @JoinColumn(name = "id"))
-    @JoinColumn(name="task_id")
+    @JoinColumn(name="job_id")
     @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
     protected List<TaskHistory> history = new ArrayList<>();
 

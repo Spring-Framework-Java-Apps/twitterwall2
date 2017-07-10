@@ -20,9 +20,11 @@ public class TaskHistory implements Comparable<TaskHistory>,Serializable {
     @Column
     private String description;
 
+    @Column(name="task_status_before",nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatusBefore;
 
+    @Column(name="task_status_now",nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatusNow;
 
