@@ -611,10 +611,6 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.onDefinedUserList = onDefinedUserList;
     }
 
-    public Set<Url> getUrls() {
-        return urls;
-    }
-
     public TaskInfo getTaskInfo() {
         return taskInfo;
     }
@@ -639,6 +635,10 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.updatedBy = updatedBy;
     }
 
+    public Set<Url> getUrls() {
+        return urls;
+    }
+
     public void setUrls(Set<Url> urls) {
         this.urls.clear();
         this.urls.addAll(urls);
@@ -647,7 +647,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public boolean addAllUrls(Set<Url> urls) {
         boolean result = false;
         for(Url url:urls){
-            if(url != null){
+            if((url != null) && (!this.urls.contains(url))){
                 this.urls.add(url);
                 result = true;
             }
@@ -658,7 +658,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public boolean removeAllUrls(Set<Url> urls) {
         boolean result = false;
         for(Url url:urls){
-            if(url != null){
+            if((url != null) && (this.urls.contains(url))){
                 this.urls.remove(url);
                 result = true;
             }
@@ -672,18 +672,18 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addUrl(Url url) {
-        if(url == null){
-            return false;
-        } else {
+        if((url != null) && (!this.urls.contains(url))){
             return this.urls.add(url);
+        } else {
+            return false;
         }
     }
 
     public boolean removetUrl(Url url) {
-        if(url == null) {
-            return true;
-        } else {
+        if((url != null) && (this.urls.contains(url))){
             return this.urls.remove(url);
+        } else {
+            return false;
         }
     }
 
@@ -697,11 +697,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (!this.tags.contains(tag))){
+                this.tags.add(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (this.tags.contains(tag))){
+                this.tags.remove(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags() {
@@ -710,11 +724,19 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
+        if((tag != null) && (!this.tags.contains(tag))){
+            return this.tags.add(tag);
+        } else {
+            return false;
+        }
     }
 
     public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
+        if((tag != null) && (this.tags.contains(tag))){
+            return this.tags.remove(tag);
+        } else {
+            return false;
+        }
     }
 
 
@@ -728,11 +750,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (!this.mentions.contains(mention))){
+                this.mentions.add(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (this.mentions.contains(mention))){
+                this.mentions.remove(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions() {
@@ -759,11 +795,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllMedia(Set<Media> media) {
-        return this.media.addAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (!this.media.contains(medium))){
+                this.media.add(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia(Set<Media> media) {
-        return this.media.removeAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (this.media.contains(medium))){
+                this.media.remove(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia() {
@@ -771,12 +821,12 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return this.media.isEmpty();
     }
 
-    public boolean addMedia(Media media) {
-        return this.media.add(media);
+    public boolean addMedium(Media medium) {
+        return this.media.add(medium);
     }
 
-    public boolean removeMedia(Media media) {
-        return this.media.remove(media);
+    public boolean removeMedium(Media medium) {
+        return this.media.remove(medium);
     }
 
     public Set<TickerSymbol> getTickerSymbols() {
@@ -789,11 +839,30 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        return this.tickerSymbols.addAll(tickerSymbols);
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (!this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.add(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        return this.tickerSymbols.removeAll(tickerSymbols);
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.remove(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllTickerSymbols() {
+        this.tickerSymbols.clear();
+        return this.tickerSymbols.isEmpty();
     }
 
     public boolean addTickerSymbol(TickerSymbol tickerSymbol) {

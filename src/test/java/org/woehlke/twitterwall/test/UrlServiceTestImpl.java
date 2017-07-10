@@ -15,7 +15,7 @@ import java.util.*;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTest {
 
-    @Value("${twitterwall.batch.url.fetchTestDataVerbose}")
+    @Value("${twitterwall.backend.url.fetchTestDataVerbose}")
     private boolean fetchTestDataVerbose;
 
     @Override

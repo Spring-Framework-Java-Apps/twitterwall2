@@ -388,6 +388,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.taskInfo = taskInfo;
     }
 
+
     public Set<Url> getUrls() {
         return urls;
     }
@@ -398,11 +399,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllUrls(Set<Url> urls) {
-        return this.urls.addAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if((url != null) && (!this.urls.contains(url))){
+                this.urls.add(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls(Set<Url> urls) {
-        return this.urls.removeAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if((url != null) && (this.urls.contains(url))){
+                this.urls.remove(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls() {
@@ -411,14 +426,20 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addUrl(Url url) {
-        return this.urls.add(url);
+        if((url != null) && (!this.urls.contains(url))){
+            return this.urls.add(url);
+        } else {
+            return false;
+        }
     }
 
-    public boolean removeUrl(Url url) {
-        return this.urls.remove(url);
+    public boolean removetUrl(Url url) {
+        if((url != null) && (this.urls.contains(url))){
+            return this.urls.remove(url);
+        } else {
+            return false;
+        }
     }
-
-
 
     public Set<HashTag> getTags() {
         return tags;
@@ -430,11 +451,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (!this.tags.contains(tag))){
+                this.tags.add(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (this.tags.contains(tag))){
+                this.tags.remove(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags() {
@@ -443,13 +478,20 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
+        if((tag != null) && (!this.tags.contains(tag))){
+            return this.tags.add(tag);
+        } else {
+            return false;
+        }
     }
 
     public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
+        if((tag != null) && (this.tags.contains(tag))){
+            return this.tags.remove(tag);
+        } else {
+            return false;
+        }
     }
-
 
 
     public Set<Mention> getMentions() {
@@ -462,11 +504,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (!this.mentions.contains(mention))){
+                this.mentions.add(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (this.mentions.contains(mention))){
+                this.mentions.remove(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions() {
@@ -483,7 +539,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-
     public Set<Media> getMedia() {
         return media;
     }
@@ -494,11 +549,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllMedia(Set<Media> media) {
-        return this.media.addAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (!this.media.contains(medium))){
+                this.media.add(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia(Set<Media> media) {
-        return this.media.removeAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (this.media.contains(medium))){
+                this.media.remove(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia() {
@@ -514,8 +583,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return this.media.remove(medium);
     }
 
-
-
     public Set<TickerSymbol> getTickerSymbols() {
         return tickerSymbols;
     }
@@ -526,7 +593,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        return this.tickerSymbols.addAll(tickerSymbols);
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (!this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.add(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.remove(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTickerSymbols() {
@@ -534,13 +619,14 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return this.tickerSymbols.isEmpty();
     }
 
-    public boolean addTickerSymbol(TickerSymbol tickerSymbols) {
-        return this.tickerSymbols.add(tickerSymbols);
+    public boolean addTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.add(tickerSymbol);
     }
 
     public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
         return this.tickerSymbols.remove(tickerSymbol);
     }
+
 
 
 

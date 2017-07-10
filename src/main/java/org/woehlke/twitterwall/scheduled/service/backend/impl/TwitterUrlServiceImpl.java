@@ -11,6 +11,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,12 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
+    @Value("${twitterwall.backend.url.connTimeToLive}")
+    private long connTimeToLive;
+
+    @Value("${twitterwall.backend.url.maxIdleTime}")
+    private long maxIdleTime;
+
     @Override
     public Url fetchTransientUrl(String urlSrc) {
         String msg = "fetchTransientUrl "+urlSrc+" ";
@@ -43,46 +50,54 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             throw new IllegalArgumentException(msg);
         }
         Url newUrl = null;
+        CloseableHttpClient httpclient = null;
+        CloseableHttpResponse response1 = null;
         try {
             String display;
             String expanded;
             int[] indices = {};
-            long connTimeToLive = 30L;
-            CloseableHttpClient httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(connTimeToLive, TimeUnit.SECONDS).build();
+            httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(maxIdleTime, TimeUnit.SECONDS).build();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
-            CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
+            response1 = httpclient.execute(httpGet, context);
             HttpHost target = context.getTargetHost();
             List<URI> redirectLocations = context.getRedirectLocations();
             URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
             display = location.getHost();
             expanded = location.toExternalForm();
             newUrl = new Url(display, expanded, urlSrc, indices);
-            response1.close();
-        } catch (HttpHostConnectException e){
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (UnknownHostException e){
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (IllegalArgumentException e){
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            log.warn(msg+ioe.getMessage());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            log.warn(msg+npe.getMessage());
+        } catch (RuntimeException re){
+            re.printStackTrace();
+            log.warn(msg+re.getMessage());
+        } catch (URISyntaxException urise) {
+            urise.printStackTrace();
+            log.warn(msg+urise.getMessage());
         } catch (Exception e){
             e.printStackTrace();
             log.warn(msg+e.getMessage());
+        } finally {
+            if(response1 != null){
+                try {
+                    response1.close();
+                } catch (IOException ioe2){
+                    ioe2.printStackTrace();
+                    log.warn(msg+ioe2.getMessage());
+                }
+            }
+            if(httpclient!=null) {
+                try {
+                    httpclient.close();
+                } catch (IOException ioe2){
+                    ioe2.printStackTrace();
+                    log.warn(msg+ioe2.getMessage());
+                }
+            }
         }
         return newUrl;
     }
