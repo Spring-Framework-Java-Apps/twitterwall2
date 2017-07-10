@@ -55,10 +55,12 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
         return this.tickerSymbolRepository.count(TickerSymbol.class);
     }
 
+    /*
     @Override
     public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
         return this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol, url);
     }
+    */
 
     @Override
     public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol, Task task) {

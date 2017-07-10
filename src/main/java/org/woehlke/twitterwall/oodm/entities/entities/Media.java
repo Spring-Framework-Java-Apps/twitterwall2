@@ -254,4 +254,9 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                // ", indices=" + myIndieces.toString() +
                 '}';
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

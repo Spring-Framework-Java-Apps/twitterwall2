@@ -9,13 +9,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
-import org.woehlke.twitterwall.oodm.service.entities.MentionService;
-import org.woehlke.twitterwall.oodm.service.entities.UrlService;
+import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 
@@ -39,14 +35,20 @@ public class StoreUserProcessImpl implements StoreUserProcess {
 
     private final MentionService mentionService;
 
+    private final MediaService mediaService;
+
+    private final TickerSymbolService tickerSymbolService;
+
     private final CreatePersistentUrl createPersistentUrl;
 
     @Autowired
-    public StoreUserProcessImpl(UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, CreatePersistentUrl createPersistentUrl) {
+    public StoreUserProcessImpl(UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
         this.userService = userService;
         this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
+        this.mediaService = mediaService;
+        this.tickerSymbolService = tickerSymbolService;
         this.createPersistentUrl = createPersistentUrl;
     }
 
@@ -56,25 +58,43 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         Set<Url> urls = new LinkedHashSet<>();
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
+        Set<Media> media = new LinkedHashSet<Media>();
+        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         for (Url myUrl : user.getUrls()) {
             Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl(),task);
-            if(urlPers != null){
+            if((urlPers != null)&&(urlPers.isValid())){
                 urls.add(urlPers);
             }
         }
         Url urlPers = createPersistentUrl.getPersistentUrlFor(user.getUrl(), task);
-        if(urlPers != null){
+        if((urlPers != null)&&(urlPers.isValid())){
             urls.add(urlPers);
         }
         for (HashTag hashTag : user.getTags()) {
-            hashTags.add(hashTagService.store(hashTag, task));
+            if(hashTag.isValid()){
+                hashTags.add(hashTagService.store(hashTag, task));
+            }
         }
         for (Mention mention : user.getMentions()) {
-            mentions.add(mentionService.store(mention, task));
+            if(mention.isValid()){
+                mentions.add(mentionService.store(mention, task));
+            }
+        }
+        for(Media medium:user.getMedia()){
+            if(medium.isValid()){
+                media.add(mediaService.store(medium,task));
+            }
+        }
+        for(TickerSymbol tickerSymbol:user.getTickerSymbols()){
+            if(tickerSymbol.isValid()){
+                tickerSymbols.add(tickerSymbolService.store(tickerSymbol,task));
+            }
         }
         user.setUrls(urls);
         user.setTags(hashTags);
         user.setMentions(mentions);
+        user.setMedia(media);
+        user.setTickerSymbols(tickerSymbols);
         try {
             long idTwitter = user.getIdTwitter();
             User userPers = userService.findByIdTwitter(idTwitter);

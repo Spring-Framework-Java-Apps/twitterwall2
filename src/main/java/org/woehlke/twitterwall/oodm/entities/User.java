@@ -1019,4 +1019,9 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ",\n tickerSymbols=" +toStringTickerSymbols() +
                 "\n}";
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

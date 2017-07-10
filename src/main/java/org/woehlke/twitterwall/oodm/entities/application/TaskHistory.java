@@ -21,7 +21,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column
+    @Column(name="description",nullable = false)
     private String description;
 
     @Column(name="task_status_before",nullable = false)
@@ -135,5 +135,22 @@ public class TaskHistory implements DomainObject<TaskHistory> {
             ", taskStatusNow=" + taskStatusNow +
             ", timeEvent=" + timeEvent +
             '}';
+    }
+
+    @Override
+    public boolean isValid() {
+        if(taskStatusBefore == null){
+            return false;
+        }
+        if(taskStatusNow == null){
+            return false;
+        }
+        if(timeEvent == null){
+            return false;
+        }
+        if((description == null)||(description.isEmpty())){
+            return false;
+        }
+        return true;
     }
 }

@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.oodm.service.common.DomainService;
  */
 public interface TickerSymbolService extends DomainService<TickerSymbol> {
 
-    TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
+    //TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
 
     TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol, Task task);
 

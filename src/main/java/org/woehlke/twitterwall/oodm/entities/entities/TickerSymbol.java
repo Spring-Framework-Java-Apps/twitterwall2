@@ -176,4 +176,9 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
                 //", indices=" + myIndieces.toString() +
                 '}';
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

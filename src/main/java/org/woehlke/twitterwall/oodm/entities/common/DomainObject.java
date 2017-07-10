@@ -18,4 +18,6 @@ public interface DomainObject<T extends DomainObject> extends Serializable, Comp
     int hashCode();
 
     String toString();
+
+    boolean isValid();
 }

@@ -271,4 +271,8 @@ public class Task implements DomainObject<Task> {
         this.history.add(event);
     }
 
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

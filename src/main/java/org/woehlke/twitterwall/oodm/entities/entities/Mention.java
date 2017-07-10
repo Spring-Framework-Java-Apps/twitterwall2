@@ -211,4 +211,14 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
             //", indices=" + myIndieces.toString() +
             '}';
     }
+
+    public boolean isValid() {
+        if((screenName == null) ||(screenName.isEmpty())){
+            return false;
+        }
+        if(idTwitter <= 1L){
+            return false;
+        }
+        return true;
+    }
 }

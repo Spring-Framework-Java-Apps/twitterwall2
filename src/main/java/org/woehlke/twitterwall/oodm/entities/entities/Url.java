@@ -185,4 +185,15 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
                // ", indices=" + myIndieces.toString() +
                 '}';
     }
+
+    @Override
+    public boolean isValid() {
+        if((this.url == null)||(this.url.isEmpty())){
+            return false;
+        }
+        if(this.url.compareTo(this.expanded)==0){
+            return false;
+        }
+        return true;
+    }
 }

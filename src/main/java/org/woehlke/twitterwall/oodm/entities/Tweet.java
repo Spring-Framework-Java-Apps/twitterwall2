@@ -766,4 +766,9 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ",\n user=" + user.toString() +
                 "\n}";
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

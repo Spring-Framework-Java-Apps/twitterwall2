@@ -167,4 +167,12 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
                   //", indices=" + myIndieces.toString() +
                 '}';
     }
+
+    @Override
+    public boolean isValid() {
+        if((text == null)||(text.isEmpty())){
+            return false;
+        }
+        return true;
+    }
 }

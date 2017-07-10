@@ -135,4 +135,9 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
                 ", url='" + url + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }
