@@ -60,6 +60,10 @@ public class Task implements DomainObject<Task> {
     private Date timeStarted;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="time_last_update",nullable = true)
+    private Date timeLastUpdate;
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_finished",nullable = true)
     private Date timeFinished;
 
@@ -114,13 +118,36 @@ public class Task implements DomainObject<Task> {
     }
 
     @Override
+    public boolean equals(Task task) {
+        if (this == task) return true;
+        if (!id.equals(task.id)) return false;
+        if (taskType != task.taskType) return false;
+        return timeStarted.equals(task.timeStarted);
+    }
+
+    @Override
     public int compareTo(Task other) {
         return id.compareTo(other.getId());
     }
 
     @Override
-    public boolean equals(Task o) {
-        return id.equals(o.getId());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task task = (Task) o;
+
+        if (!id.equals(task.id)) return false;
+        if (taskType != task.taskType) return false;
+        return timeStarted.equals(task.timeStarted);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + taskType.hashCode();
+        result = 31 * result + timeStarted.hashCode();
+        return result;
     }
 
     public TaskType getTaskType() {
@@ -192,26 +219,6 @@ public class Task implements DomainObject<Task> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
-
-        Task task = (Task) o;
-
-        if (!id.equals(task.id)) return false;
-        if (taskType != task.taskType) return false;
-        return timeStarted.equals(task.timeStarted);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + taskType.hashCode();
-        result = 31 * result + timeStarted.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         String cef = "null";
         if(countedEntitiesAtFinish != null){
@@ -229,37 +236,39 @@ public class Task implements DomainObject<Task> {
 
     public void event(String description,TaskStatus newTaskStatus) {
         TaskHistory event = new TaskHistory(description,taskStatus,newTaskStatus);
-        taskStatus = TaskStatus.READY;
-        history.add(event);
+        this.taskStatus = TaskStatus.READY;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
     }
 
     public void ready() {
         TaskHistory event = new TaskHistory("ready",taskStatus,TaskStatus.READY);
-        taskStatus = TaskStatus.READY;
-        history.add(event);
+        this.taskStatus = TaskStatus.READY;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
     }
 
     public void start() {
         TaskHistory event = new TaskHistory("start",taskStatus,TaskStatus.RUNNING);
-        taskStatus = TaskStatus.RUNNING;
+        this.taskStatus = TaskStatus.RUNNING;
+        this.timeLastUpdate = new Date();
         this.timeStarted = new Date();
-        history.add(event);
+        this.history.add(event);
     }
 
     public void done() {
         TaskHistory event = new TaskHistory("done",taskStatus,TaskStatus.FINISHED);
-        taskStatus = TaskStatus.FINISHED;
+        this.taskStatus = TaskStatus.FINISHED;
+        this.timeLastUpdate = new Date();
         this.timeFinished = new Date();
-        history.add(event);
+        this.history.add(event);
     }
 
     public void error(Exception e) {
         TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.ERROR);
-        this.timeFinished = new Date();
-        history.add(event);
-        this.timeFinished = new Date();
-        taskStatus = TaskStatus.ERROR;
+        this.taskStatus = TaskStatus.ERROR;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
     }
-
 
 }

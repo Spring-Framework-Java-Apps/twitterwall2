@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.oodm.entities.application;
 
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.listener.application.TaskHistoryListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "task_history")
 @EntityListeners(TaskHistoryListener.class)
-public class TaskHistory implements Comparable<TaskHistory>,Serializable {
+public class TaskHistory implements DomainObject<TaskHistory> {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +52,17 @@ public class TaskHistory implements Comparable<TaskHistory>,Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(TaskHistory that) {
+        if (this == that) return true;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (taskStatusBefore != that.taskStatusBefore) return false;
+        if (taskStatusNow != that.taskStatusNow) return false;
+        return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
     }
 
     public String getDescription() {
