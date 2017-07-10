@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**

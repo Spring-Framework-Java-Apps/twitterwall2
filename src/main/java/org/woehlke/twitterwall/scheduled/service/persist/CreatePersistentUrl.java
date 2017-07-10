@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.scheduled.service.persist;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 
 /**
@@ -7,5 +8,5 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
  */
 public interface CreatePersistentUrl {
 
-    Url getPersistentUrlFor(String url);
+    Url getPersistentUrlFor(String url, Task task);
 }

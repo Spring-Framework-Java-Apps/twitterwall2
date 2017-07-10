@@ -30,17 +30,17 @@ public class MentionListener {
 
   @PostPersist
   public void onPostPersist(Mention domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(Mention domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(Mention domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad

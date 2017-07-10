@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 
 /**
@@ -29,9 +30,9 @@ public class StoreOneTweetImpl implements StoreOneTweet {
     }
 
     @Override
-    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet) {
+    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet, Task task) {
         Tweet tweet = tweetTransformService.transform(myTweet);
-        tweet = storeOneTweetPerform.storeOneTweetPerform(tweet);
+        tweet = storeOneTweetPerform.storeOneTweetPerform(tweet,task);
         return tweet;
     }
 }

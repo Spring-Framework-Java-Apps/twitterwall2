@@ -30,17 +30,17 @@ public class HashTagListener {
 
   @PostPersist
   public void onPostPersist(HashTag domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(HashTag domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(HashTag domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad

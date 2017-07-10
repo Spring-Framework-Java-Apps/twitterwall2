@@ -1,5 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities.application;
 
+import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.listener.application.TaskListener;
 
@@ -62,7 +65,7 @@ public class Task implements DomainObject<Task> {
 
     @JoinColumn(name="job_id")
     @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
-    protected List<TaskHistory> history = new ArrayList<>();
+    private List<TaskHistory> history = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
@@ -98,26 +101,6 @@ public class Task implements DomainObject<Task> {
         this.taskType = taskType;
         this.description = description;
         taskStatus = TaskStatus.READY;
-    }
-
-    public void fetchUsersFromDefinedUserList(){
-        this.taskType = TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST;
-    }
-
-    public void updateUserProfilesFromMentions(){
-        this.taskType = TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS;
-    }
-
-    public void updateUserProfiles() {
-        this.taskType = TaskType.UPDATE_USER_PROFILES;
-    }
-
-    public void updateTweets() {
-        this.taskType = TaskType.UPDATE_TWEETS;
-    }
-
-    public void fetchTweetsFromTwitterSearch() {
-        this.taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
     }
 
     @Override
@@ -277,5 +260,6 @@ public class Task implements DomainObject<Task> {
         this.timeFinished = new Date();
         taskStatus = TaskStatus.ERROR;
     }
+
 
 }

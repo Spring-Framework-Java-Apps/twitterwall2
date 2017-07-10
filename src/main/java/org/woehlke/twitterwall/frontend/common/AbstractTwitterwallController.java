@@ -8,6 +8,9 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -59,6 +62,8 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     private StoreUserProfile storeUserProfile;
 
     private UserService userService;
+
+    private TaskService taskService;
 
     private String menuAppName;
 
@@ -127,6 +132,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     }
 
     protected void getTestDataTweets(String msg,Model model){
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -136,7 +142,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
                     log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.storeOneTweet.storeOneTweet(tweet);
+                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.storeOneTweet.storeOneTweet(tweet, task);
                     log.info(msg + "--------------------------------------------------------------------");
                     log.info(msg + persTweet.toString());
                     log.info(msg + "--------------------------------------------------------------------");
@@ -154,10 +160,12 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         } finally {
             log.info(msg + "--------------------------------------------------------------------");
         }
+        taskService.done(task);
         model.addAttribute("latestTweets", latest);
     }
 
     protected void getTestDataUser(String msg,Model model){
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
@@ -166,7 +174,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
                     log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile);
+                    org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
                     user.add(persUser);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
@@ -179,6 +187,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         }
+        taskService.done(task);
         model.addAttribute("user", user);
     }
 
@@ -196,6 +205,8 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     }
 
     protected void addUserForScreenName(Model model, String screenName) {
+        String msg="addUserForScreenName "+screenName+": ";
+        Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
         try {
             log.info("--------------------------------------------------------------------");
             log.info("screenName = "+ screenName);
@@ -209,7 +220,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = storeUserProfile.storeUserProfile(twitterProfile);
+                User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
                 model.addAttribute("user", user);
                 log.info("model.addAttribute user = "+user.toString());
@@ -225,16 +236,18 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                 log.info("model.addAttribute user = "+user.toString());
             }
         }  finally {
+            taskService.done(task);
             log.info("... finally done ...");
             log.info("--------------------------------------------------------------------");
         }
     }
 
-    protected void setupAfterPropertiesSetWithTesting(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
+    protected void setupAfterPropertiesSetWithTesting(TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.taskService=taskService;
         this.setupAfterPropertiesSet(menuAppName, searchterm, infoWebpage, theme, contextTest, imprintScreenName, idGoogleAnalytics);
     }
 

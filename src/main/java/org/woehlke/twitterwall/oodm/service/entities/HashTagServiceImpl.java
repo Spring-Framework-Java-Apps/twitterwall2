@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.repository.entities.HashTagRepository;
 
@@ -54,12 +55,15 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    public HashTag store(HashTag hashTag) {
+    public HashTag store(HashTag hashTag, Task task) {
         try {
             HashTag tagPers = this.hashTagRepository.findByText(hashTag.getText());
+            tagPers.setUpdatedBy(task);
+            tagPers = this.hashTagRepository.update(tagPers);
             log.debug("found: "+tagPers.toString());
             return tagPers;
         } catch (EmptyResultDataAccessException e) {
+            hashTag.setCreatedBy(task);
             log.debug("try to persist: "+hashTag.toString());
             HashTag tagPers = this.hashTagRepository.persist(hashTag);
             log.debug("persisted: "+tagPers.toString());

@@ -5,9 +5,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.repository.application.TaskRepository;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task store(Task domainObject) {
+    public Task store(Task domainObject, Task task) {
         try {
             Task taskPersistent = taskRepository.findById(domainObject.getId());
             return taskRepository.update(domainObject);

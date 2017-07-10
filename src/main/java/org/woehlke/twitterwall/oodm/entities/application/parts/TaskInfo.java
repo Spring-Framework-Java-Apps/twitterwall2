@@ -1,7 +1,6 @@
-package org.woehlke.twitterwall.oodm.entities.application;
+package org.woehlke.twitterwall.oodm.entities.application.parts;
 
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
@@ -59,4 +58,14 @@ public class TaskInfo implements Serializable {
         this.updatedByFetchUsersFromDefinedUserList |= updatedByFetchUsersFromDefinedUserList;
     }
 
+    @Override
+    public String toString() {
+        return "TaskInfo{" +
+            "updatedByFetchTweetsFromTwitterSearch=" + updatedByFetchTweetsFromTwitterSearch +
+            ", updatedByUpdateTweets=" + updatedByUpdateTweets +
+            ", updatedByUpdateUserProfiles=" + updatedByUpdateUserProfiles +
+            ", updatedByUpdateUserProfilesFromMentions=" + updatedByUpdateUserProfilesFromMentions +
+            ", updatedByFetchUsersFromDefinedUserList=" + updatedByFetchUsersFromDefinedUserList +
+            '}';
+    }
 }

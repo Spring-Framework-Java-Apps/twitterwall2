@@ -9,7 +9,7 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -63,7 +63,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 loopId++;
                 log.debug(msg+loopId);
                 try {
-                    this.storeOneTweet.storeOneTweet(tweet);
+                    this.storeOneTweet.storeOneTweet(tweet,task);
                 } catch (EmptyResultDataAccessException e)  {
                     log.warn(msg+e.getMessage());
                 } catch (NoResultException e){

@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository;
 
@@ -29,7 +30,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    public TickerSymbol store(TickerSymbol tickerSymbol) {
+    public TickerSymbol store(TickerSymbol tickerSymbol, Task task) {
         return this.tickerSymbolRepository.persist(tickerSymbol);
     }
 
@@ -59,7 +60,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol) {
+    public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol, Task task) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
         try{
             log.debug(msg+"try to find: "+tickerSymbol.toString());
@@ -68,10 +69,11 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             tickerSymbolPers.setUrl(tickerSymbol.getUrl());
             //tickerSymbolPers.setIndices(tickerSymbol.getIndices());
             tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
+            tickerSymbolPers.setCreatedBy(task);
             log.debug(msg+"found and try to update: "+tickerSymbolPers.toString());
             return this.tickerSymbolRepository.update(tickerSymbolPers);
-
         } catch (EmptyResultDataAccessException e) {
+            tickerSymbol.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }

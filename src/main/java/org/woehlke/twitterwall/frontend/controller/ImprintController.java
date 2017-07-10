@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -55,12 +56,15 @@ public class ImprintController extends AbstractTwitterwallController {
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public ImprintController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
+    public ImprintController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @RequestMapping("/imprint")
@@ -79,6 +83,6 @@ public class ImprintController extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

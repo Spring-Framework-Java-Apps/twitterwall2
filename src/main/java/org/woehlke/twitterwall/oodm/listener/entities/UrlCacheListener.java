@@ -30,17 +30,17 @@ public class UrlCacheListener {
 
   @PostPersist
   public void onPostPersist(UrlCache domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(UrlCache domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(UrlCache domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User store(User user) {
+    public User store(User user, Task task) {
         try {
             User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
             user.setId(userPersistent.getId());
+            user.setUpdatedBy(task);
             return userRepository.update(user);
         } catch (EmptyResultDataAccessException e) {
+            user.setCreatedBy(task);
             return userRepository.persist(user);
         }
     }

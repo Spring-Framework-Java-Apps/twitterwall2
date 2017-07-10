@@ -9,6 +9,9 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -33,6 +36,8 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     private final TwitterApiService twitterApiService;
 
     private final PersistDataFromTwitterTest persistDataFromTwitterTest;
@@ -40,8 +45,9 @@ public class UserServiceTestImpl implements UserServiceTest {
     private final StoreUserProfile storeUserProfile;
 
     @Autowired
-    public UserServiceTestImpl(UserService userService, TwitterApiService twitterApiService, PersistDataFromTwitterTest persistDataFromTwitterTest, StoreUserProfile storeUserProfile) {
+    public UserServiceTestImpl(UserService userService, TaskService taskService, TwitterApiService twitterApiService, PersistDataFromTwitterTest persistDataFromTwitterTest, StoreUserProfile storeUserProfile) {
         this.userService = userService;
+        this.taskService = taskService;
         this.twitterApiService = twitterApiService;
         this.persistDataFromTwitterTest = persistDataFromTwitterTest;
         this.storeUserProfile = storeUserProfile;
@@ -54,6 +60,8 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     @Override
     public User createUser(String screenName) {
+        String msg = "createUser for screenName="+screenName;
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);
@@ -67,7 +75,7 @@ public class UserServiceTestImpl implements UserServiceTest {
             log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = storeUserProfile.storeUserProfile(twitterProfile);
+                User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
                 log.info("model.addAttribute user = "+user.toString());
                 return user;
@@ -83,6 +91,7 @@ public class UserServiceTestImpl implements UserServiceTest {
                 return user;
             }
         }  finally {
+            taskService.done(task);
             log.info("... finally done ...");
             log.info("-----------------------------------------");
         }

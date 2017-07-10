@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
@@ -36,6 +37,8 @@ public class TestController extends AbstractTwitterwallController {
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
 
 
@@ -63,11 +66,12 @@ public class TestController extends AbstractTwitterwallController {
 
 
     @Autowired
-    public TestController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList) {
+    public TestController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.taskService = taskService;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
     }
 
@@ -99,7 +103,7 @@ public class TestController extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 
     @Async

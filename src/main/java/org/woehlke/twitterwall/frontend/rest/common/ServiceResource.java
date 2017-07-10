@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.oodm.entities.application.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**

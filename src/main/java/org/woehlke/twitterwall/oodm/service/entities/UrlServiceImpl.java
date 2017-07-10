@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
 
@@ -30,7 +31,7 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Url store(Url domainObject) {
+    public Url store(Url domainObject, Task task) {
         String name = "store "+domainObject.getUrl();
         log.debug(name);
         if(domainObject == null){
@@ -48,10 +49,12 @@ public class UrlServiceImpl implements UrlService {
         try {
             Url urlPersistent = this.urlRepository.findByUrl(url);
             domainObject.setId(urlPersistent.getId());
+            domainObject.setUpdatedBy(task);
             result = this.urlRepository.update(domainObject);
             log.debug(name+result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
+            domainObject.setCreatedBy(task);
             result = this.urlRepository.persist(domainObject);
             log.debug(name+result.toString());
             return result;

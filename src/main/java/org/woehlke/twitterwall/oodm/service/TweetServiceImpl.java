@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import java.util.List;
@@ -91,17 +92,19 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public Tweet store(Tweet tweet) {
+    public Tweet store(Tweet tweet, Task task) {
         String name = "try to store: "+tweet.getIdTwitter()+" ";
         log.debug(name);
         Tweet result;
         try {
             Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
             tweet.setId(tweetPersistent.getId());
+            tweet.setUpdatedBy(task);
             result = tweetRepository.update(tweet);
             log.debug(name+result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
+            tweet.setCreatedBy(task);
             result = tweetRepository.persist(tweet);
             log.debug(name+result.toString());
             return result;

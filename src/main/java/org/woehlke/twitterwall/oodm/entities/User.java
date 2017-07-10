@@ -4,7 +4,7 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -44,10 +44,10 @@ import java.util.regex.Pattern;
                 name = "User.getAll",
                 query = "select t from User as t order by t.screenName"
         ),
-    @NamedQuery(
-        name = "User.count",
-        query = "select count(t) from User as t"
-    ),
+        @NamedQuery(
+            name = "User.count",
+            query = "select count(t) from User as t"
+        ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
                 query = "select t from User as t where t.tweeting=true order by t.screenName"
@@ -60,10 +60,10 @@ import java.util.regex.Pattern;
             name = "User.getNotYetOnList",
             query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
         ),
-    @NamedQuery(
-        name = "User.getOnList",
-        query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
-    ),
+        @NamedQuery(
+            name = "User.getOnList",
+            query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+        ),
         @NamedQuery(
                 name = "User.getUsersForHashTag",
                 query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
@@ -614,6 +614,22 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public void setTaskInfo(TaskInfo taskInfo) {
         this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public void setUrls(Set<Url> urls) {

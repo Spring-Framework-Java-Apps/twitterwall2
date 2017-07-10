@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -48,26 +49,26 @@ public class StoreUserProcessImpl implements StoreUserProcess {
     }
 
     @Override
-    public User storeUserProcess(User user){
+    public User storeUserProcess(User user, Task task){
         String msg = "User.storeUserProcess ";
         Set<Url> urls = new LinkedHashSet<>();
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
         for (Url myUrl : user.getUrls()) {
-            Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl());
+            Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl(),task);
             if(urlPers != null){
                 urls.add(urlPers);
             }
         }
-        Url urlPers = createPersistentUrl.getPersistentUrlFor(user.getUrl());
+        Url urlPers = createPersistentUrl.getPersistentUrlFor(user.getUrl(), task);
         if(urlPers != null){
             urls.add(urlPers);
         }
         for (HashTag hashTag : user.getTags()) {
-            hashTags.add(hashTagService.store(hashTag));
+            hashTags.add(hashTagService.store(hashTag, task));
         }
         for (Mention mention : user.getMentions()) {
-            mentions.add(mentionService.store(mention));
+            mentions.add(mentionService.store(mention, task));
         }
         user.setUrls(urls);
         user.setTags(hashTags);

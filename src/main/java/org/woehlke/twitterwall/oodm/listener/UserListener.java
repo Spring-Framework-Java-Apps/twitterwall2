@@ -30,17 +30,17 @@ public class UserListener {
 
   @PostPersist
   public void onPostPersist(User domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(User domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(User domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 
@@ -29,8 +30,9 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public UrlCache store(UrlCache urlCache) {
+    public UrlCache store(UrlCache urlCache, Task task) {
         String name = "UrlCache.store: store";
+        urlCache.setCreatedBy(task);
         UrlCache result = this.urlCacheRepository.persist(urlCache);
         log.debug(name+result);
         return result;

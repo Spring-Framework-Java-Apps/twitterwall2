@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
@@ -45,7 +46,6 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
-
     private final TwitterApiService twitterApiService;
 
     private final StoreOneTweet storeOneTweet;
@@ -54,12 +54,15 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public GlobalExceptionHandler(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
+    public GlobalExceptionHandler(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -83,6 +86,6 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

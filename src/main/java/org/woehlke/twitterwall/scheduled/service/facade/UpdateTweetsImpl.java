@@ -9,7 +9,7 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
@@ -70,7 +70,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                     Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
                     loopId++;
                     log.debug(msg + ""+loopId);
-                    this.storeOneTweet.storeOneTweet(tweet);
+                    this.storeOneTweet.storeOneTweet(tweet, task);
                     Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());

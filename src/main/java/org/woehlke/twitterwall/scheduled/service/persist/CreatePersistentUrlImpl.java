@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
@@ -39,7 +40,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
     }
 
     @Override
-    public Url getPersistentUrlFor(String url) {
+    public Url getPersistentUrlFor(String url, Task task) {
         String msg = "Url.getPersistentUrlFor url="+url+" ";
         int indices[] = {};
         if (url == null) {
@@ -52,6 +53,8 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                 if(urlPers.isUrlAndExpandedTheSame()){
                     log.debug(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
+                urlPers.setUpdatedBy(task);
+                urlPers = this.urlRepository.update(urlPers);
                 return urlPers;
             } catch (EmptyResultDataAccessException ex) {
                 log.debug(msg+" not found ");
@@ -67,6 +70,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         log.warn(exe.getMessage());
                     }
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
+                    newUrl.setCreatedBy(task);
                     log.debug(msg+" try to persist: "+newUrl.toString());
                     newUrl = this.urlRepository.persist(newUrl);
                     log.debug(msg+" persisted: "+newUrl.toString());
@@ -97,6 +101,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                             log.warn(exe.getMessage());
                         }
                         Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
+                        newUrl.setCreatedBy(task);
                         log.debug(msg+" try to persist: "+newUrl.toString());
                         newUrl =this.urlRepository.persist(newUrl);
                         log.debug(msg+" persisted: "+newUrl.toString());

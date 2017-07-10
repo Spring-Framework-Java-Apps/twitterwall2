@@ -9,6 +9,9 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
@@ -35,23 +38,27 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     private final CountedEntitiesService countedEntitiesService;
 
     @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
     private long millisToWaitForFetchTweetsFromTwitterSearch;
 
     @Autowired
-    public PersistDataFromTwitterTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, CountedEntitiesService countedEntitiesService) {
+    public PersistDataFromTwitterTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
     }
 
     @Override
     public void fetchTweetsFromTwitterSearchTest(long[] idTwitterToFetch) {
         String msg = "fetchTweetsFromTwitterSearchTest : ";
+        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
         log.info(msg + "-----exampleTest-------------------------------------------");
         log.info(msg + "Hello, Testing-World.");
         log.info(msg + "We are waiting for fetchTweetsFromTwitterSearch.");
@@ -62,7 +69,7 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
             for (long id : idTwitterToFetch) {
                 try {
                     org.springframework.social.twitter.api.Tweet twitterTweet = twitterApiService.findOneTweetById(id);
-                    storeOneTweet.storeOneTweet(twitterTweet);
+                    storeOneTweet.storeOneTweet(twitterTweet, task);
                 } catch (EmptyResultDataAccessException ex){
                     log.error(msg + "storeOneTweet: "+ex.getMessage());
                 } catch (NoResultException exe){
@@ -72,6 +79,7 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
         } catch (InterruptedException e) {
             log.warn(msg+e.getMessage());
         }
+        taskService.done(task);
         log.info(msg + "number of tweets: " + countedEntitiesService.countTweets());
         log.info(msg + "------------------------------------------------");
     }
@@ -79,6 +87,7 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
     @Override
     public void fetchUserFromTwitterSearchTest(long[] idTwitterToFetchForProfileControllerTest) {
         String msg = "fetchUserFromTwitterSearchTest : ";
+        Task task = taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
         log.info(msg + "-----exampleTest-------------------------------------------");
         log.info(msg + "Hello, Testing-World.");
         log.info(msg + "number of users: " + countedEntitiesService.countUsers());
@@ -87,11 +96,12 @@ public class PersistDataFromTwitterTestImpl implements PersistDataFromTwitterTes
             log.info(msg + "number of users: " + countedEntitiesService.countUsers());
             for (long id : idTwitterToFetchForProfileControllerTest) {
                 TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(id);
-                storeUserProfile.storeUserProfile(twitterProfile);
+                storeUserProfile.storeUserProfile(twitterProfile,task);
             }
         } catch (InterruptedException e) {
             log.warn(msg+e.getMessage());
         }
+        taskService.done(task);
         log.info(msg + "number of users: " + countedEntitiesService.countUsers());
         log.info(msg + "------------------------------------------------");
     }

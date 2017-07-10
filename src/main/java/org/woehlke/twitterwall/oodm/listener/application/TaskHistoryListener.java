@@ -2,49 +2,49 @@ package org.woehlke.twitterwall.oodm.listener.application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
 
 import javax.persistence.*;
 
 /**
- * Created by tw on 09.07.17.
+ * Created by tw on 10.07.17.
  */
-public class TaskListener {
+public class TaskHistoryListener {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskListener.class);
+    private static final Logger log = LoggerFactory.getLogger(TaskHistoryListener.class);
 
     @PrePersist
-    public void onPrePersist(Task domainObject) {
+    public void onPrePersist(TaskHistory domainObject) {
         log.debug("try to Persist: "+domainObject.toString());
     }
 
     @PreUpdate
-    public void onPreUpdate(Task domainObject) {
+    public void onPreUpdate(TaskHistory domainObject) {
         log.debug("try to Update: "+domainObject.toString());
     }
 
     @PreRemove
-    public void onPreRemove(Task domainObject) {
+    public void onPreRemove(TaskHistory domainObject) {
         log.debug("try to Remove: "+domainObject.toString());
     }
 
     @PostPersist
-    public void onPostPersist(Task domainObject) {
+    public void onPostPersist(TaskHistory domainObject) {
         log.info("Persisted: "+domainObject.toString());
     }
 
     @PostUpdate
-    public void onPostUpdate(Task domainObject) {
+    public void onPostUpdate(TaskHistory domainObject) {
         log.info("Updated: "+domainObject.toString());
     }
 
     @PostRemove
-    public void onPostRemove(Task domainObject) {
+    public void onPostRemove(TaskHistory domainObject) {
         log.info("Removed: "+domainObject.toString());
     }
 
     @PostLoad
-    public void onPostLoad(Task domainObject) {
+    public void onPostLoad(TaskHistory domainObject) {
         log.debug("loaded: "+domainObject.toString());
     }
 }

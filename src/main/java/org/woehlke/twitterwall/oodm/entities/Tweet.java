@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
-import org.woehlke.twitterwall.oodm.entities.application.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.TweetListener;
 

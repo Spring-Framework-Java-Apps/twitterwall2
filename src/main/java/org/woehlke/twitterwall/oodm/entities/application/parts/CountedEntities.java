@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.application;
+package org.woehlke.twitterwall.oodm.entities.application.parts;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

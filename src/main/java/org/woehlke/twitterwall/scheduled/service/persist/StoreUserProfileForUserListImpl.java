@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
@@ -34,14 +35,14 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
     }
 
     @Override
-    public User storeUserProfileForUserList(TwitterProfile twitterProfile) {
+    public User storeUserProfileForUserList(TwitterProfile twitterProfile, Task task) {
         String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
         User user = userTransformService.transform(twitterProfile);
         user.setOnDefinedUserList(true);
-        user = storeUserProcess.storeUserProcess(user);
+        user = storeUserProcess.storeUserProcess(user, task);
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();
-            User userFromMention = storeUserProfile.storeUserProfileForScreenName(screenName);
+            User userFromMention = storeUserProfile.storeUserProfileForScreenName(screenName, task);
             log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
         }
         return user;

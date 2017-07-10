@@ -9,6 +9,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
@@ -42,14 +43,14 @@ public class StoreUserProfileImpl implements StoreUserProfile {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User storeUserProfile(TwitterProfile userProfile) {
+    public User storeUserProfile(TwitterProfile userProfile, Task task) {
         String msg = "storeUserProfile: ";
         User user = userTransformService.transform(userProfile);
         user.setOnDefinedUserList(false);
-        user = storeUserProcess.storeUserProcess(user);
+        user = storeUserProcess.storeUserProcess(user, task);
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();
-            User userFromMention = this.storeUserProfileForScreenName(screenName);
+            User userFromMention = this.storeUserProfileForScreenName(screenName, task);
             log.debug(msg + " userFromScreenName: "+userFromMention.toString());
         }
         return user;
@@ -57,7 +58,7 @@ public class StoreUserProfileImpl implements StoreUserProfile {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public User storeUserProfileForScreenName(String screenName){
+    public User storeUserProfileForScreenName(String screenName, Task task){
         String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
         if(screenName != null && !screenName.isEmpty()) {
             try {
@@ -66,7 +67,7 @@ public class StoreUserProfileImpl implements StoreUserProfile {
             } catch (EmptyResultDataAccessException e) {
                 try {
                     TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                    User userFromMention = this.storeUserProfile(twitterProfile);
+                    User userFromMention = this.storeUserProfile(twitterProfile,task);
                     log.debug(msg + " userFromMention: "+userFromMention.toString());
                     return userFromMention;
                 } catch (RateLimitExceededException ex) {

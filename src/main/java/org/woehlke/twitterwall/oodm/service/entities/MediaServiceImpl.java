@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
 import org.woehlke.twitterwall.oodm.repository.entities.MediaRepository;
 
@@ -54,7 +55,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media store(Media media) {
+    public Media store(Media media, Task task) {
         String msg = "Media.store: ";
         try {
             log.debug(msg+"try to find: "+media.toString());
@@ -68,9 +69,11 @@ public class MediaServiceImpl implements MediaService {
             mediaPers.setMediaHttps(media.getMediaHttps());
             mediaPers.setMediaType(media.getMediaType());
             mediaPers.setUrl(media.getUrl());
+            mediaPers.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+media.toString());
             return this.mediaRepository.update(mediaPers);
         } catch (EmptyResultDataAccessException e) {
+            media.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+media.toString());
             return this.mediaRepository.persist(media);
         }

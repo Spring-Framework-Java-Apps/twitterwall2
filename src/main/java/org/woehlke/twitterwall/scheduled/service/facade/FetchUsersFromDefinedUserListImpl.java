@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -61,7 +59,7 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         log.debug(msg + "---------------------------------------");
         List<TwitterProfile> userProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUserListName);
         for(TwitterProfile twitterProfile:userProfiles) {
-            User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile);
+            User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
         }
         taskService.done(task);
     }

@@ -1,5 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities.application;
 
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.listener.application.TaskHistoryListener;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "task_history")
+@EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements Comparable<TaskHistory>,Serializable {
 
     private static final long serialVersionUID = 1L;

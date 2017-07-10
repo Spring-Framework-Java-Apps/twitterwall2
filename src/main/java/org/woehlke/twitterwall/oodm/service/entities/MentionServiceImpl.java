@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 
@@ -55,7 +56,7 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Mention store(Mention mention) {
+    public Mention store(Mention mention, Task task) {
         log.debug("try to store Mention: "+mention.toString());
         try {
             String screenName = mention.getScreenName();
@@ -75,9 +76,11 @@ public class MentionServiceImpl implements MentionService {
             mentionPers.setIdTwitter(mention.getIdTwitter());
             mentionPers.setName(mention.getName());
             mentionPers.setScreenName(mention.getScreenName());
+            mentionPers.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
         } catch (EmptyResultDataAccessException e){
+            mention.setCreatedBy(task);
             log.debug(e.getMessage());
             log.debug("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);

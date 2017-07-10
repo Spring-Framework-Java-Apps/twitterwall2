@@ -6,6 +6,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
@@ -57,6 +58,9 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             expanded = location.toExternalForm();
             newUrl = new Url(display, expanded, urlSrc, indices);
             response1.close();
+        } catch (HttpHostConnectException e){
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
         } catch (UnknownHostException e){
             e.printStackTrace();
             log.warn(msg+e.getMessage());
@@ -73,6 +77,9 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             e.printStackTrace();
             log.warn(msg+e.getMessage());
         } catch (IOException e) {
+            e.printStackTrace();
+            log.warn(msg+e.getMessage());
+        } catch (Exception e){
             e.printStackTrace();
             log.warn(msg+e.getMessage());
         }

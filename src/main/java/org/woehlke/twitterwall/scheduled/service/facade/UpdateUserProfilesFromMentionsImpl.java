@@ -9,7 +9,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -71,7 +71,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 if((screenName != null) && (!screenName.isEmpty())) {
                     try {
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                        User user = storeUserProfile.storeUserProfile(twitterProfile);
+                        User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                         log.debug(msg + user.toString());
                     } catch (RateLimitExceededException e) {
                         log.warn(msg + e.getMessage());

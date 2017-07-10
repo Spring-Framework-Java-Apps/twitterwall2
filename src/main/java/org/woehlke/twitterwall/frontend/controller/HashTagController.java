@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class HashTagController extends AbstractTwitterwallController {
 
     @Value("${twitterwall.frontend.info.webpage}")
     private String infoWebpage;
-    
+
     @Value("${twitterwall.context.test}")
     private boolean contextTest;
 
@@ -138,7 +139,7 @@ public class HashTagController extends AbstractTwitterwallController {
             throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
         }
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);

@@ -9,7 +9,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskType;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -66,7 +66,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             for (Long userProfileTwitterId : userProfileTwitterIds) {
                 try {
                     TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
-                    User user = storeUserProfile.storeUserProfile(userProfile);
+                    User user = storeUserProfile.storeUserProfile(userProfile,task);
                     log.debug(msg + user.toString());
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
