@@ -547,7 +547,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFollower(boolean follower) {
-        this.follower = follower;
+        this.follower |= follower;
     }
 
     public boolean isFriend() {
@@ -555,7 +555,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFriend(boolean friend) {
-        this.friend = friend;
+        this.friend |= friend;
     }
 
     public boolean isTweeting() {
@@ -563,7 +563,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setTweeting(boolean tweeting) {
-        this.tweeting = tweeting;
+        this.tweeting |= tweeting;
     }
 
     public void setIdTwitter(long idTwitter) {
@@ -608,7 +608,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setOnDefinedUserList(boolean onDefinedUserList) {
-        this.onDefinedUserList = onDefinedUserList;
+        this.onDefinedUserList |= onDefinedUserList;
     }
 
     public TaskInfo getTaskInfo() {

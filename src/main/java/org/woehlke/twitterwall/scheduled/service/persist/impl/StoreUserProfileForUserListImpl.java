@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
@@ -26,15 +26,15 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
 
     private final UserTransformService userTransformService;
 
-    private final StoreUserProfile storeUserProfile;
-
     private final StoreUserProcess storeUserProcess;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public StoreUserProfileForUserListImpl(UserTransformService userTransformService, StoreUserProfile storeUserProfile, StoreUserProcess storeUserProcess) {
+    public StoreUserProfileForUserListImpl(UserTransformService userTransformService, StoreUserProcess storeUserProcess, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.userTransformService = userTransformService;
-        this.storeUserProfile = storeUserProfile;
         this.storeUserProcess = storeUserProcess;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();
             if(screenName != null){
-                User userFromMention = storeUserProfile.storeUserProfileForScreenName(screenName, task);
+                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
                 log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
             }
         }

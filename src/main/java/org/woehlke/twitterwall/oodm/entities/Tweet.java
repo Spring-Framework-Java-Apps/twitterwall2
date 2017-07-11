@@ -628,8 +628,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-
-
     public User getUser() {
         return user;
     }

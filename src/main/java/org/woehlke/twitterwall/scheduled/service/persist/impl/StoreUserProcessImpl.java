@@ -29,8 +29,6 @@ public class StoreUserProcessImpl implements StoreUserProcess {
 
     private final UserService userService;
 
-    private final UrlService urlService;
-
     private final HashTagService hashTagService;
 
     private final MentionService mentionService;
@@ -42,9 +40,8 @@ public class StoreUserProcessImpl implements StoreUserProcess {
     private final CreatePersistentUrl createPersistentUrl;
 
     @Autowired
-    public StoreUserProcessImpl(UserService userService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+    public StoreUserProcessImpl(UserService userService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
         this.userService = userService;
-        this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
@@ -55,55 +52,53 @@ public class StoreUserProcessImpl implements StoreUserProcess {
     @Override
     public User storeUserProcess(User user, Task task){
         String msg = "User.storeUserProcess ";
-        Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        Set<Media> media = new LinkedHashSet<Media>();
-        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
-        for (Url myUrl : user.getUrls()) {
+        Set<Url> urls = user.getUrls();
+        Set<HashTag> hashTags = user.getTags();
+        Set<Mention> mentions = user.getMentions();
+        Set<Media> media = user.getMedia();
+        Set<TickerSymbol> tickerSymbols = user.getTickerSymbols();
+        user.removeAllUrls();
+        user.removeAllTags();
+        user.removeAllMentions();
+        user.removeAllMedia();
+        user.removeAllTickerSymbols();
+        for (Url myUrl : urls) {
             Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl(),task);
             if((urlPers != null)&&(urlPers.isValid())){
-                urls.add(urlPers);
+                user.addUrl(urlPers);
             }
         }
         Url urlPers = createPersistentUrl.getPersistentUrlFor(user.getUrl(), task);
         if((urlPers != null)&&(urlPers.isValid())){
-            urls.add(urlPers);
+            user.addUrl(urlPers);
         }
-        for (HashTag hashTag : user.getTags()) {
+        for (HashTag hashTag : hashTags) {
             if(hashTag.isValid()){
-                hashTags.add(hashTagService.store(hashTag, task));
+                user.addTag(hashTagService.store(hashTag, task));
             }
         }
-        for (Mention mention : user.getMentions()) {
+        for (Mention mention : mentions) {
             if(mention.isValid()){
-                mentions.add(mentionService.store(mention, task));
+                user.addMention(mentionService.store(mention, task));
             }
         }
-        for(Media medium:user.getMedia()){
+        for(Media medium:media){
             if(medium.isValid()){
-                media.add(mediaService.store(medium,task));
+                user.addMedium(mediaService.store(medium,task));
             }
         }
-        for(TickerSymbol tickerSymbol:user.getTickerSymbols()){
+        for(TickerSymbol tickerSymbol:tickerSymbols){
             if(tickerSymbol.isValid()){
-                tickerSymbols.add(tickerSymbolService.store(tickerSymbol,task));
+                user.addTickerSymbol(tickerSymbolService.store(tickerSymbol,task));
             }
         }
-        user.setUrls(urls);
-        user.setTags(hashTags);
-        user.setMentions(mentions);
-        user.setMedia(media);
-        user.setTickerSymbols(tickerSymbols);
         try {
             long idTwitter = user.getIdTwitter();
             User userPers = userService.findByIdTwitter(idTwitter);
             user.setId(userPers.getId());
             user.setFriend(userPers.isFriend());
             user.setFollower(userPers.isFollower());
-            if(!user.isOnDefinedUserList()){
-                user.setOnDefinedUserList(userPers.isOnDefinedUserList());
-            }
+            user.setOnDefinedUserList(userPers.isOnDefinedUserList());
             log.debug(msg+" try to update user "+user.toString());
             return userService.update(user);
         } catch (EmptyResultDataAccessException e) {

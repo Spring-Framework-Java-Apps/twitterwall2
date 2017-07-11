@@ -11,6 +11,4 @@ public interface StoreUserProfile {
 
     User storeUserProfile(TwitterProfile userProfile, Task task);
 
-    User storeUserProfileForScreenName(String screenName, Task task);
-
 }
