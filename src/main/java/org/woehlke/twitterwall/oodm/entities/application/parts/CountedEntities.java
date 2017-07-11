@@ -9,97 +9,97 @@ import java.io.Serializable;
 @Embeddable
 public class CountedEntities implements Serializable {
 
-    private long countUser;
-    private long countTweets;
-    private long countHashTags;
-    private long countMedia;
-    private long countMention;
-    private long countTickerSymbol;
-    private long countUrl;
-    private long countUrlCache;
-    private long countTask;
-    private long countTaskHistory;
+    private Long countUser;
+    private Long countTweets;
+    private Long countHashTags;
+    private Long countMedia;
+    private Long countMention;
+    private Long countTickerSymbol;
+    private Long countUrl;
+    private Long countUrlCache;
+    private Long countTask;
+    private Long countTaskHistory;
 
     public CountedEntities() {
     }
 
-    public long getCountUser() {
+    public Long getCountUser() {
         return countUser;
     }
 
-    public void setCountUser(long countUser) {
+    public void setCountUser(Long countUser) {
         this.countUser = countUser;
     }
 
-    public long getCountTweets() {
+    public Long getCountTweets() {
         return countTweets;
     }
 
-    public void setCountTweets(long countTweets) {
+    public void setCountTweets(Long countTweets) {
         this.countTweets = countTweets;
     }
 
-    public long getCountHashTags() {
+    public Long getCountHashTags() {
         return countHashTags;
     }
 
-    public void setCountHashTags(long countHashTags) {
+    public void setCountHashTags(Long countHashTags) {
         this.countHashTags = countHashTags;
     }
 
-    public long getCountMedia() {
+    public Long getCountMedia() {
         return countMedia;
     }
 
-    public void setCountMedia(long countMedia) {
+    public void setCountMedia(Long countMedia) {
         this.countMedia = countMedia;
     }
 
-    public long getCountMention() {
+    public Long getCountMention() {
         return countMention;
     }
 
-    public void setCountMention(long countMention) {
+    public void setCountMention(Long countMention) {
         this.countMention = countMention;
     }
 
-    public long getCountTickerSymbol() {
+    public Long getCountTickerSymbol() {
         return countTickerSymbol;
     }
 
-    public void setCountTickerSymbol(long countTickerSymbol) {
+    public void setCountTickerSymbol(Long countTickerSymbol) {
         this.countTickerSymbol = countTickerSymbol;
     }
 
-    public long getCountUrl() {
+    public Long getCountUrl() {
         return countUrl;
     }
 
-    public void setCountUrl(long countUrl) {
+    public void setCountUrl(Long countUrl) {
         this.countUrl = countUrl;
     }
 
-    public long getCountUrlCache() {
+    public Long getCountUrlCache() {
         return countUrlCache;
     }
 
-    public void setCountUrlCache(long countUrlCache) {
+    public void setCountUrlCache(Long countUrlCache) {
         this.countUrlCache = countUrlCache;
     }
 
-    public long getCountTask() {
+    public Long getCountTask() {
         return countTask;
     }
 
-    public void setCountTask(long countTask) {
+    public void setCountTask(Long countTask) {
         this.countTask = countTask;
     }
 
-    public long getCountTaskHistory() {
+    public Long getCountTaskHistory() {
         return countTaskHistory;
     }
 
-    public void setCountTaskHistory(long countTaskHistory) {
+    public void setCountTaskHistory(Long countTaskHistory) {
         this.countTaskHistory = countTaskHistory;
     }
 
@@ -126,30 +126,33 @@ public class CountedEntities implements Serializable {
 
         CountedEntities that = (CountedEntities) o;
 
-        if (countUser != that.countUser) return false;
-        if (countTweets != that.countTweets) return false;
-        if (countHashTags != that.countHashTags) return false;
-        if (countMedia != that.countMedia) return false;
-        if (countMention != that.countMention) return false;
-        if (countTickerSymbol != that.countTickerSymbol) return false;
-        if (countUrl != that.countUrl) return false;
-        if (countUrlCache != that.countUrlCache) return false;
-        if (countTask != that.countTask) return false;
-        return countTaskHistory == that.countTaskHistory;
+        if (countUser != null ? !countUser.equals(that.countUser) : that.countUser != null) return false;
+        if (countTweets != null ? !countTweets.equals(that.countTweets) : that.countTweets != null) return false;
+        if (countHashTags != null ? !countHashTags.equals(that.countHashTags) : that.countHashTags != null)
+            return false;
+        if (countMedia != null ? !countMedia.equals(that.countMedia) : that.countMedia != null) return false;
+        if (countMention != null ? !countMention.equals(that.countMention) : that.countMention != null) return false;
+        if (countTickerSymbol != null ? !countTickerSymbol.equals(that.countTickerSymbol) : that.countTickerSymbol != null)
+            return false;
+        if (countUrl != null ? !countUrl.equals(that.countUrl) : that.countUrl != null) return false;
+        if (countUrlCache != null ? !countUrlCache.equals(that.countUrlCache) : that.countUrlCache != null)
+            return false;
+        if (countTask != null ? !countTask.equals(that.countTask) : that.countTask != null) return false;
+        return countTaskHistory != null ? countTaskHistory.equals(that.countTaskHistory) : that.countTaskHistory == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (countUser ^ (countUser >>> 32));
-        result = 31 * result + (int) (countTweets ^ (countTweets >>> 32));
-        result = 31 * result + (int) (countHashTags ^ (countHashTags >>> 32));
-        result = 31 * result + (int) (countMedia ^ (countMedia >>> 32));
-        result = 31 * result + (int) (countMention ^ (countMention >>> 32));
-        result = 31 * result + (int) (countTickerSymbol ^ (countTickerSymbol >>> 32));
-        result = 31 * result + (int) (countUrl ^ (countUrl >>> 32));
-        result = 31 * result + (int) (countUrlCache ^ (countUrlCache >>> 32));
-        result = 31 * result + (int) (countTask ^ (countTask >>> 32));
-        result = 31 * result + (int) (countTaskHistory ^ (countTaskHistory >>> 32));
+        int result = countUser != null ? countUser.hashCode() : 0;
+        result = 31 * result + (countTweets != null ? countTweets.hashCode() : 0);
+        result = 31 * result + (countHashTags != null ? countHashTags.hashCode() : 0);
+        result = 31 * result + (countMedia != null ? countMedia.hashCode() : 0);
+        result = 31 * result + (countMention != null ? countMention.hashCode() : 0);
+        result = 31 * result + (countTickerSymbol != null ? countTickerSymbol.hashCode() : 0);
+        result = 31 * result + (countUrl != null ? countUrl.hashCode() : 0);
+        result = 31 * result + (countUrlCache != null ? countUrlCache.hashCode() : 0);
+        result = 31 * result + (countTask != null ? countTask.hashCode() : 0);
+        result = 31 * result + (countTaskHistory != null ? countTaskHistory.hashCode() : 0);
         return result;
     }
 }

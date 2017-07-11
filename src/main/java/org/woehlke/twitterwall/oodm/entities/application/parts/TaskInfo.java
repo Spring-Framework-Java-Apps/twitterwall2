@@ -9,52 +9,52 @@ import java.io.Serializable;
 @Embeddable
 public class TaskInfo implements Serializable {
 
-    private boolean updatedByFetchTweetsFromTwitterSearch = false;
-    private boolean updatedByUpdateTweets  = false;
-    private boolean updatedByUpdateUserProfiles  = false;
-    private boolean updatedByUpdateUserProfilesFromMentions  = false;
-    private boolean updatedByFetchUsersFromDefinedUserList  = false;
+    private Boolean updatedByFetchTweetsFromTwitterSearch = false;
+    private Boolean updatedByUpdateTweets  = false;
+    private Boolean updatedByUpdateUserProfiles  = false;
+    private Boolean updatedByUpdateUserProfilesFromMentions  = false;
+    private Boolean updatedByFetchUsersFromDefinedUserList  = false;
 
     public TaskInfo() {
     }
 
-    public boolean isUpdatedByFetchTweetsFromTwitterSearch() {
+    public Boolean isUpdatedByFetchTweetsFromTwitterSearch() {
         return updatedByFetchTweetsFromTwitterSearch;
     }
 
-    public void setUpdatedByFetchTweetsFromTwitterSearch(boolean updatedByFetchTweetsFromTwitterSearch) {
+    public void setUpdatedByFetchTweetsFromTwitterSearch(Boolean updatedByFetchTweetsFromTwitterSearch) {
         this.updatedByFetchTweetsFromTwitterSearch |= updatedByFetchTweetsFromTwitterSearch;
     }
 
-    public boolean isUpdatedByUpdateTweets() {
+    public Boolean isUpdatedByUpdateTweets() {
         return updatedByUpdateTweets;
     }
 
-    public void setUpdatedByUpdateTweets(boolean updatedByUpdateTweets) {
+    public void setUpdatedByUpdateTweets(Boolean updatedByUpdateTweets) {
         this.updatedByUpdateTweets |= updatedByUpdateTweets;
     }
 
-    public boolean isUpdatedByUpdateUserProfiles() {
+    public Boolean isUpdatedByUpdateUserProfiles() {
         return updatedByUpdateUserProfiles;
     }
 
-    public void setUpdatedByUpdateUserProfiles(boolean updatedByUpdateUserProfiles) {
+    public void setUpdatedByUpdateUserProfiles(Boolean updatedByUpdateUserProfiles) {
         this.updatedByUpdateUserProfiles |= updatedByUpdateUserProfiles;
     }
 
-    public boolean isUpdatedByUpdateUserProfilesFromMentions() {
+    public Boolean isUpdatedByUpdateUserProfilesFromMentions() {
         return updatedByUpdateUserProfilesFromMentions;
     }
 
-    public void setUpdatedByUpdateUserProfilesFromMentions(boolean updatedByUpdateUserProfilesFromMentions) {
+    public void setUpdatedByUpdateUserProfilesFromMentions(Boolean updatedByUpdateUserProfilesFromMentions) {
         this.updatedByUpdateUserProfilesFromMentions |= updatedByUpdateUserProfilesFromMentions;
     }
 
-    public boolean isUpdatedByFetchUsersFromDefinedUserList() {
+    public Boolean isUpdatedByFetchUsersFromDefinedUserList() {
         return updatedByFetchUsersFromDefinedUserList;
     }
 
-    public void setUpdatedByFetchUsersFromDefinedUserList(boolean updatedByFetchUsersFromDefinedUserList) {
+    public void setUpdatedByFetchUsersFromDefinedUserList(Boolean updatedByFetchUsersFromDefinedUserList) {
         this.updatedByFetchUsersFromDefinedUserList |= updatedByFetchUsersFromDefinedUserList;
     }
 
@@ -67,5 +67,33 @@ public class TaskInfo implements Serializable {
             ", updatedByUpdateUserProfilesFromMentions=" + updatedByUpdateUserProfilesFromMentions +
             ", updatedByFetchUsersFromDefinedUserList=" + updatedByFetchUsersFromDefinedUserList +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TaskInfo)) return false;
+
+        TaskInfo taskInfo = (TaskInfo) o;
+
+        if (updatedByFetchTweetsFromTwitterSearch != null ? !updatedByFetchTweetsFromTwitterSearch.equals(taskInfo.updatedByFetchTweetsFromTwitterSearch) : taskInfo.updatedByFetchTweetsFromTwitterSearch != null)
+            return false;
+        if (updatedByUpdateTweets != null ? !updatedByUpdateTweets.equals(taskInfo.updatedByUpdateTweets) : taskInfo.updatedByUpdateTweets != null)
+            return false;
+        if (updatedByUpdateUserProfiles != null ? !updatedByUpdateUserProfiles.equals(taskInfo.updatedByUpdateUserProfiles) : taskInfo.updatedByUpdateUserProfiles != null)
+            return false;
+        if (updatedByUpdateUserProfilesFromMentions != null ? !updatedByUpdateUserProfilesFromMentions.equals(taskInfo.updatedByUpdateUserProfilesFromMentions) : taskInfo.updatedByUpdateUserProfilesFromMentions != null)
+            return false;
+        return updatedByFetchUsersFromDefinedUserList != null ? updatedByFetchUsersFromDefinedUserList.equals(taskInfo.updatedByFetchUsersFromDefinedUserList) : taskInfo.updatedByFetchUsersFromDefinedUserList == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = updatedByFetchTweetsFromTwitterSearch != null ? updatedByFetchTweetsFromTwitterSearch.hashCode() : 0;
+        result = 31 * result + (updatedByUpdateTweets != null ? updatedByUpdateTweets.hashCode() : 0);
+        result = 31 * result + (updatedByUpdateUserProfiles != null ? updatedByUpdateUserProfiles.hashCode() : 0);
+        result = 31 * result + (updatedByUpdateUserProfilesFromMentions != null ? updatedByUpdateUserProfilesFromMentions.hashCode() : 0);
+        result = 31 * result + (updatedByFetchUsersFromDefinedUserList != null ? updatedByFetchUsersFromDefinedUserList.hashCode() : 0);
+        return result;
     }
 }
