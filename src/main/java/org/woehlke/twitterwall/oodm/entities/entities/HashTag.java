@@ -1,12 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.HashTagListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +40,15 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
@@ -52,6 +61,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Column(nullable = false)
     private String text;
 
+    /*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "hashtag_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -62,6 +72,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
             this.indices.add(index);
         }
     }
+    */
 
     public Long getId() {
         return id;
@@ -77,7 +88,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public HashTag(String text, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.text = text;
     }
 
@@ -92,13 +103,28 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
-
-    public List<Integer> getIndices() {
-        return indices;
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -124,8 +150,33 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         return text.compareTo(other.getText());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
@@ -133,10 +184,22 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
             myIndieces.append(", ");
         }
         myIndieces.append(" ]");
+        */
         return "HashTag{" +
-                "id=" + id +
+                " id=" + id +
                 ", text='" + text + '\'' +
-                  ", indices=" + myIndieces.toString() +
-                '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+                  //", indices=" + myIndieces.toString() +
+                " }\n";
+    }
+
+    @Override
+    public boolean isValid() {
+        if((text == null)||(text.isEmpty())){
+            return false;
+        }
+        return true;
     }
 }

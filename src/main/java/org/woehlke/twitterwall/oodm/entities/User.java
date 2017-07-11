@@ -1,11 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;
@@ -42,10 +42,10 @@ import java.util.regex.Pattern;
                 name = "User.getAll",
                 query = "select t from User as t order by t.screenName"
         ),
-    @NamedQuery(
-        name = "User.count",
-        query = "select count(t) from User as t"
-    ),
+        @NamedQuery(
+            name = "User.count",
+            query = "select count(t) from User as t"
+        ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
                 query = "select t from User as t where t.tweeting=true order by t.screenName"
@@ -58,10 +58,10 @@ import java.util.regex.Pattern;
             name = "User.getNotYetOnList",
             query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
         ),
-    @NamedQuery(
-        name = "User.getOnList",
-        query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
-    ),
+        @NamedQuery(
+            name = "User.getOnList",
+            query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+        ),
         @NamedQuery(
                 name = "User.getUsersForHashTag",
                 query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
@@ -87,6 +87,15 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
+
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
 
     @Column(name="id_twitter",nullable = false)
     private long idTwitter;
@@ -221,6 +230,15 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @JoinTable(name = "userprofile_mention")
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
+
+    @JoinTable(name = "userprofile_media")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Set<Media> media = new LinkedHashSet<Media>();
+
+    @JoinTable(name = "userprofile_tickersymbol")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
+
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         this.idTwitter = idTwitter;
@@ -529,7 +547,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFollower(boolean follower) {
-        this.follower = follower;
+        this.follower |= follower;
     }
 
     public boolean isFriend() {
@@ -537,7 +555,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFriend(boolean friend) {
-        this.friend = friend;
+        this.friend |= friend;
     }
 
     public boolean isTweeting() {
@@ -545,7 +563,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setTweeting(boolean tweeting) {
-        this.tweeting = tweeting;
+        this.tweeting |= tweeting;
     }
 
     public void setIdTwitter(long idTwitter) {
@@ -585,13 +603,36 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.createdDate = createdDate;
     }
 
-
     public boolean isOnDefinedUserList() {
         return onDefinedUserList;
     }
 
     public void setOnDefinedUserList(boolean onDefinedUserList) {
-        this.onDefinedUserList = onDefinedUserList;
+        this.onDefinedUserList |= onDefinedUserList;
+    }
+
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public Set<Url> getUrls() {
@@ -606,7 +647,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public boolean addAllUrls(Set<Url> urls) {
         boolean result = false;
         for(Url url:urls){
-            if(url != null){
+            if((url != null) && (!this.urls.contains(url))){
                 this.urls.add(url);
                 result = true;
             }
@@ -617,7 +658,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public boolean removeAllUrls(Set<Url> urls) {
         boolean result = false;
         for(Url url:urls){
-            if(url != null){
+            if((url != null) && (this.urls.contains(url))){
                 this.urls.remove(url);
                 result = true;
             }
@@ -631,18 +672,18 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addUrl(Url url) {
-        if(url == null){
-            return false;
-        } else {
+        if((url != null) && (!this.urls.contains(url))){
             return this.urls.add(url);
+        } else {
+            return false;
         }
     }
 
     public boolean removetUrl(Url url) {
-        if(url == null) {
-            return true;
-        } else {
+        if((url != null) && (this.urls.contains(url))){
             return this.urls.remove(url);
+        } else {
+            return false;
         }
     }
 
@@ -656,11 +697,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (!this.tags.contains(tag))){
+                this.tags.add(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (this.tags.contains(tag))){
+                this.tags.remove(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags() {
@@ -669,11 +724,19 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
+        if((tag != null) && (!this.tags.contains(tag))){
+            return this.tags.add(tag);
+        } else {
+            return false;
+        }
     }
 
     public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
+        if((tag != null) && (this.tags.contains(tag))){
+            return this.tags.remove(tag);
+        } else {
+            return false;
+        }
     }
 
 
@@ -687,11 +750,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (!this.mentions.contains(mention))){
+                this.mentions.add(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (this.mentions.contains(mention))){
+                this.mentions.remove(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions() {
@@ -707,6 +784,94 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return this.mentions.remove(mention);
     }
 
+
+    public Set<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(Set<Media> media) {
+        this.media.clear();
+        this.media.addAll(media);
+    }
+
+    public boolean addAllMedia(Set<Media> media) {
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (!this.media.contains(medium))){
+                this.media.add(medium);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllMedia(Set<Media> media) {
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (this.media.contains(medium))){
+                this.media.remove(medium);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllMedia() {
+        this.media.clear();
+        return this.media.isEmpty();
+    }
+
+    public boolean addMedium(Media medium) {
+        return this.media.add(medium);
+    }
+
+    public boolean removeMedium(Media medium) {
+        return this.media.remove(medium);
+    }
+
+    public Set<TickerSymbol> getTickerSymbols() {
+        return tickerSymbols;
+    }
+
+    public void setTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        this.tickerSymbols.clear();
+        this.tickerSymbols.addAll(tickerSymbols);
+    }
+
+    public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (!this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.add(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.remove(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllTickerSymbols() {
+        this.tickerSymbols.clear();
+        return this.tickerSymbols.isEmpty();
+    }
+
+    public boolean addTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.add(tickerSymbol);
+    }
+
+    public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.remove(tickerSymbol);
+    }
 
     @Override
     public boolean equals(User o) {
@@ -731,8 +896,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return screenName.compareTo(other.getScreenName());
     }
 
-    @Override
-    public String toString() {
+    private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
         for (Url url : urls) {
@@ -744,6 +908,10 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
             }
         }
         myUrls.append(" ]");
+        return myUrls.toString();
+    }
+
+    private String toStringHashTags(){
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
         for (HashTag tag : tags) {
@@ -751,10 +919,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 myTags.append(tag.toString());
                 myTags.append(", ");
             } else {
-                myUrls.append(", null");
+                myTags.append(", null");
             }
         }
         myTags.append(" ]");
+        return myTags.toString();
+    }
+
+    private String toStringMentions(){
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("[ ");
         for (Mention mention : mentions) {
@@ -762,10 +934,69 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 myMentions.append(mention.toString());
                 myMentions.append(", ");
             } else {
-                myUrls.append(", null");
+                myMentions.append(", null");
             }
         }
         myMentions.append(" ]");
+        return myMentions.toString();
+    }
+
+    private String toStringMedia(){
+        StringBuffer myMedia = new StringBuffer();
+        myMedia.append("[ ");
+        for (Media medium : media) {
+            if(medium != null){
+                myMedia.append(medium.toString());
+                myMedia.append(", ");
+            } else {
+                myMedia.append(", null");
+            }
+        }
+        myMedia.append(" ]");
+        return myMedia.toString();
+    }
+
+    private String toStringTickerSymbols(){
+        StringBuffer myTickerSymbols = new StringBuffer();
+        myTickerSymbols.append("[ ");
+        for (TickerSymbol tickerSymbol : tickerSymbols) {
+            if(tickerSymbol != null){
+                myTickerSymbols.append(tickerSymbol.toString());
+                myTickerSymbols.append(", ");
+            } else {
+                myTickerSymbols.append(", null");
+            }
+        }
+        myTickerSymbols.append(" ]");
+        return myTickerSymbols.toString();
+    }
+
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -805,9 +1036,19 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
+                ",\n urls=" + toStringUrls() +
+                ",\n tags=" + toStringHashTags() +
+                ",\n mentions=" + toStringMentions() +
+                ",\n media=" +toStringMedia() +
+                ",\n tickerSymbols=" +toStringTickerSymbols() +
                 "\n}";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }

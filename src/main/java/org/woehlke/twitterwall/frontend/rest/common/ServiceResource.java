@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.frontend.model.CountedEntities;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
  * Created by tw on 03.07.17.
@@ -15,15 +15,16 @@ import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 @RequestMapping("/rest/service")
 public class ServiceResource {
 
-     private final PersistDataFromTwitter persistDataFromTwitter;
+    private final CountedEntitiesService countedEntitiesService;
 
-     @Autowired
-    public ServiceResource(PersistDataFromTwitter persistDataFromTwitter) {
-        this.persistDataFromTwitter = persistDataFromTwitter;
+    @Autowired
+    public ServiceResource(CountedEntitiesService countedEntitiesService) {
+        this.countedEntitiesService = countedEntitiesService;
     }
+
     @RequestMapping(path="/count",method= RequestMethod.GET)
     public @ResponseBody
     CountedEntities countAll(){
-        return this.persistDataFromTwitter.countAll();
+        return this.countedEntitiesService.countAll();
     }
 }

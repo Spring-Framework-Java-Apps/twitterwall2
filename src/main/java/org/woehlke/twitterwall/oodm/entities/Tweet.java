@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.TweetListener;
 
@@ -40,7 +42,7 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
-                query="select t from Tweet as t join t.tags tag WHERE tag.text=:hashtagText"
+                query="select count(t) from Tweet as t join t.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name="Tweet.count",
@@ -67,6 +69,15 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
+
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
@@ -337,15 +348,21 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.favoriteCount = favoriteCount;
     }
 
-    /*
-    public Entities getEntities() {
-        return entities;
+    public Task getCreatedBy() {
+        return createdBy;
     }
 
-    public void setEntities(Entities entities) {
-        this.entities = entities;
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
     }
-    */
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 
     public void setIdTwitter(long idTwitter) {
         this.idTwitter = idTwitter;
@@ -363,6 +380,13 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.createdAt = createdAt;
     }
 
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
 
 
     public Set<Url> getUrls() {
@@ -375,11 +399,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllUrls(Set<Url> urls) {
-        return this.urls.addAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if((url != null) && (!this.urls.contains(url))){
+                this.urls.add(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls(Set<Url> urls) {
-        return this.urls.removeAll(urls);
+        boolean result = false;
+        for(Url url:urls){
+            if((url != null) && (this.urls.contains(url))){
+                this.urls.remove(url);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllUrls() {
@@ -388,14 +426,20 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addUrl(Url url) {
-        return this.urls.add(url);
+        if((url != null) && (!this.urls.contains(url))){
+            return this.urls.add(url);
+        } else {
+            return false;
+        }
     }
 
-    public boolean removeUrl(Url url) {
-        return this.urls.remove(url);
+    public boolean removetUrl(Url url) {
+        if((url != null) && (this.urls.contains(url))){
+            return this.urls.remove(url);
+        } else {
+            return false;
+        }
     }
-
-
 
     public Set<HashTag> getTags() {
         return tags;
@@ -407,11 +451,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (!this.tags.contains(tag))){
+                this.tags.add(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
+        boolean result = false;
+        for(HashTag tag:tags){
+            if((tag != null) && (this.tags.contains(tag))){
+                this.tags.remove(tag);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTags() {
@@ -420,13 +478,20 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
+        if((tag != null) && (!this.tags.contains(tag))){
+            return this.tags.add(tag);
+        } else {
+            return false;
+        }
     }
 
     public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
+        if((tag != null) && (this.tags.contains(tag))){
+            return this.tags.remove(tag);
+        } else {
+            return false;
+        }
     }
-
 
 
     public Set<Mention> getMentions() {
@@ -439,11 +504,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (!this.mentions.contains(mention))){
+                this.mentions.add(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
+        boolean result = false;
+        for(Mention mention:mentions){
+            if((mention != null) && (this.mentions.contains(mention))){
+                this.mentions.remove(mention);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMentions() {
@@ -460,7 +539,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
 
-
     public Set<Media> getMedia() {
         return media;
     }
@@ -471,11 +549,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllMedia(Set<Media> media) {
-        return this.media.addAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (!this.media.contains(medium))){
+                this.media.add(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia(Set<Media> media) {
-        return this.media.removeAll(media);
+        boolean result = false;
+        for(Media medium:media){
+            if((medium != null) && (this.media.contains(medium))){
+                this.media.remove(medium);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllMedia() {
@@ -491,8 +583,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return this.media.remove(medium);
     }
 
-
-
     public Set<TickerSymbol> getTickerSymbols() {
         return tickerSymbols;
     }
@@ -503,7 +593,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     }
 
     public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        return this.tickerSymbols.addAll(tickerSymbols);
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (!this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.add(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
+        boolean result = false;
+        for(TickerSymbol tickerSymbol:tickerSymbols){
+            if((tickerSymbol != null) && (this.tickerSymbols.contains(tickerSymbol))){
+                this.tickerSymbols.remove(tickerSymbol);
+                result = true;
+            }
+        }
+        return result;
     }
 
     public boolean removeAllTickerSymbols() {
@@ -511,14 +619,13 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return this.tickerSymbols.isEmpty();
     }
 
-    public boolean addTickerSymbol(TickerSymbol tickerSymbols) {
-        return this.tickerSymbols.add(tickerSymbols);
+    public boolean addTickerSymbol(TickerSymbol tickerSymbol) {
+        return this.tickerSymbols.add(tickerSymbol);
     }
 
     public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
         return this.tickerSymbols.remove(tickerSymbol);
     }
-
 
 
     public User getUser() {
@@ -552,45 +659,123 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return createdAt.compareTo(other.getCreatedAt());
     }
 
-    @Override
-    public String toString() {
+    private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
         for (Url url : urls) {
-            myUrls.append(url.toString());
-            myUrls.append(", ");
+            if(url != null) {
+                myUrls.append(url.toString());
+                myUrls.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
         }
         myUrls.append(" ]");
+        return myUrls.toString();
+    }
+
+    private String toStringHashTags(){
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
         for (HashTag tag : tags) {
-            myTags.append(tag.toString());
-            myTags.append(", ");
+            if(tag != null){
+                myTags.append(tag.toString());
+                myTags.append(", ");
+            } else {
+                myTags.append(", null");
+            }
         }
         myTags.append(" ]");
+        return myTags.toString();
+    }
+
+    private String toStringMentions(){
         StringBuffer myMentions = new StringBuffer();
         myMentions.append("[ ");
         for (Mention mention : mentions) {
-            myMentions.append(mention.toString());
-            myMentions.append(", ");
+            if(mention != null){
+                myMentions.append(mention.toString());
+                myMentions.append(", ");
+            } else {
+                myMentions.append(", null");
+            }
         }
         myMentions.append(" ]");
+        return myMentions.toString();
+    }
 
+    private String toStringMedia(){
         StringBuffer myMedia = new StringBuffer();
         myMedia.append("[ ");
         for (Media medium : media) {
-            myMedia.append(medium.toString());
-            myMedia.append(", ");
+            if(medium != null){
+                myMedia.append(medium.toString());
+                myMedia.append(", ");
+            } else {
+                myMedia.append(", null");
+            }
         }
         myMedia.append(" ]");
+        return myMedia.toString();
+    }
 
+    private String toStringTickerSymbols(){
         StringBuffer myTickerSymbols = new StringBuffer();
         myTickerSymbols.append("[ ");
-        for (TickerSymbol medium : tickerSymbols) {
-            myTickerSymbols.append(medium.toString());
-            myTickerSymbols.append(", ");
+        for (TickerSymbol tickerSymbol : tickerSymbols) {
+            if(tickerSymbol != null){
+                myTickerSymbols.append(tickerSymbol.toString());
+                myTickerSymbols.append(", ");
+            } else {
+                myTickerSymbols.append(", null");
+            }
         }
         myTickerSymbols.append(" ]");
+        return myTickerSymbols.toString();
+    }
+
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
+    private String toStringRetweetedStatus(){
+        if(retweetedStatus==null){
+            return " null ";
+        } else {
+            return retweetedStatus.toString();
+        }
+    }
+
+    private String toStringUser(){
+        if(user==null){
+            return " null ";
+        } else {
+            return user.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
         return "Tweet{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -611,12 +796,21 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", retweetedStatus=" + retweetedStatus +
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
-                ",\n media=" + myMedia.toString() +
-                ",\n tickerSymbols=" + myTickerSymbols.toString() +
-                ",\n user=" + user.toString() +
+                ",\n retweetedStatus=" + toStringRetweetedStatus() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
+                ",\n urls=" + toStringUrls() +
+                ",\n tags=" + toStringHashTags() +
+                ",\n mentions=" + toStringMentions() +
+                ",\n media=" +toStringMedia() +
+                ",\n tickerSymbols=" +toStringTickerSymbols() +
+                ",\n user=" + toStringUser() +
                 "\n}";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }

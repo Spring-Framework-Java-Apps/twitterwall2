@@ -32,16 +32,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by tw on 19.06.17.
  */
+/*
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DataJpaTest(showSql=false)
 @AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
 @AutoConfigureMockMvc
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+*/
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class ImprintControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(ImprintControllerTest.class);
-    
+
     @Autowired
     private ImprintController controller;
 
@@ -53,7 +58,7 @@ public class ImprintControllerTest {
 
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
-    
+
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -70,7 +75,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
         log.info("------------------------------------");
     }
-    
+
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())

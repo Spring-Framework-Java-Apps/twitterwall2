@@ -8,12 +8,16 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.backend.TwitterApiService;
-import org.woehlke.twitterwall.exceptions.remote.TwitterApiException;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
@@ -48,12 +52,18 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             876441015523192832L, // Markus306
             876440419416109056L  // mattLefaux
     };
-    
+
     private static final Logger log = LoggerFactory.getLogger(AbstractTwitterwallController.class);
 
     private TwitterApiService twitterApiService;
 
-    private PersistDataFromTwitter persistDataFromTwitter;
+    private StoreOneTweet storeOneTweet;
+
+    private StoreUserProfile storeUserProfile;
+
+    private UserService userService;
+
+    private TaskService taskService;
 
     private String menuAppName;
 
@@ -62,13 +72,13 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     private String infoWebpage;
 
     private String theme;
-    
+
     private boolean contextTest;
 
     private String imprintScreenName;
 
     private String idGoogleAnalytics;
-    
+
     protected void logEnv(){
         log.info("--------------------------------------------------------------------");
         log.info("twitterwall.frontend.menu.appname = "+menuAppName);
@@ -80,7 +90,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         log.info("twitterwall.frontend.idGoogleAnalytics = "+idGoogleAnalytics);
         log.info("--------------------------------------------------------------------");
     }
-    
+
     protected ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
@@ -122,6 +132,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     }
 
     protected void getTestDataTweets(String msg,Model model){
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -131,15 +142,13 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
                     log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.persistDataFromTwitter.storeOneTweet(tweet);
+                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.storeOneTweet.storeOneTweet(tweet, task);
                     log.info(msg + "--------------------------------------------------------------------");
                     log.info(msg + persTweet.toString());
                     log.info(msg + "--------------------------------------------------------------------");
                     latest.add(persTweet);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
-                } catch (TwitterApiException ex) {
-                    log.warn(msg + ex.getMessage());
                 } catch (NoResultException e) {
                     log.warn(msg + e.getMessage());
                 }
@@ -151,10 +160,12 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         } finally {
             log.info(msg + "--------------------------------------------------------------------");
         }
+        taskService.done(task);
         model.addAttribute("latestTweets", latest);
     }
 
     protected void getTestDataUser(String msg,Model model){
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
@@ -163,12 +174,10 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
                     log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.User persUser = this.persistDataFromTwitter.storeUserProfile(twitterProfile);
+                    org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
                     user.add(persUser);
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
-                } catch (TwitterApiException ex) {
-                    log.warn(msg + ex.getMessage());
                 } catch (NoResultException e) {
                     log.warn(msg + e.getMessage());
                 }
@@ -178,6 +187,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         }
+        taskService.done(task);
         model.addAttribute("user", user);
     }
 
@@ -195,10 +205,12 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     }
 
     protected void addUserForScreenName(Model model, String screenName) {
+        String msg="addUserForScreenName "+screenName+": ";
+        Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
         try {
             log.info("--------------------------------------------------------------------");
             log.info("screenName = "+ screenName);
-            User user = persistDataFromTwitter.findUserByScreenName(screenName); //userService.findByScreenName(screenName);
+            User user = userService.findByScreenName(screenName); //userService.findByScreenName(screenName);
             log.info("userService.findByScreenName: found User = "+user.toString());
             model.addAttribute("user", user);
             log.info("model.addAttribute user = "+user.toString());
@@ -208,7 +220,7 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = persistDataFromTwitter.storeUserProfile(twitterProfile);
+                User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
                 model.addAttribute("user", user);
                 log.info("model.addAttribute user = "+user.toString());
@@ -224,14 +236,18 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                 log.info("model.addAttribute user = "+user.toString());
             }
         }  finally {
+            taskService.done(task);
             log.info("... finally done ...");
             log.info("--------------------------------------------------------------------");
         }
     }
 
-    protected void setupAfterPropertiesSetWithTesting(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
+    protected void setupAfterPropertiesSetWithTesting(TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
+        this.userService = userService;
+        this.taskService=taskService;
         this.setupAfterPropertiesSet(menuAppName, searchterm, infoWebpage, theme, contextTest, imprintScreenName, idGoogleAnalytics);
     }
 

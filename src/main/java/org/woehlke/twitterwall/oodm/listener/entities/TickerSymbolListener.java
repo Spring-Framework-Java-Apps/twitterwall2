@@ -15,17 +15,17 @@ public class TickerSymbolListener {
 
   @PrePersist
   public void onPrePersist(TickerSymbol domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(TickerSymbol domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(TickerSymbol domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
@@ -45,6 +45,6 @@ public class TickerSymbolListener {
 
   @PostLoad
   public void onPostLoad(TickerSymbol domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 }
