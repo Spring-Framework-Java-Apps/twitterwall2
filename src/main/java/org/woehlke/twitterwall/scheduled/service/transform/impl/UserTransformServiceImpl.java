@@ -33,6 +33,7 @@ public class UserTransformServiceImpl implements UserTransformService {
 
     @Override
     public User transform(TwitterProfile twitterProfile) {
+        String msg = "User.transform for "+twitterProfile.getId();
         long idTwitter = twitterProfile.getId();
         String screenName = twitterProfile.getScreenName();
         String name = twitterProfile.getName();
@@ -79,9 +80,10 @@ public class UserTransformServiceImpl implements UserTransformService {
         user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
         user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
         Entities entities = this.entitiesTransformService.getEntitiesForUser(user);
+        log.debug(msg+" entities = "+entities.toString());
         user.setEntities(entities);
+        log.debug(msg+" user = "+user.toString());
         return user;
     }
-
 
 }

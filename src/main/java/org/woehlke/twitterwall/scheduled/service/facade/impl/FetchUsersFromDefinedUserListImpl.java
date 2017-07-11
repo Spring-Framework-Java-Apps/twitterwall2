@@ -86,12 +86,12 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
                     User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                     log.debug(msg+subCounter+userFromMention.toString());
                 } catch (IllegalArgumentException exe){
-                    log.debug(msg+subCounter+exe.getMessage());
+                    taskService.warn(task,exe,msg+subCounter);
                 }
             }
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        task.event(report);
+        taskService.event(task,report);
         taskService.done(task);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE The time is now {}", dateFormat.format(new Date()));

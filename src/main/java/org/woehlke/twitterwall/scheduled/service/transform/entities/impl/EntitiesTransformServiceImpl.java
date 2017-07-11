@@ -44,7 +44,7 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
 
     @Override
     public Entities getEntitiesForUser(User user) {
-        String msg = "getEntitiesForUser: "+user.getScreenName()+", "+user.getName()+ " : ";
+        String msg = "getEntitiesForUser: "+user.getScreenName()+" : ";
         String description = user.getDescription();
         Set<Mention> mentions = mentionTransformService.findByUser(user);
         Set<Url> urls = urlTransformService.getUrlsFor(user);
@@ -57,6 +57,7 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         entities.setMedia(media);
         entities.setTags(hashTags);
         entities.setTickerSymbols(tickerSymbols);
+        log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"description " + description);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+entities.toString());
@@ -70,33 +71,23 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         Entities myNewEntities = new Entities();
         for(UrlEntity urlEntity:entities.getUrls()){
             Url url = urlTransformService.transform(urlEntity);
-            if(url.isValid()){
-                myNewEntities.addUrl(url);
-            }
+            myNewEntities.addUrl(url);
         }
         for(HashTagEntity hashTagEntity:entities.getHashTags()){
             HashTag tag = hashTagTransformService.transform(hashTagEntity);
-            if(tag.isValid()) {
-                myNewEntities.addTag(tag);
-            }
+            myNewEntities.addTag(tag);
         }
         for(MentionEntity mentionEntity:entities.getMentions()){
             Mention mention = mentionTransformService.transform(mentionEntity);
-            if(mention.isValid()) {
-                myNewEntities.addMention(mention);
-            }
+            myNewEntities.addMention(mention);
         }
         for(MediaEntity medium :entities.getMedia()){
             Media media = mediaTransformService.transform(medium);
-            if(media.isValid()){
-                myNewEntities.addMedium(media);
-            }
+            myNewEntities.addMedium(media);
         }
         for(TickerSymbolEntity tickerSymbolEntity:entities.getTickerSymbols()) {
             TickerSymbol tickerSymbol = tickerSymbolTransformService.transform(tickerSymbolEntity);
-            if (tickerSymbol.isValid()) {
-                myNewEntities.addTickerSymbol(tickerSymbol);
-            }
+            myNewEntities.addTickerSymbol(tickerSymbol);
         }
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+entities.toString());

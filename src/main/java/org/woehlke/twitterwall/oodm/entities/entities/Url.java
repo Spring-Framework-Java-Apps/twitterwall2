@@ -33,6 +33,8 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     private static final long serialVersionUID = 1L;
 
+    public static final String UNDEFINED = "UNDEFINED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
@@ -222,5 +224,13 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
             return false;
         }
         return true;
+    }
+
+    public static Url getUrlFactory(String url){
+        String display = Url.UNDEFINED;
+        String expanded = Url.UNDEFINED;
+        int[] indices = {};
+        Url newurl = new Url(display, expanded, url, indices);
+        return newurl;
     }
 }

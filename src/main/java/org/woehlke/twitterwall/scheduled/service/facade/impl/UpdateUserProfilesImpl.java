@@ -95,7 +95,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                             log.debug(msg+subCounter+userFromMention.toString());
                         } catch (IllegalArgumentException exe){
-                            log.debug(msg+subCounter+exe.getMessage());
+                            this.taskService.warn(task,exe,msg+subCounter);
                         }
                     }
                     log.debug(msg + user.toString());
@@ -105,37 +105,17 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                     log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                     log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
-                    log.warn(msg + e.getMessage());
-                    Throwable t = e.getCause();
-                    while(t != null){
-                        log.warn(msg + t.getMessage());
-                        t = t.getCause();
-                    }
+                    this.taskService.warn(task,e,msg);
                 } catch (InterruptedException ex){
-                    log.warn(msg + ex.getMessage());
-                    Throwable t = ex.getCause();
-                    while(t != null){
-                        log.warn(msg + t.getMessage());
-                        t = t.getCause();
-                    }
+                    this.taskService.warn(task,ex,msg);
                 } finally {
                     log.debug(msg +"---------------------------------------");
                 }
             }
         } catch (ResourceAccessException e) {
-            this.taskService.error(task,e);
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            log.error(msg + " check your Network Connection!");
-            //throw e;
+            this.taskService.warn(task,e,msg);
         } catch (RateLimitExceededException e) {
-            this.taskService.error(task,e);
-            log.warn(msg + e.getMessage());
-            //throw e;
+            this.taskService.warn(task,e,msg);
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
         task.event(report);

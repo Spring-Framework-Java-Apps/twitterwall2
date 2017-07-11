@@ -281,6 +281,27 @@ public class Task implements DomainObject<Task> {
         this.history.add(event);
     }
 
+    public void error(Exception e, String msg) {
+        TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.ERROR);
+        this.taskStatus = TaskStatus.ERROR;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
+    }
+
+    public void warn(Exception e) {
+        TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.WARN);
+        this.taskStatus = TaskStatus.WARN;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
+    }
+
+    public void warn(Exception e, String msg) {
+        TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.WARN);
+        this.taskStatus = TaskStatus.WARN;
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
+    }
+
     @Override
     public boolean isValid() {
         return true;

@@ -109,44 +109,25 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                         log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                         log.debug(msg + "-----------------------------------------------------");
                     } catch (RateLimitExceededException e) {
-                        log.warn(msg + e.getMessage());
-                        Throwable t = e.getCause();
-                        while(t != null){
-                            log.warn(msg + t.getMessage());
-                            t = t.getCause();
-                        }
+                        task = taskService.error(task,e,msg);
                         throw e;
                     } catch (InterruptedException ex){
-                        log.warn(msg + ex.getMessage());
-                        Throwable t = ex.getCause();
-                        while(t != null){
-                            log.warn(msg + t.getMessage());
-                            t = t.getCause();
-                        }
+                        task = taskService.warn(task,ex,msg);
                     } finally {
                         log.debug(msg +"---------------------------------------");
                     }
                 }
             }
         } catch (ResourceAccessException e) {
-            log.error(msg + " ResourceAccessException: " + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + " caused by: "+ t.getMessage());
-                t = t.getCause();
-            }
-            log.error(msg + " check your Network Connection!");
-            task = taskService.error(task,e);
-            throw e;
+            task = taskService.warn(task,e,msg);
+            //throw e;
         } catch (RateLimitExceededException e) {
-            log.error(msg + " RateLimitExceededException: " + e.getMessage());
-            task = taskService.error(task,e);
-            throw e;
-        } finally {
-            String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-            task.event(report);
-            this.taskService.done(task);
+            task = taskService.warn(task,e,msg);
+            //throw e;
         }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        this.taskService.event(task,report);
+        this.taskService.done(task);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");

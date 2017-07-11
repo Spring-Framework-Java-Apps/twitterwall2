@@ -44,27 +44,21 @@ public class MentionTransformServiceImpl implements MentionTransformService {
             Pattern mentionPattern1 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")(" + AbstractFormattedText.stopChar + ")");
             Matcher m3 = mentionPattern1.matcher(description);
             while (m3.find()) {
-                mentions.add(getMention(m3.group(1)));
+                Mention newMention = Mention.getMention(m3.group(1));
+                if(!mentions.contains(newMention)){
+                    mentions.add(newMention);
+                }
             }
             Pattern mentionPattern2 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")$");
             Matcher m4 = mentionPattern2.matcher(description);
             while (m4.find()) {
-                mentions.add(getMention(m4.group(1)));
+                Mention newMention = Mention.getMention(m4.group(1));
+                if(!mentions.contains(newMention)){
+                    mentions.add(newMention);
+                }
             }
         }
         return mentions;
     }
 
-    private Mention getMention(String mentionString) {
-        try {
-            Thread.sleep(100L);
-        } catch (InterruptedException e) {
-            log.warn(e.getMessage());
-        }
-        long idTwitter = new Date().getTime();
-        String screenName = mentionString;
-        String name = mentionString;
-        int[] myindices = {};
-        return new Mention(idTwitter, screenName, name, myindices);
-    }
 }

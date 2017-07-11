@@ -43,7 +43,7 @@ public class HashTagTransformServiceImpl implements HashTagTransformService {
             while (m3.find()) {
                 hashTags.add(new HashTag(m3.group(1), indices));
             }
-            Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
+            Pattern hashTagPattern2 = Pattern.compile("#("+HASHTAG_TEXT_PATTERN+")$");
             Matcher m4 = hashTagPattern2.matcher(description);
             while (m4.find()) {
                 hashTags.add(new HashTag(m4.group(1), indices));

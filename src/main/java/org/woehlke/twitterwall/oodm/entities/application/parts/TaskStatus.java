@@ -8,5 +8,6 @@ public enum TaskStatus {
     READY,
     RUNNING,
     FINISHED,
-    ERROR;
+    ERROR,
+    WARN;
 }
