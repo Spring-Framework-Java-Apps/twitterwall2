@@ -23,6 +23,8 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 import javax.persistence.NoResultException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tw on 09.07.17.
@@ -67,19 +69,32 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
         log.debug(msg+ "START fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
         Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH);
+        int allLoop = 0;
+        int loopId = 0;
         try {
-            int loopId = 0;
-            for (Tweet tweet : twitterApiService.findTweetsForSearchQuery()) {
+            List<Tweet> tweetsForSearchQuery = twitterApiService.findTweetsForSearchQuery();
+            int number = tweetsForSearchQuery.size();
+            for (Tweet tweet : tweetsForSearchQuery) {
+                allLoop++;
                 loopId++;
-                log.debug(msg+loopId);
+                String counter = " ("+loopId+" from "+number+")  ["+allLoop+"] ";
+                log.debug(msg+counter);
                 try {
                     org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
-                    for(Mention mention:tweetPers.getMentions()){
+                    log.debug(msg+counter+tweetPers.toString());
+                    Set<Mention> mentions = tweetPers.getMentions();
+                    int subNumber = mentions.size();
+                    int subLoops = 0;
+                    for(Mention mention:mentions){
+                        allLoop++;
+                        subLoops++;
+                        String subCounter = counter+ " ( "+subLoops + " from " +subNumber +" )  ["+allLoop+"] ";
+                        log.debug(msg+subCounter);
                         try {
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                            log.debug(msg+userFromMention.toString());
+                            log.debug(msg+subCounter+userFromMention.toString());
                         } catch (IllegalArgumentException exe){
-                            log.debug(msg+exe.getMessage());
+                            log.debug(msg+subCounter+exe.getMessage());
                         }
                     }
                 } catch (EmptyResultDataAccessException e)  {
@@ -118,6 +133,8 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
             task = taskService.error(task,e);
             //throw e;
         }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        task.event(report);
         taskService.done(task);
         log.debug(msg+"---------------------------------------");
         log.debug(msg+ "DONE fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));

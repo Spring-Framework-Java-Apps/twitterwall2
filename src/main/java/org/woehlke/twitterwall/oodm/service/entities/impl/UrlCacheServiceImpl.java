@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.service.entities.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +34,19 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache, Task task) {
         String name = "UrlCache.store: store";
-        urlCache.setCreatedBy(task);
-        UrlCache result = this.urlCacheRepository.persist(urlCache);
-        log.debug(name+result);
-        return result;
+        try {
+            UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
+            urlCache.setCreatedBy(urlCachePers.getCreatedBy());
+            urlCache.setUpdatedBy(task);
+            UrlCache result = this.urlCacheRepository.update(urlCache);
+            log.debug(name+" uodated "+result.toString());
+            return result;
+        } catch (EmptyResultDataAccessException e) {
+            urlCache.setCreatedBy(task);
+            UrlCache result = this.urlCacheRepository.persist(urlCache);
+            log.debug(name+" psersisted "+result);
+            return result;
+        }
     }
 
     @Override

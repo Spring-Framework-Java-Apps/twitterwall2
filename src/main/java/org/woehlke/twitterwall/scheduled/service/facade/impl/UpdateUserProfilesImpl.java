@@ -69,27 +69,40 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         String msg = "update User Profiles From ProfileId: ";
         log.debug(msg+"---------------------------------------");
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
+        int allLoop = 0;
+        int loopId = 0;
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
         try {
             List<Long> userProfileTwitterIds = userService.getAllTwitterIds();
+            int number = userProfileTwitterIds.size();
             for (Long userProfileTwitterId : userProfileTwitterIds) {
+                allLoop++;
+                loopId++;
+                String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
                 try {
+                    log.debug(msg+counter);
                     TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
                     User user = storeUserProfile.storeUserProfile(userProfile,task);
-
+                    log.debug(msg+counter+user.toString());
+                    int subLoopId = 0;
+                    int subNumber = user.getMentions().size();
                     for(Mention mention:user.getMentions()){
+                        allLoop++;
+                        subLoopId++;
+                        String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
                         try {
+                            log.debug(msg+subCounter);
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                            log.debug(msg+userFromMention.toString());
+                            log.debug(msg+subCounter+userFromMention.toString());
                         } catch (IllegalArgumentException exe){
-                            log.debug(msg+exe.getMessage());
+                            log.debug(msg+subCounter+exe.getMessage());
                         }
                     }
                     log.debug(msg + user.toString());
                     log.debug(msg + "-----------------------------------------------------");
-                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                     Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                     log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
@@ -124,6 +137,8 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             log.warn(msg + e.getMessage());
             //throw e;
         }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        task.event(report);
         this.taskService.done(task);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));

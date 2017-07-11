@@ -61,18 +61,11 @@ public class MediaServiceImpl implements MediaService {
         try {
             log.debug(msg+"try to find: "+media.toString());
             Media mediaPers = this.mediaRepository.findByIdTwitter(media.getIdTwitter(),Media.class);
-            log.debug(msg+"found: "+media.toString());
-            mediaPers.setDisplay(media.getDisplay());
-            mediaPers.setExpanded(media.getExpanded());
-            mediaPers.setIdTwitter(media.getIdTwitter());
-            //mediaPers.setIndices(media.getIndices());
-            mediaPers.setMediaHttp(media.getMediaHttp());
-            mediaPers.setMediaHttps(media.getMediaHttps());
-            mediaPers.setMediaType(media.getMediaType());
-            mediaPers.setUrl(media.getUrl());
-            mediaPers.setUpdatedBy(task);
+            log.debug(msg+"found: "+mediaPers.toString());
+            media.setCreatedBy(mediaPers.getCreatedBy());
+            media.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+media.toString());
-            return this.mediaRepository.update(mediaPers);
+            return this.mediaRepository.update(media);
         } catch (EmptyResultDataAccessException e) {
             media.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+media.toString());

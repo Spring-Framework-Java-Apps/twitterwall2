@@ -971,6 +971,30 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return myTickerSymbols.toString();
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -1012,9 +1036,9 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n createdBy="+createdBy.toString() +
-                ",\n updatedBy=" + updatedBy.toString() +
-                ",\n taskInfo="+taskInfo.toString() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
                 ",\n urls=" + toStringUrls() +
                 ",\n tags=" + toStringHashTags() +
                 ",\n mentions=" + toStringMentions() +

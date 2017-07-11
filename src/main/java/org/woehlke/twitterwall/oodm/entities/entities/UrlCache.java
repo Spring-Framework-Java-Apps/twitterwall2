@@ -127,13 +127,40 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
         return url.compareTo(other.getUrl());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "UrlCache{" +
-                "id=" + id +
+                " id=" + id +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-                '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+                "}\n";
     }
 
     @Override

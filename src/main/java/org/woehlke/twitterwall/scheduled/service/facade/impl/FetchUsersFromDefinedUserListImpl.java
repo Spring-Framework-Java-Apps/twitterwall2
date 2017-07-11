@@ -65,18 +65,33 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "START The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
+        int allLoop = 0;
+        int loopId = 0;
         List<TwitterProfile> userProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUserListName);
+        int number = userProfiles.size();
         for(TwitterProfile twitterProfile:userProfiles) {
+            allLoop++;
+            loopId++;
+            String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
+            log.debug(msg+counter);
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
+            log.debug(msg+counter+user.toString());
+            int subLoopId = 0;
+            int subNumber = user.getMentions().size();
             for(Mention mention:user.getMentions()){
+                allLoop++;
+                subLoopId++;
+                String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
                 try {
                     User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                    log.debug(msg+userFromMention.toString());
+                    log.debug(msg+subCounter+userFromMention.toString());
                 } catch (IllegalArgumentException exe){
-                    log.debug(msg+exe.getMessage());
+                    log.debug(msg+subCounter+exe.getMessage());
                 }
             }
         }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        task.event(report);
         taskService.done(task);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE The time is now {}", dateFormat.format(new Date()));

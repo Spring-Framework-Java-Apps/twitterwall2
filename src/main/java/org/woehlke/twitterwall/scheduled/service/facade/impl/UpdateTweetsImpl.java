@@ -24,6 +24,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tw on 09.07.17.
@@ -72,27 +73,39 @@ public class UpdateTweetsImpl implements UpdateTweets {
         log.debug(msg + "START: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
         Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
+        int loopId = 0;
+        int allLoop = 0;
         try {
-            int loopId = 0;
             List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
+            int number = tweetTwitterIds.size();
             for (Long tweetTwitterId : tweetTwitterIds) {
+                loopId++;
+                allLoop++;
+                String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
                 try {
                     Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
-                    loopId++;
-                    log.debug(msg + ""+loopId);
+                    log.debug(msg + ""+counter);
                     org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet, task);
-                    for(Mention mention:tweetPers.getMentions()){
+                    log.debug(msg + ""+counter+tweetPers);
+                    Set<Mention> mentions = tweetPers.getMentions();
+                    int subLoopId = 0;
+                    int subNumber = mentions.size();
+                    for(Mention mention:mentions){
+                        allLoop++;
+                        subLoopId++;
+                        String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
                         try {
+                            log.debug(msg+subCounter);
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                            log.debug(msg+userFromMention.toString());
+                            log.debug(msg+subCounter+userFromMention.toString());
                         } catch (IllegalArgumentException exe){
-                            log.debug(msg+exe.getMessage());
+                            log.debug(msg+subCounter+exe.getMessage());
                         }
                     }
                     log.debug(msg + "-----------------------------------------------------");
-                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                     Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                     log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
@@ -132,6 +145,8 @@ public class UpdateTweetsImpl implements UpdateTweets {
             }
             task = taskService.error(task,e);
         }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        task.event(report);
         this.taskService.done(task);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE: The time is now {}", dateFormat.format(new Date()));

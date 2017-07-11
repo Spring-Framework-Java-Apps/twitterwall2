@@ -150,6 +150,30 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         return text.compareTo(other.getText());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
         /*
@@ -162,10 +186,13 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         myIndieces.append(" ]");
         */
         return "HashTag{" +
-                "id=" + id +
+                " id=" + id +
                 ", text='" + text + '\'' +
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
                   //", indices=" + myIndieces.toString() +
-                '}';
+                " }\n";
     }
 
     @Override

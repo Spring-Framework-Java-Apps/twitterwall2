@@ -25,6 +25,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tw on 09.07.17.
@@ -71,27 +72,41 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         String msg = "update User Profiles from Mentions: ";
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS);
+        int allLoop = 0;
+        int loopId = 0;
         try {
             List<Mention> allPersMentions =  mentionService.getAll();
+            int number = allPersMentions.size();
             for(Mention onePersMentions :allPersMentions){
                 String screenName = onePersMentions.getScreenName();
                 if((screenName != null) && (!screenName.isEmpty())) {
+                    loopId++;
+                    allLoop++;
+                    String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
                     try {
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                         User user = storeUserProfile.storeUserProfile(twitterProfile,task);
-                        for(Mention mention:user.getMentions()){
+                        log.debug(msg + counter + user.toString());
+                        Set<Mention> mentions = user.getMentions();
+                        int subLoopId = 0;
+                        int subNumber = mentions.size();
+                        for(Mention mention:mentions){
+                            allLoop++;
+                            subLoopId++;
+                            String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
                             try {
+                                log.debug(msg+subCounter);
                                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                                log.debug(msg+userFromMention.toString());
+                                log.debug(msg+subCounter+userFromMention.toString());
                             } catch (IllegalArgumentException exe){
-                                log.debug(msg+exe.getMessage());
+                                log.debug(msg+subCounter+exe.getMessage());
                             }
                         }
                         log.debug(msg + user.toString());
                         log.debug(msg + "-----------------------------------------------------");
-                        log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                        log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                         Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                        log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                        log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
                         log.debug(msg + "-----------------------------------------------------");
                     } catch (RateLimitExceededException e) {
                         log.warn(msg + e.getMessage());
@@ -128,6 +143,8 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             task = taskService.error(task,e);
             throw e;
         } finally {
+            String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+            task.event(report);
             this.taskService.done(task);
         }
         log.debug(msg +"---------------------------------------");

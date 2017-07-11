@@ -74,15 +74,12 @@ public class MentionServiceImpl implements MentionService {
                 mentionPers = this.mentionRepository.findByIdTwitter(idTwitter,Mention.class);
             }
             //mentionPers.setIndices(mention.getIndices());
-            mentionPers.setIdTwitter(mention.getIdTwitter());
-            mentionPers.setName(mention.getName());
-            mentionPers.setScreenName(mention.getScreenName());
-            mentionPers.setUpdatedBy(task);
+            mention.setCreatedBy(mentionPers.getCreatedBy());
+            mention.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());
             return this.mentionRepository.update(mentionPers);
         } catch (EmptyResultDataAccessException e){
             mention.setCreatedBy(task);
-            log.debug(e.getMessage());
             log.debug("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
         }

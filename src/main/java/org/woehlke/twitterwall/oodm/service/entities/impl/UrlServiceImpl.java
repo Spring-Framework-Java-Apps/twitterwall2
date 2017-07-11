@@ -49,15 +49,15 @@ public class UrlServiceImpl implements UrlService {
         Url result;
         try {
             Url urlPersistent = this.urlRepository.findByUrl(url);
-            domainObject.setId(urlPersistent.getId());
+            domainObject.setCreatedBy(urlPersistent.getCreatedBy());
             domainObject.setUpdatedBy(task);
             result = this.urlRepository.update(domainObject);
-            log.debug(name+result.toString());
+            log.debug(name+" uodated "+result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
             domainObject.setCreatedBy(task);
             result = this.urlRepository.persist(domainObject);
-            log.debug(name+result.toString());
+            log.debug(name+" psersisted "+result.toString());
             return result;
         }
     }

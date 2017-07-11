@@ -234,6 +234,12 @@ public class Task implements DomainObject<Task> {
             '}';
     }
 
+    public void event(String descriptions) {
+        TaskHistory event = new TaskHistory(description,taskStatus,taskStatus);
+        this.timeLastUpdate = new Date();
+        this.history.add(event);
+    }
+
     public void event(String description,TaskStatus newTaskStatus) {
         TaskHistory event = new TaskHistory(description,taskStatus,newTaskStatus);
         this.taskStatus = TaskStatus.READY;

@@ -100,15 +100,15 @@ public class TweetServiceImpl implements TweetService {
         Tweet result;
         try {
             Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
-            tweet.setId(tweetPersistent.getId());
+            tweet.setCreatedBy(tweetPersistent.getCreatedBy());
             tweet.setUpdatedBy(task);
             result = tweetRepository.update(tweet);
-            log.debug(name+result.toString());
+            log.debug(name+" updated "+result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
             tweet.setCreatedBy(task);
             result = tweetRepository.persist(tweet);
-            log.debug(name+result.toString());
+            log.debug(name+" persisted "+result.toString());
             return result;
         }
     }

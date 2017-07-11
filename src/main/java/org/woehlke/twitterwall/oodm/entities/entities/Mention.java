@@ -193,6 +193,30 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return screenName.compareTo(other.getScreenName());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
         /*
@@ -204,12 +228,15 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         }
         myIndieces.append(" ]");*/
         return "Mention{" +
-            "id=" + id +
+            " id=" + id +
             ", idTwitter=" + idTwitter +
             ", screenName='" + screenName + '\'' +
             ", name='" + name + '\'' +
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
             //", indices=" + myIndieces.toString() +
-            '}';
+            " }\n";
     }
 
     public boolean isValid() {

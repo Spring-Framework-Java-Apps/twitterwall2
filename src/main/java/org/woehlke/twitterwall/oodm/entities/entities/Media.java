@@ -233,6 +233,30 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         return Long.compare(idTwitter, other.getIdTwitter());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {/*
         StringBuffer myIndieces = new StringBuffer();
@@ -243,7 +267,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         }
         myIndieces.append(" ]");*/
         return "Media{" +
-                "id=" + id +
+                " id=" + id +
                 ", idTwitter=" + idTwitter +
                 ", mediaHttp='" + mediaHttp + '\'' +
                 ", mediaHttps='" + mediaHttps + '\'' +
@@ -251,8 +275,11 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", mediaType='" + mediaType + '\'' +
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
                // ", indices=" + myIndieces.toString() +
-                '}';
+                " }\n";
     }
 
     @Override

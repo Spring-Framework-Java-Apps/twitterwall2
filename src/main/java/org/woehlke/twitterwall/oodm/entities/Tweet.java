@@ -734,6 +734,46 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return myTickerSymbols.toString();
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
+    private String toStringRetweetedStatus(){
+        if(retweetedStatus==null){
+            return " null ";
+        } else {
+            return retweetedStatus.toString();
+        }
+    }
+
+    private String toStringUser(){
+        if(user==null){
+            return " null ";
+        } else {
+            return user.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "Tweet{" +
@@ -756,16 +796,16 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", retweetedStatus=" + retweetedStatus +
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
-                ",\n retweetedStatus=" +retweetedStatus.toString() +
-                ",\n createdBy="+createdBy.toString() +
-                ",\n updatedBy=" + updatedBy.toString() +
-                ",\n taskInfo="+taskInfo.toString() +
+                ",\n retweetedStatus=" + toStringRetweetedStatus() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
                 ",\n urls=" + toStringUrls() +
                 ",\n tags=" + toStringHashTags() +
                 ",\n mentions=" + toStringMentions() +
                 ",\n media=" +toStringMedia() +
                 ",\n tickerSymbols=" +toStringTickerSymbols() +
-                ",\n user=" + user.toString() +
+                ",\n user=" + toStringUser() +
                 "\n}";
     }
 

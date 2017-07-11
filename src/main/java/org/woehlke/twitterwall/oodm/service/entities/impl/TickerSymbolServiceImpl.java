@@ -68,13 +68,11 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
         try{
             log.debug(msg+"try to find: "+tickerSymbol.toString());
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
-            log.debug(msg+"found: "+tickerSymbol.toString());
-            tickerSymbolPers.setUrl(tickerSymbol.getUrl());
-            //tickerSymbolPers.setIndices(tickerSymbol.getIndices());
-            tickerSymbolPers.setTickerSymbol(tickerSymbol.getTickerSymbol());
-            tickerSymbolPers.setCreatedBy(task);
-            log.debug(msg+"found and try to update: "+tickerSymbolPers.toString());
-            return this.tickerSymbolRepository.update(tickerSymbolPers);
+            log.debug(msg+"found: "+tickerSymbolPers.toString());
+            tickerSymbol.setCreatedBy(tickerSymbolPers.getCreatedBy());
+            tickerSymbol.setUpdatedBy(task);
+            log.debug(msg+"found and try to update: "+tickerSymbol.toString());
+            return this.tickerSymbolRepository.update(tickerSymbol);
         } catch (EmptyResultDataAccessException e) {
             tickerSymbol.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());

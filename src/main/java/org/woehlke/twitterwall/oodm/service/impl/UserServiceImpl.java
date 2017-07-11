@@ -32,14 +32,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User store(User user, Task task) {
+        String name = "try to store: "+user.getIdTwitter()+" ";
+        log.debug(name);
         try {
             User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
-            user.setId(userPersistent.getId());
+            user.setCreatedBy(userPersistent.getCreatedBy());
             user.setUpdatedBy(task);
-            return userRepository.update(user);
+            user = userRepository.update(user);
+            log.debug(name+" updated "+user.toString());
+            return user;
         } catch (EmptyResultDataAccessException e) {
             user.setCreatedBy(task);
-            return userRepository.persist(user);
+            user = userRepository.persist(user);
+            log.debug(name+" persisted "+user.toString());
+            return user;
         }
     }
 
