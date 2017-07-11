@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.facade.test;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class UpdateTweetsTest extends AbstractFacadeTest {
     @Autowired
     private UpdateTweets updateTweets;
 
+    @Ignore
     @Commit
     @Test
     public void updateTweetsTest(){
