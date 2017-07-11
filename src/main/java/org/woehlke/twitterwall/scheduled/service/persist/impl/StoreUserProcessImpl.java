@@ -62,6 +62,7 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         user.removeAllMentions();
         user.removeAllMedia();
         user.removeAllTickerSymbols();
+        user = userService.store(user,task);
         for (Url myUrl : urls) {
             Url urlPers = createPersistentUrl.getPersistentUrlFor(myUrl.getUrl(),task);
             if((urlPers != null)&&(urlPers.isValid())){
@@ -74,7 +75,8 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         }
         for (HashTag hashTag : hashTags) {
             if(hashTag.isValid()){
-                user.addTag(hashTagService.store(hashTag, task));
+                HashTag hashTagPers = hashTagService.store(hashTag, task);
+                user.addTag(hashTagPers);
             }
         }
         for (Mention mention : mentions) {
@@ -92,6 +94,9 @@ public class StoreUserProcessImpl implements StoreUserProcess {
                 user.addTickerSymbol(tickerSymbolService.store(tickerSymbol,task));
             }
         }
+        user = userService.store(user,task);
+        return user;
+        /*
         try {
             long idTwitter = user.getIdTwitter();
             User userPers = userService.findByIdTwitter(idTwitter);
@@ -105,5 +110,6 @@ public class StoreUserProcessImpl implements StoreUserProcess {
             log.debug(msg+" try to persist user "+user.toString());
             return userService.create(user);
         }
+        */
     }
 }
