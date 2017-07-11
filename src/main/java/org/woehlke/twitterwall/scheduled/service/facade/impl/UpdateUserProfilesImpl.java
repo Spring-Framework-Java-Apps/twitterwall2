@@ -85,8 +85,8 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                     User user = storeUserProfile.storeUserProfile(userProfile,task);
                     log.debug(msg+counter+user.toString());
                     int subLoopId = 0;
-                    int subNumber = user.getMentions().size();
-                    for(Mention mention:user.getMentions()){
+                    int subNumber = user.getEntities().getMentions().size();
+                    for(Mention mention:user.getEntities().getMentions()){
                         allLoop++;
                         subLoopId++;
                         String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) ["+allLoop+"] ";

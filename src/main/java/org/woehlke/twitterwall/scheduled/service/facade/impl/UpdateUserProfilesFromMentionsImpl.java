@@ -87,7 +87,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                         User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                         log.debug(msg + counter + user.toString());
-                        Set<Mention> mentions = user.getMentions();
+                        Set<Mention> mentions = user.getEntities().getMentions();
                         int subLoopId = 0;
                         int subNumber = mentions.size();
                         for(Mention mention:mentions){

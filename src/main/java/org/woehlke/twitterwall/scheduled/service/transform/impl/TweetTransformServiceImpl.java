@@ -2,10 +2,11 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
@@ -32,14 +33,17 @@ public class TweetTransformServiceImpl implements TweetTransformService {
 
     private final TickerSymbolTransformService tickerSymbolTransformService;
 
+    private final EntitiesTransformService entitiesTransformService;
+
     @Autowired
-    public TweetTransformServiceImpl(UserTransformService userTransformService, UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService, MediaTransformService mediaTransformService, TickerSymbolTransformService tickerSymbolTransformService) {
+    public TweetTransformServiceImpl(UserTransformService userTransformService, UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService, MediaTransformService mediaTransformService, TickerSymbolTransformService tickerSymbolTransformService, EntitiesTransformService entitiesTransformService) {
         this.userTransformService = userTransformService;
         this.urlTransformService = urlTransformService;
         this.hashTagTransformService = hashTagTransformService;
         this.mentionTransformService = mentionTransformService;
         this.mediaTransformService = mediaTransformService;
         this.tickerSymbolTransformService = tickerSymbolTransformService;
+        this.entitiesTransformService = entitiesTransformService;
     }
 
     @Override
@@ -70,35 +74,15 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             myTweet.setInReplyToStatusId(tweet.getInReplyToStatusId());
             myTweet.setRetweetedStatus(retweetedStatus);
             TwitterProfile twitterProfile = tweet.getUser();
+
+            org.woehlke.twitterwall.oodm.entities.Entities entities = entitiesTransformService.transform(tweet.getEntities());
+
+            myTweet.setEntities(entities);
+
             /* transform user */
             User user = userTransformService.transform(twitterProfile);
             myTweet.setUser(user);
-            /* transformTwitterEntities */
-            myTweet.removeAllUrls();
-            for(UrlEntity urlEntity:tweet.getEntities().getUrls()){
-                Url url = urlTransformService.transform(urlEntity);
-                myTweet.addUrl(url);
-            }
-            myTweet.removeAllTags();
-            for(HashTagEntity hashTagEntity:tweet.getEntities().getHashTags()){
-                HashTag tag = hashTagTransformService.transform(hashTagEntity);
-                myTweet.addTag(tag);
-            }
-            myTweet.removeAllMentions();
-            for(MentionEntity mentionEntity:tweet.getEntities().getMentions()){
-                Mention mention = mentionTransformService.transform(mentionEntity);
-                myTweet.addMention(mention);
-            }
-            myTweet.removeAllMedia();
-            for(MediaEntity medium :tweet.getEntities().getMedia()){
-                Media media = mediaTransformService.transform(medium);
-                myTweet.addMedium(media);
-            }
-            myTweet.removeAllTickerSymbols();
-            for(TickerSymbolEntity tickerSymbolEntity:tweet.getEntities().getTickerSymbols()) {
-                TickerSymbol tickerSymbol = tickerSymbolTransformService.transform(tickerSymbolEntity);
-                myTweet.addTickerSymbol(tickerSymbol);
-            }
+
             return myTweet;
         }
     }

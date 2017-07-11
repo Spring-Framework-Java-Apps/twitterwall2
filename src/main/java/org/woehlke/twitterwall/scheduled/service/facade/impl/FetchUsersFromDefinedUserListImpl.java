@@ -77,8 +77,8 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
             log.debug(msg+counter+user.toString());
             int subLoopId = 0;
-            int subNumber = user.getMentions().size();
-            for(Mention mention:user.getMentions()){
+            int subNumber = user.getEntities().getMentions().size();
+            for(Mention mention:user.getEntities().getMentions()){
                 allLoop++;
                 subLoopId++;
                 String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";

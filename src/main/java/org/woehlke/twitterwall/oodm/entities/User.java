@@ -10,7 +10,6 @@ import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,11 +63,11 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
                 name = "User.getUsersForHashTag",
-                query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
+                query = "select t from User as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.countUsersForHashTag",
-                query = "select count(t) from User as t join t.tags tag WHERE tag.text=:hashtagText"
+                query = "select count(t) from User as t join t.entities.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name = "User.getAllDescriptions",
@@ -219,26 +218,26 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column(length = 1024)
     private String profileBannerUrl;
 
-    @JoinTable(name = "userprofile_url")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Url> urls = new LinkedHashSet<Url>();
 
-    @JoinTable(name = "userprofile_hashtag")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<HashTag> tags = new LinkedHashSet<HashTag>();
-
-    @JoinTable(name = "userprofile_mention")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Mention> mentions = new LinkedHashSet<>();
-
-    @JoinTable(name = "userprofile_media")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Media> media = new LinkedHashSet<Media>();
-
-    @JoinTable(name = "userprofile_tickersymbol")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
-
+    @Embedded
+    @AssociationOverrides({
+        @AssociationOverride(
+            name = "urls",
+            joinTable = @JoinTable(name="userprofile_url")),
+        @AssociationOverride(
+            name = "tags",
+            joinTable = @JoinTable(name="userprofile_hashtag")),
+        @AssociationOverride(
+            name = "mentions",
+            joinTable = @JoinTable(name="userprofile_mention")),
+        @AssociationOverride(
+            name = "media",
+            joinTable = @JoinTable(name="userprofile_media")),
+        @AssociationOverride(
+            name = "tickerSymbols",
+            joinTable = @JoinTable(name="userprofile_tickersymbol"))
+    })
+    private Entities entities = new Entities();
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         this.idTwitter = idTwitter;
@@ -263,13 +262,13 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public String getFormattedDescription() {
         String formattedDescription = this.description;
 
-        Set<Url> urls = this.getUrls();
+        Set<Url> urls = this.entities.getUrls();
         formattedDescription = getFormattedUrlForUrls(urls, formattedDescription);
 
-        Set<Mention> mentions = this.getMentions();
+        Set<Mention> mentions = this.entities.getMentions();
         formattedDescription = getFormattedTextForMentions(mentions, formattedDescription);
 
-        Set<HashTag> tags = this.getTags();
+        Set<HashTag> tags = this.entities.getTags();
         formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
 
         return formattedDescription;
@@ -277,7 +276,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public String getFormattedUrl() {
         String formattedUrl = this.url;
-        Set<Url> urls = this.getUrls();
+        Set<Url> urls = this.entities.getUrls();
         formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
     }
@@ -635,242 +634,12 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.updatedBy = updatedBy;
     }
 
-    public Set<Url> getUrls() {
-        return urls;
+    public Entities getEntities() {
+        return entities;
     }
 
-    public void setUrls(Set<Url> urls) {
-        this.urls.clear();
-        this.urls.addAll(urls);
-    }
-
-    public boolean addAllUrls(Set<Url> urls) {
-        boolean result = false;
-        for(Url url:urls){
-            if((url != null) && (!this.urls.contains(url))){
-                this.urls.add(url);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllUrls(Set<Url> urls) {
-        boolean result = false;
-        for(Url url:urls){
-            if((url != null) && (this.urls.contains(url))){
-                this.urls.remove(url);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllUrls() {
-        this.urls.clear();
-        return this.urls.isEmpty();
-    }
-
-    public boolean addUrl(Url url) {
-        if((url != null) && (!this.urls.contains(url))){
-            return this.urls.add(url);
-        } else {
-            return false;
-        }
-    }
-
-    public boolean removetUrl(Url url) {
-        if((url != null) && (this.urls.contains(url))){
-            return this.urls.remove(url);
-        } else {
-            return false;
-        }
-    }
-
-    public Set<HashTag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<HashTag> tags) {
-        this.tags.clear();
-        this.tags.addAll(tags);
-    }
-
-    public boolean addAllTags(Set<HashTag> tags) {
-        boolean result = false;
-        for(HashTag tag:tags){
-            if((tag != null) && (!this.tags.contains(tag))){
-                this.tags.add(tag);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllTags(Set<HashTag> tags) {
-        boolean result = false;
-        for(HashTag tag:tags){
-            if((tag != null) && (this.tags.contains(tag))){
-                this.tags.remove(tag);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllTags() {
-        this.tags.clear();
-        return this.tags.isEmpty();
-    }
-
-    public boolean addTag(HashTag tag) {
-        if((tag != null) && (!this.tags.contains(tag))){
-            return this.tags.add(tag);
-        } else {
-            return false;
-        }
-    }
-
-    public boolean removeTag(HashTag tag) {
-        if((tag != null) && (this.tags.contains(tag))){
-            return this.tags.remove(tag);
-        } else {
-            return false;
-        }
-    }
-
-
-    public Set<Mention> getMentions() {
-        return mentions;
-    }
-
-    public void setMentions(Set<Mention> mentions) {
-        this.mentions.clear();
-        this.mentions.addAll(mentions);
-    }
-
-    public boolean addAllMentions(Set<Mention> mentions) {
-        boolean result = false;
-        for(Mention mention:mentions){
-            if((mention != null) && (!this.mentions.contains(mention))){
-                this.mentions.add(mention);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllMentions(Set<Mention> mentions) {
-        boolean result = false;
-        for(Mention mention:mentions){
-            if((mention != null) && (this.mentions.contains(mention))){
-                this.mentions.remove(mention);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllMentions() {
-        this.mentions.clear();
-        return this.mentions.isEmpty();
-    }
-
-    public boolean addMention(Mention mention) {
-        return this.mentions.add(mention);
-    }
-
-    public boolean removeMention(Mention mention) {
-        return this.mentions.remove(mention);
-    }
-
-
-    public Set<Media> getMedia() {
-        return media;
-    }
-
-    public void setMedia(Set<Media> media) {
-        this.media.clear();
-        this.media.addAll(media);
-    }
-
-    public boolean addAllMedia(Set<Media> media) {
-        boolean result = false;
-        for(Media medium:media){
-            if((medium != null) && (!this.media.contains(medium))){
-                this.media.add(medium);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllMedia(Set<Media> media) {
-        boolean result = false;
-        for(Media medium:media){
-            if((medium != null) && (this.media.contains(medium))){
-                this.media.remove(medium);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllMedia() {
-        this.media.clear();
-        return this.media.isEmpty();
-    }
-
-    public boolean addMedium(Media medium) {
-        return this.media.add(medium);
-    }
-
-    public boolean removeMedium(Media medium) {
-        return this.media.remove(medium);
-    }
-
-    public Set<TickerSymbol> getTickerSymbols() {
-        return tickerSymbols;
-    }
-
-    public void setTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        this.tickerSymbols.clear();
-        this.tickerSymbols.addAll(tickerSymbols);
-    }
-
-    public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        boolean result = false;
-        for(TickerSymbol tickerSymbol:tickerSymbols){
-            if((tickerSymbol != null) && (!this.tickerSymbols.contains(tickerSymbol))){
-                this.tickerSymbols.add(tickerSymbol);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        boolean result = false;
-        for(TickerSymbol tickerSymbol:tickerSymbols){
-            if((tickerSymbol != null) && (this.tickerSymbols.contains(tickerSymbol))){
-                this.tickerSymbols.remove(tickerSymbol);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public boolean removeAllTickerSymbols() {
-        this.tickerSymbols.clear();
-        return this.tickerSymbols.isEmpty();
-    }
-
-    public boolean addTickerSymbol(TickerSymbol tickerSymbol) {
-        return this.tickerSymbols.add(tickerSymbol);
-    }
-
-    public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
-        return this.tickerSymbols.remove(tickerSymbol);
+    public void setEntities(Entities entities) {
+        this.entities = entities;
     }
 
     @Override
@@ -894,81 +663,6 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Override
     public int compareTo(User other) {
         return screenName.compareTo(other.getScreenName());
-    }
-
-    private String toStringUrls(){
-        StringBuffer myUrls = new StringBuffer();
-        myUrls.append("[ ");
-        for (Url url : urls) {
-            if(url != null) {
-                myUrls.append(url.toString());
-                myUrls.append(", ");
-            } else {
-                myUrls.append(", null");
-            }
-        }
-        myUrls.append(" ]");
-        return myUrls.toString();
-    }
-
-    private String toStringHashTags(){
-        StringBuffer myTags = new StringBuffer();
-        myTags.append("[ ");
-        for (HashTag tag : tags) {
-            if(tag != null){
-                myTags.append(tag.toString());
-                myTags.append(", ");
-            } else {
-                myTags.append(", null");
-            }
-        }
-        myTags.append(" ]");
-        return myTags.toString();
-    }
-
-    private String toStringMentions(){
-        StringBuffer myMentions = new StringBuffer();
-        myMentions.append("[ ");
-        for (Mention mention : mentions) {
-            if(mention != null){
-                myMentions.append(mention.toString());
-                myMentions.append(", ");
-            } else {
-                myMentions.append(", null");
-            }
-        }
-        myMentions.append(" ]");
-        return myMentions.toString();
-    }
-
-    private String toStringMedia(){
-        StringBuffer myMedia = new StringBuffer();
-        myMedia.append("[ ");
-        for (Media medium : media) {
-            if(medium != null){
-                myMedia.append(medium.toString());
-                myMedia.append(", ");
-            } else {
-                myMedia.append(", null");
-            }
-        }
-        myMedia.append(" ]");
-        return myMedia.toString();
-    }
-
-    private String toStringTickerSymbols(){
-        StringBuffer myTickerSymbols = new StringBuffer();
-        myTickerSymbols.append("[ ");
-        for (TickerSymbol tickerSymbol : tickerSymbols) {
-            if(tickerSymbol != null){
-                myTickerSymbols.append(tickerSymbol.toString());
-                myTickerSymbols.append(", ");
-            } else {
-                myTickerSymbols.append(", null");
-            }
-        }
-        myTickerSymbols.append(" ]");
-        return myTickerSymbols.toString();
     }
 
     private String toStringCreatedBy(){
@@ -1039,11 +733,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ",\n createdBy="+ toStringCreatedBy() +
                 ",\n updatedBy=" + toStringUpdatedBy() +
                 ",\n taskInfo="+ toStringTaskInfo() +
-                ",\n urls=" + toStringUrls() +
-                ",\n tags=" + toStringHashTags() +
-                ",\n mentions=" + toStringMentions() +
-                ",\n media=" +toStringMedia() +
-                ",\n tickerSymbols=" +toStringTickerSymbols() +
+                ",\n entities=" + this.entities.toString() +
                 "\n}";
     }
 

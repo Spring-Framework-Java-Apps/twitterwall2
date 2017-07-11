@@ -82,7 +82,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 try {
                     org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
                     log.debug(msg+counter+tweetPers.toString());
-                    Set<Mention> mentions = tweetPers.getMentions();
+                    Set<Mention> mentions = tweetPers.getEntities().getMentions();
                     int subNumber = mentions.size();
                     int subLoops = 0;
                     for(Mention mention:mentions){

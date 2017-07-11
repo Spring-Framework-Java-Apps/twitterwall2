@@ -87,7 +87,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                     log.debug(msg + ""+counter);
                     org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet, task);
                     log.debug(msg + ""+counter+tweetPers);
-                    Set<Mention> mentions = tweetPers.getMentions();
+                    Set<Mention> mentions = tweetPers.getEntities().getMentions();
                     int subLoopId = 0;
                     int subNumber = mentions.size();
                     for(Mention mention:mentions){
