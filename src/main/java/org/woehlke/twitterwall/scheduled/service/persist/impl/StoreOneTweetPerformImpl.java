@@ -36,22 +36,19 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
 
     private final TweetService tweetService;
 
-    private final StoreUserProfile storeUserProfile;
-
     private final StoreUserProcess storeUserProcess;
 
     private final CreatePersistentUrl createPersistentUrl;
 
 
     @Autowired
-    public StoreOneTweetPerformImpl(TickerSymbolService tickerSymbolService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, TweetService tweetService, StoreUserProfile storeUserProfile, StoreUserProcess storeUserProcess, CreatePersistentUrl createPersistentUrl) {
+    public StoreOneTweetPerformImpl(TickerSymbolService tickerSymbolService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, TweetService tweetService, StoreUserProcess storeUserProcess, CreatePersistentUrl createPersistentUrl) {
         this.tickerSymbolService = tickerSymbolService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
         this.hashTagService = hashTagService;
         this.createPersistentUrl = createPersistentUrl;
         this.tweetService = tweetService;
-        this.storeUserProfile = storeUserProfile;
         this.storeUserProcess = storeUserProcess;
     }
 
@@ -84,12 +81,6 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
         for (Mention mention : tweet.getMentions()) {
             if(mention.isValid()){
                 mentions.add(mentionService.store(mention,task));
-                try {
-                    User userFromMention = storeUserProfile.storeUserProfileForScreenName(mention.getScreenName(),task);
-                    log.debug(msg+userFromMention.toString());
-                } catch (IllegalArgumentException exe){
-                    log.debug(msg+exe.getMessage());
-                }
             }
         }
         for (Media medium : tweet.getMedia()) {

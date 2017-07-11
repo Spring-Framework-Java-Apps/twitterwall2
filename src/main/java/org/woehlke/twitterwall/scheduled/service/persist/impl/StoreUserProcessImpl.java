@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +12,9 @@ import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserFromMention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**

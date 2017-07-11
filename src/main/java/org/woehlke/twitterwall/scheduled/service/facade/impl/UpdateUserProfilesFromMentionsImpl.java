@@ -20,6 +20,7 @@ import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfilesFromMentions;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +47,6 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
-
     private final StoreUserProfile storeUserProfile;
 
     private final TwitterApiService twitterApiService;
@@ -55,12 +55,15 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final TaskService taskService;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService) {
+    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
         this.mentionService = mentionService;
         this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -76,7 +79,20 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                     try {
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                         User user = storeUserProfile.storeUserProfile(twitterProfile,task);
+                        for(Mention mention:user.getMentions()){
+                            try {
+                                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                                log.debug(msg+userFromMention.toString());
+                            } catch (IllegalArgumentException exe){
+                                log.debug(msg+exe.getMessage());
+                            }
+                        }
                         log.debug(msg + user.toString());
+                        log.debug(msg + "-----------------------------------------------------");
+                        log.debug(msg + "Start SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                        Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+                        log.debug(msg + "Done SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                        log.debug(msg + "-----------------------------------------------------");
                     } catch (RateLimitExceededException e) {
                         log.warn(msg + e.getMessage());
                         Throwable t = e.getCause();
@@ -85,7 +101,14 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                             t = t.getCause();
                         }
                         throw e;
-                    }  finally {
+                    } catch (InterruptedException ex){
+                        log.warn(msg + ex.getMessage());
+                        Throwable t = ex.getCause();
+                        while(t != null){
+                            log.warn(msg + t.getMessage());
+                            t = t.getCause();
+                        }
+                    } finally {
                         log.debug(msg +"---------------------------------------");
                     }
                 }

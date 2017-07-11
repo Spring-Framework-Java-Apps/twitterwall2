@@ -21,11 +21,11 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 
-    private final StoreUserProfileForScreenName StoreUserProfileForScreenName;
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 
     @Autowired
-    public StoreUserFromMentionImpl(org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName storeUserProfileForScreenName) {
-        StoreUserProfileForScreenName = storeUserProfileForScreenName;
+    public StoreUserFromMentionImpl(StoreUserProfileForScreenName storeUserProfileForScreenName1) {
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName1;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
         String msg = "storeUserFromMention: ";
         for(Mention mention:user.getMentions()){
             String screenName = mention.getScreenName();
-            User userFromMention = StoreUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
+            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
             log.debug(msg + " userFromScreenName: "+userFromMention.toString());
         }
         return user;

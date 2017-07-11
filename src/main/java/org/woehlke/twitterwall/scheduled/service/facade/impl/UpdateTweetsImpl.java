@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,12 +54,15 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     private final TaskService taskService;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, StoreOneTweet storeOneTweet, TaskService taskService) {
+    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
         this.storeOneTweet = storeOneTweet;
         this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -74,8 +80,20 @@ public class UpdateTweetsImpl implements UpdateTweets {
                     Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
                     loopId++;
                     log.debug(msg + ""+loopId);
-                    this.storeOneTweet.storeOneTweet(tweet, task);
+                    org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet, task);
+                    for(Mention mention:tweetPers.getMentions()){
+                        try {
+                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                            log.debug(msg+userFromMention.toString());
+                        } catch (IllegalArgumentException exe){
+                            log.debug(msg+exe.getMessage());
+                        }
+                    }
+                    log.debug(msg + "-----------------------------------------------------");
+                    log.debug(msg + "Start SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
                     Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+                    log.debug(msg + "Done SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                    log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
                     Throwable t = e.getCause();

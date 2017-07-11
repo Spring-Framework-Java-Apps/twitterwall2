@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchTweetsFromTwitterSearch;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
 import javax.persistence.NoResultException;
 import java.text.SimpleDateFormat;
@@ -47,11 +50,14 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
 
     private final TaskService taskService;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, TaskService taskService) {
+    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -67,7 +73,15 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 loopId++;
                 log.debug(msg+loopId);
                 try {
-                    this.storeOneTweet.storeOneTweet(tweet,task);
+                    org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
+                    for(Mention mention:tweetPers.getMentions()){
+                        try {
+                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                            log.debug(msg+userFromMention.toString());
+                        } catch (IllegalArgumentException exe){
+                            log.debug(msg+exe.getMessage());
+                        }
+                    }
                 } catch (EmptyResultDataAccessException e)  {
                     log.warn(msg+e.getMessage());
                 } catch (NoResultException e){

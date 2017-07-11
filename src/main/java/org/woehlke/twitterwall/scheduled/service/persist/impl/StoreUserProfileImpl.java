@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserFromMention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
@@ -29,13 +27,10 @@ public class StoreUserProfileImpl implements StoreUserProfile {
 
     private final StoreUserProcess storeUserProcess;
 
-    private final StoreUserFromMention storeUserFromMention;
-
     @Autowired
-    public StoreUserProfileImpl(UserTransformService userTransformService, StoreUserProcess storeUserProcess, StoreUserFromMention storeUserFromMention) {
+    public StoreUserProfileImpl(UserTransformService userTransformService, StoreUserProcess storeUserProcess) {
         this.userTransformService = userTransformService;
         this.storeUserProcess = storeUserProcess;
-        this.storeUserFromMention = storeUserFromMention;
     }
 
     @Override
@@ -44,7 +39,6 @@ public class StoreUserProfileImpl implements StoreUserProfile {
         User user = userTransformService.transform(userProfile);
         user.setOnDefinedUserList(task.getTaskType().equals(TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST));
         user = storeUserProcess.storeUserProcess(user, task);
-        user = storeUserFromMention.storeUserFromMention(user, task);
         return user;
     }
 

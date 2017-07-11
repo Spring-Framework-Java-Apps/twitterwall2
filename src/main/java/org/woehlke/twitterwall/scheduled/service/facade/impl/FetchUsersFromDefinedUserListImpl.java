@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
 
 import java.text.SimpleDateFormat;
@@ -46,11 +48,14 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
 
     private final TaskService taskService;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService) {
+    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.storeUserProfileForUserList = storeUserProfileForUserList;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -63,6 +68,14 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         List<TwitterProfile> userProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUserListName);
         for(TwitterProfile twitterProfile:userProfiles) {
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
+            for(Mention mention:user.getMentions()){
+                try {
+                    User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                    log.debug(msg+userFromMention.toString());
+                } catch (IllegalArgumentException exe){
+                    log.debug(msg+exe.getMessage());
+                }
+            }
         }
         taskService.done(task);
         log.debug(msg + "---------------------------------------");

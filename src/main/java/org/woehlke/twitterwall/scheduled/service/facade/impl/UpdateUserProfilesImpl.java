@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfiles;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,12 +53,15 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private final TaskService taskService;
 
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
     @Autowired
-    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService) {
+    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
         this.storeUserProfile = storeUserProfile;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
         this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
     @Override
@@ -71,7 +76,21 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                 try {
                     TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
                     User user = storeUserProfile.storeUserProfile(userProfile,task);
+
+                    for(Mention mention:user.getMentions()){
+                        try {
+                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                            log.debug(msg+userFromMention.toString());
+                        } catch (IllegalArgumentException exe){
+                            log.debug(msg+exe.getMessage());
+                        }
+                    }
                     log.debug(msg + user.toString());
+                    log.debug(msg + "-----------------------------------------------------");
+                    log.debug(msg + "Start SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                    Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
+                    log.debug(msg + "Done SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                    log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
                     Throwable t = e.getCause();
@@ -79,7 +98,14 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                         log.warn(msg + t.getMessage());
                         t = t.getCause();
                     }
-                }  finally {
+                } catch (InterruptedException ex){
+                    log.warn(msg + ex.getMessage());
+                    Throwable t = ex.getCause();
+                    while(t != null){
+                        log.warn(msg + t.getMessage());
+                        t = t.getCause();
+                    }
+                } finally {
                     log.debug(msg +"---------------------------------------");
                 }
             }
