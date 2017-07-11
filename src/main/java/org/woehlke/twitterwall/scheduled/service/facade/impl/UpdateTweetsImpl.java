@@ -36,8 +36,8 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private int millisToWaitForFetchTweetsFromTwitterSearch;
+    @Value("${twitterwall.backend.twitter.millisToWaitBetweenTwoApiCalls}")
+    private int millisToWaitBetweenTwoApiCalls;
 
     @Value("${twitterwall.scheduler.fetchUserList.name}")
     private String fetchUserListName;
@@ -90,9 +90,9 @@ public class UpdateTweetsImpl implements UpdateTweets {
                         }
                     }
                     log.debug(msg + "-----------------------------------------------------");
-                    log.debug(msg + "Start SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
-                    Thread.sleep(millisToWaitForFetchTweetsFromTwitterSearch);
-                    log.debug(msg + "Done SLEEP for "+millisToWaitForFetchTweetsFromTwitterSearch+" ms");
+                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
+                    Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms");
                     log.debug(msg + "-----------------------------------------------------");
                 } catch (RateLimitExceededException e) {
                     log.warn(msg + e.getMessage());
