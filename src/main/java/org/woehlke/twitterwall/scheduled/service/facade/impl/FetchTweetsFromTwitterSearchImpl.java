@@ -82,7 +82,7 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                 try {
                     org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
                     log.debug(msg+counter+tweetPers.toString());
-                    Set<Mention> mentions = tweetPers.getMentions();
+                    Set<Mention> mentions = tweetPers.getEntities().getMentions();
                     int subNumber = mentions.size();
                     int subLoops = 0;
                     for(Mention mention:mentions){
@@ -94,47 +94,26 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                             log.debug(msg+subCounter+userFromMention.toString());
                         } catch (IllegalArgumentException exe){
-                            log.debug(msg+subCounter+exe.getMessage());
+                            task = taskService.warn(task,exe,msg+subCounter);
                         }
                     }
                 } catch (EmptyResultDataAccessException e)  {
-                    log.warn(msg+e.getMessage());
+                    task = taskService.warn(task,e,msg+counter);
                 } catch (NoResultException e){
-                    log.warn(msg+e.getMessage());
+                    task = taskService.warn(task,e,msg+counter);
                 } catch (Exception e){
-                    log.warn(msg+e.getMessage());
+                    task = taskService.warn(task,e,msg+counter);
                 }
             }
         } catch (ResourceAccessException e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            task = taskService.error(task,e);
-            //throw e;
+            task = taskService.warn(task,e,msg);
         } catch (RuntimeException e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            task = taskService.error(task,e);
-            //throw e;
+            task = taskService.warn(task,e,msg);
         } catch (Exception e) {
-            log.warn(msg + e.getMessage());
-            Throwable t = e.getCause();
-            while(t != null){
-                log.warn(msg + t.getMessage());
-                t = t.getCause();
-            }
-            task = taskService.error(task,e);
-            //throw e;
+            task = taskService.warn(task,e,msg);
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        task.event(report);
+        taskService.event(task,report);
         taskService.done(task);
         log.debug(msg+"---------------------------------------");
         log.debug(msg+ "DONE fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));

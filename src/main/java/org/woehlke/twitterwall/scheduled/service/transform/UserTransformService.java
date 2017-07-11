@@ -9,5 +9,4 @@ import org.woehlke.twitterwall.scheduled.service.transform.common.TransformServi
  */
 public interface UserTransformService extends TransformService<User,TwitterProfile> {
 
-    User getEntitiesForUrlDescription(User user);
 }

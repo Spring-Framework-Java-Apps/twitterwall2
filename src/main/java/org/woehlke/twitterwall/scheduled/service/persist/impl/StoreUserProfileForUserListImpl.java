@@ -43,7 +43,7 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         User user = userTransformService.transform(twitterProfile);
         user.setOnDefinedUserList(true);
         user = storeUserProcess.storeUserProcess(user, task);
-        for(Mention mention:user.getMentions()){
+        for(Mention mention:user.getEntities().getMentions()){
             String screenName = mention.getScreenName();
             if(screenName != null){
                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);

@@ -50,19 +50,19 @@ public class UrlTransformServiceImpl implements UrlTransformService {
             Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + AbstractFormattedText.stopChar + ")");
             Matcher m3 = urlPattern.matcher(description);
             while (m3.find()) {
-                urls.add(twitterUrlService.fetchTransientUrl(m3.group(1)));
+                urls.add(Url.getUrlFactory(m3.group(1)));
             }
             Pattern urlPattern2 = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")$");
             Matcher m4 = urlPattern2.matcher(description);
             while (m4.find()) {
-                urls.add(twitterUrlService.fetchTransientUrl(m4.group(1)));
+                urls.add(Url.getUrlFactory(m4.group(1)));
             }
             String userWebpage = user.getUrl();
             if(userWebpage != null) {
                 Pattern urlPattern3 = Pattern.compile("^("+Url.URL_PATTTERN_FOR_USER+")$");
                 Matcher m5 = urlPattern3.matcher(description);
                 while (m5.find()) {
-                    urls.add(twitterUrlService.fetchTransientUrl(m5.group(1)));
+                    urls.add(Url.getUrlFactory(m5.group(1)));
                 }
             }
         }

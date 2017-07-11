@@ -2,19 +2,17 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by tw on 28.06.17.
@@ -25,20 +23,17 @@ public class UserTransformServiceImpl implements UserTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(UserTransformServiceImpl.class);
 
-    private final UrlTransformService urlTransformService;
 
-    private final HashTagTransformService hashTagTransformService;
+    private final EntitiesTransformService entitiesTransformService;
 
-    private final MentionTransformService mentionTransformService;
-
-    public UserTransformServiceImpl(UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService) {
-        this.urlTransformService = urlTransformService;
-        this.hashTagTransformService = hashTagTransformService;
-        this.mentionTransformService = mentionTransformService;
+    @Autowired
+    public UserTransformServiceImpl(EntitiesTransformService entitiesTransformService) {
+        this.entitiesTransformService = entitiesTransformService;
     }
 
     @Override
     public User transform(TwitterProfile twitterProfile) {
+        String msg = "User.transform for "+twitterProfile.getId();
         long idTwitter = twitterProfile.getId();
         String screenName = twitterProfile.getScreenName();
         String name = twitterProfile.getName();
@@ -84,31 +79,10 @@ public class UserTransformServiceImpl implements UserTransformService {
         user.setLinkColor(twitterProfile.getLinkColor());
         user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
         user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
-        user =  getEntitiesForUrlDescription(user);
-        return user;
-    }
-
-    @Override
-    public User getEntitiesForUrlDescription(User user) {
-        String description = user.getDescription();
-        user.setMentions(mentionTransformService.findByUser(user));
-        Set<Url> urls = urlTransformService.getUrlsFor(user);
-        user.setUrls(urls);
-        user.setTags(hashTagTransformService.getHashTagsFor(user));
-        // TODO: mediaTransformService
-        // TODO:  tickerSymbolTransformService
-        log.debug("description " + description);
-        log.debug("++++++++++++++++++++");
-        for (HashTag hashTag : user.getTags()) {
-            log.debug("found hashTag: " + hashTag.toString());
-        }
-        for (Url url : user.getUrls()) {
-            log.debug("found url: " + url.toString());
-        }
-        for (Mention mention : user.getMentions()) {
-            log.debug("found mention: " + mention.toString());
-        }
-        log.debug("++++++++++++++++++++");
+        Entities entities = this.entitiesTransformService.getEntitiesForUser(user);
+        log.debug(msg+" entities = "+entities.toString());
+        user.setEntities(entities);
+        log.debug(msg+" user = "+user.toString());
         return user;
     }
 

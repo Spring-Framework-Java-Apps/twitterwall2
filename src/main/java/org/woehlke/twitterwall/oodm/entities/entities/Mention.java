@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -247,5 +248,17 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
             return false;
         }
         return true;
+    }
+
+    public static Mention getMention(String mentionString) {
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException e) {
+        }
+        long idTwitter = new Date().getTime();
+        String screenName = mentionString;
+        String name = mentionString;
+        int[] myindices = {};
+        return new Mention(idTwitter, screenName, name, myindices);
     }
 }

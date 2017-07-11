@@ -77,8 +77,8 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
             log.debug(msg+counter+user.toString());
             int subLoopId = 0;
-            int subNumber = user.getMentions().size();
-            for(Mention mention:user.getMentions()){
+            int subNumber = user.getEntities().getMentions().size();
+            for(Mention mention:user.getEntities().getMentions()){
                 allLoop++;
                 subLoopId++;
                 String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
@@ -86,12 +86,12 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
                     User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                     log.debug(msg+subCounter+userFromMention.toString());
                 } catch (IllegalArgumentException exe){
-                    log.debug(msg+subCounter+exe.getMessage());
+                    taskService.warn(task,exe,msg+subCounter);
                 }
             }
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        task.event(report);
+        taskService.event(task,report);
         taskService.done(task);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE The time is now {}", dateFormat.format(new Date()));

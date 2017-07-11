@@ -31,7 +31,7 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
     @Override
     public User storeUserFromMention(User user, Task task) {
         String msg = "storeUserFromMention: ";
-        for(Mention mention:user.getMentions()){
+        for(Mention mention:user.getEntities().getMentions()){
             String screenName = mention.getScreenName();
             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
             log.debug(msg + " userFromScreenName: "+userFromMention.toString());

@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.application.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.repository.application.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.facade.impl.UpdateUserProfilesImpl;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.List;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TaskServiceImpl implements TaskService {
+
+    private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
     private final TaskRepository taskRepository;
 
@@ -72,6 +77,7 @@ public class TaskServiceImpl implements TaskService {
         task.setCountedEntitiesAtStart(countedEntities);
         task.start();
         task = taskRepository.persist(task);
+        log.debug(task.toString());
         return task;
     }
 
@@ -81,6 +87,7 @@ public class TaskServiceImpl implements TaskService {
         task.setCountedEntitiesAtFinish(countedEntities);
         task.done();
         task = taskRepository.update(task);
+        log.debug(task.toString());
         return task;
     }
 
@@ -88,6 +95,39 @@ public class TaskServiceImpl implements TaskService {
     public Task error(Task task,Exception e) {
         task.error(e);
         task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task error(Task task, Exception e, String msg) {
+        task.error(e,msg);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task warn(Task task, Exception e) {
+        task.warn(e);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task warn(Task task, Exception e, String msg) {
+        task.warn(e,msg);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task event(Task task, String msg) {
+        task.event(msg);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
         return task;
     }
 }

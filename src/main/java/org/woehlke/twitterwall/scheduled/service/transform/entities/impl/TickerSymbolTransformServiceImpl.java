@@ -4,8 +4,12 @@ import org.springframework.social.twitter.api.TickerSymbolEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.TickerSymbolTransformService;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by tw on 28.06.17.
@@ -21,5 +25,12 @@ public class TickerSymbolTransformServiceImpl implements TickerSymbolTransformSe
         int[] indices = tickerSymbol.getIndices();
         TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url, indices);
         return myTickerSymbolEntity;
+    }
+
+    @Override
+    public Set<TickerSymbol> getTickerSymbolsFor(User user) {
+        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
+        //TODO: transform getTickerSymbolsFor
+        return tickerSymbols;
     }
 }
