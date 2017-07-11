@@ -40,7 +40,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(name="description",nullable = false)
+    @Column(name="description",nullable = false,length=4096)
     private String description;
 
     @Column(name="task_status_before",nullable = false)

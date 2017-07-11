@@ -44,7 +44,7 @@ public class Task implements DomainObject<Task> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column
+    @Column(length=4096)
     private String description;
 
     @Column(name="task_type",nullable = false)
@@ -224,17 +224,21 @@ public class Task implements DomainObject<Task> {
 
     @Override
     public String toString() {
-        String cef = "null";
+        String countedEntitiesAtFinishStr = "null";
         if(countedEntitiesAtFinish != null){
-            cef = countedEntitiesAtFinish.toString();
+            countedEntitiesAtFinishStr = countedEntitiesAtFinish.toString();
+        }
+        String countedEntitiesAtStartStr = "null";
+        if(countedEntitiesAtStart != null){
+            countedEntitiesAtStartStr = countedEntitiesAtStart.toString();
         }
         return "Task{" +
             "id=" + id +
             ", taskType=" + taskType +
             ", timeStarted=" + timeStarted +
             ", timeFinished=" + timeFinished +
-            ", countedEntitiesAtStart=" + countedEntitiesAtStart.toString() +
-            ", countedEntitiesAtFinish=" + cef +
+            ", countedEntitiesAtStart=" + countedEntitiesAtStartStr +
+            ", countedEntitiesAtFinish=" + countedEntitiesAtFinishStr +
             '}';
     }
 
