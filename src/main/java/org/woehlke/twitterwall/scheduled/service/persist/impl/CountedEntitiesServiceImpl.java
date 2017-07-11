@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -37,8 +39,11 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final TickerSymbolService tickerSymbolService;
 
+    private final TaskService taskService;
 
-    public CountedEntitiesServiceImpl(TweetService tweetService, UserService userService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, UrlCacheService urlCacheService, TickerSymbolService tickerSymbolService) {
+    private final TaskHistoryService taskHistoryService;
+
+    public CountedEntitiesServiceImpl(TweetService tweetService, UserService userService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, UrlCacheService urlCacheService, TickerSymbolService tickerSymbolService, TaskService taskService, TaskHistoryService taskHistoryService) {
         this.tweetService = tweetService;
         this.userService = userService;
         this.mentionService = mentionService;
@@ -47,8 +52,9 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         this.urlService = urlService;
         this.urlCacheService = urlCacheService;
         this.tickerSymbolService = tickerSymbolService;
+        this.taskService = taskService;
+        this.taskHistoryService = taskHistoryService;
     }
-
 
     @Override
     public CountedEntities countAll() {
@@ -61,6 +67,8 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setCountUrl(this.urlService.count());
         c.setCountUrlCache(this.urlCacheService.count());
         c.setCountUser(this.userService.count());
+        c.setCountTask(this.taskService.count());
+        c.setCountTaskHistory(this.taskHistoryService.count());
         log.debug("countAll: "+c.toString());
         return c;
     }

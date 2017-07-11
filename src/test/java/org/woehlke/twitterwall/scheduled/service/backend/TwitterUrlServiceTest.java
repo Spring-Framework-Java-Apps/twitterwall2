@@ -61,7 +61,6 @@ public class TwitterUrlServiceTest {
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());
                 Assert.assertEquals(exprected.getDisplay(),foundUrl.getDisplay());
                 Assert.assertEquals(exprected.getExpanded(), foundUrl.getExpanded());
-
         }
         log.info("------------------------------------");
     }

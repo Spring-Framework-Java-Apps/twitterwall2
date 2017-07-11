@@ -17,6 +17,8 @@ public class CountedEntities implements Serializable {
     private long countTickerSymbol;
     private long countUrl;
     private long countUrlCache;
+    private long countTask;
+    private long countTaskHistory;
 
     public CountedEntities() {
     }
@@ -85,6 +87,22 @@ public class CountedEntities implements Serializable {
         this.countUrlCache = countUrlCache;
     }
 
+    public long getCountTask() {
+        return countTask;
+    }
+
+    public void setCountTask(long countTask) {
+        this.countTask = countTask;
+    }
+
+    public long getCountTaskHistory() {
+        return countTaskHistory;
+    }
+
+    public void setCountTaskHistory(long countTaskHistory) {
+        this.countTaskHistory = countTaskHistory;
+    }
+
     @Override
     public String toString() {
         return "CountedEntities{" +
@@ -96,6 +114,8 @@ public class CountedEntities implements Serializable {
             ", countTickerSymbol=" + countTickerSymbol +
             ", countUrl=" + countUrl +
             ", countUrlCache=" + countUrlCache +
+            ", countTask=" + countTask +
+            ", countTaskHistory=" + countTaskHistory +
             '}';
     }
 
@@ -113,7 +133,9 @@ public class CountedEntities implements Serializable {
         if (countMention != that.countMention) return false;
         if (countTickerSymbol != that.countTickerSymbol) return false;
         if (countUrl != that.countUrl) return false;
-        return countUrlCache == that.countUrlCache;
+        if (countUrlCache != that.countUrlCache) return false;
+        if (countTask != that.countTask) return false;
+        return countTaskHistory == that.countTaskHistory;
     }
 
     @Override
@@ -126,6 +148,8 @@ public class CountedEntities implements Serializable {
         result = 31 * result + (int) (countTickerSymbol ^ (countTickerSymbol >>> 32));
         result = 31 * result + (int) (countUrl ^ (countUrl >>> 32));
         result = 31 * result + (int) (countUrlCache ^ (countUrlCache >>> 32));
+        result = 31 * result + (int) (countTask ^ (countTask >>> 32));
+        result = 31 * result + (int) (countTaskHistory ^ (countTaskHistory >>> 32));
         return result;
     }
 }

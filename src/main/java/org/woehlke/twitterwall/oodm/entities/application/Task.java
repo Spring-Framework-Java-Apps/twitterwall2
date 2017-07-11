@@ -80,7 +80,9 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "countMention", column = @Column(name = "start_count_mention")),
         @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "start_count_tickersymbol")),
         @AttributeOverride(name = "countUrl", column = @Column(name = "start_count_url")),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache"))
+        @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache")),
+        @AttributeOverride(name = "countTask", column = @Column(name = "start_count_task")),
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history"))
     })
     private CountedEntities countedEntitiesAtStart;
 
@@ -93,7 +95,9 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "countMention", column = @Column(name = "done_count_mention")),
         @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "done_count_tickersymbol")),
         @AttributeOverride(name = "countUrl", column = @Column(name = "done_count_url")),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "done_count_urlcache"))
+        @AttributeOverride(name = "countUrlCache", column = @Column(name = "done_count_urlcache")),
+        @AttributeOverride(name = "countTask", column = @Column(name = "done_count_task")),
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "done_count_task_history"))
     })
     private CountedEntities countedEntitiesAtFinish;
 
