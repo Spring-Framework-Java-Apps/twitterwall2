@@ -51,54 +51,62 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         return twitter;
     }
 
+    private String MSG = "Remote API Call ";
+
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
-        String msg = "findTweetsForSearchQuery: ";
+        String msg = MSG+"findTweetsForSearchQuery: ";
         log.debug(msg);
-            List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
-            if(fetchedTweets == null){
-                return new ArrayList<>();
-            } else {
-                return fetchedTweets;
-            }
+        List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
+        msg += " result: ";
+        if(fetchedTweets == null){
+            log.debug(msg+" result.size: 0");
+            return new ArrayList<>();
+        } else {
+            log.debug(msg+" result.size: "+fetchedTweets.size());
+            return fetchedTweets;
+        }
     }
 
     @Override
     public Tweet findOneTweetById(long id) {
-        String msg = "findOneTweetById: "+id;
+        String msg = MSG+"findOneTweetById: "+id;
         log.debug(msg);
-            Tweet result = getTwitterProxy().timelineOperations().getStatus(id);
-            log.debug(msg+result.getId());
-            return result;
+        Tweet result = getTwitterProxy().timelineOperations().getStatus(id);
+        msg += " result: ";
+        log.debug(msg+" Id: "+result.getId());
+        return result;
     }
 
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
-        String msg = "findOneTweetById: "+userProfileTwitterId;
+        String msg = MSG+"findOneTweetById: "+userProfileTwitterId;
         log.debug(msg);
-            TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
-            log.debug(msg+result.getId());
-            log.debug(msg+result.getScreenName());
-            log.debug(msg+result.getName());
-            return result;
+        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+        msg += " result: ";
+        log.debug(msg+" Id:         "+result.getId());
+        log.debug(msg+" ScreenName: "+result.getScreenName());
+        log.debug(msg+" Name:       "+result.getName());
+        return result;
     }
 
     @Override
     public TwitterProfile getUserProfileForScreenName(String screenName) {
-        String msg = "getUserProfileForScreenName: "+screenName;
+        String msg = MSG+"getUserProfileForScreenName: "+screenName;
         log.debug(msg);
-            TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);log.debug(msg+result.getId());
-            log.debug(msg+result.getScreenName());
-            log.debug(msg+result.getName());
-            return result;
+        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);log.debug(msg+result.getId());
+        msg += " result: ";
+        log.debug(msg+" ScreenName: "+result.getScreenName());
+        log.debug(msg+" Name:       "+result.getName());
+        return result;
     }
 
     @Override
     public List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName) {
-        String msg = "findUsersFromDefinedList: "+fetchUserListName+" ";
+        String msg = MSG+"findUsersFromDefinedList: "+fetchUserListName+" ";
         log.debug(msg);
-            List<TwitterProfile> result = getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
-            log.debug(msg+result.size());
-            return result;
+        List<TwitterProfile> result = getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
+        log.debug(msg+" result.size: "+result.size());
+        return result;
     }
 }
