@@ -34,24 +34,18 @@ public class UserServiceTestImpl implements UserServiceTest {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
-    private final UserService userService;
-
-    private final TaskService taskService;
-
-    private final TwitterApiService twitterApiService;
-
-    private final PersistDataFromTwitterTest persistDataFromTwitterTest;
-
-    private final StoreUserProfile storeUserProfile;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserServiceTestImpl(UserService userService, TaskService taskService, TwitterApiService twitterApiService, PersistDataFromTwitterTest persistDataFromTwitterTest, StoreUserProfile storeUserProfile) {
-        this.userService = userService;
-        this.taskService = taskService;
-        this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitterTest = persistDataFromTwitterTest;
-        this.storeUserProfile = storeUserProfile;
-    }
+    private TaskService taskService;
+
+    @Autowired
+    private TwitterApiService twitterApiService;
+
+    @Autowired
+    private  StoreUserProfile storeUserProfile;
+
 
     @Override
     public User createImprintUser(){
@@ -110,8 +104,4 @@ public class UserServiceTestImpl implements UserServiceTest {
         return user;
     }
 
-    @Override
-    public void createTestData(){
-        persistDataFromTwitterTest.fetchUserFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
-    }
 }

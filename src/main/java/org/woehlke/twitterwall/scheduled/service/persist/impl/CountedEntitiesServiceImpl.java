@@ -2,15 +2,21 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
 import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.service.TweetService;
-import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
-import org.woehlke.twitterwall.oodm.service.entities.*;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.repository.TweetRepository;
+import org.woehlke.twitterwall.oodm.repository.UserRepository;
+import org.woehlke.twitterwall.oodm.repository.application.TaskHistoryRepository;
+import org.woehlke.twitterwall.oodm.repository.application.TaskRepository;
+import org.woehlke.twitterwall.oodm.repository.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
@@ -22,64 +28,77 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);
 
+    private final TweetRepository tweetRepository;
 
-    private final TweetService tweetService;
+    private final UserRepository userRepository;
 
-    private final UserService userService;
+    private final MentionRepository mentionRepository;
 
-    private final MentionService mentionService;
+    private final MediaRepository mediaRepository;
 
-    private final MediaService mediaService;
+    private final HashTagRepository hashTagRepository;
 
-    private final HashTagService hashTagService;
+    private final UrlRepository urlRepository;
 
-    private final UrlService urlService;
+    private final UrlCacheRepository urlCacheRepository;
 
-    private final UrlCacheService urlCacheService;
+    private final TickerSymbolRepository tickerSymbolRepository;
 
-    private final TickerSymbolService tickerSymbolService;
+    private final TaskRepository taskRepository;
 
-    private final TaskService taskService;
+    private final TaskHistoryRepository taskHistoryRepository;
 
-    private final TaskHistoryService taskHistoryService;
 
-    public CountedEntitiesServiceImpl(TweetService tweetService, UserService userService, MentionService mentionService, MediaService mediaService, HashTagService hashTagService, UrlService urlService, UrlCacheService urlCacheService, TickerSymbolService tickerSymbolService, TaskService taskService, TaskHistoryService taskHistoryService) {
-        this.tweetService = tweetService;
-        this.userService = userService;
-        this.mentionService = mentionService;
-        this.mediaService = mediaService;
-        this.hashTagService = hashTagService;
-        this.urlService = urlService;
-        this.urlCacheService = urlCacheService;
-        this.tickerSymbolService = tickerSymbolService;
-        this.taskService = taskService;
-        this.taskHistoryService = taskHistoryService;
+    @Autowired
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
+        this.tweetRepository = tweetRepository;
+        this.userRepository = userRepository;
+        this.mentionRepository = mentionRepository;
+        this.mediaRepository = mediaRepository;
+        this.hashTagRepository = hashTagRepository;
+        this.urlRepository = urlRepository;
+        this.urlCacheRepository = urlCacheRepository;
+        this.tickerSymbolRepository = tickerSymbolRepository;
+        this.taskRepository = taskRepository;
+        this.taskHistoryRepository = taskHistoryRepository;
     }
 
     @Override
     public CountedEntities countAll() {
         CountedEntities c = new CountedEntities();
-        c.setCountHashTags(this.hashTagService.count());
-        c.setCountMedia(this.mediaService.count());
-        c.setCountMention(this.mentionService.count());
-        c.setCountTickerSymbol(this.tickerSymbolService.count());
-        c.setCountTweets(this.tweetService.count());
-        c.setCountUrl(this.urlService.count());
-        c.setCountUrlCache(this.urlCacheService.count());
-        c.setCountUser(this.userService.count());
-        c.setCountTask(this.taskService.count());
-        c.setCountTaskHistory(this.taskHistoryService.count());
+
+        long countUser = this.userRepository.count(User.class);
+        long countTweets = this.tweetRepository.count(Tweet.class);
+        long countHashTags = this.hashTagRepository.count(HashTag.class);
+        long countMedia = this.mediaRepository.count(Media.class);
+        long countMention = this.mentionRepository.count(Mention.class);
+        long countTickerSymbol = this.tickerSymbolRepository.count(TickerSymbol.class);
+        long countUrl = this.urlRepository.count(Url.class);
+        long countUrlCache = this.urlCacheRepository.count(UrlCache.class);
+        long countTask = this.taskRepository.count(Task.class);
+        long countTaskHistory = this.taskHistoryRepository.count(TaskHistory.class);
+
+        c.setCountHashTags(countHashTags);
+        c.setCountMedia(countMedia);
+        c.setCountMention(countMention);
+        c.setCountTickerSymbol(countTickerSymbol);
+        c.setCountTweets(countTweets);
+        c.setCountUrl(countUrl);
+        c.setCountUrlCache(countUrlCache);
+        c.setCountUser(countUser);
+        c.setCountTask(countTask);
+        c.setCountTaskHistory(countTaskHistory);
         log.debug("countAll: "+c.toString());
         return c;
     }
 
     @Override
     public long countTweets() {
-        return tweetService.count();
+        return tweetRepository.count(Tweet.class);
     }
 
     @Override
     public long countUsers() {
-        return this.userService.count();
+        return this.userRepository.count(User.class);
     }
 }

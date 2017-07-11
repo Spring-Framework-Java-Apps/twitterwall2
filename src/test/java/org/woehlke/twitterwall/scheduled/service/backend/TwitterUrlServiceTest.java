@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.backend;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class TwitterUrlServiceTest {
     @Autowired
     private TwitterUrlService twitterUrlService;
 
+    @Ignore
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
@@ -46,6 +48,7 @@ public class TwitterUrlServiceTest {
         log.info("------------------------------------");
     }
 
+    @Ignore
     @Commit
     @Test
     public void fetchUrlTest(){

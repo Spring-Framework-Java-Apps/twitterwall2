@@ -16,9 +16,9 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.ScheduledTasks;
 import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.facade.*;
+import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
-import java.text.SimpleDateFormat;
 
 /**
  * Created by tw on 11.07.17.
@@ -27,21 +27,16 @@ import java.text.SimpleDateFormat;
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-public class FetchTweetsFromTwitterSearchTest {
+public class FetchTweetsFromTwitterSearchTest extends AbstractFacadeTest {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    private final FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
-
-    private final CountedEntitiesService countedEntitiesService;
+    @Autowired
+    private FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
 
     @Autowired
-    public FetchTweetsFromTwitterSearchTest(FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, CountedEntitiesService countedEntitiesService) {
-        this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
-        this.countedEntitiesService = countedEntitiesService;
-    }
+    private CountedEntitiesService countedEntitiesService;
+
 
     @Commit
     @Test
@@ -53,9 +48,5 @@ public class FetchTweetsFromTwitterSearchTest {
         Assert.assertTrue(ok);
     }
 
-    private boolean assertCountedEntities(CountedEntities beforeTest, CountedEntities afterTest) {
-        boolean result = true;
 
-        return result;
-    }
 }

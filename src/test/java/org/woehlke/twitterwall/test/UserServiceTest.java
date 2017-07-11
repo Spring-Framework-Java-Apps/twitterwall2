@@ -7,8 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
  */
 public interface UserServiceTest {
 
-    void createTestData();
-
     User createImprintUser();
 
     User createUser(String username);

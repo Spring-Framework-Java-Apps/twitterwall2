@@ -11,7 +11,26 @@ import java.util.Date;
  * Created by tw on 10.07.17.
  */
 @Entity
-@Table(name = "task_history")
+@Table(name = "task_history", indexes = {
+    @Index(name = "idx_task_history_time_event", columnList = "time_event"),
+    @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
+    @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now"),
+    @Index(name = "idx_task_history_tdescription", columnList = "description")
+})
+@NamedQueries({
+    @NamedQuery(
+        name = "TaskHistory.findById",
+        query = "select t from TaskHistory as t where t.id=:id"
+    ),
+    @NamedQuery(
+        name = "TaskHistory.count",
+        query = "select count(t) from TaskHistory as t"
+    ),
+    @NamedQuery(
+        name = "TaskHistory.getAll",
+        query = "select t from TaskHistory as t"
+    )
+})
 @EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements DomainObject<TaskHistory> {
 

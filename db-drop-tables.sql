@@ -1,6 +1,8 @@
 drop table userprofile_url;
 drop table userprofile_mention;
 drop table userprofile_hashtag;
+drop table userprofile_media;
+drop table userprofile_tickersymbol;
 drop table tweet_tickersymbol;
 drop table tweet_mention;
 drop table tweet_media;
