@@ -756,6 +756,10 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", retweetedStatus=" + retweetedStatus +
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
+                ",\n retweetedStatus=" +retweetedStatus.toString() +
+                ",\n createdBy="+createdBy.toString() +
+                ",\n updatedBy=" + updatedBy.toString() +
+                ",\n taskInfo="+taskInfo.toString() +
                 ",\n urls=" + toStringUrls() +
                 ",\n tags=" + toStringHashTags() +
                 ",\n mentions=" + toStringMentions() +

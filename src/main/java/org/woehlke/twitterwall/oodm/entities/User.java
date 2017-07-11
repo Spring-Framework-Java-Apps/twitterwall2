@@ -1012,6 +1012,9 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
+                ",\n createdBy="+createdBy.toString() +
+                ",\n updatedBy=" + updatedBy.toString() +
+                ",\n taskInfo="+taskInfo.toString() +
                 ",\n urls=" + toStringUrls() +
                 ",\n tags=" + toStringHashTags() +
                 ",\n mentions=" + toStringMentions() +
