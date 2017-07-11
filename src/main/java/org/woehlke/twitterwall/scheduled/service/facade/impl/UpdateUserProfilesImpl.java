@@ -78,7 +78,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             for (Long userProfileTwitterId : userProfileTwitterIds) {
                 allLoop++;
                 loopId++;
-                String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
+                String counter = " ( "+loopId+ " from "+number+" ) ["+allLoop+"] ";
                 try {
                     log.debug(msg+counter);
                     TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
@@ -89,7 +89,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                     for(Mention mention:user.getMentions()){
                         allLoop++;
                         subLoopId++;
-                        String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
+                        String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) ["+allLoop+"] ";
                         try {
                             log.debug(msg+subCounter);
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);

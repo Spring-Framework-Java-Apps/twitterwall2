@@ -74,6 +74,7 @@ public class MentionServiceImpl implements MentionService {
                 mentionPers = this.mentionRepository.findByIdTwitter(idTwitter,Mention.class);
             }
             //mentionPers.setIndices(mention.getIndices());
+            mention.setId(mentionPers.getId());
             mention.setCreatedBy(mentionPers.getCreatedBy());
             mention.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());

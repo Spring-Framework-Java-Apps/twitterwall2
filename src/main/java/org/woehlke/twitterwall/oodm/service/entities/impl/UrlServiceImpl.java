@@ -49,6 +49,7 @@ public class UrlServiceImpl implements UrlService {
         Url result;
         try {
             Url urlPersistent = this.urlRepository.findByUrl(url);
+            domainObject.setId(urlPersistent.getId());
             domainObject.setCreatedBy(urlPersistent.getCreatedBy());
             domainObject.setUpdatedBy(task);
             result = this.urlRepository.update(domainObject);

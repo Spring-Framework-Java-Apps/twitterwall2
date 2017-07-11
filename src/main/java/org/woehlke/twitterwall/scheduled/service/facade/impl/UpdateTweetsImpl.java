@@ -81,7 +81,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
             for (Long tweetTwitterId : tweetTwitterIds) {
                 loopId++;
                 allLoop++;
-                String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
+                String counter = " ( "+loopId+ " from "+number+" ) ["+allLoop+"] ";
                 try {
                     Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
                     log.debug(msg + ""+counter);
@@ -93,7 +93,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                     for(Mention mention:mentions){
                         allLoop++;
                         subLoopId++;
-                        String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
+                        String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) ["+allLoop+"] ";
                         try {
                             log.debug(msg+subCounter);
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);

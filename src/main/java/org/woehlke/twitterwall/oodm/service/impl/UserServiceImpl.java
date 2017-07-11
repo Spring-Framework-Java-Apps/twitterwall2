@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
         try {
             User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
             user.setCreatedBy(userPersistent.getCreatedBy());
+            user.setId(userPersistent.getId());
             user.setUpdatedBy(task);
             user = userRepository.update(user);
             log.debug(name+" updated "+user.toString());

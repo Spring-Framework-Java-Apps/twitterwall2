@@ -69,6 +69,7 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.debug(msg+"try to find: "+tickerSymbol.toString());
             TickerSymbol tickerSymbolPers = this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
             log.debug(msg+"found: "+tickerSymbolPers.toString());
+            tickerSymbol.setId(tickerSymbolPers.getId());
             tickerSymbol.setCreatedBy(tickerSymbolPers.getCreatedBy());
             tickerSymbol.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+tickerSymbol.toString());

@@ -82,7 +82,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 if((screenName != null) && (!screenName.isEmpty())) {
                     loopId++;
                     allLoop++;
-                    String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
+                    String counter = " ( "+loopId+ " from "+number+" ) ["+allLoop+"] ";
                     try {
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                         User user = storeUserProfile.storeUserProfile(twitterProfile,task);
@@ -93,7 +93,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                         for(Mention mention:mentions){
                             allLoop++;
                             subLoopId++;
-                            String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
+                            String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) ["+allLoop+"] ";
                             try {
                                 log.debug(msg+subCounter);
                                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);

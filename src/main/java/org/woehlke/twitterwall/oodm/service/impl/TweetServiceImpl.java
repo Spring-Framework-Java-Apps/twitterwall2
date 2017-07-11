@@ -100,6 +100,7 @@ public class TweetServiceImpl implements TweetService {
         Tweet result;
         try {
             Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
+            tweet.setId(tweetPersistent.getId());
             tweet.setCreatedBy(tweetPersistent.getCreatedBy());
             tweet.setUpdatedBy(task);
             result = tweetRepository.update(tweet);

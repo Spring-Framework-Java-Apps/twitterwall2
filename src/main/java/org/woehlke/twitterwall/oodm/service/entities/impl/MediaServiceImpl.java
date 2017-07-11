@@ -62,6 +62,7 @@ public class MediaServiceImpl implements MediaService {
             log.debug(msg+"try to find: "+media.toString());
             Media mediaPers = this.mediaRepository.findByIdTwitter(media.getIdTwitter(),Media.class);
             log.debug(msg+"found: "+mediaPers.toString());
+            media.setId(mediaPers.getId());
             media.setCreatedBy(mediaPers.getCreatedBy());
             media.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+media.toString());

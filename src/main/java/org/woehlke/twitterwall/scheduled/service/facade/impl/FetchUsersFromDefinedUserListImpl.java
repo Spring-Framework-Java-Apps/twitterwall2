@@ -72,7 +72,7 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         for(TwitterProfile twitterProfile:userProfiles) {
             allLoop++;
             loopId++;
-            String counter = " ( "+loopId+ "from "+number+" ) ["+allLoop+"] ";
+            String counter = " ( "+loopId+ " from "+number+" ) ["+allLoop+"] ";
             log.debug(msg+counter);
             User user = storeUserProfileForUserList.storeUserProfileForUserList(twitterProfile,task);
             log.debug(msg+counter+user.toString());
