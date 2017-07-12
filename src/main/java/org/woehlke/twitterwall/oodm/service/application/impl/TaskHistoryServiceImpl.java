@@ -63,4 +63,9 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     public long count() {
         return taskHistoryRepository.count(TaskHistory.class);
     }
+
+    @Override
+    public List<TaskHistory> findByTask(Task oneTask) {
+        return taskHistoryRepository.findByTask(oneTask);
+    }
 }

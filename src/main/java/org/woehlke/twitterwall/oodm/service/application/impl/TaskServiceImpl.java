@@ -130,4 +130,9 @@ public class TaskServiceImpl implements TaskService {
         log.debug(task.toString());
         return task;
     }
+
+    @Override
+    public Task findById(long id) {
+        return taskRepository.findById(id);
+    }
 }

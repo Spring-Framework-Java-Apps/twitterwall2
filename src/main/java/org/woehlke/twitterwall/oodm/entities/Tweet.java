@@ -85,7 +85,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column(nullable = false)
     private String idStr;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=4096)
     private String text;
 
     @Column(name="created_date", nullable = false)
@@ -94,7 +94,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column(name="from_user")
     private String fromUser;
 
-    @Column
+    @Column(length=4096)
     private String profileImageUrl;
 
     @Column(name="to_user_id")
@@ -115,7 +115,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column
     private String languageCode;
 
-    @Column
+    @Column(length=4096)
     private String source;
 
     @Column

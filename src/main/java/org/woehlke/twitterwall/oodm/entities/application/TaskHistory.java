@@ -29,6 +29,10 @@ import java.util.Date;
     @NamedQuery(
         name = "TaskHistory.getAll",
         query = "select t from TaskHistory as t"
+    ),
+    @NamedQuery(
+        name = "TaskHistory.findByTask",
+        query = "select t from TaskHistory as t where t.task.id=:oneTaskId"
     )
 })
 @EntityListeners(TaskHistoryListener.class)
@@ -40,7 +44,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(name="description",nullable = false)
+    @Column(name="description",nullable = false,columnDefinition="text")
     private String description;
 
     @Column(name="task_status_before",nullable = false)
@@ -54,6 +58,10 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_event",nullable = false)
     private Date timeEvent;
+
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name="task_id",nullable = false)
+    private Task task;
 
     public TaskHistory() {
     }
@@ -114,6 +122,14 @@ public class TaskHistory implements DomainObject<TaskHistory> {
 
     public void setTimeEvent(Date timeEvent) {
         this.timeEvent = timeEvent;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     @Override

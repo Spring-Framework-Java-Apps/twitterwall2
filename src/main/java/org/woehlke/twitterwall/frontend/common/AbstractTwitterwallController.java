@@ -191,33 +191,22 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         model.addAttribute("user", user);
     }
 
-    protected User getDummyUser(){
-        long idTwitter=0L;
-        String screenName = imprintScreenName;
-        String name="Exception Handler Dummy Username";
-        String url="https://github.com/phasenraum2010/twitterwall2";
-        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
-        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
-        String location="Berlin, Germany";
-        Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
-        return user;
-    }
-
     protected void addUserForScreenName(Model model, String screenName) {
         String msg="addUserForScreenName "+screenName+": ";
         Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
         try {
             log.info("--------------------------------------------------------------------");
             log.info("screenName = "+ screenName);
-            User user = userService.findByScreenName(screenName); //userService.findByScreenName(screenName);
+            User user = userService.findByScreenName(screenName);
             log.info("userService.findByScreenName: found User = "+user.toString());
             model.addAttribute("user", user);
             log.info("model.addAttribute user = "+user.toString());
         } catch (EmptyResultDataAccessException e){
-            log.info("EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName);
+            String msg2 = "EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName;
+            task = taskService.warn(task,e,msg2);
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-            log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
+            String msg3 = "twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString();
+            task = taskService.event(task,msg3);
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
                 User user = storeUserProfile.storeUserProfile(twitterProfile,task);
@@ -226,12 +215,12 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
                 log.info("model.addAttribute user = "+user.toString());
             } catch (EmptyResultDataAccessException ex){
                 log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: "+ex.getMessage());
-                User user = getDummyUser();
+                User user = User.getDummyUserForScreenName(screenName);
                 model.addAttribute("user", user);
                 log.info("model.addAttribute user = "+user.toString());
             } catch (NoResultException exe) {
                 log.warn("persistDataFromTwitter.storeUserProfile raised NoResultException: "+exe.getMessage());
-                User user = getDummyUser();
+                User user = User.getDummyUserForScreenName(screenName);
                 model.addAttribute("user", user);
                 log.info("model.addAttribute user = "+user.toString());
             }
