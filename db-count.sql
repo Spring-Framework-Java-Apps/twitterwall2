@@ -1,6 +1,8 @@
 select count(*) from userprofile_url;
 select count(*) from userprofile_mention;
 select count(*) from userprofile_hashtag;
+select count(*) from userprofile_media;
+select count(*) from userprofile_tickersymbol;
 select count(*) from tweet_tickersymbol;
 select count(*) from tweet_mention;
 select count(*) from tweet_media;
@@ -19,3 +21,5 @@ select count(*) from hashtag_indices;
 select count(*) from hashtag;
 select count(*) from tweet;
 select count(*) from userprofile;
+select count(*) from task_history;
+select count(*) from task;

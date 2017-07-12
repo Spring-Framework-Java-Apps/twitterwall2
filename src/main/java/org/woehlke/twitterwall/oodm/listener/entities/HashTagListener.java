@@ -15,17 +15,17 @@ public class HashTagListener {
 
   @PrePersist
   public void onPrePersist(HashTag domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(HashTag domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(HashTag domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
@@ -45,7 +45,7 @@ public class HashTagListener {
 
   @PostLoad
   public void onPostLoad(HashTag domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 
 

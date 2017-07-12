@@ -9,10 +9,13 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 import java.util.Date;
@@ -31,21 +34,18 @@ public class UserServiceTestImpl implements UserServiceTest {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
-    private final UserService userService;
-
-    private final TwitterApiService twitterApiService;
-
-    private final PersistDataFromTwitter persistDataFromTwitter;
-
-    private final PersistDataFromTwitterTest persistDataFromTwitterTest;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserServiceTestImpl(UserService userService, TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter, PersistDataFromTwitterTest persistDataFromTwitterTest) {
-        this.userService = userService;
-        this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
-        this.persistDataFromTwitterTest = persistDataFromTwitterTest;
-    }
+    private TaskService taskService;
+
+    @Autowired
+    private TwitterApiService twitterApiService;
+
+    @Autowired
+    private  StoreUserProfile storeUserProfile;
+
 
     @Override
     public User createImprintUser(){
@@ -54,6 +54,8 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     @Override
     public User createUser(String screenName) {
+        String msg = "createUser for screenName="+screenName;
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);
@@ -67,7 +69,7 @@ public class UserServiceTestImpl implements UserServiceTest {
             log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
                 log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = persistDataFromTwitter.storeUserProfile(twitterProfile);
+                User user = storeUserProfile.storeUserProfile(twitterProfile,task);
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
                 log.info("model.addAttribute user = "+user.toString());
                 return user;
@@ -83,6 +85,7 @@ public class UserServiceTestImpl implements UserServiceTest {
                 return user;
             }
         }  finally {
+            taskService.done(task);
             log.info("... finally done ...");
             log.info("-----------------------------------------");
         }
@@ -101,8 +104,4 @@ public class UserServiceTestImpl implements UserServiceTest {
         return user;
     }
 
-    @Override
-    public void createTestData(){
-        persistDataFromTwitterTest.fetchUserFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST);
-    }
 }

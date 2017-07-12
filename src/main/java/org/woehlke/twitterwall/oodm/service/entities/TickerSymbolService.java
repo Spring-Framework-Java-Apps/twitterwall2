@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.service.common.DomainService;
 
@@ -9,8 +10,8 @@ import org.woehlke.twitterwall.oodm.service.common.DomainService;
  */
 public interface TickerSymbolService extends DomainService<TickerSymbol> {
 
-    TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
+    //TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url);
 
-    TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol);
+    TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol, Task task);
 
 }

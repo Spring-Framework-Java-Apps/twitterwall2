@@ -14,17 +14,17 @@ public class TweetListener  {
 
   @PrePersist
   public void onPrePersist(Tweet domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(Tweet domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(Tweet domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
@@ -44,6 +44,6 @@ public class TweetListener  {
 
   @PostLoad
   public void onPostLoad(Tweet domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 }

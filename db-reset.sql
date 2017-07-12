@@ -1,6 +1,8 @@
 delete from userprofile_url;
 delete from userprofile_mention;
 delete from userprofile_hashtag;
+delete from userprofile_media;
+delete from userprofile_tickersymbol;
 delete from tweet_tickersymbol;
 delete from tweet_mention;
 delete from tweet_media;
@@ -19,3 +21,7 @@ delete from hashtag_indices;
 delete from hashtag;
 delete from tweet;
 delete from userprofile;
+delete from task_history;
+delete from task;
+
+

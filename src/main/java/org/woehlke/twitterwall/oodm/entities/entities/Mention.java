@@ -1,14 +1,15 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +53,15 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo  = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name = "id_twitter")
     private long idTwitter;
 
@@ -64,10 +74,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "screen_name")
     private String screenName;
 
-    @Column(name = "name")
+    @Column(name = "name",length=4096)
     private String name;
 
-
+/*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -77,10 +87,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         for(Integer index: indices){
             this.indices.add(index);
         }
-    }
+    }*/
 
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -126,13 +136,37 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     public void setName(String name) {
         this.name = name;
     }
-
+/*
     public List<Integer> getIndices() {
         return indices;
     }
 
     public void setIndices(List<Integer> indices) {
         this.indices = indices;
+    }
+*/
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -160,21 +194,71 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return screenName.compareTo(other.getScreenName());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
             myIndieces.append(index.toString());
             myIndieces.append(", ");
         }
-        myIndieces.append(" ]");
+        myIndieces.append(" ]");*/
         return "Mention{" +
-            "id=" + id +
+            " id=" + id +
             ", idTwitter=" + idTwitter +
             ", screenName='" + screenName + '\'' +
             ", name='" + name + '\'' +
-            ", indices=" + myIndieces.toString() +
-            '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+            //", indices=" + myIndieces.toString() +
+            " }\n";
+    }
+
+    public boolean isValid() {
+        if((screenName == null) ||(screenName.isEmpty())){
+            return false;
+        }
+        if(idTwitter <= 1L){
+            return false;
+        }
+        return true;
+    }
+
+    public static Mention getMention(String mentionString) {
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException e) {
+        }
+        long idTwitter = new Date().getTime();
+        String screenName = mentionString;
+        String name = mentionString;
+        int[] myindices = {};
+        return new Mention(idTwitter, screenName, name, myindices);
     }
 }

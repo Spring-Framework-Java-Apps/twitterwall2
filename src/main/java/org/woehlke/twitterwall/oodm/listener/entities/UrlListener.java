@@ -15,17 +15,17 @@ public class UrlListener {
 
   @PrePersist
   public void onPrePersist(Url domainObject) {
-    log.info("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(Url domainObject) {
-    log.info("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(Url domainObject) {
-    log.info("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
@@ -45,6 +45,6 @@ public class UrlListener {
 
   @PostLoad
   public void onPostLoad(Url domainObject) {
-    log.info("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.toString());
   }
 }

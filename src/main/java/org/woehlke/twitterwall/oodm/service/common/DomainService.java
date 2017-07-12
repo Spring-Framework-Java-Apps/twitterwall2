@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.service.common;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
  */
 public interface DomainService<T extends DomainObject> {
 
-    T store(T domainObject);
-    
+    T store(T domainObject, Task task);
+
     T create(T domainObject);
 
     T update(T domainObject);
@@ -18,5 +19,5 @@ public interface DomainService<T extends DomainObject> {
     List<T> getAll();
 
     long count();
-    
+
 }

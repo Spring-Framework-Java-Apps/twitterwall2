@@ -10,12 +10,14 @@ public interface DomainObject<T extends DomainObject> extends Serializable, Comp
     Long getId();
 
     void setId(Long id);
-    
-    int compareTo(T other);
-    
+
     boolean equals(T o);
+
+    boolean equals(Object o);
 
     int hashCode();
 
     String toString();
+
+    boolean isValid();
 }

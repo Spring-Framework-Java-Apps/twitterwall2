@@ -1,12 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -33,21 +33,33 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     private static final long serialVersionUID = 1L;
 
+    public static final String UNDEFINED = "UNDEFINED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(length=2048)
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
+    @Column(length=4096)
     private String display;
 
-    @Column(length=2048)
+    @Column(length=4096)
     private String expanded;
 
     public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
 
-    @Column(nullable = false,length=1024)
+    @Column(nullable = false,length=4096)
     private String url;
 
+    /*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "url_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -57,7 +69,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         for(Integer index: indices){
             this.indices.add(index);
         }
-    }
+    }*/
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -65,7 +77,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     public Url(String display, String expanded, String url, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.display = display;
         this.expanded = expanded;
         this.url = url;
@@ -110,12 +122,28 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         this.url = url;
     }
 
-    public List<Integer> getIndices() {
-        return indices;
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -141,21 +169,68 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         return url.compareTo(other.getUrl());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
+        /*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
             myIndieces.append(index.toString());
             myIndieces.append(", ");
         }
-        myIndieces.append(" ]");
+        myIndieces.append(" ]");*/
         return "Url{" +
                 "id=" + id +
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-                ", indices=" + myIndieces.toString() +
-                '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+               // ", indices=" + myIndieces.toString() +
+                "}\n";
+    }
+
+    @Override
+    public boolean isValid() {
+        if((this.url == null)||(this.url.isEmpty())){
+            return false;
+        }
+        if(this.url.compareTo(this.expanded)==0){
+            return false;
+        }
+        return true;
+    }
+
+    public static Url getUrlFactory(String url){
+        String display = Url.UNDEFINED;
+        String expanded = Url.UNDEFINED;
+        int[] indices = {};
+        Url newurl = new Url(display, expanded, url, indices);
+        return newurl;
     }
 }

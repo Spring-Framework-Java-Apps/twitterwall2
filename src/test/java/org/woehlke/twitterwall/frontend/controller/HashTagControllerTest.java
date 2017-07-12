@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.test.PersistDataFromTwitterTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,9 +37,6 @@ public class HashTagControllerTest {
     @Autowired
     private  HashTagController controller;
 
-    @Autowired
-    private PersistDataFromTwitterTest persistDataFromTwitterTest;
-
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -55,7 +51,7 @@ public class HashTagControllerTest {
         for(long id:ID_TWITTER_TO_FETCH_FOR_TWEET_TEST){
             log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_TWEET_TEST: "+id);
         }
-        persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
+        //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
         Assert.assertTrue(true);
         log.info("------------------------------------");

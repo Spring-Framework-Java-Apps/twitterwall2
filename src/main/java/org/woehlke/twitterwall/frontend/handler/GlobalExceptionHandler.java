@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.backend.TwitterApiService;
+import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
+import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,15 +46,23 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
-
     private final TwitterApiService twitterApiService;
 
-    private final PersistDataFromTwitter persistDataFromTwitter;
+    private final StoreOneTweet storeOneTweet;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final UserService userService;
+
+    private final TaskService taskService;
 
     @Autowired
-    public GlobalExceptionHandler(TwitterApiService twitterApiService, PersistDataFromTwitter persistDataFromTwitter) {
+    public GlobalExceptionHandler(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService) {
         this.twitterApiService = twitterApiService;
-        this.persistDataFromTwitter = persistDataFromTwitter;
+        this.storeOneTweet = storeOneTweet;
+        this.storeUserProfile = storeUserProfile;
+        this.userService = userService;
+        this.taskService = taskService;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -60,7 +71,7 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
-    
+
     private ModelAndView getTemplate(HttpServletRequest request, Exception ex) {
         ModelAndView mav = new ModelAndView();
         String symbol = Symbols.EXCEPTION.toString();
@@ -75,6 +86,6 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(twitterApiService,persistDataFromTwitter,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 }

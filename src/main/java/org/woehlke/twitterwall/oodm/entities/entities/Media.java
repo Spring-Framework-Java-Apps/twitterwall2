@@ -1,13 +1,13 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MediaListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -50,27 +50,37 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
-    @Column(name = "media_http")
+    @Column(name = "media_http",length=4096)
     private String mediaHttp;
 
-    @Column(name = "media_https")
+    @Column(name = "media_https",length=4096)
     private String mediaHttps;
 
-    @Column
+    @Column(length=4096)
     private String url;
 
-    @Column
+    @Column(length=4096)
     private String display;
 
-    @Column
+    @Column(length=4096)
     private String expanded;
 
-    @Column(name = "media_type")
+    @Column(name = "media_type",length=4096)
     private String mediaType;
 
+    /*
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "media_indices", joinColumns = @JoinColumn(name = "id"))
     protected List<Integer> indices = new ArrayList<>();
@@ -80,10 +90,10 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         for(Integer index: indices){
             this.indices.add(index);
         }
-    }
+    }*/
 
     public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
-        setIndices(indices);
+        //setIndices(indices);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -166,12 +176,28 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.mediaType = mediaType;
     }
 
-    public List<Integer> getIndices() {
-        return indices;
+    public Task getCreatedBy() {
+        return createdBy;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
     }
 
     @Override
@@ -207,17 +233,41 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         return Long.compare(idTwitter, other.getIdTwitter());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
-    public String toString() {
+    public String toString() {/*
         StringBuffer myIndieces = new StringBuffer();
         myIndieces.append("[ ");
         for (Integer index : indices) {
             myIndieces.append(index.toString());
             myIndieces.append(", ");
         }
-        myIndieces.append(" ]");
+        myIndieces.append(" ]");*/
         return "Media{" +
-                "id=" + id +
+                " id=" + id +
                 ", idTwitter=" + idTwitter +
                 ", mediaHttp='" + mediaHttp + '\'' +
                 ", mediaHttps='" + mediaHttps + '\'' +
@@ -225,7 +275,15 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", mediaType='" + mediaType + '\'' +
-                ", indices=" + myIndieces.toString() +
-                '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+               // ", indices=" + myIndieces.toString() +
+                " }\n";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }
