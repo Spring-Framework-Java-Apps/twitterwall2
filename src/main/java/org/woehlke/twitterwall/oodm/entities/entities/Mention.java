@@ -74,7 +74,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "screen_name")
     private String screenName;
 
-    @Column(name = "name")
+    @Column(name = "name",length=4096)
     private String name;
 
 /*

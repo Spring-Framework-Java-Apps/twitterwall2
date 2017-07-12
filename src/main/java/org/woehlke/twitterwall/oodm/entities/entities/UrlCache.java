@@ -48,10 +48,10 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private Task updatedBy;
 
-    @Column(length=2048)
+    @Column(length=4096)
     private String expanded;
 
-    @Column(nullable = false,length=1024)
+    @Column(nullable = false,length=4096)
     private String url;
 
     @Transient

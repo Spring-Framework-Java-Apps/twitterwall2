@@ -58,7 +58,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         return m.matches();
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=4096)
     private String text;
 
     /*

@@ -48,15 +48,15 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private Task updatedBy;
 
-    @Column(length=2048)
+    @Column(length=4096)
     private String display;
 
-    @Column(length=2048)
+    @Column(length=4096)
     private String expanded;
 
     public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
 
-    @Column(nullable = false,length=1024)
+    @Column(nullable = false,length=4096)
     private String url;
 
     /*

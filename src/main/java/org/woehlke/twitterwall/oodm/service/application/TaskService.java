@@ -22,4 +22,7 @@ public interface TaskService extends DomainService<Task> {
     Task warn(Task task, Exception e, String msg);
 
     Task event(Task task, String msg);
+
+    Task findById(long id);
+
 }

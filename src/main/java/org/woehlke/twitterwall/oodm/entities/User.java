@@ -113,13 +113,13 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String url;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String profileImageUrl;
 
-    @Column
+    @Column(length = 4096)
     private String description;
 
     @Column
@@ -188,7 +188,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean useBackgroundImage;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String backgroundImageUrl;
 
     @Column
@@ -215,7 +215,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean onDefinedUserList;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String profileBannerUrl;
 
 
@@ -740,5 +740,17 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    public static User getDummyUserForScreenName(String screenName){
+        long idTwitter= new Date().getTime();
+        String name="Exception Handler Dummy Username";
+        String url="https://github.com/phasenraum2010/twitterwall2";
+        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
+        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
+        String location="Berlin, Germany";
+        Date createdDate = new Date();
+        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        return user;
     }
 }

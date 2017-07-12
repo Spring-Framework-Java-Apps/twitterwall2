@@ -44,7 +44,7 @@ public class Task implements DomainObject<Task> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(length=4096)
+    @Column(columnDefinition="text")
     private String description;
 
     @Column(name="task_type",nullable = false)
@@ -67,8 +67,7 @@ public class Task implements DomainObject<Task> {
     @Column(name="time_finished",nullable = true)
     private Date timeFinished;
 
-    @JoinColumn(name="job_id")
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true, mappedBy="task")
     private List<TaskHistory> history = new ArrayList<>();
 
     @Embedded
@@ -222,6 +221,14 @@ public class Task implements DomainObject<Task> {
         this.history.add(history);
     }
 
+    public Date getTimeLastUpdate() {
+        return timeLastUpdate;
+    }
+
+    public void setTimeLastUpdate(Date timeLastUpdate) {
+        this.timeLastUpdate = timeLastUpdate;
+    }
+
     @Override
     public String toString() {
         String countedEntitiesAtFinishStr = "null";
@@ -236,6 +243,7 @@ public class Task implements DomainObject<Task> {
             "id=" + id +
             ", taskType=" + taskType +
             ", timeStarted=" + timeStarted +
+            ", timeLastUpdate=" + timeLastUpdate +
             ", timeFinished=" + timeFinished +
             ", countedEntitiesAtStart=" + countedEntitiesAtStartStr +
             ", countedEntitiesAtFinish=" + countedEntitiesAtFinishStr +
@@ -244,12 +252,14 @@ public class Task implements DomainObject<Task> {
 
     public void event(String descriptions) {
         TaskHistory event = new TaskHistory(description,taskStatus,taskStatus);
+        event.setTask(this);
         this.timeLastUpdate = new Date();
         this.history.add(event);
     }
 
     public void event(String description,TaskStatus newTaskStatus) {
         TaskHistory event = new TaskHistory(description,taskStatus,newTaskStatus);
+        event.setTask(this);
         this.taskStatus = TaskStatus.READY;
         this.timeLastUpdate = new Date();
         this.history.add(event);
@@ -257,6 +267,7 @@ public class Task implements DomainObject<Task> {
 
     public void ready() {
         TaskHistory event = new TaskHistory("ready",taskStatus,TaskStatus.READY);
+        event.setTask(this);
         this.taskStatus = TaskStatus.READY;
         this.timeLastUpdate = new Date();
         this.history.add(event);
@@ -264,6 +275,7 @@ public class Task implements DomainObject<Task> {
 
     public void start() {
         TaskHistory event = new TaskHistory("start",taskStatus,TaskStatus.RUNNING);
+        event.setTask(this);
         this.taskStatus = TaskStatus.RUNNING;
         this.timeLastUpdate = new Date();
         this.timeStarted = new Date();
@@ -272,6 +284,7 @@ public class Task implements DomainObject<Task> {
 
     public void done() {
         TaskHistory event = new TaskHistory("done",taskStatus,TaskStatus.FINISHED);
+        event.setTask(this);
         this.taskStatus = TaskStatus.FINISHED;
         this.timeLastUpdate = new Date();
         this.timeFinished = new Date();
@@ -280,6 +293,7 @@ public class Task implements DomainObject<Task> {
 
     public void error(Exception e) {
         TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.ERROR);
+        event.setTask(this);
         this.taskStatus = TaskStatus.ERROR;
         this.timeLastUpdate = new Date();
         this.history.add(event);
@@ -287,6 +301,7 @@ public class Task implements DomainObject<Task> {
 
     public void error(Exception e, String msg) {
         TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.ERROR);
+        event.setTask(this);
         this.taskStatus = TaskStatus.ERROR;
         this.timeLastUpdate = new Date();
         this.history.add(event);
@@ -294,6 +309,7 @@ public class Task implements DomainObject<Task> {
 
     public void warn(Exception e) {
         TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.WARN);
+        event.setTask(this);
         this.taskStatus = TaskStatus.WARN;
         this.timeLastUpdate = new Date();
         this.history.add(event);
@@ -301,6 +317,7 @@ public class Task implements DomainObject<Task> {
 
     public void warn(Exception e, String msg) {
         TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.WARN);
+        event.setTask(this);
         this.taskStatus = TaskStatus.WARN;
         this.timeLastUpdate = new Date();
         this.history.add(event);

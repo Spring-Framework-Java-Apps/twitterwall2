@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:spring="http://www.springframework.org/tags">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" >
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <tr>
+                        <th>
+                            <i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;
+                            <span th:text="${task.id}">id</span>
+                        </th>
+                        <th>
+                            <ul>
+                                <li th:if="${task.timeStarted}">timeStarted: <span th:text="${#dates.format(task.timeStarted,'HH:mm:ss (dd.MM.yyyy)')}">timeStarted</span></li>
+                                <li th:if="${task.timeLastUpdate}">timeLastUpdate: <span th:text="${#dates.format(task.timeLastUpdate,'HH:mm:ss (dd.MM.yyyy)')}">timeLastUpdate</span></li>
+                                <li th:if="${task.timeFinished}">timeFinished: <span th:text="${#dates.format(task.timeFinished,'HH:mm:ss (dd.MM.yyyy)')}">timeFinished</span></li>
+                                <li th:if="${task.taskType}">taskType: <span th:text="${task.taskType}">taskType</span></li>
+                                <li th:if="${task.taskStatus}">taskStatus: <span th:text="${task.taskStatus}">taskStatus</span></li>
+                            </ul>
+                        </th>
+                        <th>
+                            <span th:text="${task.description}">description</span>
+                        </th>
+                    </tr>
+                <tr th:each="taskHistory : ${taskHistoryList}">
+                    <td>
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;
+                        <span th:text="${taskHistory.id}">id</span>
+                    </td>
+                    <td>
+                        <ul>
+                            <li th:if="${taskHistory.taskStatusBefore}">taskStatusBefore: <span th:text="${taskHistory.taskStatusBefore}">taskStatusBefore</span></li>
+                            <li th:if="${taskHistory.taskStatusNow}">taskStatusNow: <span th:text="${taskHistory.taskStatusNow}">taskStatusNow</span></li>
+                            <li th:if="${taskHistory.timeEvent}">timeEvent: <span th:text="${#dates.format(taskHistory.timeEvent,'HH:mm:ss (dd.MM.yyyy)')}">timeEvent</span></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span th:text="${taskHistory.description}">description</span>
+                    </td>
+                </tr>
+                </table>
+                <p th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:include="layout :: footer" >
+
+</footer>
+</body>
+</html>

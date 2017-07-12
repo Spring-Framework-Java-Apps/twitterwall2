@@ -53,10 +53,10 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private Task updatedBy;
 
-    @Column(name = "ticker_symbol")
+    @Column(name = "ticker_symbol",length=4096)
     private String tickerSymbol;
 
-    @Column
+    @Column(length=4096)
     private String url;
 
     /*

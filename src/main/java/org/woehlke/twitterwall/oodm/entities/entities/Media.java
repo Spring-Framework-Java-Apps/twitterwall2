@@ -62,22 +62,22 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
-    @Column(name = "media_http")
+    @Column(name = "media_http",length=4096)
     private String mediaHttp;
 
-    @Column(name = "media_https")
+    @Column(name = "media_https",length=4096)
     private String mediaHttps;
 
-    @Column
+    @Column(length=4096)
     private String url;
 
-    @Column
+    @Column(length=4096)
     private String display;
 
-    @Column
+    @Column(length=4096)
     private String expanded;
 
-    @Column(name = "media_type")
+    @Column(name = "media_type",length=4096)
     private String mediaType;
 
     /*
