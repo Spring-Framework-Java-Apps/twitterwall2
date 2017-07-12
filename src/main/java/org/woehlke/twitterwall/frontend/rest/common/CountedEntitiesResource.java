@@ -12,13 +12,13 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
  * Created by tw on 03.07.17.
  */
 @Controller
-@RequestMapping("/rest/service")
-public class ServiceResource {
+@RequestMapping("/rest/common")
+public class CountedEntitiesResource {
 
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public ServiceResource(CountedEntitiesService countedEntitiesService) {
+    public CountedEntitiesResource(CountedEntitiesService countedEntitiesService) {
         this.countedEntitiesService = countedEntitiesService;
     }
 

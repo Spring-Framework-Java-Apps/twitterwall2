@@ -17,28 +17,29 @@ import java.util.List;
 @RequestMapping("/rest/tweet")
 public class TweetResource {
 
-  private final TweetService tweetService;
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
+        return this.tweetService.count();
+    }
 
-  @Autowired
-  public TweetResource(TweetService tweetService) {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<Tweet> getAll() {
+        return this.tweetService.getAll();
+    }
+
+    @RequestMapping(path="/latest",method= RequestMethod.GET)
+    public @ResponseBody
+    List<Tweet> getLatestTweets() {
+        return this.tweetService.getLatestTweets();
+    }
+
+    private final TweetService tweetService;
+
+    @Autowired
+    public TweetResource(TweetService tweetService) {
     this.tweetService = tweetService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
-    return this.tweetService.count();
-  }
-
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<Tweet> getAll() {
-    return this.tweetService.getAll();
-  }
-
-  @RequestMapping(path="/latest",method= RequestMethod.GET)
-  public @ResponseBody
-  List<Tweet> getLatestTweets() {
-    return this.tweetService.getLatestTweets();
-  }
 }

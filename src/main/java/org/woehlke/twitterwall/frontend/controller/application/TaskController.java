@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.application;
+package org.woehlke.twitterwall.frontend.controller.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * Created by tw on 11.07.17.
  */
-@Controller
+@Controller("/task")
 public class TaskController  extends AbstractTwitterwallController {
 
-    @RequestMapping("/task/all")
+    @RequestMapping("/all")
     public String countedEntities(Model model) {
         String msg = "/task/all: ";
         logEnv();
@@ -34,7 +34,7 @@ public class TaskController  extends AbstractTwitterwallController {
         return "taskAll";
     }
 
-    @RequestMapping("/task/{id}")
+    @RequestMapping("/{id}")
     public String countedEntities(@PathVariable long id, Model model) {
         String msg = "/task/ "+id;
         logEnv();

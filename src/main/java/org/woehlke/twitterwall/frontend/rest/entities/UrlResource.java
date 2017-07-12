@@ -17,23 +17,23 @@ import java.util.List;
 @RequestMapping("/rest/url")
 public class UrlResource {
 
-  private final UrlService urlService;
+    private final UrlService urlService;
 
-  @Autowired
-  public UrlResource(UrlService urlService) {
+    @Autowired
+    public UrlResource(UrlService urlService) {
     this.urlService = urlService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
     return this.urlService.count();
-  }
+    }
 
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<Url> getAll() {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<Url> getAll() {
     return this.urlService.getAll();
-  }
+    }
 
 }

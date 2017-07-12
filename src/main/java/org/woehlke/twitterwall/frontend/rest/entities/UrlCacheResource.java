@@ -17,22 +17,23 @@ import java.util.List;
 @RequestMapping("/rest/urlcache")
 public class UrlCacheResource {
 
-  private final UrlCacheService urlCacheService;;
+    private final UrlCacheService urlCacheService;;
 
-  @Autowired
-  public UrlCacheResource(UrlCacheService urlCacheService) {
+    @Autowired
+    public UrlCacheResource(UrlCacheService urlCacheService) {
     this.urlCacheService = urlCacheService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
     return this.urlCacheService.count();
-  }
+    }
 
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<UrlCache> getAll() {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<UrlCache> getAll() {
     return this.urlCacheService.getAll();
-  }
+    }
+
 }

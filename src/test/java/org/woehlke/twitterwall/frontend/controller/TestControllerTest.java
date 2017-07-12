@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.frontend.controller.pages.TestController;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +33,7 @@ public class TestControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private  TestController controller;
+    private TestController controller;
 
     @Test
     public void controllerIsPresentTest(){

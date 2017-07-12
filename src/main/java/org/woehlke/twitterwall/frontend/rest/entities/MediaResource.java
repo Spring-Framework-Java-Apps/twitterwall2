@@ -17,22 +17,22 @@ import java.util.List;
 @RequestMapping("/rest/media")
 public class MediaResource {
 
-  private final MediaService mediaService;
+    private final MediaService mediaService;
 
-  @Autowired
-  public MediaResource(MediaService mediaService) {
+    @Autowired
+    public MediaResource(MediaService mediaService) {
     this.mediaService = mediaService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
     return this.mediaService.count();
-  }
+    }
 
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<Media> getAll() {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<Media> getAll() {
     return this.mediaService.getAll();
-  }
+    }
 }

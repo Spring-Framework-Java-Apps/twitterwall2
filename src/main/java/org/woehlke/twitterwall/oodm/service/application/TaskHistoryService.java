@@ -12,4 +12,6 @@ import java.util.List;
 public interface TaskHistoryService  extends DomainService<TaskHistory> {
 
     List<TaskHistory> findByTask(Task oneTask);
+
+    TaskHistory findById(long id);
 }

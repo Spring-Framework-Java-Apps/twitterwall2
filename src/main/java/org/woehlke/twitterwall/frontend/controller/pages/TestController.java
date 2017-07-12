@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller;
+package org.woehlke.twitterwall.frontend.controller.pages;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by tw on 30.06.17.
  */
-@Controller
+@Controller("/test")
 public class TestController extends AbstractTwitterwallController {
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
@@ -40,7 +40,6 @@ public class TestController extends AbstractTwitterwallController {
     private final TaskService taskService;
 
     private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
-
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
@@ -62,8 +61,6 @@ public class TestController extends AbstractTwitterwallController {
 
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
-
-
 
     @Autowired
     public TestController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList) {
