@@ -27,6 +27,32 @@ import java.util.List;
 @Controller("/test")
 public class TestController extends AbstractTwitterwallController {
 
+    @RequestMapping("/getTestData")
+    public String getTestData(Model model) {
+        logEnv();
+        model = super.setupPage(model,"Test Data Tweets",searchterm,Symbols.GET_TEST_DATA.toString());
+        String msg = "/getTestData : ";
+        if(contextTest){
+            super.getTestDataTweets(msg,model);
+            super.getTestDataUser(msg,model);
+        }
+        return "timeline";
+    }
+
+    @RequestMapping("/user/onlist/renew")
+    public String getOnListRenew(Model model) {
+        String msg = "getOnListRenew: ";
+        startOnListRenew();
+        log.info(msg+"START userService.getOnList(): ");
+        List<User> usersOnList = userService.getOnList();
+        log.info(msg+"DONE userService.getOnList(): ");
+        model.addAttribute("users", usersOnList);
+        String symbol = Symbols.LEAF.toString();
+        String title = "Renew List of Users On List";
+        model = setupPage(model, title, "Users", symbol);
+        return "user";
+    }
+
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     private final TwitterApiService twitterApiService;
@@ -70,32 +96,6 @@ public class TestController extends AbstractTwitterwallController {
         this.userService = userService;
         this.taskService = taskService;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
-    }
-
-    @RequestMapping("/getTestData")
-    public String getTestData(Model model) {
-        logEnv();
-        model = super.setupPage(model,"Test Data Tweets",searchterm,Symbols.GET_TEST_DATA.toString());
-        String msg = "/getTestData : ";
-        if(contextTest){
-            super.getTestDataTweets(msg,model);
-            super.getTestDataUser(msg,model);
-        }
-        return "timeline";
-    }
-
-    @RequestMapping("/user/onlist/renew")
-    public String getOnListRenew(Model model) {
-        String msg = "getOnListRenew: ";
-        startOnListRenew();
-        log.info(msg+"START userService.getOnList(): ");
-        List<User> usersOnList = userService.getOnList();
-        log.info(msg+"DONE userService.getOnList(): ");
-        model.addAttribute("users", usersOnList);
-        String symbol = Symbols.LEAF.toString();
-        String title = "Renew List of Users On List";
-        model = setupPage(model, title, "Users", symbol);
-        return "user";
     }
 
     @Override

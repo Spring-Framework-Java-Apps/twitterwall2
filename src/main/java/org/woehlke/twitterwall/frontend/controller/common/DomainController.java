@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.application;
+package org.woehlke.twitterwall.frontend.controller.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +13,21 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 /**
  * Created by tw on 03.07.17.
  */
-@Controller
-public class ServiceController extends AbstractTwitterwallController {
+@Controller("/application")
+public class DomainController extends AbstractTwitterwallController {
+
+    @RequestMapping("/domain/count")
+    public String countedEntities(Model model) {
+        String msg = "/hashtags: ";
+        logEnv();
+        String title = "Counted Entities";
+        String subtitle = searchterm;
+        String symbol = Symbols.DATABASE.toString();
+        model = setupPage(model,title,subtitle,symbol);
+        CountedEntities countedEntities =this.countedEntitiesService.countAll();
+        model.addAttribute("countedEntities", countedEntities);
+        return "countedEntities";
+    }
 
     private final CountedEntitiesService countedEntitiesService;
 
@@ -40,22 +53,8 @@ public class ServiceController extends AbstractTwitterwallController {
     private String idGoogleAnalytics;
 
     @Autowired
-    public ServiceController(CountedEntitiesService countedEntitiesService) {
+    public DomainController(CountedEntitiesService countedEntitiesService) {
         this.countedEntitiesService = countedEntitiesService;
-    }
-
-    @RequestMapping("/service/count")
-    public String countedEntities(Model model) {
-        String msg = "/hashtags: ";
-        logEnv();
-        String title = "Counted Entities";
-        String subtitle = searchterm;
-        String symbol = Symbols.DATABASE.toString();
-        model = setupPage(model,title,subtitle,symbol);
-
-        CountedEntities countedEntities =this.countedEntitiesService.countAll();
-        model.addAttribute("countedEntities", countedEntities);
-        return "countedEntities";
     }
 
     @Override
