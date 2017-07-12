@@ -1,35 +1,36 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.listener.TweetListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
+
 @Table(name = "tweet", uniqueConstraints = {
-        @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
+    @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
 }, indexes = {
-        @Index(name="idx_tweet_created_date", columnList="created_date"),
-        @Index(name="idx_tweet_from_user", columnList="from_user"),
-        @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
-        @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
-        @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
-        @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
-        @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
+    @Index(name="idx_tweet_created_date", columnList="created_date"),
+    @Index(name="idx_tweet_from_user", columnList="from_user"),
+    @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
+    @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
+    @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
+    @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
+    @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
 })
 @NamedQueries({
         @NamedQuery(
                 name="Tweet.findByIdTwitter",
-                query= "select t from Tweet as t where t.idTwitter=:idTwitter"
+                query= "select t from org.woehlke.twitterwall.oodm.entities.Tweet as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
                 name="Tweet.getLatestTweets",
@@ -37,15 +38,19 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name="Tweet.getTweetsForHashTag",
-                query="select t from Tweet as t join t.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC"
+                query="select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC"
         ),
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
-                query="select t from Tweet as t join t.tags tag WHERE tag.text=:hashtagText"
+                query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name="Tweet.count",
                 query="select count(t) from Tweet as t"
+        ),
+        @NamedQuery(
+            name="Tweet.getAll",
+            query="select t from Tweet as t"
         ),
         @NamedQuery(
                 name="Tweet.getTweetsForUser",
@@ -56,6 +61,7 @@ import java.util.Set;
                 query="select t.idTwitter from Tweet as t"
         )
 })
+@EntityListeners(TweetListener.class)
 public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
 
     private static final long serialVersionUID = 1L;
@@ -64,13 +70,22 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
     @Column(nullable = false)
     private String idStr;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length=4096)
     private String text;
 
     @Column(name="created_date", nullable = false)
@@ -79,7 +94,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column(name="from_user")
     private String fromUser;
 
-    @Column
+    @Column(length=4096)
     private String profileImageUrl;
 
     @Column(name="to_user_id")
@@ -100,7 +115,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column
     private String languageCode;
 
-    @Column
+    @Column(length=4096)
     private String source;
 
     @Column
@@ -118,30 +133,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column
     private Integer favoriteCount;
 
-    /*
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
+    @Embedded
+    @AssociationOverrides({
+        @AssociationOverride(
+            name = "urls",
+            joinTable = @JoinTable(name="tweet_url")),
+        @AssociationOverride(
+            name = "tags",
+            joinTable = @JoinTable(name="tweet_hashtag")),
+        @AssociationOverride(
+            name = "mentions",
+            joinTable = @JoinTable(name="tweet_mention")),
+        @AssociationOverride(
+            name = "media",
+            joinTable = @JoinTable(name="tweet_media")),
+        @AssociationOverride(
+            name = "tickerSymbols",
+            joinTable = @JoinTable(name="tweet_tickersymbol"))
+    })
     private Entities entities;
-    */
-
-    @JoinTable(name = "tweet_url")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Url> urls = new LinkedHashSet<Url>();
-
-    @JoinTable(name = "tweet_hashtag")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<HashTag> tags = new LinkedHashSet<HashTag>();
-
-    @JoinTable(name = "tweet_mention")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Mention> mentions = new LinkedHashSet<>();
-
-    @JoinTable(name = "tweet_media")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Media> media = new LinkedHashSet<Media>();
-
-    @JoinTable(name = "tweet_tickersymbol")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
     private User user;
@@ -190,13 +200,13 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
 
         formattedText = getFormattedTextForHashTags(formattedText);
 
-        Set<Media> media = this.getMedia();
+        Set<Media> media = this.entities.getMedia();
         formattedText = getFormattedTextForMedia(media, formattedText);
 
-        Set<Url> urls = this.getUrls();
+        Set<Url> urls = this.entities.getUrls();
         formattedText = getFormattedTextForUrls(urls, formattedText);
 
-        Set<Mention> mentions = this.getMentions();
+        Set<Mention> mentions = this.entities.getMentions();
 
         return formattedText;
     }
@@ -338,15 +348,21 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.favoriteCount = favoriteCount;
     }
 
-    /*
-    public Entities getEntities() {
-        return entities;
+    public Task getCreatedBy() {
+        return createdBy;
     }
 
-    public void setEntities(Entities entities) {
-        this.entities = entities;
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
     }
-    */
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 
     public void setIdTwitter(long idTwitter) {
         this.idTwitter = idTwitter;
@@ -364,164 +380,22 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.createdAt = createdAt;
     }
 
-
-
-    public Set<Url> getUrls() {
-        return urls;
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public void setUrls(Set<Url> urls) {
-        this.urls.clear();
-        this.urls.addAll(urls);
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
     }
 
-    public boolean addAllUrls(Set<Url> urls) {
-        return this.urls.addAll(urls);
+    public Entities getEntities() {
+        return entities;
     }
 
-    public boolean removeAllUrls(Set<Url> urls) {
-        return this.urls.removeAll(urls);
+    public void setEntities(Entities entities) {
+        this.entities = entities;
     }
 
-    public boolean removeAllUrls() {
-        this.urls.clear();
-        return this.urls.isEmpty();
-    }
-
-    public boolean addUrl(Url url) {
-        return this.urls.add(url);
-    }
-
-    public boolean removeUrl(Url url) {
-        return this.urls.remove(url);
-    }
-
-
-
-    public Set<HashTag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<HashTag> tags) {
-        this.tags.clear();
-        this.tags.addAll(tags);
-    }
-
-    public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
-    }
-
-    public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
-    }
-
-    public boolean removeAllTags() {
-        this.tags.clear();
-        return this.tags.isEmpty();
-    }
-
-    public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
-    }
-
-    public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
-    }
-
-
-    
-    public Set<Mention> getMentions() {
-        return mentions;
-    }
-
-    public void setMentions(Set<Mention> mentions) {
-        this.mentions.clear();
-        this.mentions.addAll(mentions);
-    }
-
-    public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
-    }
-
-    public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
-    }
-
-    public boolean removeAllMentions() {
-        this.mentions.clear();
-        return this.mentions.isEmpty();
-    }
-    
-    public boolean addMention(Mention mention) {
-        return this.mentions.add(mention);
-    }
-
-    public boolean removeMention(Mention mention) {
-        return this.mentions.remove(mention);
-    }
-
-
-
-    public Set<Media> getMedia() {
-        return media;
-    }
-
-    public void setMedia(Set<Media> media) {
-        this.media.clear();
-        this.media.addAll(media);
-    }
-
-    public boolean addAllMedia(Set<Media> media) {
-        return this.media.addAll(media);
-    }
-
-    public boolean removeAllMedia(Set<Media> media) {
-        return this.media.removeAll(media);
-    }
-
-    public boolean removeAllMedia() {
-        this.media.clear();
-        return this.media.isEmpty();
-    }
-
-    public boolean addMedium(Media medium) {
-        return this.media.add(medium);
-    }
-
-    public boolean removeMedium(Media medium) {
-        return this.media.remove(medium);
-    }
-
-
-    
-    public Set<TickerSymbol> getTickerSymbols() {
-        return tickerSymbols;
-    }
-
-    public void setTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        this.tickerSymbols.clear();
-        this.tickerSymbols.addAll(tickerSymbols);
-    }
-
-    public boolean addAllTickerSymbols(Set<TickerSymbol> tickerSymbols) {
-        return this.tickerSymbols.addAll(tickerSymbols);
-    }
-
-    public boolean removeAllTickerSymbols() {
-        this.tickerSymbols.clear();
-        return this.tickerSymbols.isEmpty();
-    }
-
-    public boolean addTickerSymbol(TickerSymbol tickerSymbols) {
-        return this.tickerSymbols.add(tickerSymbols);
-    }
-
-    public boolean removeTickerSymbol(TickerSymbol tickerSymbol) {
-        return this.tickerSymbols.remove(tickerSymbol);
-    }
-
-
-    
     public User getUser() {
         return user;
     }
@@ -553,45 +427,49 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         return createdAt.compareTo(other.getCreatedAt());
     }
 
+
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
+    private String toStringRetweetedStatus(){
+        if(retweetedStatus==null){
+            return " null ";
+        } else {
+            return retweetedStatus.toString();
+        }
+    }
+
+    private String toStringUser(){
+        if(user==null){
+            return " null ";
+        } else {
+            return user.toString();
+        }
+    }
+
     @Override
     public String toString() {
-        StringBuffer myUrls = new StringBuffer();
-        myUrls.append("[ ");
-        for (Url url : urls) {
-            myUrls.append(url.toString());
-            myUrls.append(", ");
-        }
-        myUrls.append(" ]");
-        StringBuffer myTags = new StringBuffer();
-        myTags.append("[ ");
-        for (HashTag tag : tags) {
-            myTags.append(tag.toString());
-            myTags.append(", ");
-        }
-        myTags.append(" ]");
-        StringBuffer myMentions = new StringBuffer();
-        myMentions.append("[ ");
-        for (Mention mention : mentions) {
-            myMentions.append(mention.toString());
-            myMentions.append(", ");
-        }
-        myMentions.append(" ]");
-
-        StringBuffer myMedia = new StringBuffer();
-        myMedia.append("[ ");
-        for (Media medium : media) {
-            myMedia.append(medium.toString());
-            myMedia.append(", ");
-        }
-        myMedia.append(" ]");
-
-        StringBuffer myTickerSymbols = new StringBuffer();
-        myTickerSymbols.append("[ ");
-        for (TickerSymbol medium : tickerSymbols) {
-            myTickerSymbols.append(medium.toString());
-            myTickerSymbols.append(", ");
-        }
-        myTickerSymbols.append(" ]");
         return "Tweet{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -612,12 +490,17 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", retweetedStatus=" + retweetedStatus +
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
-                ",\n media=" + myMedia.toString() +
-                ",\n tickerSymbols=" + myTickerSymbols.toString() +
-                ",\n user=" + user.toString() +
+                ",\n retweetedStatus=" + toStringRetweetedStatus() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
+                ",\n entities=" + this.entities.toString() +
+                ",\n user=" + toStringUser() +
                 "\n}";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }

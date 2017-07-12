@@ -13,7 +13,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.4.RELEASE</version>
     </parent>
-    
+
     <organization>
         <name>Thomas Woehlke</name>
         <url>https://twitter.com/ThomasWoehlke</url>
@@ -25,7 +25,7 @@
         <developerConnection>scm:git:https://github.com/phasenraum2010/twitterwall2.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-    
+
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/phasenraum2010/twitterwall2/issues</url>
@@ -33,7 +33,7 @@
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file://${project.basedir}/docs</url>
+            <url>file://${project.basedir}/docs2</url>
         </site>
     </distributionManagement>
     <developers>
@@ -49,7 +49,7 @@
             <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
         </license>
     </licenses>
-    
+
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -77,6 +77,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -311,7 +319,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <!-- <version>2.10</version>   -->
-                    </plugin>                                                               
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
@@ -323,11 +331,29 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>testing</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <!-- <version>2.10</version>   -->
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <!-- <version>2.16</version>    -->
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
+
 
     <reporting>
         <plugins>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -348,7 +374,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -362,7 +388,7 @@
                     <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -381,7 +407,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -459,7 +485,7 @@
                 <version>2.12.1</version>
                 <reportSets><reportSet><reports><report>github-report</report></reports></reportSet></reportSets>
             </plugin>
-            
+
         </plugins>
     </reporting>
 

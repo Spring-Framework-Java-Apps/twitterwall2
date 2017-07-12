@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.test.TweetServiceTest;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -32,15 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserControllerTest.class);
-    
+
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private UserController controller;
-
-    @Autowired
-    private TweetServiceTest tweetServiceTest;
 
     @Autowired
     private UserServiceTest userServiceTest;
@@ -60,7 +56,7 @@ public class UserControllerTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
-        tweetServiceTest.createTestData();
+        //tweetServiceTest.createTestData();
         log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+screenName+")");
         userServiceTest.createUser(screenName);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+screenName+")");

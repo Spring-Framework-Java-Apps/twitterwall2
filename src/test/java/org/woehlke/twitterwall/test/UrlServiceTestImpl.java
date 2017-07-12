@@ -1,21 +1,11 @@
 package org.woehlke.twitterwall.test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.backend.TwitterApiService;
-import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.PersistDataFromTwitter;
 
-import javax.persistence.NoResultException;
 import java.util.*;
 
 /**
@@ -25,7 +15,7 @@ import java.util.*;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTest {
 
-    @Value("${twitterwall.batch.url.fetchTestDataVerbose}")
+    @Value("${twitterwall.backend.url.fetchTestDataVerbose}")
     private boolean fetchTestDataVerbose;
 
     @Override

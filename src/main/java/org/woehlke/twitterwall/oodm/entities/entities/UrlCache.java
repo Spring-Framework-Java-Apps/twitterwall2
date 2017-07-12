@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.listener.entities.UrlCacheListener;
 
 import javax.persistence.*;
 
@@ -18,20 +20,38 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "UrlCache.findByUrl",
                 query = "select t from UrlCache as t where t.url=:url"
-        )
+        ) ,
+    @NamedQuery(
+        name = "UrlCache.count",
+        query = "select count(t) from UrlCache as t"
+    ),
+    @NamedQuery(
+        name = "UrlCache.getAll",
+        query = "select t from UrlCache as t"
+    )
 })
+@EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache> {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length=2048)
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
+    @Column(length=4096)
     private String expanded;
 
-    @Column(nullable = false,length=1024)
+    @Column(nullable = false,length=4096)
     private String url;
 
     @Transient
@@ -63,6 +83,30 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
         this.url = url;
     }
 
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     @Override
     public boolean equals(UrlCache o) {
         if (this == o) return true;
@@ -83,12 +127,44 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
         return url.compareTo(other.getUrl());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "UrlCache{" +
-                "id=" + id +
+                " id=" + id +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-                '}';
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+                "}\n";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }

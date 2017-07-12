@@ -1,16 +1,15 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +42,10 @@ import java.util.regex.Pattern;
                 query = "select t from User as t order by t.screenName"
         ),
         @NamedQuery(
+            name = "User.count",
+            query = "select count(t) from User as t"
+        ),
+        @NamedQuery(
                 name = "User.getTweetingUsers",
                 query = "select t from User as t where t.tweeting=true order by t.screenName"
         ),
@@ -51,12 +54,20 @@ import java.util.regex.Pattern;
                 query = "select t from User as t where t.following=false order by t.screenName"
         ),
         @NamedQuery(
+            name = "User.getNotYetOnList",
+            query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
+        ),
+        @NamedQuery(
+            name = "User.getOnList",
+            query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+        ),
+        @NamedQuery(
                 name = "User.getUsersForHashTag",
-                query = "select t from User as t join t.tags tag WHERE tag.text=:hashtagText order by t.screenName"
+                query = "select t from User as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.countUsersForHashTag",
-                query = "select count(t) from User as t join t.tags tag WHERE tag.text=:hashtagText"
+                query = "select count(t) from User as t join t.entities.tags tag WHERE tag.text=:hashtagText"
         ),
         @NamedQuery(
                 name = "User.getAllDescriptions",
@@ -67,6 +78,7 @@ import java.util.regex.Pattern;
                 query = "select t.idTwitter from User as t"
         )
 })
+@EntityListeners(UserListener.class)
 public class User extends AbstractFormattedText<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
 
     private static final long serialVersionUID = 1L;
@@ -74,6 +86,15 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
+
+    @Embedded
+    private TaskInfo taskInfo = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
 
     @Column(name="id_twitter",nullable = false)
     private long idTwitter;
@@ -92,13 +113,13 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String url;
 
-    @Column
+    @Column(length = 4096)
     private String profileImageUrl;
 
-    @Column
+    @Column(length = 4096)
     private String description;
 
     @Column
@@ -167,7 +188,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean useBackgroundImage;
 
-    @Column
+    @Column(length = 4096)
     private String backgroundImageUrl;
 
     @Column
@@ -192,19 +213,31 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     private boolean tweeting;
 
     @Column
+    private boolean onDefinedUserList;
+
+    @Column(length = 4096)
     private String profileBannerUrl;
 
-    @JoinTable(name = "userprofile_url")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Url> urls = new LinkedHashSet<Url>();
 
-    @JoinTable(name = "userprofile_hashtag")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<HashTag> tags = new LinkedHashSet<HashTag>();
-
-    @JoinTable(name = "userprofile_mention")
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<Mention> mentions = new LinkedHashSet<>();
+    @Embedded
+    @AssociationOverrides({
+        @AssociationOverride(
+            name = "urls",
+            joinTable = @JoinTable(name="userprofile_url")),
+        @AssociationOverride(
+            name = "tags",
+            joinTable = @JoinTable(name="userprofile_hashtag")),
+        @AssociationOverride(
+            name = "mentions",
+            joinTable = @JoinTable(name="userprofile_mention")),
+        @AssociationOverride(
+            name = "media",
+            joinTable = @JoinTable(name="userprofile_media")),
+        @AssociationOverride(
+            name = "tickerSymbols",
+            joinTable = @JoinTable(name="userprofile_tickersymbol"))
+    })
+    private Entities entities = new Entities();
 
     public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         this.idTwitter = idTwitter;
@@ -229,13 +262,13 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public String getFormattedDescription() {
         String formattedDescription = this.description;
 
-        Set<Url> urls = this.getUrls();
+        Set<Url> urls = this.entities.getUrls();
         formattedDescription = getFormattedUrlForUrls(urls, formattedDescription);
 
-        Set<Mention> mentions = this.getMentions();
+        Set<Mention> mentions = this.entities.getMentions();
         formattedDescription = getFormattedTextForMentions(mentions, formattedDescription);
 
-        Set<HashTag> tags = this.getTags();
+        Set<HashTag> tags = this.entities.getTags();
         formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
 
         return formattedDescription;
@@ -243,9 +276,25 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public String getFormattedUrl() {
         String formattedUrl = this.url;
-        Set<Url> urls = this.getUrls();
+        Set<Url> urls = this.entities.getUrls();
         formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
+    }
+
+    public String getCssBackgroundImage(){
+        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+            return "img-responsive my-background";
+        } else {
+            return "hidden";
+        }
+    }
+
+    public String getCssProfileBannerUrl(){
+        String style ="img-circle my-profile-image";
+        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+            style += " my-profile-image-with-bg";
+        }
+        return style;
     }
 
     public Long getId() {
@@ -259,7 +308,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     public long getIdTwitter() {
         return idTwitter;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -497,7 +546,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFollower(boolean follower) {
-        this.follower = follower;
+        this.follower |= follower;
     }
 
     public boolean isFriend() {
@@ -505,7 +554,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setFriend(boolean friend) {
-        this.friend = friend;
+        this.friend |= friend;
     }
 
     public boolean isTweeting() {
@@ -513,7 +562,7 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     }
 
     public void setTweeting(boolean tweeting) {
-        this.tweeting = tweeting;
+        this.tweeting |= tweeting;
     }
 
     public void setIdTwitter(long idTwitter) {
@@ -553,102 +602,46 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         this.createdDate = createdDate;
     }
 
-
-
-    public Set<Url> getUrls() {
-        return urls;
+    public boolean isOnDefinedUserList() {
+        return onDefinedUserList;
     }
 
-    public void setUrls(Set<Url> urls) {
-        this.urls.clear();
-        this.urls.addAll(urls);
+    public void setOnDefinedUserList(boolean onDefinedUserList) {
+        this.onDefinedUserList |= onDefinedUserList;
     }
 
-    public boolean addAllUrls(Set<Url> urls) {
-        return this.urls.addAll(urls);
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
     }
 
-    public boolean removeAllUrls(Set<Url> urls) {
-        return this.urls.removeAll(urls);
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
     }
 
-    public boolean removeAllUrls() {
-        this.urls.clear();
-        return this.urls.isEmpty();
+    public Task getCreatedBy() {
+        return createdBy;
     }
 
-    public boolean addUrl(Url url) {
-        return this.urls.add(url);
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public boolean removetUrl(Url url) {
-        return this.urls.remove(url);
+    public Task getUpdatedBy() {
+        return updatedBy;
     }
 
-
-
-    public Set<HashTag> getTags() {
-        return tags;
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
-    public void setTags(Set<HashTag> tags) {
-        this.tags.clear();
-        this.tags.addAll(tags);
+    public Entities getEntities() {
+        return entities;
     }
 
-    public boolean addAllTags(Set<HashTag> tags) {
-        return this.tags.addAll(tags);
+    public void setEntities(Entities entities) {
+        this.entities = entities;
     }
 
-    public boolean removeAllTags(Set<HashTag> tags) {
-        return this.tags.removeAll(tags);
-    }
-
-    public boolean removeAllTags() {
-        this.tags.clear();
-        return this.tags.isEmpty();
-    }
-
-    public boolean addTag(HashTag tag) {
-        return this.tags.add(tag);
-    }
-
-    public boolean removeTag(HashTag tag) {
-        return this.tags.remove(tag);
-    }
-    
-
-    public Set<Mention> getMentions() {
-        return mentions;
-    }
-
-    public void setMentions(Set<Mention> mentions) {
-        this.mentions.clear();
-        this.mentions.addAll(mentions);
-    }
-
-    public boolean addAllMentions(Set<Mention> mentions) {
-        return this.mentions.addAll(mentions);
-    }
-
-    public boolean removeAllMentions(Set<Mention> mentions) {
-        return this.mentions.removeAll(mentions);
-    }
-
-    public boolean removeAllMentions() {
-        this.mentions.clear();
-        return this.mentions.isEmpty();
-    }
-
-    public boolean addMention(Mention mention) {
-        return this.mentions.add(mention);
-    }
-
-    public boolean removeMention(Mention mention) {
-        return this.mentions.remove(mention);
-    }
-
-    
     @Override
     public boolean equals(User o) {
         if (this == o) return true;
@@ -672,29 +665,32 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         return screenName.compareTo(other.getScreenName());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
-        StringBuffer myUrls = new StringBuffer();
-        myUrls.append("[ ");
-        for (Url url : urls) {
-            myUrls.append(url.toString());
-            myUrls.append(", ");
-        }
-        myUrls.append(" ]");
-        StringBuffer myTags = new StringBuffer();
-        myTags.append("[ ");
-        for (HashTag tag : tags) {
-            myTags.append(tag.toString());
-            myTags.append(", ");
-        }
-        myTags.append(" ]");
-        StringBuffer myMentions = new StringBuffer();
-        myMentions.append("[ ");
-        for (Mention mention : mentions) {
-            myMentions.append(mention.toString());
-            myMentions.append(", ");
-        }
-        myMentions.append(" ]");
         return "User{" +
                 "id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -734,9 +730,27 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n urls=" + myUrls.toString() +
-                ",\n tags=" + myTags.toString() +
-                ",\n mentions=" + myMentions.toString() +
+                ",\n createdBy="+ toStringCreatedBy() +
+                ",\n updatedBy=" + toStringUpdatedBy() +
+                ",\n taskInfo="+ toStringTaskInfo() +
+                ",\n entities=" + this.entities.toString() +
                 "\n}";
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    public static User getDummyUserForScreenName(String screenName){
+        long idTwitter= new Date().getTime();
+        String name="Exception Handler Dummy Username";
+        String url="https://github.com/phasenraum2010/twitterwall2";
+        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
+        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
+        String location="Berlin, Germany";
+        Date createdDate = new Date();
+        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        return user;
     }
 }

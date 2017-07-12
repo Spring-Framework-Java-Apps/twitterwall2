@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.service.common.DomainService;
 
@@ -9,7 +10,7 @@ import org.woehlke.twitterwall.oodm.service.common.DomainService;
  */
 public interface UrlCacheService extends DomainService<UrlCache> {
 
-    UrlCache store(UrlCache urlCache);
+    UrlCache store(UrlCache urlCache, Task task);
 
     UrlCache findByUrl(String url);
 }

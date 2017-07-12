@@ -43,7 +43,7 @@ public class UserController extends AbstractTwitterwallController {
 
     @Value("${twitterwall.context.test}")
     private boolean contextTest;
-    
+
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
@@ -80,6 +80,25 @@ public class UserController extends AbstractTwitterwallController {
         model.addAttribute("users", userService.getNotYetFriendUsers());
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
+        model = setupPage(model, title, subtitle, symbol);
+        return "user";
+    }
+
+    @RequestMapping("/user/notyetonlist")
+    public String getNotYetOnList(Model model) {
+        model.addAttribute("users", userService.getNotYetOnList());
+        String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
+        String title = "Not Yet On List";
+        model = setupPage(model, title, subtitle, symbol);
+        return "user";
+    }
+
+    @RequestMapping("/user/onlist")
+    public String getOnList(Model model) {
+        List<User> usersOnList = userService.getOnList();
+        model.addAttribute("users", usersOnList);
+        String symbol = Symbols.LEAF.toString();
+        String title = "On List";
         model = setupPage(model, title, subtitle, symbol);
         return "user";
     }

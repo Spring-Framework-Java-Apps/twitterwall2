@@ -1,13 +1,15 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,27 +18,34 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Table(name = "mention", uniqueConstraints = {
-        @UniqueConstraint(name="unique_mention", columnNames = {"screen_name","id_twitter"})
+    @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
 }, indexes = {
-        @Index(name="idx_mention_name", columnList="name")
+    @Index(name = "idx_mention_name", columnList = "name")
 })
 @NamedQueries({
-        @NamedQuery(
-                name = "Mention.findByIdTwitter",
-                query = "select t from Mention as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name =  "Mention.findByScreenName",
-                query = "select t from Mention as t where t.screenName=:screenName"
-        ),
-        @NamedQuery(
-                name =  "Mention.findByIdTwitterAndScreenName",
-                query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
-        )
-
-
+    @NamedQuery(
+        name = "Mention.findByIdTwitter",
+        query = "select t from Mention as t where t.idTwitter=:idTwitter"
+    ),
+    @NamedQuery(
+        name = "Mention.findByScreenName",
+        query = "select t from Mention as t where t.screenName=:screenName"
+    ),
+    @NamedQuery(
+        name = "Mention.findByIdTwitterAndScreenName",
+        query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+    ),
+    @NamedQuery(
+        name = "Mention.count",
+        query = "select count(t) from Mention as t"
+    ),
+    @NamedQuery(
+        name = "Mention.getAll",
+        query = "select t from Mention as t"
+    )
 })
-public class Mention extends AbstractTwitterObject<Mention>implements DomainObjectWithIdTwitter<Mention>,DomainObjectWithScreenName<Mention> {
+@EntityListeners(MentionListener.class)
+public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention> {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,11 +53,20 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Embedded
+    private TaskInfo taskInfo  = new TaskInfo();
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task createdBy;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    private Task updatedBy;
+
     @Column(name = "id_twitter")
     private long idTwitter;
 
-    public static boolean isValidScreenName(String screenName){
-        Pattern p = Pattern.compile("^"+User.SCREEN_NAME_PATTERN+"$");
+    public static boolean isValidScreenName(String screenName) {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
         Matcher m = p.matcher(screenName);
         return m.matches();
     }
@@ -56,15 +74,26 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     @Column(name = "screen_name")
     private String screenName;
 
-    @Column(name = "name")
+    @Column(name = "name",length=4096)
     private String name;
 
+/*
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
+    protected List<Integer> indices = new ArrayList<>();
+
+    public void setIndices(int[] indices) {
+        this.indices.clear();
+        for(Integer index: indices){
+            this.indices.add(index);
+        }
+    }*/
 
     public Mention(long idTwitter, String screenName, String name, int[] indices) {
+        //setIndices(indices);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
-        this.indices = indices;
     }
 
     private Mention() {
@@ -107,6 +136,38 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
     public void setName(String name) {
         this.name = name;
     }
+/*
+    public List<Integer> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+    }
+*/
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Task getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Task createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Task getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Task updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -133,13 +194,71 @@ public class Mention extends AbstractTwitterObject<Mention>implements DomainObje
         return screenName.compareTo(other.getScreenName());
     }
 
+    private String toStringCreatedBy(){
+        if(createdBy==null){
+            return " null ";
+        } else {
+            return createdBy.toString();
+        }
+    }
+
+    private String toStringUpdatedBy(){
+        if(updatedBy==null){
+            return " null ";
+        } else {
+            return updatedBy.toString();
+        }
+    }
+
+    private String toStringTaskInfo(){
+        if(taskInfo==null){
+            return " null ";
+        } else {
+            return taskInfo.toString();
+        }
+    }
+
     @Override
     public String toString() {
+        /*
+        StringBuffer myIndieces = new StringBuffer();
+        myIndieces.append("[ ");
+        for (Integer index : indices) {
+            myIndieces.append(index.toString());
+            myIndieces.append(", ");
+        }
+        myIndieces.append(" ]");*/
         return "Mention{" +
-                "id=" + id +
-                ", idTwitter=" + idTwitter +
-                ", screenName='" + screenName + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+            " id=" + id +
+            ", idTwitter=" + idTwitter +
+            ", screenName='" + screenName + '\'' +
+            ", name='" + name + '\'' +
+            ",\n createdBy="+ toStringCreatedBy() +
+            ",\n updatedBy=" + toStringUpdatedBy() +
+            ",\n taskInfo="+ toStringTaskInfo() +
+            //", indices=" + myIndieces.toString() +
+            " }\n";
+    }
+
+    public boolean isValid() {
+        if((screenName == null) ||(screenName.isEmpty())){
+            return false;
+        }
+        if(idTwitter <= 1L){
+            return false;
+        }
+        return true;
+    }
+
+    public static Mention getMention(String mentionString) {
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException e) {
+        }
+        long idTwitter = new Date().getTime();
+        String screenName = mentionString;
+        String name = mentionString;
+        int[] myindices = {};
+        return new Mention(idTwitter, screenName, name, myindices);
     }
 }
