@@ -6,9 +6,9 @@ import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
@@ -47,7 +47,7 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Set<Url> urls = new LinkedHashSet<>();
         String description = user.getDescription();
         if (description != null) {
-            Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + AbstractFormattedText.stopChar + ")");
+            Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
             Matcher m3 = urlPattern.matcher(description);
             while (m3.find()) {
                 urls.add(Url.getUrlFactory(m3.group(1)));

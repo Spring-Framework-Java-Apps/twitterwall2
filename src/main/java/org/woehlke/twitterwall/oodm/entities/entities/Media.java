@@ -286,4 +286,15 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     public boolean isValid() {
         return true;
     }
+
+    public static Media getMediaFactory(String url) {
+        long idTwitter = -1L;
+        String mediaHttp = "UNKNOWN";
+        String mediaHttps  = "UNKNOWN";
+        String display = "UNKNOWN";
+        String expanded = "UNKNOWN";
+        String mediaType = "UNKNOWN";
+        int[] indices = {};
+        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, indices);
+    }
 }

@@ -196,20 +196,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     public String getFormattedText() {
         String formattedText = this.text;
 
-        formattedText = getFormattedTextForUserProfiles(formattedText);
-
-        Set<HashTag> tags = this.entities.getTags();
-        formattedText = getFormattedTextForHashTags(tags,formattedText);
-
-        Set<Media> media = this.entities.getMedia();
-        formattedText = getFormattedTextForMedia(media, formattedText);
-
-        Set<Url> urls = this.entities.getUrls();
-        formattedText = getFormattedTextForUrls(urls, formattedText);
-
-        Set<Mention> mentions = this.entities.getMentions();
-        formattedText = getFormattedTextForMentions(mentions, formattedText);
-
+        this.entities.getFormattedText(formattedText);
 
         return formattedText;
     }

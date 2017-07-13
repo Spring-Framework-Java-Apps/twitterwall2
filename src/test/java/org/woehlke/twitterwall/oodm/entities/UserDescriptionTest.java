@@ -143,6 +143,6 @@ public class UserDescriptionTest {
 
     static private int[] indices = {};
 
-    static private String stopChar = AbstractFormattedText.stopChar;
-    
+    static private String stopChar = Entities.stopChar;
+
 }

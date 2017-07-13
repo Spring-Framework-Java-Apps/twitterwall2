@@ -261,31 +261,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public String getFormattedDescription() {
         String formattedDescription = this.description;
-
-        Set<Url> urls = this.entities.getUrls();
-        formattedDescription = getFormattedUrlForUrls(urls, formattedDescription);
-
-        Set<Mention> mentions = this.entities.getMentions();
-        formattedDescription = getFormattedTextForMentions(mentions, formattedDescription);
-
-        Set<HashTag> tags = this.entities.getTags();
-        formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
-
-        Set<Media> media = this.entities.getMedia();
-        formattedDescription = getFormattedTextForMedia(media, formattedDescription);
-
-        Set<TickerSymbol> tickerSymbols = this.entities.getTickerSymbols();
-        formattedDescription = super.getFormattedTextForTickerSymbols(tickerSymbols, formattedDescription);
-
-
-
+        this.entities.getFormattedText(formattedDescription);
         return formattedDescription;
     }
 
     public String getFormattedUrl() {
         String formattedUrl = this.url;
         Set<Url> urls = this.entities.getUrls();
-        formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
+        formattedUrl = this.entities.getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
     }
 

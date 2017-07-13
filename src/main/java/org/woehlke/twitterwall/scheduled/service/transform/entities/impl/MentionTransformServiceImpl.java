@@ -6,12 +6,11 @@ import org.springframework.social.twitter.api.MentionEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
 import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.MentionTransformService;
 
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -41,7 +40,7 @@ public class MentionTransformServiceImpl implements MentionTransformService {
         String description = user.getDescription();
         Set<Mention> mentions = new LinkedHashSet<>();
         if (description != null) {
-            Pattern mentionPattern1 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")(" + AbstractFormattedText.stopChar + ")");
+            Pattern mentionPattern1 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")(" + Entities.stopChar + ")");
             Matcher m3 = mentionPattern1.matcher(description);
             while (m3.find()) {
                 Mention newMention = Mention.getMention(m3.group(1));
