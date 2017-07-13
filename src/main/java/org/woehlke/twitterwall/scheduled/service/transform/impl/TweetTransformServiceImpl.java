@@ -23,26 +23,11 @@ public class TweetTransformServiceImpl implements TweetTransformService {
 
     private final UserTransformService userTransformService;
 
-    private final UrlTransformService urlTransformService;
-
-    private final HashTagTransformService hashTagTransformService;
-
-    private final MentionTransformService mentionTransformService;
-
-    private final MediaTransformService mediaTransformService;
-
-    private final TickerSymbolTransformService tickerSymbolTransformService;
-
     private final EntitiesTransformService entitiesTransformService;
 
     @Autowired
-    public TweetTransformServiceImpl(UserTransformService userTransformService, UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService, MediaTransformService mediaTransformService, TickerSymbolTransformService tickerSymbolTransformService, EntitiesTransformService entitiesTransformService) {
+    public TweetTransformServiceImpl(UserTransformService userTransformService, EntitiesTransformService entitiesTransformService) {
         this.userTransformService = userTransformService;
-        this.urlTransformService = urlTransformService;
-        this.hashTagTransformService = hashTagTransformService;
-        this.mentionTransformService = mentionTransformService;
-        this.mediaTransformService = mediaTransformService;
-        this.tickerSymbolTransformService = tickerSymbolTransformService;
         this.entitiesTransformService = entitiesTransformService;
     }
 
