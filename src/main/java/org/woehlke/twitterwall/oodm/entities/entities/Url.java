@@ -234,6 +234,10 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         return true;
     }
 
+    public boolean isRawUrlsFromDescription() {
+        return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
+    }
+
     public static Url getUrlFactory(String url){
         String display = Url.UNDEFINED;
         String expanded = Url.UNDEFINED;

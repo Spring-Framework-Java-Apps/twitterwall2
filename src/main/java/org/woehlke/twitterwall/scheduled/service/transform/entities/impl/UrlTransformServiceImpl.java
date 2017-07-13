@@ -41,11 +41,9 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Url myUrlEntity = new Url(display, expanded, urlStr, indices);
         return myUrlEntity;
     }
-/*
-    @Override
-    public Set<Url> getUrlsFor(User user) {
+
+    private Set<Url> getUrlsForDescription(String description) {
         Set<Url> urls = new LinkedHashSet<>();
-        String description = user.getDescription();
         if (description != null) {
             Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
             Matcher m3 = urlPattern.matcher(description);
@@ -57,25 +55,14 @@ public class UrlTransformServiceImpl implements UrlTransformService {
             while (m4.find()) {
                 urls.add(Url.getUrlFactory(m4.group(1)));
             }
-            String userWebpage = user.getUrl();
-            if(userWebpage != null) {
-                Pattern urlPattern3 = Pattern.compile("^("+Url.URL_PATTTERN_FOR_USER+")$");
-                Matcher m5 = urlPattern3.matcher(description);
-                while (m5.find()) {
-                    urls.add(Url.getUrlFactory(m5.group(1)));
-                }
-            }
         }
         return urls;
     }
-    */
 
     @Override
     public Set<Url> getUrlsFor(TwitterProfile userSource) {
         Set<Url> urlsTarget = new LinkedHashSet<Url>();
         Map<String, Object> extraData = userSource.getExtraData();
-        //TODO: see Debugger, Target: Application
-        //TODO: bla
         if(extraData.containsKey("status")){
             Object o = extraData.get("status");
             Object oo = ((Map)o).get("entities");
@@ -102,6 +89,8 @@ public class UrlTransformServiceImpl implements UrlTransformService {
                 urlsTarget.add(urlTarget);
             }
         }
+        String description = userSource.getDescription();
+        Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
         return urlsTarget;
     }
 }

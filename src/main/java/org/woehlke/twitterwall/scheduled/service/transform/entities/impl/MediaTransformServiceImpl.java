@@ -36,7 +36,6 @@ public class MediaTransformServiceImpl implements MediaTransformService {
         return myMediaEntity;
     }
 
-
     private Set<Media> getMediaForDescription(String description) {
         Set<Media> media =  new LinkedHashSet<Media>();
         if (description != null) {
