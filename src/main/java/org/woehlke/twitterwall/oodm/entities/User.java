@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
-                query = "select t from User as t where t.tweeting=true order by t.screenName"
+                query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.getNotYetFriendUsers",
@@ -55,11 +55,11 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
             name = "User.getNotYetOnList",
-            query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
         ),
         @NamedQuery(
             name = "User.getOnList",
-            query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.getUsersForHashTag",
@@ -79,7 +79,7 @@ import java.util.regex.Pattern;
         )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractFormattedText<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
+public class User extends AbstractTwitterObject<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -212,12 +212,8 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
     @Column
     private boolean tweeting;
 
-    @Column
-    private boolean onDefinedUserList;
-
     @Column(length = 4096)
     private String profileBannerUrl;
-
 
     @Embedded
     @AssociationOverrides({
@@ -261,23 +257,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public String getFormattedDescription() {
         String formattedDescription = this.description;
-
-        Set<Url> urls = this.entities.getUrls();
-        formattedDescription = getFormattedUrlForUrls(urls, formattedDescription);
-
-        Set<Mention> mentions = this.entities.getMentions();
-        formattedDescription = getFormattedTextForMentions(mentions, formattedDescription);
-
-        Set<HashTag> tags = this.entities.getTags();
-        formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
-
+        this.entities.getFormattedText(formattedDescription);
         return formattedDescription;
     }
 
     public String getFormattedUrl() {
         String formattedUrl = this.url;
         Set<Url> urls = this.entities.getUrls();
-        formattedUrl = getFormattedUrlForUrls(urls, formattedUrl);
+        formattedUrl = this.entities.getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
     }
 
@@ -600,14 +587,6 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public boolean isOnDefinedUserList() {
-        return onDefinedUserList;
-    }
-
-    public void setOnDefinedUserList(boolean onDefinedUserList) {
-        this.onDefinedUserList |= onDefinedUserList;
     }
 
     public TaskInfo getTaskInfo() {

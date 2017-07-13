@@ -17,22 +17,22 @@ import java.util.List;
 @RequestMapping("/rest/user")
 public class UserResource {
 
-  private final UserService userService;
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
+        return this.userService.count();
+    }
 
-  @Autowired
-  public UserResource(UserService userService) {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody List<User> getAll() {
+        return this.userService.getAll();
+    }
+
+    private final UserService userService;
+
+    @Autowired
+    public UserResource(UserService userService) {
     this.userService = userService;
-  }
-
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
-    return this.userService.count();
-  }
-
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody List<User> getAll() {
-    return this.userService.getAll();
-  }
+    }
 
 }

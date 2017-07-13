@@ -17,22 +17,23 @@ import java.util.List;
 @RequestMapping("/rest/tickersymbol")
 public class TickerSymbolResource {
 
-  private final TickerSymbolService tickerSymbolService;
+    private final TickerSymbolService tickerSymbolService;
 
-  @Autowired
-  public TickerSymbolResource(TickerSymbolService tickerSymbolService) {
+    @Autowired
+    public TickerSymbolResource(TickerSymbolService tickerSymbolService) {
     this.tickerSymbolService = tickerSymbolService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
     return this.tickerSymbolService.count();
-  }
+    }
 
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<TickerSymbol> getAll() {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<TickerSymbol> getAll() {
     return this.tickerSymbolService.getAll();
-  }
+    }
+
 }

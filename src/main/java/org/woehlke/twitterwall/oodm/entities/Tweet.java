@@ -1,15 +1,13 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.listener.TweetListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by tw on 10.06.17.
@@ -30,7 +28,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(
                 name="Tweet.findByIdTwitter",
-                query= "select t from org.woehlke.twitterwall.oodm.entities.Tweet as t where t.idTwitter=:idTwitter"
+                query= "select t from Tweet as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
                 name="Tweet.getLatestTweets",
@@ -62,7 +60,7 @@ import java.util.Set;
         )
 })
 @EntityListeners(TweetListener.class)
-public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
+public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -196,17 +194,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     public String getFormattedText() {
         String formattedText = this.text;
 
-        formattedText = getFormattedTextForUserProfiles(formattedText);
-
-        formattedText = getFormattedTextForHashTags(formattedText);
-
-        Set<Media> media = this.entities.getMedia();
-        formattedText = getFormattedTextForMedia(media, formattedText);
-
-        Set<Url> urls = this.entities.getUrls();
-        formattedText = getFormattedTextForUrls(urls, formattedText);
-
-        Set<Mention> mentions = this.entities.getMentions();
+        this.entities.getFormattedText(formattedText);
 
         return formattedText;
     }
@@ -468,6 +456,14 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         }
     }
 
+    private String toStringEntities(){
+        if(user==null){
+            return " null ";
+        } else {
+            return entities.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "Tweet{" +
@@ -494,7 +490,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ",\n createdBy="+ toStringCreatedBy() +
                 ",\n updatedBy=" + toStringUpdatedBy() +
                 ",\n taskInfo="+ toStringTaskInfo() +
-                ",\n entities=" + this.entities.toString() +
+                ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";
     }

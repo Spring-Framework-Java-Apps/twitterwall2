@@ -17,23 +17,23 @@ import java.util.List;
 @RequestMapping("/rest/mention")
 public class MentionResource {
 
-  private final MentionService mentionService;
+    private final MentionService mentionService;
 
-  @Autowired
-  public MentionResource(MentionService mentionService) {
+    @Autowired
+    public MentionResource(MentionService mentionService) {
     this.mentionService = mentionService;
-  }
+    }
 
-  @RequestMapping(path="/count",method= RequestMethod.GET)
-  public @ResponseBody
-  long getCount() {
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    long getCount() {
     return this.mentionService.count();
-  }
+    }
 
-  @RequestMapping(path="/all",method= RequestMethod.GET)
-  public @ResponseBody
-  List<Mention> getAll() {
+    @RequestMapping(path="/all",method= RequestMethod.GET)
+    public @ResponseBody
+    List<Mention> getAll() {
     return this.mentionService.getAll();
-  }
+    }
 
 }

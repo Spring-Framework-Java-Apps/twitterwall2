@@ -208,4 +208,9 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     public boolean isValid() {
         return true;
     }
+
+    public static TickerSymbol getTickerSymbolFactory(String url) {
+        int[] indices = {};
+        return new TickerSymbol(url,url,indices);
+    }
 }

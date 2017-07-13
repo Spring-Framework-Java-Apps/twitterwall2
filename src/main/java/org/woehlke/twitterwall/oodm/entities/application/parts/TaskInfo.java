@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.application.parts;
 
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -14,6 +16,10 @@ public class TaskInfo implements Serializable {
     private Boolean updatedByUpdateUserProfiles  = false;
     private Boolean updatedByUpdateUserProfilesFromMentions  = false;
     private Boolean updatedByFetchUsersFromDefinedUserList  = false;
+
+    private Boolean controllerAddUserForScreenName = false;
+    private Boolean controllerGetTestdataForTweets = false;
+    private Boolean controllerGetTestdataForUsers = false;
 
     public TaskInfo() {
     }
@@ -58,15 +64,48 @@ public class TaskInfo implements Serializable {
         this.updatedByFetchUsersFromDefinedUserList |= updatedByFetchUsersFromDefinedUserList;
     }
 
-    @Override
-    public String toString() {
-        return "TaskInfo{" +
-            "updatedByFetchTweetsFromTwitterSearch=" + updatedByFetchTweetsFromTwitterSearch +
-            ", updatedByUpdateTweets=" + updatedByUpdateTweets +
-            ", updatedByUpdateUserProfiles=" + updatedByUpdateUserProfiles +
-            ", updatedByUpdateUserProfilesFromMentions=" + updatedByUpdateUserProfilesFromMentions +
-            ", updatedByFetchUsersFromDefinedUserList=" + updatedByFetchUsersFromDefinedUserList +
-            '}';
+    public Boolean getUpdatedByFetchTweetsFromTwitterSearch() {
+        return updatedByFetchTweetsFromTwitterSearch;
+    }
+
+    public Boolean getUpdatedByUpdateTweets() {
+        return updatedByUpdateTweets;
+    }
+
+    public Boolean getUpdatedByUpdateUserProfiles() {
+        return updatedByUpdateUserProfiles;
+    }
+
+    public Boolean getUpdatedByUpdateUserProfilesFromMentions() {
+        return updatedByUpdateUserProfilesFromMentions;
+    }
+
+    public Boolean getUpdatedByFetchUsersFromDefinedUserList() {
+        return updatedByFetchUsersFromDefinedUserList;
+    }
+
+    public Boolean getControllerAddUserForScreenName() {
+        return controllerAddUserForScreenName;
+    }
+
+    public void setControllerAddUserForScreenName(Boolean controllerAddUserForScreenName) {
+        this.controllerAddUserForScreenName |= controllerAddUserForScreenName;
+    }
+
+    public Boolean getControllerGetTestdataForTweets() {
+        return controllerGetTestdataForTweets;
+    }
+
+    public void setControllerGetTestdataForTweets(Boolean controllerGetTestdataForTweets) {
+        this.controllerGetTestdataForTweets |= controllerGetTestdataForTweets;
+    }
+
+    public Boolean getControllerGetTestdataForUsers() {
+        return controllerGetTestdataForUsers;
+    }
+
+    public void setControllerGetTestdataForUsers(Boolean controllerGetTestdataForUsers) {
+        this.controllerGetTestdataForUsers |= controllerGetTestdataForUsers;
     }
 
     @Override
@@ -84,7 +123,13 @@ public class TaskInfo implements Serializable {
             return false;
         if (updatedByUpdateUserProfilesFromMentions != null ? !updatedByUpdateUserProfilesFromMentions.equals(taskInfo.updatedByUpdateUserProfilesFromMentions) : taskInfo.updatedByUpdateUserProfilesFromMentions != null)
             return false;
-        return updatedByFetchUsersFromDefinedUserList != null ? updatedByFetchUsersFromDefinedUserList.equals(taskInfo.updatedByFetchUsersFromDefinedUserList) : taskInfo.updatedByFetchUsersFromDefinedUserList == null;
+        if (updatedByFetchUsersFromDefinedUserList != null ? !updatedByFetchUsersFromDefinedUserList.equals(taskInfo.updatedByFetchUsersFromDefinedUserList) : taskInfo.updatedByFetchUsersFromDefinedUserList != null)
+            return false;
+        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(taskInfo.controllerAddUserForScreenName) : taskInfo.controllerAddUserForScreenName != null)
+            return false;
+        if (controllerGetTestdataForTweets != null ? !controllerGetTestdataForTweets.equals(taskInfo.controllerGetTestdataForTweets) : taskInfo.controllerGetTestdataForTweets != null)
+            return false;
+        return controllerGetTestdataForUsers != null ? controllerGetTestdataForUsers.equals(taskInfo.controllerGetTestdataForUsers) : taskInfo.controllerGetTestdataForUsers == null;
     }
 
     @Override
@@ -95,5 +140,37 @@ public class TaskInfo implements Serializable {
         result = 31 * result + (updatedByUpdateUserProfilesFromMentions != null ? updatedByUpdateUserProfilesFromMentions.hashCode() : 0);
         result = 31 * result + (updatedByFetchUsersFromDefinedUserList != null ? updatedByFetchUsersFromDefinedUserList.hashCode() : 0);
         return result;
+    }
+
+    public TaskInfo setTaskInfoFromTask(Task task) {
+        TaskType useCase = task.getTaskType();
+        switch (useCase){
+            case FETCH_TWEETS_FROM_TWITTER_SEARCH:
+                this.updatedByFetchTweetsFromTwitterSearch = true;
+                break;
+            case UPDATE_TWEETS:
+                this.updatedByUpdateTweets = true;
+                break;
+            case UPDATE_USER_PROFILES:
+                this.updatedByUpdateUserProfiles = true;
+                break;
+            case UPDATE_USER_PROFILES_FROM_MENTIONS:
+                this.updatedByUpdateUserProfilesFromMentions = true;
+                break;
+            case FETCH_USERS_FROM_DEFINED_USER_LIST:
+                this.updatedByFetchUsersFromDefinedUserList = true;
+                break;
+            case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
+                this.controllerAddUserForScreenName = true;
+                break;
+            case CONTROLLER_GET_TESTDATA_TWEETS:
+                this.controllerGetTestdataForTweets = true;
+                break;
+            case CONTROLLER_GET_TESTDATA_USER:
+                this.controllerGetTestdataForUsers = true;
+                break;
+                default: break;
+        }
+        return this;
     }
 }
