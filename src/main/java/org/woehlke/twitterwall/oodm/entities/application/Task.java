@@ -242,6 +242,7 @@ public class Task implements DomainObject<Task> {
         return "Task{" +
             "id=" + id +
             ", taskType=" + taskType +
+            ", taskStatus=" +taskStatus +
             ", timeStarted=" + timeStarted +
             ", timeLastUpdate=" + timeLastUpdate +
             ", timeFinished=" + timeFinished +
