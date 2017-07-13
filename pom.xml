@@ -4,7 +4,7 @@
 
     <groupId>org.woehlke.spring.boot</groupId>
     <artifactId>twitterwall2</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <name>twitterwall2</name>
     <url>https://phasenraum2010.github.io/twitterwall2/</url>
 

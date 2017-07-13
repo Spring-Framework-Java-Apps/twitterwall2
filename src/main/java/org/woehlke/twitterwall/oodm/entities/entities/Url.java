@@ -21,13 +21,13 @@ import java.util.List;
 })
 @NamedQueries({
         @NamedQuery(
-                name="Url.findByUrl",
-                query="select t from Url as t where t.url=:url"
+            name="Url.findByUrl",
+            query="select t from Url as t where t.url=:url"
         ) ,
-    @NamedQuery(
-        name = "Url.count",
-        query = "select count(t) from Url as t"
-    ),
+        @NamedQuery(
+            name = "Url.count",
+            query = "select count(t) from Url as t"
+        ),
 })
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {
@@ -158,17 +158,16 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Url)) return false;
-        if (!super.equals(o)) return false;
 
         Url url1 = (Url) o;
 
-        return url.equals(url1.url);
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + url.hashCode();
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 

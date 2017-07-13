@@ -194,7 +194,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     public String getFormattedText() {
         String formattedText = this.text;
 
-        this.entities.getFormattedText(formattedText);
+        formattedText = this.entities.getFormattedText(formattedText,"tweet");
 
         return formattedText;
     }
