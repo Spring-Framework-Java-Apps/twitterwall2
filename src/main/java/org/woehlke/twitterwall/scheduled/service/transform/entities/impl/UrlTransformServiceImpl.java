@@ -65,28 +65,44 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Map<String, Object> extraData = userSource.getExtraData();
         if(extraData.containsKey("status")){
             Object o = extraData.get("status");
-            Object oo = ((Map)o).get("entities");
-            Object ooo = ((Map)oo).get("urls");
-            for(Object o4 :(List)ooo){
-                String url = ((Map<String,String>)o4).get("url");
-                String expandedUrl = ((Map<String,String>)o4).get("expanded_url");
-                String displayUrl = ((Map<String,String>)o4).get("display_url");
-                List<Integer> indicesSource = (List<Integer>)((Map<String,Object>)o4).get("indices");
-                Url urlTarget = new Url(displayUrl, expandedUrl,url, indicesSource);
-                urlsTarget.add(urlTarget);
+            if(o != null && o instanceof Map) {
+                Object oo = ((Map) o).get("entities");
+                if(oo != null && oo instanceof Map) {
+                    Object ooo = ((Map) oo).get("urls");
+                    if(ooo != null && ooo instanceof List) {
+                        for (Object o4 : (List) ooo) {
+                            if(o4 != null && o4 instanceof Map) {
+                                String url = ((Map<String, String>) o4).get("url");
+                                String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
+                                String displayUrl = ((Map<String, String>) o4).get("display_url");
+                                List<Integer> indicesSource = (List<Integer>) ((Map<String, Object>) o4).get("indices");
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url, indicesSource);
+                                urlsTarget.add(urlTarget);
+                            }
+                        }
+                    }
+                }
             }
         }
         if(extraData.containsKey("entities")){
             Object o = extraData.get("entities");
-            Object oo = ((Map)o).get("url");
-            Object ooo = ((Map)oo).get("urls");
-            for(Object o4 :(List)ooo){
-                String url = ((Map<String,String>)o4).get("url");
-                String expandedUrl = ((Map<String,String>)o4).get("expanded_url");
-                String displayUrl = ((Map<String,String>)o4).get("display_url");
-                List<Integer> indicesSource = (List<Integer>)((Map<String,Object>)o4).get("indices");
-                Url urlTarget = new Url(displayUrl, expandedUrl,url, indicesSource);
-                urlsTarget.add(urlTarget);
+            if(o != null && o instanceof Map) {
+                Object oo = ((Map) o).get("url");
+                if(oo != null && oo instanceof Map) {
+                    Object ooo = ((Map) oo).get("urls");
+                    if(ooo != null && ooo instanceof List) {
+                        for (Object o4 : (List) ooo) {
+                            if(o4 != null && o4 instanceof Map){
+                                String url = ((Map<String, String>) o4).get("url");
+                                String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
+                                String displayUrl = ((Map<String, String>) o4).get("display_url");
+                                List<Integer> indicesSource = (List<Integer>) ((Map<String, Object>) o4).get("indices");
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url, indicesSource);
+                                urlsTarget.add(urlTarget);
+                            }
+                        }
+                    }
+                }
             }
         }
         String description = userSource.getDescription();

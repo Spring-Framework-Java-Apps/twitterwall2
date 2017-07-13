@@ -40,6 +40,7 @@ public class TestController extends AbstractTwitterwallController {
         return "timeline";
     }
 
+
     @RequestMapping("/user/onlist/renew")
     public String getOnListRenew(Model model) {
         String msg = "getOnListRenew: ";

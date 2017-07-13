@@ -602,6 +602,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     }
 
     public void setCreatedBy(Task createdBy) {
+        this.taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -610,6 +611,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        this.taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 
