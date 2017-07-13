@@ -35,10 +35,8 @@ public class MentionTransformServiceImpl implements MentionTransformService {
         Mention myMentionEntity = new Mention(idTwitter, screenName, name, indices);
         return myMentionEntity;
     }
-/*
-    @Override
-    public Set<Mention> findByUser(User user) {
-        String description = user.getDescription();
+
+    private Set<Mention> findByUserDescription(String description) {
         Set<Mention> mentions = new LinkedHashSet<>();
         if (description != null) {
             Pattern mentionPattern1 = Pattern.compile("@("+User.SCREEN_NAME_PATTERN+")(" + Entities.stopChar + ")");
@@ -60,12 +58,13 @@ public class MentionTransformServiceImpl implements MentionTransformService {
         }
         return mentions;
     }
-    */
 
     @Override
     public Set<Mention> findByUser(TwitterProfile userSource) {
         Set<Mention> mentionsTarget = new LinkedHashSet<>();
         //TODO: bla
+        String description = userSource.getDescription();
+        //Set<Mention> mentionsTarget = findByUserDescription(description);
         return mentionsTarget;
     }
 }

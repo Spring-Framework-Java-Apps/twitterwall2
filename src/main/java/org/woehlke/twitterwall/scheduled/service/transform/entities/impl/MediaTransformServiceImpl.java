@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
-import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.MediaTransformService;
 
@@ -38,11 +36,9 @@ public class MediaTransformServiceImpl implements MediaTransformService {
         return myMediaEntity;
     }
 
-    /*
-    @Override
-    public Set<Media> getMediaFor(User user) {
+
+    private Set<Media> getMediaForDescription(String description) {
         Set<Media> media =  new LinkedHashSet<Media>();
-        String description = user.getDescription();
         if (description != null) {
             Pattern urlPattern = Pattern.compile("("+ Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
             Matcher m3 = urlPattern.matcher(description);
@@ -55,14 +51,15 @@ public class MediaTransformServiceImpl implements MediaTransformService {
                 media.add(Media.getMediaFactory(m4.group(1)));
             }
         }
-
         return media;
-    }*/
+    }
 
     @Override
     public Set<Media> getMediaFor(TwitterProfile userSource) {
         Set<Media> mediaTarget = new LinkedHashSet<Media>();
         //TODO: bla
+        String description = userSource.getDescription();
+        //Set<Media> mediaTarget = getMediaForDescription(description);
         return mediaTarget;
     }
 }

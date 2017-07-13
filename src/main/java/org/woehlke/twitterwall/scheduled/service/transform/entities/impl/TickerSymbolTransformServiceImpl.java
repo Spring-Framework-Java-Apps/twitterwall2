@@ -32,11 +32,8 @@ public class TickerSymbolTransformServiceImpl implements TickerSymbolTransformSe
         return myTickerSymbolEntity;
     }
 
-    /*
-    @Override
-    public Set<TickerSymbol> getTickerSymbolsFor(User user) {
+    private Set<TickerSymbol> getTickerSymbolsFor(String description) {
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
-        String description = user.getDescription();
         if (description != null) {
             Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
             Matcher m3 = urlPattern.matcher(description);
@@ -50,12 +47,14 @@ public class TickerSymbolTransformServiceImpl implements TickerSymbolTransformSe
             }
         }
         return tickerSymbols;
-    }*/
+    }
 
     @Override
     public Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource) {
         Set<TickerSymbol> tickerSymbolsTarget = new LinkedHashSet<TickerSymbol>();
         //TODO: bla
+        String description = userSource.getDescription();
+        //Set<TickerSymbol> tickerSymbolsTarget = getTickerSymbolsFor(description);
         return tickerSymbolsTarget;
     }
 }
