@@ -18,10 +18,11 @@ import java.util.List;
 /**
  * Created by tw on 11.07.17.
  */
-@Controller("/task")
+@Controller
+@RequestMapping(path="/task")
 public class TaskController  extends AbstractTwitterwallController {
 
-    @RequestMapping("/all")
+    @RequestMapping(path="/all")
     public String getAll(Model model) {
         String msg = "/task/all: ";
         logEnv();
@@ -34,7 +35,7 @@ public class TaskController  extends AbstractTwitterwallController {
         return "taskAll";
     }
 
-    @RequestMapping("/{id}")
+    @RequestMapping(path="/{id}")
     public String getTaskById(@PathVariable long id, Model model) {
         String msg = "/task/ "+id;
         logEnv();

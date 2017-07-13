@@ -28,10 +28,11 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
 /**
  * Created by tw on 12.07.17.
  */
-@Controller("/hashtag")
+@Controller
+@RequestMapping(path="/hashtag")
 public class HashTagController extends AbstractTwitterwallController {
 
-    @RequestMapping("/tweets/{hashtagText}")
+    @RequestMapping(path="/tweet/{hashtagText}")
     public String hashTagFromTweets(@PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
@@ -49,7 +50,7 @@ public class HashTagController extends AbstractTwitterwallController {
         }
     }
 
-    @RequestMapping("/user/{hashtagText}")
+    @RequestMapping(path="/user/{hashtagText}")
     public String hashTagFromUsers(@PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
@@ -67,7 +68,7 @@ public class HashTagController extends AbstractTwitterwallController {
         }
     }
 
-    @RequestMapping("/hashtag/overview")
+    @RequestMapping(path="/overview")
     public String hashTagsOverview(Model model) {
         String msg = "/hashtags: ";
         logEnv();

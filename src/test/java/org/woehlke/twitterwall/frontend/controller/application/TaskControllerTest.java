@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller.application;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -41,6 +42,7 @@ public class TaskControllerTest {
     @Autowired
     private TaskService taskService;
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -52,7 +54,7 @@ public class TaskControllerTest {
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "taskAlls"))
+            .andExpect(view().name( "taskAll"))
             .andExpect(model().attributeExists("tasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -64,6 +66,7 @@ public class TaskControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -87,5 +90,6 @@ public class TaskControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 }

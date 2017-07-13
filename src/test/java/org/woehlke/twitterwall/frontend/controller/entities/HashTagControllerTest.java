@@ -37,6 +37,7 @@ public class HashTagControllerTest {
     @Autowired
     private HashTagController controller;
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -53,8 +54,8 @@ public class HashTagControllerTest {
         }
         //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        Assert.assertTrue(true);
         log.info("------------------------------------");
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -75,6 +76,7 @@ public class HashTagControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -95,6 +97,7 @@ public class HashTagControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -115,6 +118,7 @@ public class HashTagControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
 }

@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ import org.woehlke.twitterwall.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
@@ -58,9 +58,6 @@ public class TweetControllerTest extends PrepareDataTest {
     @Autowired
     private TaskService taskService;
 
-    @Autowired
-    private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
-
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
 
@@ -86,6 +83,7 @@ public class TweetControllerTest extends PrepareDataTest {
         super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -98,6 +96,7 @@ public class TweetControllerTest extends PrepareDataTest {
         String msg = "setupTestData: ";
         super.getTestDataTweets(msg);
         super.getTestDataUser(msg);
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -105,7 +104,7 @@ public class TweetControllerTest extends PrepareDataTest {
     public void getLatestTweetsTest() throws Exception {
         String msg ="getLatestTweetsTest: ";
 
-        MvcResult result = this.mockMvc.perform(get("/application/domain/count"))
+        MvcResult result = this.mockMvc.perform(get("/tweet/all"))
             .andExpect(status().isOk())
             .andExpect(view().name( "timeline"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -119,5 +118,6 @@ public class TweetControllerTest extends PrepareDataTest {
         log.info(msg+content);
         log.info(msg+"#######################################");
         log.info(msg+"#######################################");
+        Assert.assertTrue(true);
     }
 }

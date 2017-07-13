@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller.pages;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -86,6 +87,7 @@ public class TestControllerTest extends PrepareDataTest {
         super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
     }
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -98,6 +100,7 @@ public class TestControllerTest extends PrepareDataTest {
         String msg = "setupTestData: ";
         super.getTestDataTweets(msg);
         super.getTestDataUser(msg);
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -118,6 +121,7 @@ public class TestControllerTest extends PrepareDataTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -137,6 +141,7 @@ public class TestControllerTest extends PrepareDataTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
 }

@@ -17,7 +17,8 @@ import java.util.List;
 /**
  * Created by tw on 10.06.17.
  */
-@Controller("/tweet")
+@Controller
+@RequestMapping("/tweet")
 public class TweetController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")

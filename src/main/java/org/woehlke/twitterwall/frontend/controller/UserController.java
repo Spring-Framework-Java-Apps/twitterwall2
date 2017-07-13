@@ -20,7 +20,8 @@ import java.util.List;
 /**
  * Created by tw on 12.06.17.
  */
-@Controller("/user")
+@Controller
+@RequestMapping("/user")
 public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")

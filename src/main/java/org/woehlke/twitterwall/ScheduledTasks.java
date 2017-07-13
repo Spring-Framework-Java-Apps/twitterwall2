@@ -45,6 +45,20 @@ public class ScheduledTasks {
     @Value("${twitterwall.scheduler.fetchUserList.allow}")
     private boolean fetchUserListAllow;
 
+    private void logEnv(String msg){
+        log.info("====================================================================");
+        log.info(msg);
+        log.info("====================================================================");
+        log.info("twitterwall.scheduler.allowUpdateTweets = "+allowUpdateTweets);
+        log.info("twitterwall.scheduler.allowUpdateUserProfiles = "+allowUpdateUserProfiles);
+        log.info("twitterwall.scheduler.allowUpdateUserProfilesFromMention = "+allowUpdateUserProfilesFromMention);
+        log.info("twitterwall.scheduler.allowFetchTweetsFromTwitterSearch = "+allowFetchTweetsFromTwitterSearch);
+        log.info("twitterwall.scheduler.skipFortesting = "+skipFortesting);
+        log.info("twitterwall.scheduler.herokuDbRowsLimit = "+herokuDbRowsLimit);
+        log.info("twitterwall.scheduler.fetchUserList.name = "+fetchUserListName);
+        log.info("twitterwall.scheduler.fetchUserList.allow = "+fetchUserListAllow);
+        log.info("====================================================================");
+    }
 
     private final FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
 
@@ -85,8 +99,9 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
+        String msg = "fetch Tweets From TwitterSearch ";
+        logEnv(msg);
         if(allowFetchTweetsFromTwitterSearch  && !skipFortesting){
-            String msg = "fetch Tweets From TwitterSearch ";
             log.info("START "+msg+": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
@@ -115,12 +130,14 @@ public class ScheduledTasks {
                 log.error("NOT DONE "+msg+" (NOK)");;
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
+        String msg = "update Tweets ";
+        logEnv(msg);
         if(allowUpdateTweets  && !skipFortesting){
-            String msg = "update Tweets ";
             log.info("START "+msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.updateTweets.updateTweets();
@@ -149,12 +166,14 @@ public class ScheduledTasks {
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
+        String msg = "update User Profiles ";
+        logEnv(msg);
         if(allowUpdateUserProfiles  && !skipFortesting) {
-            String msg = "update User Profiles ";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.updateUserProfiles.updateUserProfiles();
@@ -181,12 +200,14 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions(){
+        String msg = "update User Profiles From Mentions";
+        logEnv(msg);
         if(allowUpdateUserProfilesFromMention  && !skipFortesting) {
-            String msg = "update User Profiles From Mentions";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
@@ -213,12 +234,14 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
+        String msg = "fetch Users from Defined User List ";
+        logEnv(msg);
         if(fetchUserListAllow  && !skipFortesting) {
-            String msg = "fetch Users from Defined User List ";
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
@@ -245,6 +268,6 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
-
 }

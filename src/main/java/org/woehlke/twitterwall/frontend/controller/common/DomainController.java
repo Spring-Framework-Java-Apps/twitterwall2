@@ -13,10 +13,11 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 /**
  * Created by tw on 03.07.17.
  */
-@Controller("/application")
+@Controller
+@RequestMapping(path="/application")
 public class DomainController extends AbstractTwitterwallController {
 
-    @RequestMapping("/domain/count")
+    @RequestMapping(path="/domain/count")
     public String domainCount(Model model) {
         String msg = "/hashtags: ";
         logEnv();

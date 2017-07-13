@@ -1,9 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities.common;
 
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.entities.Media;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.entities.*;
 
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -13,7 +10,7 @@ import java.util.regex.Pattern;
  * Created by tw on 23.06.17.
  */
 public abstract class AbstractFormattedText<T extends DomainObject> extends AbstractTwitterObject<T> {
-    
+
     protected String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
 
@@ -45,26 +42,31 @@ public abstract class AbstractFormattedText<T extends DomainObject> extends Abst
 
             Pattern hashTagPattern = Pattern.compile("#(" + tag.getText() + ")(" + stopChar + ")");
             Matcher m3 = hashTagPattern.matcher(formattedText);
-            formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/user/hashtag/$1\">#$1</a>$2");
+            formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/user/$1\">#$1</a>$2");
 
             Pattern hashTagPattern2 = Pattern.compile("#(" + tag.getText() + ")$");
             Matcher m4 = hashTagPattern2.matcher(formattedText);
-            formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/user/hashtag/$1\">#$1</a> ");
+            formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/user/$1\">#$1</a> ");
         }
         return formattedText;
     }
 
-    protected String getFormattedTextForHashTags(String formattedText) {
+    public String getFormattedTextForTickerSymbols(Set<TickerSymbol> tickerSymbols, String formattedDescription) {
+        return formattedDescription; //TODO: HIER WEIER
+    }
+
+    /*
+    protected String getFormattedTextForHashTagsInTweet(String formattedText) {
         Pattern hashTagPattern = Pattern.compile("#(\\w*)(" + stopChar + ")");
         Matcher m3 = hashTagPattern.matcher(formattedText);
-        formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a>$2");
+        formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/tweet/$1\">#$1</a>$2");
 
         Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(formattedText);
-        formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/$1\">#$1</a> ");
+        formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/tweet/$1\">#$1</a> ");
 
         return formattedText;
-    }
+    }*/
 
     protected String getFormattedTextForMedia(Set<Media> media, String formattedText) {
         for (Media medium : media) {
@@ -164,5 +166,6 @@ public abstract class AbstractFormattedText<T extends DomainObject> extends Abst
         x.append("]");
         stopChar = x.toString();
     }
+
 
 }

@@ -32,7 +32,8 @@ import java.util.List;
 /**
  * Created by tw on 30.06.17.
  */
-@Controller("/test")
+@Controller
+@RequestMapping("/test")
 public class TestController extends AbstractTwitterwallController {
 
     @RequestMapping("/getTestData")

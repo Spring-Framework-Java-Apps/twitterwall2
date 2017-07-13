@@ -271,6 +271,14 @@ public class User extends AbstractFormattedText<User> implements DomainObjectWit
         Set<HashTag> tags = this.entities.getTags();
         formattedDescription = getFormattedTextForHashTags(tags, formattedDescription);
 
+        Set<Media> media = this.entities.getMedia();
+        formattedDescription = getFormattedTextForMedia(media, formattedDescription);
+
+        Set<TickerSymbol> tickerSymbols = this.entities.getTickerSymbols();
+        formattedDescription = super.getFormattedTextForTickerSymbols(tickerSymbols, formattedDescription);
+
+
+
         return formattedDescription;
     }
 

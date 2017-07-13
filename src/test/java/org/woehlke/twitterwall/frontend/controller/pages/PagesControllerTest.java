@@ -46,6 +46,7 @@ public class PagesControllerTest {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -59,16 +60,19 @@ public class PagesControllerTest {
         log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+imprintScreenName+")");
         userServiceTest.createUser(imprintScreenName);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+imprintScreenName+")");
-        Assert.assertTrue(true);
         log.info("------------------------------------");
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
     public void imprintTest1() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("port80guru")));
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
     public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))
@@ -84,5 +88,6 @@ public class PagesControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 }
