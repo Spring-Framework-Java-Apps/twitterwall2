@@ -2,15 +2,13 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
-import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
-import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
 
 import java.util.Date;
 
@@ -23,67 +21,52 @@ public class TweetTransformServiceImpl implements TweetTransformService {
 
     private final UserTransformService userTransformService;
 
-    private final UrlTransformService urlTransformService;
-
-    private final HashTagTransformService hashTagTransformService;
-
-    private final MentionTransformService mentionTransformService;
-
-    private final MediaTransformService mediaTransformService;
-
-    private final TickerSymbolTransformService tickerSymbolTransformService;
-
     private final EntitiesTransformService entitiesTransformService;
 
     @Autowired
-    public TweetTransformServiceImpl(UserTransformService userTransformService, UrlTransformService urlTransformService, HashTagTransformService hashTagTransformService, MentionTransformService mentionTransformService, MediaTransformService mediaTransformService, TickerSymbolTransformService tickerSymbolTransformService, EntitiesTransformService entitiesTransformService) {
+    public TweetTransformServiceImpl(UserTransformService userTransformService, EntitiesTransformService entitiesTransformService) {
         this.userTransformService = userTransformService;
-        this.urlTransformService = urlTransformService;
-        this.hashTagTransformService = hashTagTransformService;
-        this.mentionTransformService = mentionTransformService;
-        this.mediaTransformService = mediaTransformService;
-        this.tickerSymbolTransformService = tickerSymbolTransformService;
         this.entitiesTransformService = entitiesTransformService;
     }
 
     @Override
-    public org.woehlke.twitterwall.oodm.entities.Tweet transform(org.springframework.social.twitter.api.Tweet tweet) {
-        if (tweet == null) { return null; } else {
-            org.woehlke.twitterwall.oodm.entities.Tweet retweetedStatus = transform(tweet.getRetweetedStatus());
-            long idTwitter = tweet.getId();
-            String idStr = tweet.getIdStr();
-            String text = tweet.getText();
-            Date createdAt = tweet.getCreatedAt();
-            String fromUser = tweet.getFromUser();
-            String profileImageUrl = tweet.getProfileImageUrl();
-            Long toUserId = tweet.getToUserId();
-            long fromUserId = tweet.getFromUserId();
-            String languageCode = tweet.getLanguageCode();
-            String source = tweet.getSource();
-            org.woehlke.twitterwall.oodm.entities.Tweet myTweet = new org.woehlke.twitterwall.oodm.entities.Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
-            myTweet.setFavoriteCount(tweet.getFavoriteCount());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToScreenName(tweet.getInReplyToScreenName());
-            myTweet.setInReplyToUserId(tweet.getInReplyToUserId());
-            myTweet.setLanguageCode(tweet.getLanguageCode());
-            myTweet.setRetweetCount(tweet.getRetweetCount());
-            myTweet.setRetweeted(tweet.isRetweeted());
-            myTweet.setSource(tweet.getSource());
-            myTweet.setFromUser(tweet.getFromUser());
-            myTweet.setFavorited(tweet.isFavorited());
-            myTweet.setInReplyToStatusId(tweet.getInReplyToStatusId());
-            myTweet.setRetweetedStatus(retweetedStatus);
-            TwitterProfile twitterProfile = tweet.getUser();
+    public org.woehlke.twitterwall.oodm.entities.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource) {
+        if (tweetSource == null) { return null; } else {
+            org.woehlke.twitterwall.oodm.entities.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus());
+            long idTwitter = tweetSource.getId();
+            String idStr = tweetSource.getIdStr();
+            String text = tweetSource.getText();
+            Date createdAt = tweetSource.getCreatedAt();
+            String fromUser = tweetSource.getFromUser();
+            String profileImageUrl = tweetSource.getProfileImageUrl();
+            Long toUserId = tweetSource.getToUserId();
+            long fromUserId = tweetSource.getFromUserId();
+            String languageCode = tweetSource.getLanguageCode();
+            String source = tweetSource.getSource();
+            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
+            tweetTarget.setFavoriteCount(tweetSource.getFavoriteCount());
+            tweetTarget.setFavorited(tweetSource.isFavorited());
+            tweetTarget.setInReplyToScreenName(tweetSource.getInReplyToScreenName());
+            tweetTarget.setInReplyToUserId(tweetSource.getInReplyToUserId());
+            tweetTarget.setLanguageCode(tweetSource.getLanguageCode());
+            tweetTarget.setRetweetCount(tweetSource.getRetweetCount());
+            tweetTarget.setRetweeted(tweetSource.isRetweeted());
+            tweetTarget.setSource(tweetSource.getSource());
+            tweetTarget.setFromUser(tweetSource.getFromUser());
+            tweetTarget.setFavorited(tweetSource.isFavorited());
+            tweetTarget.setInReplyToStatusId(tweetSource.getInReplyToStatusId());
+            tweetTarget.setRetweetedStatus(retweetedStatus);
+            TwitterProfile userSource = tweetSource.getUser();
 
-            org.woehlke.twitterwall.oodm.entities.Entities entities = entitiesTransformService.transform(tweet.getEntities());
+            org.woehlke.twitterwall.oodm.entities.Entities entitiesTarget = entitiesTransformService.transform(tweetSource.getEntities());
 
-            myTweet.setEntities(entities);
+            tweetTarget.setEntities(entitiesTarget);
 
-            /* transform user */
-            User user = userTransformService.transform(twitterProfile);
-            myTweet.setUser(user);
+            /* transform userTarget */
+            User userTarget = userTransformService.transform(userSource);
+            tweetTarget.setUser(userTarget);
 
-            return myTweet;
+            return tweetTarget;
         }
     }
 }

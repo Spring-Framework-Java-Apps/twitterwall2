@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller;
+package org.woehlke.twitterwall.frontend.controller.entities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
 
 import java.util.ArrayList;
@@ -27,49 +26,50 @@ import java.util.regex.Pattern;
 import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEXT_PATTERN;
 
 /**
- * Created by tw on 28.06.17.
+ * Created by tw on 12.07.17.
  */
 @Controller
+@RequestMapping(path="/hashtag")
 public class HashTagController extends AbstractTwitterwallController {
 
-    private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
-
-    private final TweetService tweetService;
-
-    private final HashTagService hashTagService;
-
-    private final UserService userService;
-
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
-    @Autowired
-    public HashTagController(TweetService tweetService, HashTagService hashTagService, UserService userService) {
-        this.tweetService = tweetService;
-        this.hashTagService = hashTagService;
-        this.userService = userService;
+    @RequestMapping(path="/tweet/{hashtagText}")
+    public String hashTagFromTweets(@PathVariable String hashtagText, Model model) {
+        logEnv();
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        if (m.matches()) {
+            String title = "Tweets für HashTag";
+            String subtitle = "#" + hashtagText;
+            String symbol = Symbols.HASHTAG.toString();
+            model = setupPage(model,title,subtitle,symbol);
+            List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
+            model.addAttribute("latestTweets", tweets);
+            return "timeline";
+        } else {
+            throw new IllegalArgumentException("/hashtag/"+hashtagText);
+        }
     }
 
-    @RequestMapping("/hashtags")
-    public String hashTags(Model model) {
+    @RequestMapping(path="/user/{hashtagText}")
+    public String hashTagFromUsers(@PathVariable String hashtagText, Model model) {
+        logEnv();
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        if (m.matches()) {
+            String title = "Users für HashTag";
+            String subtitle = "#" + hashtagText;
+            String symbol = Symbols.HASHTAG.toString();
+            model = setupPage(model,title,subtitle,symbol);
+            List<User> users = userService.getUsersForHashTag(hashtagText);
+            model.addAttribute("users", users);
+            return "user";
+        } else {
+            throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
+        }
+    }
+
+    @RequestMapping(path="/overview")
+    public String hashTagsOverview(Model model) {
         String msg = "/hashtags: ";
         logEnv();
         String title = "HashTags";
@@ -104,40 +104,43 @@ public class HashTagController extends AbstractTwitterwallController {
         return "tags";
     }
 
-    @RequestMapping("/hashtag/{hashtagText}")
-    public String hashTag(@PathVariable String hashtagText, Model model) {
-        logEnv();
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        if (m.matches()) {
-            String title = "Tweets für HashTag";
-            String subtitle = "#" + hashtagText;
-            String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model,title,subtitle,symbol);
-            List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
-            model.addAttribute("latestTweets", tweets);
-            return "timeline";
-        } else {
-            throw new IllegalArgumentException("/hashtag/"+hashtagText);
-        }
-    }
+    private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
 
-    @RequestMapping("/user/hashtag/{hashtagText}")
-    public String hashTagForUsers(@PathVariable String hashtagText, Model model) {
-        logEnv();
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        if (m.matches()) {
-            String title = "Users für HashTag";
-            String subtitle = "#" + hashtagText;
-            String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model,title,subtitle,symbol);
-            List<User> users = userService.getUsersForHashTag(hashtagText);
-            model.addAttribute("users", users);
-            return "user";
-        } else {
-            throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
-        }
+    @Value("${twitterwall.frontend.menu.appname}")
+    private String menuAppName;
+
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.frontend.info.webpage}")
+    private String infoWebpage;
+
+    @Value("${twitterwall.frontend.theme}")
+    private String theme;
+
+    @Value("${twitterwall.context.test}")
+    private boolean contextTest;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprint.subtitle}")
+    private String imprintSubtitle;
+
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
+
+    private final HashTagService hashTagService;
+
+    private final TweetService tweetService;
+
+    private final UserService userService;
+
+    @Autowired
+    public HashTagController(HashTagService hashTagService, TweetService tweetService, UserService userService) {
+        this.hashTagService = hashTagService;
+        this.tweetService = tweetService;
+        this.userService = userService;
     }
 
     @Override

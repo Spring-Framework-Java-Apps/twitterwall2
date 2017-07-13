@@ -68,4 +68,9 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     public List<TaskHistory> findByTask(Task oneTask) {
         return taskHistoryRepository.findByTask(oneTask);
     }
+
+    @Override
+    public TaskHistory findById(long id) {
+        return taskHistoryRepository.findById(id);
+    }
 }

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller;
+package org.woehlke.twitterwall.frontend.controller.pages;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,17 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
@@ -32,23 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by tw on 19.06.17.
  */
-/*
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DataJpaTest(showSql=false)
-@AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
-@AutoConfigureMockMvc
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-*/
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ImprintControllerTest {
+public class PagesControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ImprintControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(PagesControllerTest.class);
 
     @Autowired
-    private ImprintController controller;
+    private PagesController controller;
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,6 +46,7 @@ public class ImprintControllerTest {
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -72,18 +60,21 @@ public class ImprintControllerTest {
         log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+imprintScreenName+")");
         userServiceTest.createUser(imprintScreenName);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+imprintScreenName+")");
-        Assert.assertTrue(true);
         log.info("------------------------------------");
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void imprintTest1() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("port80guru")));
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
-    public void imprintTest() throws Exception {
+    public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "imprint"))
@@ -97,5 +88,6 @@ public class ImprintControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 }

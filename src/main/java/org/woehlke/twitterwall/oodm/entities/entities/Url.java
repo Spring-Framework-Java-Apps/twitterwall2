@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -77,6 +78,13 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     public Url(String display, String expanded, String url, int[] indices) {
+        //setIndices(indices);
+        this.display = display;
+        this.expanded = expanded;
+        this.url = url;
+    }
+
+    public Url(String display, String expanded, String url, List<Integer> indices) {
         //setIndices(indices);
         this.display = display;
         this.expanded = expanded;
