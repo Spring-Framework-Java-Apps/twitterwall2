@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
+import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
@@ -79,7 +79,7 @@ import java.util.regex.Pattern;
         )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractFormattedText<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
+public class User extends AbstractTwitterObject<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User> {
 
     private static final long serialVersionUID = 1L;
 
