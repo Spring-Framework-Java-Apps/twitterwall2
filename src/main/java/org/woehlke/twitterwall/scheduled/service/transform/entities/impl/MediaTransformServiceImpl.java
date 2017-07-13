@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
 
 import org.springframework.social.twitter.api.MediaEntity;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class MediaTransformServiceImpl implements MediaTransformService {
         return myMediaEntity;
     }
 
+    /*
     @Override
     public Set<Media> getMediaFor(User user) {
         Set<Media> media =  new LinkedHashSet<Media>();
@@ -55,5 +57,12 @@ public class MediaTransformServiceImpl implements MediaTransformService {
         }
 
         return media;
+    }*/
+
+    @Override
+    public Set<Media> getMediaFor(TwitterProfile userSource) {
+        Set<Media> mediaTarget = new LinkedHashSet<Media>();
+        //TODO: bla
+        return mediaTarget;
     }
 }

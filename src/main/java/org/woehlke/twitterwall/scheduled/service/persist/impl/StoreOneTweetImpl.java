@@ -32,9 +32,9 @@ public class StoreOneTweetImpl implements StoreOneTweet {
     }
 
     @Override
-    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet myTweet, Task task) {
-        Tweet tweet = tweetTransformService.transform(myTweet);
-        tweet = storeOneTweetPerform.storeOneTweetPerform(tweet,task);
-        return tweet;
+    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweetSource, Task task) {
+        Tweet tweetTarget = tweetTransformService.transform(tweetSource);
+        tweetTarget = storeOneTweetPerform.storeOneTweetPerform(tweetTarget,task);
+        return tweetTarget;
     }
 }

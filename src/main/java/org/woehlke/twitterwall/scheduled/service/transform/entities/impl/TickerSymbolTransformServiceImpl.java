@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
 
 import org.springframework.social.twitter.api.TickerSymbolEntity;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class TickerSymbolTransformServiceImpl implements TickerSymbolTransformSe
         return myTickerSymbolEntity;
     }
 
+    /*
     @Override
     public Set<TickerSymbol> getTickerSymbolsFor(User user) {
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
@@ -48,5 +50,12 @@ public class TickerSymbolTransformServiceImpl implements TickerSymbolTransformSe
             }
         }
         return tickerSymbols;
+    }*/
+
+    @Override
+    public Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource) {
+        Set<TickerSymbol> tickerSymbolsTarget = new LinkedHashSet<TickerSymbol>();
+        //TODO: bla
+        return tickerSymbolsTarget;
     }
 }

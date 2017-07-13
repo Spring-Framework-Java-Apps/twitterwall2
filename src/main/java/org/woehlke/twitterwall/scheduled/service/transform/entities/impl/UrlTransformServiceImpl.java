@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,10 +28,10 @@ public class UrlTransformServiceImpl implements UrlTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlTransformServiceImpl.class);
 
-    private final TwitterUrlService twitterUrlService;
+    //private final TwitterUrlService twitterUrlService;
 
-    public UrlTransformServiceImpl(TwitterUrlService twitterUrlService) {
-        this.twitterUrlService = twitterUrlService;
+    public UrlTransformServiceImpl() {
+
     }
 
     @Override
@@ -41,7 +43,7 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Url myUrlEntity = new Url(display, expanded, urlStr, indices);
         return myUrlEntity;
     }
-
+/*
     @Override
     public Set<Url> getUrlsFor(User user) {
         Set<Url> urls = new LinkedHashSet<>();
@@ -68,5 +70,14 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         }
         return urls;
     }
+    */
 
+    @Override
+    public Set<Url> getUrlsFor(TwitterProfile userSource) {
+        Set<Url> urlsTarget = new LinkedHashSet<Url>();
+        Map<String, Object> extraData = userSource.getExtraData();
+        //TODO: see Debugger, Target: Application
+        //TODO: bla
+        return urlsTarget;
+    }
 }

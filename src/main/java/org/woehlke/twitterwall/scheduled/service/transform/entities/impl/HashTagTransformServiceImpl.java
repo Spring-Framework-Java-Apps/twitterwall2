@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
 
 import org.springframework.social.twitter.api.HashTagEntity;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class HashTagTransformServiceImpl implements HashTagTransformService {
         return myHashTagEntity;
     }
 
+    /*
     @Override
     public Set<HashTag> getHashTagsFor(User user) {
         String description = user.getDescription();
@@ -50,5 +52,13 @@ public class HashTagTransformServiceImpl implements HashTagTransformService {
             }
         }
         return hashTags;
+    }
+    */
+
+    @Override
+    public Set<HashTag> getHashTagsFor(TwitterProfile userSource) {
+        Set<HashTag> hashTagsTarget = new LinkedHashSet<HashTag>();
+        //TODO: bla
+        return hashTagsTarget;
     }
 }

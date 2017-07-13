@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
+package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
 
 import java.util.List;
@@ -44,26 +45,27 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
     }
 
     @Override
-    public Entities getEntitiesForUser(User user) {
-        String msg = "getEntitiesForUser: "+user.getScreenName()+" : ";
-        String description = user.getDescription();
-        Set<Mention> mentions = mentionTransformService.findByUser(user);
-        Set<Url> urls = urlTransformService.getUrlsFor(user);
-        Set<HashTag> hashTags = hashTagTransformService.getHashTagsFor(user);
-        Set<Media> media = mediaTransformService.getMediaFor(user);
-        Set<TickerSymbol> tickerSymbols = tickerSymbolTransformService.getTickerSymbolsFor(user);
-        Entities entities = new Entities();
-        entities.setMentions(mentions);
-        entities.addAllUrls(urls);
-        entities.setMedia(media);
-        entities.setTags(hashTags);
-        entities.setTickerSymbols(tickerSymbols);
+    public Entities transformEntitiesForUser(TwitterProfile userSource) {
+        //TODO: bla!
+        String msg = "transformEntitiesForUser: "+userSource.getScreenName()+" : ";
+        String description = userSource.getDescription();
+        Entities entitiesTarget = new Entities();
+        Set<Url> urls = urlTransformService.getUrlsFor(userSource);
+        Set<HashTag> hashTags = hashTagTransformService.getHashTagsFor(userSource);
+        Set<Mention> mentions = mentionTransformService.findByUser(userSource);
+        Set<Media> media = mediaTransformService.getMediaFor(userSource);
+        Set<TickerSymbol> tickerSymbols = tickerSymbolTransformService.getTickerSymbolsFor(userSource);
+        entitiesTarget.setMentions(mentions);
+        entitiesTarget.addAllUrls(urls);
+        entitiesTarget.setMedia(media);
+        entitiesTarget.setTags(hashTags);
+        entitiesTarget.setTickerSymbols(tickerSymbols);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"description " + description);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.debug(msg+entities.toString());
+        log.debug(msg+entitiesTarget.toString());
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        return entities;
+        return entitiesTarget;
     }
 
     @Override

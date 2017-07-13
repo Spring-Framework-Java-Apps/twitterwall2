@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
@@ -16,6 +17,7 @@ import org.woehlke.twitterwall.oodm.service.entities.TickerSymbolService;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -110,8 +112,5 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         return entities;
     }
 
-    @Override
-    public Entities transform(org.springframework.social.twitter.api.Entities twitterEntities) {
-        return null;
-    }
+
 }

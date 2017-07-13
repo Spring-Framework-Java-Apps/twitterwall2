@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.scheduled.service.transform.entities;
 
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
@@ -12,6 +13,8 @@ import java.util.Set;
  */
 public interface UrlTransformService extends TransformService<Url,UrlEntity> {
 
-    Set<Url> getUrlsFor(User user);
+    //Set<Url> getUrlsFor(User user);
+
+    Set<Url> getUrlsFor(TwitterProfile userSource);
 
 }

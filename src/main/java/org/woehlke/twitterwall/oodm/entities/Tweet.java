@@ -456,6 +456,14 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         }
     }
 
+    private String toStringEntities(){
+        if(user==null){
+            return " null ";
+        } else {
+            return entities.toString();
+        }
+    }
+
     @Override
     public String toString() {
         return "Tweet{" +
@@ -482,7 +490,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
                 ",\n createdBy="+ toStringCreatedBy() +
                 ",\n updatedBy=" + toStringUpdatedBy() +
                 ",\n taskInfo="+ toStringTaskInfo() +
-                ",\n entities=" + this.entities.toString() +
+                ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";
     }

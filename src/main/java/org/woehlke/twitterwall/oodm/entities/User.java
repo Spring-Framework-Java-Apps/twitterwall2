@@ -212,12 +212,8 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Column
     private boolean tweeting;
 
-    @Column
-    private boolean onDefinedUserList;
-
     @Column(length = 4096)
     private String profileBannerUrl;
-
 
     @Embedded
     @AssociationOverrides({
@@ -591,14 +587,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public boolean isOnDefinedUserList() {
-        return onDefinedUserList;
-    }
-
-    public void setOnDefinedUserList(boolean onDefinedUserList) {
-        this.onDefinedUserList |= onDefinedUserList;
     }
 
     public TaskInfo getTaskInfo() {

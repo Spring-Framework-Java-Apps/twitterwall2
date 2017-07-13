@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.transform.entities.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.MentionEntity;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class MentionTransformServiceImpl implements MentionTransformService {
         Mention myMentionEntity = new Mention(idTwitter, screenName, name, indices);
         return myMentionEntity;
     }
-
+/*
     @Override
     public Set<Mention> findByUser(User user) {
         String description = user.getDescription();
@@ -59,5 +60,12 @@ public class MentionTransformServiceImpl implements MentionTransformService {
         }
         return mentions;
     }
+    */
 
+    @Override
+    public Set<Mention> findByUser(TwitterProfile userSource) {
+        Set<Mention> mentionsTarget = new LinkedHashSet<>();
+        //TODO: bla
+        return mentionsTarget;
+    }
 }

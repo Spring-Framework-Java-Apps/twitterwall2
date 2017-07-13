@@ -52,18 +52,15 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
             tweet.setRetweetedStatus(retweetedStatus);
         }
-        /** The User */
-        User user = tweet.getUser();
-        boolean onDefinedUserList = task.getTaskType().equals(TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST);
-        user.setOnDefinedUserList(onDefinedUserList);
-
+        /** TaskInfo */
         TaskInfo taskInfo = tweet.getTaskInfo();
         taskInfo = taskInfo.setTaskInfoFromTask(task);
         tweet.setTaskInfo(taskInfo);
-
+        /** User */
+        User user = tweet.getUser();
         user = storeUserProcess.storeUserProcess(user,task);
         tweet.setUser(user);
-        /** The Entities */
+        /** Entities */
         Entities entities = tweet.getEntities();
         entities = storeEntitiesProcess.storeEntitiesProcess(entities,task,null);
         tweet.setEntities(entities);

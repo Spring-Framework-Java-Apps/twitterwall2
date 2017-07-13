@@ -222,7 +222,11 @@ public class Entities {
     }
 
     public boolean addMedium(Media medium) {
-        return this.media.add(medium);
+        if (medium == null) {
+            return false;
+        } else {
+            return this.media.add(medium);
+        }
     }
 
     public boolean removeMedium(Media medium) {
@@ -432,7 +436,6 @@ public class Entities {
             Pattern myUrl2 = Pattern.compile("(" + tickerSymbol.getUrl() + ")$");
             Matcher m11 = myUrl2.matcher(formattedText);
             formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + tickerSymbol.getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a> ");
-
         }
         return formattedText; //TODO: HIER WEIER
     }

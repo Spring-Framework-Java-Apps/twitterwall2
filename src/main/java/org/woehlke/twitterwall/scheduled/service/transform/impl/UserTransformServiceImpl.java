@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
-import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
 
 import java.util.Date;
 
@@ -32,58 +32,58 @@ public class UserTransformServiceImpl implements UserTransformService {
     }
 
     @Override
-    public User transform(TwitterProfile twitterProfile) {
-        String msg = "User.transform for "+twitterProfile.getId();
-        long idTwitter = twitterProfile.getId();
-        String screenName = twitterProfile.getScreenName();
-        String name = twitterProfile.getName();
-        String url = twitterProfile.getUrl();
-        if (url == null || twitterProfile.getUrl().isEmpty()) {
+    public User transform(TwitterProfile userSource) {
+        String msg = "User.transform for "+userSource.getId();
+        long idTwitter = userSource.getId();
+        String screenName = userSource.getScreenName();
+        String name = userSource.getName();
+        String url = userSource.getUrl();
+        if (url == null || userSource.getUrl().isEmpty()) {
             url = null;
         }
-        String profileImageUrl = twitterProfile.getProfileImageUrl();
-        String description = twitterProfile.getDescription();
-        if (twitterProfile.getDescription().isEmpty()) {
+        String profileImageUrl = userSource.getProfileImageUrl();
+        String description = userSource.getDescription();
+        if (userSource.getDescription().isEmpty()) {
             description = null;
         }
-        String location = twitterProfile.getLocation();
-        if (twitterProfile.getLocation().isEmpty()) {
+        String location = userSource.getLocation();
+        if (userSource.getLocation().isEmpty()) {
             location = null;
         }
-        Date createdDate = twitterProfile.getCreatedDate();
-        User user = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
-        user.setTweeting(true);
-        user.setLanguage(twitterProfile.getLanguage());
-        user.setStatusesCount(twitterProfile.getStatusesCount());
-        user.setFriendsCount(twitterProfile.getFriendsCount());
-        user.setFollowersCount(twitterProfile.getFollowersCount());
-        user.setFavoritesCount(twitterProfile.getFavoritesCount());
-        user.setListedCount(twitterProfile.getListedCount());
-        user.setFollowing(twitterProfile.isFollowing());
-        user.setFollowRequestSent(twitterProfile.isFollowRequestSent());
-        user.setProtected(twitterProfile.isProtected());
-        user.setNotificationsEnabled(twitterProfile.isNotificationsEnabled());
-        user.setVerified(twitterProfile.isVerified());
-        user.setGeoEnabled(twitterProfile.isGeoEnabled());
-        user.setContributorsEnabled(twitterProfile.isContributorsEnabled());
-        user.setTranslator(twitterProfile.isTranslator());
-        user.setTimeZone(twitterProfile.getTimeZone());
-        user.setUtcOffset(twitterProfile.getUtcOffset());
-        user.setSidebarBorderColor(twitterProfile.getSidebarBorderColor());
-        user.setSidebarFillColor(twitterProfile.getSidebarFillColor());
-        user.setBackgroundColor(twitterProfile.getBackgroundColor());
-        user.setUseBackgroundImage(twitterProfile.useBackgroundImage());
-        user.setBackgroundImageUrl(twitterProfile.getBackgroundImageUrl());
-        user.setBackgroundImageTiled(twitterProfile.isBackgroundImageTiled());
-        user.setTextColor(twitterProfile.getTextColor());
-        user.setLinkColor(twitterProfile.getLinkColor());
-        user.setShowAllInlineMedia(twitterProfile.showAllInlineMedia());
-        user.setProfileBannerUrl(twitterProfile.getProfileBannerUrl());
-        Entities entities = this.entitiesTransformService.getEntitiesForUser(user);
+        Date createdDate = userSource.getCreatedDate();
+        User userTarget = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
+        userTarget.setTweeting(true);
+        userTarget.setLanguage(userSource.getLanguage());
+        userTarget.setStatusesCount(userSource.getStatusesCount());
+        userTarget.setFriendsCount(userSource.getFriendsCount());
+        userTarget.setFollowersCount(userSource.getFollowersCount());
+        userTarget.setFavoritesCount(userSource.getFavoritesCount());
+        userTarget.setListedCount(userSource.getListedCount());
+        userTarget.setFollowing(userSource.isFollowing());
+        userTarget.setFollowRequestSent(userSource.isFollowRequestSent());
+        userTarget.setProtected(userSource.isProtected());
+        userTarget.setNotificationsEnabled(userSource.isNotificationsEnabled());
+        userTarget.setVerified(userSource.isVerified());
+        userTarget.setGeoEnabled(userSource.isGeoEnabled());
+        userTarget.setContributorsEnabled(userSource.isContributorsEnabled());
+        userTarget.setTranslator(userSource.isTranslator());
+        userTarget.setTimeZone(userSource.getTimeZone());
+        userTarget.setUtcOffset(userSource.getUtcOffset());
+        userTarget.setSidebarBorderColor(userSource.getSidebarBorderColor());
+        userTarget.setSidebarFillColor(userSource.getSidebarFillColor());
+        userTarget.setBackgroundColor(userSource.getBackgroundColor());
+        userTarget.setUseBackgroundImage(userSource.useBackgroundImage());
+        userTarget.setBackgroundImageUrl(userSource.getBackgroundImageUrl());
+        userTarget.setBackgroundImageTiled(userSource.isBackgroundImageTiled());
+        userTarget.setTextColor(userSource.getTextColor());
+        userTarget.setLinkColor(userSource.getLinkColor());
+        userTarget.setShowAllInlineMedia(userSource.showAllInlineMedia());
+        userTarget.setProfileBannerUrl(userSource.getProfileBannerUrl());
+        Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource);
         log.debug(msg+" entities = "+entities.toString());
-        user.setEntities(entities);
-        log.debug(msg+" user = "+user.toString());
-        return user;
+        userTarget.setEntities(entities);
+        log.debug(msg+" userTarget = "+userTarget.toString());
+        return userTarget;
     }
 
 }

@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform.entities;
 
 import org.springframework.social.twitter.api.MediaEntity;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Media;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
@@ -12,6 +13,8 @@ import java.util.Set;
  */
 public interface MediaTransformService extends TransformService<Media,MediaEntity> {
 
+    //Set<Media> getMediaFor(User user);
 
-    Set<Media> getMediaFor(User user);
+    Set<Media> getMediaFor(TwitterProfile userSource);
+
 }
