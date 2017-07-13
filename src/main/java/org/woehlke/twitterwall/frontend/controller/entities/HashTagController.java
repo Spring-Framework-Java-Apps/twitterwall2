@@ -32,7 +32,7 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
 public class HashTagController extends AbstractTwitterwallController {
 
     @RequestMapping("/tweets/{hashtagText}")
-    public String hashTag(@PathVariable String hashtagText, Model model) {
+    public String hashTagFromTweets(@PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
@@ -50,7 +50,7 @@ public class HashTagController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/user/{hashtagText}")
-    public String hashTagForUsers(@PathVariable String hashtagText, Model model) {
+    public String hashTagFromUsers(@PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
@@ -68,7 +68,7 @@ public class HashTagController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/hashtag/overview")
-    public String hashTags(Model model) {
+    public String hashTagsOverview(Model model) {
         String msg = "/hashtags: ";
         logEnv();
         String title = "HashTags";

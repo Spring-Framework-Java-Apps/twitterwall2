@@ -24,7 +24,7 @@ import java.util.List;
 public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")
-    public String all(Model model) {
+    public String getAll(Model model) {
         model.addAttribute("users", userService.getAll());
         String symbol = Symbols.USER_ALL.toString();
         String title = "All Users";
@@ -33,7 +33,7 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/{screenName}")
-    public String follower(@PathVariable String screenName, Model model) {
+    public String getUserForScreeName(@PathVariable String screenName, Model model) {
         if (User.isValidScreenName(screenName)) {
             User user = userService.findByScreenName(screenName);
             List<Tweet> tweetsForUser = tweetService.getTweetsForUser(user);

@@ -18,10 +18,10 @@ import java.util.List;
  * Created by tw on 10.06.17.
  */
 @Controller("/tweet")
-public class TweetsController extends AbstractTwitterwallController {
+public class TweetController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")
-    public String tweets(Model model) {
+    public String getLatestTweets(Model model) {
         logEnv();
         model = super.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
         List<Tweet> latest = tweetService.getLatestTweets();
@@ -29,7 +29,7 @@ public class TweetsController extends AbstractTwitterwallController {
         return "timeline";
     }
 
-    private static final Logger log = LoggerFactory.getLogger(TweetsController.class);
+    private static final Logger log = LoggerFactory.getLogger(TweetController.class);
 
     private final TweetService tweetService;
 
@@ -55,7 +55,7 @@ public class TweetsController extends AbstractTwitterwallController {
     private String idGoogleAnalytics;
 
     @Autowired
-    public TweetsController(TweetService tweetService) {
+    public TweetController(TweetService tweetService) {
         this.tweetService = tweetService;
     }
 

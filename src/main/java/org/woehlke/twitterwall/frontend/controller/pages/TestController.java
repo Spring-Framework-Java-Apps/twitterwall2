@@ -4,10 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.social.RateLimitExceededException;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
@@ -18,6 +24,8 @@ import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUse
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
+import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 

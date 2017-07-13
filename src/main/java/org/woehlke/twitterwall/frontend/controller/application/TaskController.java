@@ -22,7 +22,7 @@ import java.util.List;
 public class TaskController  extends AbstractTwitterwallController {
 
     @RequestMapping("/all")
-    public String countedEntities(Model model) {
+    public String getAll(Model model) {
         String msg = "/task/all: ";
         logEnv();
         String title = "Tasks";
@@ -35,7 +35,7 @@ public class TaskController  extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/{id}")
-    public String countedEntities(@PathVariable long id, Model model) {
+    public String getTaskById(@PathVariable long id, Model model) {
         String msg = "/task/ "+id;
         logEnv();
         String title = "Tasks";

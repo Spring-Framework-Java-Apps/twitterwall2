@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller;
+package org.woehlke.twitterwall.frontend.controller.pages;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.frontend.controller.pages.ImprintController;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -28,23 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by tw on 19.06.17.
  */
-/*
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DataJpaTest(showSql=false)
-@AutoConfigureTestDatabase(connection= EmbeddedDatabaseConnection.H2)
-@AutoConfigureMockMvc
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-*/
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ImprintControllerTest {
+public class PagesControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ImprintControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(PagesControllerTest.class);
 
     @Autowired
-    private ImprintController controller;
+    private PagesController controller;
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,13 +64,13 @@ public class ImprintControllerTest {
     }
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void imprintTest1() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("port80guru")));
     }
 
     @Test
-    public void imprintTest() throws Exception {
+    public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "imprint"))

@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 public class DomainController extends AbstractTwitterwallController {
 
     @RequestMapping("/domain/count")
-    public String countedEntities(Model model) {
+    public String domainCount(Model model) {
         String msg = "/hashtags: ";
         logEnv();
         String title = "Counted Entities";
