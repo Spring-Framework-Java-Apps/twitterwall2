@@ -28,7 +28,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(
                 name="Tweet.findByIdTwitter",
-                query= "select t from org.woehlke.twitterwall.oodm.entities.Tweet as t where t.idTwitter=:idTwitter"
+                query= "select t from Tweet as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
                 name="Tweet.getLatestTweets",

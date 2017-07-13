@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
                 name = "User.getTweetingUsers",
-                query = "select t from User as t where t.tweeting=true order by t.screenName"
+                query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.getNotYetFriendUsers",
@@ -55,11 +55,11 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
             name = "User.getNotYetOnList",
-            query = "select t from User as t where t.onDefinedUserList=false and t.tweeting=true order by t.screenName"
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
         ),
         @NamedQuery(
             name = "User.getOnList",
-            query = "select t from User as t where t.onDefinedUserList=true order by t.screenName"
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true order by t.screenName"
         ),
         @NamedQuery(
                 name = "User.getUsersForHashTag",
