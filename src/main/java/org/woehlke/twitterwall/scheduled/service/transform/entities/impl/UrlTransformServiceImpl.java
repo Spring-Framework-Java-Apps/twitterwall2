@@ -13,9 +13,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +76,32 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Map<String, Object> extraData = userSource.getExtraData();
         //TODO: see Debugger, Target: Application
         //TODO: bla
+        if(extraData.containsKey("status")){
+            Object o = extraData.get("status");
+            Object oo = ((Map)o).get("entities");
+            Object ooo = ((Map)oo).get("urls");
+            for(Object o4 :(List)ooo){
+                String url = ((Map<String,String>)o4).get("url");
+                String expandedUrl = ((Map<String,String>)o4).get("expanded_url");
+                String displayUrl = ((Map<String,String>)o4).get("display_url");
+                List<Integer> indicesSource = (List<Integer>)((Map<String,Object>)o4).get("indices");
+                Url urlTarget = new Url(displayUrl, expandedUrl,url, indicesSource);
+                urlsTarget.add(urlTarget);
+            }
+        }
+        if(extraData.containsKey("entities")){
+            Object o = extraData.get("entities");
+            Object oo = ((Map)o).get("url");
+            Object ooo = ((Map)oo).get("urls");
+            for(Object o4 :(List)ooo){
+                String url = ((Map<String,String>)o4).get("url");
+                String expandedUrl = ((Map<String,String>)o4).get("expanded_url");
+                String displayUrl = ((Map<String,String>)o4).get("display_url");
+                List<Integer> indicesSource = (List<Integer>)((Map<String,Object>)o4).get("indices");
+                Url urlTarget = new Url(displayUrl, expandedUrl,url, indicesSource);
+                urlsTarget.add(urlTarget);
+            }
+        }
         return urlsTarget;
     }
 }
