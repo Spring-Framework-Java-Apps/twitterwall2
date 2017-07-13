@@ -15,6 +15,7 @@ buildNumber.properties
 *.iml
 twitterwall.log
 twitterwall.log*
+docs2
 .bundle
 .sass-cache
 Gemfile.lock
