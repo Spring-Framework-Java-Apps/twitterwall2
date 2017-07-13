@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.scheduled.service.facade.*;
 
 import java.text.SimpleDateFormat;
@@ -14,7 +17,8 @@ import java.util.Date;
 /**
  * Created by tw on 10.06.17.
  */
-@Component
+@Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
