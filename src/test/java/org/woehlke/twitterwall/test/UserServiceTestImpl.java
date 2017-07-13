@@ -20,8 +20,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import javax.persistence.NoResultException;
 import java.util.Date;
 
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
-
 /**
  * Created by tw on 01.07.17.
  */
@@ -44,7 +42,7 @@ public class UserServiceTestImpl implements UserServiceTest {
     private TwitterApiService twitterApiService;
 
     @Autowired
-    private  StoreUserProfile storeUserProfile;
+    private StoreUserProfile storeUserProfile;
 
 
     @Override

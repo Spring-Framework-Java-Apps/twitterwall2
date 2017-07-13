@@ -48,54 +48,25 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
     }
 
     @Override
-    public Entities storeEntitiesProcess(Entities entities, Task task, String url) {
+    public Entities storeEntitiesProcess(Entities entities, Task task) {
         String msg = "storeEntitiesProcess ";
-
         Set<Url> urls = new LinkedHashSet<>();
         Set<HashTag> hashTags = new LinkedHashSet<>();
         Set<Mention> mentions = new LinkedHashSet<>();
         Set<Media> media = new LinkedHashSet<>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
-
-        /*
-        entities.removeAllUrls();
-        entities.removeAllTags();
-        entities.removeAllMentions();
-        entities.removeAllMedia();
-        entities.removeAllTickerSymbols();
-        */
-
-        /*
-        for (Url myUrl : urls) {
-            if(url == null) {
-                log.debug(msg+"tweet.getUrls() -> url==null");
-            } else {
-                String urlStr = myUrl.getUrl();
-                if(urlStr == null){
-                    log.debug(msg+"tweet.getUrls() -> url.getUrl() == null");
-                } else {
-                    Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr,task);
-                    if((urlObj != null)&&(urlObj.isValid())){
-                        entities.addUrl(urlObj);
-                    } else {
-                        log.debug(msg+"urlService.getPersistentUrlFor("+urlStr+") == null");
-                    }
-                }
-            }
-        }*/
         for (Url myUrl : entities.getUrls()) {
             if((myUrl != null)&&(myUrl.isValid())){
                 Url urlPers = urlService.store(myUrl, task);
                 urls.add(urlPers);
+            } else if((myUrl != null)&&(myUrl.isRawUrlsFromDescription())){
+                String urlStr = myUrl.getUrl();
+                Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr,task);
+                if((urlObj != null)&&(urlObj.isValid())){
+                    urls.add(urlObj);
+                }
             }
         }
-        /*
-        if(url!=null){
-            Url urlPers = createPersistentUrl.getPersistentUrlFor(url, task);
-            if((urlPers != null)&&(urlPers.isValid())){
-                entities.addUrl(urlPers);
-            }
-        }*/
         for (HashTag hashTag : entities.getTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
@@ -120,6 +91,11 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                 tickerSymbols.add(tickerSymbolPers);
             }
         }
+        entities.setUrls(urls);
+        entities.setTags(hashTags);
+        entities.setMentions(mentions);
+        entities.setMedia(media);
+        entities.setTickerSymbols(tickerSymbols);
         return entities;
     }
 

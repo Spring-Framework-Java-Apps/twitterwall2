@@ -225,13 +225,8 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public boolean isValid() {
-        if((this.url == null)||(this.url.isEmpty())){
-            return false;
-        }
-        if(this.url.compareTo(this.expanded)==0){
-            return false;
-        }
-        return true;
+        boolean isInvalid = (this.url == null)||(this.url.isEmpty()||isRawUrlsFromDescription())||(this.url.compareTo(this.expanded)==0);
+        return !isInvalid;
     }
 
     public boolean isRawUrlsFromDescription() {

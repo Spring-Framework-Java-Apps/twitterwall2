@@ -11,14 +11,8 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.TweetService;
-import org.woehlke.twitterwall.oodm.service.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.*;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Created by tw on 09.07.17.
@@ -62,7 +56,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
         tweet.setUser(user);
         /** Entities */
         Entities entities = tweet.getEntities();
-        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task,null);
+        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
         tweet.setEntities(entities);
         /** Tweet itself */
         tweet = tweetService.store(tweet,task);
