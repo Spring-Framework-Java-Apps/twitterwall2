@@ -14,10 +14,13 @@ import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
+import org.woehlke.twitterwall.oodm.repository.application.JdbcRepository;
 import org.woehlke.twitterwall.oodm.repository.application.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.repository.application.TaskRepository;
 import org.woehlke.twitterwall.oodm.repository.entities.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+
+import java.util.Map;
 
 /**
  * Created by tw on 09.07.17.
@@ -48,9 +51,11 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final TaskHistoryRepository taskHistoryRepository;
 
+    private final JdbcRepository jdbcRepository;
+
 
     @Autowired
-    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, JdbcRepository jdbcRepository) {
         this.tweetRepository = tweetRepository;
         this.userRepository = userRepository;
         this.mentionRepository = mentionRepository;
@@ -61,6 +66,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         this.tickerSymbolRepository = tickerSymbolRepository;
         this.taskRepository = taskRepository;
         this.taskHistoryRepository = taskHistoryRepository;
+        this.jdbcRepository = jdbcRepository;
     }
 
     @Override
@@ -78,6 +84,8 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         long countTask = this.taskRepository.count(Task.class);
         long countTaskHistory = this.taskHistoryRepository.count(TaskHistory.class);
 
+        Map<String,Integer> tableCount =  jdbcRepository.getTableCount();
+
         c.setCountHashTags(countHashTags);
         c.setCountMedia(countMedia);
         c.setCountMention(countMention);
@@ -88,6 +96,18 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setCountUser(countUser);
         c.setCountTask(countTask);
         c.setCountTaskHistory(countTaskHistory);
+
+        c.setTweet2hashtag(tableCount.get("tweet_hashtag").longValue());
+        c.setTweet2media(tableCount.get("tweet_media").longValue());
+        c.setTweet2mention(tableCount.get("tweet_mention").longValue());
+        c.setTweet2tickersymbol(tableCount.get("tweet_tickersymbol").longValue());
+        c.setTweet2url(tableCount.get("tweet_url").longValue());
+        c.setUserprofile2hashtag(tableCount.get("userprofile_hashtag").longValue());
+        c.setUserprofile2media(tableCount.get("userprofile_media").longValue());
+        c.setUserprofile2mention(tableCount.get("userprofile_mention").longValue());
+        c.setUserprofile2tickersymbol(tableCount.get("userprofile_tickersymbol").longValue());
+        c.setUserprofile2url(tableCount.get("userprofile_url").longValue());
+
         log.debug("countAll: "+c.toString());
         return c;
     }
