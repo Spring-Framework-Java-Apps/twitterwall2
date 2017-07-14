@@ -43,7 +43,7 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
      *    <pre>
      *    Algorithmus: User anlegen
      *    1. gibt es einen User mit diesem ScreenName?
-     *    2. Falls Nein?-> hole TwitterProfile für ScreenName über die Twitter-API
+     *    2. Falls Nein? -&gt; hole TwitterProfile für ScreenName über die Twitter-API
      *       2.1 Gibt es von der Twitter-API ein TwitterProfile?
      *       2.2 Falls ja: 1. Persistierungs-Prozess dafür durchführen;
      *                     2. die idTwitter des Users im Mention-Objekt speichern.
