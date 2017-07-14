@@ -2,6 +2,9 @@ package org.woehlke.twitterwall.oodm.repository.common.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepository;
 
@@ -39,13 +42,17 @@ public class DomainRepositoryImpl<T extends DomainObject> implements DomainRepos
     }
 
     @Override
-    public List<T> getAll(Class<T> myClass) {
+    public Page<T> getAll(Class<T> myClass, Pageable pageRequest) {
         String name = myClass.getSimpleName() + ".getAll";
         log.debug(name);
         TypedQuery<T> query = entityManager.createNamedQuery(name, myClass);
+        long total = query.getResultList().size();
+        query.setMaxResults(pageRequest.getPageSize());
+        query.setFirstResult(pageRequest.getOffset());
         List<T> result = query.getResultList();
-        log.debug(name+"  "+result.size());
-        return result;
+        Page resultPage = new PageImpl(result,pageRequest,total);
+        log.debug(name+"  "+total);
+        return resultPage;
     }
 
     @Override

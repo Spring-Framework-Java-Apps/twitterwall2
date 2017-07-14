@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.service.entities.UrlCacheService;
 
-import java.util.List;
 
 /**
  * Created by tw on 23.06.17.
@@ -63,8 +64,8 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     }
 
     @Override
-    public List<UrlCache> getAll() {
-        return this.urlCacheRepository.getAll(UrlCache.class);
+    public Page<UrlCache> getAll(Pageable pageRequest) {
+        return this.urlCacheRepository.getAll(UrlCache.class,pageRequest);
     }
 
     @Override

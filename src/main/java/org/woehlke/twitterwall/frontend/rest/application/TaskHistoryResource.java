@@ -1,16 +1,17 @@
 package org.woehlke.twitterwall.frontend.rest.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
 
-import java.util.List;
+import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 12.07.17.
@@ -19,10 +20,11 @@ import java.util.List;
 @RequestMapping("/rest/taskhistory")
 public class TaskHistoryResource {
 
-    @RequestMapping(path="/all",method= RequestMethod.GET)
+    @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    List<TaskHistory> countedEntities(Model model) {
-        List<TaskHistory> allTasks = taskHistoryService.getAll();
+    Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;
     }
 
@@ -32,6 +34,10 @@ public class TaskHistoryResource {
         TaskHistory taskHistory = taskHistoryService.findById(id);
         return taskHistory;
     }
+
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
 
     @Autowired
     public TaskHistoryResource(TaskHistoryService taskHistoryService) {

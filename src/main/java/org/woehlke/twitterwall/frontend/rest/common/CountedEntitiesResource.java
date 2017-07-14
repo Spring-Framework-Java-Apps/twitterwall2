@@ -15,16 +15,17 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 @RequestMapping("/rest/common")
 public class CountedEntitiesResource {
 
+    @RequestMapping(path="/count",method= RequestMethod.GET)
+    public @ResponseBody
+    CountedEntities countAll(){
+        return this.countedEntitiesService.countAll();
+    }
+
+
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
     public CountedEntitiesResource(CountedEntitiesService countedEntitiesService) {
         this.countedEntitiesService = countedEntitiesService;
-    }
-
-    @RequestMapping(path="/count",method= RequestMethod.GET)
-    public @ResponseBody
-    CountedEntities countAll(){
-        return this.countedEntitiesService.countAll();
     }
 }

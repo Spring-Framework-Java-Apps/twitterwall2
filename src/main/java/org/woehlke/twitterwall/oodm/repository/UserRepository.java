@@ -1,29 +1,29 @@
 package org.woehlke.twitterwall.oodm.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithIdTwitter;
 import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithScreenName;
-
-import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
  */
 public interface UserRepository extends DomainRepositoryWithIdTwitter<User>,DomainRepositoryWithScreenName<User> {
 
-    List<User> getTweetingUsers();
+    Page<User> getTweetingUsers(Pageable pageRequest);
 
-    List<User> getNotYetFriendUsers();
+    Page<User> getNotYetFriendUsers(Pageable pageRequest);
 
-    List<User> getNotYetOnList();
+    Page<User> getNotYetOnList(Pageable pageRequest);
 
-    List<User> getOnList();
+    Page<User> getOnList(Pageable pageRequest);
 
-    List<String> getAllDescriptions();
+    Page<String> getAllDescriptions(Pageable pageRequest);
 
-    List<Long> getAllTwitterIds();
+    Page<Long> getAllTwitterIds(Pageable pageRequest);
 
-    List<User> getUsersForHashTag(String hashtagText);
+    Page<User> getUsersForHashTag(String hashtagText, Pageable pageRequest);
 
     long countUsersForHashTag(String hashtagText);
 

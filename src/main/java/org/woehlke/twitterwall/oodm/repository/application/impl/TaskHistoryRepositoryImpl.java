@@ -3,6 +3,9 @@ package org.woehlke.twitterwall.oodm.repository.application.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
@@ -37,15 +40,19 @@ public class TaskHistoryRepositoryImpl extends DomainRepositoryImpl<TaskHistory>
     }
 
     @Override
-    public List<TaskHistory> findByTask(Task oneTask) {
+    public Page<TaskHistory> findByTask(Task oneTask, Pageable pageRequest) {
         String name = "TaskHistory.findByTask";
         log.debug(name);
         try {
             TypedQuery<TaskHistory> query = entityManager.createNamedQuery(name, TaskHistory.class);
             query.setParameter("oneTaskId", oneTask.getId());
+            long total = query.getResultList().size();
+            query.setMaxResults(pageRequest.getPageSize());
+            query.setFirstResult(pageRequest.getOffset());
             List<TaskHistory> result = query.getResultList();
+            Page resultPage = new PageImpl(result,pageRequest,total);
             log.debug(name+" found: " + result.size());
-            return result;
+            return resultPage;
         } catch (EmptyResultDataAccessException e) {
             log.debug(name+" not found: " + oneTask.toString());
             throw e;

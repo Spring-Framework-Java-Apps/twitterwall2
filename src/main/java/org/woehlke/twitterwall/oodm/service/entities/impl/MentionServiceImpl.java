@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.Mention;
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 import org.woehlke.twitterwall.oodm.service.entities.MentionService;
 
-
-import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -49,8 +49,8 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public List<Mention> getAll() {
-        return this.mentionRepository.getAll(Mention.class);
+    public Page<Mention> getAll(Pageable pageRequest) {
+        return this.mentionRepository.getAll(Mention.class,pageRequest);
     }
 
     @Override

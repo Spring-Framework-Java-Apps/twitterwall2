@@ -29,34 +29,6 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedUserList {
 
-    private static final Logger log = LoggerFactory.getLogger(FetchUsersFromDefinedUserListImpl.class);
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private int millisToWaitForFetchTweetsFromTwitterSearch;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    private final StoreUserProfileForUserList storeUserProfileForUserList;
-
-    private final TwitterApiService twitterApiService;
-
-    private final TaskService taskService;
-
-    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
-
-    @Autowired
-    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
-        this.storeUserProfileForUserList = storeUserProfileForUserList;
-        this.twitterApiService = twitterApiService;
-        this.taskService = taskService;
-        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
-    }
 
     @Override
     public void fetchUsersFromDefinedUserList() {
@@ -96,5 +68,35 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(FetchUsersFromDefinedUserListImpl.class);
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    private int millisToWaitForFetchTweetsFromTwitterSearch;
+
+    @Value("${twitterwall.scheduler.fetchUserList.name}")
+    private String fetchUserListName;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
+    private final StoreUserProfileForUserList storeUserProfileForUserList;
+
+    private final TwitterApiService twitterApiService;
+
+    private final TaskService taskService;
+
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
+    @Autowired
+    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+        this.storeUserProfileForUserList = storeUserProfileForUserList;
+        this.twitterApiService = twitterApiService;
+        this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 }

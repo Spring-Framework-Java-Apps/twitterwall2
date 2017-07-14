@@ -33,34 +33,6 @@ import java.util.Set;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterSearch {
 
-    private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private int millisToWaitForFetchTweetsFromTwitterSearch;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    private final TwitterApiService twitterApiService;
-
-    private final StoreOneTweet storeOneTweet;
-
-    private final TaskService taskService;
-
-    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
-
-    @Autowired
-    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
-        this.twitterApiService = twitterApiService;
-        this.storeOneTweet = storeOneTweet;
-        this.taskService = taskService;
-        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
-    }
 
     @Override
     public void fetchTweetsFromTwitterSearch() {
@@ -118,5 +90,35 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
         log.debug(msg+"---------------------------------------");
         log.debug(msg+ "DONE fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
+    private int millisToWaitForFetchTweetsFromTwitterSearch;
+
+    @Value("${twitterwall.scheduler.fetchUserList.name}")
+    private String fetchUserListName;
+
+    @Value("${twitterwall.frontend.imprint.screenName}")
+    private String imprintScreenName;
+
+    private final TwitterApiService twitterApiService;
+
+    private final StoreOneTweet storeOneTweet;
+
+    private final TaskService taskService;
+
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
+    @Autowired
+    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+        this.twitterApiService = twitterApiService;
+        this.storeOneTweet = storeOneTweet;
+        this.taskService = taskService;
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 }

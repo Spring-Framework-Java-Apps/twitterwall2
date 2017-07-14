@@ -1,25 +1,26 @@
 package org.woehlke.twitterwall.oodm.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
-import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
  */
 public interface TweetService extends DomainServiceWithIdTwitter<Tweet>,DomainServiceWithTask<Tweet> {
 
-    List<Tweet> getLatestTweets();
+    Page<Tweet> getLatestTweets(Pageable pageRequest);
 
-    List<Tweet> getTweetsForHashTag(String hashtagText);
+    Page<Tweet> getTweetsForHashTag(String hashtagText,Pageable pageRequest);
 
     long countTweetsForHashTag(String hashtagText);
 
-    List<Tweet> getTweetsForUser(User user);
+    Page<Tweet> getTweetsForUser(User user,Pageable pageRequest);
 
-    List<Long> getAllTwitterIds();
+    Page<Long> getAllTwitterIds(Pageable pageRequest);
 
 }

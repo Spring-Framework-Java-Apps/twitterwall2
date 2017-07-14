@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.repository.entities.TickerSymbolRepository;
 import org.woehlke.twitterwall.oodm.service.entities.TickerSymbolService;
 
-import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -43,8 +44,8 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    public List<TickerSymbol> getAll() {
-        return this.tickerSymbolRepository.getAll(TickerSymbol.class);
+    public Page<TickerSymbol> getAll(Pageable pageRequest) {
+        return this.tickerSymbolRepository.getAll(TickerSymbol.class,pageRequest);
     }
 
     @Override

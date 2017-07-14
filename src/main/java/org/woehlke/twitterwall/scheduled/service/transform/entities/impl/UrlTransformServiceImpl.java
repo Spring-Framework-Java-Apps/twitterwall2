@@ -24,13 +24,6 @@ import java.util.regex.Pattern;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlTransformServiceImpl implements UrlTransformService {
 
-    private static final Logger log = LoggerFactory.getLogger(UrlTransformServiceImpl.class);
-
-    //private final TwitterUrlService twitterUrlService;
-
-    public UrlTransformServiceImpl() {
-
-    }
 
     @Override
     public Url transform(UrlEntity url) {
@@ -109,4 +102,12 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
         return urlsTarget;
     }
+
+
+    private static final Logger log = LoggerFactory.getLogger(UrlTransformServiceImpl.class);
+
+    public UrlTransformServiceImpl() {
+
+    }
+
 }

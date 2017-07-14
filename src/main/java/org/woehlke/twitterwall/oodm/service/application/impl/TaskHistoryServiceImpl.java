@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +57,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
-    public List<TaskHistory> getAll() {
-        return taskHistoryRepository.getAll(TaskHistory.class);
+    public Page<TaskHistory> getAll(Pageable pageRequest) {
+        return taskHistoryRepository.getAll(TaskHistory.class, pageRequest);
     }
 
     @Override
@@ -65,8 +67,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
-    public List<TaskHistory> findByTask(Task oneTask) {
-        return taskHistoryRepository.findByTask(oneTask);
+    public Page<TaskHistory> findByTask(Task oneTask,Pageable pageRequest) {
+        return taskHistoryRepository.findByTask(oneTask,pageRequest);
     }
 
     @Override

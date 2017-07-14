@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +78,8 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public List<Url> getAll() {
-        return this.urlRepository.getAll(Url.class);
+    public Page<Url> getAll(Pageable pageRequest) {
+        return this.urlRepository.getAll(Url.class,pageRequest);
     }
 
     @Override

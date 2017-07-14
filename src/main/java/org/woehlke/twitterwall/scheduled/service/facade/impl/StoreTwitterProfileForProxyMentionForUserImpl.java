@@ -33,40 +33,6 @@ import java.util.Set;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitterProfileForProxyMentionForUser {
 
-    private static final Logger log = LoggerFactory.getLogger(StoreTwitterProfileForProxyMentionForUserImpl.class);
-
-    private final UserService userService;
-
-    private final TwitterApiService twitterApiService;
-
-    private final TaskService taskService;
-
-    private final UserTransformService userTransformService;
-
-    private final UrlService urlService;
-
-    private final HashTagService hashTagService;
-
-    private final MentionService mentionService;
-
-    private final MediaService mediaService;
-
-    private final TickerSymbolService tickerSymbolService;
-
-    private final CreatePersistentUrl createPersistentUrl;
-
-    public StoreTwitterProfileForProxyMentionForUserImpl(UserService userService, TwitterApiService twitterApiService, TaskService taskService, UserTransformService userTransformService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
-        this.userService = userService;
-        this.twitterApiService = twitterApiService;
-        this.taskService = taskService;
-        this.userTransformService = userTransformService;
-        this.urlService = urlService;
-        this.hashTagService = hashTagService;
-        this.mentionService = mentionService;
-        this.mediaService = mediaService;
-        this.tickerSymbolService = tickerSymbolService;
-        this.createPersistentUrl = createPersistentUrl;
-    }
 
     @Override
     public User storeTwitterProfileForProxyMentionForUser(Mention mention, Task task) {
@@ -157,4 +123,39 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         return user;
     }
 
+
+    private static final Logger log = LoggerFactory.getLogger(StoreTwitterProfileForProxyMentionForUserImpl.class);
+
+    private final UserService userService;
+
+    private final TwitterApiService twitterApiService;
+
+    private final TaskService taskService;
+
+    private final UserTransformService userTransformService;
+
+    private final UrlService urlService;
+
+    private final HashTagService hashTagService;
+
+    private final MentionService mentionService;
+
+    private final MediaService mediaService;
+
+    private final TickerSymbolService tickerSymbolService;
+
+    private final CreatePersistentUrl createPersistentUrl;
+
+    public StoreTwitterProfileForProxyMentionForUserImpl(UserService userService, TwitterApiService twitterApiService, TaskService taskService, UserTransformService userTransformService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+        this.userService = userService;
+        this.twitterApiService = twitterApiService;
+        this.taskService = taskService;
+        this.userTransformService = userTransformService;
+        this.urlService = urlService;
+        this.hashTagService = hashTagService;
+        this.mentionService = mentionService;
+        this.mediaService = mediaService;
+        this.tickerSymbolService = tickerSymbolService;
+        this.createPersistentUrl = createPersistentUrl;
+    }
 }

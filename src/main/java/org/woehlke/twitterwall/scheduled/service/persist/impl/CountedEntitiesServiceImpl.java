@@ -29,45 +29,6 @@ import java.util.Map;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
-    private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);
-
-    private final TweetRepository tweetRepository;
-
-    private final UserRepository userRepository;
-
-    private final MentionRepository mentionRepository;
-
-    private final MediaRepository mediaRepository;
-
-    private final HashTagRepository hashTagRepository;
-
-    private final UrlRepository urlRepository;
-
-    private final UrlCacheRepository urlCacheRepository;
-
-    private final TickerSymbolRepository tickerSymbolRepository;
-
-    private final TaskRepository taskRepository;
-
-    private final TaskHistoryRepository taskHistoryRepository;
-
-    private final JdbcRepository jdbcRepository;
-
-
-    @Autowired
-    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, JdbcRepository jdbcRepository) {
-        this.tweetRepository = tweetRepository;
-        this.userRepository = userRepository;
-        this.mentionRepository = mentionRepository;
-        this.mediaRepository = mediaRepository;
-        this.hashTagRepository = hashTagRepository;
-        this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
-        this.tickerSymbolRepository = tickerSymbolRepository;
-        this.taskRepository = taskRepository;
-        this.taskHistoryRepository = taskHistoryRepository;
-        this.jdbcRepository = jdbcRepository;
-    }
 
     @Override
     public CountedEntities countAll() {
@@ -120,5 +81,46 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
     @Override
     public long countUsers() {
         return this.userRepository.count(User.class);
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);
+
+    private final TweetRepository tweetRepository;
+
+    private final UserRepository userRepository;
+
+    private final MentionRepository mentionRepository;
+
+    private final MediaRepository mediaRepository;
+
+    private final HashTagRepository hashTagRepository;
+
+    private final UrlRepository urlRepository;
+
+    private final UrlCacheRepository urlCacheRepository;
+
+    private final TickerSymbolRepository tickerSymbolRepository;
+
+    private final TaskRepository taskRepository;
+
+    private final TaskHistoryRepository taskHistoryRepository;
+
+    private final JdbcRepository jdbcRepository;
+
+
+    @Autowired
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, JdbcRepository jdbcRepository) {
+        this.tweetRepository = tweetRepository;
+        this.userRepository = userRepository;
+        this.mentionRepository = mentionRepository;
+        this.mediaRepository = mediaRepository;
+        this.hashTagRepository = hashTagRepository;
+        this.urlRepository = urlRepository;
+        this.urlCacheRepository = urlCacheRepository;
+        this.tickerSymbolRepository = tickerSymbolRepository;
+        this.taskRepository = taskRepository;
+        this.taskHistoryRepository = taskHistoryRepository;
+        this.jdbcRepository = jdbcRepository;
     }
 }

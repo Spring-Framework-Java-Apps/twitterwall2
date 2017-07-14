@@ -24,32 +24,6 @@ import java.util.Set;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(StoreEntitiesProcessImpl.class);
-
-    private final UrlService urlService;
-
-    private final HashTagService hashTagService;
-
-    private final MentionService mentionService;
-
-    private final MediaService mediaService;
-
-    private final TickerSymbolService tickerSymbolService;
-
-    private final CreatePersistentUrl createPersistentUrl;
-
-    private final CreatePersistentMention createPersistentMention;
-
-    @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
-        this.urlService = urlService;
-        this.hashTagService = hashTagService;
-        this.mentionService = mentionService;
-        this.mediaService = mediaService;
-        this.tickerSymbolService = tickerSymbolService;
-        this.createPersistentUrl = createPersistentUrl;
-        this.createPersistentMention = createPersistentMention;
-    }
 
     @Override
     public Entities storeEntitiesProcess(Entities entities, Task task) {
@@ -108,5 +82,32 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         return entities;
     }
 
+
+    private static final Logger log = LoggerFactory.getLogger(StoreEntitiesProcessImpl.class);
+
+    private final UrlService urlService;
+
+    private final HashTagService hashTagService;
+
+    private final MentionService mentionService;
+
+    private final MediaService mediaService;
+
+    private final TickerSymbolService tickerSymbolService;
+
+    private final CreatePersistentUrl createPersistentUrl;
+
+    private final CreatePersistentMention createPersistentMention;
+
+    @Autowired
+    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
+        this.urlService = urlService;
+        this.hashTagService = hashTagService;
+        this.mentionService = mentionService;
+        this.mediaService = mediaService;
+        this.tickerSymbolService = tickerSymbolService;
+        this.createPersistentUrl = createPersistentUrl;
+        this.createPersistentMention = createPersistentMention;
+    }
 
 }
