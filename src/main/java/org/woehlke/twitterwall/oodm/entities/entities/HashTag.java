@@ -4,6 +4,7 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.listener.entities.HashTagListener;
 
 import javax.persistence.*;
@@ -32,7 +33,7 @@ import java.util.regex.Pattern;
         )
 })
 @EntityListeners(HashTagListener.class)
-public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag> {
+public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
@@ -116,6 +117,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -124,6 +126,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

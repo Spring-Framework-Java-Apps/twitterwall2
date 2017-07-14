@@ -31,12 +31,14 @@ public class HashTagServiceImpl implements HashTagService {
     }
 
     @Override
-    public HashTag create(HashTag tag) {
-        return this.hashTagRepository.persist(tag);
+    public HashTag create(HashTag hashTag, Task task) {
+        hashTag.setCreatedBy(task);
+        return this.hashTagRepository.persist(hashTag);
     }
 
     @Override
-    public HashTag update(HashTag tag) {
+    public HashTag update(HashTag tag, Task task) {
+        tag.setUpdatedBy(task);
         return this.hashTagRepository.update(tag);
     }
 

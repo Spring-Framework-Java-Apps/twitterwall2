@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MediaListener;
@@ -42,7 +43,7 @@ import javax.persistence.*;
         )
 })
 @EntityListeners(MediaListener.class)
-public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
+public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
     private static final long serialVersionUID = 1L;
 
@@ -181,6 +182,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -189,6 +191,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

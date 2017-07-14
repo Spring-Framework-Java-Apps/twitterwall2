@@ -10,4 +10,7 @@ import org.woehlke.twitterwall.oodm.repository.common.DomainRepositoryWithScreen
 public interface MentionRepository extends DomainRepositoryWithIdTwitter<Mention>,DomainRepositoryWithScreenName<Mention> {
 
     Mention findByIdTwitterAndScreenName(Long idTwitter, String screenName);
+
+    long findLowestIdTwitter(Mention mention);
+
 }

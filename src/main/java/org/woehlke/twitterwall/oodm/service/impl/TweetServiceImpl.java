@@ -33,12 +33,14 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public Tweet create(Tweet myTweet) {
+    public Tweet create(Tweet myTweet, Task task) {
+        myTweet.setCreatedBy(task);
         return tweetRepository.persist(myTweet);
     }
 
     @Override
-    public Tweet update(Tweet myTweet) {
+    public Tweet update(Tweet myTweet, Task task) {
+        myTweet.setUpdatedBy(task);
         return tweetRepository.update(myTweet);
     }
 

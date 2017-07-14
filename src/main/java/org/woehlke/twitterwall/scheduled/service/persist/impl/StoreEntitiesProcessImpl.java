@@ -10,6 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.service.entities.*;
+import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 
@@ -37,14 +38,17 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     private final CreatePersistentUrl createPersistentUrl;
 
+    private final CreatePersistentMention createPersistentMention;
+
     @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
         this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
         this.tickerSymbolService = tickerSymbolService;
         this.createPersistentUrl = createPersistentUrl;
+        this.createPersistentMention = createPersistentMention;
     }
 
     @Override
@@ -77,6 +81,11 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             if(mention.isValid()){
                 Mention mentionPers =mentionService.store(mention, task);
                 mentions.add(mentionPers);
+            } else if(mention.isRawMentionFromUserDescription()){
+                Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
+                if((mention != null) && mentionPers.isValid()){
+                    mentions.add(mentionPers);
+                }
             }
         }
         for(Media medium:entities.getMedia()){

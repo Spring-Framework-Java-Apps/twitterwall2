@@ -6,10 +6,10 @@ import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.listener.entities.MentionListener;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +32,10 @@ import java.util.regex.Pattern;
         query = "select t from Mention as t where t.screenName=:screenName"
     ),
     @NamedQuery(
+        name = "Mention.findLowestIdTwitter",
+        query = "select t.idTwitter from Mention as t order by t.idTwitter ASC"
+    ),
+    @NamedQuery(
         name = "Mention.findByIdTwitterAndScreenName",
         query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
     ),
@@ -45,9 +49,11 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(MentionListener.class)
-public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention> {
+public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
     private static final long serialVersionUID = 1L;
+
+    private static final long ID_TWITTER_UNDEFINED = -1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,6 +71,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "id_twitter")
     private long idTwitter;
 
+    public boolean isProxy(){
+       return idTwitter < 0;
+    }
+
     public static boolean isValidScreenName(String screenName) {
         Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
         Matcher m = p.matcher(screenName);
@@ -76,6 +86,24 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
 
     @Column(name = "name",length=4096)
     private String name;
+
+    boolean hasPersistentUser(){
+        boolean result = false;
+        User myUser = this.getUser();
+        if(myUser != null){
+            result =
+                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
+                (idTwitterOfUser != null ) &&
+                (myUser.getIdTwitter() == idTwitterOfUser);
+        }
+        return result;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    private User user;
+
+    @Column(name = "id_twitte_of_user",nullable = true)
+    private Long idTwitterOfUser;
 
 /*
     @ElementCollection(fetch = FetchType.EAGER)
@@ -158,6 +186,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -166,7 +195,24 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Long getIdTwitterOfUser() {
+        return idTwitterOfUser;
+    }
+
+    public void setIdTwitterOfUser(Long idTwitterOfUser) {
+        this.idTwitterOfUser = idTwitterOfUser;
     }
 
     @Override
@@ -241,7 +287,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
 
     public boolean isValid() {
-        if((screenName == null) ||(screenName.isEmpty())){
+        if((screenName == null) ||(screenName.isEmpty())|| isRawMentionFromUserDescription()){
             return false;
         }
         if(idTwitter <= 1L){
@@ -250,12 +296,16 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return true;
     }
 
+    public boolean isRawMentionFromUserDescription() {
+        return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
+    }
+
     public static Mention getMention(String mentionString) {
         try {
             Thread.sleep(100L);
         } catch (InterruptedException e) {
         }
-        long idTwitter = new Date().getTime();
+        long idTwitter = ID_TWITTER_UNDEFINED;
         String screenName = mentionString;
         String name = mentionString;
         int[] myindices = {};

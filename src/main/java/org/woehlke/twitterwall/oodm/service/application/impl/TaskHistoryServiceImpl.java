@@ -31,7 +31,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
-    public TaskHistory store(TaskHistory domainObject, Task task) {
+    public TaskHistory store(TaskHistory domainObject) {
         try {
             TaskHistory taskHistoryPersistent = this.taskHistoryRepository.findById(domainObject.getId());
             if(domainObject.compareTo(taskHistoryPersistent)==0) {

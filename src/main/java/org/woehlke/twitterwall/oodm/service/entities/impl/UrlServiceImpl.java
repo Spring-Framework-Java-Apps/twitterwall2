@@ -64,12 +64,14 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Url create(Url url) {
+    public Url create(Url url, Task task) {
+        url.setCreatedBy(task);
         return this.urlRepository.persist(url);
     }
 
     @Override
-    public Url update(Url url) {
+    public Url update(Url url, Task task) {
+        url.setUpdatedBy(task);
         return this.urlRepository.update(url);
     }
 

@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
@@ -30,7 +31,7 @@ import java.util.List;
         ),
 })
 @EntityListeners(UrlListener.class)
-public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {
+public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
     private static final long serialVersionUID = 1L;
 
@@ -143,6 +144,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -151,6 +153,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

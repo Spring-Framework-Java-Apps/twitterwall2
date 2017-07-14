@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.TickerSymbolListener;
@@ -36,7 +37,7 @@ import javax.persistence.*;
     )
 })
 @EntityListeners(TickerSymbolListener.class)
-public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol> {
+public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,6 +124,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -131,6 +133,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

@@ -51,12 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user, Task task) {
+        user.setCreatedBy(task);
         return userRepository.persist(user);
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user, Task task) {
+        user.setUpdatedBy(task);
         return userRepository.update(user);
     }
 
