@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
@@ -123,8 +122,7 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         }
         String description = userSource.getDescription();
         Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
-        //TODO: teste dies:
-        //urlsTarget.addAll(rawUrlsFromDescription);
+        urlsTarget.addAll(rawUrlsFromDescription);
         return urlsTarget;
     }
 

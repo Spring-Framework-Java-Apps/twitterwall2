@@ -12,19 +12,30 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Tweets HashTags</h3>
+                <div>
                 <span th:each="hashTag : ${hashTagsTweets}">
                     <a href="" th:href="@{|/hashtag/tweet/${hashTag.text}|}">
-                    <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
-                    </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="tw-vector">
+                            <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
                 </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr/>
             </div>
             <div class="col-md-12">
                 <h3>User HashTags</h3>
+                <div>
                 <span th:each="hashTag : ${hashTagsUsers}">
                     <a href="" th:href="@{|/hashtag/user/${hashTag.text}|}">
-                    <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
-                    </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="tw-vector">
+                            <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
                 </span>
+                </div>
             </div>
             <div class="col-md-12">
                 <h3>&nbsp;</h3>

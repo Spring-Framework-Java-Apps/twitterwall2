@@ -82,6 +82,10 @@
         margin-top: -50px;
     }
 
+    .tw-vector {
+        white-space: nowrap;
+        display: inline-block;
+    }
 }
 
 
