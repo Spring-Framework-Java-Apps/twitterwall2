@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlCacheListener;
@@ -31,7 +32,7 @@ import javax.persistence.*;
     )
 })
 @EntityListeners(UrlCacheListener.class)
-public class UrlCache implements DomainObjectWithUrl<UrlCache> {
+public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,6 +54,17 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
 
     @Column(nullable = false,length=4096)
     private String url;
+
+    public UrlCache(TaskInfo taskInfo, Task createdBy, Task updatedBy, String expanded, String url) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.expanded = expanded;
+        this.url = url;
+    }
+
+    public UrlCache() {
+    }
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -92,6 +104,7 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     }
 
     public Task getCreatedBy() {
+        taskInfo.setTaskInfoFromTask(createdBy);
         return createdBy;
     }
 
@@ -104,6 +117,7 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache> {
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

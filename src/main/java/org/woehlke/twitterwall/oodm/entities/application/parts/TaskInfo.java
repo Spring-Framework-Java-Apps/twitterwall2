@@ -24,6 +24,17 @@ public class TaskInfo implements Serializable {
     public TaskInfo() {
     }
 
+    public TaskInfo(Boolean updatedByFetchTweetsFromTwitterSearch, Boolean updatedByUpdateTweets, Boolean updatedByUpdateUserProfiles, Boolean updatedByUpdateUserProfilesFromMentions, Boolean updatedByFetchUsersFromDefinedUserList, Boolean controllerAddUserForScreenName, Boolean controllerGetTestdataForTweets, Boolean controllerGetTestdataForUsers) {
+        this.updatedByFetchTweetsFromTwitterSearch = updatedByFetchTweetsFromTwitterSearch;
+        this.updatedByUpdateTweets = updatedByUpdateTweets;
+        this.updatedByUpdateUserProfiles = updatedByUpdateUserProfiles;
+        this.updatedByUpdateUserProfilesFromMentions = updatedByUpdateUserProfilesFromMentions;
+        this.updatedByFetchUsersFromDefinedUserList = updatedByFetchUsersFromDefinedUserList;
+        this.controllerAddUserForScreenName = controllerAddUserForScreenName;
+        this.controllerGetTestdataForTweets = controllerGetTestdataForTweets;
+        this.controllerGetTestdataForUsers = controllerGetTestdataForUsers;
+    }
+
     public Boolean isUpdatedByFetchTweetsFromTwitterSearch() {
         return updatedByFetchTweetsFromTwitterSearch;
     }

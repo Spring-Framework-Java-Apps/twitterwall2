@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task store(Task domainObject, Task task) {
+    public Task store(Task domainObject) {
         try {
             Task taskPersistent = taskRepository.findById(domainObject.getId());
             if(domainObject.compareTo(taskPersistent)==0) {

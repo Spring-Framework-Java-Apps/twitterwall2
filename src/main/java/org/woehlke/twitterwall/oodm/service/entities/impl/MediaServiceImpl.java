@@ -31,7 +31,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media create(Media media) {
+    public Media create(Media media,Task task) {
+        media.setUpdatedBy(task);
         return this.mediaRepository.persist(media);
     }
 
@@ -41,7 +42,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media update(Media media) {
+    public Media update(Media media,Task task) {
+        media.setUpdatedBy(task);
         return this.mediaRepository.update(media);
     }
 
@@ -74,4 +76,8 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
+    @Override
+    public Media findByUrl(String url) {
+        return this.mediaRepository.findByUrl(url);
+    }
 }

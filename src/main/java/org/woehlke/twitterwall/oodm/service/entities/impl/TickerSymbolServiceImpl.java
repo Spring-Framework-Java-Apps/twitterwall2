@@ -31,17 +31,14 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     }
 
     @Override
-    public TickerSymbol store(TickerSymbol tickerSymbol, Task task) {
-        return this.tickerSymbolRepository.persist(tickerSymbol);
-    }
-
-    @Override
-    public TickerSymbol create(TickerSymbol domainObject) {
+    public TickerSymbol create(TickerSymbol domainObject, Task task) {
+        domainObject.setCreatedBy(task);
         return this.tickerSymbolRepository.persist(domainObject);
     }
 
     @Override
-    public TickerSymbol update(TickerSymbol tickerSymbol) {
+    public TickerSymbol update(TickerSymbol tickerSymbol, Task task) {
+        tickerSymbol.setUpdatedBy(task);
         return this.tickerSymbolRepository.update(tickerSymbol);
     }
 
@@ -55,15 +52,8 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
         return this.tickerSymbolRepository.count(TickerSymbol.class);
     }
 
-    /*
     @Override
-    public TickerSymbol findByTickerSymbolAndUrl(String tickerSymbol, String url) {
-        return this.tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol, url);
-    }
-    */
-
-    @Override
-    public TickerSymbol storeTickerSymbol(TickerSymbol tickerSymbol, Task task) {
+    public TickerSymbol store(TickerSymbol tickerSymbol, Task task) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
         try{
             log.debug(msg+"try to find: "+tickerSymbol.toString());
@@ -79,5 +69,10 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
             return this.tickerSymbolRepository.persist(tickerSymbol);
         }
+    }
+
+    @Override
+    public TickerSymbol findByUrl(String url) {
+        return this.tickerSymbolRepository.findByUrl(url);
     }
 }

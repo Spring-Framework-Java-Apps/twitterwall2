@@ -130,6 +130,18 @@ public class Task implements DomainObject<Task> {
         taskStatus = TaskStatus.READY;
     }
 
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished, List<TaskHistory> history, CountedEntities countedEntitiesAtStart, CountedEntities countedEntitiesAtFinish) {
+        this.description = description;
+        this.taskType = taskType;
+        this.taskStatus = taskStatus;
+        this.timeStarted = timeStarted;
+        this.timeLastUpdate = timeLastUpdate;
+        this.timeFinished = timeFinished;
+        this.history = history;
+        this.countedEntitiesAtStart = countedEntitiesAtStart;
+        this.countedEntitiesAtFinish = countedEntitiesAtFinish;
+    }
+
     @Override
     public Long getId() {
         return id;

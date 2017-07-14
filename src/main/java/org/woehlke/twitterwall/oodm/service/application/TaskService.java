@@ -25,4 +25,10 @@ public interface TaskService extends DomainService<Task> {
 
     Task findById(long id);
 
+    Task store(Task domainObject);
+
+    Task create(Task domainObject);
+
+    Task update(Task domainObject);
+
 }

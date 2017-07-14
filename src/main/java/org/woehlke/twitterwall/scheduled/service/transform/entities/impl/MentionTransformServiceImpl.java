@@ -61,10 +61,8 @@ public class MentionTransformServiceImpl implements MentionTransformService {
 
     @Override
     public Set<Mention> findByUser(TwitterProfile userSource) {
-        Set<Mention> mentionsTarget = new LinkedHashSet<>();
-        //TODO: bla
         String description = userSource.getDescription();
-        //Set<Mention> mentionsTarget = findByUserDescription(description);
+        Set<Mention> mentionsTarget = findByUserDescription(description);
         return mentionsTarget;
     }
 }

@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.repository.common.impl.DomainRepositoryWithI
 import org.woehlke.twitterwall.oodm.repository.entities.MentionRepository;
 
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -48,6 +49,28 @@ public class MentionRepositoryImpl extends DomainRepositoryWithIdTwitterImpl<Men
         } catch (EmptyResultDataAccessException e) {
             log.debug(qname+" not found: " + screenName);
             throw e;
+        }
+    }
+
+    @Override
+    public long findLowestIdTwitter(Mention mention) {
+        String qname="Mention.findLowestIdTwitter";
+        log.debug(qname);
+        try {
+            TypedQuery<Long> query = entityManager.createNamedQuery(qname, Long.class);
+            query.setMaxResults(1);
+            List<Long>result = query.getResultList();
+            if(result.size()==0){
+                log.debug(qname+" not found: return 0");
+                return 0;
+            } else {
+                long lowestIdTwitter = result.iterator().next();
+                log.debug(qname+" found: " + lowestIdTwitter + " for "+mention.toString());
+                return lowestIdTwitter;
+            }
+        } catch (EmptyResultDataAccessException e) {
+            log.debug(qname+" not found: return 0");
+            return 0;
         }
     }
 }

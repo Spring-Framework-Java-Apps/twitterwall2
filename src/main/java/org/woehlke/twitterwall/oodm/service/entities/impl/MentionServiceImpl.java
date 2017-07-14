@@ -32,7 +32,8 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Mention create(Mention mention) {
+    public Mention create(Mention mention, Task task) {
+        mention.setCreatedBy(task);
         return this.mentionRepository.persist(mention);
     }
 
@@ -42,7 +43,8 @@ public class MentionServiceImpl implements MentionService {
     }
 
     @Override
-    public Mention update(Mention mention) {
+    public Mention update(Mention mention, Task task) {
+        mention.setUpdatedBy(task);
         return this.mentionRepository.update(mention);
     }
 
@@ -84,5 +86,20 @@ public class MentionServiceImpl implements MentionService {
             log.debug("try to persist Mention: "+mention.toString());
             return this.mentionRepository.persist(mention);
         }
+    }
+
+    @Override
+    public Mention findByScreenName(String screenName) {
+        return this.mentionRepository.findByScreenName(screenName);
+    }
+
+    @Override
+    public Mention createProxyMention(Mention mention, Task task) {
+        long lowestIdTwitter = this.mentionRepository.findLowestIdTwitter(mention);
+        lowestIdTwitter--;
+        mention.setIdTwitter(lowestIdTwitter);
+        mention.setCreatedBy(task);
+        mention = this.mentionRepository.persist(mention);
+        return mention;
     }
 }

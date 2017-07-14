@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities.entities;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.MediaListener;
@@ -42,7 +43,7 @@ import javax.persistence.*;
         )
 })
 @EntityListeners(MediaListener.class)
-public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media> {
+public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
     private static final long serialVersionUID = 1L;
 
@@ -103,7 +104,20 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.mediaType = mediaType;
     }
 
-    private Media() {
+    public Media(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.idTwitter = idTwitter;
+        this.mediaHttp = mediaHttp;
+        this.mediaHttps = mediaHttps;
+        this.url = url;
+        this.display = display;
+        this.expanded = expanded;
+        this.mediaType = mediaType;
+    }
+
+    public Media() {
         super();
     }
 
@@ -181,6 +195,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
@@ -189,6 +204,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     public void setUpdatedBy(Task updatedBy) {
+        taskInfo.setTaskInfoFromTask(updatedBy);
         this.updatedBy = updatedBy;
     }
 

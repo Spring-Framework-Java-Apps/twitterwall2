@@ -1,16 +1,12 @@
 package org.woehlke.twitterwall.oodm.service.entities;
 
-
-import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
-import org.woehlke.twitterwall.oodm.service.common.DomainService;
+import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
+import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithUrl;
 
 /**
  * Created by tw on 23.06.17.
  */
-public interface UrlCacheService extends DomainService<UrlCache> {
+public interface UrlCacheService extends DomainServiceWithUrl<UrlCache>,DomainServiceWithTask<UrlCache> {
 
-    UrlCache store(UrlCache urlCache, Task task);
-
-    UrlCache findByUrl(String url);
 }

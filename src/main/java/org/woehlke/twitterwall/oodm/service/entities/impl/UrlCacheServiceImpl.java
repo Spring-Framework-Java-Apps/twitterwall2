@@ -51,12 +51,14 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     }
 
     @Override
-    public UrlCache create(UrlCache domainObject) {
+    public UrlCache create(UrlCache domainObject, Task task) {
+        domainObject.setCreatedBy(task);
         return this.urlCacheRepository.persist(domainObject);
     }
 
     @Override
-    public UrlCache update(UrlCache domainObject) {
+    public UrlCache update(UrlCache domainObject, Task task) {
+        domainObject.setUpdatedBy(task);
         return domainObject;
     }
 
