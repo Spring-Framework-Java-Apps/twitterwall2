@@ -58,7 +58,7 @@ public class UrlServiceImpl implements UrlService {
         } catch (EmptyResultDataAccessException e) {
             domainObject.setCreatedBy(task);
             result = this.urlRepository.persist(domainObject);
-            log.debug(name+" psersisted "+result.toString());
+            log.debug(name+" persisted "+result.toString());
             return result;
         }
     }

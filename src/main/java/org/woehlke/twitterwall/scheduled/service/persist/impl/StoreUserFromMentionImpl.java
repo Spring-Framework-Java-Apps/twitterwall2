@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserFromMentionImpl implements StoreUserFromMention {
 
-    private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(StoreUserFromMentionImpl.class);
 
     private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 

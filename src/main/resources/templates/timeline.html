@@ -15,12 +15,12 @@
                     <span>
                     <p><img class="" src="" th:attr="src=${tweet.user.profileBannerUrl},class=${tweet.user.cssBackgroundImage}" /></p>
                     <p>
-                    <a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><img class="" src="" alt="Alt-Text"
+                    <a href="" th:href="@{|/user/${tweet.user.screenName}|}"><img class="" src="" alt="Alt-Text"
                             th:attr="src=${tweet.user.profileImageUrl},alt=${tweet.user.description},title=${tweet.user.description},class=${tweet.user.cssProfileBannerUrl}"/></a></p>
                     </span>
                     <div class="caption">
-                        <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
-                        <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}">@<span th:text="${tweet.user.screenName}">screenName</span></a></h3>
+                        <h2><a href="" th:href="@{|/user/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
+                        <h3><a href="" th:href="@{|/user/${tweet.user.screenName}|}">@<span th:text="${tweet.user.screenName}">screenName</span></a></h3>
                         <p><hr/></p>
                         <p th:if="${tweet.retweetedStatus} == null"><span th:utext="${tweet.formattedText}">Text</span></p>
                         <p th:if="${tweet.retweetedStatus} == null"><hr/></p>
@@ -33,14 +33,14 @@
                             <div class="thumbnail">
                                 <span>
                             <p><img class="" src="" th:attr="src=${tweet.retweetedStatus.user.profileBannerUrl},class=${tweet.user.cssBackgroundImage}" /></p>
-                                <p> <a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><img
+                                <p> <a href="" th:href="@{|/user/${tweet.retweetedStatus.user.screenName}|}"><img
                                         src="" alt="Alt-Text"  class=""
                                         th:attr="src=${tweet.retweetedStatus.user.bigProfileImageUrl},alt=${tweet.retweetedStatus.user.description},title=${tweet.retweetedStatus.user.description},class=${tweet.user.cssProfileBannerUrl}"/></a>
                                 </p>
                                 </span>
                                 <div class="caption">
-                                    <h2><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
-                                    <h3><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
+                                    <h2><a href="" th:href="@{|/user/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
+                                    <h3><a href="" th:href="@{|/user/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
                                     <p><hr/></p>
                                     <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
                                     <p><hr/></p>

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller;
+package org.woehlke.twitterwall.frontend.controller.entities;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,8 +35,9 @@ public class HashTagControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private  HashTagController controller;
+    private HashTagController controller;
 
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -53,18 +54,20 @@ public class HashTagControllerTest {
         }
         //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
         log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        Assert.assertTrue(true);
         log.info("------------------------------------");
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
-    public void hashtagsTest() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/hashtags"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("tags"))
-                .andExpect(model().attributeExists("hashTagsTweets"))
-                .andExpect(model().attributeExists("hashTagsUsers"))
-                .andExpect(model().attributeExists("page")).andReturn();
+    public void hashTagFromTweetsTest() throws Exception {
+        String hashtagText = "java";
+        MvcResult result = this.mockMvc.perform(get("/hashtag/tweets/"+hashtagText))
+            .andExpect(status().isOk())
+            .andExpect(view().name("timeline"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
@@ -73,34 +76,19 @@ public class HashTagControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
 
+    @Commit
     @Test
-    public void hashTagTest() throws Exception {
+    public void hashTagForUsersTest() throws Exception {
         String hashtagText = "java";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/"+hashtagText))
-                .andExpect(status().isOk())
-                .andExpect(view().name("timeline"))
-                .andExpect(model().attributeExists("latestTweets"))
-                .andExpect(model().attributeExists("page")).andReturn();
-
-        String content = result.getResponse().getContentAsString();
-
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
-    }
-
-    @Test
-    public void hashTagForUsers() throws Exception {
-        String hashtagText = "java";
-        MvcResult result = this.mockMvc.perform(get("/user/hashtag/"+hashtagText))
+        MvcResult result = this.mockMvc.perform(get("/hashtag/user/"+hashtagText))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user"))
                 .andExpect(model().attributeExists("users"))
-                .andExpect(model().attributeExists("page")).andReturn();
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
@@ -109,5 +97,28 @@ public class HashTagControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
+
+    @Commit
+    @Test
+    public void hashTagsOverview()  throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/hashtag/overview"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("tags"))
+            .andExpect(model().attributeExists("hashTagsTweets"))
+            .andExpect(model().attributeExists("hashTagsUsers"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
 }

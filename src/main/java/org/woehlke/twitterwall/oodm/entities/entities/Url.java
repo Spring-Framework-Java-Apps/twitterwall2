@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.listener.entities.UrlListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -20,13 +21,13 @@ import javax.persistence.*;
 })
 @NamedQueries({
         @NamedQuery(
-                name="Url.findByUrl",
-                query="select t from Url as t where t.url=:url"
+            name="Url.findByUrl",
+            query="select t from Url as t where t.url=:url"
         ) ,
-    @NamedQuery(
-        name = "Url.count",
-        query = "select count(t) from Url as t"
-    ),
+        @NamedQuery(
+            name = "Url.count",
+            query = "select count(t) from Url as t"
+        ),
 })
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url> {
@@ -77,6 +78,13 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     public Url(String display, String expanded, String url, int[] indices) {
+        //setIndices(indices);
+        this.display = display;
+        this.expanded = expanded;
+        this.url = url;
+    }
+
+    public Url(String display, String expanded, String url, List<Integer> indices) {
         //setIndices(indices);
         this.display = display;
         this.expanded = expanded;
@@ -150,17 +158,16 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Url)) return false;
-        if (!super.equals(o)) return false;
 
         Url url1 = (Url) o;
 
-        return url.equals(url1.url);
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + url.hashCode();
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 
@@ -217,13 +224,12 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public boolean isValid() {
-        if((this.url == null)||(this.url.isEmpty())){
-            return false;
-        }
-        if(this.url.compareTo(this.expanded)==0){
-            return false;
-        }
-        return true;
+        boolean isInvalid = (this.url == null)||(this.url.isEmpty()||isRawUrlsFromDescription())||(this.url.compareTo(this.expanded)==0);
+        return !isInvalid;
+    }
+
+    public boolean isRawUrlsFromDescription() {
+        return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
     }
 
     public static Url getUrlFactory(String url){

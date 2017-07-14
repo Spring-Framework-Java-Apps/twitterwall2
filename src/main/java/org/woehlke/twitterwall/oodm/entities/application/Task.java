@@ -81,7 +81,17 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "countUrl", column = @Column(name = "start_count_url")),
         @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache")),
         @AttributeOverride(name = "countTask", column = @Column(name = "start_count_task")),
-        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history"))
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history")),
+        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "start_count_tweet2hashtag")),
+        @AttributeOverride(name = "tweet2media", column = @Column(name = "start_count_tweet2media")),
+        @AttributeOverride(name = "tweet2mention", column = @Column(name = "start_count_tweet2mention")),
+        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "start_count_tweet2tickersymbol")),
+        @AttributeOverride(name = "tweet2url", column = @Column(name = "start_count_tweet2url")),
+        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "start_count_userprofile2hashtag")),
+        @AttributeOverride(name = "userprofile2media", column = @Column(name = "start_count_userprofile2media")),
+        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "start_count_userprofile2mention")),
+        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "start_count_userprofile2tickersymbol")),
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "start_count_userprofile2url"))
     })
     private CountedEntities countedEntitiesAtStart;
 
@@ -96,7 +106,17 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "countUrl", column = @Column(name = "done_count_url")),
         @AttributeOverride(name = "countUrlCache", column = @Column(name = "done_count_urlcache")),
         @AttributeOverride(name = "countTask", column = @Column(name = "done_count_task")),
-        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "done_count_task_history"))
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "done_count_task_history")),
+        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "done_count_tweet2hashtag")),
+        @AttributeOverride(name = "tweet2media", column = @Column(name = "done_count_tweet2media")),
+        @AttributeOverride(name = "tweet2mention", column = @Column(name = "done_count_tweet2mention")),
+        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "done_count_tweet2tickersymbol")),
+        @AttributeOverride(name = "tweet2url", column = @Column(name = "done_count_tweet2url")),
+        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "done_count_userprofile2hashtag")),
+        @AttributeOverride(name = "userprofile2media", column = @Column(name = "done_count_userprofile2media")),
+        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "done_count_userprofile2mention")),
+        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "done_count_userprofile2tickersymbol")),
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "done_count_userprofile2url"))
     })
     private CountedEntities countedEntitiesAtFinish;
 
@@ -242,6 +262,7 @@ public class Task implements DomainObject<Task> {
         return "Task{" +
             "id=" + id +
             ", taskType=" + taskType +
+            ", taskStatus=" +taskStatus +
             ", timeStarted=" + timeStarted +
             ", timeLastUpdate=" + timeLastUpdate +
             ", timeFinished=" + timeFinished +

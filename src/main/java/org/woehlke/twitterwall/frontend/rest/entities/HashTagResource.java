@@ -33,4 +33,9 @@ public class HashTagResource {
   public @ResponseBody List<HashTag> getAll() {
     return this.hashTagService.getAll();
   }
+
+    @RequestMapping(path="/overview",method= RequestMethod.GET)
+    public @ResponseBody List<HashTag> getOverview() {
+        return this.hashTagService.getAll();
+    }
 }

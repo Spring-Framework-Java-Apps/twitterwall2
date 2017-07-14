@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
@@ -37,7 +36,6 @@ public class StoreUserProfileImpl implements StoreUserProfile {
     public User storeUserProfile(TwitterProfile userProfile, Task task) {
         String msg = "storeUserProfile: ";
         User user = userTransformService.transform(userProfile);
-        user.setOnDefinedUserList(task.getTaskType().equals(TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST));
         user = storeUserProcess.storeUserProcess(user, task);
         return user;
     }

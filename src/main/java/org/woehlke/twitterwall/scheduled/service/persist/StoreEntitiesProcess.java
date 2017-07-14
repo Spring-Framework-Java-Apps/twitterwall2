@@ -8,7 +8,6 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
  */
 public interface StoreEntitiesProcess {
 
-    Entities storeEntitiesProcess(Entities entities,Task task, String url);
+    Entities storeEntitiesProcess(Entities entities,Task task);
 
-    Entities transform(org.springframework.social.twitter.api.Entities twitterEntities);
 }
