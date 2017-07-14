@@ -132,6 +132,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task warn(Task task, String msg) {
+        task.warn(msg);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task error(Task task, String msg) {
+        task.error(msg);
+        task = taskRepository.update(task);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
     public Task findById(long id) {
         return taskRepository.findById(id);
     }

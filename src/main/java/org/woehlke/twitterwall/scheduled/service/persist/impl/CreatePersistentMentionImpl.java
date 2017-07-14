@@ -64,6 +64,11 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
         String msg = "getPersistentMentionAndUserFor:";
         String screenName = mention.getScreenName();
         User foundUser = storeTwitterProfileForProxyMentionForUser.storeTwitterProfileForProxyMentionForUser(mention,task);
+        if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
+            String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
+            log.warn(eventMsg);
+            taskService.warn(task,eventMsg);
+        }
         if(foundUser != null){
             Mention persMention = null;
             try {
@@ -79,10 +84,11 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
                 log.debug(msg+" persisted: "+persMention.toString());
             }
             return persMention;
+        } else {
+            String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
+            taskService.error(task,eventMsg);
+            log.error(eventMsg);
+            return null;
         }
-        String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
-        taskService.event(task,eventMsg);
-        log.error(eventMsg);
-        return null;
     }
 }
