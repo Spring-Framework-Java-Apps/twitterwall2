@@ -94,7 +94,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public TwitterProfile getUserProfileForScreenName(String screenName) {
         String msg = MSG+"getUserProfileForScreenName: "+screenName;
         log.debug(msg);
-        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);log.debug(msg+result.getId());
+        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);
+        log.debug(msg+result.getId());
         msg += " result: ";
         log.debug(msg+" ScreenName: "+result.getScreenName());
         log.debug(msg+" Name:       "+result.getName());
