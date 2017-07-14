@@ -247,13 +247,13 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.createdDate = createdDate;
     }
 
+    public User() {
+    }
+
     public String getBigProfileImageUrl() {
         String bigProfileImageUrl = this.profileImageUrl;
         bigProfileImageUrl = bigProfileImageUrl.replace("_normal.jpg", "_400x400.jpg");
         return bigProfileImageUrl;
-    }
-
-    private User() {
     }
 
     public String getFormattedDescription() {

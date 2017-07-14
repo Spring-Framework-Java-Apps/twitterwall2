@@ -75,6 +75,25 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
     */
 
+    public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.text = text;
+    }
+
+    public HashTag(Task createdBy, Task updatedBy, String text) {
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.text = text;
+    }
+
+    public HashTag(String text) {
+        this.text = text;
+    }
+
+
+
     public Long getId() {
         return id;
     }
@@ -93,7 +112,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
-    private HashTag() {
+    public HashTag() {
     }
 
     public static long getSerialVersionUID() {

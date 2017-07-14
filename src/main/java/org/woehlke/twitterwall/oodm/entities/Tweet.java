@@ -189,7 +189,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.source = source;
     }
 
-    private Tweet() {
+    public Tweet() {
     }
 
     public String getFormattedText() {

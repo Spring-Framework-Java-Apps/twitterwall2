@@ -55,6 +55,17 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     @Column(nullable = false,length=4096)
     private String url;
 
+    public UrlCache(TaskInfo taskInfo, Task createdBy, Task updatedBy, String expanded, String url) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.expanded = expanded;
+        this.url = url;
+    }
+
+    public UrlCache() {
+    }
+
     @Transient
     public boolean isUrlAndExpandedTheSame(){
        return  url.compareTo(expanded) == 0;

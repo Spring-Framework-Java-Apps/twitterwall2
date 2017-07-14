@@ -78,7 +78,15 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.url = url;
     }
 
-    private TickerSymbol() {
+    public TickerSymbol(TaskInfo taskInfo, Task createdBy, Task updatedBy, String tickerSymbol, String url) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.tickerSymbol = tickerSymbol;
+        this.url = url;
+    }
+
+    public TickerSymbol() {
     }
 
     public static long getSerialVersionUID() {

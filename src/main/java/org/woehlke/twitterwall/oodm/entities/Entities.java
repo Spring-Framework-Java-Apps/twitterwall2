@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -14,7 +15,7 @@ import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FO
  * Created by tw on 11.07.17.
  */
 @Embeddable
-public class Entities {
+public class Entities implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
@@ -31,6 +32,16 @@ public class Entities {
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
+    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
+        this.urls = urls;
+        this.tags = tags;
+        this.mentions = mentions;
+        this.media = media;
+        this.tickerSymbols = tickerSymbols;
+    }
+
+    public Entities() {
+    }
 
     public Set<Url> getUrls() {
         return urls;
@@ -387,13 +398,16 @@ public class Entities {
     private String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
 
-            Pattern userPattern = Pattern.compile("@(" + mention.getScreenName() + ")(" + stopChar + ")");
-            Matcher m1 = userPattern.matcher(formattedText);
-            formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2");
+            if(mention.isProxy() && mention.hasUser()) {
 
-            Pattern userPattern2 = Pattern.compile("@(" + mention.getScreenName() + ")$");
-            Matcher m2 = userPattern2.matcher(formattedText);
-            formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> ");
+                Pattern userPattern = Pattern.compile("@(" + mention.getScreenName() + ")(" + stopChar + ")");
+                Matcher m1 = userPattern.matcher(formattedText);
+                formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2");
+
+                Pattern userPattern2 = Pattern.compile("@(" + mention.getScreenName() + ")$");
+                Matcher m2 = userPattern2.matcher(formattedText);
+                formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> ");
+            }
         }
         return formattedText;
     }

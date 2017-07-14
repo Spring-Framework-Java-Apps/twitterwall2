@@ -179,7 +179,7 @@ public class ScheduledTasks {
         if(allowUpdateUserProfiles  && !skipFortesting) {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.updateUserProfiles.updateUserProfiles();
+                //this.updateUserProfiles.updateUserProfiles();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 msg += " (RuntimeException) ";
@@ -213,7 +213,7 @@ public class ScheduledTasks {
         if(allowUpdateUserProfilesFromMention  && !skipFortesting) {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
+                //this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 msg += " (RuntimeException) ";

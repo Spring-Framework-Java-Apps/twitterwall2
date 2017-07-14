@@ -99,7 +99,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return result;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    @OneToOne(optional=true, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     private User user;
 
     @Column(name = "id_twitte_of_user",nullable = true)
@@ -124,7 +124,22 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         this.name = name;
     }
 
-    private Mention() {
+    public Mention(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, User user, Long idTwitterOfUser) {
+        this.taskInfo = taskInfo;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.idTwitter = idTwitter;
+        this.screenName = screenName;
+        this.name = name;
+        this.user = user;
+        this.idTwitterOfUser = idTwitterOfUser;
+    }
+
+    public Mention() {
+    }
+
+    public boolean hasUser() {
+        return user != null;
     }
 
     public static long getSerialVersionUID() {
@@ -311,4 +326,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         int[] myindices = {};
         return new Mention(idTwitter, screenName, name, myindices);
     }
+
+
 }

@@ -14,8 +14,7 @@ import java.util.Date;
 @Table(name = "task_history", indexes = {
     @Index(name = "idx_task_history_time_event", columnList = "time_event"),
     @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
-    @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now"),
-    @Index(name = "idx_task_history_tdescription", columnList = "description")
+    @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
 })
 @NamedQueries({
     @NamedQuery(
@@ -71,6 +70,14 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
         this.timeEvent = new Date();
+    }
+
+    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task) {
+        this.description = description;
+        this.taskStatusBefore = taskStatusBefore;
+        this.taskStatusNow = taskStatusNow;
+        this.timeEvent = timeEvent;
+        this.task = task;
     }
 
     public Long getId() {
