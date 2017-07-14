@@ -9,7 +9,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER;
+import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER_HTTP;
+import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER_HTTPS;
 
 /**
  * Created by tw on 11.07.17.
@@ -492,17 +493,29 @@ public class Entities implements Serializable {
 
     private String getFormattedTextForUrls( String formattedText) {
 
-        Pattern myUrl1 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER + ")(" + stopChar + ")");
+        Pattern myUrl1 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTPS + ")(" + stopChar + ")");
         Matcher m1 = myUrl1.matcher(formattedText);
         formattedText = m1.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex1\" target=\"_blank\">$2</a>$3");
 
-        Pattern myUrl2 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER + ")(" + stopChar + ")");
+        Pattern myUrl2 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER_HTTPS + ")(" + stopChar + ")");
         Matcher m2 = myUrl2.matcher(formattedText);
         formattedText = m2.replaceAll("<a href=\"$1\" class=\"tw-url-regex2\" target=\"_blank\">$1</a>$2");
 
-        Pattern myUrl3 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER + ")$");
+        Pattern myUrl3 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTPS + ")$");
         Matcher m3 = myUrl3.matcher(formattedText);
         formattedText = m3.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex3\" target=\"_blank\">$2</a>");
+
+        Pattern myUrl11 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTP + ")(" + stopChar + ")");
+        Matcher m11 = myUrl11.matcher(formattedText);
+        formattedText = m11.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex11\" target=\"_blank\">$2</a>$3");
+
+        Pattern myUrl12 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER_HTTP + ")(" + stopChar + ")");
+        Matcher m12 = myUrl12.matcher(formattedText);
+        formattedText = m12.replaceAll("<a href=\"$1\" class=\"tw-url-regex12\" target=\"_blank\">$1</a>$2");
+
+        Pattern myUrl13 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTP + ")$");
+        Matcher m13 = myUrl13.matcher(formattedText);
+        formattedText = m13.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex13\" target=\"_blank\">$2</a>");
 
         return formattedText;
     }

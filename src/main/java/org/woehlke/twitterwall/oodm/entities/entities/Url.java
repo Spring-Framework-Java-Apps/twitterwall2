@@ -56,7 +56,9 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @Column(length=4096)
     private String expanded;
 
-    public static final String URL_PATTTERN_FOR_USER = "https://t\\.co/\\w*";
+    public static final String URL_PATTTERN_FOR_USER_HTTPS = "https://t\\.co/\\w*";
+
+    public static final String URL_PATTTERN_FOR_USER_HTTP = "http://t\\.co/\\w*";
 
     @Column(nullable = false,length=4096)
     private String url;

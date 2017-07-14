@@ -8,14 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER_HTTP;
+import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER_HTTPS;
 
 /**
  * Created by tw on 28.06.17.
@@ -38,15 +40,36 @@ public class UrlTransformServiceImpl implements UrlTransformService {
     private Set<Url> getUrlsForDescription(String description) {
         Set<Url> urls = new LinkedHashSet<>();
         if (description != null) {
-            Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
-            Matcher m3 = urlPattern.matcher(description);
-            while (m3.find()) {
-                urls.add(Url.getUrlFactory(m3.group(1)));
+
+            Pattern myUrl1 = Pattern.compile("(" + Entities.stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTPS + ")(" + Entities.stopChar + ")");
+            Matcher m1 = myUrl1.matcher(description);
+            while (m1.find()) {
+                urls.add(Url.getUrlFactory(m1.group(2)));
             }
-            Pattern urlPattern2 = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")$");
-            Matcher m4 = urlPattern2.matcher(description);
-            while (m4.find()) {
-                urls.add(Url.getUrlFactory(m4.group(1)));
+            Pattern myUrl2 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER_HTTPS + ")(" + Entities.stopChar + ")");
+            Matcher m2 = myUrl2.matcher(description);
+            while (m2.find()) {
+                urls.add(Url.getUrlFactory(m2.group(1)));
+            }
+            Pattern myUrl3 = Pattern.compile("(" + Entities.stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTPS + ")$");
+            Matcher m3 = myUrl3.matcher(description);
+            while (m3.find()) {
+                urls.add(Url.getUrlFactory(m3.group(2)));
+            }
+            Pattern myUrl11 = Pattern.compile("(" + Entities.stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTP + ")(" + Entities.stopChar + ")");
+            Matcher m11 = myUrl11.matcher(description);
+            while (m11.find()) {
+                urls.add(Url.getUrlFactory(m11.group(2)));
+            }
+            Pattern myUrl12 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER_HTTP + ")(" + Entities.stopChar + ")");
+            Matcher m12 = myUrl12.matcher(description);
+            while (m12.find()) {
+                urls.add(Url.getUrlFactory(m12.group(1)));
+            }
+            Pattern myUrl13 = Pattern.compile("(" + Entities.stopChar + ")(" + URL_PATTTERN_FOR_USER_HTTP + ")$");
+            Matcher m13 = myUrl13.matcher(description);
+            while (m13.find()) {
+                urls.add(Url.getUrlFactory(m13.group(2)));
             }
         }
         return urls;
@@ -100,6 +123,8 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         }
         String description = userSource.getDescription();
         Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
+        //TODO: teste dies:
+        //urlsTarget.addAll(rawUrlsFromDescription);
         return urlsTarget;
     }
 
