@@ -392,12 +392,12 @@ public class Entities extends EntitiesFilter implements Serializable {
             "\n}";
     }
 
-    public String getFormattedText(String formattedText, String domainObject ) {
+    public String getFormattedText(String formattedText ) {
 
         formattedText = getFormattedTextForUserProfiles(formattedText);
 
         Set<HashTag> tags = this.getTags();
-        formattedText = getFormattedTextForHashTags(tags,formattedText,domainObject);
+        formattedText = getFormattedTextForHashTags(tags,formattedText);
 
         Set<Media> media = this.getMedia();
         formattedText = getFormattedTextForMedia(media, formattedText);

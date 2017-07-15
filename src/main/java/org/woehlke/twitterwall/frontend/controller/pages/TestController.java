@@ -40,8 +40,12 @@ public class TestController extends AbstractTwitterwallController {
         if(contextTest){
             super.getTestDataTweets(msg,model);
             super.getTestDataUser(msg,model);
+        } else {
+            model.addAttribute("latestTweets",null);
+            model.addAttribute("user",null);
         }
-        return "timeline";
+        return "/test/getTestData";
+        //return "timeline";
     }
 
     @RequestMapping("/user/onlist/renew")
@@ -56,7 +60,8 @@ public class TestController extends AbstractTwitterwallController {
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";
         model = setupPage(model, title, "Users", symbol);
-        return "user";
+        return "/test/user/onlist/renew";
+        //return "user";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);

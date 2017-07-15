@@ -35,7 +35,7 @@ public class TaskController  extends AbstractTwitterwallController {
         Pageable pageRequest = new PageRequest(page, pageSize);
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
-        return "taskAll";
+        return "task/taskAll";
     }
 
     @RequestMapping(path="/{id}")
@@ -53,7 +53,7 @@ public class TaskController  extends AbstractTwitterwallController {
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(oneTask,pageRequest);
         model.addAttribute("task",oneTask);
         model.addAttribute("taskHistoryList",taskHistoryList);
-        return "taskHistory";
+        return "task/taskHistory";
     }
 
     private final TaskService taskService;

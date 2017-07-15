@@ -120,7 +120,7 @@ public class EntitiesFilter {
         return hashTags;
     }
 
-    protected String getFormattedTextForHashTags(Set<HashTag> tags, String formattedText, String domainObject ) {
+    protected String getFormattedTextForHashTags(Set<HashTag> tags, String formattedText ) {
         for (HashTag tag : tags) {
 
             String USER_PROFILE_INPUT[] = {
@@ -129,8 +129,8 @@ public class EntitiesFilter {
             };
 
             String USER_PROFILE_OUTPUT[] = {
-                "<a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/"+domainObject+"/$1\">#$1</a>$2",
-                "<a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/"+domainObject+"/$1\">#$1</a> "
+                "<a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/$1\">#$1</a>$2",
+                "<a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/$1\">#$1</a> "
             };
 
             for(int i=0;i<2;i++){

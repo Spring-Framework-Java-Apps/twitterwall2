@@ -14,7 +14,7 @@
                 <h3>Tweets HashTags</h3>
                 <div>
                 <span th:each="hashTag : ${hashTagsTweets}">
-                    <a href="" th:href="@{|/hashtag/tweet/${hashTag.text}|}">
+                    <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
                         <span class="tw-vector">
                             <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
                         </span>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -29,7 +29,7 @@
                 <h3>User HashTags</h3>
                 <div>
                 <span th:each="hashTag : ${hashTagsUsers}">
-                    <a href="" th:href="@{|/hashtag/user/${hashTag.text}|}">
+                    <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
                         <span class="tw-vector">
                             <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
                         </span>&nbsp;&nbsp;&nbsp;&nbsp;

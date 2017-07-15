@@ -19,7 +19,7 @@ public class DomainController extends AbstractTwitterwallController {
 
     @RequestMapping(path="/domain/count")
     public String domainCount(Model model) {
-        String msg = "/hashtags: ";
+        String msg = "/application/domain/count: ";
         logEnv();
         String title = "Counted Entities";
         String subtitle = searchterm;
@@ -27,7 +27,8 @@ public class DomainController extends AbstractTwitterwallController {
         model = setupPage(model,title,subtitle,symbol);
         CountedEntities countedEntities =this.countedEntitiesService.countAll();
         model.addAttribute("countedEntities", countedEntities);
-        return "countedEntities";
+        return "/application/domain/count";
+        //return "countedEntities";
     }
 
     private final CountedEntitiesService countedEntitiesService;
