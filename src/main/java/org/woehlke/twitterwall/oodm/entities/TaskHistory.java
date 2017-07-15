@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
-import org.woehlke.twitterwall.oodm.listener.TaskHistoryListener;
+import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
 import java.util.Date;

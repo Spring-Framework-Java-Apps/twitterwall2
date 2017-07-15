@@ -5,7 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
-import org.woehlke.twitterwall.oodm.listener.MentionListener;
+import org.woehlke.twitterwall.oodm.entities.listener.MentionListener;
 
 import javax.persistence.*;
 import java.util.regex.Matcher;

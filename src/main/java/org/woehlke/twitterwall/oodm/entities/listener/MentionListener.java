@@ -1,50 +1,50 @@
-package org.woehlke.twitterwall.oodm.listener;
+package org.woehlke.twitterwall.oodm.entities.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.woehlke.twitterwall.oodm.entities.UrlCache;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 
 import javax.persistence.*;
 
 /**
  * Created by tw on 03.07.17.
  */
-public class UrlCacheListener {
+public class MentionListener {
 
-  private static final Logger log = LoggerFactory.getLogger(UrlCacheListener.class);
+  private static final Logger log = LoggerFactory.getLogger(MentionListener.class);
 
   @PrePersist
-  public void onPrePersist(UrlCache domainObject) {
+  public void onPrePersist(Mention domainObject) {
     log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
-  public void onPreUpdate(UrlCache domainObject) {
+  public void onPreUpdate(Mention domainObject) {
     log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
-  public void onPreRemove(UrlCache domainObject) {
+  public void onPreRemove(Mention domainObject) {
     log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
-  public void onPostPersist(UrlCache domainObject) {
+  public void onPostPersist(Mention domainObject) {
     log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
-  public void onPostUpdate(UrlCache domainObject) {
+  public void onPostUpdate(Mention domainObject) {
     log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
-  public void onPostRemove(UrlCache domainObject) {
+  public void onPostRemove(Mention domainObject) {
     log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad
-  public void onPostLoad(UrlCache domainObject) {
+  public void onPostLoad(Mention domainObject) {
     log.debug("loaded: "+domainObject.toString());
   }
 }

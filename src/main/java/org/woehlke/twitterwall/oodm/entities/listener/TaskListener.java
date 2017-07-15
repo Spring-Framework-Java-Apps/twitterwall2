@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.listener;
+package org.woehlke.twitterwall.oodm.entities.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

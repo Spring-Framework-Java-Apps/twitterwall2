@@ -1,50 +1,49 @@
-package org.woehlke.twitterwall.oodm.listener;
+package org.woehlke.twitterwall.oodm.entities.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.woehlke.twitterwall.oodm.entities.Url;
-
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import javax.persistence.*;
 
 /**
  * Created by tw on 03.07.17.
  */
-public class UrlListener {
+public class TweetListener  {
 
-  private static final Logger log = LoggerFactory.getLogger(UrlListener.class);
+  private static final Logger log = LoggerFactory.getLogger(TweetListener.class);
 
   @PrePersist
-  public void onPrePersist(Url domainObject) {
+  public void onPrePersist(Tweet domainObject) {
     log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
-  public void onPreUpdate(Url domainObject) {
+  public void onPreUpdate(Tweet domainObject) {
     log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
-  public void onPreRemove(Url domainObject) {
+  public void onPreRemove(Tweet domainObject) {
     log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
-  public void onPostPersist(Url domainObject) {
+  public void onPostPersist(Tweet domainObject) {
     log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
-  public void onPostUpdate(Url domainObject) {
+  public void onPostUpdate(Tweet domainObject) {
     log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
-  public void onPostRemove(Url domainObject) {
+  public void onPostRemove(Tweet domainObject) {
     log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad
-  public void onPostLoad(Url domainObject) {
+  public void onPostLoad(Tweet domainObject) {
     log.debug("loaded: "+domainObject.toString());
   }
 }

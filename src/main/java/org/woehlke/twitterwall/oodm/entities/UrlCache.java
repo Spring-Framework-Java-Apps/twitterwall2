@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
-import org.woehlke.twitterwall.oodm.listener.UrlCacheListener;
+import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
 

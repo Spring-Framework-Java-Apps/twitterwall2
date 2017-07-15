@@ -4,7 +4,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
-import org.woehlke.twitterwall.oodm.listener.HashTagListener;
+import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 
 import javax.persistence.*;
 import java.util.regex.Matcher;

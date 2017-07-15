@@ -1,50 +1,52 @@
-package org.woehlke.twitterwall.oodm.listener;
+package org.woehlke.twitterwall.oodm.entities.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 
 import javax.persistence.*;
 
 /**
  * Created by tw on 03.07.17.
  */
-public class MentionListener {
+public class HashTagListener {
 
-  private static final Logger log = LoggerFactory.getLogger(MentionListener.class);
+  private static final Logger log = LoggerFactory.getLogger(HashTagListener.class);
 
   @PrePersist
-  public void onPrePersist(Mention domainObject) {
+  public void onPrePersist(HashTag domainObject) {
     log.debug("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
-  public void onPreUpdate(Mention domainObject) {
+  public void onPreUpdate(HashTag domainObject) {
     log.debug("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
-  public void onPreRemove(Mention domainObject) {
+  public void onPreRemove(HashTag domainObject) {
     log.debug("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
-  public void onPostPersist(Mention domainObject) {
+  public void onPostPersist(HashTag domainObject) {
     log.info("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
-  public void onPostUpdate(Mention domainObject) {
+  public void onPostUpdate(HashTag domainObject) {
     log.info("Updated: "+domainObject.toString());
   }
 
   @PostRemove
-  public void onPostRemove(Mention domainObject) {
+  public void onPostRemove(HashTag domainObject) {
     log.info("Removed: "+domainObject.toString());
   }
 
   @PostLoad
-  public void onPostLoad(Mention domainObject) {
+  public void onPostLoad(HashTag domainObject) {
     log.debug("loaded: "+domainObject.toString());
   }
+
+
 }
