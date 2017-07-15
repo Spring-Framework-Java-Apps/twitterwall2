@@ -44,7 +44,8 @@ public class MentionServiceImpl implements MentionService {
 
     @Override
     public Mention findByIdTwitter(long idTwitter) {
-        return this.mentionDao.findByIdTwitter(idTwitter,Mention.class);
+        return mentionRepository.findByIdTwitter(idTwitter);
+        //return this.mentionDao.findByIdTwitter(idTwitter,Mention.class);
     }
 
     @Override
@@ -75,24 +76,29 @@ public class MentionServiceImpl implements MentionService {
             Mention mentionPers = null;
             if(screenName != null && idTwitter != null){
                 log.debug("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
-                mentionPers = this.mentionDao.findByIdTwitterAndScreenName(idTwitter,screenName);
+                mentionPers = mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
+                //mentionPers = this.mentionDao.findByIdTwitterAndScreenName(idTwitter,screenName);
             } else if (screenName != null && idTwitter == null) {
                 log.debug("try to find Mention.findByScreenName: "+mention.toString());
-                mentionPers = this.mentionDao.findByScreenName(screenName);
+                mentionPers = mentionRepository.findByScreenName(screenName);
+                //mentionPers = this.mentionDao.findByScreenName(screenName);
             } else if (screenName == null && idTwitter != null) {
                 log.debug("try to find Mention.findByIdTwitter: "+mention.toString());
-                mentionPers = this.mentionDao.findByIdTwitter(idTwitter,Mention.class);
+                mentionPers = mentionRepository.findByIdTwitter(idTwitter);
+                //mentionPers = this.mentionDao.findByIdTwitter(idTwitter,Mention.class);
             }
             //mentionPers.setIndices(mention.getIndices());
             mention.setId(mentionPers.getId());
             mention.setCreatedBy(mentionPers.getCreatedBy());
             mention.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());
-            return this.mentionDao.update(mentionPers);
+            return mentionRepository.save(mentionPers);
+            //return this.mentionDao.update(mentionPers);
         } catch (EmptyResultDataAccessException e){
             mention.setCreatedBy(task);
             log.debug("try to persist Mention: "+mention.toString());
-            return this.mentionDao.persist(mention);
+            return mentionRepository.save(mention);
+            //return this.mentionDao.persist(mention);
         }
     }
 
@@ -103,7 +109,7 @@ public class MentionServiceImpl implements MentionService {
 
     @Override
     public Mention createProxyMention(Mention mention, Task task) {
-        long lowestIdTwitter = this.mentionDao.findLowestIdTwitter(mention);
+        long lowestIdTwitter =  this.mentionDao.findLowestIdTwitter(mention);
         lowestIdTwitter--;
         mention.setIdTwitter(lowestIdTwitter);
         mention.setCreatedBy(task);

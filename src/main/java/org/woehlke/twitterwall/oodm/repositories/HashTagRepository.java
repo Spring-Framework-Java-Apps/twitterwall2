@@ -7,4 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.HashTag;
  * Created by tw on 15.07.17.
  */
 public interface HashTagRepository extends PagingAndSortingRepository<HashTag,Long> {
+
+    HashTag findByText(String text);
 }

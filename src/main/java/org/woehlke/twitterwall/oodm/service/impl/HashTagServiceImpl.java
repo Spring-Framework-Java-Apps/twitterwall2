@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
-import org.woehlke.twitterwall.oodm.dao.HashTagDao;
+//import org.woehlke.twitterwall.oodm.dao.HashTagDao;
 import org.woehlke.twitterwall.oodm.repositories.HashTagRepository;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
@@ -24,13 +24,13 @@ public class HashTagServiceImpl implements HashTagService {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceImpl.class);
 
-    private final HashTagDao hashTagDao;
+    //private final HashTagDao hashTagDao;
 
     private final HashTagRepository hashTagRepository;
 
     @Autowired
-    public HashTagServiceImpl(HashTagDao hashTagDao, HashTagRepository hashTagRepository) {
-        this.hashTagDao = hashTagDao;
+    public HashTagServiceImpl(HashTagRepository hashTagRepository) {
+        //this.hashTagDao = hashTagDao;
         this.hashTagRepository = hashTagRepository;
     }
 
@@ -50,7 +50,8 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public HashTag findByText(String text) {
-        return this.hashTagDao.findByText(text);
+        return hashTagRepository.findByText(text);
+        //return this.hashTagDao.findByText(text);
     }
 
     @Override
@@ -68,17 +69,18 @@ public class HashTagServiceImpl implements HashTagService {
     @Override
     public HashTag store(HashTag hashTag, Task task) {
         try {
-            HashTag tagPers = this.hashTagDao.findByText(hashTag.getText());
+            HashTag tagPers = hashTagRepository.findByText(hashTag.getText());
             hashTag.setId(tagPers.getId());
+            hashTag.setTaskInfo(tagPers.getTaskInfo());
             hashTag.setCreatedBy(tagPers.getCreatedBy());
             hashTag.setUpdatedBy(task);
-            hashTag = this.hashTagDao.update(hashTag);
+            hashTag = hashTagRepository.save(hashTag);//this.hashTagDao.update(hashTag);
             log.debug("found: "+hashTag.toString());
             return hashTag;
         } catch (EmptyResultDataAccessException e) {
             hashTag.setCreatedBy(task);
             log.debug("try to persist: "+hashTag.toString());
-            HashTag tagPers = this.hashTagDao.persist(hashTag);
+            HashTag tagPers = hashTagRepository.save(hashTag);
             log.debug("persisted: "+tagPers.toString());
             return tagPers;
         }
