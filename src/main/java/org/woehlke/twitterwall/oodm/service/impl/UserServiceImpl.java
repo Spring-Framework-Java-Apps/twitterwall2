@@ -40,16 +40,19 @@ public class UserServiceImpl implements UserService {
         String name = "try to store: "+user.getIdTwitter()+" ";
         log.debug(name);
         try {
-            User userPersistent = userDao.findByIdTwitter(user.getIdTwitter(),User.class);
+            //User userPersistent = userDao.findByIdTwitter(user.getIdTwitter(),User.class);
+            User userPersistent = this.userRepository.findByIdTwitter(user.getIdTwitter());
             user.setCreatedBy(userPersistent.getCreatedBy());
             user.setId(userPersistent.getId());
             user.setUpdatedBy(task);
-            user = userDao.update(user);
+            //user = userDao.update(user);
+            user = this.userRepository.save(user);
             log.debug(name+" updated "+user.toString());
             return user;
         } catch (EmptyResultDataAccessException e) {
             user.setCreatedBy(task);
-            user = userDao.persist(user);
+            //user = userDao.persist(user);
+            user = this.userRepository.save(user);
             log.debug(name+" persisted "+user.toString());
             return user;
         }
@@ -86,7 +89,8 @@ public class UserServiceImpl implements UserService {
         if (!User.isValidScreenName(screenName)) {
             throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
         }
-        return userDao.findByScreenName(screenName);
+        return userRepository.findByScreenName(screenName);
+        //return userDao.findByScreenName(screenName);
     }
 
     @Override
@@ -111,7 +115,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByIdTwitter(long idTwitter) {
-        return userDao.findByIdTwitter(idTwitter,User.class);
+        return userRepository.findByIdTwitter(idTwitter);
+        //return userDao.findByIdTwitter(idTwitter,User.class);
     }
 
     @Override
