@@ -258,7 +258,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
 
     public String getFormattedDescription() {
         String formattedDescription = this.description;
-        formattedDescription = this.entities.getFormattedText(formattedDescription,"user");
+        formattedDescription = this.entities.getFormattedText(formattedDescription);
         return formattedDescription;
     }
 

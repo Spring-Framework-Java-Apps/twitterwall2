@@ -48,8 +48,8 @@ public class HashTagController extends AbstractTwitterwallController {
         if (m.matches()) {
             Pageable pageRequestTweet = new PageRequest(pageTweet, pageSize);
             Pageable pageRequestUser = new PageRequest(pageUser, pageSize);
-            String title = "Tweets und User für HashTag";
-            String subtitle = "#" + hashtagText;
+            String subtitle = "Tweets und User für HashTag";
+            String title = hashtagText;
             String symbol = Symbols.HASHTAG.toString();
             model = setupPage(model,title,subtitle,symbol);
             //
@@ -66,7 +66,7 @@ public class HashTagController extends AbstractTwitterwallController {
             throw new IllegalArgumentException("/hashtag/"+hashtagText);
         }
     }
-
+/*
     @RequestMapping(path="/tweet/{hashtagText}")
     public String hashTagFromTweets(
         @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
@@ -112,6 +112,7 @@ public class HashTagController extends AbstractTwitterwallController {
             throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
         }
     }
+*/
 
     @RequestMapping(path="/overview")
     public String hashTagsOverview(Model model) {

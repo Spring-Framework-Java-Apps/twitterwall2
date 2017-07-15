@@ -14,7 +14,7 @@
                 <span  class="tw-pager-arrow tw-pager-up"  th:if="${latestTweets.hasPrevious()}">
                     <a href="" th:href="@{|/hashtag/tweet/${hashtagText}?page=${latestTweets.previousPageable().pageNumber}|}">
                         <span>
-                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                         </span>
                     </a>
                 </span>
@@ -26,7 +26,7 @@
                 <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
                     <a href="" th:href="@{|/hashtag/tweet/${hashtagText}?page=${latestTweets.nextPageable().pageNumber}|}" >
                         <span>
-                        <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                         </span>
                     </a>
                 </span>
