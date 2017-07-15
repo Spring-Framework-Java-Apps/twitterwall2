@@ -86,6 +86,20 @@
         white-space: nowrap;
         display: inline-block;
     }
+
+    .tw-pager-arrow {
+        display: block;
+        font-size: 6em;
+        width: 100%
+    }
+
+    .tw-pager-arrow a span {
+        text-align: center;
+    }
+
+    .tw-pager-arrow a span i {
+        display: block !important;
+    }
 }
 
 
