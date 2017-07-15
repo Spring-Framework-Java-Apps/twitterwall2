@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +50,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<Media> getAll() {
-        return this.mediaRepository.getAll(Media.class);
+    public Page<Media> getAll(Pageable pageRequest) {
+        return this.mediaRepository.getAll(Media.class,pageRequest);
     }
 
     @Override

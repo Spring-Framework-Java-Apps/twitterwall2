@@ -7,9 +7,13 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +23,8 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
 import java.util.List;
+
+import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 
 /**
@@ -38,31 +44,42 @@ public class UserTest {
     @Autowired
     private UserServiceTest userServiceTest;
 
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
+
     @Ignore
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
-        log.info("getAllDescriptionsTest");
-        log.info("------------------------------------------------");
+        String msg ="getAllDescriptionsTest";
+        log.info(msg+"------------------------------------------------");
         //userServiceTest.createTestData();
         Assert.assertTrue(true);
-        log.info("------------------------------------------------");
+        log.info(msg+"------------------------------------------------");
     }
 
     @Ignore
     @Commit
     @Test
     public void getAllDescriptionsTest() {
-        log.info("getAllDescriptionsTest");
-        log.info("------------------------------------------------");
-        List<String> descriptions = userService.getAllDescriptions();
-        log.info("found "+descriptions.size()+" descriptions");
-        for(String description:descriptions){
-            log.info("description: "+description);
-        }
+        String msg = "getAllDescriptionsTest";
+        log.info(msg+"------------------------------------------------");
+        boolean hasNext;
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        do {
+            Page<String> descriptions = userService.getAllDescriptions(pageRequest);
+            hasNext = descriptions.hasNext();
+            long totalNumber = descriptions.getTotalElements();
+            int number = descriptions.getNumber();
+            log.info(msg+"found "+number+" descriptions (total: "+totalNumber+")");
+            for(String description:descriptions){
+                log.info(msg+"description: "+description);
+            }
+            pageRequest = pageRequest.next();
+        } while (hasNext);
         String message = "userService.getAllDescriptions(); ";
         Assert.assertTrue(message,true);
-        log.info("------------------------------------------------");
+        log.info(msg+"------------------------------------------------");
     }
 
     private static String descriptions[] = {

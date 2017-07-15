@@ -25,20 +25,6 @@ import java.net.URL;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
-    private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
-
-    private final UrlRepository urlRepository;
-
-    private final UrlCacheRepository urlCacheRepository;
-
-    private final TwitterUrlService twitterUrlService;
-
-    @Autowired
-    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
-        this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
-        this.twitterUrlService = twitterUrlService;
-    }
 
     @Override
     public Url getPersistentUrlFor(String url, Task task) {
@@ -111,5 +97,21 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                 }
             }
         }
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
+
+    private final UrlRepository urlRepository;
+
+    private final UrlCacheRepository urlCacheRepository;
+
+    private final TwitterUrlService twitterUrlService;
+
+    @Autowired
+    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
+        this.urlRepository = urlRepository;
+        this.urlCacheRepository = urlCacheRepository;
+        this.twitterUrlService = twitterUrlService;
     }
 }

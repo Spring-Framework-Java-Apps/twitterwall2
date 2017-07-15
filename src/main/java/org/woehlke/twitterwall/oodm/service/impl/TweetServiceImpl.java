@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,6 @@ import org.woehlke.twitterwall.oodm.entities.entities.*;
 import org.woehlke.twitterwall.oodm.repository.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
-import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -45,23 +46,23 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<Tweet> getAll() {
-        return tweetRepository.getAll(Tweet.class);
+    public Page<Tweet> getAll(Pageable pageRequest) {
+        return tweetRepository.getAll(Tweet.class,pageRequest);
     }
 
     @Override
-    public List<Tweet> getLatestTweets() {
-        return tweetRepository.getLatestTweets();
+    public Page<Tweet> getLatestTweets(Pageable pageRequest) {
+        return tweetRepository.getLatestTweets(pageRequest);
     }
 
     private final static String MSG = "hashtagText is not valid";
 
     @Override
-    public List<Tweet> getTweetsForHashTag(String hashtagText) {
+    public Page<Tweet> getTweetsForHashTag(String hashtagText,Pageable pageRequest) {
         if(!HashTag.isValidText(hashtagText)){
             throw new IllegalArgumentException("getTweetsForHashTag: "+MSG);
         }
-        return tweetRepository.getTweetsForHashTag(hashtagText);
+        return tweetRepository.getTweetsForHashTag(hashtagText,pageRequest);
     }
 
     @Override
@@ -78,16 +79,16 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<Tweet> getTweetsForUser(User user) {
+    public Page<Tweet> getTweetsForUser(User user,Pageable pageRequest) {
         if(user == null){
             throw new IllegalArgumentException("getTweetsForUser: user is null");
         }
-        return tweetRepository.getTweetsForUser(user);
+        return tweetRepository.getTweetsForUser(user,pageRequest);
     }
 
     @Override
-    public List<Long> getAllTwitterIds() {
-        return tweetRepository.getAllTwitterIds();
+    public Page<Long> getAllTwitterIds(Pageable pageRequest) {
+        return tweetRepository.getAllTwitterIds(pageRequest);
     }
 
     @Override

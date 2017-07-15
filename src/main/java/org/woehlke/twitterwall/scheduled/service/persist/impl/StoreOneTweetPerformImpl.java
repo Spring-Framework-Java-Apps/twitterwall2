@@ -21,21 +21,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.*;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
 
-    private static final Logger log = LoggerFactory.getLogger(StoreOneTweetPerformImpl.class);
-
-    private final TweetService tweetService;
-
-    private final StoreUserProcess storeUserProcess;
-
-    private final StoreEntitiesProcess storeEntitiesProcess;
-
-    @Autowired
-    public StoreOneTweetPerformImpl(TweetService tweetService, StoreUserProcess storeUserProcess, StoreEntitiesProcess storeEntitiesProcess) {
-        this.tweetService = tweetService;
-        this.storeUserProcess = storeUserProcess;
-        this.storeEntitiesProcess = storeEntitiesProcess;
-    }
-
     /** Method because of recursive Method Call in this Method **/
     public Tweet storeOneTweetPerform(Tweet tweet, Task task){
         String msg = "storeOneTweetPerform( idTwitter="+tweet.getIdTwitter()+" ) ";
@@ -63,4 +48,21 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
         log.debug(msg+"tweetService.store: "+tweet.toString());
         return tweet;
     }
+
+
+    private static final Logger log = LoggerFactory.getLogger(StoreOneTweetPerformImpl.class);
+
+    private final TweetService tweetService;
+
+    private final StoreUserProcess storeUserProcess;
+
+    private final StoreEntitiesProcess storeEntitiesProcess;
+
+    @Autowired
+    public StoreOneTweetPerformImpl(TweetService tweetService, StoreUserProcess storeUserProcess, StoreEntitiesProcess storeEntitiesProcess) {
+        this.tweetService = tweetService;
+        this.storeUserProcess = storeUserProcess;
+        this.storeEntitiesProcess = storeEntitiesProcess;
+    }
+
 }

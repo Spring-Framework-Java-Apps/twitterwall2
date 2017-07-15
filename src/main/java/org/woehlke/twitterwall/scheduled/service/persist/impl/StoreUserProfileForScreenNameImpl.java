@@ -24,24 +24,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScreenName {
 
-    private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
-
-    private final UserService userService;
-
-    private final TwitterApiService twitterApiService;
-
-    private final StoreUserProfile storeUserProfile;
-
-    private final TaskService taskService;
-
-    @Autowired
-    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, TaskService taskService) {
-        this.userService = userService;
-        this.twitterApiService = twitterApiService;
-        this.storeUserProfile = storeUserProfile;
-        this.taskService = taskService;
-    }
-
     @Override
     public User storeUserProfileForScreenName(String screenName, Task task){
         String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
@@ -65,4 +47,26 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
             throw new IllegalArgumentException("screenName is empty");
         }
     }
+
+
+
+    private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
+
+    private final UserService userService;
+
+    private final TwitterApiService twitterApiService;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final TaskService taskService;
+
+    @Autowired
+    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, TaskService taskService) {
+        this.userService = userService;
+        this.twitterApiService = twitterApiService;
+        this.storeUserProfile = storeUserProfile;
+        this.taskService = taskService;
+    }
+
+
 }

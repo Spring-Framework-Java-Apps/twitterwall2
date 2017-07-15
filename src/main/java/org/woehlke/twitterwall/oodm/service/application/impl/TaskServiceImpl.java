@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
 import org.woehlke.twitterwall.oodm.repository.application.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
-import org.woehlke.twitterwall.scheduled.service.facade.impl.UpdateUserProfilesImpl;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
-
-import java.util.List;
 
 /**
  * Created by tw on 09.07.17.
@@ -61,8 +60,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAll() {
-        return taskRepository.getAll(Task.class);
+    public Page<Task> getAll(Pageable pageRequest) {
+        return taskRepository.getAll(Task.class,pageRequest);
     }
 
     @Override

@@ -4,10 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
@@ -33,16 +37,19 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
 public class HashTagController extends AbstractTwitterwallController {
 
     @RequestMapping(path="/tweet/{hashtagText}")
-    public String hashTagFromTweets(@PathVariable String hashtagText, Model model) {
+    public String hashTagFromTweets(
+        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
+        @PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
+            Pageable pageRequest = new PageRequest(page, pageSize);
             String title = "Tweets für HashTag";
             String subtitle = "#" + hashtagText;
             String symbol = Symbols.HASHTAG.toString();
             model = setupPage(model,title,subtitle,symbol);
-            List<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText);
+            Page<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText,pageRequest);
             model.addAttribute("latestTweets", tweets);
             return "timeline";
         } else {
@@ -51,16 +58,19 @@ public class HashTagController extends AbstractTwitterwallController {
     }
 
     @RequestMapping(path="/user/{hashtagText}")
-    public String hashTagFromUsers(@PathVariable String hashtagText, Model model) {
+    public String hashTagFromUsers(
+        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
+        @PathVariable String hashtagText, Model model) {
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         if (m.matches()) {
+            Pageable pageRequest = new PageRequest(page, pageSize);
             String title = "Users für HashTag";
             String subtitle = "#" + hashtagText;
             String symbol = Symbols.HASHTAG.toString();
             model = setupPage(model,title,subtitle,symbol);
-            List<User> users = userService.getUsersForHashTag(hashtagText);
+            Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequest);
             model.addAttribute("users", users);
             return "user";
         } else {
@@ -78,33 +88,44 @@ public class HashTagController extends AbstractTwitterwallController {
         model = setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        for (HashTag hashTag : hashTagService.getAll()) {
-            String text = hashTag.getText();
-            try {
-                long numberTweets = tweetService.countTweetsForHashTag(hashTag.getText());
-                if(numberTweets > 0) {
-                    HashTagCounted c = new HashTagCounted(numberTweets, text);
-                    hashTagsTweets.add(c);
+        boolean hasNext;
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        do {
+            Page<HashTag> myPage = hashTagService.getAll(pageRequest);
+            hasNext = myPage.hasNext();
+            pageRequest = pageRequest.next();
+            for (HashTag hashTag : myPage) {
+                String text = hashTag.getText();
+                try {
+                    long numberTweets = tweetService.countTweetsForHashTag(hashTag.getText());
+                    if(numberTweets > 0) {
+                        HashTagCounted c = new HashTagCounted(numberTweets, text);
+                        hashTagsTweets.add(c);
+                    }
+                } catch (IllegalArgumentException e){
+                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
                 }
-            } catch (IllegalArgumentException e){
-                log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
-            }
-            try {
-                long numberUsers = userService.countUsersForHashTag(hashTag.getText());
-                if(numberUsers > 0){
-                    HashTagCounted c = new HashTagCounted(numberUsers,text);
-                    hashTagsUsers.add(c);
+                try {
+                    long numberUsers = userService.countUsersForHashTag(hashTag.getText());
+                    if(numberUsers > 0){
+                        HashTagCounted c = new HashTagCounted(numberUsers,text);
+                        hashTagsUsers.add(c);
+                    }
+                } catch (IllegalArgumentException e){
+                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
                 }
-            } catch (IllegalArgumentException e){
-                log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
             }
         }
+        while(hasNext);
         model.addAttribute("hashTagsTweets", hashTagsTweets);
         model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "tags";
     }
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;

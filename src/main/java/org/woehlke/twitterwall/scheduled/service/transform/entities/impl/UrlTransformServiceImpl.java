@@ -7,30 +7,18 @@ import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.common.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.entities.UrlTransformService;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 28.06.17.
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-public class UrlTransformServiceImpl implements UrlTransformService {
-
-    private static final Logger log = LoggerFactory.getLogger(UrlTransformServiceImpl.class);
-
-    //private final TwitterUrlService twitterUrlService;
-
-    public UrlTransformServiceImpl() {
-
-    }
+public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransformService {
 
     @Override
     public Url transform(UrlEntity url) {
@@ -40,23 +28,6 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         int[] indices = url.getIndices();
         Url myUrlEntity = new Url(display, expanded, urlStr, indices);
         return myUrlEntity;
-    }
-
-    private Set<Url> getUrlsForDescription(String description) {
-        Set<Url> urls = new LinkedHashSet<>();
-        if (description != null) {
-            Pattern urlPattern = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")(" + Entities.stopChar + ")");
-            Matcher m3 = urlPattern.matcher(description);
-            while (m3.find()) {
-                urls.add(Url.getUrlFactory(m3.group(1)));
-            }
-            Pattern urlPattern2 = Pattern.compile("("+Url.URL_PATTTERN_FOR_USER+")$");
-            Matcher m4 = urlPattern2.matcher(description);
-            while (m4.find()) {
-                urls.add(Url.getUrlFactory(m4.group(1)));
-            }
-        }
-        return urls;
     }
 
     @Override
@@ -107,6 +78,15 @@ public class UrlTransformServiceImpl implements UrlTransformService {
         }
         String description = userSource.getDescription();
         Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
+        urlsTarget.addAll(rawUrlsFromDescription);
         return urlsTarget;
     }
+
+
+    private static final Logger log = LoggerFactory.getLogger(UrlTransformServiceImpl.class);
+
+    public UrlTransformServiceImpl() {
+
+    }
+
 }

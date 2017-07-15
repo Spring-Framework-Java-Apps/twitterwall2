@@ -29,6 +29,8 @@ import java.util.List;
  */
 public abstract class AbstractTwitterwallController implements InitializingBean {
 
+    public final static int FIRST_PAGE_NUMBER = 0;
+
     public final static long[] ID_TWITTER_TO_FETCH_FOR_TWEET_TEST = {
             876329508009279488L,
             876356335784394752L,

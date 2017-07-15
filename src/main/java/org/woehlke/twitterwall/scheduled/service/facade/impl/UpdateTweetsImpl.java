@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
@@ -23,8 +26,9 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
+
+import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 09.07.17.
@@ -32,6 +36,76 @@ import java.util.Set;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UpdateTweetsImpl implements UpdateTweets {
+
+    @Override
+    public void updateTweets() {
+        String msg = "update Tweets: ";
+        log.debug(msg + "---------------------------------------");
+        log.debug(msg + "START: The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg + "---------------------------------------");
+        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
+        int loopId = 0;
+        int allLoop = 0;
+        try {
+            boolean hasNext;
+            Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+            do {
+                Page<Long> tweetTwitterIds = tweetService.getAllTwitterIds(pageRequest);
+                hasNext = tweetTwitterIds.hasNext();
+                long number = tweetTwitterIds.getTotalElements();
+                for (Long tweetTwitterId : tweetTwitterIds) {
+                    loopId++;
+                    allLoop++;
+                    String counter = " ( " + loopId + " from " + number + " ) [ " + allLoop + " ] ";
+                    try {
+                        Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
+                        log.debug(msg + "" + counter);
+                        org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet, task);
+                        log.debug(msg + "" + counter + tweetPers);
+                        Set<Mention> mentions = tweetPers.getEntities().getMentions();
+                        int subLoopId = 0;
+                        int subNumber = mentions.size();
+                        for (Mention mention : mentions) {
+                            allLoop++;
+                            subLoopId++;
+                            String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [ " + allLoop + " ] ";
+                            try {
+                                log.debug(msg + subCounter);
+                                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
+                                log.debug(msg + subCounter + userFromMention.toString());
+                            } catch (IllegalArgumentException exe) {
+                                task = taskService.warn(task, exe, msg + subCounter);
+                            }
+                        }
+                        log.debug(msg + "-----------------------------------------------------");
+                        log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                        Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                        log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                        log.debug(msg + "-----------------------------------------------------");
+                    } catch (RateLimitExceededException e) {
+                        task = taskService.error(task, e, msg + counter);
+                        throw e;
+                    } catch (InterruptedException ex) {
+                        task = taskService.warn(task, ex, msg + counter);
+                    } finally {
+                        log.debug(msg + "---------------------------------------");
+                    }
+                }
+                pageRequest = pageRequest.next();
+            } while (hasNext);
+        } catch (ResourceAccessException e) {
+            task = taskService.error(task,e,msg + " check your Network Connection!");
+        } catch (RateLimitExceededException e) {
+            task = taskService.error(task,e,msg);
+        }
+        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
+        this.taskService.event(task,report);
+        this.taskService.done(task);
+        log.debug(msg + "---------------------------------------");
+        log.debug(msg + "DONE: The time is now {}", dateFormat.format(new Date()));
+        log.debug(msg + "---------------------------------------");
+    }
+
 
     private static final Logger log = LoggerFactory.getLogger(UpdateTweetsImpl.class);
 
@@ -45,6 +119,9 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
 
 
     private final StoreOneTweet storeOneTweet;
@@ -66,66 +143,4 @@ public class UpdateTweetsImpl implements UpdateTweets {
         this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
-    @Override
-    public void updateTweets() {
-        String msg = "update Tweets: ";
-        log.debug(msg + "---------------------------------------");
-        log.debug(msg + "START: The time is now {}", dateFormat.format(new Date()));
-        log.debug(msg + "---------------------------------------");
-        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
-        int loopId = 0;
-        int allLoop = 0;
-        try {
-            List<Long> tweetTwitterIds = tweetService.getAllTwitterIds();
-            int number = tweetTwitterIds.size();
-            for (Long tweetTwitterId : tweetTwitterIds) {
-                loopId++;
-                allLoop++;
-                String counter = " ( "+loopId+ " from "+number+" ) [ "+allLoop+" ] ";
-                try {
-                    Tweet tweet = twitterApiService.findOneTweetById(tweetTwitterId);
-                    log.debug(msg + ""+counter);
-                    org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet, task);
-                    log.debug(msg + ""+counter+tweetPers);
-                    Set<Mention> mentions = tweetPers.getEntities().getMentions();
-                    int subLoopId = 0;
-                    int subNumber = mentions.size();
-                    for(Mention mention:mentions){
-                        allLoop++;
-                        subLoopId++;
-                        String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) [ "+allLoop+" ] ";
-                        try {
-                            log.debug(msg+subCounter);
-                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                            log.debug(msg+subCounter+userFromMention.toString());
-                        } catch (IllegalArgumentException exe){
-                            task = taskService.warn(task,exe,msg+subCounter);
-                        }
-                    }
-                    log.debug(msg + "-----------------------------------------------------");
-                    log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
-                    Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                    log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
-                    log.debug(msg + "-----------------------------------------------------");
-                } catch (RateLimitExceededException e) {
-                    task = taskService.error(task,e,msg+counter);
-                    throw e;
-                } catch (InterruptedException ex){
-                    task = taskService.warn(task,ex,msg+counter);
-                } finally {
-                    log.debug(msg + "---------------------------------------");
-                }
-            }
-        } catch (ResourceAccessException e) {
-            task = taskService.error(task,e,msg + " check your Network Connection!");
-        } catch (RateLimitExceededException e) {
-            task = taskService.error(task,e,msg);
-        }
-        String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        this.taskService.event(task,report);
-        this.taskService.done(task);
-        log.debug(msg + "---------------------------------------");
-        log.debug(msg + "DONE: The time is now {}", dateFormat.format(new Date()));
-        log.debug(msg + "---------------------------------------");
-    }
 }

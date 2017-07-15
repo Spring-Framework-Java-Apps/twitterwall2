@@ -20,6 +20,17 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProcessImpl implements StoreUserProcess {
 
+    @Override
+    public User storeUserProcess(User user, Task task){
+        String msg = "User.storeUserProcess ";
+        Entities entities = user.getEntities();
+        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
+        user.setEntities(entities);
+        user = userService.store(user,task);
+        return user;
+    }
+
+
     private static final Logger log = LoggerFactory.getLogger(StoreUserProcessImpl.class);
 
     private final UserService userService;
@@ -32,13 +43,4 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         this.storeEntitiesProcess = storeEntitiesProcess;
     }
 
-    @Override
-    public User storeUserProcess(User user, Task task){
-        String msg = "User.storeUserProcess ";
-        Entities entities = user.getEntities();
-        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
-        user.setEntities(entities);
-        user = userService.store(user,task);
-        return user;
-    }
 }

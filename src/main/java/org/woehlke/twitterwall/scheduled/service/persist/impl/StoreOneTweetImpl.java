@@ -19,6 +19,15 @@ import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetImpl implements StoreOneTweet {
 
+
+    @Override
+    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweetSource, Task task) {
+        Tweet tweetTarget = tweetTransformService.transform(tweetSource);
+        tweetTarget = storeOneTweetPerform.storeOneTweetPerform(tweetTarget,task);
+        return tweetTarget;
+    }
+
+
     private static final Logger log = LoggerFactory.getLogger(StoreOneTweetImpl.class);
 
     private final TweetTransformService tweetTransformService;
@@ -29,12 +38,5 @@ public class StoreOneTweetImpl implements StoreOneTweet {
     public StoreOneTweetImpl(TweetTransformService tweetTransformService, StoreOneTweetPerform storeOneTweetPerform) {
         this.tweetTransformService = tweetTransformService;
         this.storeOneTweetPerform = storeOneTweetPerform;
-    }
-
-    @Override
-    public Tweet storeOneTweet(org.springframework.social.twitter.api.Tweet tweetSource, Task task) {
-        Tweet tweetTarget = tweetTransformService.transform(tweetSource);
-        tweetTarget = storeOneTweetPerform.storeOneTweetPerform(tweetTarget,task);
-        return tweetTarget;
     }
 }

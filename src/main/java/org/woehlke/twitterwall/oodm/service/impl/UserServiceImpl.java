@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.repository.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
-import java.util.List;
 
 /**
  * Created by tw on 11.06.17.
@@ -63,8 +64,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.getAll(User.class);
+    public Page<User> getAll(Pageable pageRequest) {
+        return userRepository.getAll(User.class,pageRequest);
     }
 
     @Override
@@ -81,23 +82,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getTweetingUsers() {
-        return userRepository.getTweetingUsers();
+    public Page<User> getTweetingUsers(Pageable pageRequest) {
+        return userRepository.getTweetingUsers(pageRequest);
     }
 
     @Override
-    public List<User> getNotYetFriendUsers() {
-        return userRepository.getNotYetFriendUsers();
+    public Page<User> getNotYetFriendUsers(Pageable pageRequest) {
+        return userRepository.getNotYetFriendUsers(pageRequest);
     }
 
     @Override
-    public List<User> getNotYetOnList() {
-        return userRepository.getNotYetOnList();
+    public Page<User> getNotYetOnList(Pageable pageRequest) {
+        return userRepository.getNotYetOnList(pageRequest);
     }
 
     @Override
-    public List<User> getOnList() {
-        return userRepository.getOnList();
+    public Page<User> getOnList(Pageable pageRequest) {
+        return userRepository.getOnList(pageRequest);
     }
 
     @Override
@@ -106,18 +107,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> getAllDescriptions() {
-        return userRepository.getAllDescriptions();
+    public Page<String> getAllDescriptions(Pageable pageRequest) {
+        return userRepository.getAllDescriptions(pageRequest);
     }
 
     @Override
-    public List<Long> getAllTwitterIds() {
-        return userRepository.getAllTwitterIds();
+    public Page<Long> getAllTwitterIds(Pageable pageRequest) {
+        return userRepository.getAllTwitterIds(pageRequest);
     }
 
     @Override
-    public List<User> getUsersForHashTag(String hashtagText) {
-        List<User> users = userRepository.getUsersForHashTag(hashtagText);
+    public Page<User> getUsersForHashTag(String hashtagText,Pageable pageRequest) {
+        Page<User> users = userRepository.getUsersForHashTag(hashtagText,pageRequest);
         return users;
     }
 

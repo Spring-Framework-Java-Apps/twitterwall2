@@ -4,10 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -25,8 +29,9 @@ import java.util.List;
 public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")
-    public String getAll(Model model) {
-        model.addAttribute("users", userService.getAll());
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        model.addAttribute("users", userService.getAll(pageRequest));
         String symbol = Symbols.USER_ALL.toString();
         String title = "All Users";
         model = super.setupPage(model, title, subtitle, symbol);
@@ -34,10 +39,13 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/{screenName}")
-    public String getUserForScreeName(@PathVariable String screenName, Model model) {
+    public String getUserForScreeName(
+        @RequestParam(name= "page", defaultValue=""+FIRST_PAGE_NUMBER) int page,
+        @PathVariable String screenName, Model model) {
         if (User.isValidScreenName(screenName)) {
+            Pageable pageRequest = new PageRequest(page, pageSize);
             User user = userService.findByScreenName(screenName);
-            List<Tweet> tweetsForUser = tweetService.getTweetsForUser(user);
+            Page<Tweet> tweetsForUser = tweetService.getTweetsForUser(user,pageRequest);
             String symbol = Symbols.PROFILE.toString();
             String title = "@" + user.getScreenName();
             String subtitle = user.getName();
@@ -51,8 +59,9 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/tweets")
-    public String getTweetingUsers(Model model) {
-        List<User> tweetingUsers = userService.getTweetingUsers();
+    public String getTweetingUsers(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
         model.addAttribute("users", tweetingUsers);
         String symbol = Symbols.USER_TWEETS.toString();
         String title = "With one or more Tweets";
@@ -61,8 +70,9 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/notyetfriends")
-    public String getNotYetFriendUsers(Model model) {
-        model.addAttribute("users", userService.getNotYetFriendUsers());
+    public String getNotYetFriendUsers(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        model.addAttribute("users", userService.getNotYetFriendUsers(pageRequest));
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
         model = setupPage(model, title, subtitle, symbol);
@@ -70,8 +80,9 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/notyetonlist")
-    public String getNotYetOnList(Model model) {
-        model.addAttribute("users", userService.getNotYetOnList());
+    public String getNotYetOnList(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        model.addAttribute("users", userService.getNotYetOnList(pageRequest));
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
         model = setupPage(model, title, subtitle, symbol);
@@ -79,8 +90,9 @@ public class UserController extends AbstractTwitterwallController {
     }
 
     @RequestMapping("/onlist")
-    public String getOnList(Model model) {
-        List<User> usersOnList = userService.getOnList();
+    public String getOnList(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<User> usersOnList = userService.getOnList(pageRequest);
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "On List";
@@ -93,6 +105,9 @@ public class UserController extends AbstractTwitterwallController {
     private final UserService userService;
 
     private final TweetService tweetService;
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;

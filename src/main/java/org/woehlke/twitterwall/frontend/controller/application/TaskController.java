@@ -2,18 +2,20 @@ package org.woehlke.twitterwall.frontend.controller.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.application.TaskService;
-
-import java.util.List;
 
 /**
  * Created by tw on 11.07.17.
@@ -23,20 +25,23 @@ import java.util.List;
 public class TaskController  extends AbstractTwitterwallController {
 
     @RequestMapping(path="/all")
-    public String getAll(Model model) {
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
         String msg = "/task/all: ";
         logEnv();
         String title = "Tasks";
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
         model = setupPage(model,title,subtitle,symbol);
-        List<Task> allTasks = taskService.getAll();
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
         return "taskAll";
     }
 
     @RequestMapping(path="/{id}")
-    public String getTaskById(@PathVariable long id, Model model) {
+    public String getTaskById(
+        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
+        @PathVariable long id, Model model) {
         String msg = "/task/ "+id;
         logEnv();
         String title = "Tasks";
@@ -44,7 +49,8 @@ public class TaskController  extends AbstractTwitterwallController {
         String symbol = Symbols.TASK.toString();
         model = setupPage(model,title,subtitle,symbol);
         Task oneTask = taskService.findById(id);
-        List<TaskHistory> taskHistoryList = taskHistoryService.findByTask(oneTask);
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(oneTask,pageRequest);
         model.addAttribute("task",oneTask);
         model.addAttribute("taskHistoryList",taskHistoryList);
         return "taskHistory";
@@ -53,6 +59,9 @@ public class TaskController  extends AbstractTwitterwallController {
     private final TaskService taskService;
 
     private final TaskHistoryService taskHistoryService;
+
+    @Value("${twitterwall.frontend.maxResults}")
+    private int pageSize;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;

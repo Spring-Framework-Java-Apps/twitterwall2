@@ -22,21 +22,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentMentionImpl implements CreatePersistentMention {
 
-    private static final Logger log = LoggerFactory.getLogger(CreatePersistentMentionImpl.class);
-
-    private final MentionService mentionService;
-
-    private final StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser;
-
-    private final TaskService taskService;
-
-    @Autowired
-    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser, TaskService taskService) {
-       this.mentionService = mentionService;
-        this.storeTwitterProfileForProxyMentionForUser = storeTwitterProfileForProxyMentionForUser;
-        this.taskService = taskService;
-    }
-
     /**
      *   Creates a Mention and a User, or fetch an axisting one from the Database.
      *
@@ -92,5 +77,21 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             log.error(eventMsg);
             return null;
         }
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(CreatePersistentMentionImpl.class);
+
+    private final MentionService mentionService;
+
+    private final StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser;
+
+    private final TaskService taskService;
+
+    @Autowired
+    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser, TaskService taskService) {
+        this.mentionService = mentionService;
+        this.storeTwitterProfileForProxyMentionForUser = storeTwitterProfileForProxyMentionForUser;
+        this.taskService = taskService;
     }
 }

@@ -1,11 +1,10 @@
 package org.woehlke.twitterwall.frontend.rest.model;
 
+import org.springframework.data.domain.Page;
 import org.woehlke.twitterwall.oodm.entities.application.Task;
 import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tw on 12.07.17.
@@ -13,9 +12,9 @@ import java.util.List;
 public class TaskResourceModel implements Serializable {
 
     private Task oneTask;
-    private List<TaskHistory> taskHistoryList = new ArrayList<>();
+    private Page<TaskHistory> taskHistoryList;
 
-    public TaskResourceModel(Task oneTask, List<TaskHistory> taskHistoryList) {
+    public TaskResourceModel(Task oneTask, Page<TaskHistory> taskHistoryList) {
         this.oneTask = oneTask;
         this.taskHistoryList = taskHistoryList;
     }
@@ -31,11 +30,11 @@ public class TaskResourceModel implements Serializable {
         this.oneTask = oneTask;
     }
 
-    public List<TaskHistory> getTaskHistoryList() {
+    public Page<TaskHistory> getTaskHistoryList() {
         return taskHistoryList;
     }
 
-    public void setTaskHistoryList(List<TaskHistory> taskHistoryList) {
+    public void setTaskHistoryList(Page<TaskHistory> taskHistoryList) {
         this.taskHistoryList = taskHistoryList;
     }
 

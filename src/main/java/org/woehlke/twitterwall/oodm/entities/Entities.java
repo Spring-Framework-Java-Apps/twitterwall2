@@ -1,21 +1,18 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.entities.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.woehlke.twitterwall.oodm.entities.entities.Url.URL_PATTTERN_FOR_USER;
 
 /**
  * Created by tw on 11.07.17.
  */
 @Embeddable
-public class Entities implements Serializable {
+public class Entities extends EntitiesFilter implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
@@ -395,181 +392,6 @@ public class Entities implements Serializable {
             "\n}";
     }
 
-    private String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
-        for (Mention mention : mentions) {
-
-            if(mention.isProxy() && mention.hasUser()) {
-
-                Pattern userPattern = Pattern.compile("@(" + mention.getScreenName() + ")(" + stopChar + ")");
-                Matcher m1 = userPattern.matcher(formattedText);
-                formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2");
-
-                Pattern userPattern2 = Pattern.compile("@(" + mention.getScreenName() + ")$");
-                Matcher m2 = userPattern2.matcher(formattedText);
-                formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> ");
-            }
-        }
-        return formattedText;
-    }
-
-    private String getFormattedTextForUserProfiles(String formattedText) {
-        Pattern userPattern = Pattern.compile("@(\\w{1,15})(" + stopChar + ")");
-        Matcher m1 = userPattern.matcher(formattedText);
-        formattedText = m1.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/user/$1\">@$1</a>$2");
-
-        Pattern userPattern2 = Pattern.compile("@(\\w{1,15})$");
-        Matcher m2 = userPattern2.matcher(formattedText);
-        formattedText = m2.replaceAll("<a class=\"tweet-action tweet-profile\" href=\"/user/$1\">@$1</a> ");
-
-        return formattedText;
-    }
-
-    private String getFormattedTextForHashTags(Set<HashTag> tags, String formattedText,String domainObject ) {
-        for (HashTag tag : tags) {
-
-            Pattern hashTagPattern = Pattern.compile("#(" + tag.getText() + ")(" + stopChar + ")");
-            Matcher m3 = hashTagPattern.matcher(formattedText);
-            formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/"+domainObject+"/$1\">#$1</a>$2");
-
-            Pattern hashTagPattern2 = Pattern.compile("#(" + tag.getText() + ")$");
-            Matcher m4 = hashTagPattern2.matcher(formattedText);
-            formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/"+domainObject+"/$1\">#$1</a> ");
-        }
-        return formattedText;
-    }
-
-    private String getFormattedTextForTickerSymbols(Set<TickerSymbol> tickerSymbols, String formattedText) {
-        for(TickerSymbol tickerSymbol:tickerSymbols){
-            Pattern myUrl1 = Pattern.compile("(" + tickerSymbol.getUrl() + ")(" + stopChar + ")");
-            Matcher m10 = myUrl1.matcher(formattedText);
-            formattedText = m10.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + tickerSymbol.getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a>$2");
-
-            Pattern myUrl2 = Pattern.compile("(" + tickerSymbol.getUrl() + ")$");
-            Matcher m11 = myUrl2.matcher(formattedText);
-            formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + tickerSymbol.getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a> ");
-        }
-        return formattedText;
-    }
-
-    /*
-    private String getFormattedTextForHashTagsInTweet(String formattedText) {
-        Pattern hashTagPattern = Pattern.compile("#(\\w*)(" + stopChar + ")");
-        Matcher m3 = hashTagPattern.matcher(formattedText);
-        formattedText = m3.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/tweet/$1\">#$1</a>$2");
-
-        Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
-        Matcher m4 = hashTagPattern2.matcher(formattedText);
-        formattedText = m4.replaceAll("<a class=\"tweet-action tweet-hashtag\" href=\"/hashtag/tweet/$1\">#$1</a> ");
-
-        return formattedText;
-    }*/
-
-    private String getFormattedTextForMedia(Set<Media> media, String formattedText) {
-        for (Media medium : media) {
-            if (medium.getMediaType().compareTo("photo") == 0) {
-                Pattern myUrl1 = Pattern.compile("(" + medium.getUrl() + ")(" + stopChar + ")");
-                Matcher m10 = myUrl1.matcher(formattedText);
-                formattedText = m10.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a>$2");
-
-                Pattern myUrl2 = Pattern.compile("(" + medium.getUrl() + ")$");
-                Matcher m11 = myUrl2.matcher(formattedText);
-                formattedText = m11.replaceAll("<br/><br/><a class=\"tweet-action tweet-photo\" href=\"" + medium.getExpanded() + "\" target=\"_blank\"><img class=\"tweet-photo\" src=\"" + medium.getMediaHttps() + "\" /></a> ");
-            }
-        }
-        return formattedText;
-    }
-
-    public String getFormattedUrlForUrls(Set<Url> urls, String formattedText) {
-        for (Url url : urls) {
-
-            Pattern myUrl1 = Pattern.compile(url.getUrl());
-            Matcher m10 = myUrl1.matcher(formattedText);
-            formattedText = m10.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url3\" target=\"_blank\">" + url.getDisplay() + "</a>");
-
-        }
-        return formattedText;
-    }
-
-    private String getFormattedTextForUrls( String formattedText) {
-
-        Pattern myUrl1 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER + ")(" + stopChar + ")");
-        Matcher m1 = myUrl1.matcher(formattedText);
-        formattedText = m1.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex1\" target=\"_blank\">$2</a>$3");
-
-        Pattern myUrl2 = Pattern.compile("^(" + URL_PATTTERN_FOR_USER + ")(" + stopChar + ")");
-        Matcher m2 = myUrl2.matcher(formattedText);
-        formattedText = m2.replaceAll("<a href=\"$1\" class=\"tw-url-regex2\" target=\"_blank\">$1</a>$2");
-
-        Pattern myUrl3 = Pattern.compile("(" + stopChar + ")(" + URL_PATTTERN_FOR_USER + ")$");
-        Matcher m3 = myUrl3.matcher(formattedText);
-        formattedText = m3.replaceAll("$1<a href=\"$2\" class=\"tw-url-regex3\" target=\"_blank\">$2</a>");
-
-        return formattedText;
-    }
-
-    private String getFormattedTextForUrls(Set<Url> urls, String formattedText) {
-        for (Url url : urls) {
-
-            Pattern myUrl2 = Pattern.compile("(" + url.getDisplay() + ")(" + stopChar + ")");
-            Matcher m11 = myUrl2.matcher(formattedText);
-            formattedText = m11.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-display1\" target=\"_blank\">" + url.getDisplay() + "</a>$2");
-
-            Pattern myUrl5 = Pattern.compile("(" + url.getDisplay() + ")$");
-            Matcher m21 = myUrl5.matcher(formattedText);
-            formattedText = m21.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-display2\" target=\"_blank\">" + url.getDisplay() + "</a> ");
-
-            Pattern myUrl3 = Pattern.compile("(" + url.getExpanded() + ")(" + stopChar + ")");
-            Matcher m12 = myUrl3.matcher(formattedText);
-            formattedText = m12.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-expanded1\" target=\"_blank\">" + url.getDisplay() + "</a>$2");
-
-            Pattern myUrl6 = Pattern.compile("(" + url.getExpanded() + ")$");
-            Matcher m22 = myUrl6.matcher(formattedText);
-            formattedText = m22.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-expanded2\" target=\"_blank\">" + url.getDisplay() + "</a> ");
-
-            Pattern myUrl1 = Pattern.compile("(" + url.getUrl() + ")(" + stopChar + ")");
-            Matcher m10 = myUrl1.matcher(formattedText);
-            formattedText = m10.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url1\" target=\"_blank\">" + url.getDisplay() + "</a>$2");
-
-            Pattern myUrl4 = Pattern.compile("(" + url.getUrl() + ")$");
-            Matcher m20 = myUrl4.matcher(formattedText);
-            formattedText = m20.replaceAll("<a href=\"" + url.getExpanded() + "\" class=\"tw-url2\" target=\"_blank\">" + url.getDisplay() + "</a> ");
-        }
-        return formattedText;
-    }
-
-    static public String stopChar;
-
-    static {
-        StringBuffer x = new StringBuffer("[\\s");
-        x.append("\\!");
-        x.append("\\%");
-        x.append("\\&");
-        x.append("\\'");
-        x.append("\\(");
-        x.append("\\)");
-        x.append("\\*");
-        x.append("\\+");
-        x.append("\\,");
-        x.append("\\-");
-        x.append("\\.");
-        x.append("\\/");
-        x.append("\\:");
-        x.append("\\;");
-        x.append("\\=");
-        x.append("\\?");
-        x.append("\\[");
-        x.append("\\]");
-        x.append("\\^");
-        x.append("\\…");
-        x.append("\\`");
-        x.append("\\{");
-        x.append("\\|");
-        x.append("\\}");
-        x.append("\\~");
-        x.append("]");
-        stopChar = x.toString();
-    }
-
     public String getFormattedText(String formattedText, String domainObject ) {
 
         formattedText = getFormattedTextForUserProfiles(formattedText);
@@ -586,7 +408,7 @@ public class Entities implements Serializable {
         formattedText = getFormattedTextForUrls( formattedText );
 
         Set<Mention> mentions = this.getMentions();
-        formattedText = getFormattedTextForMentions(mentions, formattedText);
+        formattedText = super.getFormattedTextForMentions(mentions, formattedText);
 
         Set<TickerSymbol> tickerSymbols = this.getTickerSymbols();
         formattedText = getFormattedTextForTickerSymbols(tickerSymbols, formattedText);

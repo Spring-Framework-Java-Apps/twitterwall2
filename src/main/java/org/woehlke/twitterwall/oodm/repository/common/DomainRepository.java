@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.oodm.repository.common;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
-
-import java.util.List;
 
 /**
  * Created by tw on 24.06.17.
@@ -13,7 +13,7 @@ public interface DomainRepository<T extends DomainObject> {
 
     T update(T domainObject);
 
-    List<T> getAll(Class<T> myClass);
+    Page<T> getAll(Class<T> myClass, Pageable pageRequest);
 
     long count(Class<T> myClass);
 }

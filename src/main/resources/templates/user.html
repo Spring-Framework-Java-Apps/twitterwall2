@@ -11,12 +11,13 @@
         <div class="row">
             <div class="col-md-12 tw-col-4-wrapper">
                 <div class="thumbnail tw-col-4-box" th:each="user : ${users}">
-                    <span>
-                    <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>
-                    <p>
-                    <a href="" th:href="@{|https://twitter.com/${user.screenName}|}"><img class="" src=""
-                         alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a></p>
-                    </span>
+                    <div>
+                        <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>
+                        <p>
+                            <a href="" th:href="@{|https://twitter.com/${user.screenName}|}"><img class="" src=""
+                                 alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a>
+                        </p>
+                    </div>
                     <div class="caption">
                         <h2><a href="" th:href="@{|/user/${user.screenName}|}"><span th:text="${user.name}">name</span></a></h2>
                         <h3><a href="" th:href="@{|/user/${user.screenName}|}"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
