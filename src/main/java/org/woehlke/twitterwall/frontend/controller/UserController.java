@@ -35,7 +35,7 @@ public class UserController extends AbstractTwitterwallController {
         String symbol = Symbols.USER_ALL.toString();
         String title = "All Users";
         model = super.setupPage(model, title, subtitle, symbol);
-        return "user";
+        return "user/all";
     }
 
     @RequestMapping("/{screenName}")
@@ -52,7 +52,7 @@ public class UserController extends AbstractTwitterwallController {
             model = super.setupPage(model, title, subtitle, symbol);
             model.addAttribute("user", user);
             model.addAttribute("latestTweets",tweetsForUser);
-            return "profile";
+            return "user/screenName";
         } else {
             throw new IllegalArgumentException("/profile/"+ screenName);
         }
@@ -66,7 +66,7 @@ public class UserController extends AbstractTwitterwallController {
         String symbol = Symbols.USER_TWEETS.toString();
         String title = "With one or more Tweets";
         model = super.setupPage(model, title, subtitle, symbol);
-        return "user";
+        return "user/tweets";
     }
 
     @RequestMapping("/notyetfriends")
@@ -76,7 +76,7 @@ public class UserController extends AbstractTwitterwallController {
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
         model = setupPage(model, title, subtitle, symbol);
-        return "user";
+        return "user/notyetfriends";
     }
 
     @RequestMapping("/notyetonlist")
@@ -86,7 +86,7 @@ public class UserController extends AbstractTwitterwallController {
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
         model = setupPage(model, title, subtitle, symbol);
-        return "user";
+        return "user/notyetonlist";
     }
 
     @RequestMapping("/onlist")
@@ -97,7 +97,7 @@ public class UserController extends AbstractTwitterwallController {
         String symbol = Symbols.LEAF.toString();
         String title = "On List";
         model = setupPage(model, title, subtitle, symbol);
-        return "user";
+        return "user/onlist";
     }
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

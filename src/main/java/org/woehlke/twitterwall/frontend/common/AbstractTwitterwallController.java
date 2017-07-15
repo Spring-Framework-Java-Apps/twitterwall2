@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
@@ -162,8 +165,14 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         } finally {
             log.info(msg + "--------------------------------------------------------------------");
         }
-        taskService.done(task);
-        model.addAttribute("latestTweets", latest);
+        int numberOfTwweets = latest.size();
+        if(numberOfTwweets > 0 ) {
+            Pageable pageRequest = new PageRequest(0, numberOfTwweets);
+            org.springframework.data.domain.Page<Tweet> result = new PageImpl(latest, pageRequest, numberOfTwweets);
+            model.addAttribute("latestTweets", result);
+        } else {
+            model.addAttribute("latestTweets",null);
+        }
     }
 
     protected void getTestDataUser(String msg,Model model){
@@ -191,6 +200,15 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         }
         taskService.done(task);
         model.addAttribute("user", user);
+
+        int numberOfUser = user.size();
+        if(numberOfUser > 0) {
+            Pageable pageRequest = new PageRequest(0, numberOfUser);
+            org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.User> result = new PageImpl(user, pageRequest, numberOfUser);
+            model.addAttribute("user", result);
+        } else {
+            model.addAttribute("user",null);
+        }
     }
 
     protected void addUserForScreenName(Model model, String screenName) {

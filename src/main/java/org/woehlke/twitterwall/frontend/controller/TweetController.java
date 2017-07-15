@@ -31,7 +31,7 @@ public class TweetController extends AbstractTwitterwallController {
         Pageable pageRequest = new PageRequest(page, pageSize);
         Page<Tweet> latest = tweetService.getLatestTweets(pageRequest);
         model.addAttribute("latestTweets", latest);
-        return "timeline";
+        return "tweet/all";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TweetController.class);

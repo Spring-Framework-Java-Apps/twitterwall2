@@ -51,7 +51,9 @@ public class HashTagController extends AbstractTwitterwallController {
             model = setupPage(model,title,subtitle,symbol);
             Page<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText,pageRequest);
             model.addAttribute("latestTweets", tweets);
-            return "timeline";
+            model.addAttribute("hashtagText"+hashtagText);
+            return "/hashtag/tweet/hashtagText";
+            //return "timeline";
         } else {
             throw new IllegalArgumentException("/hashtag/"+hashtagText);
         }
@@ -72,7 +74,9 @@ public class HashTagController extends AbstractTwitterwallController {
             model = setupPage(model,title,subtitle,symbol);
             Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequest);
             model.addAttribute("users", users);
-            return "user";
+            model.addAttribute("hashtagText"+hashtagText);
+            return "/hashtag/user/hashtagText";
+            //return "user";
         } else {
             throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
         }
@@ -119,7 +123,8 @@ public class HashTagController extends AbstractTwitterwallController {
         while(hasNext);
         model.addAttribute("hashTagsTweets", hashTagsTweets);
         model.addAttribute("hashTagsUsers", hashTagsUsers);
-        return "tags";
+        return "/hashtag/overview";
+        //return "tags";
     }
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);

@@ -80,7 +80,7 @@ public class GlobalExceptionHandler extends AbstractTwitterwallController {
         mav = super.setupPage(mav, title, subtitle, symbol);
         mav.addObject("exception", ex);
         mav.addObject("url", request.getRequestURL());
-        mav.setViewName("persistentObjectNotFound");
+        mav.setViewName("/exceptionhandler/persistentObjectNotFound");
         return mav;
     }
 
