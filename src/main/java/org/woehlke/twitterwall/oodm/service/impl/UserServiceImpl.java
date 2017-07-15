@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.dao.UserDao;
+import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 
@@ -26,9 +27,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, UserRepository userRepository) {
         this.userDao = userDao;
+        this.userRepository = userRepository;
     }
 
     @Override

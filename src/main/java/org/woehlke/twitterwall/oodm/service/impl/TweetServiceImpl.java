@@ -14,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.dao.TweetDao;
+import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
 
@@ -28,9 +29,12 @@ public class TweetServiceImpl implements TweetService {
 
     private final TweetDao tweetDao;
 
+    private final TweetRepository tweetRepository;
+
     @Autowired
-    public TweetServiceImpl(TweetDao tweetDao) {
+    public TweetServiceImpl(TweetDao tweetDao, TweetRepository tweetRepository) {
         this.tweetDao = tweetDao;
+        this.tweetRepository = tweetRepository;
     }
 
     @Override

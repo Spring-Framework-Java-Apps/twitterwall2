@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
+import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
@@ -104,14 +106,20 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     private final UrlDao urlDao;
 
+    private final UrlRepository urlRepository;
+
     private final UrlCacheDao urlCacheDao;
+
+    private final UrlCacheRepository urlCacheRepository;
 
     private final TwitterUrlService twitterUrlService;
 
     @Autowired
-    public CreatePersistentUrlImpl(UrlDao urlDao, UrlCacheDao urlCacheDao, TwitterUrlService twitterUrlService) {
+    public CreatePersistentUrlImpl(UrlDao urlDao, UrlRepository urlRepository, UrlCacheDao urlCacheDao, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
         this.urlDao = urlDao;
+        this.urlRepository = urlRepository;
         this.urlCacheDao = urlCacheDao;
+        this.urlCacheRepository = urlCacheRepository;
         this.twitterUrlService = twitterUrlService;
     }
 }

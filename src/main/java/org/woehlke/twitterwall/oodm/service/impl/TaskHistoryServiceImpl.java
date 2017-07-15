@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.dao.TaskHistoryDao;
+import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 
 /**
@@ -23,54 +24,57 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceImpl.class);
 
-    private final TaskHistoryDao taskHistoryRepository;
+    private final TaskHistoryDao taskHistoryDao;
+
+    private final TaskHistoryRepository taskHistoryRepository;
 
     @Autowired
-    public TaskHistoryServiceImpl(TaskHistoryDao taskHistoryRepository) {
+    public TaskHistoryServiceImpl(TaskHistoryDao taskHistoryDao, TaskHistoryRepository taskHistoryRepository) {
+        this.taskHistoryDao = taskHistoryDao;
         this.taskHistoryRepository = taskHistoryRepository;
     }
 
     @Override
     public TaskHistory store(TaskHistory domainObject) {
         try {
-            TaskHistory taskHistoryPersistent = this.taskHistoryRepository.findById(domainObject.getId());
+            TaskHistory taskHistoryPersistent = this.taskHistoryDao.findById(domainObject.getId());
             if(domainObject.compareTo(taskHistoryPersistent)==0) {
-                return taskHistoryRepository.update(domainObject);
+                return taskHistoryDao.update(domainObject);
             } else {
-                return taskHistoryRepository.persist(domainObject);
+                return taskHistoryDao.persist(domainObject);
             }
         } catch (EmptyResultDataAccessException e) {
-            return taskHistoryRepository.persist(domainObject);
+            return taskHistoryDao.persist(domainObject);
         }
     }
 
     @Override
     public TaskHistory create(TaskHistory domainObject) {
-        return taskHistoryRepository.persist(domainObject);
+        return taskHistoryDao.persist(domainObject);
     }
 
     @Override
     public TaskHistory update(TaskHistory domainObject) {
-        return taskHistoryRepository.update(domainObject);
+        return taskHistoryDao.update(domainObject);
     }
 
     @Override
     public Page<TaskHistory> getAll(Pageable pageRequest) {
-        return taskHistoryRepository.getAll(TaskHistory.class, pageRequest);
+        return taskHistoryDao.getAll(TaskHistory.class, pageRequest);
     }
 
     @Override
     public long count() {
-        return taskHistoryRepository.count(TaskHistory.class);
+        return taskHistoryDao.count(TaskHistory.class);
     }
 
     @Override
     public Page<TaskHistory> findByTask(Task oneTask,Pageable pageRequest) {
-        return taskHistoryRepository.findByTask(oneTask,pageRequest);
+        return taskHistoryDao.findByTask(oneTask,pageRequest);
     }
 
     @Override
     public TaskHistory findById(long id) {
-        return taskHistoryRepository.findById(id);
+        return taskHistoryDao.findById(id);
     }
 }

@@ -13,6 +13,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.dao.TaskDao;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -25,48 +26,51 @@ public class TaskServiceImpl implements TaskService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
-    private final TaskDao taskRepository;
+    private final TaskDao taskDao;
+
+    private final TaskRepository taskRepository;
 
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public TaskServiceImpl(TaskDao taskRepository, CountedEntitiesService countedEntitiesService) {
-        this.taskRepository = taskRepository;
+    public TaskServiceImpl(TaskDao taskRepository, TaskRepository taskRepository1, CountedEntitiesService countedEntitiesService) {
+        this.taskDao = taskRepository;
+        this.taskRepository = taskRepository1;
         this.countedEntitiesService = countedEntitiesService;
     }
 
     @Override
     public Task store(Task domainObject) {
         try {
-            Task taskPersistent = taskRepository.findById(domainObject.getId());
+            Task taskPersistent = taskDao.findById(domainObject.getId());
             if(domainObject.compareTo(taskPersistent)==0) {
-                return taskRepository.update(domainObject);
+                return taskDao.update(domainObject);
             } else {
-                return taskRepository.persist(domainObject);
+                return taskDao.persist(domainObject);
             }
         } catch (EmptyResultDataAccessException e) {
-            return taskRepository.persist(domainObject);
+            return taskDao.persist(domainObject);
         }
     }
 
     @Override
     public Task create(Task domainObject) {
-        return taskRepository.persist(domainObject);
+        return taskDao.persist(domainObject);
     }
 
     @Override
     public Task update(Task domainObject) {
-        return taskRepository.update(domainObject);
+        return taskDao.update(domainObject);
     }
 
     @Override
     public Page<Task> getAll(Pageable pageRequest) {
-        return taskRepository.getAll(Task.class,pageRequest);
+        return taskDao.getAll(Task.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return taskRepository.count(Task.class);
+        return taskDao.count(Task.class);
     }
 
     @Override
@@ -75,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = new Task(msg,type);
         task.setCountedEntitiesAtStart(countedEntities);
         task.start();
-        task = taskRepository.persist(task);
+        task = taskDao.persist(task);
         log.debug(task.toString());
         return task;
     }
@@ -85,7 +89,7 @@ public class TaskServiceImpl implements TaskService {
         AbstractTwitterObject.CountedEntities countedEntities = this.countedEntitiesService.countAll();
         task.setCountedEntitiesAtFinish(countedEntities);
         task.done();
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -93,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task error(Task task,Exception e) {
         task.error(e);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -101,7 +105,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task error(Task task, Exception e, String msg) {
         task.error(e,msg);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -109,7 +113,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task warn(Task task, Exception e) {
         task.warn(e);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -117,7 +121,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task warn(Task task, Exception e, String msg) {
         task.warn(e,msg);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -125,7 +129,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task event(Task task, String msg) {
         task.event(msg);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -133,7 +137,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task warn(Task task, String msg) {
         task.warn(msg);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
@@ -141,13 +145,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task error(Task task, String msg) {
         task.error(msg);
-        task = taskRepository.update(task);
+        task = taskDao.update(task);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task findById(long id) {
-        return taskRepository.findById(id);
+        return taskDao.findById(id);
     }
 }

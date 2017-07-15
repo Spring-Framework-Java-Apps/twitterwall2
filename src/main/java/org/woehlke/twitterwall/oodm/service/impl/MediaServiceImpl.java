@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.dao.MediaDao;
+import org.woehlke.twitterwall.oodm.repositories.MediaRepository;
 import org.woehlke.twitterwall.oodm.service.MediaService;
 
 /**
@@ -25,9 +26,12 @@ public class MediaServiceImpl implements MediaService {
 
     private final MediaDao mediaDao;
 
+    private final MediaRepository mediaRepository;
+
     @Autowired
-    public MediaServiceImpl(MediaDao mediaDao) {
+    public MediaServiceImpl(MediaDao mediaDao, MediaRepository mediaRepository) {
         this.mediaDao = mediaDao;
+        this.mediaRepository = mediaRepository;
     }
 
     @Override

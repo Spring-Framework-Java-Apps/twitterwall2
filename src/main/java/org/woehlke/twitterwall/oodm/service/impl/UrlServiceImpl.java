@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.dao.UrlDao;
+import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 
 /**
@@ -25,9 +26,12 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlDao urlDao;
 
+    private final UrlRepository urlRepository;
+
     @Autowired
-    public UrlServiceImpl(UrlDao urlDao) {
+    public UrlServiceImpl(UrlDao urlDao, UrlRepository urlRepository) {
         this.urlDao = urlDao;
+        this.urlRepository = urlRepository;
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.dao.*;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.repositories.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.Map;
@@ -33,8 +34,8 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         long countTickerSymbol = this.tickerSymbolDao.count(TickerSymbol.class);
         long countUrl = this.urlDao.count(Url.class);
         long countUrlCache = this.urlCacheDao.count(UrlCache.class);
-        long countTask = this.taskRepository.count(Task.class);
-        long countTaskHistory = this.taskHistoryRepository.count(TaskHistory.class);
+        long countTask = this.taskDao.count(Task.class);
+        long countTaskHistory = this.taskHistoryDao.count(TaskHistory.class);
 
         Map<String,Integer> tableCount =  jdbcDao.getTableCount();
 
@@ -79,38 +80,68 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final TweetDao tweetDao;
 
+    private final TweetRepository tweetRepository;
+
     private final UserDao userDao;
+
+    private final UserRepository userRepository;
 
     private final MentionDao mentionDao;
 
+    private final MentionRepository mentionRepository;
+
     private final MediaDao mediaDao;
+
+    private final MediaRepository mediaRepository;
 
     private final HashTagDao hashTagDao;
 
+    private final HashTagRepository hashTagRepository;
+
     private final UrlDao urlDao;
+
+    private final UrlRepository urlRepository;
 
     private final UrlCacheDao urlCacheDao;
 
+    private final UrlCacheRepository urlCacheRepository;
+
     private final TickerSymbolDao tickerSymbolDao;
 
-    private final TaskDao taskRepository;
+    private final TickerSymbolRepository tickerSymbolRepository;
 
-    private final TaskHistoryDao taskHistoryRepository;
+    private final TaskDao taskDao;
+
+    private final TaskRepository taskRepository;
+
+    private final TaskHistoryDao taskHistoryDao;
+
+    private final TaskHistoryRepository taskHistoryRepository;
 
     private final JdbcDao jdbcDao;
 
 
     @Autowired
-    public CountedEntitiesServiceImpl(TweetDao tweetDao, UserDao userDao, MentionDao mentionDao, MediaDao mediaDao, HashTagDao hashTagDao, UrlDao urlDao, UrlCacheDao urlCacheDao, TickerSymbolDao tickerSymbolDao, TaskDao taskRepository, TaskHistoryDao taskHistoryRepository, JdbcDao jdbcDao) {
+    public CountedEntitiesServiceImpl(TweetDao tweetDao, TweetRepository tweetRepository, UserDao userDao, UserRepository userRepository, MentionDao mentionDao, MentionRepository mentionRepository, MediaDao mediaDao, MediaRepository mediaRepository, HashTagDao hashTagDao, HashTagRepository hashTagRepository, UrlDao urlDao, UrlRepository urlRepository, UrlCacheDao urlCacheDao, UrlCacheRepository urlCacheRepository, TickerSymbolDao tickerSymbolDao, TickerSymbolRepository tickerSymbolRepository, TaskDao taskDao, TaskRepository taskRepository, TaskHistoryDao taskHistoryDao, TaskHistoryRepository taskHistoryRepository, JdbcDao jdbcDao) {
         this.tweetDao = tweetDao;
+        this.tweetRepository = tweetRepository;
         this.userDao = userDao;
+        this.userRepository = userRepository;
         this.mentionDao = mentionDao;
+        this.mentionRepository = mentionRepository;
         this.mediaDao = mediaDao;
+        this.mediaRepository = mediaRepository;
         this.hashTagDao = hashTagDao;
+        this.hashTagRepository = hashTagRepository;
         this.urlDao = urlDao;
+        this.urlRepository = urlRepository;
         this.urlCacheDao = urlCacheDao;
+        this.urlCacheRepository = urlCacheRepository;
         this.tickerSymbolDao = tickerSymbolDao;
+        this.tickerSymbolRepository = tickerSymbolRepository;
+        this.taskDao = taskDao;
         this.taskRepository = taskRepository;
+        this.taskHistoryDao = taskHistoryDao;
         this.taskHistoryRepository = taskHistoryRepository;
         this.jdbcDao = jdbcDao;
     }

@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.dao.UrlCacheDao;
+import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.service.UrlCacheService;
-import org.woehlke.twitterwall.oodm.service.impl.TickerSymbolServiceImpl;
 
 
 /**
@@ -27,9 +27,12 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     private final UrlCacheDao urlCacheDao;
 
+    private final UrlCacheRepository urlCacheRepository;
+
     @Autowired
-    public UrlCacheServiceImpl(UrlCacheDao urlCacheDao) {
+    public UrlCacheServiceImpl(UrlCacheDao urlCacheDao, UrlCacheRepository urlCacheRepository) {
         this.urlCacheDao = urlCacheDao;
+        this.urlCacheRepository = urlCacheRepository;
     }
 
     @Override

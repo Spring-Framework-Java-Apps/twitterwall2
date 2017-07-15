@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.dao.MentionDao;
+import org.woehlke.twitterwall.oodm.repositories.MentionRepository;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 
 
@@ -26,9 +27,12 @@ public class MentionServiceImpl implements MentionService {
 
     private final MentionDao mentionDao;
 
+    private final MentionRepository mentionRepository;
+
     @Autowired
-    public MentionServiceImpl(MentionDao mentionDao) {
+    public MentionServiceImpl(MentionDao mentionDao, MentionRepository mentionRepository) {
         this.mentionDao = mentionDao;
+        this.mentionRepository = mentionRepository;
     }
 
     @Override

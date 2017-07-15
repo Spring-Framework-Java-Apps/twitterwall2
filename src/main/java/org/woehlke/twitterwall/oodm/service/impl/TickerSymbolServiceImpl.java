@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.dao.TickerSymbolDao;
+import org.woehlke.twitterwall.oodm.repositories.TickerSymbolRepository;
 import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 
 
@@ -26,9 +27,12 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
 
     private final TickerSymbolDao tickerSymbolDao;
 
+    private final TickerSymbolRepository tickerSymbolRepository;
+
     @Autowired
-    public TickerSymbolServiceImpl(TickerSymbolDao tickerSymbolDao) {
+    public TickerSymbolServiceImpl(TickerSymbolDao tickerSymbolDao, TickerSymbolRepository tickerSymbolRepository) {
         this.tickerSymbolDao = tickerSymbolDao;
+        this.tickerSymbolRepository = tickerSymbolRepository;
     }
 
     @Override
