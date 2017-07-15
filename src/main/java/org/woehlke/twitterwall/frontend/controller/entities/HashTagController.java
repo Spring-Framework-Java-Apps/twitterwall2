@@ -66,53 +66,6 @@ public class HashTagController extends AbstractTwitterwallController {
             throw new IllegalArgumentException("/hashtag/"+hashtagText);
         }
     }
-/*
-    @RequestMapping(path="/tweet/{hashtagText}")
-    public String hashTagFromTweets(
-        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
-        @PathVariable String hashtagText, Model model) {
-        logEnv();
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        if (m.matches()) {
-            Pageable pageRequest = new PageRequest(page, pageSize);
-            String title = "Tweets für HashTag";
-            String subtitle = "#" + hashtagText;
-            String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model,title,subtitle,symbol);
-            Page<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText,pageRequest);
-            model.addAttribute("latestTweets", tweets);
-            model.addAttribute("hashtagText"+hashtagText);
-            return "/hashtag/tweet/hashtagText";
-            //return "timeline";
-        } else {
-            throw new IllegalArgumentException("/hashtag/"+hashtagText);
-        }
-    }
-
-    @RequestMapping(path="/user/{hashtagText}")
-    public String hashTagFromUsers(
-        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
-        @PathVariable String hashtagText, Model model) {
-        logEnv();
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        if (m.matches()) {
-            Pageable pageRequest = new PageRequest(page, pageSize);
-            String title = "Users für HashTag";
-            String subtitle = "#" + hashtagText;
-            String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model,title,subtitle,symbol);
-            Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequest);
-            model.addAttribute("users", users);
-            model.addAttribute("hashtagText"+hashtagText);
-            return "/hashtag/user/hashtagText";
-            //return "user";
-        } else {
-            throw new IllegalArgumentException("/user/hashtag/"+hashtagText);
-        }
-    }
-*/
 
     @RequestMapping(path="/overview")
     public String hashTagsOverview(Model model) {
