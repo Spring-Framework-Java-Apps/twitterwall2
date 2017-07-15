@@ -10,19 +10,11 @@
 <section>
     <div class="container">
         <div th:if="${latestTweets} != null">
-            <div class="row">
-                <div class="col-md-12 tw-col-4-wrapper">
-                    <div th:include="timeline :: tw-show-latest-tweets" >
-                    </div>
-                </div>
+            <div th:include="timeline :: tw-show-latest-tweets" >
             </div>
         </div>
         <div th:if="${users} != null">
-            <div class="row">
-                <div class="col-md-12 tw-col-4-wrapper">
-                    <div th:include="user :: tw-show-users" >
-                    </div>
-                </div>
+            <div th:include="user :: tw-show-users" >
             </div>
         </div>
     </div>

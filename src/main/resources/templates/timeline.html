@@ -9,9 +9,9 @@
 </header>
 <section>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 tw-col-4-wrapper">
-                <div th:fragment="tw-show-latest-tweets">
+        <div th:fragment="tw-show-latest-tweets">
+            <div class="row">
+                <div class="col-md-12 tw-col-4-wrapper">
                     <div class="thumbnail tw-col-4-box" th:each="tweet : ${latestTweets}">
                         <div>
                             <p>

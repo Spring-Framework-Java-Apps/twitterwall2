@@ -8,9 +8,9 @@
 <header th:include="layout :: tw-header" ></header>
 <section>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 tw-col-4-wrapper">
-                <div th:fragment="tw-show-users">
+        <div th:fragment="tw-show-users">
+            <div class="row">
+                <div class="col-md-12 tw-col-4-wrapper">
                     <div class="thumbnail tw-col-4-box" th:each="user : ${users}">
                         <div>
                             <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>

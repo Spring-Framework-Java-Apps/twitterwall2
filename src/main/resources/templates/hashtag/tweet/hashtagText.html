@@ -20,11 +20,7 @@
                 </span>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12 tw-col-4-wrapper">
-                <div th:include="timeline :: tw-show-latest-tweets" ></div>
-            </div>
-        </div>
+        <div th:include="timeline :: tw-show-latest-tweets" ></div>
         <div class="row">
             <div class="col-md-12">
                 <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
