@@ -36,6 +36,37 @@ import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEX
 @RequestMapping(path="/hashtag")
 public class HashTagController extends AbstractTwitterwallController {
 
+    @RequestMapping(path="/{hashtagText}")
+    public String hashTagFromTweetsAndUsers(
+        @RequestParam(name= "pageTweet" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageTweet,
+        @RequestParam(name= "pageUser" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageUser,
+        @PathVariable String hashtagText, Model model)
+    {
+        logEnv();
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        if (m.matches()) {
+            Pageable pageRequestTweet = new PageRequest(pageTweet, pageSize);
+            Pageable pageRequestUser = new PageRequest(pageUser, pageSize);
+            String title = "Tweets und User für HashTag";
+            String subtitle = "#" + hashtagText;
+            String symbol = Symbols.HASHTAG.toString();
+            model = setupPage(model,title,subtitle,symbol);
+            //
+            Page<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText,pageRequestTweet);
+            model.addAttribute("latestTweets", tweets);
+            //
+            Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequestUser);
+            model.addAttribute("users", users);
+            //
+            model.addAttribute("hashtagText"+hashtagText);
+            return "/hashtag/hashtagText";
+            //return "timeline";
+        } else {
+            throw new IllegalArgumentException("/hashtag/"+hashtagText);
+        }
+    }
+
     @RequestMapping(path="/tweet/{hashtagText}")
     public String hashTagFromTweets(
         @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
