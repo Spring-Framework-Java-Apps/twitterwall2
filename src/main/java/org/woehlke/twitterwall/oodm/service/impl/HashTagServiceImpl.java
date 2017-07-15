@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.dao.HashTagDao;
+import org.woehlke.twitterwall.oodm.repositories.HashTagRepository;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
 /**
@@ -25,21 +26,26 @@ public class HashTagServiceImpl implements HashTagService {
 
     private final HashTagDao hashTagDao;
 
+    private final HashTagRepository hashTagRepository;
+
     @Autowired
-    public HashTagServiceImpl(HashTagDao hashTagDao) {
+    public HashTagServiceImpl(HashTagDao hashTagDao, HashTagRepository hashTagRepository) {
         this.hashTagDao = hashTagDao;
+        this.hashTagRepository = hashTagRepository;
     }
 
     @Override
     public HashTag create(HashTag hashTag, Task task) {
         hashTag.setCreatedBy(task);
-        return this.hashTagDao.persist(hashTag);
+        return hashTagRepository.save(hashTag);
+        //return this.hashTagDao.persist(hashTag);
     }
 
     @Override
-    public HashTag update(HashTag tag, Task task) {
-        tag.setUpdatedBy(task);
-        return this.hashTagDao.update(tag);
+    public HashTag update(HashTag hashTag, Task task) {
+        hashTag.setUpdatedBy(task);
+        return hashTagRepository.save(hashTag);
+        //return this.hashTagDao.update(tag);
     }
 
     @Override
@@ -49,12 +55,14 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public Page<HashTag> getAll(Pageable pageRequest) {
-        return this.hashTagDao.getAll(HashTag.class,pageRequest);
+        return hashTagRepository.findAll(pageRequest);
+        //return this.hashTagDao.getAll(HashTag.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.hashTagDao.count(HashTag.class);
+        return hashTagRepository.count();
+        //return this.hashTagDao.count(HashTag.class);
     }
 
     @Override

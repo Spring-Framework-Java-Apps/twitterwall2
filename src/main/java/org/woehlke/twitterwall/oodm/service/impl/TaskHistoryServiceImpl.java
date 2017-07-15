@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+//import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +36,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     @Override
     public TaskHistory store(TaskHistory domainObject) {
+        return taskHistoryRepository.save(domainObject);
+        /*
         try {
             TaskHistory taskHistoryPersistent = this.taskHistoryDao.findById(domainObject.getId());
             if(domainObject.compareTo(taskHistoryPersistent)==0) {
@@ -46,26 +48,31 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         } catch (EmptyResultDataAccessException e) {
             return taskHistoryDao.persist(domainObject);
         }
+        */
     }
 
     @Override
     public TaskHistory create(TaskHistory domainObject) {
-        return taskHistoryDao.persist(domainObject);
+        return taskHistoryRepository.save(domainObject);
+        //return taskHistoryDao.persist(domainObject);
     }
 
     @Override
     public TaskHistory update(TaskHistory domainObject) {
-        return taskHistoryDao.update(domainObject);
+        return taskHistoryRepository.save(domainObject);
+        //return taskHistoryDao.update(domainObject);
     }
 
     @Override
     public Page<TaskHistory> getAll(Pageable pageRequest) {
-        return taskHistoryDao.getAll(TaskHistory.class, pageRequest);
+        return taskHistoryRepository.findAll(pageRequest);
+        //return taskHistoryDao.getAll(TaskHistory.class, pageRequest);
     }
 
     @Override
     public long count() {
-        return taskHistoryDao.count(TaskHistory.class);
+        return taskHistoryRepository.count();
+        //return taskHistoryDao.count(TaskHistory.class);
     }
 
     @Override
@@ -75,6 +82,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     @Override
     public TaskHistory findById(long id) {
-        return taskHistoryDao.findById(id);
+        return taskHistoryRepository.findOne(id);
+        //return taskHistoryDao.findById(id);
     }
 }

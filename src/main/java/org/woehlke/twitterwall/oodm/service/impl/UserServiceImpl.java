@@ -58,23 +58,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user, Task task) {
         user.setCreatedBy(task);
-        return userDao.persist(user);
+        return userRepository.save(user);
+        //return userDao.persist(user);
     }
 
     @Override
     public User update(User user, Task task) {
         user.setUpdatedBy(task);
-        return userDao.update(user);
+        return userRepository.save(user);
+        //return userDao.update(user);
     }
 
     @Override
     public Page<User> getAll(Pageable pageRequest) {
-        return userDao.getAll(User.class,pageRequest);
+        return userRepository.findAll(pageRequest);
+        //return userDao.getAll(User.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return userDao.count(User.class);
+        return userRepository.count();
+        //return userDao.count(User.class);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
 
 import javax.persistence.*;
@@ -93,7 +93,7 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "start_count_userprofile2tickersymbol")),
         @AttributeOverride(name = "userprofile2url", column = @Column(name = "start_count_userprofile2url"))
     })
-    private AbstractTwitterObject.CountedEntities countedEntitiesAtStart;
+    private CountedEntities countedEntitiesAtStart;
 
     @Embedded
     @AttributeOverrides({
@@ -118,7 +118,7 @@ public class Task implements DomainObject<Task> {
         @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "done_count_userprofile2tickersymbol")),
         @AttributeOverride(name = "userprofile2url", column = @Column(name = "done_count_userprofile2url"))
     })
-    private AbstractTwitterObject.CountedEntities countedEntitiesAtFinish;
+    private CountedEntities countedEntitiesAtFinish;
 
     public Task() {
         taskStatus = TaskStatus.READY;
@@ -130,7 +130,7 @@ public class Task implements DomainObject<Task> {
         taskStatus = TaskStatus.READY;
     }
 
-    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished, List<TaskHistory> history, AbstractTwitterObject.CountedEntities countedEntitiesAtStart, AbstractTwitterObject.CountedEntities countedEntitiesAtFinish) {
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished, List<TaskHistory> history, CountedEntities countedEntitiesAtStart, CountedEntities countedEntitiesAtFinish) {
         this.description = description;
         this.taskType = taskType;
         this.taskStatus = taskStatus;
@@ -209,19 +209,19 @@ public class Task implements DomainObject<Task> {
         this.timeFinished = timeFinished;
     }
 
-    public AbstractTwitterObject.CountedEntities getCountedEntitiesAtStart() {
+    public CountedEntities getCountedEntitiesAtStart() {
         return countedEntitiesAtStart;
     }
 
-    public void setCountedEntitiesAtStart(AbstractTwitterObject.CountedEntities countedEntitiesAtStart) {
+    public void setCountedEntitiesAtStart(CountedEntities countedEntitiesAtStart) {
         this.countedEntitiesAtStart = countedEntitiesAtStart;
     }
 
-    public AbstractTwitterObject.CountedEntities getCountedEntitiesAtFinish() {
+    public CountedEntities getCountedEntitiesAtFinish() {
         return countedEntitiesAtFinish;
     }
 
-    public void setCountedEntitiesAtFinish(AbstractTwitterObject.CountedEntities countedEntitiesAtFinish) {
+    public void setCountedEntitiesAtFinish(CountedEntities countedEntitiesAtFinish) {
         this.countedEntitiesAtFinish = countedEntitiesAtFinish;
     }
 

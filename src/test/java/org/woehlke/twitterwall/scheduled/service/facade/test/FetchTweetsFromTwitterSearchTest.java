@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.ScheduledTasks;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.facade.*;
 import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
@@ -42,9 +42,9 @@ public class FetchTweetsFromTwitterSearchTest extends AbstractFacadeTest {
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest(){
-        AbstractTwitterObject.CountedEntities beforeTest = countedEntitiesService.countAll();
+        CountedEntities beforeTest = countedEntitiesService.countAll();
         this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
-        AbstractTwitterObject.CountedEntities afterTest = countedEntitiesService.countAll();
+        CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }

@@ -58,23 +58,27 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     public UrlCache create(UrlCache domainObject, Task task) {
         domainObject.setCreatedBy(task);
-        return this.urlCacheDao.persist(domainObject);
+        return urlCacheRepository.save(domainObject);
+        //return this.urlCacheDao.persist(domainObject);
     }
 
     @Override
     public UrlCache update(UrlCache domainObject, Task task) {
         domainObject.setUpdatedBy(task);
-        return domainObject;
+        return urlCacheRepository.save(domainObject);
+        //return domainObject;
     }
 
     @Override
     public Page<UrlCache> getAll(Pageable pageRequest) {
-        return this.urlCacheDao.getAll(UrlCache.class,pageRequest);
+        return urlCacheRepository.findAll(pageRequest);
+        //return this.urlCacheDao.getAll(UrlCache.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.urlCacheDao.count(UrlCache.class);
+        return urlCacheRepository.count();
+        //return this.urlCacheDao.count(UrlCache.class);
     }
 
     @Override

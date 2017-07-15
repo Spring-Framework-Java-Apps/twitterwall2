@@ -38,7 +38,8 @@ public class MentionServiceImpl implements MentionService {
     @Override
     public Mention create(Mention mention, Task task) {
         mention.setCreatedBy(task);
-        return this.mentionDao.persist(mention);
+        return mentionRepository.save(mention);
+        //return this.mentionDao.persist(mention);
     }
 
     @Override
@@ -49,17 +50,20 @@ public class MentionServiceImpl implements MentionService {
     @Override
     public Mention update(Mention mention, Task task) {
         mention.setUpdatedBy(task);
-        return this.mentionDao.update(mention);
+        return mentionRepository.save(mention);
+        //return this.mentionDao.update(mention);
     }
 
     @Override
     public Page<Mention> getAll(Pageable pageRequest) {
-        return this.mentionDao.getAll(Mention.class,pageRequest);
+        return mentionRepository.findAll(pageRequest);
+        //return this.mentionDao.getAll(Mention.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.mentionDao.count(Mention.class);
+        return mentionRepository.count();
+        //return this.mentionDao.count(Mention.class);
     }
 
     @Override

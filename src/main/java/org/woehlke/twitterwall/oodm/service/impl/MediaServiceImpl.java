@@ -37,28 +37,33 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media create(Media media,Task task) {
         media.setUpdatedBy(task);
-        return this.mediaDao.persist(media);
+        return mediaRepository.save(media);
+        //return this.mediaDao.persist(media);
     }
 
     @Override
     public Media findByIdTwitter(long idTwitter) {
+       //return mediaRepository.findOne()
         return this.mediaDao.findByIdTwitter(idTwitter,Media.class);
     }
 
     @Override
     public Media update(Media media,Task task) {
         media.setUpdatedBy(task);
-        return this.mediaDao.update(media);
+        return mediaRepository.save(media);
+        //return this.mediaDao.update(media);
     }
 
     @Override
     public Page<Media> getAll(Pageable pageRequest) {
-        return this.mediaDao.getAll(Media.class,pageRequest);
+        return mediaRepository.findAll(pageRequest);
+        //return this.mediaDao.getAll(Media.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.mediaDao.count(Media.class);
+        return mediaRepository.count();
+        //return this.mediaDao.count(Media.class);
     }
 
     @Override

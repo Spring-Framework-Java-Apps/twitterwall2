@@ -40,18 +40,21 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public Tweet create(Tweet myTweet, Task task) {
         myTweet.setCreatedBy(task);
-        return tweetDao.persist(myTweet);
+        return tweetRepository.save(myTweet);
+        //return tweetDao.persist(myTweet);
     }
 
     @Override
     public Tweet update(Tweet myTweet, Task task) {
         myTweet.setUpdatedBy(task);
-        return tweetDao.update(myTweet);
+        return tweetRepository.save(myTweet);
+        //return tweetDao.update(myTweet);
     }
 
     @Override
     public Page<Tweet> getAll(Pageable pageRequest) {
-        return tweetDao.getAll(Tweet.class,pageRequest);
+        return tweetRepository.findAll(pageRequest);
+        //return tweetDao.getAll(Tweet.class,pageRequest);
     }
 
     @Override
@@ -79,7 +82,8 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public long count() {
-        return tweetDao.count(Tweet.class);
+        return tweetRepository.count();
+        //return tweetDao.count(Tweet.class);
     }
 
     @Override

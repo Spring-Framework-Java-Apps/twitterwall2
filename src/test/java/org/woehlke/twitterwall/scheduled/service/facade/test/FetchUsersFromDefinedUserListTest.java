@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
@@ -40,9 +40,9 @@ public class FetchUsersFromDefinedUserListTest  extends AbstractFacadeTest {
     @Commit
     @Test
     public void fetchUsersFromDefinedUserListTest(){
-        AbstractTwitterObject.CountedEntities beforeTest = countedEntitiesService.countAll();
+        CountedEntities beforeTest = countedEntitiesService.countAll();
         this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
-        AbstractTwitterObject.CountedEntities afterTest = countedEntitiesService.countAll();
+        CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }

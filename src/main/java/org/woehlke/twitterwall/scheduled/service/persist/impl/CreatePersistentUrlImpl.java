@@ -43,7 +43,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     log.debug(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
                 urlPers.setUpdatedBy(task);
-                urlPers = this.urlDao.update(urlPers);
+                urlPers = urlRepository.save(urlPers);//this.urlDao.update(urlPers);
                 return urlPers;
             } catch (EmptyResultDataAccessException ex) {
                 log.debug(msg+" not found ");
@@ -61,7 +61,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
                     newUrl.setCreatedBy(task);
                     log.debug(msg+" try to persist: "+newUrl.toString());
-                    newUrl = this.urlDao.persist(newUrl);
+                    newUrl = urlRepository.save(newUrl);//this.urlDao.persist(newUrl);
                     log.debug(msg+" persisted: "+newUrl.toString());
                     return newUrl;
                 } catch (EmptyResultDataAccessException e) {
@@ -79,7 +79,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         if (urlCache.isUrlAndExpandedTheSame()) {
                             log.debug(msg + " not persisted: " + urlCache.toString());
                         } else {
-                            urlCache = urlCacheDao.persist(urlCache);
+                            urlCache = urlCacheRepository.save(urlCache);//urlCacheDao.persist(urlCache);
                             log.debug(msg + " persisted: " + urlCache.toString());
                         }
                         String displayUrl = myUrl.getExpanded();
@@ -92,7 +92,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
                         newUrl.setCreatedBy(task);
                         log.debug(msg+" try to persist: "+newUrl.toString());
-                        newUrl =this.urlDao.persist(newUrl);
+                        newUrl = urlRepository.save(newUrl); //this.urlDao.persist(newUrl);
                         log.debug(msg+" persisted: "+newUrl.toString());
                         return newUrl;
                     }

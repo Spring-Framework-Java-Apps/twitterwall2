@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.dao.*;
-import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.repositories.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -23,8 +22,8 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
 
     @Override
-    public AbstractTwitterObject.CountedEntities countAll() {
-        AbstractTwitterObject.CountedEntities c = new AbstractTwitterObject.CountedEntities();
+    public CountedEntities countAll() {
+        CountedEntities c = new CountedEntities();
 
         /*
         long countUser = this.userDao.count(User.class);

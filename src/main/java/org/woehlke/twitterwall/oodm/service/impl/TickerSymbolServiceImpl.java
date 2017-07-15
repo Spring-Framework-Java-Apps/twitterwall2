@@ -38,23 +38,27 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     @Override
     public TickerSymbol create(TickerSymbol domainObject, Task task) {
         domainObject.setCreatedBy(task);
-        return this.tickerSymbolDao.persist(domainObject);
+        return tickerSymbolRepository.save(domainObject);
+        //return this.tickerSymbolDao.persist(domainObject);
     }
 
     @Override
     public TickerSymbol update(TickerSymbol tickerSymbol, Task task) {
         tickerSymbol.setUpdatedBy(task);
-        return this.tickerSymbolDao.update(tickerSymbol);
+        return tickerSymbolRepository.save(tickerSymbol);
+        //return this.tickerSymbolDao.update(tickerSymbol);
     }
 
     @Override
     public Page<TickerSymbol> getAll(Pageable pageRequest) {
-        return this.tickerSymbolDao.getAll(TickerSymbol.class,pageRequest);
+        return tickerSymbolRepository.findAll(pageRequest);
+        //return this.tickerSymbolDao.getAll(TickerSymbol.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.tickerSymbolDao.count(TickerSymbol.class);
+        return tickerSymbolRepository.count();
+        //return this.tickerSymbolDao.count(TickerSymbol.class);
     }
 
     @Override

@@ -69,23 +69,27 @@ public class UrlServiceImpl implements UrlService {
     @Override
     public Url create(Url url, Task task) {
         url.setCreatedBy(task);
-        return this.urlDao.persist(url);
+        return urlRepository.save(url);
+        //return this.urlDao.persist(url);
     }
 
     @Override
     public Url update(Url url, Task task) {
         url.setUpdatedBy(task);
-        return this.urlDao.update(url);
+        return urlRepository.save(url);
+        //return this.urlDao.update(url);
     }
 
     @Override
     public Page<Url> getAll(Pageable pageRequest) {
-        return this.urlDao.getAll(Url.class,pageRequest);
+        return urlRepository.findAll(pageRequest);
+        //return this.urlDao.getAll(Url.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return this.urlDao.count(Url.class);
+        return urlRepository.count();
+        //return this.urlDao.count(Url.class);
     }
 
     @Override
