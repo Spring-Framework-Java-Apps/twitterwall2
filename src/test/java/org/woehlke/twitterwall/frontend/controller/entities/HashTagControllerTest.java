@@ -13,13 +13,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.frontend.controller.HashTagController;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
 
 /**
  * Created by tw on 01.07.17.

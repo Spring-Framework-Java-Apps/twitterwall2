@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller.pages;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
-import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
+import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;

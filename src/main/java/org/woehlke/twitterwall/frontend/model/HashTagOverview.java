@@ -1,6 +1,4 @@
-package org.woehlke.twitterwall.frontend.rest.model;
-
-import org.woehlke.twitterwall.frontend.model.HashTagCounted;
+package org.woehlke.twitterwall.frontend.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

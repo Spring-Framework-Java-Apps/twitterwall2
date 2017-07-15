@@ -8,12 +8,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.dao.UrlCacheDao;
-import org.woehlke.twitterwall.oodm.dao.parts.impl.DomainDaoImpl;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.dao.TweetDao;
-import org.woehlke.twitterwall.oodm.dao.parts.impl.DomainDaoWithIdTwitterImpl;
 
 import javax.persistence.*;
 import java.util.List;

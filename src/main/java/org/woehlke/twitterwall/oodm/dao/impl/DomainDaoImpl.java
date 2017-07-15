@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.dao.parts.impl;
+package org.woehlke.twitterwall.oodm.dao.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

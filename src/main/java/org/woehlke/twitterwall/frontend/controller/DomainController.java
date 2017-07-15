@@ -1,12 +1,12 @@
-package org.woehlke.twitterwall.frontend.controller.common;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
-import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
+import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 

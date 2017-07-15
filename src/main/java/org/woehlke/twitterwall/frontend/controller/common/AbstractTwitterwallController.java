@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.common;
+package org.woehlke.twitterwall.frontend.controller.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

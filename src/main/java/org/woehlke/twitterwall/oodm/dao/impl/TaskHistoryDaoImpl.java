@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.dao.TaskHistoryDao;
-import org.woehlke.twitterwall.oodm.dao.parts.impl.DomainDaoImpl;
 
 import javax.persistence.TypedQuery;
 import java.util.List;

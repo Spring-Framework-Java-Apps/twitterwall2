@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.dao.UserDao;
-import org.woehlke.twitterwall.oodm.dao.parts.impl.DomainDaoWithIdTwitterImpl;
 
 import javax.persistence.*;
 import java.util.List;

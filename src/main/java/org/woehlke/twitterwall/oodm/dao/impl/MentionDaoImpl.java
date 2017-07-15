@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Mention;
-import org.woehlke.twitterwall.oodm.dao.parts.impl.DomainDaoWithIdTwitterImpl;
 import org.woehlke.twitterwall.oodm.dao.MentionDao;
 
 import javax.persistence.TypedQuery;

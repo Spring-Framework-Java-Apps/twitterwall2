@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.rest.common;
+package org.woehlke.twitterwall.frontend.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
