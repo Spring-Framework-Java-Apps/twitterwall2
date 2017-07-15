@@ -26,6 +26,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
     public AbstractTwitterObject.CountedEntities countAll() {
         AbstractTwitterObject.CountedEntities c = new AbstractTwitterObject.CountedEntities();
 
+        /*
         long countUser = this.userDao.count(User.class);
         long countTweets = this.tweetDao.count(Tweet.class);
         long countHashTags = this.hashTagDao.count(HashTag.class);
@@ -36,6 +37,18 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         long countUrlCache = this.urlCacheDao.count(UrlCache.class);
         long countTask = this.taskDao.count(Task.class);
         long countTaskHistory = this.taskHistoryDao.count(TaskHistory.class);
+        */
+
+        long countUser = userRepository.count();
+        long countTweets = tweetRepository.count();
+        long countHashTags = hashTagRepository.count();
+        long countMedia = mediaRepository.count();
+        long countMention = mentionRepository.count();
+        long countTickerSymbol = tickerSymbolRepository.count();
+        long countUrl = urlRepository.count();
+        long countUrlCache = urlCacheRepository.count();
+        long countTask = taskRepository.count();
+        long countTaskHistory = taskHistoryRepository.count();
 
         Map<String,Integer> tableCount =  jdbcDao.getTableCount();
 
@@ -67,60 +80,74 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     @Override
     public long countTweets() {
-        return tweetDao.count(Tweet.class);
+        return tweetRepository.count();
     }
 
     @Override
     public long countUsers() {
-        return this.userDao.count(User.class);
+        return userRepository.count();
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);
 
-    private final TweetDao tweetDao;
+    //private final TweetDao tweetDao;
 
     private final TweetRepository tweetRepository;
 
-    private final UserDao userDao;
+    //private final UserDao userDao;
 
     private final UserRepository userRepository;
 
-    private final MentionDao mentionDao;
+    //private final MentionDao mentionDao;
 
     private final MentionRepository mentionRepository;
 
-    private final MediaDao mediaDao;
+    //private final MediaDao mediaDao;
 
     private final MediaRepository mediaRepository;
 
-    private final HashTagDao hashTagDao;
+    //private final HashTagDao hashTagDao;
 
     private final HashTagRepository hashTagRepository;
 
-    private final UrlDao urlDao;
+    //private final UrlDao urlDao;
 
     private final UrlRepository urlRepository;
 
-    private final UrlCacheDao urlCacheDao;
+    //private final UrlCacheDao urlCacheDao;
 
     private final UrlCacheRepository urlCacheRepository;
 
-    private final TickerSymbolDao tickerSymbolDao;
+    //private final TickerSymbolDao tickerSymbolDao;
 
     private final TickerSymbolRepository tickerSymbolRepository;
 
-    private final TaskDao taskDao;
+    //private final TaskDao taskDao;
 
     private final TaskRepository taskRepository;
 
-    private final TaskHistoryDao taskHistoryDao;
+    //private final TaskHistoryDao taskHistoryDao;
 
     private final TaskHistoryRepository taskHistoryRepository;
 
     private final JdbcDao jdbcDao;
 
+    @Autowired
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, JdbcDao jdbcDao) {
+        this.tweetRepository = tweetRepository;
+        this.userRepository = userRepository;
+        this.mentionRepository = mentionRepository;
+        this.mediaRepository = mediaRepository;
+        this.hashTagRepository = hashTagRepository;
+        this.urlRepository = urlRepository;
+        this.urlCacheRepository = urlCacheRepository;
+        this.tickerSymbolRepository = tickerSymbolRepository;
+        this.taskRepository = taskRepository;
+        this.taskHistoryRepository = taskHistoryRepository;
+        this.jdbcDao = jdbcDao;
+    }
 
+    /*
     @Autowired
     public CountedEntitiesServiceImpl(TweetDao tweetDao, TweetRepository tweetRepository, UserDao userDao, UserRepository userRepository, MentionDao mentionDao, MentionRepository mentionRepository, MediaDao mediaDao, MediaRepository mediaRepository, HashTagDao hashTagDao, HashTagRepository hashTagRepository, UrlDao urlDao, UrlRepository urlRepository, UrlCacheDao urlCacheDao, UrlCacheRepository urlCacheRepository, TickerSymbolDao tickerSymbolDao, TickerSymbolRepository tickerSymbolRepository, TaskDao taskDao, TaskRepository taskRepository, TaskHistoryDao taskHistoryDao, TaskHistoryRepository taskHistoryRepository, JdbcDao jdbcDao) {
         this.tweetDao = tweetDao;
@@ -145,4 +172,5 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         this.taskHistoryRepository = taskHistoryRepository;
         this.jdbcDao = jdbcDao;
     }
+    */
 }
