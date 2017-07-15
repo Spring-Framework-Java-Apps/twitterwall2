@@ -1,12 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.listener.UserListener;
 
 import javax.persistence.*;

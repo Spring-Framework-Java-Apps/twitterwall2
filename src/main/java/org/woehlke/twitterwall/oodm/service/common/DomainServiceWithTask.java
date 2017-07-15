@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.service.common;
 
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 
 /**

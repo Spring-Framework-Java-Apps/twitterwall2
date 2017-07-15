@@ -7,10 +7,9 @@ import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
-import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
+import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.scheduled.service.transform.*;
 
 import java.util.List;
 import java.util.Set;

@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.test.UrlServiceTest;
 
 import java.util.List;

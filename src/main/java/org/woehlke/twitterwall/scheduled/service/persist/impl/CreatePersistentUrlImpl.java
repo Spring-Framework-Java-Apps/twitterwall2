@@ -7,12 +7,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
-import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
-import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
+import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.UrlCache;
+import org.woehlke.twitterwall.oodm.dao.UrlCacheDao;
+import org.woehlke.twitterwall.oodm.dao.UrlDao;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 
 import java.net.MalformedURLException;
@@ -35,19 +35,19 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
         } else {
             try {
                 log.debug(msg+" try to find ");
-                Url urlPers = this.urlRepository.findByUrl(url);
+                Url urlPers = this.urlDao.findByUrl(url);
                 log.debug(msg+" found: "+urlPers);
                 if(urlPers.isUrlAndExpandedTheSame()){
                     log.debug(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
                 }
                 urlPers.setUpdatedBy(task);
-                urlPers = this.urlRepository.update(urlPers);
+                urlPers = this.urlDao.update(urlPers);
                 return urlPers;
             } catch (EmptyResultDataAccessException ex) {
                 log.debug(msg+" not found ");
                 try {
                     log.debug(msg+" try to find UrlCache");
-                    UrlCache urlCache = urlCacheRepository.findByUrl(url);
+                    UrlCache urlCache = urlCacheDao.findByUrl(url);
                     log.debug(msg+" found: "+urlCache);
                     String displayUrl = urlCache.getExpanded();
                     try {
@@ -59,7 +59,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
                     newUrl.setCreatedBy(task);
                     log.debug(msg+" try to persist: "+newUrl.toString());
-                    newUrl = this.urlRepository.persist(newUrl);
+                    newUrl = this.urlDao.persist(newUrl);
                     log.debug(msg+" persisted: "+newUrl.toString());
                     return newUrl;
                 } catch (EmptyResultDataAccessException e) {
@@ -77,7 +77,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         if (urlCache.isUrlAndExpandedTheSame()) {
                             log.debug(msg + " not persisted: " + urlCache.toString());
                         } else {
-                            urlCache = urlCacheRepository.persist(urlCache);
+                            urlCache = urlCacheDao.persist(urlCache);
                             log.debug(msg + " persisted: " + urlCache.toString());
                         }
                         String displayUrl = myUrl.getExpanded();
@@ -90,7 +90,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
                         newUrl.setCreatedBy(task);
                         log.debug(msg+" try to persist: "+newUrl.toString());
-                        newUrl =this.urlRepository.persist(newUrl);
+                        newUrl =this.urlDao.persist(newUrl);
                         log.debug(msg+" persisted: "+newUrl.toString());
                         return newUrl;
                     }
@@ -102,16 +102,16 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
 
-    private final UrlRepository urlRepository;
+    private final UrlDao urlDao;
 
-    private final UrlCacheRepository urlCacheRepository;
+    private final UrlCacheDao urlCacheDao;
 
     private final TwitterUrlService twitterUrlService;
 
     @Autowired
-    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
-        this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
+    public CreatePersistentUrlImpl(UrlDao urlDao, UrlCacheDao urlCacheDao, TwitterUrlService twitterUrlService) {
+        this.urlDao = urlDao;
+        this.urlCacheDao = urlCacheDao;
         this.twitterUrlService = twitterUrlService;
     }
 }

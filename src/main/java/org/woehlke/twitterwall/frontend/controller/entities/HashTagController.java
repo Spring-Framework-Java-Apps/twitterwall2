@@ -17,17 +17,17 @@ import org.woehlke.twitterwall.frontend.common.Symbols;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.entities.HashTagService;
+import org.woehlke.twitterwall.oodm.service.HashTagService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.woehlke.twitterwall.oodm.entities.entities.HashTag.HASHTAG_TEXT_PATTERN;
+import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN;
 
 /**
  * Created by tw on 12.07.17.

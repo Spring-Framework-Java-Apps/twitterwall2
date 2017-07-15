@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
@@ -21,8 +21,6 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
-
-import java.util.List;
 
 
 /**

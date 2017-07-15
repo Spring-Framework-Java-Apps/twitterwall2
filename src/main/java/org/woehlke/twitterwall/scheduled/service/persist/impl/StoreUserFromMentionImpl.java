@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserFromMention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 

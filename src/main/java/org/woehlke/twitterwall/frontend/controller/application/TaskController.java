@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
-import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 
 /**
  * Created by tw on 11.07.17.

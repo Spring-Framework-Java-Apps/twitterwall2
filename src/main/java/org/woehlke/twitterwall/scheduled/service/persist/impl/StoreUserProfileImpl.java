@@ -7,7 +7,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;

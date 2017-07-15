@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.repository.TweetRepository;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.dao.TweetDao;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
 
@@ -26,33 +26,33 @@ public class TweetServiceImpl implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
 
-    private final TweetRepository tweetRepository;
+    private final TweetDao tweetDao;
 
     @Autowired
-    public TweetServiceImpl(TweetRepository tweetRepository) {
-        this.tweetRepository = tweetRepository;
+    public TweetServiceImpl(TweetDao tweetDao) {
+        this.tweetDao = tweetDao;
     }
 
     @Override
     public Tweet create(Tweet myTweet, Task task) {
         myTweet.setCreatedBy(task);
-        return tweetRepository.persist(myTweet);
+        return tweetDao.persist(myTweet);
     }
 
     @Override
     public Tweet update(Tweet myTweet, Task task) {
         myTweet.setUpdatedBy(task);
-        return tweetRepository.update(myTweet);
+        return tweetDao.update(myTweet);
     }
 
     @Override
     public Page<Tweet> getAll(Pageable pageRequest) {
-        return tweetRepository.getAll(Tweet.class,pageRequest);
+        return tweetDao.getAll(Tweet.class,pageRequest);
     }
 
     @Override
     public Page<Tweet> getLatestTweets(Pageable pageRequest) {
-        return tweetRepository.getLatestTweets(pageRequest);
+        return tweetDao.getLatestTweets(pageRequest);
     }
 
     private final static String MSG = "hashtagText is not valid";
@@ -62,7 +62,7 @@ public class TweetServiceImpl implements TweetService {
         if(!HashTag.isValidText(hashtagText)){
             throw new IllegalArgumentException("getTweetsForHashTag: "+MSG);
         }
-        return tweetRepository.getTweetsForHashTag(hashtagText,pageRequest);
+        return tweetDao.getTweetsForHashTag(hashtagText,pageRequest);
     }
 
     @Override
@@ -70,12 +70,12 @@ public class TweetServiceImpl implements TweetService {
         if(!HashTag.isValidText(hashtagText)){
             throw new IllegalArgumentException("countTweetsForHashTag: "+MSG);
         }
-        return tweetRepository.countTweetsForHashTag(hashtagText);
+        return tweetDao.countTweetsForHashTag(hashtagText);
     }
 
     @Override
     public long count() {
-        return tweetRepository.count(Tweet.class);
+        return tweetDao.count(Tweet.class);
     }
 
     @Override
@@ -83,17 +83,17 @@ public class TweetServiceImpl implements TweetService {
         if(user == null){
             throw new IllegalArgumentException("getTweetsForUser: user is null");
         }
-        return tweetRepository.getTweetsForUser(user,pageRequest);
+        return tweetDao.getTweetsForUser(user,pageRequest);
     }
 
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return tweetRepository.getAllTwitterIds(pageRequest);
+        return tweetDao.getAllTwitterIds(pageRequest);
     }
 
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
-        return tweetRepository.findByIdTwitter(idTwitter,Tweet.class);
+        return tweetDao.findByIdTwitter(idTwitter,Tweet.class);
     }
 
     @Override
@@ -102,16 +102,16 @@ public class TweetServiceImpl implements TweetService {
         log.debug(name);
         Tweet result;
         try {
-            Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
+            Tweet tweetPersistent = tweetDao.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
             tweet.setId(tweetPersistent.getId());
             tweet.setCreatedBy(tweetPersistent.getCreatedBy());
             tweet.setUpdatedBy(task);
-            result = tweetRepository.update(tweet);
+            result = tweetDao.update(tweet);
             log.debug(name+" updated "+result.toString());
             return result;
         } catch (EmptyResultDataAccessException e) {
             tweet.setCreatedBy(task);
-            result = tweetRepository.persist(tweet);
+            result = tweetDao.persist(tweet);
             log.debug(name+" persisted "+result.toString());
             return result;
         }

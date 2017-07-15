@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.common.Symbols;
-import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
@@ -25,7 +25,7 @@ public class DomainController extends AbstractTwitterwallController {
         String subtitle = searchterm;
         String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
-        CountedEntities countedEntities =this.countedEntitiesService.countAll();
+        AbstractTwitterObject.CountedEntities countedEntities =this.countedEntitiesService.countAll();
         model.addAttribute("countedEntities", countedEntities);
         return "/application/domain/count";
         //return "countedEntities";

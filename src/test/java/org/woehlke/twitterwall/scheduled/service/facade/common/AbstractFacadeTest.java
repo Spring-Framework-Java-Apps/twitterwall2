@@ -1,14 +1,14 @@
 package org.woehlke.twitterwall.scheduled.service.facade.common;
 
 import org.junit.Assert;
-import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 
 /**
  * Created by tw on 11.07.17.
  */
 public abstract class AbstractFacadeTest {
 
-    protected boolean assertCountedEntities(CountedEntities beforeTest, CountedEntities afterTest) {
+    protected boolean assertCountedEntities(AbstractTwitterObject.CountedEntities beforeTest, AbstractTwitterObject.CountedEntities afterTest) {
         boolean result = true;
 
         boolean resultTask = afterTest.getCountTask() > beforeTest.getCountTask();

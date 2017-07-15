@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;

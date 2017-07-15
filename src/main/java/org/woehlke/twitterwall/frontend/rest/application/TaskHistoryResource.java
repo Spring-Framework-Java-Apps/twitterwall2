@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.woehlke.twitterwall.oodm.entities.application.TaskHistory;
-import org.woehlke.twitterwall.oodm.service.application.TaskHistoryService;
+import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 
 import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 

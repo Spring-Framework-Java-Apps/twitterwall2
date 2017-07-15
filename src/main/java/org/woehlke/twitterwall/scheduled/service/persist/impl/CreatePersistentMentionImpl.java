@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
-import org.woehlke.twitterwall.oodm.service.entities.MentionService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.scheduled.service.facade.StoreTwitterProfileForProxyMentionForUser;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention;
 

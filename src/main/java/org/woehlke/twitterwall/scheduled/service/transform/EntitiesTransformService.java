@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform;
 
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.Entities;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 
 /**
  * Created by tw on 11.07.17.

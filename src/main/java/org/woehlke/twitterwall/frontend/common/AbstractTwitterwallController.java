@@ -11,9 +11,9 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -24,7 +24,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

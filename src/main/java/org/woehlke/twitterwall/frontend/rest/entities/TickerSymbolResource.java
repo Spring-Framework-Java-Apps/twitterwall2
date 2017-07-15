@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.oodm.entities.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.service.entities.TickerSymbolService;
+import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 
 
 import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;

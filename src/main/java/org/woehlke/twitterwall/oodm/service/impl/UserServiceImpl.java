@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.repository.UserRepository;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.dao.UserDao;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 
@@ -24,11 +24,11 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Override
@@ -36,16 +36,16 @@ public class UserServiceImpl implements UserService {
         String name = "try to store: "+user.getIdTwitter()+" ";
         log.debug(name);
         try {
-            User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
+            User userPersistent = userDao.findByIdTwitter(user.getIdTwitter(),User.class);
             user.setCreatedBy(userPersistent.getCreatedBy());
             user.setId(userPersistent.getId());
             user.setUpdatedBy(task);
-            user = userRepository.update(user);
+            user = userDao.update(user);
             log.debug(name+" updated "+user.toString());
             return user;
         } catch (EmptyResultDataAccessException e) {
             user.setCreatedBy(task);
-            user = userRepository.persist(user);
+            user = userDao.persist(user);
             log.debug(name+" persisted "+user.toString());
             return user;
         }
@@ -54,23 +54,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user, Task task) {
         user.setCreatedBy(task);
-        return userRepository.persist(user);
+        return userDao.persist(user);
     }
 
     @Override
     public User update(User user, Task task) {
         user.setUpdatedBy(task);
-        return userRepository.update(user);
+        return userDao.update(user);
     }
 
     @Override
     public Page<User> getAll(Pageable pageRequest) {
-        return userRepository.getAll(User.class,pageRequest);
+        return userDao.getAll(User.class,pageRequest);
     }
 
     @Override
     public long count() {
-        return userRepository.count(User.class);
+        return userDao.count(User.class);
     }
 
     @Override
@@ -78,53 +78,53 @@ public class UserServiceImpl implements UserService {
         if (!User.isValidScreenName(screenName)) {
             throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
         }
-        return userRepository.findByScreenName(screenName);
+        return userDao.findByScreenName(screenName);
     }
 
     @Override
     public Page<User> getTweetingUsers(Pageable pageRequest) {
-        return userRepository.getTweetingUsers(pageRequest);
+        return userDao.getTweetingUsers(pageRequest);
     }
 
     @Override
     public Page<User> getNotYetFriendUsers(Pageable pageRequest) {
-        return userRepository.getNotYetFriendUsers(pageRequest);
+        return userDao.getNotYetFriendUsers(pageRequest);
     }
 
     @Override
     public Page<User> getNotYetOnList(Pageable pageRequest) {
-        return userRepository.getNotYetOnList(pageRequest);
+        return userDao.getNotYetOnList(pageRequest);
     }
 
     @Override
     public Page<User> getOnList(Pageable pageRequest) {
-        return userRepository.getOnList(pageRequest);
+        return userDao.getOnList(pageRequest);
     }
 
     @Override
     public User findByIdTwitter(long idTwitter) {
-        return userRepository.findByIdTwitter(idTwitter,User.class);
+        return userDao.findByIdTwitter(idTwitter,User.class);
     }
 
     @Override
     public Page<String> getAllDescriptions(Pageable pageRequest) {
-        return userRepository.getAllDescriptions(pageRequest);
+        return userDao.getAllDescriptions(pageRequest);
     }
 
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return userRepository.getAllTwitterIds(pageRequest);
+        return userDao.getAllTwitterIds(pageRequest);
     }
 
     @Override
     public Page<User> getUsersForHashTag(String hashtagText,Pageable pageRequest) {
-        Page<User> users = userRepository.getUsersForHashTag(hashtagText,pageRequest);
+        Page<User> users = userDao.getUsersForHashTag(hashtagText,pageRequest);
         return users;
     }
 
     @Override
     public long countUsersForHashTag(String hashtagText) {
-        long numberUsers = userRepository.countUsersForHashTag(hashtagText);
+        long numberUsers = userDao.countUsersForHashTag(hashtagText);
         return numberUsers;
     }
 }
