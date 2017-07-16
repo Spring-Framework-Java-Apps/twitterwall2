@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,19 @@ import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN
 @Controller
 @RequestMapping(path="/hashtag")
 public class HashTagController extends AbstractTwitterwallController {
+
+    @RequestMapping(path="/all")
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
+        logEnv();
+        String subtitle = "HashTag";
+        String title = "All";
+        String symbol = Symbols.HASHTAG.toString();
+        model = setupPage(model,title,subtitle,symbol);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"text");
+        Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
+        model.addAttribute("myPageContent",myPageContent);
+        return "/hashtag/all";
+    }
 
     @RequestMapping(path="/{hashtagText}")
     public String hashTagFromTweetsAndUsers(
