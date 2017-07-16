@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 09.07.17.
@@ -50,7 +50,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
             boolean hasNext;
             Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
             do {
-                Page<Long> tweetTwitterIds = tweetService.getAllTwitterIds(pageRequest);
+                Page<Long> tweetTwitterIds = tweetService.findAllTwitterIds(pageRequest);
                 hasNext = tweetTwitterIds.hasNext();
                 long number = tweetTwitterIds.getTotalElements();
                 for (Long tweetTwitterId : tweetTwitterIds) {

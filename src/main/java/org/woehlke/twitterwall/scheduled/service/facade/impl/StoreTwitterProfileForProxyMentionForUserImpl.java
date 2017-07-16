@@ -8,13 +8,10 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
-import org.woehlke.twitterwall.oodm.service.entities.*;
+import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.service.*;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.StoreTwitterProfileForProxyMentionForUser;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
@@ -87,7 +84,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
                 }
             }
         }
-        for (HashTag hashTag : entities.getTags()) {
+        for (HashTag hashTag : entities.getHashTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
                 hashTags.add(hashTagPers);
@@ -113,7 +110,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
             }
         }
         entities.setUrls(urls);
-        entities.setTags(hashTags);
+        entities.setHashTags(hashTags);
         entities.setMentions(mentions);
         entities.setMedia(media);
         entities.setTickerSymbols(tickerSymbols);

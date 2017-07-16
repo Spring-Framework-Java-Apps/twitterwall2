@@ -7,10 +7,9 @@ import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
-import org.woehlke.twitterwall.scheduled.service.transform.entities.*;
+import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.scheduled.service.transform.*;
 
 import java.util.List;
 import java.util.Set;
@@ -57,7 +56,7 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         entitiesTarget.setMentions(mentions);
         entitiesTarget.addAllUrls(urls);
         entitiesTarget.setMedia(media);
-        entitiesTarget.setTags(hashTags);
+        entitiesTarget.setHashTags(hashTags);
         entitiesTarget.setTickerSymbols(tickerSymbols);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"description " + description);
@@ -89,9 +88,9 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
             entitiesTarget.addUrl(url);
         }
         for(HashTagEntity hashTagEntity:listHashTagEntity){
-            HashTag tag = hashTagTransformService.transform(hashTagEntity);
-            log.debug(msg+"transformed HashTag = "+tag.toString());
-            entitiesTarget.addTag(tag);
+            HashTag hashTag = hashTagTransformService.transform(hashTagEntity);
+            log.debug(msg+"transformed HashTag = "+hashTag.toString());
+            entitiesTarget.addHashTag(hashTag);
         }
         for(MentionEntity mentionEntity:listMentionEntity){
             Mention mention = mentionTransformService.transform(mentionEntity);

@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.facade.common;
 
 import org.junit.Assert;
-import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 
 /**
  * Created by tw on 11.07.17.

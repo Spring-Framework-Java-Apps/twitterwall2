@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +21,7 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
-import java.util.List;
-
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 
 /**
@@ -77,7 +74,7 @@ public class UserTest {
             }
             pageRequest = pageRequest.next();
         } while (hasNext);
-        String message = "userService.getAllDescriptions(); ";
+        String message = "userService.findAllDescriptions(); ";
         Assert.assertTrue(message,true);
         log.info(msg+"------------------------------------------------");
     }

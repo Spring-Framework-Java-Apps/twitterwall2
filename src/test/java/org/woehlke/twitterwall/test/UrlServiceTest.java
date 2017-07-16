@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.test;
 
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.Url;
 
 import java.util.List;
 

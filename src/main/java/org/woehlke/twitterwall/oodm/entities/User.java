@@ -1,13 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.listener.UserListener;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,6 +29,7 @@ import java.util.regex.Pattern;
         @Index(name="idx_userprofile_url", columnList="url")
 })
 @NamedQueries({
+        /*
         @NamedQuery(
                 name = "User.findByIdTwitter",
                 query = "select t from User as t where t.idTwitter=:idTwitter"
@@ -45,39 +45,66 @@ import java.util.regex.Pattern;
         @NamedQuery(
             name = "User.count",
             query = "select count(t) from User as t"
+        ),*/
+        @NamedQuery(
+                name = "User.findTweetingUsers",
+                query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
-                name = "User.getTweetingUsers",
-                query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
+                name = "User.findNotYetFriendUsers",
+                //TODO: remove "order by t.screenName" from NamedQuery
+                query = "select t from User as t where t.following=false"
         ),
         @NamedQuery(
-                name = "User.getNotYetFriendUsers",
-                query = "select t from User as t where t.following=false order by t.screenName"
+            name = "User.findNotYetOnList",
+            //TODO: remove "order by t.screenName" from NamedQuery
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
-            name = "User.getNotYetOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true order by t.screenName"
+            name = "User.findOnList",
+            //TODO: remove "order by t.screenName" from NamedQuery
+            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
         ),
+
+    @NamedQuery(
+        name="User.getUsersForHashTag",
+        query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="User.countUsersForHashTag",
+        query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+
         @NamedQuery(
-            name = "User.getOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true order by t.screenName"
-        ),
-        @NamedQuery(
-                name = "User.getUsersForHashTag",
-                query = "select t from User as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.screenName"
-        ),
-        @NamedQuery(
-                name = "User.countUsersForHashTag",
-                query = "select count(t) from User as t join t.entities.tags tag WHERE tag.text=:hashtagText"
-        ),
-        @NamedQuery(
-                name = "User.getAllDescriptions",
+                name = "User.findAllDescriptions",
                 query = "select t.description from User as t where t.description is not null"
         ),
         @NamedQuery(
-                name = "User.getAllTwitterIds",
+                name = "User.findAllTwitterIds",
                 query = "select t.idTwitter from User as t"
         )
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(
+        name="User.countAllUser2HashTag",
+        query="select count(*) as z from userprofile_hashtag"
+    ),
+    @NamedNativeQuery(
+        name="User.countAllUser2Media",
+        query="select count(*) as z from userprofile_media"
+    ),
+    @NamedNativeQuery(
+        name="User.countAllUser2Mention",
+        query="select count(*) as z from userprofile_mention"
+    ),
+    @NamedNativeQuery(
+        name="User.countAllUser2TickerSymbol",
+        query="select count(*) as z from userprofile_tickersymbol"
+    ),
+    @NamedNativeQuery(
+        name="User.countAllUser2Url",
+        query="select count(*) as z from userprofile_url"
+    )
 })
 @EntityListeners(UserListener.class)
 public class User extends AbstractTwitterObject<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
@@ -220,19 +247,34 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @AssociationOverrides({
         @AssociationOverride(
             name = "urls",
-            joinTable = @JoinTable(name="userprofile_url")),
+            joinTable = @JoinTable(
+                name="userprofile_url"
+            )
+        ),
         @AssociationOverride(
-            name = "tags",
-            joinTable = @JoinTable(name="userprofile_hashtag")),
+            name = "hashTags",
+            joinTable = @JoinTable(
+                name="userprofile_hashtag"
+            )
+        ),
         @AssociationOverride(
             name = "mentions",
-            joinTable = @JoinTable(name="userprofile_mention")),
+            joinTable = @JoinTable(
+                name="userprofile_mention"
+            )
+        ),
         @AssociationOverride(
             name = "media",
-            joinTable = @JoinTable(name="userprofile_media")),
+            joinTable = @JoinTable(
+                name="userprofile_media"
+            )
+        ),
         @AssociationOverride(
             name = "tickerSymbols",
-            joinTable = @JoinTable(name="userprofile_tickersymbol"))
+            joinTable = @JoinTable(
+                name="userprofile_tickersymbol"
+            )
+        )
     })
     private Entities entities = new Entities();
 
