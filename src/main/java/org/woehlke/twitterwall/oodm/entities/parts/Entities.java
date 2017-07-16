@@ -100,9 +100,9 @@ public class Entities extends EntitiesFilter implements Serializable {
         this.hashTags.addAll(hashTags);
     }
 
-    public boolean addAllTags(Set<HashTag> tags) {
+    public boolean addAllHashTags(Set<HashTag> hashTags) {
         boolean result = false;
-        for(HashTag tag:tags){
+        for(HashTag tag:hashTags){
             if((tag != null) && (!this.hashTags.contains(tag))){
                 this.hashTags.add(tag);
                 result = true;
@@ -111,33 +111,33 @@ public class Entities extends EntitiesFilter implements Serializable {
         return result;
     }
 
-    public boolean removeAllTags(Set<HashTag> tags) {
+    public boolean removeAllHashTags(Set<HashTag> hashTags) {
         boolean result = false;
-        for(HashTag tag:tags){
-            if((tag != null) && (this.hashTags.contains(tag))){
-                this.hashTags.remove(tag);
+        for(HashTag hashTag:hashTags){
+            if((hashTag!= null) && (this.hashTags.contains(hashTag))){
+                this.hashTags.remove(hashTag);
                 result = true;
             }
         }
         return result;
     }
 
-    public boolean removeAllTags() {
+    public boolean removeAllHashTags() {
         this.hashTags.clear();
         return this.hashTags.isEmpty();
     }
 
-    public boolean addTag(HashTag tag) {
-        if((tag != null) && (!this.hashTags.contains(tag))){
-            return this.hashTags.add(tag);
+    public boolean addHashTag(HashTag hashTag) {
+        if((hashTag != null) && (!this.hashTags.contains(hashTag))){
+            return this.hashTags.add(hashTag);
         } else {
             return false;
         }
     }
 
-    public boolean removeTag(HashTag tag) {
-        if((tag != null) && (this.hashTags.contains(tag))){
-            return this.hashTags.remove(tag);
+    public boolean removeHashTag(HashTag hashTag) {
+        if((hashTag != null) && (this.hashTags.contains(hashTag))){
+            return this.hashTags.remove(hashTag);
         } else {
             return false;
         }

@@ -50,40 +50,52 @@ public class HashTagController extends AbstractTwitterwallController {
         return "/hashtag/all";
     }
 
-    @RequestMapping(path="/{hashtagText}")
+    @RequestMapping(path="/{text}")
     public String hashTagFromTweetsAndUsers(
+        @PathVariable("text") String text,
         @RequestParam(name= "pageTweet" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageTweet,
         @RequestParam(name= "pageUser" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageUser,
-        @PathVariable String hashtagText, Model model)
+         Model model)
     {
+        String msg = "/hashtag/" + text + " ";
         logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
+        Matcher m = p.matcher(text);
         if (m.matches()) {
+            String msg2 = msg + " parameter IS valid - START ";
+            log.debug(msg2);
             Pageable pageRequestTweet = new PageRequest(pageTweet, pageSize);
             Pageable pageRequestUser = new PageRequest(pageUser, pageSize);
             String subtitle = "Tweets und User für HashTag";
-            String title = hashtagText;
+            String title = text;
             String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model,title,subtitle,symbol);
-            HashTag hashTag = hashTagService.findByText(hashtagText);
+            model = setupPage(model, title, subtitle, symbol);
+            log.debug(msg + " try to: hashTagService.findByText ");
+            HashTag hashTag = hashTagService.findByText(text);
+            model.addAttribute("hashTag",hashTag);
+            log.debug(msg + " found:  " + text);
             //
+            log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
             Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
             model.addAttribute("latestTweets", tweets);
             //
+            log.debug(msg+" try to: userService.getUsersForHashTag: ");
             Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
             model.addAttribute("users", users);
             //
-            model.addAttribute("hashtagText"+hashtagText);
+            log.debug(msg + " READY - DONE");
             return "/hashtag/hashtagText";
             //return "timeline";
         } else {
-            throw new IllegalArgumentException("/hashtag/"+hashtagText);
+            String msg2 = msg + " parameter ist NOT valid";
+            log.warn(msg2);
+            //throw new IllegalArgumentException(msg2);
+            return "/hashtag/hashtagText";
         }
     }
 
     @RequestMapping(path="/overview")
-    public String hashTagsOverview(Model model) {
+    public String hashTagsOverview(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
         String msg = "/hashtags: ";
         logEnv();
         String title = "HashTags";
@@ -92,41 +104,41 @@ public class HashTagController extends AbstractTwitterwallController {
         model = setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        boolean hasNext;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
-        do {
-            Page<HashTag> myPage = hashTagService.getAll(pageRequest);
-            hasNext = myPage.hasNext();
-            pageRequest = pageRequest.next();
+        Pageable pageRequest = new PageRequest(page, pageSize);
+        Page<HashTag> myPage = hashTagService.getAll(pageRequest);
+
+
             for (HashTag hashTag : myPage.getContent()) {
-                String text = hashTag.getText();
-                try {
+                // String text = hashTag.getText();
+                //try {
                     Pageable pageRequestTeets = new PageRequest(0, 1);
                     Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTeets);
-                    long numberTweets = tweets.getTotalElements();
-                    if(numberTweets > 0) {
-                        HashTagCounted c = new HashTagCounted(numberTweets, text);
-                        hashTagsTweets.add(c);
+                    if(tweets!=null){
+                        long numberTweets = tweets.getTotalElements();
+                        if(numberTweets > 0) {
+                            HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
+                            hashTagsTweets.add(c);
+                        }
                     }
-                } catch (IllegalArgumentException e){
-                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
-                }
-                try {
+                //} catch (IllegalArgumentException e){
+                 //   log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
+                //}
+                //try {
                     Pageable pageRequestUsers = new PageRequest(0, 1);
                     Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUsers);
-                    long numberUsers =  users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
-                    if(numberUsers > 0){
-                        HashTagCounted c = new HashTagCounted(numberUsers,text);
-                        hashTagsUsers.add(c);
+                    if(users!=null){
+                        long numberUsers =  users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
+                        if(numberUsers > 0){
+                            HashTagCounted c = new HashTagCounted(numberUsers,hashTag.getText());
+                            hashTagsUsers.add(c);
+                        }
                     }
-                } catch (IllegalArgumentException e){
-                    log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
-                }
+                //} catch (IllegalArgumentException e){
+                   // log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
+                //}
             }
-        }
-        while(hasNext);
-        model.addAttribute("hashTagsTweets", hashTagsTweets);
-        model.addAttribute("hashTagsUsers", hashTagsUsers);
+        model.addAttribute("latestTweets", hashTagsTweets);
+        model.addAttribute("users", hashTagsUsers);
         return "/hashtag/overview";
         //return "tags";
     }

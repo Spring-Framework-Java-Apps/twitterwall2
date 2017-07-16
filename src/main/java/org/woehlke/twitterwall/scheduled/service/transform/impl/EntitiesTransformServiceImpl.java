@@ -88,9 +88,9 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
             entitiesTarget.addUrl(url);
         }
         for(HashTagEntity hashTagEntity:listHashTagEntity){
-            HashTag tag = hashTagTransformService.transform(hashTagEntity);
-            log.debug(msg+"transformed HashTag = "+tag.toString());
-            entitiesTarget.addTag(tag);
+            HashTag hashTag = hashTagTransformService.transform(hashTagEntity);
+            log.debug(msg+"transformed HashTag = "+hashTag.toString());
+            entitiesTarget.addHashTag(hashTag);
         }
         for(MentionEntity mentionEntity:listMentionEntity){
             Mention mention = mentionTransformService.transform(mentionEntity);

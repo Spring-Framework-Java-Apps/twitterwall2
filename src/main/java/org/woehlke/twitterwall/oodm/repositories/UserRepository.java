@@ -4,12 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
 
 /**
  * Created by tw on 15.07.17.
  */
+@Repository
 public interface UserRepository extends PagingAndSortingRepository<User,Long> {
 
     User findByIdTwitter(long idTwitter);
@@ -35,9 +38,10 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
     Page<Long> findAllTwitterIds(Pageable pageRequest);
 
     @Query(
-        name="User.findUsersForHashTag"
+        name="User.getUsersForHashTag",
+        countName = "User.countUsersForHashTag"
     )
-    Page<User>findUsersForHashTag(HashTag hashTag, Pageable pageRequest);
+    Page<User> findUsersForHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
     //@Query(name="User.countUsersForHashTag",nativeQuery=true)
     //long countUsersForHashTag(String hashtagText);

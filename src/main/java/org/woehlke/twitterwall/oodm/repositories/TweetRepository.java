@@ -4,13 +4,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+//import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+
+import java.util.List;
 
 /**
  * Created by tw on 15.07.17.
  */
+@Repository
 public interface TweetRepository extends PagingAndSortingRepository<Tweet,Long> {
 
     Tweet findByIdTwitter(long idTwitter);
@@ -20,8 +25,11 @@ public interface TweetRepository extends PagingAndSortingRepository<Tweet,Long> 
     Page<Tweet> findLatestTweets(Pageable pageRequest);
     */
 
-    @Query(name="Tweet.findByHashTag")
-    Page<Tweet> findByHashTag(HashTag hashTag, Pageable pageRequest);
+    @Query(
+        name="Tweet.getTweetsForHashTag",
+        countName="Tweet.countTweetsForHashTag"
+    )
+    Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
     //@Query(name = "Tweet.findByUser")
     Page<Tweet> findByUser(User user, Pageable pageRequest);

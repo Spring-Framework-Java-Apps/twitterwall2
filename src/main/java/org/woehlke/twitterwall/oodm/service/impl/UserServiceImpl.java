@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
-        return userRepository.findUsersForHashTag(hashTag,pageRequest);
+        return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
         //Page<User> users = userDao.getUsersForHashTag(hashtagText,pageRequest);
         //return users;
     }

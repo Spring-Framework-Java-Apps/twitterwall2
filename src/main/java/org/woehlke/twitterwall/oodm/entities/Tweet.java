@@ -10,6 +10,8 @@ import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 import javax.persistence.*;
 import java.util.Date;
 
+import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
+
 /**
  * Created by tw on 10.06.17.
  */
@@ -35,12 +37,6 @@ import java.util.Date;
                 name="Tweet.findLatestTweets",
                 query="select t from Tweet as t order by t.createdAt DESC"
         ),
-        */
-        @NamedQuery(
-                name="Tweet.findByHashTag",
-                query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag=:hashtag"
-        ),
-        /*
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
                 query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
@@ -58,6 +54,26 @@ import java.util.Date;
                 query="select t from Tweet as t WHERE t.user=:user"
         ),
         */
+
+        /*
+        @NamedQuery(
+            name="Tweet.findByHashTag",
+            query="select t from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
+        ),
+        @NamedQuery(
+            name="Tweet.countByHashTag",
+            query="select count(t) from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
+        ),*/
+
+
+    @NamedQuery(
+        name="Tweet.getTweetsForHashTag",
+        query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="Tweet.countTweetsForHashTag",
+        query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
         @NamedQuery(
                 name="Tweet.findAllTwitterIds",
                 query="select t.idTwitter from Tweet as t"
@@ -161,19 +177,45 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @AssociationOverrides({
         @AssociationOverride(
             name = "urls",
-            joinTable = @JoinTable(name="tweet_url")),
+            joinTable = @JoinTable(
+                name="tweet_url"
+            )
+        ),
         @AssociationOverride(
             name = "hashTags",
-            joinTable = @JoinTable(name="tweet_hashtag")),
+            joinTable = @JoinTable(
+                name="tweet_hashtag"
+                /*,
+                joinColumns={@JoinColumn(name="tweet_id")},
+                inverseJoinColumns={@JoinColumn(name="hashtag_id")},
+                uniqueConstraints = {
+                    @UniqueConstraint(
+                        name="unique_tweet_hashtag",
+                        columnNames = {"tweet_id","hashtag_id"})
+                },
+                foreignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_tweet"),
+                inverseForeignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_hashtag")
+                */
+            )
+        ),
         @AssociationOverride(
             name = "mentions",
-            joinTable = @JoinTable(name="tweet_mention")),
+            joinTable = @JoinTable(
+                name="tweet_mention"
+            )
+        ),
         @AssociationOverride(
             name = "media",
-            joinTable = @JoinTable(name="tweet_media")),
+            joinTable = @JoinTable(
+                name="tweet_media"
+            )
+        ),
         @AssociationOverride(
             name = "tickerSymbols",
-            joinTable = @JoinTable(name="tweet_tickersymbol"))
+            joinTable = @JoinTable(
+                name="tweet_tickersymbol"
+            )
+        )
     })
     private Entities entities;
 

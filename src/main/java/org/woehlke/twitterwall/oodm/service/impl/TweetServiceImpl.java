@@ -16,6 +16,8 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
+import java.util.List;
+
 
 /**
  * Created by tw on 10.06.17.
@@ -63,14 +65,9 @@ public class TweetServiceImpl implements TweetService {
     }
     */
 
-    private final static String MSG = "hashtagText is not valid";
-
     @Override
     public Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest) {
-        if(!HashTag.isValidText(hashtag.getText())){
-            throw new IllegalArgumentException("findTweetsForHashTag: "+MSG);
-        }
-        return tweetRepository.findByHashTag(hashtag,pageRequest);
+        return tweetRepository.findByHashTag(hashtag.getText(),pageRequest);
         //return tweetDao.findTweetsForHashTag(hashtagText,pageRequest);
     }
 

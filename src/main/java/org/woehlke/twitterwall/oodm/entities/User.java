@@ -65,11 +65,16 @@ import java.util.regex.Pattern;
             //TODO: remove "order by t.screenName" from NamedQuery
             query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
         ),
-        @NamedQuery(
-                name = "User.findUsersForHashTag",
-                //TODO: remove "order by t.screenName" from NamedQuery
-                query = "select t from User as t join t.entities.hashTags hashTag WHERE hashTag=:hashtag"
-        ),
+
+    @NamedQuery(
+        name="User.getUsersForHashTag",
+        query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="User.countUsersForHashTag",
+        query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+
         @NamedQuery(
                 name = "User.findAllDescriptions",
                 query = "select t.description from User as t where t.description is not null"
@@ -242,19 +247,34 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @AssociationOverrides({
         @AssociationOverride(
             name = "urls",
-            joinTable = @JoinTable(name="userprofile_url")),
+            joinTable = @JoinTable(
+                name="userprofile_url"
+            )
+        ),
         @AssociationOverride(
             name = "hashTags",
-            joinTable = @JoinTable(name="userprofile_hashtag")),
+            joinTable = @JoinTable(
+                name="userprofile_hashtag"
+            )
+        ),
         @AssociationOverride(
             name = "mentions",
-            joinTable = @JoinTable(name="userprofile_mention")),
+            joinTable = @JoinTable(
+                name="userprofile_mention"
+            )
+        ),
         @AssociationOverride(
             name = "media",
-            joinTable = @JoinTable(name="userprofile_media")),
+            joinTable = @JoinTable(
+                name="userprofile_media"
+            )
+        ),
         @AssociationOverride(
             name = "tickerSymbols",
-            joinTable = @JoinTable(name="userprofile_tickersymbol"))
+            joinTable = @JoinTable(
+                name="userprofile_tickersymbol"
+            )
+        )
     })
     private Entities entities = new Entities();
 
