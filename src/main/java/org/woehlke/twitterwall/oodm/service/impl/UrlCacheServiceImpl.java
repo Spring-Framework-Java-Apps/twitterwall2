@@ -25,13 +25,13 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);
 
-    private final UrlCacheDao urlCacheDao;
+    //private final UrlCacheDao urlCacheDao;
 
     private final UrlCacheRepository urlCacheRepository;
 
     @Autowired
-    public UrlCacheServiceImpl(UrlCacheDao urlCacheDao, UrlCacheRepository urlCacheRepository) {
-        this.urlCacheDao = urlCacheDao;
+    public UrlCacheServiceImpl(UrlCacheRepository urlCacheRepository) {
+        //this.urlCacheDao = urlCacheDao;
         this.urlCacheRepository = urlCacheRepository;
     }
 
@@ -39,18 +39,18 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache, Task task) {
         String name = "UrlCache.store: store";
-        try {
-            UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
+        UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
+        if(urlCachePers!=null){
             urlCache.setId(urlCachePers.getId());
             urlCache.setCreatedBy(urlCachePers.getCreatedBy());
             urlCache.setUpdatedBy(task);
-            UrlCache result = this.urlCacheDao.update(urlCache);
-            log.debug(name+" uodated "+result.toString());
+            UrlCache result = this.urlCacheRepository.save(urlCache);//this.urlCacheDao.update(urlCache);
+            log.debug(name+" updated "+result.toString());
             return result;
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             urlCache.setCreatedBy(task);
-            UrlCache result = this.urlCacheDao.persist(urlCache);
-            log.debug(name+" psersisted "+result);
+            UrlCache result = this.urlCacheRepository.save(urlCache);//this.urlCacheDao.persist(urlCache);
+            log.debug(name+" persisted "+result);
             return result;
         }
     }
@@ -84,7 +84,7 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     public UrlCache findByUrl(String url) {
         log.debug("UrlCache.findByUrl: try to find: "+url);
-        UrlCache urlCache = this.urlCacheDao.findByUrl(url);
+        UrlCache urlCache = this.urlCacheRepository.findByUrl(url);//this.urlCacheDao.findByUrl(url);
         log.debug("UrlCache.findByUrl: found: "+urlCache.toString());
         return urlCache;
     }

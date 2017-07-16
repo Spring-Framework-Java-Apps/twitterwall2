@@ -42,7 +42,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<User> getTweetingUsers(Pageable pageRequest) {
-        String name = "User.getTweetingUsers";
+        String name = "User.findTweetingUsers";
         log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         long total = query.getResultList().size();
@@ -56,7 +56,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<User> getNotYetFriendUsers(Pageable pageRequest) {
-        String name = "User.getNotYetFriendUsers";
+        String name = "User.findNotYetFriendUsers";
         log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         long total = query.getResultList().size();
@@ -70,7 +70,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<User> getNotYetOnList(Pageable pageRequest) {
-        String name = "User.getNotYetOnList";
+        String name = "User.findNotYetOnList";
         log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         long total = query.getResultList().size();
@@ -84,7 +84,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<User> getOnList(Pageable pageRequest) {
-        String name = "User.getOnList";
+        String name = "User.findOnList";
         log.debug(name);
         TypedQuery<User> query = entityManager.createNamedQuery(name, User.class);
         long total = query.getResultList().size();
@@ -98,7 +98,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<String> getAllDescriptions(Pageable pageRequest) {
-        String name= "User.getAllDescriptions";
+        String name= "User.findAllDescriptions";
         log.debug(name);
         TypedQuery<String> query = entityManager.createNamedQuery(name, String.class);
         long total = query.getResultList().size();
@@ -112,7 +112,7 @@ public class UserDaoImpl extends DomainDaoWithIdTwitterImpl<User> implements Use
 
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        String name ="User.getAllTwitterIds";
+        String name ="User.findAllTwitterIds";
         log.debug(name);
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         long total = query.getResultList().size();

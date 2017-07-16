@@ -16,6 +16,7 @@ import javax.persistence.*;
 }, indexes = {
         @Index(name="idx_url_cache_expanded", columnList="expanded")
 })
+/*
 @NamedQueries({
         @NamedQuery(
                 name = "UrlCache.findByUrl",
@@ -30,6 +31,7 @@ import javax.persistence.*;
         query = "select t from UrlCache as t"
     )
 })
+*/
 @EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 

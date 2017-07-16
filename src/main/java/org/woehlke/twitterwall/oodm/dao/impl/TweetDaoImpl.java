@@ -26,7 +26,7 @@ public class TweetDaoImpl extends DomainDaoWithIdTwitterImpl<Tweet> implements T
 
     @Override
     public Page<Tweet> getLatestTweets(Pageable pageRequest) {
-        String name = "Tweet.getLatestTweets";
+        String name = "Tweet.findLatestTweets";
         log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         long total = query.getResultList().size();
@@ -40,7 +40,7 @@ public class TweetDaoImpl extends DomainDaoWithIdTwitterImpl<Tweet> implements T
 
     @Override
     public Page<Tweet> getTweetsForHashTag(String hashtagText,Pageable pageRequest) {
-        String name = "Tweet.getTweetsForHashTag";
+        String name = "Tweet.findTweetsForHashTag";
         log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("hashtagText", hashtagText);
@@ -66,7 +66,7 @@ public class TweetDaoImpl extends DomainDaoWithIdTwitterImpl<Tweet> implements T
 
     @Override
     public Page<Tweet> getTweetsForUser(User user,Pageable pageRequest) {
-        String name = "Tweet.getTweetsForUser";
+        String name = "Tweet.findByUser";
         log.debug(name);
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name, Tweet.class);
         query.setParameter("user", user);
@@ -81,7 +81,7 @@ public class TweetDaoImpl extends DomainDaoWithIdTwitterImpl<Tweet> implements T
 
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        String name = "Tweet.getAllTwitterIds";
+        String name = "Tweet.findAllTwitterIds";
         log.debug(name);
         TypedQuery<Long> query = entityManager.createNamedQuery(name, Long.class);
         long total = query.getResultList().size();
@@ -93,28 +93,4 @@ public class TweetDaoImpl extends DomainDaoWithIdTwitterImpl<Tweet> implements T
         return resultPage;
     }
 
-    /**
-     * Created by tw on 23.06.17.
-     */
-    @Repository
-    public static class UrlCacheDaoImpl extends DomainDaoImpl<UrlCache> implements UrlCacheDao {
-
-        private static final Logger log = LoggerFactory.getLogger(UrlCacheDaoImpl.class);
-
-        @Override
-        public UrlCache findByUrl(String url) {
-            String name = "UrlCache.findByUrl";
-            log.debug(name);
-            try {
-                TypedQuery<UrlCache> query = entityManager.createNamedQuery(name, UrlCache.class);
-                query.setParameter("url", url);
-                UrlCache result = query.getSingleResult();
-                log.debug(name+" found: " + result.toString());
-                return result;
-            } catch (EmptyResultDataAccessException e) {
-                log.debug(name+" not found: " + url);
-                throw e;
-            }
-        }
-    }
 }

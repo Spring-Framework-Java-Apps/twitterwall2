@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +29,8 @@ public class TweetController extends AbstractTwitterwallController {
     public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
         logEnv();
         model = super.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
-        Pageable pageRequest = new PageRequest(page, pageSize);
-        Page<Tweet> latest = tweetService.getLatestTweets(pageRequest);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
+        Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
     }

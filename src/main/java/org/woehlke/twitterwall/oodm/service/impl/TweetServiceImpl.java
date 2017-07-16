@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.dao.TweetDao;
+//import org.woehlke.twitterwall.oodm.dao.TweetDao;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -27,13 +26,13 @@ public class TweetServiceImpl implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
 
-    private final TweetDao tweetDao;
+    //private final TweetDao tweetDao;
 
     private final TweetRepository tweetRepository;
 
     @Autowired
-    public TweetServiceImpl(TweetDao tweetDao, TweetRepository tweetRepository) {
-        this.tweetDao = tweetDao;
+    public TweetServiceImpl(TweetRepository tweetRepository) {
+        //this.tweetDao = tweetDao;
         this.tweetRepository = tweetRepository;
     }
 
@@ -56,20 +55,23 @@ public class TweetServiceImpl implements TweetService {
         return tweetRepository.findAll(pageRequest);
         //return tweetDao.getAll(Tweet.class,pageRequest);
     }
-
+/*
     @Override
-    public Page<Tweet> getLatestTweets(Pageable pageRequest) {
-        return tweetDao.getLatestTweets(pageRequest);
+    public Page<Tweet> findLatestTweets(Pageable pageRequest) {
+        return tweetRepository.findLatestTweets(pageRequest);
+        //return tweetDao.findLatestTweets(pageRequest);
     }
+    */
 
     private final static String MSG = "hashtagText is not valid";
 
     @Override
-    public Page<Tweet> getTweetsForHashTag(String hashtagText,Pageable pageRequest) {
+    public Page<Tweet> findTweetsForHashTag(String hashtagText, Pageable pageRequest) {
         if(!HashTag.isValidText(hashtagText)){
-            throw new IllegalArgumentException("getTweetsForHashTag: "+MSG);
+            throw new IllegalArgumentException("findTweetsForHashTag: "+MSG);
         }
-        return tweetDao.getTweetsForHashTag(hashtagText,pageRequest);
+        return tweetRepository.findTweetsForHashTag(hashtagText,pageRequest);
+        //return tweetDao.findTweetsForHashTag(hashtagText,pageRequest);
     }
 
     @Override
@@ -77,7 +79,8 @@ public class TweetServiceImpl implements TweetService {
         if(!HashTag.isValidText(hashtagText)){
             throw new IllegalArgumentException("countTweetsForHashTag: "+MSG);
         }
-        return tweetDao.countTweetsForHashTag(hashtagText);
+        return tweetRepository.countTweetsForHashTag(hashtagText);
+        //return tweetDao.countTweetsForHashTag(hashtagText);
     }
 
     @Override
@@ -87,21 +90,21 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public Page<Tweet> getTweetsForUser(User user,Pageable pageRequest) {
-        if(user == null){
-            throw new IllegalArgumentException("getTweetsForUser: user is null");
-        }
-        return tweetDao.getTweetsForUser(user,pageRequest);
+    public Page<Tweet> findTweetsForUser(User user, Pageable pageRequest) {
+        return tweetRepository.findByUser(user,pageRequest);
+        //return tweetDao.findByUser(user,pageRequest);
     }
 
     @Override
-    public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return tweetDao.getAllTwitterIds(pageRequest);
+    public Page<Long> findAllTwitterIds(Pageable pageRequest) {
+        return tweetRepository.findAllTwitterIds(pageRequest);
+        //return tweetDao.findAllTwitterIds(pageRequest);
     }
 
     @Override
     public Tweet findByIdTwitter(long idTwitter) {
-        return tweetDao.findByIdTwitter(idTwitter,Tweet.class);
+        return tweetRepository.findByIdTwitter(idTwitter);
+        //return tweetDao.findByIdTwitter(idTwitter,Tweet.class);
     }
 
     @Override
@@ -109,17 +112,19 @@ public class TweetServiceImpl implements TweetService {
         String name = "try to store: "+tweet.getIdTwitter()+" ";
         log.debug(name);
         Tweet result;
-        try {
-            Tweet tweetPersistent = tweetDao.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
+        Tweet tweetPersistent = tweetRepository.findByIdTwitter(tweet.getIdTwitter());//tweetDao.findByIdTwitter(tweet.getIdTwitter(),Tweet.class);
+        if(tweetPersistent!=null){
             tweet.setId(tweetPersistent.getId());
             tweet.setCreatedBy(tweetPersistent.getCreatedBy());
             tweet.setUpdatedBy(task);
-            result = tweetDao.update(tweet);
+            //result = tweetDao.update(tweet);
+            result = tweetRepository.save(tweet);
             log.debug(name+" updated "+result.toString());
             return result;
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             tweet.setCreatedBy(task);
-            result = tweetDao.persist(tweet);
+            //result = tweetDao.persist(tweet);
+            result = tweetRepository.save(tweet);
             log.debug(name+" persisted "+result.toString());
             return result;
         }

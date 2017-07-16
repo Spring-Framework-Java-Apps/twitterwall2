@@ -51,9 +51,9 @@ public class TestController extends AbstractTwitterwallController {
         Pageable pageRequest = new PageRequest(page, pageSize);
         String msg = "getOnListRenew: ";
         startOnListRenew();
-        log.info(msg+"START userService.getOnList(): ");
+        log.info(msg+"START userService.findOnList(): ");
         Page<User> usersOnList = userService.getOnList(pageRequest);
-        log.info(msg+"DONE userService.getOnList(): ");
+        log.info(msg+"DONE userService.findOnList(): ");
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";

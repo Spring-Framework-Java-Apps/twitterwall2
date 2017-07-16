@@ -14,7 +14,6 @@ import java.util.Date;
  * Created by tw on 10.06.17.
  */
 @Entity
-
 @Table(name = "tweet", uniqueConstraints = {
     @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
 }, indexes = {
@@ -27,22 +26,25 @@ import java.util.Date;
     @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
 })
 @NamedQueries({
+        /*
         @NamedQuery(
                 name="Tweet.findByIdTwitter",
                 query= "select t from Tweet as t where t.idTwitter=:idTwitter"
         ),
         @NamedQuery(
-                name="Tweet.getLatestTweets",
+                name="Tweet.findLatestTweets",
                 query="select t from Tweet as t order by t.createdAt DESC"
         ),
+        */
         @NamedQuery(
-                name="Tweet.getTweetsForHashTag",
+                name="Tweet.findTweetsForHashTag",
                 query="select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC"
         ),
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
                 query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
         ),
+        /*
         @NamedQuery(
                 name="Tweet.count",
                 query="select count(t) from Tweet as t"
@@ -52,13 +54,36 @@ import java.util.Date;
             query="select t from Tweet as t"
         ),
         @NamedQuery(
-                name="Tweet.getTweetsForUser",
+                name="Tweet.findTweetsForUser",
                 query="select t from Tweet as t WHERE t.user=:user"
         ),
+        */
         @NamedQuery(
-                name="Tweet.getAllTwitterIds",
+                name="Tweet.findAllTwitterIds",
                 query="select t.idTwitter from Tweet as t"
         )
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2HashTag",
+        query="select count(*) as z from tweet_hashtag"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Media",
+        query="select count(*) as z from tweet_media"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Mention",
+        query="select count(*) as z from tweet_mention"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2TickerSymbol",
+        query="select count(*) as z from tweet_tickersymbol"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Url",
+        query="select count(*) as z from tweet_url"
+    )
 })
 @EntityListeners(TweetListener.class)
 public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithIdTwitter<Tweet>,DomainObjectWithTask<Tweet> {

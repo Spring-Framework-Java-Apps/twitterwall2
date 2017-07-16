@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getAll(pageRequest));
         String symbol = Symbols.USER_ALL.toString();
         String title = "All Users";
@@ -41,9 +42,12 @@ public class UserController extends AbstractTwitterwallController {
         @RequestParam(name= "page", defaultValue=""+FIRST_PAGE_NUMBER) int page,
         @PathVariable String screenName, Model model) {
         if (User.isValidScreenName(screenName)) {
-            Pageable pageRequest = new PageRequest(page, pageSize);
             User user = userService.findByScreenName(screenName);
-            Page<Tweet> tweetsForUser = tweetService.getTweetsForUser(user,pageRequest);
+            if(user==null){
+                throw new IllegalArgumentException("/user/"+ screenName);
+            }
+            Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
+            Page<Tweet> tweetsForUser = tweetService.findTweetsForUser(user,pageRequest);
             String symbol = Symbols.PROFILE.toString();
             String title = "@" + user.getScreenName();
             String subtitle = user.getName();
@@ -52,13 +56,13 @@ public class UserController extends AbstractTwitterwallController {
             model.addAttribute("latestTweets",tweetsForUser);
             return "user/screenName";
         } else {
-            throw new IllegalArgumentException("/profile/"+ screenName);
+            throw new IllegalArgumentException("/user/"+ screenName);
         }
     }
 
     @RequestMapping("/tweets")
     public String getTweetingUsers(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
         model.addAttribute("users", tweetingUsers);
         String symbol = Symbols.USER_TWEETS.toString();
@@ -69,7 +73,7 @@ public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/notyetfriends")
     public String getNotYetFriendUsers(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getNotYetFriendUsers(pageRequest));
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
@@ -79,7 +83,7 @@ public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/notyetonlist")
     public String getNotYetOnList(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getNotYetOnList(pageRequest));
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
@@ -89,7 +93,7 @@ public class UserController extends AbstractTwitterwallController {
 
     @RequestMapping("/onlist")
     public String getOnList(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         Page<User> usersOnList = userService.getOnList(pageRequest);
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();

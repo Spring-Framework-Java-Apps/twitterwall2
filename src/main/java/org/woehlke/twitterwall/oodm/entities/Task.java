@@ -21,6 +21,7 @@ import java.util.List;
     @Index(name = "idx_task_task_type", columnList = "task_type"),
     @Index(name = "idx_task_task_status", columnList = "task_status")
 })
+/*
 @NamedQueries({
     @NamedQuery(
         name = "Task.findById",
@@ -34,7 +35,7 @@ import java.util.List;
         name = "Task.getAll",
         query = "select t from Task as t"
     )
-})
+})*/
 @EntityListeners(TaskListener.class)
 public class Task implements DomainObject<Task> {
 

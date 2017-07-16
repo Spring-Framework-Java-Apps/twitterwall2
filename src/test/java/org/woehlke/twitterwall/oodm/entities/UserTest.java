@@ -74,7 +74,7 @@ public class UserTest {
             }
             pageRequest = pageRequest.next();
         } while (hasNext);
-        String message = "userService.getAllDescriptions(); ";
+        String message = "userService.findAllDescriptions(); ";
         Assert.assertTrue(message,true);
         log.info(msg+"------------------------------------------------");
     }

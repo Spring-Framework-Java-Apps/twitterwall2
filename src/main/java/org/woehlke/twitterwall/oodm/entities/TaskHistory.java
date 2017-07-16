@@ -16,7 +16,7 @@ import java.util.Date;
     @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
     @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
 })
-@NamedQueries({
+/*@NamedQueries({
     @NamedQuery(
         name = "TaskHistory.findById",
         query = "select t from TaskHistory as t where t.id=:id"
@@ -33,7 +33,7 @@ import java.util.Date;
         name = "TaskHistory.findByTask",
         query = "select t from TaskHistory as t where t.task.id=:oneTaskId"
     )
-})
+})*/
 @EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements DomainObject<TaskHistory> {
 

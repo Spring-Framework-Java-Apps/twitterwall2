@@ -71,9 +71,9 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media store(Media media, Task task) {
         String msg = "Media.store: ";
-        try {
-            log.debug(msg+"try to find: "+media.toString());
-            Media mediaPers = mediaRepository.findByIdTwitter(media.getIdTwitter()); //this.mediaDao.findByIdTwitter(media.getIdTwitter(),Media.class);
+        log.debug(msg+"try to find: "+media.toString());
+        Media mediaPers = mediaRepository.findByIdTwitter(media.getIdTwitter()); //this.mediaDao.findByIdTwitter(media.getIdTwitter(),Media.class);
+        if(mediaPers!=null){
             log.debug(msg+"found: "+mediaPers.toString());
             media.setId(mediaPers.getId());
             media.setMediaType(mediaPers.getMediaType());
@@ -82,7 +82,7 @@ public class MediaServiceImpl implements MediaService {
             log.debug(msg+"found and try to update: "+media.toString());
             return mediaRepository.save(media);
             //return this.mediaDao.update(media);
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             media.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+media.toString());
             return mediaRepository.save(media);

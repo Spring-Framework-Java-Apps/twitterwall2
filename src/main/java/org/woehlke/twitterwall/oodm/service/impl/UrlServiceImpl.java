@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.dao.UrlDao;
+//import org.woehlke.twitterwall.oodm.dao.UrlDao;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 
@@ -24,13 +24,13 @@ public class UrlServiceImpl implements UrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    private final UrlDao urlDao;
+    //private final UrlDao urlDao;
 
     private final UrlRepository urlRepository;
 
     @Autowired
-    public UrlServiceImpl(UrlDao urlDao, UrlRepository urlRepository) {
-        this.urlDao = urlDao;
+    public UrlServiceImpl(UrlRepository urlRepository) {
+        //this.urlDao = urlDao;
         this.urlRepository = urlRepository;
     }
 
@@ -50,17 +50,19 @@ public class UrlServiceImpl implements UrlService {
             throw new IllegalArgumentException();
         }
         Url result;
-        try {
-            Url urlPersistent = this.urlDao.findByUrl(url);
+        Url urlPersistent = urlRepository.findByUrl(url);//this.urlDao.findByUrl(url);
+        if(urlPersistent!=null){
             domainObject.setId(urlPersistent.getId());
             domainObject.setCreatedBy(urlPersistent.getCreatedBy());
             domainObject.setUpdatedBy(task);
-            result = this.urlDao.update(domainObject);
+            result = urlRepository.save(domainObject);
+            //result = this.urlDao.update(domainObject);
             log.debug(name+" uodated "+result.toString());
             return result;
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             domainObject.setCreatedBy(task);
-            result = this.urlDao.persist(domainObject);
+            result = urlRepository.save(domainObject);
+            //result = this.urlDao.persist(domainObject);
             log.debug(name+" persisted "+result.toString());
             return result;
         }
@@ -98,7 +100,7 @@ public class UrlServiceImpl implements UrlService {
         if(url == null){
             throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
-        Url result = this.urlDao.findByUrl(url);
+        Url result = urlRepository.findByUrl(url); //this.urlDao.findByUrl(url);
         log.debug(name+result.toString());
         return result;
     }

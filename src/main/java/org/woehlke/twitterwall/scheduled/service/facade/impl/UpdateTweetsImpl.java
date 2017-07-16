@@ -50,7 +50,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
             boolean hasNext;
             Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
             do {
-                Page<Long> tweetTwitterIds = tweetService.getAllTwitterIds(pageRequest);
+                Page<Long> tweetTwitterIds = tweetService.findAllTwitterIds(pageRequest);
                 hasNext = tweetTwitterIds.hasNext();
                 long number = tweetTwitterIds.getTotalElements();
                 for (Long tweetTwitterId : tweetTwitterIds) {

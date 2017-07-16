@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
-import org.woehlke.twitterwall.oodm.dao.TaskHistoryDao;
+//import org.woehlke.twitterwall.oodm.dao.TaskHistoryDao;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 
@@ -24,13 +24,13 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceImpl.class);
 
-    private final TaskHistoryDao taskHistoryDao;
+    //private final TaskHistoryDao taskHistoryDao;
 
     private final TaskHistoryRepository taskHistoryRepository;
 
     @Autowired
-    public TaskHistoryServiceImpl(TaskHistoryDao taskHistoryDao, TaskHistoryRepository taskHistoryRepository) {
-        this.taskHistoryDao = taskHistoryDao;
+    public TaskHistoryServiceImpl(TaskHistoryRepository taskHistoryRepository) {
+        //this.taskHistoryDao = taskHistoryDao;
         this.taskHistoryRepository = taskHistoryRepository;
     }
 
@@ -77,7 +77,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     @Override
     public Page<TaskHistory> findByTask(Task oneTask,Pageable pageRequest) {
-        return taskHistoryDao.findByTask(oneTask,pageRequest);
+        return taskHistoryRepository.findByTask(oneTask,pageRequest);
+        //return taskHistoryDao.findByTask(oneTask,pageRequest);
     }
 
     @Override

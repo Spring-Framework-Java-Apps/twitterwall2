@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 @Table(name = "hashtag", uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
 })
+/*
 @NamedQueries({
         @NamedQuery(
                 name = "HashTag.findByText",
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
                 query = "select count(h) from HashTag as h"
         )
 })
+*/
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 

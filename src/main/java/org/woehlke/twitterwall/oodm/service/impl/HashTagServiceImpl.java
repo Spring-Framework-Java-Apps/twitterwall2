@@ -68,8 +68,8 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public HashTag store(HashTag hashTag, Task task) {
-        try {
-            HashTag tagPers = hashTagRepository.findByText(hashTag.getText());
+        HashTag tagPers = hashTagRepository.findByText(hashTag.getText());
+        if(tagPers!=null){
             hashTag.setId(tagPers.getId());
             hashTag.setTaskInfo(tagPers.getTaskInfo());
             hashTag.setCreatedBy(tagPers.getCreatedBy());
@@ -77,12 +77,12 @@ public class HashTagServiceImpl implements HashTagService {
             hashTag = hashTagRepository.save(hashTag);//this.hashTagDao.update(hashTag);
             log.debug("found: "+hashTag.toString());
             return hashTag;
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             hashTag.setCreatedBy(task);
             log.debug("try to persist: "+hashTag.toString());
-            HashTag tagPers = hashTagRepository.save(hashTag);
-            log.debug("persisted: "+tagPers.toString());
-            return tagPers;
+            HashTag tagPers2 = hashTagRepository.save(hashTag);
+            log.debug("persisted: "+tagPers2.toString());
+            return tagPers2;
         }
     }
 

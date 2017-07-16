@@ -17,6 +17,7 @@ import javax.persistence.*;
 }, indexes = {
         @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
 })
+/*
 @NamedQueries({
         @NamedQuery(
                 name = "TickerSymbol.findByUrl",
@@ -35,6 +36,7 @@ import javax.persistence.*;
         query = "select t from TickerSymbol as t"
     )
 })
+*/
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 

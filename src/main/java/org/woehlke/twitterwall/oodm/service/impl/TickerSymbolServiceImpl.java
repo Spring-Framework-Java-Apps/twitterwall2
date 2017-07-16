@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
-import org.woehlke.twitterwall.oodm.dao.TickerSymbolDao;
+//import org.woehlke.twitterwall.oodm.dao.TickerSymbolDao;
 import org.woehlke.twitterwall.oodm.repositories.TickerSymbolRepository;
 import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 
@@ -25,13 +25,13 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);
 
-    private final TickerSymbolDao tickerSymbolDao;
+    //private final TickerSymbolDao tickerSymbolDao;
 
     private final TickerSymbolRepository tickerSymbolRepository;
 
     @Autowired
-    public TickerSymbolServiceImpl(TickerSymbolDao tickerSymbolDao, TickerSymbolRepository tickerSymbolRepository) {
-        this.tickerSymbolDao = tickerSymbolDao;
+    public TickerSymbolServiceImpl(TickerSymbolRepository tickerSymbolRepository) {
+        //this.tickerSymbolDao = tickerSymbolDao;
         this.tickerSymbolRepository = tickerSymbolRepository;
     }
 
@@ -64,24 +64,25 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
     @Override
     public TickerSymbol store(TickerSymbol tickerSymbol, Task task) {
         String msg = "TickerSymbol.storeTickerSymbol: ";
-        try{
-            log.debug(msg+"try to find: "+tickerSymbol.toString());
-            TickerSymbol tickerSymbolPers = this.tickerSymbolDao.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
+        log.debug(msg+"try to find: "+tickerSymbol.toString());
+        TickerSymbol tickerSymbolPers = tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());//this.tickerSymbolDao.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
+        if(tickerSymbolPers!=null){
             log.debug(msg+"found: "+tickerSymbolPers.toString());
             tickerSymbol.setId(tickerSymbolPers.getId());
             tickerSymbol.setCreatedBy(tickerSymbolPers.getCreatedBy());
             tickerSymbol.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+tickerSymbol.toString());
-            return this.tickerSymbolDao.update(tickerSymbol);
-        } catch (EmptyResultDataAccessException e) {
+            return tickerSymbolRepository.save(tickerSymbol); //this.tickerSymbolDao.update(tickerSymbol);
+        }else{
             tickerSymbol.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
-            return this.tickerSymbolDao.persist(tickerSymbol);
+            return tickerSymbolRepository.save(tickerSymbol);//this.tickerSymbolDao.persist(tickerSymbol);
         }
     }
 
     @Override
     public TickerSymbol findByUrl(String url) {
-        return this.tickerSymbolDao.findByUrl(url);
+        return tickerSymbolRepository.findByUrl(url);
+        //return this.tickerSymbolDao.findByUrl(url);
     }
 }

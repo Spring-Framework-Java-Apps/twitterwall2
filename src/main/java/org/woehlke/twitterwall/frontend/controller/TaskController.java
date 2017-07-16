@@ -41,17 +41,18 @@ public class TaskController  extends AbstractTwitterwallController {
     @RequestMapping(path="/{id}")
     public String getTaskById(
         @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
-        @PathVariable long id, Model model) {
-        String msg = "/task/ "+id;
+        //@PathVariable long id, Model model) {
+        @PathVariable("id") Task task, Model model) {
+        String msg = "/task/ "+task.getId();
         logEnv();
         String title = "Tasks";
         String subtitle = "List aller TasksHistory für Task";
         String symbol = Symbols.TASK.toString();
         model = setupPage(model,title,subtitle,symbol);
-        Task oneTask = taskService.findById(id);
+        //Task oneTask = taskService.findById(id);
         Pageable pageRequest = new PageRequest(page, pageSize);
-        Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(oneTask,pageRequest);
-        model.addAttribute("task",oneTask);
+        Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
+        model.addAttribute("task",task);
         model.addAttribute("taskHistoryList",taskHistoryList);
         return "task/taskHistory";
     }

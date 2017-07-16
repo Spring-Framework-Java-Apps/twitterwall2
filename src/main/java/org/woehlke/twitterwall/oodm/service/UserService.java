@@ -28,5 +28,5 @@ public interface UserService extends DomainServiceWithIdTwitter<User>,DomainServ
     Page<User> getUsersForHashTag(String hashtagText,Pageable pageRequest);
 
     long countUsersForHashTag(String hashtagText);
-
+    
 }

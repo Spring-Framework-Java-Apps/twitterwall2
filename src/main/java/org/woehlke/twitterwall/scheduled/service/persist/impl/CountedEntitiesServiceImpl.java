@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.dao.*;
+//import org.woehlke.twitterwall.oodm.dao.*;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.repositories.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
-import java.util.Map;
+//import java.util.Map;
 
 /**
  * Created by tw on 09.07.17.
@@ -49,7 +49,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         long countTask = taskRepository.count();
         long countTaskHistory = taskHistoryRepository.count();
 
-        Map<String,Integer> tableCount =  jdbcDao.getTableCount();
+        //Map<String,Integer> tableCount =  jdbcDao.getTableCount();
 
         c.setCountHashTags(countHashTags);
         c.setCountMedia(countMedia);
@@ -62,16 +62,17 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setCountTask(countTask);
         c.setCountTaskHistory(countTaskHistory);
 
-        c.setTweet2hashtag(tableCount.get("tweet_hashtag").longValue());
-        c.setTweet2media(tableCount.get("tweet_media").longValue());
-        c.setTweet2mention(tableCount.get("tweet_mention").longValue());
-        c.setTweet2tickersymbol(tableCount.get("tweet_tickersymbol").longValue());
-        c.setTweet2url(tableCount.get("tweet_url").longValue());
-        c.setUserprofile2hashtag(tableCount.get("userprofile_hashtag").longValue());
-        c.setUserprofile2media(tableCount.get("userprofile_media").longValue());
-        c.setUserprofile2mention(tableCount.get("userprofile_mention").longValue());
-        c.setUserprofile2tickersymbol(tableCount.get("userprofile_tickersymbol").longValue());
-        c.setUserprofile2url(tableCount.get("userprofile_url").longValue());
+        c.setTweet2hashtag(tweetRepository.countAllUser2HashTag());
+        c.setTweet2media(tweetRepository.countAllUser2Media());
+        c.setTweet2mention(tweetRepository.countAllUser2Mention());
+        c.setTweet2tickersymbol(tweetRepository.countAllUser2TickerSymbol());
+        c.setTweet2url(tweetRepository.countAllUser2Url());
+
+        c.setUserprofile2hashtag(userRepository.countAllUser2HashTag());
+        c.setUserprofile2media(userRepository.countAllUser2Media());
+        c.setUserprofile2mention(userRepository.countAllUser2Mention());
+        c.setUserprofile2tickersymbol(userRepository.countAllUser2TickerSymbol());
+        c.setUserprofile2url(userRepository.countAllUser2Url());
 
         log.debug("countAll: "+c.toString());
         return c;
@@ -129,10 +130,10 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final TaskHistoryRepository taskHistoryRepository;
 
-    private final JdbcDao jdbcDao;
+    //private final JdbcDao jdbcDao;
 
     @Autowired
-    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, JdbcDao jdbcDao) {
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
         this.tweetRepository = tweetRepository;
         this.userRepository = userRepository;
         this.mentionRepository = mentionRepository;
@@ -143,7 +144,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         this.tickerSymbolRepository = tickerSymbolRepository;
         this.taskRepository = taskRepository;
         this.taskHistoryRepository = taskHistoryRepository;
-        this.jdbcDao = jdbcDao;
+        //this.jdbcDao = jdbcDao;
     }
 
     /*

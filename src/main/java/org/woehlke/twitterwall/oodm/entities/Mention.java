@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 }, indexes = {
     @Index(name = "idx_mention_name", columnList = "name")
 })
+/*
 @NamedQueries({
     @NamedQuery(
         name = "Mention.findByIdTwitter",
@@ -46,6 +47,7 @@ import java.util.regex.Pattern;
         query = "select t from Mention as t"
     )
 })
+*/
 @EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 

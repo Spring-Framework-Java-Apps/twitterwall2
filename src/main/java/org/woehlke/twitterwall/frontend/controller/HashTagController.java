@@ -53,7 +53,7 @@ public class HashTagController extends AbstractTwitterwallController {
             String symbol = Symbols.HASHTAG.toString();
             model = setupPage(model,title,subtitle,symbol);
             //
-            Page<Tweet> tweets = tweetService.getTweetsForHashTag(hashtagText,pageRequestTweet);
+            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashtagText,pageRequestTweet);
             model.addAttribute("latestTweets", tweets);
             //
             Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequestUser);

@@ -19,6 +19,7 @@ import java.util.List;
         @Index(name="idx_url_expanded", columnList="expanded"),
         @Index(name="idx_url_display", columnList="display")
 })
+/*
 @NamedQueries({
         @NamedQuery(
             name="Url.findByUrl",
@@ -29,6 +30,7 @@ import java.util.List;
             query = "select count(t) from Url as t"
         ),
 })
+*/
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 

@@ -23,7 +23,7 @@ import javax.persistence.*;
         @Index(name="idx_media_media_https", columnList="media_https"),
         @Index(name="idx_media_media_type", columnList="media_type")
 })
-@NamedQueries({
+ /*@NamedQueries({
         @NamedQuery(
                 name = "Media.findByIdTwitter",
                 query = "select t from Media as t where t.idTwitter=:idTwitter"
@@ -40,7 +40,7 @@ import javax.persistence.*;
                 name = "Media.findByUrl",
                 query = "select t from Media as t where t.url=:url"
         )
-})
+})*/
 @EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
