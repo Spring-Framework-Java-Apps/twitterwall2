@@ -96,7 +96,7 @@ public class HashTagController extends AbstractTwitterwallController {
 
     @RequestMapping(path="/overview")
     public String hashTagsOverview(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
-        String msg = "/hashtags: ";
+        String msg = "/hashtag/overview?page="+page+" ";
         logEnv();
         String title = "HashTags";
         String subtitle = searchterm;
@@ -113,8 +113,12 @@ public class HashTagController extends AbstractTwitterwallController {
                 //try {
                     Pageable pageRequestTeets = new PageRequest(0, 1);
                     Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTeets);
-                    if(tweets!=null){
+                    String myMSg = msg+" tweetService.findTweetsForHashTag= "+hashTag.getText();
+                    if(tweets==null){
+                        log.debug(myMSg+" result: null");
+                    } else {
                         long numberTweets = tweets.getTotalElements();
+                        log.debug(myMSg+" result: numberTweets="+numberTweets);
                         if(numberTweets > 0) {
                             HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
                             hashTagsTweets.add(c);
@@ -126,8 +130,12 @@ public class HashTagController extends AbstractTwitterwallController {
                 //try {
                     Pageable pageRequestUsers = new PageRequest(0, 1);
                     Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUsers);
-                    if(users!=null){
+                    myMSg = msg+" userService.getUsersForHashTag= "+hashTag.getText();
+                    if(users==null){
+                        log.debug(myMSg+" result: null");
+                    } else {
                         long numberUsers =  users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
+                        log.debug(myMSg+" result: numberUsers="+numberUsers);
                         if(numberUsers > 0){
                             HashTagCounted c = new HashTagCounted(numberUsers,hashTag.getText());
                             hashTagsUsers.add(c);
@@ -137,8 +145,8 @@ public class HashTagController extends AbstractTwitterwallController {
                    // log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
                 //}
             }
-        model.addAttribute("latestTweets", hashTagsTweets);
-        model.addAttribute("users", hashTagsUsers);
+        model.addAttribute("hashTagsTweets", hashTagsTweets);
+        model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "/hashtag/overview";
         //return "tags";
     }
