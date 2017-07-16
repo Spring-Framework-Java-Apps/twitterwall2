@@ -37,14 +37,14 @@ import java.util.Date;
         ),
         */
         @NamedQuery(
-                name="Tweet.findTweetsForHashTag",
-                query="select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC"
+                name="Tweet.findByHashTag",
+                query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag=:hashtag"
         ),
+        /*
         @NamedQuery(
                 name="Tweet.countTweetsForHashTag",
                 query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
         ),
-        /*
         @NamedQuery(
                 name="Tweet.count",
                 query="select count(t) from Tweet as t"
@@ -163,7 +163,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
             name = "urls",
             joinTable = @JoinTable(name="tweet_url")),
         @AssociationOverride(
-            name = "tags",
+            name = "hashTags",
             joinTable = @JoinTable(name="tweet_hashtag")),
         @AssociationOverride(
             name = "mentions",

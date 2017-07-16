@@ -17,7 +17,7 @@ public class Entities extends EntitiesFilter implements Serializable {
     private Set<Url> urls = new LinkedHashSet<Url>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private Set<HashTag> tags = new LinkedHashSet<HashTag>();
+    private Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
@@ -28,9 +28,9 @@ public class Entities extends EntitiesFilter implements Serializable {
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
-    public Entities(Set<Url> urls, Set<HashTag> tags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
+    public Entities(Set<Url> urls, Set<HashTag> hashTags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
         this.urls = urls;
-        this.tags = tags;
+        this.hashTags = hashTags;
         this.mentions = mentions;
         this.media = media;
         this.tickerSymbols = tickerSymbols;
@@ -91,20 +91,20 @@ public class Entities extends EntitiesFilter implements Serializable {
         }
     }
 
-    public Set<HashTag> getTags() {
-        return tags;
+    public Set<HashTag> getHashTags() {
+        return hashTags;
     }
 
-    public void setTags(Set<HashTag> tags) {
-        this.tags.clear();
-        this.tags.addAll(tags);
+    public void setHashTags(Set<HashTag> hashTags) {
+        this.hashTags.clear();
+        this.hashTags.addAll(hashTags);
     }
 
     public boolean addAllTags(Set<HashTag> tags) {
         boolean result = false;
         for(HashTag tag:tags){
-            if((tag != null) && (!this.tags.contains(tag))){
-                this.tags.add(tag);
+            if((tag != null) && (!this.hashTags.contains(tag))){
+                this.hashTags.add(tag);
                 result = true;
             }
         }
@@ -114,8 +114,8 @@ public class Entities extends EntitiesFilter implements Serializable {
     public boolean removeAllTags(Set<HashTag> tags) {
         boolean result = false;
         for(HashTag tag:tags){
-            if((tag != null) && (this.tags.contains(tag))){
-                this.tags.remove(tag);
+            if((tag != null) && (this.hashTags.contains(tag))){
+                this.hashTags.remove(tag);
                 result = true;
             }
         }
@@ -123,21 +123,21 @@ public class Entities extends EntitiesFilter implements Serializable {
     }
 
     public boolean removeAllTags() {
-        this.tags.clear();
-        return this.tags.isEmpty();
+        this.hashTags.clear();
+        return this.hashTags.isEmpty();
     }
 
     public boolean addTag(HashTag tag) {
-        if((tag != null) && (!this.tags.contains(tag))){
-            return this.tags.add(tag);
+        if((tag != null) && (!this.hashTags.contains(tag))){
+            return this.hashTags.add(tag);
         } else {
             return false;
         }
     }
 
     public boolean removeTag(HashTag tag) {
-        if((tag != null) && (this.tags.contains(tag))){
-            return this.tags.remove(tag);
+        if((tag != null) && (this.hashTags.contains(tag))){
+            return this.hashTags.remove(tag);
         } else {
             return false;
         }
@@ -289,7 +289,7 @@ public class Entities extends EntitiesFilter implements Serializable {
         Entities entities = (Entities) o;
 
         if (!urls.equals(entities.urls)) return false;
-        if (!tags.equals(entities.tags)) return false;
+        if (!hashTags.equals(entities.hashTags)) return false;
         if (!mentions.equals(entities.mentions)) return false;
         if (!media.equals(entities.media)) return false;
         return tickerSymbols.equals(entities.tickerSymbols);
@@ -298,7 +298,7 @@ public class Entities extends EntitiesFilter implements Serializable {
     @Override
     public int hashCode() {
         int result = urls.hashCode();
-        result = 31 * result + tags.hashCode();
+        result = 31 * result + hashTags.hashCode();
         result = 31 * result + mentions.hashCode();
         result = 31 * result + media.hashCode();
         result = 31 * result + tickerSymbols.hashCode();
@@ -323,7 +323,7 @@ public class Entities extends EntitiesFilter implements Serializable {
     private String toStringHashTags(){
         StringBuffer myTags = new StringBuffer();
         myTags.append("[ ");
-        for (HashTag tag : tags) {
+        for (HashTag tag : hashTags) {
             if(tag != null){
                 myTags.append(tag.toString());
                 myTags.append(", ");
@@ -384,7 +384,7 @@ public class Entities extends EntitiesFilter implements Serializable {
     public String toString() {
         return "Entities{" +
             ",\n urls=" + toStringUrls() +
-            ",\n tags=" + toStringHashTags() +
+            ",\n hashTags=" + toStringHashTags() +
             ",\n mentions=" + toStringMentions() +
             ",\n media=" +toStringMedia() +
             ",\n tickerSymbols=" +toStringTickerSymbols() +
@@ -395,7 +395,7 @@ public class Entities extends EntitiesFilter implements Serializable {
 
         formattedText = getFormattedTextForUserProfiles(formattedText);
 
-        Set<HashTag> tags = this.getTags();
+        Set<HashTag> tags = this.getHashTags();
         formattedText = getFormattedTextForHashTags(tags,formattedText);
 
         Set<Media> media = this.getMedia();

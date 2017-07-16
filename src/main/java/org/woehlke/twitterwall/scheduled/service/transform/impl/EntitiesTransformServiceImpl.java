@@ -56,7 +56,7 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         entitiesTarget.setMentions(mentions);
         entitiesTarget.addAllUrls(urls);
         entitiesTarget.setMedia(media);
-        entitiesTarget.setTags(hashTags);
+        entitiesTarget.setHashTags(hashTags);
         entitiesTarget.setTickerSymbols(tickerSymbols);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"description " + description);

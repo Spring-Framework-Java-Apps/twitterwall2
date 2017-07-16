@@ -66,21 +66,12 @@ public class TweetServiceImpl implements TweetService {
     private final static String MSG = "hashtagText is not valid";
 
     @Override
-    public Page<Tweet> findTweetsForHashTag(String hashtagText, Pageable pageRequest) {
-        if(!HashTag.isValidText(hashtagText)){
+    public Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest) {
+        if(!HashTag.isValidText(hashtag.getText())){
             throw new IllegalArgumentException("findTweetsForHashTag: "+MSG);
         }
-        return tweetRepository.findTweetsForHashTag(hashtagText,pageRequest);
+        return tweetRepository.findByHashTag(hashtag,pageRequest);
         //return tweetDao.findTweetsForHashTag(hashtagText,pageRequest);
-    }
-
-    @Override
-    public long countTweetsForHashTag(String hashtagText) {
-        if(!HashTag.isValidText(hashtagText)){
-            throw new IllegalArgumentException("countTweetsForHashTag: "+MSG);
-        }
-        return tweetRepository.countTweetsForHashTag(hashtagText);
-        //return tweetDao.countTweetsForHashTag(hashtagText);
     }
 
     @Override

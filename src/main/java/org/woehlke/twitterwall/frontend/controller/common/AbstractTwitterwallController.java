@@ -213,41 +213,35 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
     protected void addUserForScreenName(Model model, String screenName) {
         String msg="addUserForScreenName "+screenName+": ";
         Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
-        try {
-            log.info("--------------------------------------------------------------------");
-            log.info("screenName = "+ screenName);
-            User user = userService.findByScreenName(screenName);
+        log.info("--------------------------------------------------------------------");
+        log.info("screenName = "+ screenName);
+        User user = userService.findByScreenName(screenName);
+        if(user!=null){
             log.info("userService.findByScreenName: found User = "+user.toString());
             model.addAttribute("user", user);
             log.info("model.addAttribute user = "+user.toString());
-        } catch (EmptyResultDataAccessException e){
+        } else {
             String msg2 = "EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName;
-            task = taskService.warn(task,e,msg2);
+            task = taskService.warn(task,msg2);
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
             String msg3 = "twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString();
             task = taskService.event(task,msg3);
-            try {
-                log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
-                User user = storeUserProfile.storeUserProfile(twitterProfile,task);
-                log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
-                model.addAttribute("user", user);
-                log.info("model.addAttribute user = "+user.toString());
-            } catch (EmptyResultDataAccessException ex){
-                log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: "+ex.getMessage());
-                User user = User.getDummyUserForScreenName(screenName);
-                model.addAttribute("user", user);
-                log.info("model.addAttribute user = "+user.toString());
-            } catch (NoResultException exe) {
-                log.warn("persistDataFromTwitter.storeUserProfile raised NoResultException: "+exe.getMessage());
-                User user = User.getDummyUserForScreenName(screenName);
-                model.addAttribute("user", user);
-                log.info("model.addAttribute user = "+user.toString());
+            log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
+            User user2 = storeUserProfile.storeUserProfile(twitterProfile,task);
+            if(user2!=null){
+                log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user2.toString());
+                model.addAttribute("user", user2);
+                log.info("model.addAttribute user = "+user2.toString());
+            } else {
+                log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: ");
+                User user3 = User.getDummyUserForScreenName(screenName);
+                model.addAttribute("user", user3);
+                log.info("model.addAttribute user = "+user3.toString());
             }
-        }  finally {
-            taskService.done(task);
-            log.info("... finally done ...");
-            log.info("--------------------------------------------------------------------");
         }
+        taskService.done(task);
+        log.info("... finally done ...");
+        log.info("--------------------------------------------------------------------");
     }
 
     protected void setupAfterPropertiesSetWithTesting(TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {

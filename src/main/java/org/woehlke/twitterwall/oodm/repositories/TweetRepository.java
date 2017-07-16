@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 
@@ -19,14 +20,8 @@ public interface TweetRepository extends PagingAndSortingRepository<Tweet,Long> 
     Page<Tweet> findLatestTweets(Pageable pageRequest);
     */
 
-    @Query(
-        name="Tweet.findTweetsForHashTag",
-        countName = "Tweet.countTweetsForHashTag"
-    )
-    Page<Tweet> findTweetsForHashTag(String hashtagText, Pageable pageRequest);
-
-    @Query(name = "Tweet.countTweetsForHashTag")
-    long countTweetsForHashTag(String hashtagText);
+    @Query(name="Tweet.findByHashTag")
+    Page<Tweet> findByHashTag(HashTag hashTag, Pageable pageRequest);
 
     //@Query(name = "Tweet.findByUser")
     Page<Tweet> findByUser(User user, Pageable pageRequest);

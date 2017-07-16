@@ -84,7 +84,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
                 }
             }
         }
-        for (HashTag hashTag : entities.getTags()) {
+        for (HashTag hashTag : entities.getHashTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
                 hashTags.add(hashTagPers);
@@ -110,7 +110,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
             }
         }
         entities.setUrls(urls);
-        entities.setTags(hashTags);
+        entities.setHashTags(hashTags);
         entities.setMentions(mentions);
         entities.setMedia(media);
         entities.setTickerSymbols(tickerSymbols);

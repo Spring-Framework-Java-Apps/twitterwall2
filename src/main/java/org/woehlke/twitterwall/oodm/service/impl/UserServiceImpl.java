@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 //import org.woehlke.twitterwall.oodm.dao.UserDao;
@@ -135,16 +136,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getUsersForHashTag(String hashtagText,Pageable pageRequest) {
-        return userRepository.findUsersForHashTag(hashtagText,pageRequest);
+    public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
+        return userRepository.findUsersForHashTag(hashTag,pageRequest);
         //Page<User> users = userDao.getUsersForHashTag(hashtagText,pageRequest);
         //return users;
     }
 
+    /*
     @Override
     public long countUsersForHashTag(String hashtagText) {
         return userRepository.countUsersForHashTag(hashtagText);
         //long numberUsers = userDao.countUsersForHashTag(hashtagText);
         //return numberUsers;
     }
+    */
 }

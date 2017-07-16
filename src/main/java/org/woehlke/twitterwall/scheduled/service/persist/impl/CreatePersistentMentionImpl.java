@@ -49,22 +49,22 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
         String msg = "getPersistentMentionAndUserFor:";
         String screenName = mention.getScreenName();
         User foundUser = storeTwitterProfileForProxyMentionForUser.storeTwitterProfileForProxyMentionForUser(mention,task);
-        if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
-            String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
-            log.warn(eventMsg);
-            taskService.warn(task,eventMsg);
-            mention.setScreenName(foundUser.getScreenName());
-            screenName = foundUser.getScreenName();
-        }
         if(foundUser != null){
+            if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
+                String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
+                log.warn(eventMsg);
+                taskService.warn(task,eventMsg);
+                mention.setScreenName(foundUser.getScreenName());
+                screenName = foundUser.getScreenName();
+            }
             Mention persMention = null;
-            try {
-                Mention myFoundMention = mentionService.findByScreenName(screenName);
+            Mention myFoundMention = mentionService.findByScreenName(screenName);
+            if(myFoundMention!=null){
                 myFoundMention.setUser(foundUser);
                 myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                 persMention = mentionService.update(myFoundMention,task);
                 log.debug(msg+" updated: "+persMention.toString());
-            } catch (EmptyResultDataAccessException e){
+            } else {
                 mention.setUser(foundUser);
                 mention.setIdTwitterOfUser(foundUser.getIdTwitter());
                 persMention = mentionService.createProxyMention(mention,task);
@@ -78,7 +78,6 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             return null;
         }
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentMentionImpl.class);
 

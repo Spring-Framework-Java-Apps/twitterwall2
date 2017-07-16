@@ -66,11 +66,12 @@ public class HashTagController extends AbstractTwitterwallController {
             String title = hashtagText;
             String symbol = Symbols.HASHTAG.toString();
             model = setupPage(model,title,subtitle,symbol);
+            HashTag hashTag = hashTagService.findByText(hashtagText);
             //
-            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashtagText,pageRequestTweet);
+            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
             model.addAttribute("latestTweets", tweets);
             //
-            Page<User> users = userService.getUsersForHashTag(hashtagText,pageRequestUser);
+            Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
             model.addAttribute("users", users);
             //
             model.addAttribute("hashtagText"+hashtagText);
@@ -97,25 +98,29 @@ public class HashTagController extends AbstractTwitterwallController {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
             hasNext = myPage.hasNext();
             pageRequest = pageRequest.next();
-            for (HashTag hashTag : myPage) {
+            for (HashTag hashTag : myPage.getContent()) {
                 String text = hashTag.getText();
                 try {
-                    long numberTweets = tweetService.countTweetsForHashTag(hashTag.getText());
+                    Pageable pageRequestTeets = new PageRequest(0, 1);
+                    Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTeets);
+                    long numberTweets = tweets.getTotalElements();
                     if(numberTweets > 0) {
                         HashTagCounted c = new HashTagCounted(numberTweets, text);
                         hashTagsTweets.add(c);
                     }
                 } catch (IllegalArgumentException e){
-                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
+                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
                 }
                 try {
-                    long numberUsers = userService.countUsersForHashTag(hashTag.getText());
+                    Pageable pageRequestUsers = new PageRequest(0, 1);
+                    Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUsers);
+                    long numberUsers =  users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
                     if(numberUsers > 0){
                         HashTagCounted c = new HashTagCounted(numberUsers,text);
                         hashTagsUsers.add(c);
                     }
                 } catch (IllegalArgumentException e){
-                    log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage());
+                    log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
                 }
             }
         }

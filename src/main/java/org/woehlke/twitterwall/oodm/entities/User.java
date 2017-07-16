@@ -68,11 +68,7 @@ import java.util.regex.Pattern;
         @NamedQuery(
                 name = "User.findUsersForHashTag",
                 //TODO: remove "order by t.screenName" from NamedQuery
-                query = "select t from User as t join t.entities.tags tag WHERE tag.text=:hashtagText"
-        ),
-        @NamedQuery(
-                name = "User.countUsersForHashTag",
-                query = "select count(t) from User as t join t.entities.tags tag WHERE tag.text=:hashtagText"
+                query = "select t from User as t join t.entities.hashTags hashTag WHERE hashTag=:hashtag"
         ),
         @NamedQuery(
                 name = "User.findAllDescriptions",
@@ -248,7 +244,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
             name = "urls",
             joinTable = @JoinTable(name="userprofile_url")),
         @AssociationOverride(
-            name = "tags",
+            name = "hashTags",
             joinTable = @JoinTable(name="userprofile_hashtag")),
         @AssociationOverride(
             name = "mentions",

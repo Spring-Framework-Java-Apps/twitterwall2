@@ -23,7 +23,6 @@ import java.util.Set;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
-
     @Override
     public Entities storeEntitiesProcess(Entities entities, Task task) {
         String msg = "storeEntitiesProcess ";
@@ -33,18 +32,20 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         Set<Media> media = new LinkedHashSet<>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
         for (Url myUrl : entities.getUrls()) {
-            if((myUrl != null)&&(myUrl.isValid())){
-                Url urlPers = urlService.store(myUrl, task);
-                urls.add(urlPers);
-            } else if((myUrl != null)&&(myUrl.isRawUrlsFromDescription())){
-                String urlStr = myUrl.getUrl();
-                Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr,task);
-                if((urlObj != null)&&(urlObj.isValid())){
-                    urls.add(urlObj);
+            if(myUrl != null) {
+                if (myUrl.isValid()) {
+                    Url urlPers = urlService.store(myUrl, task);
+                    urls.add(urlPers);
+                } else if (myUrl.isRawUrlsFromDescription()){
+                    String urlStr = myUrl.getUrl();
+                    Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr, task);
+                    if ((urlObj != null) && (urlObj.isValid())) {
+                        urls.add(urlObj);
+                    }
                 }
             }
         }
-        for (HashTag hashTag : entities.getTags()) {
+        for (HashTag hashTag : entities.getHashTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
                 hashTags.add(hashTagPers);
@@ -56,7 +57,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                 mentions.add(mentionPers);
             } else if(mention.isRawMentionFromUserDescription()){
                 Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
-                if((mention != null) && mentionPers.isValid()){
+                if((mentionPers != null) && mentionPers.isValid()){
                     mentions.add(mentionPers);
                 }
             }
@@ -74,7 +75,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             }
         }
         entities.setUrls(urls);
-        entities.setTags(hashTags);
+        entities.setHashTags(hashTags);
         entities.setMentions(mentions);
         entities.setMedia(media);
         entities.setTickerSymbols(tickerSymbols);

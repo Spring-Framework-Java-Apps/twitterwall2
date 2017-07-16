@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+//import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,22 +35,22 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
         if (url == null) {
             return null;
         } else {
-            try {
-                log.debug(msg+" try to find ");
-                Url urlPers = urlRepository.findByUrl(url);//this.urlDao.findByUrl(url);
-                log.debug(msg+" found: "+urlPers);
-                if(urlPers.isUrlAndExpandedTheSame()){
-                    log.debug(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
+            log.debug(msg + " try to find ");
+            Url urlPers = urlRepository.findByUrl(url);//this.urlDao.findByUrl(url);
+            if (urlPers != null) {
+                log.debug(msg + " found: " + urlPers);
+                if (urlPers.isUrlAndExpandedTheSame()) {
+                    log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.toString());
                 }
                 urlPers.setUpdatedBy(task);
                 urlPers = urlRepository.save(urlPers);//this.urlDao.update(urlPers);
                 return urlPers;
-            } catch (EmptyResultDataAccessException ex) {
-                log.debug(msg+" not found ");
-                try {
-                    log.debug(msg+" try to find UrlCache");
-                    UrlCache urlCache = urlCacheRepository.findByUrl(url);//urlCacheDao.findByUrl(url);
-                    log.debug(msg+" found: "+urlCache);
+            } else {
+                log.debug(msg + " not found ");
+                log.debug(msg + " try to find UrlCache");
+                UrlCache urlCache = urlCacheRepository.findByUrl(url);//urlCacheDao.findByUrl(url);
+                if (urlCache != null) {
+                    log.debug(msg + " found: " + urlCache);
                     String displayUrl = urlCache.getExpanded();
                     try {
                         URL myURL = new URL(urlCache.getExpanded());
@@ -60,15 +60,15 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     }
                     Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
                     newUrl.setCreatedBy(task);
-                    log.debug(msg+" try to persist: "+newUrl.toString());
+                    log.debug(msg + " try to persist: " + newUrl.toString());
                     newUrl = urlRepository.save(newUrl);//this.urlDao.persist(newUrl);
-                    log.debug(msg+" persisted: "+newUrl.toString());
+                    log.debug(msg + " persisted: " + newUrl.toString());
                     return newUrl;
-                } catch (EmptyResultDataAccessException e) {
-                    UrlCache urlCache = new UrlCache();
+                } else {
+                    urlCache = new UrlCache();
                     log.debug(msg + " try to fetchTransientUrl");
                     Url myUrl = twitterUrlService.fetchTransientUrl(url);
-                    if(myUrl == null) {
+                    if (myUrl == null) {
                         log.debug(msg + "nothing found by fetchTransientUrl");
                         return null;
                     } else {
@@ -91,9 +91,9 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         }
                         Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
                         newUrl.setCreatedBy(task);
-                        log.debug(msg+" try to persist: "+newUrl.toString());
+                        log.debug(msg + " try to persist: " + newUrl.toString());
                         newUrl = urlRepository.save(newUrl); //this.urlDao.persist(newUrl);
-                        log.debug(msg+" persisted: "+newUrl.toString());
+                        log.debug(msg + " persisted: " + newUrl.toString());
                         return newUrl;
                     }
                 }
