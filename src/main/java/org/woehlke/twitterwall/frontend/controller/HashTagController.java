@@ -95,8 +95,8 @@ public class HashTagController extends AbstractTwitterwallController {
     }
 
     @RequestMapping(path="/overview")
-    public String hashTagsOverview(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
-        String msg = "/hashtag/overview?page="+page+" ";
+    public String hashTagsOverview(Model model) {
+        String msg = "/hashtag/overview ";
         logEnv();
         String title = "HashTags";
         String subtitle = searchterm;
@@ -104,47 +104,52 @@ public class HashTagController extends AbstractTwitterwallController {
         model = setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(page, pageSize);
-        Page<HashTag> myPage = hashTagService.getAll(pageRequest);
-
-
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        boolean hasNext = true;
+        while(hasNext) {
+            Page<HashTag> myPage = hashTagService.getAll(pageRequest);
             for (HashTag hashTag : myPage.getContent()) {
                 // String text = hashTag.getText();
                 //try {
-                    Pageable pageRequestTeets = new PageRequest(0, 1);
-                    Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTeets);
-                    String myMSg = msg+" tweetService.findTweetsForHashTag= "+hashTag.getText();
-                    if(tweets==null){
-                        log.debug(myMSg+" result: null");
-                    } else {
-                        long numberTweets = tweets.getTotalElements();
-                        log.debug(myMSg+" result: numberTweets="+numberTweets);
-                        if(numberTweets > 0) {
-                            HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
-                            hashTagsTweets.add(c);
-                        }
+                Pageable pageRequestTeets = new PageRequest(0, 1);
+                Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag, pageRequestTeets);
+                String myMSg = msg + " tweetService.findTweetsForHashTag= " + hashTag.getText();
+                if (tweets == null) {
+                    log.debug(myMSg + " result: null");
+                } else {
+                    long numberTweets = tweets.getTotalElements();
+                    log.debug(myMSg + " result: numberTweets=" + numberTweets);
+                    if (numberTweets > 0) {
+                        HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
+                        hashTagsTweets.add(c);
                     }
+                }
                 //} catch (IllegalArgumentException e){
-                 //   log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
+                //   log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
                 //}
                 //try {
-                    Pageable pageRequestUsers = new PageRequest(0, 1);
-                    Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUsers);
-                    myMSg = msg+" userService.getUsersForHashTag= "+hashTag.getText();
-                    if(users==null){
-                        log.debug(myMSg+" result: null");
-                    } else {
-                        long numberUsers =  users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
-                        log.debug(myMSg+" result: numberUsers="+numberUsers);
-                        if(numberUsers > 0){
-                            HashTagCounted c = new HashTagCounted(numberUsers,hashTag.getText());
-                            hashTagsUsers.add(c);
-                        }
+                Pageable pageRequestUsers = new PageRequest(0, 1);
+                Page<User> users = userService.getUsersForHashTag(hashTag, pageRequestUsers);
+                myMSg = msg + " userService.getUsersForHashTag= " + hashTag.getText();
+                if (users == null) {
+                    log.debug(myMSg + " result: null");
+                } else {
+                    long numberUsers = users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
+                    log.debug(myMSg + " result: numberUsers=" + numberUsers);
+                    if (numberUsers > 0) {
+                        HashTagCounted c = new HashTagCounted(numberUsers, hashTag.getText());
+                        hashTagsUsers.add(c);
                     }
+                }
                 //} catch (IllegalArgumentException e){
-                   // log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
+                // log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
                 //}
             }
+            hasNext = myPage.hasNext();
+            if(hasNext){
+                pageRequest=myPage.nextPageable();
+            }
+        }
         model.addAttribute("hashTagsTweets", hashTagsTweets);
         model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "/hashtag/overview";
