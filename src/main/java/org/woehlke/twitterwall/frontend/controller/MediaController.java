@@ -26,9 +26,9 @@ public class MediaController extends AbstractTwitterwallController {
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
-        String subtitle = "Media";
-        String title = "All";
-        String symbol = Symbols.LEAF.toString();
+        String subtitle = "all";
+        String title = "Media";
+        String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
         Page<Media> myPageContent = mediaService.getAll(pageRequest);

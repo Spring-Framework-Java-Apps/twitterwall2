@@ -27,6 +27,8 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 @RequestMapping("/user")
 public class UserController extends AbstractTwitterwallController {
 
+    private final static String PATH="/user";
+
     @RequestMapping("/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");

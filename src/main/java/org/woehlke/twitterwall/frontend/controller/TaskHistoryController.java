@@ -8,34 +8,40 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.oodm.entities.UrlCache;
-import org.woehlke.twitterwall.oodm.service.UrlCacheService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 
 /**
- * Created by tw on 16.07.17.
+ * Created by tw on 11.07.17.
  */
 @Controller
-@RequestMapping("/urlcache")
-public class UrlCacheController  extends AbstractTwitterwallController {
+@RequestMapping(path="/taskhistory")
+public class TaskHistoryController extends AbstractTwitterwallController {
 
-    private final static String PATH="/urlcache";
+    private final static String PATH="/taskhistory";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
         String subtitle = "all";
-        String title = "UrlCache";
+        String title = "TaskHistory";
         String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
-        Page<UrlCache> myPageContent = urlCacheService.getAll(pageRequest);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"timeEvent");
+        Page<TaskHistory> myPageContent = taskHistoryService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
+
+    private final TaskHistoryService taskHistoryService;
 
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
@@ -61,11 +67,9 @@ public class UrlCacheController  extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
-    private final UrlCacheService urlCacheService;
-
     @Autowired
-    public UrlCacheController(UrlCacheService urlCacheService) {
-        this.urlCacheService = urlCacheService;
+    public TaskHistoryController(TaskHistoryService taskHistoryService) {
+        this.taskHistoryService = taskHistoryService;
     }
 
     @Override

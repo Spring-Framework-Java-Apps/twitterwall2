@@ -18,68 +18,77 @@ public class CountedEntitiesController extends AbstractTwitterwallController {
 
     @RequestMapping(path="/tweet/hashtag")
     public String domainCountTweet2hashtag(Model model) {
-        setUpThisPage(model);
+        String title = "Tweet -&gt; HashTag";
+        setUpThisPage(title,model);
         return PATH+"/tweet/hashtag";
     }
 
     @RequestMapping(path="/tweet/media")
     public String domainCountTweet2media(Model model) {
-        setUpThisPage(model);
+        String title = "Tweet -&gt; Media";
+        setUpThisPage(title,model);
         return PATH+"/tweet/media";
     }
 
     @RequestMapping(path="/tweet/mention")
     public String domainCountTweet2mention(Model model) {
-        setUpThisPage(model);
+        String title = "Tweet -&gt; Mention";
+        setUpThisPage(title,model);
         return PATH+"/tweet/mention";
     }
 
     @RequestMapping(path="/tweet/tickersymbol")
     public String domainCountTweet2tickersymbol(Model model) {
-        setUpThisPage(model);
+        String title = "Tweet -&gt; TickerSymbol";
+        setUpThisPage(title,model);
         return PATH+"/tweet/tickersymbol";
     }
 
     @RequestMapping(path="/tweet/url")
     public String domainCountTweet2url(Model model) {
-        setUpThisPage(model);
+        String title = "Tweet -&gt; Url";
+        setUpThisPage(title,model);
         return PATH+"/tweet/url";
     }
 
     @RequestMapping(path="/userprofile/hashtag")
     public String domainCountUserprofile2hashtag(Model model) {
-        setUpThisPage(model);
+        String title = "UserProfile -&gt; HashTag";
+        setUpThisPage(title,model);
         return PATH+"/userprofile/hashtag";
     }
 
     @RequestMapping(path="/userprofil/media")
     public String domainCountUserprofile2media(Model model) {
-        setUpThisPage(model);
+        String title = "UserProfile -&gt; Media";
+        setUpThisPage(title,model);
         return PATH+"/userprofile/media";
     }
 
     @RequestMapping(path="/userprofile/mention")
     public String domainCountUserprofile2mention(Model model) {
-        setUpThisPage(model);
+        String title = "UserProfile -&gt; Mention";
+        setUpThisPage(title,model);
         return PATH+"/userprofile/mention";
     }
 
     @RequestMapping(path="/userprofile/tickersymbol")
     public String domainCountUserprofile2Tickersymbol(Model model) {
-        setUpThisPage(model);
+        String title = "UserProfile -&gt; TickerSymbol";
+        setUpThisPage(title,model);
         return PATH+"/userprofile/tickersymbol";
     }
 
     @RequestMapping(path="/userprofile/url")
     public String domainCountUserprofile2Url(Model model) {
-        setUpThisPage(model);
+        String title = "UserProfile -&gt; Url";
+        setUpThisPage(title,model);
         return PATH+"/userprofile/url";
     }
 
-    private void setUpThisPage(Model model){
+    private void setUpThisPage(String title,Model model){
         logEnv();
-        String title = "Counted Entities";
-        String subtitle = searchterm;
+        String subtitle = "Counted Entities";
         String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
     }

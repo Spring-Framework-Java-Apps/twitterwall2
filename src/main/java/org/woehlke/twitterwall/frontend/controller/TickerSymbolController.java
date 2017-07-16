@@ -22,17 +22,19 @@ import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 @RequestMapping("/tickersymbol")
 public class TickerSymbolController  extends AbstractTwitterwallController {
 
+    private final static String PATH="/tickersymbol";
+
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
-        String subtitle = "TickerSymbol";
-        String title = "All";
-        String symbol = Symbols.LEAF.toString();
+        String subtitle = "all";
+        String title = "TickerSymbol";
+        String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
         Page<TickerSymbol> myPageContent = tickerSymbolService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return "/tickersymbol/all";
+        return PATH+"/all";
     }
 
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,7 @@ public class TaskController  extends AbstractTwitterwallController {
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
         model = setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"timeStarted");
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
         return "task/taskAll";

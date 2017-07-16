@@ -25,9 +25,9 @@ public class MentionController  extends AbstractTwitterwallController {
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
-        String subtitle = "Mention";
-        String title = "All";
-        String symbol = Symbols.LEAF.toString();
+        String subtitle = "all";
+        String title = "Mention";
+        String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
         Page<Mention> myPageContent = mentionService.getAll(pageRequest);

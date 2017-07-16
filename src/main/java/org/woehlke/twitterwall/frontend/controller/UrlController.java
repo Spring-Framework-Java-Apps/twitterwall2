@@ -22,17 +22,19 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
 @RequestMapping("/url")
 public class UrlController extends AbstractTwitterwallController {
 
+    private final static String PATH="/url";
+
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
-        String subtitle = "Url";
-        String title = "All";
-        String symbol = Symbols.LEAF.toString();
+        String subtitle = "all";
+        String title = "Url";
+        String symbol = Symbols.DATABASE.toString();
         model = setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
         Page<Url> myPageContent = urlService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return "/url/all";
+        return PATH+"/all";
     }
 
     @Value("${twitterwall.frontend.maxResults}")

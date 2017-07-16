@@ -40,8 +40,8 @@ public class HashTagController extends AbstractTwitterwallController {
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
         logEnv();
-        String subtitle = "HashTag";
-        String title = "All";
+        String subtitle = "all";
+        String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
         model = setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"text");
