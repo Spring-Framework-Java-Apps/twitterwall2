@@ -11,6 +11,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <p th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <span  class="tw-pager-arrow tw-pager-up" th:if="${taskHistoryList.hasPrevious()}">
                     <a href="" th:href="@{|/task/${task.id}?page=${taskHistoryList.previousPageable().pageNumber}|}">
                         <span>
@@ -41,26 +48,23 @@
                             <span th:text="${task.description}">description</span>
                         </th>
                     </tr>
-                <tr th:each="taskHistory : ${taskHistoryList}">
-                    <td>
-                        <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;
-                        <span th:text="${taskHistory.id}">id</span>
-                    </td>
-                    <td>
-                        <ul>
-                            <li th:if="${taskHistory.taskStatusBefore}">taskStatusBefore: <span th:text="${taskHistory.taskStatusBefore}">taskStatusBefore</span></li>
-                            <li th:if="${taskHistory.taskStatusNow}">taskStatusNow: <span th:text="${taskHistory.taskStatusNow}">taskStatusNow</span></li>
-                            <li th:if="${taskHistory.timeEvent}">timeEvent: <span th:text="${#dates.format(taskHistory.timeEvent,'HH:mm:ss (dd.MM.yyyy)')}">timeEvent</span></li>
-                        </ul>
-                    </td>
-                    <td>
-                        <span th:text="${taskHistory.description}">description</span>
-                    </td>
-                </tr>
+                    <tr th:each="taskHistory : ${taskHistoryList}">
+                        <td>
+                            <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;
+                            <span th:text="${taskHistory.id}">id</span>
+                        </td>
+                        <td>
+                            <ul>
+                                <li th:if="${taskHistory.taskStatusBefore}">taskStatusBefore: <span th:text="${taskHistory.taskStatusBefore}">taskStatusBefore</span></li>
+                                <li th:if="${taskHistory.taskStatusNow}">taskStatusNow: <span th:text="${taskHistory.taskStatusNow}">taskStatusNow</span></li>
+                                <li th:if="${taskHistory.timeEvent}">timeEvent: <span th:text="${#dates.format(taskHistory.timeEvent,'HH:mm:ss (dd.MM.yyyy)')}">timeEvent</span></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <span th:text="${taskHistory.description}">description</span>
+                        </td>
+                    </tr>
                 </table>
-                <p th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                </p>
             </div>
         </div>
         <div class="row">
@@ -72,6 +76,16 @@
                         </span>
                     </a>
                 </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <hr/>
+                </p>
+                <p th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                </p>
             </div>
         </div>
     </div>

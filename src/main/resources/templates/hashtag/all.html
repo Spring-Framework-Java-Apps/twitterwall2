@@ -9,13 +9,33 @@
 </header>
 <section>
     <div class="container">
+        <div th:include="dataview :: tw-data-view-above" th:with="myEntity='hashtag'"></div>
         <div class="row">
             <div class="col-md-12">
-                <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                </div>
+                <table class="table table-striped">
+                    <thead th:include="dataview :: tw-data-view-thead">
+                    </thead>
+                    <tbody>
+                        <tr th:each="myPageItem : ${myPageContent}">
+                        <td>
+                            <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                        </td>
+                        <td>
+                            <a href="" th:href="@{|/hashtag/${myPageItem.text}|}">
+                                <span th:text="${myPageItem.text}">text</span>
+                            </a>
+                        </td>
+                        <td>
+                            <span th:include="dataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot th:include="dataview :: tw-data-view-tfoot">
+                    </tfoot>
+                </table>
             </div>
         </div>
+        <div th:include="dataview :: tw-data-view-below" th:with="myEntity='hashtag'"></div>
     </div>
 </section>
 <footer th:include="layout :: footer" >
