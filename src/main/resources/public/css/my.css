@@ -108,7 +108,7 @@
     }
 
     dl.tw-data-array {
-        list-style-type: cjk-ideographic;
+        list-style-type: none;
     }
 
     dl.tw-data-array dt {
@@ -122,6 +122,11 @@
         display: inline-block;
         font-weight: bold;
         float: left;
+    }
+
+    ul.tw-data-view-common-fields,
+    ul.tw-data-view-common-fields li {
+        list-style-type: none;
     }
 }
 
