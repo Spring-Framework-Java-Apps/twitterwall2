@@ -83,12 +83,12 @@ public class UserDescriptionTest {
         Pattern hashTagPattern = Pattern.compile("#(\\w*)("+stopChar+")");
         Matcher m3 = hashTagPattern.matcher(description);
         while (m3.find()) {
-            hashTags.add(new HashTag(m3.group(1),indices));
+            hashTags.add(new HashTag(m3.group(1)));
         }
         Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(description);
         while (m4.find()) {
-            hashTags.add(new HashTag(m4.group(1),indices));
+            hashTags.add(new HashTag(m4.group(1)));
         }
         return hashTags;
     }
@@ -111,7 +111,7 @@ public class UserDescriptionTest {
     private Url getUrl(String urlString){
         String display="";
         String expanded="";
-        Url newUrl = new Url(display,expanded,urlString,indices);
+        Url newUrl = new Url(display,expanded,urlString);
         return newUrl;
     }
 
@@ -134,11 +134,8 @@ public class UserDescriptionTest {
         long idTwitter = 10000000L;
         String screenName=mentionString;
         String name=mentionString;
-        int[] myindices = indices;
-        return new Mention(idTwitter,screenName,name,myindices);
+        return new Mention(idTwitter,screenName,name);
     }
-
-    static private int[] indices = {};
 
     static private String stopChar = Entities.stopChar;
 

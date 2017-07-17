@@ -27,8 +27,7 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
         long idTwitter = mention.getId();
         String screenName = mention.getScreenName();
         String name = mention.getName();
-        int[] indices = mention.getIndices();
-        Mention myMentionEntity = new Mention(idTwitter, screenName, name, indices);
+        Mention myMentionEntity = new Mention(idTwitter, screenName, name);
         return myMentionEntity;
     }
 

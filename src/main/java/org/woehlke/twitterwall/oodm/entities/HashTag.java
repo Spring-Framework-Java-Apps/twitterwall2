@@ -17,22 +17,6 @@ import java.util.regex.Pattern;
 @Table(name = "hashtag", uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
 })
-/*
-@NamedQueries({
-        @NamedQuery(
-                name = "HashTag.findByText",
-                query = "select t from HashTag as t where t.text=:text"
-        ),
-        @NamedQuery(
-                name = "HashTag.getAll",
-                query = "select h from HashTag as h"
-        ),
-        @NamedQuery(
-                name = "HashTag.count" ,
-                query = "select count(h) from HashTag as h"
-        )
-})
-*/
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
@@ -54,7 +38,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
 
     public static boolean isValidText(String hashtagText){
-        //Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(hashtagText);
         return m.matches();
@@ -62,19 +45,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     @Column(nullable = false,length=4096)
     private String text;
-
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "hashtag_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }
-    */
 
     public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {
         this.taskInfo = taskInfo;
@@ -109,7 +79,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     public HashTag(String text, int[] indices) {
-        //setIndices(indices);
         this.text = text;
     }
 
@@ -199,22 +168,12 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");
-        */
         return "HashTag{" +
                 " id=" + id +
                 ", text='" + text + '\'' +
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-                  //", indices=" + myIndieces.toString() +
                 " }\n";
     }
 

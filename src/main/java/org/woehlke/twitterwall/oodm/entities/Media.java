@@ -23,24 +23,6 @@ import javax.persistence.*;
         @Index(name="idx_media_media_https", columnList="media_https"),
         @Index(name="idx_media_media_type", columnList="media_type")
 })
- /*@NamedQueries({
-        @NamedQuery(
-                name = "Media.findByIdTwitter",
-                query = "select t from Media as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-            name = "Media.count",
-            query = "select count(t) from Media as t"
-        ),
-        @NamedQuery(
-                name = "Media.getAll",
-                query = "select t from Media as t"
-        ),
-        @NamedQuery(
-                name = "Media.findByUrl",
-                query = "select t from Media as t where t.url=:url"
-        )
-})*/
 @EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
@@ -80,20 +62,8 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @Column(name = "media_type",length=4096)
     private String mediaType;
 
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "media_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
 
     public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
-        //setIndices(indices);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -273,14 +243,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     @Override
-    public String toString() {/*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
+    public String toString() {
         return "Media{" +
                 " id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -293,7 +256,6 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-               // ", indices=" + myIndieces.toString() +
                 " }\n";
     }
 

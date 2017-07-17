@@ -43,7 +43,6 @@ public class TestController extends AbstractTwitterwallController {
             model.addAttribute("user",null);
         }
         return "/test/getTestData";
-        //return "timeline";
     }
 
     @RequestMapping("/user/onlist/renew")
@@ -59,7 +58,6 @@ public class TestController extends AbstractTwitterwallController {
         String title = "Renew List of Users On List";
         model = setupPage(model, title, "Users", symbol);
         return "/test/user/onlist/renew";
-        //return "user";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);

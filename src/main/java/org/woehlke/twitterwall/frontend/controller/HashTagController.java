@@ -85,11 +85,9 @@ public class HashTagController extends AbstractTwitterwallController {
             //
             log.debug(msg + " READY - DONE");
             return "/hashtag/hashtagText";
-            //return "timeline";
         } else {
             String msg2 = msg + " parameter ist NOT valid";
             log.warn(msg2);
-            //throw new IllegalArgumentException(msg2);
             return "/hashtag/hashtagText";
         }
     }
@@ -109,8 +107,6 @@ public class HashTagController extends AbstractTwitterwallController {
         while(hasNext) {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
             for (HashTag hashTag : myPage.getContent()) {
-                // String text = hashTag.getText();
-                //try {
                 Pageable pageRequestTeets = new PageRequest(0, 1);
                 Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag, pageRequestTeets);
                 String myMSg = msg + " tweetService.findTweetsForHashTag= " + hashTag.getText();
@@ -124,10 +120,6 @@ public class HashTagController extends AbstractTwitterwallController {
                         hashTagsTweets.add(c);
                     }
                 }
-                //} catch (IllegalArgumentException e){
-                //   log.warn(msg+"tweetService.countTweetsForHashTag: "+e.getMessage()+" - ");
-                //}
-                //try {
                 Pageable pageRequestUsers = new PageRequest(0, 1);
                 Page<User> users = userService.getUsersForHashTag(hashTag, pageRequestUsers);
                 myMSg = msg + " userService.getUsersForHashTag= " + hashTag.getText();
@@ -141,9 +133,6 @@ public class HashTagController extends AbstractTwitterwallController {
                         hashTagsUsers.add(c);
                     }
                 }
-                //} catch (IllegalArgumentException e){
-                // log.warn(msg+"userService.countTweetsForHashTag: "+e.getMessage());
-                //}
             }
             hasNext = myPage.hasNext();
             if(hasNext){
@@ -153,7 +142,6 @@ public class HashTagController extends AbstractTwitterwallController {
         model.addAttribute("hashTagsTweets", hashTagsTweets);
         model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "/hashtag/overview";
-        //return "tags";
     }
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);

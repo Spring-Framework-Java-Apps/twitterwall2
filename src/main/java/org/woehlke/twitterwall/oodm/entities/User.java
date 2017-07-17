@@ -29,52 +29,30 @@ import java.util.regex.Pattern;
         @Index(name="idx_userprofile_url", columnList="url")
 })
 @NamedQueries({
-        /*
-        @NamedQuery(
-                name = "User.findByIdTwitter",
-                query = "select t from User as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name = "User.findByScreenName",
-                query = "select t from User as t where t.screenName=:screenName"
-        ),
-        @NamedQuery(
-                name = "User.getAll",
-                query = "select t from User as t order by t.screenName"
-        ),
-        @NamedQuery(
-            name = "User.count",
-            query = "select count(t) from User as t"
-        ),*/
         @NamedQuery(
                 name = "User.findTweetingUsers",
                 query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
                 name = "User.findNotYetFriendUsers",
-                //TODO: remove "order by t.screenName" from NamedQuery
                 query = "select t from User as t where t.following=false"
         ),
         @NamedQuery(
             name = "User.findNotYetOnList",
-            //TODO: remove "order by t.screenName" from NamedQuery
             query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
             name = "User.findOnList",
-            //TODO: remove "order by t.screenName" from NamedQuery
             query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
         ),
-
-    @NamedQuery(
-        name="User.getUsersForHashTag",
-        query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-    ),
-    @NamedQuery(
-        name="User.countUsersForHashTag",
-        query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-    ),
-
+        @NamedQuery(
+            name="User.getUsersForHashTag",
+            query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+        ),
+        @NamedQuery(
+            name="User.countUsersForHashTag",
+            query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+        ),
         @NamedQuery(
                 name = "User.findAllDescriptions",
                 query = "select t.description from User as t where t.description is not null"

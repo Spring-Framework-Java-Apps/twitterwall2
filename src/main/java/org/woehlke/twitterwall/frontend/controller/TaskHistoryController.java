@@ -8,16 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
-import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
-import org.woehlke.twitterwall.oodm.service.TaskService;
 
 /**
  * Created by tw on 11.07.17.

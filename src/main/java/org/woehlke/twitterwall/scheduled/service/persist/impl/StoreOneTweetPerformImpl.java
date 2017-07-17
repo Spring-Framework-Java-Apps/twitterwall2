@@ -49,7 +49,6 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
         return tweet;
     }
 
-
     private static final Logger log = LoggerFactory.getLogger(StoreOneTweetPerformImpl.class);
 
     private final TweetService tweetService;

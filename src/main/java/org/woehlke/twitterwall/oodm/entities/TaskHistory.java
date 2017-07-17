@@ -16,24 +16,6 @@ import java.util.Date;
     @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
     @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
 })
-/*@NamedQueries({
-    @NamedQuery(
-        name = "TaskHistory.findById",
-        query = "select t from TaskHistory as t where t.id=:id"
-    ),
-    @NamedQuery(
-        name = "TaskHistory.count",
-        query = "select count(t) from TaskHistory as t"
-    ),
-    @NamedQuery(
-        name = "TaskHistory.getAll",
-        query = "select t from TaskHistory as t"
-    ),
-    @NamedQuery(
-        name = "TaskHistory.findByTask",
-        query = "select t from TaskHistory as t where t.task.id=:oneTaskId"
-    )
-})*/
 @EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements DomainObject<TaskHistory> {
 

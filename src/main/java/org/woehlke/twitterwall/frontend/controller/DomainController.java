@@ -28,7 +28,6 @@ public class DomainController extends AbstractTwitterwallController {
         CountedEntities countedEntities =this.countedEntitiesService.countAll();
         model.addAttribute("countedEntities", countedEntities);
         return "/application/domain/count";
-        //return "countedEntities";
     }
 
     private final CountedEntitiesService countedEntitiesService;

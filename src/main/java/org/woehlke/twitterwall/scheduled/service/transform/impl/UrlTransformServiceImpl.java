@@ -25,8 +25,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
         String display = url.getDisplayUrl();
         String expanded = url.getExpandedUrl();
         String urlStr = url.getUrl();
-        int[] indices = url.getIndices();
-        Url myUrlEntity = new Url(display, expanded, urlStr, indices);
+        Url myUrlEntity = new Url(display, expanded, urlStr);
         return myUrlEntity;
     }
 
@@ -46,8 +45,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                List<Integer> indicesSource = (List<Integer>) ((Map<String, Object>) o4).get("indices");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url, indicesSource);
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url);
                                 urlsTarget.add(urlTarget);
                             }
                         }
@@ -67,8 +65,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                List<Integer> indicesSource = (List<Integer>) ((Map<String, Object>) o4).get("indices");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url, indicesSource);
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url);
                                 urlsTarget.add(urlTarget);
                             }
                         }

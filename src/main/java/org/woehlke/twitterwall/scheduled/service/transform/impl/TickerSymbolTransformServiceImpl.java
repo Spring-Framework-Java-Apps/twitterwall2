@@ -23,17 +23,12 @@ public class TickerSymbolTransformServiceImpl extends EntitiesFilter implements 
     public TickerSymbol transform(TickerSymbolEntity tickerSymbol) {
         String tickerSymbolString = tickerSymbol.getTickerSymbol();
         String url = tickerSymbol.getUrl();
-        int[] indices = tickerSymbol.getIndices();
-        TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url, indices);
+        TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url);
         return myTickerSymbolEntity;
     }
 
     @Override
     public Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource) {
-        Set<TickerSymbol> tickerSymbolsTarget = new LinkedHashSet<TickerSymbol>();
-        //TODO: bla
-        String description = userSource.getDescription();
-        //Set<TickerSymbol> tickerSymbolsTarget = getTickerSymbolsFor(description);
-        return tickerSymbolsTarget;
+        return new LinkedHashSet<TickerSymbol>();
     }
 }

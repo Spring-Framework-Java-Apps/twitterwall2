@@ -34,13 +34,12 @@ public class UrlServiceTestImpl implements UrlServiceTest {
         String urlSrc;
         String display;
         String expanded;
-        int[] indices = {};
         List<Url> testData = new ArrayList<>();
         for (Map.Entry<String, String> url : urlsTest.entrySet()) {
             urlSrc = url.getKey();
             expanded = url.getValue();
             display = hostsTest.get(urlSrc);
-            Url myUrl = new Url(display, expanded, urlSrc, indices);
+            Url myUrl = new Url(display, expanded, urlSrc);
             testData.add(myUrl);
         }
         return testData;

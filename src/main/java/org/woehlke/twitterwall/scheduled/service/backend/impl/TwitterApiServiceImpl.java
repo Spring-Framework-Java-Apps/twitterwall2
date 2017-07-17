@@ -22,37 +22,6 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterApiServiceImpl implements TwitterApiService {
 
-    private static final Logger log = LoggerFactory.getLogger(TwitterApiServiceImpl.class);
-
-    @Value("${twitter.consumerKey}")
-    private String twitterConsumerKey;
-
-    @Value("${twitter.consumerSecret}")
-    private String twitterConsumerSecret;
-
-    @Value("${twitter.accessToken}")
-    private String twitterAccessToken;
-
-    @Value("${twitter.accessTokenSecret}")
-    private String twitterAccessTokenSecret;
-
-    @Value("${twitter.pageSize}")
-    private int pageSize;
-
-    @Value("${twitter.searchQuery}")
-    private String searchQuery;
-
-    private Twitter getTwitterProxy() {
-        Twitter twitter = new TwitterTemplate(
-                twitterConsumerKey,
-                twitterConsumerSecret,
-                twitterAccessToken,
-                twitterAccessTokenSecret);
-        return twitter;
-    }
-
-    private String MSG = "Remote API Call ";
-
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
         String msg = MSG+"findTweetsForSearchQuery: ";
@@ -110,4 +79,36 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         log.debug(msg+" result.size: "+result.size());
         return result;
     }
+
+
+    private static final Logger log = LoggerFactory.getLogger(TwitterApiServiceImpl.class);
+
+    @Value("${twitter.consumerKey}")
+    private String twitterConsumerKey;
+
+    @Value("${twitter.consumerSecret}")
+    private String twitterConsumerSecret;
+
+    @Value("${twitter.accessToken}")
+    private String twitterAccessToken;
+
+    @Value("${twitter.accessTokenSecret}")
+    private String twitterAccessTokenSecret;
+
+    @Value("${twitter.pageSize}")
+    private int pageSize;
+
+    @Value("${twitter.searchQuery}")
+    private String searchQuery;
+
+    private Twitter getTwitterProxy() {
+        Twitter twitter = new TwitterTemplate(
+            twitterConsumerKey,
+            twitterConsumerSecret,
+            twitterAccessToken,
+            twitterAccessTokenSecret);
+        return twitter;
+    }
+
+    private String MSG = "Remote API Call ";
 }

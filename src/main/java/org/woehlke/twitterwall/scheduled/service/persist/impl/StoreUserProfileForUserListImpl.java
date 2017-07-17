@@ -37,7 +37,6 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         return user;
     }
 
-
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileForUserListImpl.class);
 
     private final UserTransformService userTransformService;

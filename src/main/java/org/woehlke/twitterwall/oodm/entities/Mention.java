@@ -20,34 +20,6 @@ import java.util.regex.Pattern;
 }, indexes = {
     @Index(name = "idx_mention_name", columnList = "name")
 })
-/*
-@NamedQueries({
-    @NamedQuery(
-        name = "Mention.findByIdTwitter",
-        query = "select t from Mention as t where t.idTwitter=:idTwitter"
-    ),
-    @NamedQuery(
-        name = "Mention.findByScreenName",
-        query = "select t from Mention as t where t.screenName=:screenName"
-    ),
-    @NamedQuery(
-        name = "Mention.findLowestIdTwitter",
-        query = "select t.idTwitter from Mention as t order by t.idTwitter ASC"
-    ),
-    @NamedQuery(
-        name = "Mention.findByIdTwitterAndScreenName",
-        query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
-    ),
-    @NamedQuery(
-        name = "Mention.count",
-        query = "select count(t) from Mention as t"
-    ),
-    @NamedQuery(
-        name = "Mention.getAll",
-        query = "select t from Mention as t"
-    )
-})
-*/
 @EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
@@ -105,20 +77,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "id_twitte_of_user",nullable = true)
     private Long idTwitterOfUser;
 
-/*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
-    public Mention(long idTwitter, String screenName, String name, int[] indices) {
-        //setIndices(indices);
+    public Mention(long idTwitter, String screenName, String name) {
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -179,15 +138,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     public void setName(String name) {
         this.name = name;
     }
-/*
-    public List<Integer> getIndices() {
-        return indices;
-    }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
-    }
-*/
     public TaskInfo getTaskInfo() {
         return taskInfo;
     }
@@ -281,14 +232,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "Mention{" +
             " id=" + id +
             ", idTwitter=" + idTwitter +
@@ -297,7 +240,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-            //", indices=" + myIndieces.toString() +
             " }\n";
     }
 
@@ -323,9 +265,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         long idTwitter = ID_TWITTER_UNDEFINED;
         String screenName = mentionString;
         String name = mentionString;
-        int[] myindices = {};
-        return new Mention(idTwitter, screenName, name, myindices);
+        return new Mention(idTwitter, screenName, name);
     }
-
 
 }

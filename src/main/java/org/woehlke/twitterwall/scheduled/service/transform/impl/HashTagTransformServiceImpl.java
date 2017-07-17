@@ -29,8 +29,6 @@ public class HashTagTransformServiceImpl extends EntitiesFilter implements HashT
 
     @Override
     public Set<HashTag> getHashTagsFor(TwitterProfile userSource) {
-        //Map<String, Object> extraData = userSource.getExtraData();
-        //Set<HashTag> hashTagsTarget = new LinkedHashSet<HashTag>();
         String description = userSource.getDescription();
         Set<HashTag> hashTagsTarget = getHashTagsForDescription(description);
         return hashTagsTarget;

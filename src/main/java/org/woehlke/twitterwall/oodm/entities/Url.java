@@ -7,7 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by tw on 10.06.17.
@@ -19,18 +18,6 @@ import java.util.List;
         @Index(name="idx_url_expanded", columnList="expanded"),
         @Index(name="idx_url_display", columnList="display")
 })
-/*
-@NamedQueries({
-        @NamedQuery(
-            name="Url.findByUrl",
-            query="select t from Url as t where t.url=:url"
-        ) ,
-        @NamedQuery(
-            name = "Url.count",
-            query = "select count(t) from Url as t"
-        ),
-})
-*/
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
@@ -64,32 +51,12 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @Column(nullable = false,length=4096)
     private String url;
 
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "url_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
     @Transient
     public boolean isUrlAndExpandedTheSame(){
         return url.compareTo(expanded) == 0;
     }
 
-    public Url(String display, String expanded, String url, int[] indices) {
-        //setIndices(indices);
-        this.display = display;
-        this.expanded = expanded;
-        this.url = url;
-    }
-
-    public Url(String display, String expanded, String url, List<Integer> indices) {
-        //setIndices(indices);
+    public Url(String display, String expanded, String url) {
         this.display = display;
         this.expanded = expanded;
         this.url = url;
@@ -217,14 +184,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "Url{" +
                 "id=" + id +
                 ", display='" + display + '\'' +
@@ -233,7 +192,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-               // ", indices=" + myIndieces.toString() +
                 "}\n";
     }
 
@@ -250,8 +208,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     public static Url getUrlFactory(String url){
         String display = Url.UNDEFINED;
         String expanded = Url.UNDEFINED;
-        int[] indices = {};
-        Url newurl = new Url(display, expanded, url, indices);
+        Url newurl = new Url(display, expanded, url);
         return newurl;
     }
 }

@@ -35,10 +35,6 @@ public class MediaTransformServiceImpl extends EntitiesFilter implements MediaTr
 
     @Override
     public Set<Media> getMediaFor(TwitterProfile userSource) {
-        Set<Media> mediaTarget = new LinkedHashSet<Media>();
-        //TODO: bla
-        String description = userSource.getDescription();
-        //Set<Media> mediaTarget = getMediaForDescription(description);
-        return mediaTarget;
+        return new LinkedHashSet<Media>();
     }
 }

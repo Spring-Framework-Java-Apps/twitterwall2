@@ -31,14 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterUrlServiceImpl implements TwitterUrlService {
 
-    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
-
-    @Value("${twitterwall.backend.url.connTimeToLive}")
-    private long connTimeToLive;
-
-    @Value("${twitterwall.backend.url.maxIdleTime}")
-    private long maxIdleTime;
-
     @Override
     public Url fetchTransientUrl(String urlSrc) {
         String msg = "fetchTransientUrl "+urlSrc+" ";
@@ -52,7 +44,6 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
         try {
             String display;
             String expanded;
-            int[] indices = {};
             httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(maxIdleTime, TimeUnit.SECONDS).build();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
@@ -62,7 +53,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
             display = location.getHost();
             expanded = location.toExternalForm();
-            newUrl = new Url(display, expanded, urlSrc, indices);
+            newUrl = new Url(display, expanded, urlSrc);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             log.warn(msg+ioe.getMessage());
@@ -98,4 +89,13 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
         }
         return newUrl;
     }
+
+
+    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
+
+    @Value("${twitterwall.backend.url.connTimeToLive}")
+    private long connTimeToLive;
+
+    @Value("${twitterwall.backend.url.maxIdleTime}")
+    private long maxIdleTime;
 }

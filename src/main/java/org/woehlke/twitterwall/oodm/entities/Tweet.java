@@ -28,44 +28,6 @@ import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
     @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
 })
 @NamedQueries({
-        /*
-        @NamedQuery(
-                name="Tweet.findByIdTwitter",
-                query= "select t from Tweet as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name="Tweet.findLatestTweets",
-                query="select t from Tweet as t order by t.createdAt DESC"
-        ),
-        @NamedQuery(
-                name="Tweet.countTweetsForHashTag",
-                query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
-        ),
-        @NamedQuery(
-                name="Tweet.count",
-                query="select count(t) from Tweet as t"
-        ),
-        @NamedQuery(
-            name="Tweet.getAll",
-            query="select t from Tweet as t"
-        ),
-        @NamedQuery(
-                name="Tweet.findTweetsForUser",
-                query="select t from Tweet as t WHERE t.user=:user"
-        ),
-        */
-
-        /*
-        @NamedQuery(
-            name="Tweet.findByHashTag",
-            query="select t from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
-        ),
-        @NamedQuery(
-            name="Tweet.countByHashTag",
-            query="select count(t) from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
-        ),*/
-
-
     @NamedQuery(
         name="Tweet.getTweetsForHashTag",
         query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
@@ -74,10 +36,10 @@ import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
         name="Tweet.countTweetsForHashTag",
         query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
     ),
-        @NamedQuery(
-                name="Tweet.findAllTwitterIds",
-                query="select t.idTwitter from Tweet as t"
-        )
+    @NamedQuery(
+            name="Tweet.findAllTwitterIds",
+            query="select t.idTwitter from Tweet as t"
+    )
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
@@ -185,17 +147,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
             name = "hashTags",
             joinTable = @JoinTable(
                 name="tweet_hashtag"
-                /*,
-                joinColumns={@JoinColumn(name="tweet_id")},
-                inverseJoinColumns={@JoinColumn(name="hashtag_id")},
-                uniqueConstraints = {
-                    @UniqueConstraint(
-                        name="unique_tweet_hashtag",
-                        columnNames = {"tweet_id","hashtag_id"})
-                },
-                foreignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_tweet"),
-                inverseForeignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_hashtag")
-                */
             )
         ),
         @AssociationOverride(

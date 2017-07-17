@@ -17,26 +17,6 @@ import javax.persistence.*;
 }, indexes = {
         @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
 })
-/*
-@NamedQueries({
-        @NamedQuery(
-                name = "TickerSymbol.findByUrl",
-                query = "select t from TickerSymbol as t where t.url=:url"
-        ),
-        @NamedQuery(
-                name = "TickerSymbol.findByTickerSymbolAndUrl",
-                query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
-        ),
-    @NamedQuery(
-        name = "TickerSymbol.count",
-        query = "select count(t) from TickerSymbol as t"
-    ),
-    @NamedQuery(
-        name = "TickerSymbol.getAll",
-        query = "select t from TickerSymbol as t"
-    )
-})
-*/
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
@@ -61,20 +41,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Column(length=4096)
     private String url;
 
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "tickersymbol_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
-    public TickerSymbol(String tickerSymbol, String url, int[] indices) {
-        //setIndices(indices);
+    public TickerSymbol(String tickerSymbol, String url) {
         this.tickerSymbol = tickerSymbol;
         this.url = url;
     }
@@ -197,14 +164,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
@@ -212,7 +171,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-                //", indices=" + myIndieces.toString() +
                 "\n}";
     }
 
@@ -222,7 +180,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     }
 
     public static TickerSymbol getTickerSymbolFactory(String url) {
-        int[] indices = {};
-        return new TickerSymbol(url,url,indices);
+        return new TickerSymbol(url,url);
     }
 }

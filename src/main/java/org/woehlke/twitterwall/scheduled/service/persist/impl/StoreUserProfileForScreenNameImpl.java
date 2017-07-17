@@ -48,8 +48,6 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
         }
     }
 
-
-
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 
     private final UserService userService;
@@ -67,6 +65,5 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
         this.storeUserProfile = storeUserProfile;
         this.taskService = taskService;
     }
-
 
 }
