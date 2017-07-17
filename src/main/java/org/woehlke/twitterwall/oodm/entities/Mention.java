@@ -59,7 +59,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "name",length=4096)
     private String name;
 
-    boolean hasPersistentUser(){
+    public boolean hasPersistentUser(){
         boolean result = false;
         User myUser = this.getUser();
         if(myUser != null){

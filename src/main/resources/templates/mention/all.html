@@ -39,6 +39,14 @@
                                         </a>
                                     </span>
                                 </div>
+                                <div class="col-md-2">has User:</div>
+                                <div class="col-md-10">
+                                    <span th:if="${myPageItem.hasPersistentUser()}">
+                                        <a href="" th:href="@{|/user/${myPageItem.user.screenName}|}">
+                                            <span th:text="${myPageItem.user.screenName}">user.screenName</span>
+                                        </a>
+                                    </span>
+                                </div>
                                 <div class="col-md-2">idTwitterOfUser:</div>
                                 <div class="col-md-10">
                                     <span th:text="${myPageItem.idTwitterOfUser}">idTwitterOfUser</span>
