@@ -36,7 +36,9 @@
                             <span th:text="${myPageItem.id}">id</span>
                         </td>
                         <td>
-                            <span th:text="${myPageItem.text}">text</span>
+                            <a href="" th:href="@{|/hashtag/${myPageItem.text}|}">
+                                <span th:text="${myPageItem.text}">text</span>
+                            </a>
                         </td>
                         <td>
                             <button class="btn btn-primary" type="button"

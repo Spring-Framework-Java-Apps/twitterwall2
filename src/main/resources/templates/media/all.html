@@ -36,22 +36,40 @@
                             <span th:text="${myPageItem.id}">id</span>
                         </td>
                         <td>
-                            <span th:text="${myPageItem.idTwitter}">idTwitter</span>
-                        </td>
-                        <td>
-                            <span th:text="${myPageItem.mediaHttps}">mediaHttps</span>
-                        </td>
-                        <td>
-                            <span th:text="${myPageItem.url}">url</span>
-                        </td>
-                        <td>
-                            <span th:text="${myPageItem.display}">display</span>
-                        </td>
-                        <td>
-                            <span th:text="${myPageItem.expanded}">expanded</span>
-                        </td>
-                        <td>
-                            <span th:text="${myPageItem.mediaType}">mediaType</span>
+                            <dl class="tw-data-array">
+                                <dt>idTwitter:</dt>
+                                <dd>
+                                    <span th:text="${myPageItem.idTwitter}">idTwitter</span>
+                                </dd>
+                                <dt>mediaHttps:</dt>
+                                <dd>
+                                    <a href="" th:href="@{|${myPageItem.mediaHttps}|}">
+                                        <span th:text="${myPageItem.mediaHttps}">mediaHttps</span>
+                                    </a>
+                                </dd>
+                                <dt>mediaHttps:</dt>
+                                <dd>
+                                    <a href="" th:href="@{|${myPageItem.url}|}">
+                                        <span th:text="${myPageItem.url}">url</span>
+                                    </a>
+                                </dd>
+                                <dt>display:</dt>
+                                <dd>
+                                    <a href="" th:href="@{|${myPageItem.display}|}">
+                                        <span th:text="${myPageItem.display}">display</span>
+                                    </a>
+                                </dd>
+                                <dt>expanded:</dt>
+                                <dd>
+                                    <a href="" th:href="@{|${myPageItem.expanded}|}">
+                                        <span th:text="${myPageItem.expanded}">expanded</span>
+                                    </a>
+                                </dd>
+                                <dt>mediaType:</dt>
+                                <dd>
+                                    <span th:text="${myPageItem.mediaType}">mediaType</span>
+                                </dd>
+                            </dl>
                         </td>
                         <td>
                             <button class="btn btn-primary" type="button"
