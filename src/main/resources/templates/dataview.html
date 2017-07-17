@@ -159,19 +159,19 @@
                                                 <span>Task</span>
                                                 <ul>
                                                     <li>
-                                                        <span><b>createdBy:</b></span><br/>
+                                                        <div><b>createdBy:</b></div>
                                                         <span th:if="${myPageItem.createdBy != null}">
-                                                                <a th:href="@{|/task/${myPageItem.createdBy.id}|}">
-                                                                    <i class="fa fa-external-link" aria-hidden="true"></i>
-                                                                    <span>&nbsp;&nbsp;</span>
-                                                                    <span th:text="${myPageItem.createdBy.id}">id</span>
-                                                                    <span>&nbsp;&nbsp;</span>
-                                                                    <span th:text="${myPageItem.createdBy.taskType}">taskType</span>
-                                                                </a>
-                                                            </span>
+                                                            <a th:href="@{|/task/${myPageItem.createdBy.id}|}">
+                                                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                                                                <span>&nbsp;&nbsp;</span>
+                                                                <span th:text="${myPageItem.createdBy.id}">id</span>
+                                                                <span>&nbsp;&nbsp;</span>
+                                                                <span th:text="${myPageItem.createdBy.taskType}">taskType</span>
+                                                            </a>
+                                                        </span>
                                                     </li>
                                                     <li>
-                                                        <span><b>updatedBy:</b></span><br/>
+                                                        <div><b>updatedBy:</b></div>
                                                         <span th:if="${myPageItem.updatedBy != null}">
                                                                 <a th:href="@{|/task/${myPageItem.updatedBy.id}|}">
                                                                     <i class="fa fa-external-link" aria-hidden="true"></i>
@@ -180,7 +180,7 @@
                                                                     <span>&nbsp;&nbsp;</span>
                                                                     <span th:text="${myPageItem.updatedBy.taskType}">taskType</span>
                                                                 </a>
-                                                            </span>
+                                                        </span>
                                                     </li>
                                                 </ul>
                                             </li>

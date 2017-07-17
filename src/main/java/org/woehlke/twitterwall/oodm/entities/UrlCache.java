@@ -105,11 +105,11 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     }
 
     public Task getCreatedBy() {
-        taskInfo.setTaskInfoFromTask(createdBy);
         return createdBy;
     }
 
     public void setCreatedBy(Task createdBy) {
+        taskInfo.setTaskInfoFromTask(createdBy);
         this.createdBy = createdBy;
     }
 
