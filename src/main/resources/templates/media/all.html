@@ -9,7 +9,7 @@
 </header>
 <section>
     <div class="container">
-        <div th:include="dataview :: tw-data-view-above" ></div>
+        <div th:include="dataview :: tw-data-view-above" th:with="myEntity='media'"></div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped">
@@ -18,7 +18,7 @@
                     <tbody>
                         <tr th:each="myPageItem : ${myPageContent}">
                             <td>
-                                <spans th:include="dataview :: tw-data-view-id" ></spans>
+                                <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
                             </td>
                             <td>
                                 <div class="row">
@@ -57,7 +57,7 @@
                                 </div>
                             </td>
                             <td>
-                                <spans th:include="dataview :: tw-data-view-common-fields" ></spans>
+                                <span th:include="dataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -66,7 +66,7 @@
                 </table>
             </div>
         </div>
-        <div th:include="dataview :: tw-data-view-below" ></div>
+        <div th:include="dataview :: tw-data-view-below" th:with="myEntity='media'"></div>
     </div>
 </section>
 <footer th:include="layout :: footer" >
