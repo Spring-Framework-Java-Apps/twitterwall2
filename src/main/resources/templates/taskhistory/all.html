@@ -16,6 +16,59 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
+                    <a href="" th:href="@{|/hashtag/all?page=${myPageContent.previousPageable().pageNumber}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <tr th:each="myPageItem : ${myPageContent}">
+                        <td>
+                            <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;
+                            <span th:text="${myPageItem.id}">id</span>
+                        </td>
+                        <td>
+                            <span th:text="${myPageItem.description}">description</span>
+                        </td>
+                        <td>
+                            <span th:text="${myPageItem.taskStatusBefore}">taskStatusBefore</span>
+                        </td>
+                        <td>
+                            <span th:text="${myPageItem.taskStatusNow}">taskStatusNow</span>
+                        </td>
+                        <td>
+                            <span th:text="${myPageItem.timeEvent}">timeEvent</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
+                    <a href="" th:href="@{|/hashtag/all?page=${myPageContent.nextPageable().pageNumber}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 <footer th:include="layout :: footer" >
