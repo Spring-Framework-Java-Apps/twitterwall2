@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -127,6 +128,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void hashTagsOverview()  throws Exception {
