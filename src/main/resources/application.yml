@@ -84,6 +84,8 @@ twitterwall:
   context:
     test: ${TWITTERWALL_CONTEXT_TEST}
   frontend:
+    controller:
+      fetchUsersFromDefinedUserList: true
     idGoogleAnalytics: ${TWITTERWALL_GOOGLE_ANALYTICS_ID}
     imprint:
       screenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}

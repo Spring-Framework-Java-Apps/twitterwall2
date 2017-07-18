@@ -8,10 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
-
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 12.07.17.
@@ -22,7 +21,7 @@ public class TaskHistoryResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
+    Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         Pageable pageRequest = new PageRequest(page, pageSize);
         Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;

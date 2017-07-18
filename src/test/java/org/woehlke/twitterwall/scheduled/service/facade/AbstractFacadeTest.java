@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.common;
+package org.woehlke.twitterwall.scheduled.service.facade;
 
 import org.junit.Assert;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;

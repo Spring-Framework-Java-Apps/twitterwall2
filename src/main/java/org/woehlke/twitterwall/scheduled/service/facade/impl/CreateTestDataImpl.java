@@ -1,24 +1,25 @@
-package org.woehlke.twitterwall.frontend.controller.common;
+package org.woehlke.twitterwall.scheduled.service.facade.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.frontend.model.Page;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
@@ -27,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by tw on 01.07.17.
+ * Created by tw on 18.07.17.
  */
-public abstract class AbstractTwitterwallController implements InitializingBean {
-
-    public final static int FIRST_PAGE_NUMBER = 0;
+@Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+public class CreateTestDataImpl implements CreateTestData {
 
     public final static long[] ID_TWITTER_TO_FETCH_FOR_TWEET_TEST = {
             876329508009279488L,
@@ -57,85 +58,9 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             876440419416109056L  // mattLefaux
     };
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractTwitterwallController.class);
 
-    private TwitterApiService twitterApiService;
-
-    private StoreOneTweet storeOneTweet;
-
-    private StoreUserProfile storeUserProfile;
-
-    private UserService userService;
-
-    private TaskService taskService;
-
-    private String menuAppName;
-
-    private String searchterm;
-
-    private String infoWebpage;
-
-    private String theme;
-
-    private boolean contextTest;
-
-    private String imprintScreenName;
-
-    private String idGoogleAnalytics;
-
-    protected void logEnv(){
-        log.info("--------------------------------------------------------------------");
-        log.info("twitterwall.frontend.menu.appname = "+menuAppName);
-        log.info("twitter.searchQuery = "+searchterm);
-        log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
-        log.info("twitterwall.frontend.theme = "+theme);
-        log.info("twitterwall.context.test = "+contextTest);
-        log.info("twitterwall.frontend.imprint.screenName = "+imprintScreenName);
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+idGoogleAnalytics);
-        log.info("--------------------------------------------------------------------");
-    }
-
-    protected ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
-        Page page = new Page();
-        page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
-        mav.addObject("page", page);
-        return mav;
-    }
-
-    protected Model setupPage(Model model, String title, String subtitle, String symbol) {
-        Page page = new Page();
-        page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
-        model.addAttribute("page", page);
-        return model;
-    }
-
-    private Page setupPage(Page page,String title, String subtitle, String symbol)  {
-        page.setTitle(title);
-        page.setSubtitle(subtitle);
-        page.setSymbol(symbol);
-        page.setMenuAppName(menuAppName);
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
-        page.setContextTest(contextTest);
-        page.setHistoryBack(true);
-        if(!idGoogleAnalytics.isEmpty()){
-            String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
-            html = html.replace("###GOOGLE_ANALYTICS_ID###",idGoogleAnalytics);
-            page.setGoogleAnalyticScriptHtml(html);
-        } else {
-            page.setGoogleAnalyticScriptHtml("");
-        }
-        logEnv();
-        log.info("--------------------------------------------------------------------");
-        log.info("setupPage = "+page.toString());
-        log.info("--------------------------------------------------------------------");
-        return page;
-    }
-
-    protected void getTestDataTweets(String msg,Model model){
+    public org.springframework.data.domain.Page<Tweet> getTestDataTweets(){
+        String msg = "getTestDataTweets: ";
         Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS);
         List<Tweet> latest =  new ArrayList<>();
         try {
@@ -168,13 +93,17 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         if(numberOfTwweets > 0 ) {
             Pageable pageRequest = new PageRequest(0, numberOfTwweets);
             org.springframework.data.domain.Page<Tweet> result = new PageImpl(latest, pageRequest, numberOfTwweets);
-            model.addAttribute("latestTweets", result);
+            //model.addAttribute("latestTweets", result);
+            return result;
         } else {
-            model.addAttribute("latestTweets",null);
+            return null;
+            //model.addAttribute("latestTweets",null);
         }
     }
 
-    protected void getTestDataUser(String msg,Model model){
+
+    public org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.User> getTestDataUser(){
+        String msg = "getTestDataUser: ";
         Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
@@ -198,19 +127,22 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             log.warn(msg + e.getMessage());
         }
         taskService.done(task);
-        model.addAttribute("user", user);
+        //model.addAttribute("user", user);
 
         int numberOfUser = user.size();
         if(numberOfUser > 0) {
             Pageable pageRequest = new PageRequest(0, numberOfUser);
             org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.User> result = new PageImpl(user, pageRequest, numberOfUser);
-            model.addAttribute("user", result);
+            //model.addAttribute("user", result);
+            return result;
         } else {
-            model.addAttribute("user",null);
+            //model.addAttribute("user",null);
+            return null;
         }
     }
 
-    protected void addUserForScreenName(Model model, String screenName) {
+    public User addUserForScreenName(String screenName) {
+        User userReturnValue = null;
         String msg="addUserForScreenName "+screenName+": ";
         Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
         log.info("--------------------------------------------------------------------");
@@ -218,8 +150,9 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
         User user = userService.findByScreenName(screenName);
         if(user!=null){
             log.info("userService.findByScreenName: found User = "+user.toString());
-            model.addAttribute("user", user);
-            log.info("model.addAttribute user = "+user.toString());
+            //model.addAttribute("user", user);
+            userReturnValue = user;
+            //log.info("model.addAttribute user = "+user.toString());
         } else {
             String msg2 = "EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName;
             task = taskService.warn(task,msg2);
@@ -230,47 +163,42 @@ public abstract class AbstractTwitterwallController implements InitializingBean 
             User user2 = storeUserProfile.storeUserProfile(twitterProfile,task);
             if(user2!=null){
                 log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user2.toString());
-                model.addAttribute("user", user2);
-                log.info("model.addAttribute user = "+user2.toString());
+                //model.addAttribute("user", user2);
+                //log.info("model.addAttribute user = "+user2.toString());
+                userReturnValue = user2;
             } else {
                 log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: ");
                 User user3 = User.getDummyUserForScreenName(screenName);
-                model.addAttribute("user", user3);
-                log.info("model.addAttribute user = "+user3.toString());
+                //model.addAttribute("user", user3);
+                //log.info("model.addAttribute user = "+user3.toString());
+                userReturnValue = user3;
             }
         }
         taskService.done(task);
         log.info("... finally done ...");
         log.info("--------------------------------------------------------------------");
+        return userReturnValue;
     }
 
-    protected void setupAfterPropertiesSetWithTesting(TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
+    @Autowired
+    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
         this.twitterApiService = twitterApiService;
+        this.taskService = taskService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
-        this.taskService=taskService;
-        this.setupAfterPropertiesSet(menuAppName, searchterm, infoWebpage, theme, contextTest, imprintScreenName, idGoogleAnalytics);
     }
 
-    protected void setupAfterPropertiesSet(String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest ,String imprintScreenName,String idGoogleAnalytics) {
-        this.menuAppName = menuAppName;
-        this.searchterm = searchterm;
-        this.infoWebpage = infoWebpage;
-        this.theme = theme;
-        this.contextTest = contextTest;
-        this.imprintScreenName = imprintScreenName;
-        this.idGoogleAnalytics = idGoogleAnalytics;
-        logEnv();
-    }
+    private final TwitterApiService twitterApiService;
 
-    private final static String GOOGLE_ANALYTICS_SCRIPT_HTML = "<script>\n" +
-            "        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +
-            "                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n" +
-            "            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n" +
-            "        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n" +
-            "\n" +
-            "        ga('create', '###GOOGLE_ANALYTICS_ID###', 'auto');\n" +
-            "        ga('send', 'pageview');\n" +
-            "    </script>";
+    private final TaskService taskService;
+
+    private final StoreOneTweet storeOneTweet;
+
+    private final StoreUserProfile storeUserProfile;
+
+    private final UserService userService;
+
+    private static final Logger log = LoggerFactory.getLogger(CreateTestDataImpl.class);
+
 }

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.test;
+package org.woehlke.twitterwall.scheduled.service.facade;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
-import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**

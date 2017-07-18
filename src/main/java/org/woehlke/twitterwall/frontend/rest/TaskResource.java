@@ -8,14 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.TaskResourceModel;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-
-
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 12.07.17.
@@ -25,7 +23,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitter
 public class TaskResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
-    public @ResponseBody Page<Task> getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,Model model) {
+    public @ResponseBody Page<Task> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         Pageable pageRequest = new PageRequest(page, pageSize);
         Page<Task> allTasks = taskService.getAll(pageRequest);
         return allTasks;
@@ -33,7 +31,7 @@ public class TaskResource {
 
     @RequestMapping(path="/{id}", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    TaskResourceModel findByTaskId(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
+    TaskResourceModel findByTaskId(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
                                    @PathVariable long id, Model model) {
         Task oneTask = taskService.findById(id);
         Pageable pageRequest = new PageRequest(page, pageSize);

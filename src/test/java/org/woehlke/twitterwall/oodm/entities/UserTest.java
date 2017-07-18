@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 
 /**

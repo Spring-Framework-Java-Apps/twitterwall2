@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.test;
+package org.woehlke.twitterwall.scheduled.service.facade;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfilesFromMentions;
-import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
@@ -26,22 +24,22 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-public class UpdateUserProfilesFromMentionsTest extends AbstractFacadeTest {
+public class FetchUsersFromDefinedUserListTest  extends AbstractFacadeTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesFromMentionsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(FetchUsersFromDefinedUserListTest.class);
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    private UpdateUserProfilesFromMentions updateUserProfilesFromMentions;
+    private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
 
     @Ignore
     @Commit
     @Test
-    public void updateUserProfilesFromMentions(){
+    public void fetchUsersFromDefinedUserListTest(){
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
+        this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.UrlService;
@@ -20,17 +20,17 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
  */
 @Controller
 @RequestMapping("/url")
-public class UrlController extends AbstractTwitterwallController {
+public class UrlController {
 
     private final static String PATH="/url";
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
-        logEnv();
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "Url";
         String symbol = Symbols.DATABASE.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
         Page<Url> myPageContent = urlService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
@@ -40,36 +40,13 @@ public class UrlController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
     private final UrlService urlService;
 
     @Autowired
-    public UrlController(UrlService urlService) {
+    public UrlController(UrlService urlService, ControllerHelper controllerHelper) {
         this.urlService = urlService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
 }

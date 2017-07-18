@@ -13,8 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN;
 
 /**
@@ -35,15 +36,15 @@ import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN
  */
 @Controller
 @RequestMapping(path="/hashtag")
-public class HashTagController extends AbstractTwitterwallController {
+public class HashTagController {
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
-        logEnv();
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ FIRST_PAGE_NUMBER) int page, Model model){
+        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"text");
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
@@ -53,12 +54,12 @@ public class HashTagController extends AbstractTwitterwallController {
     @RequestMapping(path="/{text}")
     public String hashTagFromTweetsAndUsers(
         @PathVariable("text") String text,
-        @RequestParam(name= "pageTweet" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageTweet,
-        @RequestParam(name= "pageUser" ,defaultValue=""+FIRST_PAGE_NUMBER) int pageUser,
+        @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
+        @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
          Model model)
     {
         String msg = "/hashtag/" + text + " ";
-        logEnv();
+        controllerHelper.logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(text);
         if (m.matches()) {
@@ -69,7 +70,7 @@ public class HashTagController extends AbstractTwitterwallController {
             String subtitle = "Tweets und User für HashTag";
             String title = text;
             String symbol = Symbols.HASHTAG.toString();
-            model = setupPage(model, title, subtitle, symbol);
+            model = controllerHelper.setupPage(model, title, subtitle, symbol);
             log.debug(msg + " try to: hashTagService.findByText ");
             HashTag hashTag = hashTagService.findByText(text);
             model.addAttribute("hashTag",hashTag);
@@ -95,11 +96,11 @@ public class HashTagController extends AbstractTwitterwallController {
     @RequestMapping(path="/overview")
     public String hashTagsOverview(Model model) {
         String msg = "/hashtag/overview ";
-        logEnv();
+        controllerHelper.logEnv();
         String title = "HashTags";
         String subtitle = searchterm;
         String symbol = Symbols.HASHTAG.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
@@ -149,29 +150,8 @@ public class HashTagController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
     @Value("${twitter.searchQuery}")
     private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.imprint.subtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
 
     private final HashTagService hashTagService;
 
@@ -180,14 +160,12 @@ public class HashTagController extends AbstractTwitterwallController {
     private final UserService userService;
 
     @Autowired
-    public HashTagController(HashTagService hashTagService, TweetService tweetService, UserService userService) {
+    public HashTagController(HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
         this.userService = userService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
 }

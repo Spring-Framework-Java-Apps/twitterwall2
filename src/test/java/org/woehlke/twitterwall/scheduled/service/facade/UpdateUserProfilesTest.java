@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.test;
+package org.woehlke.twitterwall.scheduled.service.facade;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
-import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
@@ -26,22 +24,22 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-public class FetchUsersFromDefinedUserListTest  extends AbstractFacadeTest {
+public class UpdateUserProfilesTest extends AbstractFacadeTest {
 
-    private static final Logger log = LoggerFactory.getLogger(FetchUsersFromDefinedUserListTest.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesTest.class);
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
+    private UpdateUserProfiles updateUserProfiles;
 
     @Ignore
     @Commit
     @Test
-    public void fetchUsersFromDefinedUserListTest(){
+    public void updateUserProfiles(){
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
+        this.updateUserProfiles.updateUserProfiles();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

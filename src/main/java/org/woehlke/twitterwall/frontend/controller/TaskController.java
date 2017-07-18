@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
@@ -23,16 +23,16 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
  */
 @Controller
 @RequestMapping(path="/task")
-public class TaskController  extends AbstractTwitterwallController {
+public class TaskController {
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         String msg = "/task/all: ";
-        logEnv();
+        controllerHelper.logEnv();
         String title = "Tasks";
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"timeStarted");
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
@@ -41,15 +41,15 @@ public class TaskController  extends AbstractTwitterwallController {
 
     @RequestMapping(path="/{id}")
     public String getTaskById(
-        @RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
         //@PathVariable long id, Model model) {
         @PathVariable("id") Task task, Model model) {
         String msg = "/task/ "+task.getId();
-        logEnv();
+        controllerHelper.logEnv();
         String title = "Tasks";
         String subtitle = "List aller TasksHistory für Task";
         String symbol = Symbols.TASK.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         //Task oneTask = taskService.findById(id);
         Pageable pageRequest = new PageRequest(page, pageSize);
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
@@ -62,38 +62,16 @@ public class TaskController  extends AbstractTwitterwallController {
 
     private final TaskHistoryService taskHistoryService;
 
+
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, ControllerHelper controllerHelper) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
 }

@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
-
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 03.07.17.
@@ -31,14 +30,14 @@ public class TweetResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    Page<Tweet> getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page) {
+    Page<Tweet> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
         Pageable pageRequest = new PageRequest(page, pageSize);
         return this.tweetService.getAll(pageRequest);
     }
 
     @RequestMapping(path="/latest", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    Page<Tweet> getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page) {
+    Page<Tweet> getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page) {
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
         return this.tweetService.getAll(pageRequest);
     }

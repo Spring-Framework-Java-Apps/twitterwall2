@@ -8,20 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
+import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
 
 
 /**
  * Created by tw on 12.07.17.
  */
 @Controller
-public class PagesController extends AbstractTwitterwallController {
+public class PagesController {
+
 
     @RequestMapping("/")
     public ModelAndView index(Model model) {
@@ -31,33 +29,19 @@ public class PagesController extends AbstractTwitterwallController {
     @RequestMapping("/imprint")
     public String imprint(Model model) {
         log.info("-----------------------------------------");
-        logEnv();
+        controllerHelper.logEnv();
         String symbol = Symbols.IMPRINT.toString();
         String title = "Impressum";
         String subtitle = imprintSubtitle;
-        model = super.setupPage(model, title, subtitle, symbol);
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
         String screenName = imprintScreenName;
-        super.addUserForScreenName(model,screenName);
+        User user = createTestData.addUserForScreenName(screenName);
+        model.addAttribute("user", user);
         log.info("-----------------------------------------");
         return "imprint";
     }
 
     private static final Logger log = LoggerFactory.getLogger(PagesController.class);
-
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
 
     @Value("${twitterwall.frontend.imprint.screenName}")
     private String imprintScreenName;
@@ -65,30 +49,15 @@ public class PagesController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.imprint.subtitle}")
     private String imprintSubtitle;
 
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
+    private final CreateTestData createTestData;
 
-    private final TwitterApiService twitterApiService;
-
-    private final StoreOneTweet storeOneTweet;
-
-    private final StoreUserProfile storeUserProfile;
-
-    private final TaskService taskService;
-
-    private final UserService userService;
 
     @Autowired
-    public PagesController(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, TaskService taskService, UserService userService) {
-        this.twitterApiService = twitterApiService;
-        this.storeOneTweet = storeOneTweet;
-        this.storeUserProfile = storeUserProfile;
-        this.taskService = taskService;
-        this.userService = userService;
+    public PagesController(CreateTestData createTestData, ControllerHelper controllerHelper) {
+        this.createTestData = createTestData;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
+
 }

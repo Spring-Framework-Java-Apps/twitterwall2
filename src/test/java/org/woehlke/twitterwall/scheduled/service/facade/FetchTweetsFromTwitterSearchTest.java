@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.test;
+package org.woehlke.twitterwall.scheduled.service.facade;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -14,10 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.ScheduledTasks;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfiles;
-import org.woehlke.twitterwall.scheduled.service.facade.common.AbstractFacadeTest;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+
 
 /**
  * Created by tw on 11.07.17.
@@ -26,24 +26,26 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=false)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-public class UpdateUserProfilesTest extends AbstractFacadeTest {
+public class FetchTweetsFromTwitterSearchTest extends AbstractFacadeTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
+    @Autowired
+    private FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    @Autowired
-    private UpdateUserProfiles updateUserProfiles;
-
     @Ignore
     @Commit
     @Test
-    public void updateUserProfiles(){
+    public void fetchTweetsFromTwitterSearchTest(){
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.updateUserProfiles.updateUserProfiles();
+        this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
+
+
 }

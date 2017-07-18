@@ -27,7 +27,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 09.07.17.

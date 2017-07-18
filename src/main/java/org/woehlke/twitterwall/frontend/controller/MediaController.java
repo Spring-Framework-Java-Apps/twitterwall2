@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.service.MediaService;
 
@@ -20,55 +20,34 @@ import org.woehlke.twitterwall.oodm.service.MediaService;
  */
 @Controller
 @RequestMapping("/media")
-public class MediaController extends AbstractTwitterwallController {
+public class MediaController {
 
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
-        logEnv();
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "Media";
         String symbol = Symbols.DATABASE.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
         Page<Media> myPageContent = mediaService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/media/all";
     }
 
+
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
-
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
 
     private final MediaService mediaService;
 
     @Autowired
-    public MediaController(MediaService mediaService) {
+    public MediaController(MediaService mediaService, ControllerHelper controllerHelper) {
         this.mediaService = mediaService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
+
 }

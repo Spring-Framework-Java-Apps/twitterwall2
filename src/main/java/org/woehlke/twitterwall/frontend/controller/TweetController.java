@@ -12,8 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -23,12 +23,12 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
  */
 @Controller
 @RequestMapping("/tweet")
-public class TweetController extends AbstractTwitterwallController {
+public class TweetController {
 
     @RequestMapping("/all")
-    public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
-        logEnv();
-        model = super.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
+    public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+        controllerHelper.logEnv();
+        model = controllerHelper.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
         Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
@@ -42,34 +42,14 @@ public class TweetController extends AbstractTwitterwallController {
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
     @Autowired
-    public TweetController(TweetService tweetService) {
+    public TweetController(TweetService tweetService, ControllerHelper controllerHelper) {
         this.tweetService = tweetService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
 }

@@ -1,20 +1,21 @@
 package org.woehlke.twitterwall.frontend.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 
 /**
  * Created by tw on 16.07.17.
  */
 @Controller
 @RequestMapping(path="/application/countedEntities")
-public class CountedEntitiesController extends AbstractTwitterwallController {
+public class CountedEntitiesController {
 
     private final static String PATH="/application/countedEntities";
+
 
     @RequestMapping(path="/tweet/hashtag")
     public String domainCountTweet2hashtag(Model model) {
@@ -87,12 +88,13 @@ public class CountedEntitiesController extends AbstractTwitterwallController {
     }
 
     private void setUpThisPage(String title,Model model){
-        logEnv();
+        controllerHelper.logEnv();
         String subtitle = "Counted Entities";
         String symbol = Symbols.DATABASE.toString();
-        model = setupPage(model,title,subtitle,symbol);
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
     }
 
+    /*
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
@@ -116,10 +118,13 @@ public class CountedEntitiesController extends AbstractTwitterwallController {
 
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
+    */
 
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+    @Autowired
+    public CountedEntitiesController(ControllerHelper controllerHelper) {
+        this.controllerHelper = controllerHelper;
     }
+
+    private final ControllerHelper controllerHelper;
 }

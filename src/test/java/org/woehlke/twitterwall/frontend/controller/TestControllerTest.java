@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller.common;
+package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.PrepareDataTest;
-import org.woehlke.twitterwall.frontend.controller.DomainController;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
@@ -29,20 +29,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
- * Created by tw on 13.07.17.
+ * Created by tw on 01.07.17.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class DomainControllerTest extends PrepareDataTest {
+public class TestControllerTest extends PrepareDataTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DomainControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private DomainController controller;
+    private TestController controller;
 
     @Autowired
     private TwitterApiService twitterApiService;
@@ -58,6 +58,9 @@ public class DomainControllerTest extends PrepareDataTest {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
 
     @Value("${twitterwall.frontend.menu.appname}")
     private String menuAppName;
@@ -102,24 +105,43 @@ public class DomainControllerTest extends PrepareDataTest {
 
     @Commit
     @Test
-    public void domainCountTest() throws Exception {
-        String msg ="domainCountTest: ";
+    public void getTestDataTest() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/test/getTestData"))
+                .andExpect(status().isOk())
+                .andExpect(view().name( "timeline"))
+                .andExpect(model().attributeExists("latestTweets"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
 
-        MvcResult result = this.mockMvc.perform(get("/application/domain/count"))
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @Commit
+    @Test
+    public void getOnListRenewTest() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/test/user/onlist/renew"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "taskHistory"))
-            .andExpect(model().attributeExists("countedEntities"))
-            .andExpect(model().attributeExists("taskHistoryList"))
+            .andExpect(view().name( "user"))
+            .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
         Assert.assertTrue(true);
     }
+
 }

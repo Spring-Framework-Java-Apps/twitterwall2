@@ -6,7 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.frontend.controller.pages.TestControllerTest;
+import org.woehlke.twitterwall.frontend.controller.TestControllerTest;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
@@ -20,8 +20,9 @@ import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
-import static org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+import static org.woehlke.twitterwall.scheduled.service.facade.impl.CreateTestDataImpl.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
+import static org.woehlke.twitterwall.scheduled.service.facade.impl.CreateTestDataImpl.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
+
 
 /**
  * Created by tw on 13.07.17.
