@@ -113,8 +113,11 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     @Value("${twitterwall.scheduler.fetchUserList.name}")
     private String fetchUserListName;
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
+    @Value("${twitterwall.frontend.imprintScreenName}")
     private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprintSubtitle}")
+    private String imprintSubtitle;
 
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;

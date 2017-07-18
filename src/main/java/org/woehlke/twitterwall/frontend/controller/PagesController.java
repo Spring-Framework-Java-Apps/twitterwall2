@@ -43,10 +43,10 @@ public class PagesController {
 
     private static final Logger log = LoggerFactory.getLogger(PagesController.class);
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
+    @Value("${twitterwall.frontend.imprintScreenName}")
     private String imprintScreenName;
 
-    @Value("${twitterwall.frontend.imprint.subtitle}")
+    @Value("${twitterwall.frontend.imprintSubtitle}")
     private String imprintSubtitle;
 
     private final CreateTestData createTestData;

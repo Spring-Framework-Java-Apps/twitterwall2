@@ -93,33 +93,7 @@ public class CountedEntitiesController {
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
     }
-
-    /*
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
-
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-    */
-
+    
 
     @Autowired
     public CountedEntitiesController(ControllerHelper controllerHelper) {

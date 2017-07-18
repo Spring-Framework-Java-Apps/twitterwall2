@@ -63,23 +63,26 @@ public class TestControllerTest extends PrepareDataTest {
     @Autowired
     private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
 
-    @Value("${twitterwall.frontend.menu.appname}")
+    @Value("${twitterwall.frontend.menuAppName}")
     private String menuAppName;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
-    @Value("${twitterwall.frontend.info.webpage}")
+    @Value("${twitterwall.frontend.infoWebpage}")
     private String infoWebpage;
 
     @Value("${twitterwall.frontend.theme}")
     private String theme;
 
-    @Value("${twitterwall.context.test}")
+    @Value("${twitterwall.frontend.contextTest}")
     private boolean contextTest;
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
+    @Value("${twitterwall.frontend.imprintScreenName}")
     private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprintSubtitle}")
+    private String imprintSubtitle;
 
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;

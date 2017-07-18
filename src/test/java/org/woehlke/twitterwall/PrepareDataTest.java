@@ -152,12 +152,12 @@ public abstract class PrepareDataTest implements InitializingBean {
 
     protected void logEnv(){
         log.info("--------------------------------------------------------------------");
-        log.info("twitterwall.frontend.menu.appname = "+menuAppName);
+        log.info("twitterwall.frontend.menuAppName = "+menuAppName);
         log.info("twitter.searchQuery = "+searchterm);
-        log.info("twitterwall.frontend.info.webpage = "+infoWebpage);
+        log.info("twitterwall.frontend.infoWebpage = "+infoWebpage);
         log.info("twitterwall.frontend.theme = "+theme);
-        log.info("twitterwall.context.test = "+contextTest);
-        log.info("twitterwall.frontend.imprint.screenName = "+imprintScreenName);
+        log.info("twitterwall.frontend.contextTest = "+contextTest);
+        log.info("twitterwall.frontend.imprintScreenName = "+imprintScreenName);
         log.info("twitterwall.frontend.idGoogleAnalytics = "+idGoogleAnalytics);
         log.info("--------------------------------------------------------------------");
     }

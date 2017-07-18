@@ -81,8 +81,11 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
     @Value("${twitterwall.scheduler.fetchUserList.name}")
     private String fetchUserListName;
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
+    @Value("${twitterwall.frontend.imprintScreenName}")
     private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprintSubtitle}")
+    private String imprintSubtitle;
 
     private final StoreUserProfileForUserList storeUserProfileForUserList;
 

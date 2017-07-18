@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
@@ -36,6 +37,30 @@ public class HashTagControllerTest {
 
     @Autowired
     private HashTagController controller;
+
+    @Value("${twitterwall.frontend.menuAppName}")
+    private String menuAppName;
+
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.frontend.infoWebpage}")
+    private String infoWebpage;
+
+    @Value("${twitterwall.frontend.theme}")
+    private String theme;
+
+    @Value("${twitterwall.frontend.contextTest}")
+    private boolean contextTest;
+
+    @Value("${twitterwall.frontend.imprintScreenName}")
+    private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprintSubtitle}")
+    private String imprintSubtitle;
+
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
 
     @Commit
     @Test

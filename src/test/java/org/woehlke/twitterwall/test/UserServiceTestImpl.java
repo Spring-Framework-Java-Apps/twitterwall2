@@ -29,8 +29,29 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTestImpl.class);
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
+    @Value("${twitterwall.frontend.menuAppName}")
+    private String menuAppName;
+
+    @Value("${twitter.searchQuery}")
+    private String searchterm;
+
+    @Value("${twitterwall.frontend.infoWebpage}")
+    private String infoWebpage;
+
+    @Value("${twitterwall.frontend.theme}")
+    private String theme;
+
+    @Value("${twitterwall.frontend.contextTest}")
+    private boolean contextTest;
+
+    @Value("${twitterwall.frontend.imprintScreenName}")
     private String imprintScreenName;
+
+    @Value("${twitterwall.frontend.imprintSubtitle}")
+    private String imprintSubtitle;
+
+    @Value("${twitterwall.frontend.idGoogleAnalytics}")
+    private String idGoogleAnalytics;
 
     @Autowired
     private UserService userService;

@@ -81,20 +81,16 @@ twitterwall:
       connTimeToLive: 10
       fetchTestDataVerbose: ${TWITTERWALL_URL_TEST_DATA_VERBOSE}
       maxIdleTime: 120
-  context:
-    test: ${TWITTERWALL_CONTEXT_TEST}
   frontend:
+    contextTest: ${TWITTERWALL_CONTEXT_TEST}
     controller:
       fetchUsersFromDefinedUserList: true
     idGoogleAnalytics: ${TWITTERWALL_GOOGLE_ANALYTICS_ID}
-    imprint:
-      screenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}
-      subtitle: "www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com"
-    info:
-      webpage: ${TWITTERWALL_INFO_WEBPAGE}
+    imprintScreenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}
+    imprintSubtitle: "www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com"
+    infoWebpage: ${TWITTERWALL_INFO_WEBPAGE}
     maxResults: ${TWITTERWALL_FRONTEND_MAX_RESULTS}
-    menu:
-      appname: ${TWITTERWALL_APP_NAME}
+    menuAppName: ${TWITTERWALL_APP_NAME}
     theme: ${TWITTERWALL_THEME}
   scheduler:
     allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
@@ -105,4 +101,4 @@ twitterwall:
       allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
       name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
-    skipFortesting: true
+    skipFortesting: false
