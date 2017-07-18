@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -103,7 +104,7 @@ public class UserControllerTest extends PrepareDataTest {
     public void getAll() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user"))
+            .andExpect(view().name("user/all"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -118,12 +119,13 @@ public class UserControllerTest extends PrepareDataTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getUserForScreeName() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/"+imprintScreenName))
             .andExpect(status().isOk())
-            .andExpect(view().name("profile"))
+            .andExpect(view().name("user/screenName"))
             .andExpect(model().attributeExists("user"))
             .andExpect(model().attributeExists("latestTweets"))
             .andExpect(model().attributeExists("page"))
@@ -144,8 +146,8 @@ public class UserControllerTest extends PrepareDataTest {
     public void getTweetingUsers() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/tweets"))
             .andExpect(status().isOk())
-            .andExpect(view().name("users"))
-            .andExpect(model().attributeExists("user"))
+            .andExpect(view().name("user/tweets"))
+            .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 
@@ -164,7 +166,7 @@ public class UserControllerTest extends PrepareDataTest {
     public void getNotYetFriendUsers() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/notyetfriends"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user"))
+            .andExpect(view().name("user/notyetfriends"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -184,7 +186,7 @@ public class UserControllerTest extends PrepareDataTest {
     public void getNotYetOnList() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/notyetonlist"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user"))
+            .andExpect(view().name("user/notyetonlist"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -204,7 +206,7 @@ public class UserControllerTest extends PrepareDataTest {
     public void getOnList() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/user/onlist"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user"))
+            .andExpect(view().name("user/onlist"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();

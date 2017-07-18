@@ -106,7 +106,7 @@ public class TweetControllerTest extends PrepareDataTest {
 
         MvcResult result = this.mockMvc.perform(get("/tweet/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "timeline"))
+            .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
             .andExpect(model().attributeExists("page"))
             .andReturn();

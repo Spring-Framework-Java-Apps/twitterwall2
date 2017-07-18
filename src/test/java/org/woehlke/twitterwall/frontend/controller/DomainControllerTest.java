@@ -106,9 +106,8 @@ public class DomainControllerTest extends PrepareDataTest {
 
         MvcResult result = this.mockMvc.perform(get("/application/domain/count"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "taskHistory"))
+            .andExpect(view().name( "/application/domain/count"))
             .andExpect(model().attributeExists("countedEntities"))
-            .andExpect(model().attributeExists("taskHistoryList"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 

@@ -60,14 +60,14 @@ public class HashTagControllerTest {
 
     @Commit
     @Test
-    public void hashTagFromTweetsTest() throws Exception {
+    public void getAllTest()throws Exception {
         String hashtagText = "java";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/tweets/"+hashtagText))
-            .andExpect(status().isOk())
-            .andExpect(view().name("timeline"))
-            .andExpect(model().attributeExists("latestTweets"))
-            .andExpect(model().attributeExists("page"))
-            .andReturn();
+        MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/hashtag/all"))
+                .andExpect(model().attributeExists("myPageContent"))
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
@@ -81,12 +81,14 @@ public class HashTagControllerTest {
 
     @Commit
     @Test
-    public void hashTagForUsersTest() throws Exception {
+    public void hashTagFromTweetsAndUsersTest() throws Exception {
         String hashtagText = "java";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/user/"+hashtagText))
+        MvcResult result = this.mockMvc.perform(get("/hashtag/"+hashtagText))
                 .andExpect(status().isOk())
-                .andExpect(view().name("user"))
+                .andExpect(view().name("/hashtag/hashtagText"))
                 .andExpect(model().attributeExists("users"))
+                .andExpect(model().attributeExists("latestTweets"))
+                .andExpect(model().attributeExists("hashTag"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -105,7 +107,7 @@ public class HashTagControllerTest {
     public void hashTagsOverview()  throws Exception {
         MvcResult result = this.mockMvc.perform(get("/hashtag/overview"))
             .andExpect(status().isOk())
-            .andExpect(view().name("tags"))
+            .andExpect(view().name("/hashtag/overview"))
             .andExpect(model().attributeExists("hashTagsTweets"))
             .andExpect(model().attributeExists("hashTagsUsers"))
             .andExpect(model().attributeExists("page"))

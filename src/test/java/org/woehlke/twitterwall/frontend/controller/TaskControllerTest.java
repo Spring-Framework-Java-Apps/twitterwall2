@@ -54,7 +54,7 @@ public class TaskControllerTest {
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "taskAll"))
+            .andExpect(view().name( "task/taskAll"))
             .andExpect(model().attributeExists("tasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -77,7 +77,7 @@ public class TaskControllerTest {
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
-            .andExpect(view().name( "taskHistory"))
+            .andExpect(view().name( "task/taskHistory"))
             .andExpect(model().attributeExists("task"))
             .andExpect(model().attributeExists("taskHistoryList"))
             .andExpect(model().attributeExists("page"))
