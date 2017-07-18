@@ -119,7 +119,6 @@ public class UserControllerTest extends PrepareDataTest {
         Assert.assertTrue(true);
     }
 
-    @Ignore
     @Commit
     @Test
     public void getUserForScreeName() throws Exception {

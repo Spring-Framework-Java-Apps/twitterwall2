@@ -104,7 +104,6 @@ public class TestControllerTest extends PrepareDataTest {
         Assert.assertTrue(true);
     }
 
-    @Ignore
     @Commit
     @Test
     public void getTestDataTest() throws Exception {
@@ -112,7 +111,7 @@ public class TestControllerTest extends PrepareDataTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name( "/test/getTestData"))
                 .andExpect(model().attributeExists("latestTweets"))
-                .andExpect(model().attributeExists("user"))
+                //.andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 

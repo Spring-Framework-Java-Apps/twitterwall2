@@ -35,10 +35,10 @@ public class TestController {
         String msg = "/getTestData : ";
         if(contextTest){
             model.addAttribute("latestTweets", createTestData.getTestDataTweets());
-            model.addAttribute("user", createTestData.getTestDataUser());
+            model.addAttribute("users", createTestData.getTestDataUser());
         } else {
             model.addAttribute("latestTweets",null);
-            model.addAttribute("user",null);
+            model.addAttribute("users",null);
         }
         return "/test/getTestData";
     }
