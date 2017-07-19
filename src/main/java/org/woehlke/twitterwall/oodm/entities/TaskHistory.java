@@ -46,7 +46,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     private Date timeEvent;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name="task_id",nullable = true)
+    @JoinColumn(name="task_id", nullable = true)
     private Task task;
 
     public TaskHistory() {

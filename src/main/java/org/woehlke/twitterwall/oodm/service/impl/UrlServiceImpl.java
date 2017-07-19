@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 
@@ -24,9 +25,12 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlRepository urlRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public UrlServiceImpl(UrlRepository urlRepository) {
+    public UrlServiceImpl(UrlRepository urlRepository, TaskRepository taskRepository) {
         this.urlRepository = urlRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -49,11 +53,13 @@ public class UrlServiceImpl implements UrlService {
         if(urlPersistent!=null){
             domainObject.setId(urlPersistent.getId());
             domainObject.setCreatedBy(urlPersistent.getCreatedBy());
+            task = this.taskRepository.save(task);
             domainObject.setUpdatedBy(task);
             result = urlRepository.save(domainObject);
             log.debug(name+" uodated "+result.toString());
             return result;
         } else {
+            task = this.taskRepository.save(task);
             domainObject.setCreatedBy(task);
             result = urlRepository.save(domainObject);
             log.debug(name+" persisted "+result.toString());

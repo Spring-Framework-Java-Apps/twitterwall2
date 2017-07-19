@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 
 /**
@@ -24,9 +25,12 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private final TaskHistoryRepository taskHistoryRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public TaskHistoryServiceImpl(TaskHistoryRepository taskHistoryRepository) {
+    public TaskHistoryServiceImpl(TaskHistoryRepository taskHistoryRepository, TaskRepository taskRepository) {
         this.taskHistoryRepository = taskHistoryRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override

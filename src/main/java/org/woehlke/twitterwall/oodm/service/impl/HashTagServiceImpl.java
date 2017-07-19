@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.repositories.HashTagRepository;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
 /**
@@ -24,9 +25,12 @@ public class HashTagServiceImpl implements HashTagService {
 
     private final HashTagRepository hashTagRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public HashTagServiceImpl(HashTagRepository hashTagRepository) {
+    public HashTagServiceImpl(HashTagRepository hashTagRepository, TaskRepository taskRepository) {
         this.hashTagRepository = hashTagRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -63,11 +67,13 @@ public class HashTagServiceImpl implements HashTagService {
             hashTag.setId(tagPers.getId());
             hashTag.setTaskInfo(tagPers.getTaskInfo());
             hashTag.setCreatedBy(tagPers.getCreatedBy());
+            task = this.taskRepository.save(task);
             hashTag.setUpdatedBy(task);
             hashTag = hashTagRepository.save(hashTag);
             log.debug("found: "+hashTag.toString());
             return hashTag;
         } else {
+            task = this.taskRepository.save(task);
             hashTag.setCreatedBy(task);
             log.debug("try to persist: "+hashTag.toString());
             HashTag tagPers2 = hashTagRepository.save(hashTag);

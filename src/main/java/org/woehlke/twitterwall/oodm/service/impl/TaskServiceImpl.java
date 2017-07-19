@@ -76,9 +76,9 @@ public class TaskServiceImpl implements TaskService {
         task.setTaskStatus(TaskStatus.RUNNING);
         task.setTimeStarted(new Date());
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
-        task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -91,9 +91,9 @@ public class TaskServiceImpl implements TaskService {
         TaskHistory event = new TaskHistory("done",task.getTaskStatus(),TaskStatus.FINISHED);
         task.setTaskStatus(TaskStatus.FINISHED);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
-        task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -107,6 +107,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -117,9 +119,10 @@ public class TaskServiceImpl implements TaskService {
         TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR);
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -133,6 +136,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -146,6 +151,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -158,6 +165,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -171,6 +180,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;
@@ -184,6 +195,8 @@ public class TaskServiceImpl implements TaskService {
         event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        event.setTask(task);
         task = taskRepository.save(task);
         log.debug(task.toString());
         return task;

@@ -33,10 +33,10 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH , CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "ticker_symbol",length=4096)

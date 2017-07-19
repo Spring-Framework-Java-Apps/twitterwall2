@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
@@ -26,9 +27,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -39,11 +43,13 @@ public class UserServiceImpl implements UserService {
         if(userPersistent!=null) {
             user.setCreatedBy(userPersistent.getCreatedBy());
             user.setId(userPersistent.getId());
+            task = this.taskRepository.save(task);
             user.setUpdatedBy(task);
             user = this.userRepository.save(user);
             log.debug(name + " updated " + user.toString());
             return user;
         } else {
+            task = this.taskRepository.save(task);
             user.setCreatedBy(task);
             user = this.userRepository.save(user);
             log.debug(name+" persisted "+user.toString());

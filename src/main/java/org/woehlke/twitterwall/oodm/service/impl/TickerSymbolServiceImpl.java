@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.TickerSymbolRepository;
 import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 
@@ -25,9 +26,12 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
 
     private final TickerSymbolRepository tickerSymbolRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public TickerSymbolServiceImpl(TickerSymbolRepository tickerSymbolRepository) {
+    public TickerSymbolServiceImpl(TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository) {
         this.tickerSymbolRepository = tickerSymbolRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -61,10 +65,12 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.debug(msg+"found: "+tickerSymbolPers.toString());
             tickerSymbol.setId(tickerSymbolPers.getId());
             tickerSymbol.setCreatedBy(tickerSymbolPers.getCreatedBy());
+            task = this.taskRepository.save(task);
             tickerSymbol.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+tickerSymbol.toString());
             return tickerSymbolRepository.save(tickerSymbol);
         }else{
+            task = this.taskRepository.save(task);
             tickerSymbol.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
             return tickerSymbolRepository.save(tickerSymbol);

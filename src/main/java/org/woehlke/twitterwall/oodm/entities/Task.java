@@ -57,7 +57,7 @@ public class Task implements DomainObject<Task> {
     @Column(name="time_finished",nullable = true)
     private Date timeFinished;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER,orphanRemoval=true, mappedBy="task")
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.EAGER,orphanRemoval=true, mappedBy="task")
     private List<TaskHistory> history = new ArrayList<>();
 
     @Embedded

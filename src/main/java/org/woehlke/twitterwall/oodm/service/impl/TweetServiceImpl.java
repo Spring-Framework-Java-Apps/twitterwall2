@@ -12,6 +12,7 @@ import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -27,9 +28,12 @@ public class TweetServiceImpl implements TweetService {
 
     private final TweetRepository tweetRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public TweetServiceImpl(TweetRepository tweetRepository) {
+    public TweetServiceImpl(TweetRepository tweetRepository, TaskRepository taskRepository) {
         this.tweetRepository = tweetRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -83,11 +87,13 @@ public class TweetServiceImpl implements TweetService {
         if(tweetPersistent!=null){
             tweet.setId(tweetPersistent.getId());
             tweet.setCreatedBy(tweetPersistent.getCreatedBy());
+            task = this.taskRepository.save(task);
             tweet.setUpdatedBy(task);
             result = tweetRepository.save(tweet);
             log.debug(name+" updated "+result.toString());
             return result;
         } else {
+            task = this.taskRepository.save(task);
             tweet.setCreatedBy(task);
             result = tweetRepository.save(tweet);
             log.debug(name+" persisted "+result.toString());

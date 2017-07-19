@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.service.UrlCacheService;
 
@@ -25,9 +26,12 @@ public class UrlCacheServiceImpl implements UrlCacheService {
 
     private final UrlCacheRepository urlCacheRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public UrlCacheServiceImpl(UrlCacheRepository urlCacheRepository) {
+    public UrlCacheServiceImpl(UrlCacheRepository urlCacheRepository, TaskRepository taskRepository) {
         this.urlCacheRepository = urlCacheRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -38,11 +42,13 @@ public class UrlCacheServiceImpl implements UrlCacheService {
         if(urlCachePers!=null){
             urlCache.setId(urlCachePers.getId());
             urlCache.setCreatedBy(urlCachePers.getCreatedBy());
+            task = this.taskRepository.save(task);
             urlCache.setUpdatedBy(task);
             UrlCache result = this.urlCacheRepository.save(urlCache);
             log.debug(name+" updated "+result.toString());
             return result;
         } else {
+            task = this.taskRepository.save(task);
             urlCache.setCreatedBy(task);
             UrlCache result = this.urlCacheRepository.save(urlCache);
             log.debug(name+" persisted "+result);

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.repositories.MentionRepository;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 
 
@@ -28,9 +29,12 @@ public class MentionServiceImpl implements MentionService {
 
     private final MentionRepository mentionRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public MentionServiceImpl(MentionRepository mentionRepository) {
+    public MentionServiceImpl(MentionRepository mentionRepository, TaskRepository taskRepository) {
         this.mentionRepository = mentionRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -79,10 +83,12 @@ public class MentionServiceImpl implements MentionService {
             }
             mention.setId(mentionPers.getId());
             mention.setCreatedBy(mentionPers.getCreatedBy());
+            task = this.taskRepository.save(task);
             mention.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());
             return mentionRepository.save(mentionPers);
         } catch (EmptyResultDataAccessException e){
+            task = this.taskRepository.save(task);
             mention.setCreatedBy(task);
             log.debug("try to persist Mention: "+mention.toString());
             return mentionRepository.save(mention);
@@ -106,6 +112,7 @@ public class MentionServiceImpl implements MentionService {
         }
         lowestIdTwitter--;
         mention.setIdTwitter(lowestIdTwitter);
+        task = this.taskRepository.save(task);
         mention.setCreatedBy(task);
         mention = mentionRepository.save(mention);
         return mention;

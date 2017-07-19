@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,9 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.service.facade.FetchTweetsFromTwitterSearch;
+import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
+import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
 
 /**
  * Created by tw on 11.07.17.
@@ -58,18 +62,112 @@ public class TaskController {
         return "task/taskHistory";
     }
 
+    @RequestMapping(path="/scheduled/tweets/fetch")
+    public String  fetchTweetsFromTwitterSearchRequest(Model model) {
+        String msg = "/scheduled/tweets/fetch";
+        controllerHelper.logEnv();
+        String title = "Scheduled Task started";
+        String subtitle = "/scheduled/tweets/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        this.fetchTweetsFromTwitterSearch();
+        return "/scheduled/taskStarted";
+    }
+
+    @RequestMapping(path="/scheduled/tweets/update")
+    public String updateTweetsRequest(Model model) {
+        String msg = "/scheduled/tweets/fetch";
+        controllerHelper.logEnv();
+        String title = "Scheduled Task started";
+        String subtitle = "/scheduled/tweets/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        this.updateTweets();
+        return "/scheduled/taskStarted";
+    }
+
+    @RequestMapping(path="/scheduled/users/list/fetch")
+    public String fetchUsersFromDefinedUserListRequest(Model model){
+        String msg = "/scheduled/users/list/fetch";
+        controllerHelper.logEnv();
+        String title = "Scheduled Task started";
+        String subtitle = "/scheduled/users/list/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        this.fetchUsersFromDefinedUserList();
+        return "/scheduled/taskStarted";
+    }
+
+    @RequestMapping(path="/scheduled/users/mentions/update")
+    public String updateUserProfilesFromMentionsRequest(Model model){
+        String msg = "/scheduled/users/mentions/update";
+        controllerHelper.logEnv();
+        String title = "Scheduled Task started";
+        String subtitle = "/scheduled/users/mentions/update";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        this.updateUserProfilesFromMentions();
+        return "/scheduled/taskStarted";
+    }
+
+    @RequestMapping(path="/scheduled/users/update")
+    public String updateUserProfilesRequest(Model model) {
+        String msg = "/scheduled/users/update";
+        controllerHelper.logEnv();
+        String title = "Scheduled Task started";
+        String subtitle = "/scheduled/users/update";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        this.updateUserProfiles();
+        return "/scheduled/taskStarted";
+    }
+
+    @Async
+    protected void fetchTweetsFromTwitterSearch() {
+        fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();;
+    }
+
+    @Async
+    protected void updateTweets() {
+        updateTweets.updateTweets();
+    }
+
+    @Async
+    protected void fetchUsersFromDefinedUserList(){
+        fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
+    }
+
+    @Async
+    protected void updateUserProfilesFromMentions(){
+
+    }
+
+    @Async
+    protected void updateUserProfiles() {
+
+    }
+
     private final TaskService taskService;
 
     private final TaskHistoryService taskHistoryService;
+
+    private final FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
+
+    private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
+
+    private final UpdateTweets updateTweets;
 
 
     @Value("${twitterwall.frontend.maxResults}")
     private int pageSize;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, ControllerHelper controllerHelper) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, ControllerHelper controllerHelper) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
+        this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
+        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
+        this.updateTweets = updateTweets;
         this.controllerHelper = controllerHelper;
     }
 

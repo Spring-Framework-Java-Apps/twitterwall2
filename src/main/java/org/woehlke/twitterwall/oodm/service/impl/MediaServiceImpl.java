@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.repositories.MediaRepository;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.MediaService;
 
 /**
@@ -24,9 +25,12 @@ public class MediaServiceImpl implements MediaService {
 
     private final MediaRepository mediaRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public MediaServiceImpl(MediaRepository mediaRepository) {
+    public MediaServiceImpl(MediaRepository mediaRepository, TaskRepository taskRepository) {
         this.mediaRepository = mediaRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -66,10 +70,12 @@ public class MediaServiceImpl implements MediaService {
             media.setId(mediaPers.getId());
             media.setMediaType(mediaPers.getMediaType());
             media.setCreatedBy(mediaPers.getCreatedBy());
+            task = this.taskRepository.save(task);
             media.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+media.toString());
             return mediaRepository.save(media);
         } else {
+            task = this.taskRepository.save(task);
             media.setCreatedBy(task);
             log.debug(msg+"not found and try to persist: "+media.toString());
             return mediaRepository.save(media);
