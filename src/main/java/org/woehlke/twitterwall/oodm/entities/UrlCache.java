@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by tw on 23.06.17.
@@ -29,18 +30,23 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
+    @NotNull
     @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = false)
     private Task createdBy;
 
+    @NotNull
     @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
+    @NotNull
     @Column(length=4096)
     private String expanded;
 
+    @NotNull
     @Column(nullable = false,length=4096)
     private String url;
 

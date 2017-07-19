@@ -347,4 +347,6 @@ public class CountedEntities implements Serializable {
         result = 31 * result + (userprofile2url != null ? userprofile2url.hashCode() : 0);
         return result;
     }
+
+    private static final long serialVersionUID = 1L;
 }

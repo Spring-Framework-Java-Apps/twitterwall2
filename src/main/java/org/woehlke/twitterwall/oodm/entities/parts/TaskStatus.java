@@ -9,5 +9,6 @@ public enum TaskStatus {
     RUNNING,
     FINISHED,
     ERROR,
-    WARN, NULL;
+    WARN,
+    NULL;
 }

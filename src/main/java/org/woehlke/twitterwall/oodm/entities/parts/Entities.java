@@ -418,4 +418,6 @@ public class Entities extends EntitiesFilter implements Serializable {
 
         return formattedText;
     }
+
+    private static final long serialVersionUID = 1L;
 }
