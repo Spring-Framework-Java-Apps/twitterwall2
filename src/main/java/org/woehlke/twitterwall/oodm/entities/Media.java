@@ -13,16 +13,20 @@ import javax.persistence.*;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "media", uniqueConstraints = {
+@Table(
+    name = "media",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_media_id_twitter", columnNames = {"id_twitter"})
-}, indexes = {
+    },
+    indexes = {
         @Index(name="idx_media_url", columnList= "url"),
         @Index(name="idx_media_expanded", columnList="expanded"),
         @Index(name="idx_media_display", columnList="display") ,
         @Index(name="idx_media_media_http", columnList="media_http"),
         @Index(name="idx_media_media_https", columnList="media_https"),
         @Index(name="idx_media_media_type", columnList="media_type")
-})
+    }
+)
 @EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
@@ -35,10 +39,10 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)

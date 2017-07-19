@@ -12,12 +12,16 @@ import javax.persistence.*;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "url", uniqueConstraints = {
+@Table(
+    name = "url",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_url", columnNames = {"url"})
-}, indexes = {
+    },
+    indexes = {
         @Index(name="idx_url_expanded", columnList="expanded"),
         @Index(name="idx_url_display", columnList="display")
-})
+    }
+)
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
@@ -32,10 +36,10 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(length=4096)

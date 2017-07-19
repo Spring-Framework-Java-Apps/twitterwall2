@@ -14,9 +14,12 @@ import java.util.regex.Pattern;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "hashtag", uniqueConstraints = {
+@Table(
+    name = "hashtag",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
-})
+    }
+)
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
@@ -29,10 +32,10 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
@@ -43,7 +46,7 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         return m.matches();
     }
 
-    @Column(nullable = false,length=4096)
+    @Column(name="text", nullable = false,length=4096)
     private String text;
 
     public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {

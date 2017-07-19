@@ -11,11 +11,15 @@ import javax.persistence.*;
  * Created by tw on 23.06.17.
  */
 @Entity
-@Table(name = "url_cache",
-        uniqueConstraints = { @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
-}, indexes = {
+@Table(
+    name = "url_cache",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
+    },
+    indexes = {
         @Index(name="idx_url_cache_expanded", columnList="expanded")
-})
+    }
+)
 @EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 
@@ -28,10 +32,10 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(length=4096)

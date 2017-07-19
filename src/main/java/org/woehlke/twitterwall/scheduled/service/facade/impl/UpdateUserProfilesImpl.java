@@ -96,7 +96,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             this.taskService.warn(task,e,msg);
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        task.event(report);
+        taskService.event(task,report);
         this.taskService.done(task);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));

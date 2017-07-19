@@ -15,12 +15,16 @@ import java.util.List;
  * Created by tw on 09.07.17.
  */
 @Entity
-@Table(name = "task", indexes = {
-    @Index(name = "idx_task_time_started", columnList = "time_started"),
-    @Index(name = "idx_task_time_finished", columnList = "time_finished"),
-    @Index(name = "idx_task_task_type", columnList = "task_type"),
-    @Index(name = "idx_task_task_status", columnList = "task_status")
-})
+@Table(
+    name = "task",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_task",columnNames = {"task_type","time_started"})
+    },
+    indexes = {
+        @Index(name = "idx_task_time_finished", columnList = "time_finished"),
+        @Index(name = "idx_task_task_status", columnList = "task_status")
+    }
+)
 @EntityListeners(TaskListener.class)
 public class Task implements DomainObject<Task> {
 
@@ -28,7 +32,7 @@ public class Task implements DomainObject<Task> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    private Long id;
 
     @Column(columnDefinition="text")
     private String description;
@@ -53,7 +57,7 @@ public class Task implements DomainObject<Task> {
     @Column(name="time_finished",nullable = true)
     private Date timeFinished;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true, mappedBy="task")
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER,orphanRemoval=true, mappedBy="task")
     private List<TaskHistory> history = new ArrayList<>();
 
     @Embedded
@@ -148,7 +152,11 @@ public class Task implements DomainObject<Task> {
 
     @Override
     public int compareTo(Task other) {
-        return id.compareTo(other.getId());
+        int result = this.taskType.compareTo(other.getTaskType());
+        if(result==0){
+            return this.timeStarted.compareTo(other.getTimeStarted());
+        }
+        return result;
     }
 
     @Override
@@ -158,16 +166,14 @@ public class Task implements DomainObject<Task> {
 
         Task task = (Task) o;
 
-        if (!id.equals(task.id)) return false;
-        if (taskType != task.taskType) return false;
-        return timeStarted.equals(task.timeStarted);
+        if (getTaskType() != task.getTaskType()) return false;
+        return getTimeStarted().equals(task.getTimeStarted());
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + taskType.hashCode();
-        result = 31 * result + timeStarted.hashCode();
+        int result = getTaskType().hashCode();
+        result = 31 * result + getTimeStarted().hashCode();
         return result;
     }
 
@@ -247,6 +253,7 @@ public class Task implements DomainObject<Task> {
         this.timeLastUpdate = timeLastUpdate;
     }
 
+
     @Override
     public String toString() {
         String countedEntitiesAtFinishStr = "null";
@@ -267,95 +274,6 @@ public class Task implements DomainObject<Task> {
             ", countedEntitiesAtStart=" + countedEntitiesAtStartStr +
             ", countedEntitiesAtFinish=" + countedEntitiesAtFinishStr +
             '}';
-    }
-
-    public void event(String descriptions) {
-        TaskHistory event = new TaskHistory(description,taskStatus,taskStatus);
-        event.setTask(this);
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void event(String description,TaskStatus newTaskStatus) {
-        TaskHistory event = new TaskHistory(description,taskStatus,newTaskStatus);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.READY;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void ready() {
-        TaskHistory event = new TaskHistory("ready",taskStatus,TaskStatus.READY);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.READY;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void start() {
-        TaskHistory event = new TaskHistory("start",taskStatus,TaskStatus.RUNNING);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.RUNNING;
-        this.timeLastUpdate = new Date();
-        this.timeStarted = new Date();
-        this.history.add(event);
-    }
-
-    public void done() {
-        TaskHistory event = new TaskHistory("done",taskStatus,TaskStatus.FINISHED);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.FINISHED;
-        this.timeLastUpdate = new Date();
-        this.timeFinished = new Date();
-        this.history.add(event);
-    }
-
-    public void error(Exception e) {
-        TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.ERROR);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.ERROR;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void error(Exception e, String msg) {
-        TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.ERROR);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.ERROR;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void warn(Exception e) {
-        TaskHistory event = new TaskHistory(e.getMessage(),taskStatus,TaskStatus.WARN);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.WARN;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void warn(Exception e, String msg) {
-        TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),taskStatus,TaskStatus.WARN);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.WARN;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void warn(String description) {
-        TaskHistory event = new TaskHistory(description,taskStatus,TaskStatus.WARN);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.READY;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
-    }
-
-    public void error(String description) {
-        TaskHistory event = new TaskHistory(description,taskStatus,TaskStatus.ERROR);
-        event.setTask(this);
-        this.taskStatus = TaskStatus.READY;
-        this.timeLastUpdate = new Date();
-        this.history.add(event);
     }
 
     @Override

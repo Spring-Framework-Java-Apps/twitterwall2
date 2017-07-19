@@ -12,11 +12,15 @@ import javax.persistence.*;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "tickersymbol", uniqueConstraints = {
-        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url"})
-}, indexes = {
+@Table(
+    name = "tickersymbol",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
+    },
+    indexes = {
         @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
-})
+    }
+)
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
@@ -29,16 +33,16 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "ticker_symbol",length=4096)
     private String tickerSymbol;
 
-    @Column(length=4096)
+    @Column(name = "url",length=4096)
     private String url;
 
     public TickerSymbol(String tickerSymbol, String url) {

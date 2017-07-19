@@ -18,24 +18,27 @@ import java.util.regex.Pattern;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "userprofile", uniqueConstraints = {
-        @UniqueConstraint(name="unique_user_id",columnNames = {"id_twitter"}),
-        @UniqueConstraint(name="unique_user_screen_name",columnNames = {"screen_name"})
-}, indexes = {
+@Table(
+    name = "userprofile",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name"}),
+    },
+    indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
         @Index(name="idx_userprofile_screen_name", columnList="screen_name"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
         @Index(name="idx_userprofile_url", columnList="url")
-})
+    }
+)
 @NamedQueries({
         @NamedQuery(
-                name = "User.findTweetingUsers",
-                query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
+            name = "User.findTweetingUsers",
+            query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
-                name = "User.findNotYetFriendUsers",
-                query = "select t from User as t where t.following=false"
+            name = "User.findNotYetFriendUsers",
+            query = "select t from User as t where t.following=false"
         ),
         @NamedQuery(
             name = "User.findNotYetOnList",
@@ -54,12 +57,12 @@ import java.util.regex.Pattern;
             query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
         ),
         @NamedQuery(
-                name = "User.findAllDescriptions",
-                query = "select t.description from User as t where t.description is not null"
+            name = "User.findAllDescriptions",
+            query = "select t.description from User as t where t.description is not null"
         ),
         @NamedQuery(
-                name = "User.findAllTwitterIds",
-                query = "select t.idTwitter from User as t"
+            name = "User.findAllTwitterIds",
+            query = "select t.idTwitter from User as t"
         )
 })
 @NamedNativeQueries({
@@ -96,10 +99,10 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter",nullable = false)
@@ -119,16 +122,16 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 4096)
+    @Column(name="url", length = 4096)
     private String url;
 
     @Column(length = 4096)
     private String profileImageUrl;
 
-    @Column(length = 4096)
+    @Column(name="description", length = 4096)
     private String description;
 
-    @Column
+    @Column(name="location")
     private String location;
 
     @Column(name="created_date",nullable = false)

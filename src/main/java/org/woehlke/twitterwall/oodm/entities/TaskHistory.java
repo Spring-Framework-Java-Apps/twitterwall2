@@ -11,11 +11,16 @@ import java.util.Date;
  * Created by tw on 10.07.17.
  */
 @Entity
-@Table(name = "task_history", indexes = {
-    @Index(name = "idx_task_history_time_event", columnList = "time_event"),
-    @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
-    @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
-})
+@Table(
+    name = "task_history",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_task_history",columnNames = {"task_id","time_event"})
+    },
+    indexes = {
+        @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
+        @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
+    }
+)
 @EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements DomainObject<TaskHistory> {
 
@@ -40,8 +45,8 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @Column(name="time_event",nullable = false)
     private Date timeEvent;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinColumn(name="task_id",nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="task_id",nullable = true)
     private Task task;
 
     public TaskHistory() {
@@ -152,12 +157,17 @@ public class TaskHistory implements DomainObject<TaskHistory> {
 
     @Override
     public String toString() {
+        Long taskId = 0L;
+        if(task != null){
+            taskId = task.getId();
+        }
         return "TaskHistory{" +
             "id=" + id +
             ", description='" + description + '\'' +
             ", taskStatusBefore=" + taskStatusBefore +
             ", taskStatusNow=" + taskStatusNow +
             ", timeEvent=" + timeEvent +
+            ", task.id=" + taskId +
             '}';
     }
 

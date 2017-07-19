@@ -10,23 +10,25 @@ import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 import javax.persistence.*;
 import java.util.Date;
 
-import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
-
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "tweet", uniqueConstraints = {
-    @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
-}, indexes = {
-    @Index(name="idx_tweet_created_date", columnList="created_date"),
-    @Index(name="idx_tweet_from_user", columnList="from_user"),
-    @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
-    @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
-    @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
-    @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
-    @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
-})
+@Table(
+    name = "tweet",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
+    },
+    indexes = {
+        @Index(name="idx_tweet_created_date", columnList="created_date"),
+        @Index(name="idx_tweet_from_user", columnList="from_user"),
+        @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
+        @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
+        @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
+        @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
+        @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
+    }
+)
 @NamedQueries({
     @NamedQuery(
         name="Tweet.getTweetsForHashTag",
@@ -37,8 +39,8 @@ import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
         query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
     ),
     @NamedQuery(
-            name="Tweet.findAllTwitterIds",
-            query="select t.idTwitter from Tweet as t"
+        name="Tweet.findAllTwitterIds",
+        query="select t.idTwitter from Tweet as t"
     )
 })
 @NamedNativeQueries({
@@ -75,10 +77,10 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
@@ -433,7 +435,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     @Override
     public int compareTo(Tweet other) {
-        return createdAt.compareTo(other.getCreatedAt());
+        return Long.compare(idTwitter,other.getIdTwitter());
     }
 
 

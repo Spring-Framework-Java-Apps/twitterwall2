@@ -15,11 +15,15 @@ import java.util.regex.Pattern;
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "mention", uniqueConstraints = {
-    @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
-}, indexes = {
-    @Index(name = "idx_mention_name", columnList = "name")
-})
+@Table(
+    name = "mention",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
+    },
+    indexes = {
+        @Index(name = "idx_mention_name", columnList = "name")
+    }
+)
 @EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
@@ -34,10 +38,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Embedded
     private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "id_twitter")
