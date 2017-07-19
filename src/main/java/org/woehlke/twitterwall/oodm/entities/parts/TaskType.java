@@ -5,6 +5,7 @@ package org.woehlke.twitterwall.oodm.entities.parts;
  */
 public enum TaskType {
 
+    NULL,
     FETCH_TWEETS_FROM_TWITTER_SEARCH,
     UPDATE_TWEETS,
     UPDATE_USER_PROFILES,

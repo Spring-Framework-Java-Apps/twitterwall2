@@ -5,6 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -14,11 +15,12 @@ import java.util.Date;
 @Table(
     name = "task_history",
     uniqueConstraints = {
-        @UniqueConstraint(name="unique_task_history",columnNames = {"task_id","time_event"})
+        @UniqueConstraint(name="unique_task_history",columnNames = {"id_task","time_event"})
     },
     indexes = {
-        @Index(name = "idx_task_history_task_status_before", columnList = "task_status_before"),
-        @Index(name = "idx_task_history_task_status_now", columnList = "task_status_now")
+        @Index(name = "idx_task_history_status_before", columnList = "status_before"),
+        @Index(name = "idx_task_history_status_now", columnList = "status_now"),
+        @Index(name = "idx_task_history_time_event", columnList = "time_event"),
     }
 )
 @EntityListeners(TaskHistoryListener.class)
@@ -30,23 +32,31 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Column(name="description",nullable = false,columnDefinition="text")
-    private String description;
+    private String description = "NULL";
 
-    @Column(name="task_status_before",nullable = false)
+    @NotNull
+    @Column(name="status_before",nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatusBefore;
+    private TaskStatus taskStatusBefore = TaskStatus.NULL;
 
-    @Column(name="task_status_now",nullable = false)
+    @NotNull
+    @Column(name="status_now",nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatusNow;
+    private TaskStatus taskStatusNow = TaskStatus.NULL;
 
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_event",nullable = false)
-    private Date timeEvent;
+    private Date timeEvent = new Date();
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name="task_id", nullable = true)
+    @NotNull
+    @Column(name="id_task",nullable = false)
+    private Long idTask = 0L;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="task_id")
     private Task task;
 
     public TaskHistory() {
@@ -56,7 +66,6 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
-        this.timeEvent = new Date();
     }
 
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task) {
@@ -83,6 +92,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (taskStatusBefore != that.taskStatusBefore) return false;
         if (taskStatusNow != that.taskStatusNow) return false;
+        if (idTask != that.idTask) return false;
         return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
     }
 
@@ -126,6 +136,14 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         this.task = task;
     }
 
+    public Long getIdTask() {
+        return idTask;
+    }
+
+    public void setIdTask(Long idTask) {
+        this.idTask = idTask;
+    }
+
     @Override
     public int compareTo(TaskHistory o) {
         return timeEvent.compareTo(o.getTimeEvent());
@@ -142,6 +160,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (taskStatusBefore != that.taskStatusBefore) return false;
         if (taskStatusNow != that.taskStatusNow) return false;
+        if (idTask != that.idTask) return false;
         return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
     }
 
@@ -152,22 +171,19 @@ public class TaskHistory implements DomainObject<TaskHistory> {
         result = 31 * result + (taskStatusBefore != null ? taskStatusBefore.hashCode() : 0);
         result = 31 * result + (taskStatusNow != null ? taskStatusNow.hashCode() : 0);
         result = 31 * result + (timeEvent != null ? timeEvent.hashCode() : 0);
+        result = 31 * result + (idTask != null ? idTask.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        Long taskId = 0L;
-        if(task != null){
-            taskId = task.getId();
-        }
         return "TaskHistory{" +
             "id=" + id +
             ", description='" + description + '\'' +
             ", taskStatusBefore=" + taskStatusBefore +
             ", taskStatusNow=" + taskStatusNow +
             ", timeEvent=" + timeEvent +
-            ", task.id=" + taskId +
+            ", task.id=" + idTask +
             '}';
     }
 
@@ -183,6 +199,9 @@ public class TaskHistory implements DomainObject<TaskHistory> {
             return false;
         }
         if((description == null)||(description.isEmpty())){
+            return false;
+        }
+        if(idTask == null){
             return false;
         }
         return true;

@@ -62,19 +62,20 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public HashTag store(HashTag hashTag, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         HashTag tagPers = hashTagRepository.findByText(hashTag.getText());
         if(tagPers!=null){
             hashTag.setId(tagPers.getId());
             hashTag.setTaskInfo(tagPers.getTaskInfo());
             hashTag.setCreatedBy(tagPers.getCreatedBy());
-            task = this.taskRepository.save(task);
             hashTag.setUpdatedBy(task);
             hashTag = hashTagRepository.save(hashTag);
             log.debug("found: "+hashTag.toString());
             return hashTag;
         } else {
-            task = this.taskRepository.save(task);
             hashTag.setCreatedBy(task);
+            hashTag.setUpdatedBy(task);
             log.debug("try to persist: "+hashTag.toString());
             HashTag tagPers2 = hashTagRepository.save(hashTag);
             log.debug("persisted: "+tagPers2.toString());

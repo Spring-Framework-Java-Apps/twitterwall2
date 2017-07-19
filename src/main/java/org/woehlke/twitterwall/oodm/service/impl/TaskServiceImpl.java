@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,16 +72,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task create(String msg,TaskType type) {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
-        Task task = new Task(msg,type);
+        Task task = new Task("start: "+msg,type);
         task.setCountedEntitiesAtStart(countedEntities);
-        TaskHistory event = new TaskHistory("start",task.getTaskStatus(), TaskStatus.RUNNING);
+        TaskHistory event = new TaskHistory("start: "+msg,TaskStatus.READY, TaskStatus.RUNNING);
         task.setTaskStatus(TaskStatus.RUNNING);
         task.setTimeStarted(new Date());
         task.setTimeLastUpdate(new Date());
-        event = taskHistoryRepository.save(event);
         task.addHistory(event);
         event.setTask(task);
         task = taskRepository.save(task);
+        event.setIdTask(task.getId());
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
@@ -89,115 +94,134 @@ public class TaskServiceImpl implements TaskService {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
         task.setCountedEntitiesAtFinish(countedEntities);
         TaskHistory event = new TaskHistory("done",task.getTaskStatus(),TaskStatus.FINISHED);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.FINISHED);
         task.setTimeLastUpdate(new Date());
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task error(Task task,Exception e) {
-        TaskHistory event = new TaskHistory(e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR);
+        TaskHistory event = new TaskHistory("error: "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task error(Task task, Exception e, String msg) {
-        TaskHistory event = new TaskHistory(msg+", "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR);
+        TaskHistory event = new TaskHistory(msg+", error: "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task warn(Task task, Exception e) {
-        TaskHistory event = new TaskHistory(e.getMessage(),task.getTaskStatus(),TaskStatus.WARN);
+        TaskHistory event = new TaskHistory("warn: "+e.getMessage(),task.getTaskStatus(),TaskStatus.WARN);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task warn(Task task, Exception e, String msg) {
-        TaskHistory event = new TaskHistory(e.getMessage(),task.getTaskStatus(),TaskStatus.WARN);
+        TaskHistory event = new TaskHistory("warn: "+msg+", "+e.getMessage(),task.getTaskStatus(),TaskStatus.WARN);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task event(Task task, String msg) {
-        TaskHistory event = new TaskHistory(msg,task.getTaskStatus(),task.getTaskStatus());
+        TaskHistory event = new TaskHistory("event: "+msg,task.getTaskStatus(),task.getTaskStatus());
+        event.setIdTask(task.getId());
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task warn(Task task, String msg) {
-        TaskHistory event = new TaskHistory(msg,task.getTaskStatus(),TaskStatus.WARN);
+        TaskHistory event = new TaskHistory("warn: "+msg,task.getTaskStatus(),TaskStatus.WARN);
+        event.setIdTask(task.getId());
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
-        event.setTask(task);
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }
 
     @Override
     public Task error(Task task, String msg) {
-        TaskHistory event = new TaskHistory(msg,task.getTaskStatus(),TaskStatus.ERROR);
+        TaskHistory event = new TaskHistory("error: "+msg,task.getTaskStatus(),TaskStatus.ERROR);
+        event.setIdTask(task.getId());
         task.setTimeLastUpdate(new Date());
         task.setTaskStatus(TaskStatus.ERROR);
-        event.setTask(task);
+        task.setTimeLastUpdate(new Date());
         task.addHistory(event);
         event = taskHistoryRepository.save(event);
         task.addHistory(event);
-        event.setTask(task);
         task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
     }

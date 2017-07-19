@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
@@ -88,7 +89,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractTwitterObject<User> implements DomainObjectWithIdTwitter<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
+public class User extends AbstractTwitterObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -271,6 +272,10 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     }
 
     public User() {
+    }
+
+    public void removeAllEntities(){
+        this.entities.removeAll();
     }
 
     public String getBigProfileImageUrl() {

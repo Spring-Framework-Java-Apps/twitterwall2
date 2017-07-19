@@ -58,6 +58,8 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
 
     @Override
     public TickerSymbol store(TickerSymbol tickerSymbol, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String msg = "TickerSymbol.storeTickerSymbol: ";
         log.debug(msg+"try to find: "+tickerSymbol.toString());
         TickerSymbol tickerSymbolPers = tickerSymbolRepository.findByTickerSymbolAndUrl(tickerSymbol.getTickerSymbol(), tickerSymbol.getUrl());
@@ -65,13 +67,12 @@ public class TickerSymbolServiceImpl implements TickerSymbolService {
             log.debug(msg+"found: "+tickerSymbolPers.toString());
             tickerSymbol.setId(tickerSymbolPers.getId());
             tickerSymbol.setCreatedBy(tickerSymbolPers.getCreatedBy());
-            task = this.taskRepository.save(task);
             tickerSymbol.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+tickerSymbol.toString());
             return tickerSymbolRepository.save(tickerSymbol);
         }else{
-            task = this.taskRepository.save(task);
             tickerSymbol.setCreatedBy(task);
+            tickerSymbol.setUpdatedBy(task);
             log.debug(msg+"not found and try to persist: "+tickerSymbol.toString());
             return tickerSymbolRepository.save(tickerSymbol);
         }

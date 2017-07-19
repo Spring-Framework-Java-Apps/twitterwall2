@@ -64,7 +64,6 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
      */
     private User storeUserProcess(User user, Task task){
         String msg = "User.storeUserProcess ";
-        Entities entities = user.getEntities();
 
         /** @see StoreEntitiesProcessImpl.storeEntitiesProcess(Entities entities, Task task) */
         Set<Url> urls = new LinkedHashSet<>();
@@ -72,7 +71,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         Set<Mention> mentions = new LinkedHashSet<>();
         Set<Media> media = new LinkedHashSet<>();
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
-        for (Url myUrl : entities.getUrls()) {
+        for (Url myUrl : user.getEntities().getUrls()) {
             if((myUrl != null)&&(myUrl.isValid())){
                 Url urlPers = urlService.store(myUrl, task);
                 urls.add(urlPers);
@@ -84,38 +83,40 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
                 }
             }
         }
-        for (HashTag hashTag : entities.getHashTags()) {
+        for (HashTag hashTag : user.getEntities().getHashTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
                 hashTags.add(hashTagPers);
             }
         }
         /** hier wird kein Proxy user mehr angelegt */
-        for (Mention mention : entities.getMentions()) {
+        for (Mention mention : user.getEntities().getMentions()) {
             if(mention.isValid()){
                 Mention mentionPers =mentionService.store(mention, task);
                 mentions.add(mentionPers);
             }
         }
-        for(Media medium:entities.getMedia()){
+        for(Media medium:user.getEntities().getMedia()){
             if(medium.isValid()) {
                 Media mediumPers = mediaService.store(medium, task);
                 media.add(mediumPers);
             }
         }
-        for(TickerSymbol tickerSymbol:entities.getTickerSymbols()){
+        for(TickerSymbol tickerSymbol:user.getEntities().getTickerSymbols()){
             if(tickerSymbol.isValid()){
                 TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol,task);
                 tickerSymbols.add(tickerSymbolPers);
             }
         }
-        entities.setUrls(urls);
-        entities.setHashTags(hashTags);
-        entities.setMentions(mentions);
-        entities.setMedia(media);
-        entities.setTickerSymbols(tickerSymbols);
+        user.removeAllEntities();
+        user = userService.store(user,task);
 
-        user.setEntities(entities);
+        user.getEntities().setUrls(urls);
+        user.getEntities().setHashTags(hashTags);
+        user.getEntities().setMentions(mentions);
+        user.getEntities().setMedia(media);
+        user.getEntities().setTickerSymbols(tickerSymbols);
+
         user = userService.store(user,task);
         return user;
     }

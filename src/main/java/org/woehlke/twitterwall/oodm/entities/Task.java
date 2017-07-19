@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,54 +35,61 @@ public class Task implements DomainObject<Task> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(columnDefinition="text")
-    private String description;
+    @NotNull
+    @Column(columnDefinition="text",nullable = false)
+    private String description = "NULL";
 
+    @NotNull
     @Column(name="task_type",nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskType taskType;
+    private TaskType taskType = TaskType.NULL;
 
+    @NotNull
     @Column(name="task_status",nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatus;
+    private TaskStatus taskStatus = TaskStatus.READY;
 
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_started",nullable = false)
-    private Date timeStarted;
+    private Date timeStarted = new Date();
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="time_last_update",nullable = false)
+    private Date timeLastUpdate = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="time_last_update",nullable = true)
-    private Date timeLastUpdate;
+    @Column(name="time_finished")
+    private Date timeFinished = null;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="time_finished",nullable = true)
-    private Date timeFinished;
-
+    @NotNull
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.EAGER,orphanRemoval=true, mappedBy="task")
     private List<TaskHistory> history = new ArrayList<>();
 
+    @NotNull
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "countUser", column = @Column(name = "start_count_user")),
-        @AttributeOverride(name = "countTweets", column = @Column(name = "start_count_tweets")),
-        @AttributeOverride(name = "countHashTags", column = @Column(name = "start_count_hashtags")),
-        @AttributeOverride(name = "countMedia", column = @Column(name = "start_count_media")),
-        @AttributeOverride(name = "countMention", column = @Column(name = "start_count_mention")),
-        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "start_count_tickersymbol")),
-        @AttributeOverride(name = "countUrl", column = @Column(name = "start_count_url")),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache")),
-        @AttributeOverride(name = "countTask", column = @Column(name = "start_count_task")),
-        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history")),
-        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "start_count_tweet2hashtag")),
-        @AttributeOverride(name = "tweet2media", column = @Column(name = "start_count_tweet2media")),
-        @AttributeOverride(name = "tweet2mention", column = @Column(name = "start_count_tweet2mention")),
-        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "start_count_tweet2tickersymbol")),
-        @AttributeOverride(name = "tweet2url", column = @Column(name = "start_count_tweet2url")),
-        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "start_count_userprofile2hashtag")),
-        @AttributeOverride(name = "userprofile2media", column = @Column(name = "start_count_userprofile2media")),
-        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "start_count_userprofile2mention")),
-        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "start_count_userprofile2tickersymbol")),
-        @AttributeOverride(name = "userprofile2url", column = @Column(name = "start_count_userprofile2url"))
+        @AttributeOverride(name = "countUser", column = @Column(name = "start_count_user",nullable=false)),
+        @AttributeOverride(name = "countTweets", column = @Column(name = "start_count_tweets",nullable=false)),
+        @AttributeOverride(name = "countHashTags", column = @Column(name = "start_count_hashtags",nullable=false)),
+        @AttributeOverride(name = "countMedia", column = @Column(name = "start_count_media",nullable=false)),
+        @AttributeOverride(name = "countMention", column = @Column(name = "start_count_mention",nullable=false)),
+        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "start_count_tickersymbol",nullable=false)),
+        @AttributeOverride(name = "countUrl", column = @Column(name = "start_count_url",nullable=false)),
+        @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache",nullable=false)),
+        @AttributeOverride(name = "countTask", column = @Column(name = "start_count_task",nullable=false)),
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history",nullable=false)),
+        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "start_count_tweet2hashtag",nullable=false)),
+        @AttributeOverride(name = "tweet2media", column = @Column(name = "start_count_tweet2media",nullable=false)),
+        @AttributeOverride(name = "tweet2mention", column = @Column(name = "start_count_tweet2mention",nullable=false)),
+        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "start_count_tweet2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "tweet2url", column = @Column(name = "start_count_tweet2url",nullable=false)),
+        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "start_count_userprofile2hashtag",nullable=false)),
+        @AttributeOverride(name = "userprofile2media", column = @Column(name = "start_count_userprofile2media",nullable=false)),
+        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "start_count_userprofile2mention",nullable=false)),
+        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "start_count_userprofile2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "start_count_userprofile2url",nullable=false))
     })
     private CountedEntities countedEntitiesAtStart;
 
@@ -111,13 +119,11 @@ public class Task implements DomainObject<Task> {
     private CountedEntities countedEntitiesAtFinish;
 
     public Task() {
-        taskStatus = TaskStatus.READY;
     }
 
     public Task(String description,TaskType taskType) {
         this.taskType = taskType;
         this.description = description;
-        taskStatus = TaskStatus.READY;
     }
 
     public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished, List<TaskHistory> history, CountedEntities countedEntitiesAtStart, CountedEntities countedEntitiesAtFinish) {
@@ -251,6 +257,10 @@ public class Task implements DomainObject<Task> {
 
     public void setTimeLastUpdate(Date timeLastUpdate) {
         this.timeLastUpdate = timeLastUpdate;
+    }
+
+    public void setTimeLastUpdate() {
+        this.timeLastUpdate = new Date();
     }
 
 

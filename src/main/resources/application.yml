@@ -89,16 +89,20 @@ twitterwall:
     imprintScreenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}
     imprintSubtitle: "www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com"
     infoWebpage: ${TWITTERWALL_INFO_WEBPAGE}
-    maxResults: ${TWITTERWALL_FRONTEND_MAX_RESULTS}
+    maxResults: 12
     menuAppName: ${TWITTERWALL_APP_NAME}
     theme: ${TWITTERWALL_THEME}
   scheduler:
     allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
-    allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
-    allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
-    allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
+    #allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
+    #allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
+    #allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
+    allowUpdateTweets: false
+    allowUpdateUserProfiles: false
+    allowUpdateUserProfilesFromMention: false
     fetchUserList:
-      allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
+      #allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
+      allow: true
       name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
     skipFortesting: false

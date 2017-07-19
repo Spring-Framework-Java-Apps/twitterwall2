@@ -35,6 +35,8 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Url store(Url domainObject, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "store "+domainObject.getUrl();
         log.debug(name);
         if(domainObject == null){
@@ -53,14 +55,13 @@ public class UrlServiceImpl implements UrlService {
         if(urlPersistent!=null){
             domainObject.setId(urlPersistent.getId());
             domainObject.setCreatedBy(urlPersistent.getCreatedBy());
-            task = this.taskRepository.save(task);
             domainObject.setUpdatedBy(task);
             result = urlRepository.save(domainObject);
             log.debug(name+" uodated "+result.toString());
             return result;
         } else {
-            task = this.taskRepository.save(task);
             domainObject.setCreatedBy(task);
+            domainObject.setUpdatedBy(task);
             result = urlRepository.save(domainObject);
             log.debug(name+" persisted "+result.toString());
             return result;

@@ -80,6 +80,8 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public Tweet store(Tweet tweet, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "try to store: "+tweet.getIdTwitter()+" ";
         log.debug(name);
         Tweet result;
@@ -87,14 +89,13 @@ public class TweetServiceImpl implements TweetService {
         if(tweetPersistent!=null){
             tweet.setId(tweetPersistent.getId());
             tweet.setCreatedBy(tweetPersistent.getCreatedBy());
-            task = this.taskRepository.save(task);
             tweet.setUpdatedBy(task);
             result = tweetRepository.save(tweet);
             log.debug(name+" updated "+result.toString());
             return result;
         } else {
-            task = this.taskRepository.save(task);
             tweet.setCreatedBy(task);
+            tweet.setUpdatedBy(task);
             result = tweetRepository.save(tweet);
             log.debug(name+" persisted "+result.toString());
             return result;

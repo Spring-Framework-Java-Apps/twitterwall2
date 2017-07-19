@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -9,27 +10,66 @@ import java.io.Serializable;
 @Embeddable
 public class CountedEntities implements Serializable {
 
-    private Long countUser;
-    private Long countTweets;
-    private Long countHashTags;
-    private Long countMedia;
-    private Long countMention;
-    private Long countTickerSymbol;
-    private Long countUrl;
-    private Long countUrlCache;
-    private Long countTask;
-    private Long countTaskHistory;
+    @NotNull
+    private Long countUser=0L;
 
-    private Long tweet2hashtag;
-    private Long tweet2media;
-    private Long tweet2mention;
-    private Long tweet2tickersymbol;
-    private Long tweet2url;
-    private Long userprofile2hashtag;
-    private Long userprofile2media;
-    private Long userprofile2mention;
-    private Long userprofile2tickersymbol;
-    private Long userprofile2url;
+    @NotNull
+    private Long countTweets=0L;
+
+    @NotNull
+    private Long countHashTags=0L;
+
+    @NotNull
+    private Long countMedia=0L;
+
+    @NotNull
+    private Long countMention=0L;
+
+    @NotNull
+    private Long countTickerSymbol=0L;
+
+    @NotNull
+    private Long countUrl=0L;
+
+    @NotNull
+    private Long countUrlCache=0L;
+
+    @NotNull
+    private Long countTask=0L;
+
+    @NotNull
+    private Long countTaskHistory=0L;
+
+
+    @NotNull
+    private Long tweet2hashtag=0L;
+
+    @NotNull
+    private Long tweet2media=0L;
+
+    @NotNull
+    private Long tweet2mention=0L;
+
+    @NotNull
+    private Long tweet2tickersymbol=0L;
+
+    @NotNull
+    private Long tweet2url=0L;
+
+    @NotNull
+    private Long userprofile2hashtag=0L;
+
+    @NotNull
+    private Long userprofile2media=0L;
+
+    @NotNull
+    private Long userprofile2mention=0L;
+
+    @NotNull
+    private Long userprofile2tickersymbol=0L;
+
+    @NotNull
+    private Long userprofile2url=0L;
 
     public CountedEntities() {
     }

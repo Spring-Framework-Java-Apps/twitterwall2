@@ -62,6 +62,8 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media store(Media media, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String msg = "Media.store: ";
         log.debug(msg+"try to find: "+media.toString());
         Media mediaPers = mediaRepository.findByIdTwitter(media.getIdTwitter()); //this.mediaDao.findByIdTwitter(media.getIdTwitter(),Media.class);
@@ -70,13 +72,12 @@ public class MediaServiceImpl implements MediaService {
             media.setId(mediaPers.getId());
             media.setMediaType(mediaPers.getMediaType());
             media.setCreatedBy(mediaPers.getCreatedBy());
-            task = this.taskRepository.save(task);
             media.setUpdatedBy(task);
             log.debug(msg+"found and try to update: "+media.toString());
             return mediaRepository.save(media);
         } else {
-            task = this.taskRepository.save(task);
             media.setCreatedBy(task);
+            media.setUpdatedBy(task);
             log.debug(msg+"not found and try to persist: "+media.toString());
             return mediaRepository.save(media);
         }

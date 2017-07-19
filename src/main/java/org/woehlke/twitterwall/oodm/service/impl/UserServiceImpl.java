@@ -37,20 +37,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User store(User user, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "try to store: "+user.getIdTwitter()+" ";
         log.debug(name);
         User userPersistent = this.userRepository.findByIdTwitter(user.getIdTwitter());
         if(userPersistent!=null) {
-            user.setCreatedBy(userPersistent.getCreatedBy());
             user.setId(userPersistent.getId());
-            task = this.taskRepository.save(task);
+            user.setCreatedBy(userPersistent.getCreatedBy());
             user.setUpdatedBy(task);
             user = this.userRepository.save(user);
             log.debug(name + " updated " + user.toString());
             return user;
         } else {
-            task = this.taskRepository.save(task);
             user.setCreatedBy(task);
+            user.setUpdatedBy(task);
             user = this.userRepository.save(user);
             log.debug(name+" persisted "+user.toString());
             return user;

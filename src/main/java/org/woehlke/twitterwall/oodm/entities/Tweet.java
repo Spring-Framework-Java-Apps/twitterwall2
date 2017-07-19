@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
@@ -66,7 +67,7 @@ import java.util.Date;
     )
 })
 @EntityListeners(TweetListener.class)
-public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithIdTwitter<Tweet>,DomainObjectWithTask<Tweet> {
+public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithEntities<Tweet>,DomainObjectWithTask<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -211,6 +212,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     public Tweet() {
     }
+
+    public void removeAllEntities(){
+        this.entities.removeAll();
+    }
+
 
     public String getFormattedText() {
         String formattedText = this.text;

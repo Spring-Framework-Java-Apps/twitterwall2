@@ -66,30 +66,31 @@ public class MentionServiceImpl implements MentionService {
 
     @Override
     public Mention store(Mention mention, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         log.debug("try to store Mention: "+mention.toString());
-        try {
-            String screenName = mention.getScreenName();
-            Long idTwitter = mention.getIdTwitter();
-            Mention mentionPers = null;
-            if(screenName != null && idTwitter != null){
-                log.debug("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
-                mentionPers = mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
-            } else if (screenName != null && idTwitter == null) {
-                log.debug("try to find Mention.findByScreenName: "+mention.toString());
-                mentionPers = mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
-            } else if (screenName == null && idTwitter != null) {
-                log.debug("try to find Mention.findByIdTwitter: "+mention.toString());
-                mentionPers = mentionRepository.findByIdTwitter(idTwitter);
-            }
+        String screenName = mention.getScreenName();
+        Long idTwitter = mention.getIdTwitter();
+        Mention mentionPers = null;
+        if(screenName != null && idTwitter != null){
+            log.debug("try to find Mention.findByIdTwitterAndScreenName: "+mention.toString());
+            mentionPers = mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
+        } else if (screenName != null && idTwitter == null) {
+            log.debug("try to find Mention.findByScreenName: "+mention.toString());
+            mentionPers = mentionRepository.findByIdTwitterAndScreenName(idTwitter,screenName);
+        } else if (screenName == null && idTwitter != null) {
+            log.debug("try to find Mention.findByIdTwitter: "+mention.toString());
+            mentionPers = mentionRepository.findByIdTwitter(idTwitter);
+        }
+        if(mentionPers != null) {
             mention.setId(mentionPers.getId());
             mention.setCreatedBy(mentionPers.getCreatedBy());
-            task = this.taskRepository.save(task);
             mention.setUpdatedBy(task);
             log.debug("try to update Mention: "+mention.toString());
             return mentionRepository.save(mentionPers);
-        } catch (EmptyResultDataAccessException e){
-            task = this.taskRepository.save(task);
+        } else {
             mention.setCreatedBy(task);
+            mention.setUpdatedBy(task);
             log.debug("try to persist Mention: "+mention.toString());
             return mentionRepository.save(mention);
         }
@@ -112,6 +113,7 @@ public class MentionServiceImpl implements MentionService {
         }
         lowestIdTwitter--;
         mention.setIdTwitter(lowestIdTwitter);
+        mention.setCreatedBy(task);
         task = this.taskRepository.save(task);
         mention.setCreatedBy(task);
         mention = mentionRepository.save(mention);

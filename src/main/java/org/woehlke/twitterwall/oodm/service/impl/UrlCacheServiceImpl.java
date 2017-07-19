@@ -37,19 +37,20 @@ public class UrlCacheServiceImpl implements UrlCacheService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public UrlCache store(UrlCache urlCache, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "UrlCache.store: store";
         UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
         if(urlCachePers!=null){
             urlCache.setId(urlCachePers.getId());
             urlCache.setCreatedBy(urlCachePers.getCreatedBy());
-            task = this.taskRepository.save(task);
             urlCache.setUpdatedBy(task);
             UrlCache result = this.urlCacheRepository.save(urlCache);
             log.debug(name+" updated "+result.toString());
             return result;
         } else {
-            task = this.taskRepository.save(task);
             urlCache.setCreatedBy(task);
+            urlCache.setUpdatedBy(task);
             UrlCache result = this.urlCacheRepository.save(urlCache);
             log.debug(name+" persisted "+result);
             return result;

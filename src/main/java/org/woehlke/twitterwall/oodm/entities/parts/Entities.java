@@ -39,6 +39,10 @@ public class Entities extends EntitiesFilter implements Serializable {
     public Entities() {
     }
 
+    public boolean removeAll(){
+        return removeAllUrls() && removeAllHashTags() &&  removeAllMentions() &&  removeAllMedia() && removeAllTickerSymbols();
+    }
+
     public Set<Url> getUrls() {
         return urls;
     }
