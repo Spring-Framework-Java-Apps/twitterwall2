@@ -86,24 +86,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    /*
-    public Url(TaskInfo taskInfo, Task createdBy, Task updatedBy, String display, String expanded, String url) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.display = display;
-        this.expanded = expanded;
-        this.url = url;
-    }
-
-
-    public Url(Task task) {
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
-    }
-    */
-
     public Url(String url,Task task) {
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;

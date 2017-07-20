@@ -83,19 +83,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    /*
-    public Mention(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, User user, Long idTwitterOfUser) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.idTwitter = idTwitter;
-        this.screenName = screenName;
-        this.name = name;
-        this.user = user;
-        this.idTwitterOfUser = idTwitterOfUser;
-    }
-    */
-
     private Mention() {
     }
 

@@ -21,10 +21,10 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Table(
-    name = "hashtag"/*,
+    name = "hashtag",
     uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
-    }*/
+    }
 )
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
@@ -51,20 +51,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @SafeHtml
     @Column(name="text", nullable = false,length=4096)
     private String text = "";
-
-    /*
-    public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.text = text;
-    }
-
-    public HashTag(String text) {
-        this.text = text;
-    }
-
-    */
 
     public HashTag(Task createdBy, Task updatedBy, String text) {
         this.createdBy = createdBy;

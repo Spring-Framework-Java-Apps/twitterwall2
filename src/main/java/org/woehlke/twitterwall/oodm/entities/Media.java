@@ -99,21 +99,6 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    /*
-    public Media(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.idTwitter = idTwitter;
-        this.mediaHttp = mediaHttp;
-        this.mediaHttps = mediaHttps;
-        this.url = url;
-        this.display = display;
-        this.expanded = expanded;
-        this.mediaType = mediaType;
-    }
-    */
-
     private Media() {
         super();
     }

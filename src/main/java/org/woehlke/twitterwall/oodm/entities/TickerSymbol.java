@@ -76,16 +76,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.updatedBy = task;
         this.taskInfo.setTaskInfoFromTask(task);
     }
-/*
-    public TickerSymbol(TaskInfo taskInfo, Task createdBy, Task updatedBy, String tickerSymbol, String url) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.tickerSymbol = tickerSymbol;
-        this.taskInfo.setTaskInfoFromTask(createdBy);
-        this.taskInfo.setTaskInfoFromTask(updatedBy);
-        this.url = url;
-    }*/
 
     private TickerSymbol() {
     }
