@@ -42,13 +42,13 @@ public class UrlServiceImpl implements UrlService {
         if(domainObject == null){
             String msg = "Url == null";
             log.debug(name+msg+domainObject.toString());
-            throw new IllegalArgumentException(msg);
+            return null;
         }
         String url = domainObject.getUrl();
         if(url == null){
             String msg = "Url.getUrl() == null";
             log.debug(name+msg+domainObject.toString());
-            throw new IllegalArgumentException();
+            return null;
         }
         Url result;
         Url urlPersistent = urlRepository.findByUrl(url);

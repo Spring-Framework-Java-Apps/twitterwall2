@@ -12,7 +12,6 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -44,56 +43,55 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         int allLoop = 0;
         int loopId = 0;
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
-        try {
-            boolean hasNext;
-            Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
-            do {
-                Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
-                hasNext = userProfileTwitterIds.hasNext();
-                long number = userProfileTwitterIds.getTotalElements();
-                for (Long userProfileTwitterId : userProfileTwitterIds) {
-                    allLoop++;
-                    loopId++;
-                    String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
-                    try {
-                        log.debug(msg + counter);
-                        TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
-                        User user = storeUserProfile.storeUserProfile(userProfile, task);
-                        log.debug(msg + counter + user.toString());
-                        int subLoopId = 0;
-                        int subNumber = user.getEntities().getMentions().size();
-                        for (Mention mention : user.getEntities().getMentions()) {
-                            allLoop++;
-                            subLoopId++;
-                            String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [" + allLoop + "] ";
-                            try {
-                                log.debug(msg + subCounter);
-                                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
-                                log.debug(msg + subCounter + userFromMention.toString());
-                            } catch (IllegalArgumentException exe) {
-                                this.taskService.warn(task, exe, msg + subCounter);
-                            }
-                        }
-                        log.debug(msg + user.toString());
-                        log.debug(msg + "-----------------------------------------------------");
-                        log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
-                        Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                        log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
-                        log.debug(msg + "-----------------------------------------------------");
-                    } catch (RateLimitExceededException e) {
-                        this.taskService.warn(task, e, msg);
-                    } catch (InterruptedException ex) {
-                        this.taskService.warn(task, ex, msg);
-                    } finally {
-                        log.debug(msg + "---------------------------------------");
-                    }
+        boolean hasNext=true;
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        while (hasNext) {
+            Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
+            hasNext = userProfileTwitterIds.hasNext();
+            long number = userProfileTwitterIds.getTotalElements();
+            for (Long userProfileTwitterId : userProfileTwitterIds) {
+                allLoop++;
+                loopId++;
+                String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
+                log.debug(msg + counter);
+                TwitterProfile userProfile = null;
+                try {
+                    userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
+                } catch (RateLimitExceededException e) {
+                    this.taskService.warn(task, e, msg);
                 }
-                pageRequest = pageRequest.next();
-            } while (hasNext);
-        } catch (ResourceAccessException e) {
-            this.taskService.warn(task,e,msg);
-        } catch (RateLimitExceededException e) {
-            this.taskService.warn(task,e,msg);
+                User user = storeUserProfile.storeUserProfile(userProfile, task);
+                if(user!=null){
+                    log.debug(msg + counter + user.toString());
+                    int subLoopId = 0;
+                    int subNumber = user.getEntities().getMentions().size();
+                    for (Mention mention : user.getEntities().getMentions()) {
+                        allLoop++;
+                        subLoopId++;
+                        String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [" + allLoop + "] ";
+                        try {
+                            log.debug(msg + subCounter);
+                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
+                            log.debug(msg + subCounter + userFromMention.toString());
+                        } catch (IllegalArgumentException exe) {
+                            this.taskService.warn(task, exe, msg + subCounter);
+                        }
+                    }
+                    log.debug(msg + user.toString());
+                }
+                log.debug(msg + "-----------------------------------------------------");
+                log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                try {
+                    Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                } catch (InterruptedException ex) {
+                    log.debug(msg+" "+task.toString(),ex);
+                }
+                log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                log.debug(msg + "-----------------------------------------------------");
+
+                log.debug(msg + "---------------------------------------");
+            }
+            pageRequest = pageRequest.next();
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
         taskService.event(task,report);

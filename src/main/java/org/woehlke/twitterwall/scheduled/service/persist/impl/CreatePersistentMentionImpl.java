@@ -72,7 +72,7 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             return persMention;
         } else {
             String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
-            taskService.error(task,eventMsg);
+            //taskService.error(task,eventMsg);
             log.error(eventMsg);
             return null;
         }

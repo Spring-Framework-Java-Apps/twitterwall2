@@ -45,60 +45,59 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS);
         int allLoop = 0;
         int loopId = 0;
-        try {
-            boolean hasNext;
-            Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
-            do {
-                Page<Mention> allPersMentions =  mentionService.getAll(pageRequest);
-                hasNext = allPersMentions.hasNext();
-                long number = allPersMentions.getTotalElements();
-                for(Mention onePersMentions :allPersMentions){
-                    String screenName = onePersMentions.getScreenName();
-                    if((screenName != null) && (!screenName.isEmpty())) {
-                        loopId++;
-                        allLoop++;
-                        String counter = " ( "+loopId+ " from "+number+" ) ["+allLoop+"] ";
-                        try {
-                            TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                            User user = storeUserProfile.storeUserProfile(twitterProfile,task);
+        boolean hasNext=true;
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        while (hasNext) {
+            Page<Mention> allPersMentions =  mentionService.getAll(pageRequest);
+            hasNext = allPersMentions.hasNext();
+            long number = allPersMentions.getTotalElements();
+            for(Mention onePersMentions :allPersMentions) {
+                String screenName = onePersMentions.getScreenName();
+                if ((screenName != null) && (!screenName.isEmpty())) {
+                    loopId++;
+                    allLoop++;
+                    String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
+                    TwitterProfile twitterProfile = null;
+                    try {
+                        twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
+                    } catch (RateLimitExceededException e) {
+                        task = taskService.error(task, e, msg);
+                    }
+                    if (twitterProfile != null) {
+                        User user = storeUserProfile.storeUserProfile(twitterProfile, task);
+                        if (user != null) {
                             log.debug(msg + counter + user.toString());
                             Set<Mention> mentions = user.getEntities().getMentions();
                             int subLoopId = 0;
                             int subNumber = mentions.size();
-                            for(Mention mention:mentions){
+                            for (Mention mention : mentions) {
                                 allLoop++;
                                 subLoopId++;
-                                String subCounter = counter+" ( "+subLoopId+ " from "+subNumber+" ) ["+allLoop+"] ";
+                                String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [" + allLoop + "] ";
                                 try {
-                                    log.debug(msg+subCounter);
-                                    User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                                    log.debug(msg+subCounter+userFromMention.toString());
-                                } catch (IllegalArgumentException exe){
-                                    log.debug(msg+subCounter+exe.getMessage());
+                                    log.debug(msg + subCounter);
+                                    User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
+                                    log.debug(msg + subCounter + userFromMention.toString());
+                                } catch (IllegalArgumentException exe) {
+                                    log.debug(msg + subCounter + exe.getMessage());
                                 }
                             }
                             log.debug(msg + user.toString());
                             log.debug(msg + "-----------------------------------------------------");
-                            log.debug(msg + "Start SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
-                            Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                            log.debug(msg + "Done SLEEP for "+millisToWaitBetweenTwoApiCalls+" ms "+counter);
+                            log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                            try {
+                                Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                            } catch (InterruptedException ex) {
+                                log.warn(msg, ex);
+                            }
+
+                            log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
                             log.debug(msg + "-----------------------------------------------------");
-                        } catch (RateLimitExceededException e) {
-                            task = taskService.error(task,e,msg);
-                            throw e;
-                        } catch (InterruptedException ex){
-                            task = taskService.warn(task,ex,msg);
-                        } finally {
-                            log.debug(msg +"---------------------------------------");
                         }
                     }
                 }
-                pageRequest = pageRequest.next();
-            } while (hasNext);
-        } catch (ResourceAccessException e) {
-            task = taskService.warn(task,e,msg);
-        } catch (RateLimitExceededException e) {
-            task = taskService.warn(task,e,msg);
+            }
+            pageRequest = pageRequest.next();
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
         this.taskService.event(task,report);

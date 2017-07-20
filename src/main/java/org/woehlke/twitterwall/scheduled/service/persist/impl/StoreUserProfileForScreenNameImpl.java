@@ -36,12 +36,12 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
                     log.debug(msg + " userFromMention: " + userFromMention.toString());
                     return userFromMention;
                 } catch (RateLimitExceededException ex) {
-                    taskService.warn(task, ex, msg);
+                    log.warn(msg+""+task.toString(),ex);
                 }
             }
             return userPersForMention;
         } else {
-            taskService.event(task,msg+" throw new IllegalArgumentException");
+            log.warn(msg+" "+task.toString());
             return null;
         }
     }
