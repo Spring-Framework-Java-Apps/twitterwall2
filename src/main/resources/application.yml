@@ -97,13 +97,13 @@ twitterwall:
     #allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
     #allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
     #allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
-    allowFetchTweetsFromTwitterSearch: false
+    allowFetchTweetsFromTwitterSearch: true
     allowUpdateTweets: true
-    allowUpdateUserProfiles: false
-    allowUpdateUserProfilesFromMention: false
+    allowUpdateUserProfiles: true
+    allowUpdateUserProfilesFromMention: true
     fetchUserList:
       #allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
-      allow: false
+      allow: true
       name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
     skipFortesting: false
