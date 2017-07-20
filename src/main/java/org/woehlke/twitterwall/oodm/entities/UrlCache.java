@@ -26,6 +26,8 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
 
     private static final long serialVersionUID = 1L;
 
+    public static final String UNDEFINED = "UNDEFINED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -50,6 +52,7 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     @Column(nullable = false,length=4096)
     private String url;
 
+    /*
     public UrlCache(TaskInfo taskInfo, Task createdBy, Task updatedBy, String expanded, String url) {
         this.taskInfo = taskInfo;
         this.createdBy = createdBy;
@@ -58,7 +61,30 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
         this.url = url;
     }
 
-    public UrlCache() {
+    public UrlCache(Task task) {
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+    */
+
+    public UrlCache(String expanded, String url, Task task) {
+        this.expanded = expanded;
+        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    public UrlCache(String url,Task task){
+        this.expanded = UrlCache.UNDEFINED;
+        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    private UrlCache(){
     }
 
     @Transient

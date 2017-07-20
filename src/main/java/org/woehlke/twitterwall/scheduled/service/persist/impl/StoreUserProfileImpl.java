@@ -23,7 +23,7 @@ public class StoreUserProfileImpl implements StoreUserProfile {
     @Override
     public User storeUserProfile(TwitterProfile userProfile, Task task) {
         String msg = "storeUserProfile: ";
-        User user = userTransformService.transform(userProfile);
+        User user = userTransformService.transform(userProfile,task);
         user = storeUserProcess.storeUserProcess(user, task);
         return user;
     }

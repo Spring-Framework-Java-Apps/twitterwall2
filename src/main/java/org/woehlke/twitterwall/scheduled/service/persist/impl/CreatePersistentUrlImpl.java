@@ -36,6 +36,21 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                 log.debug(msg + " found: " + urlPers);
                 if (urlPers.isUrlAndExpandedTheSame()) {
                     log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.toString());
+                    Url myTransientUrl = twitterUrlService.fetchTransientUrl(url,task);
+                    if (myTransientUrl == null) {
+                        log.debug(msg + "nothing found by fetchTransientUrl");
+                        return null;
+                    } else {
+                        urlPers.setExpanded(myTransientUrl.getExpanded());
+                        String displayUrl = myTransientUrl.getExpanded();
+                        try {
+                            URL newURL = new URL(myTransientUrl.getExpanded());
+                            displayUrl = newURL.getHost();
+                        } catch (MalformedURLException exe) {
+                            log.warn(exe.getMessage());
+                        }
+                        urlPers.setDisplay(displayUrl);
+                    }
                 }
                 urlPers.setUpdatedBy(task);
                 urlPers = urlRepository.save(urlPers);
@@ -53,23 +68,25 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     } catch (MalformedURLException exe) {
                         log.warn(exe.getMessage());
                     }
-                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl());
-                    newUrl.setCreatedBy(task);
+                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(),task);
                     log.debug(msg + " try to persist: " + newUrl.toString());
                     newUrl = urlRepository.save(newUrl);
+                    //TODO: delete ?
+                    if((!newUrl.isRawUrlsFromDescription())&&(!newUrl.isUrlAndExpandedTheSame())){
+                        urlCacheRepository.delete(urlCache);
+                    }
                     log.debug(msg + " persisted: " + newUrl.toString());
                     return newUrl;
                 } else {
-                    urlCache = new UrlCache();
+                    urlCache = new UrlCache(url,task);
                     log.debug(msg + " try to fetchTransientUrl");
-                    Url myUrl = twitterUrlService.fetchTransientUrl(url);
-                    if (myUrl == null) {
+                    Url myTransientUrl = twitterUrlService.fetchTransientUrl(url,task);
+                    if (myTransientUrl == null) {
                         log.debug(msg + "nothing found by fetchTransientUrl");
                         return null;
                     } else {
-                        log.debug(msg + " found by fetchTransientUrl: " + myUrl);
-                        urlCache.setUrl(myUrl.getUrl());
-                        urlCache.setExpanded(myUrl.getExpanded());
+                        log.debug(msg + " found by fetchTransientUrl: " + myTransientUrl);
+                        urlCache.setExpanded(myTransientUrl.getExpanded());
                         log.debug(msg + " try to persist: " + urlCache.toString());
                         if (urlCache.isUrlAndExpandedTheSame()) {
                             log.debug(msg + " not persisted: " + urlCache.toString());
@@ -77,15 +94,14 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                             urlCache = urlCacheRepository.save(urlCache);
                             log.debug(msg + " persisted: " + urlCache.toString());
                         }
-                        String displayUrl = myUrl.getExpanded();
+                        String displayUrl = myTransientUrl.getExpanded();
                         try {
-                            URL newURL = new URL(myUrl.getExpanded());
+                            URL newURL = new URL(myTransientUrl.getExpanded());
                             displayUrl = newURL.getHost();
                         } catch (MalformedURLException exe) {
                             log.warn(exe.getMessage());
                         }
-                        Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl());
-                        newUrl.setCreatedBy(task);
+                        Url newUrl = new Url(displayUrl, myTransientUrl.getExpanded(), myTransientUrl.getUrl(),task);
                         log.debug(msg + " try to persist: " + newUrl.toString());
                         newUrl = urlRepository.save(newUrl);
                         log.debug(msg + " persisted: " + newUrl.toString());

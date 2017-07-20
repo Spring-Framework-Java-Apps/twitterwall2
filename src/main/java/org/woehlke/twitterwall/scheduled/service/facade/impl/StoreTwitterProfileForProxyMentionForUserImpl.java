@@ -42,7 +42,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         } catch (EmptyResultDataAccessException e){
             try {
                 TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-                User myFoundUser = userTransformService.transform(twitterProfile);
+                User myFoundUser = userTransformService.transform(twitterProfile,task);
                 myFoundUser = this.storeUserProcess(myFoundUser, task);
                 foundUser = myFoundUser;
             } catch (ApiException twitterApiException) {

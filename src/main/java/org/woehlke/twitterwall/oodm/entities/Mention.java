@@ -81,12 +81,16 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "id_twitte_of_user",nullable = true)
     private Long idTwitterOfUser;
 
-    public Mention(long idTwitter, String screenName, String name) {
+    public Mention(long idTwitter, String screenName, String name,Task task) {
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
+    /*
     public Mention(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, User user, Long idTwitterOfUser) {
         this.taskInfo = taskInfo;
         this.createdBy = createdBy;
@@ -97,6 +101,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         this.user = user;
         this.idTwitterOfUser = idTwitterOfUser;
     }
+    */
 
     public Mention() {
     }
@@ -261,7 +266,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
     }
 
-    public static Mention getMention(String mentionString) {
+    public static Mention getMention(String mentionString,Task task) {
         try {
             Thread.sleep(100L);
         } catch (InterruptedException e) {
@@ -269,7 +274,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         long idTwitter = ID_TWITTER_UNDEFINED;
         String screenName = mentionString;
         String name = mentionString;
-        return new Mention(idTwitter, screenName, name);
+        return new Mention(idTwitter, screenName, name,task);
     }
 
 }

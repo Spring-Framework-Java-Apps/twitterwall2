@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     @Override
-    public Url fetchTransientUrl(String urlSrc) {
+    public Url fetchTransientUrl(String urlSrc,Task task) {
         String msg = "fetchTransientUrl "+urlSrc+" ";
         log.debug(msg);
         if(urlSrc == null) {
@@ -53,7 +54,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
             URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
             display = location.getHost();
             expanded = location.toExternalForm();
-            newUrl = new Url(display, expanded, urlSrc);
+            newUrl = new Url(display, expanded, urlSrc,task);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             log.warn(msg+ioe.getMessage());

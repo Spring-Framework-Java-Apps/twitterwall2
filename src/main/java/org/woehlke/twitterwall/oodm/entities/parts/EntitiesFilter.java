@@ -16,7 +16,7 @@ import static org.woehlke.twitterwall.oodm.entities.Url.URL_PATTTERN_FOR_USER_HT
  */
 public class EntitiesFilter {
 
-    protected Set<Mention> findByUserDescription(String description) {
+    protected Set<Mention> findByUserDescription(String description,Task task) {
         Set<Mention> mentions = new LinkedHashSet<>();
         if (description != null) {
 
@@ -33,7 +33,7 @@ public class EntitiesFilter {
                 Pattern mentionPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = mentionPattern.matcher(description);
                 while (m.find()) {
-                    Mention newMention = Mention.getMention(m.group(USER_PROFILE_OUTPUT[i]));
+                    Mention newMention = Mention.getMention(m.group(USER_PROFILE_OUTPUT[i]),task);
                     if(!mentions.contains(newMention)){
                         mentions.add(newMention);
                     }
@@ -93,8 +93,7 @@ public class EntitiesFilter {
         return formattedText;
     }
 
-    protected Set<HashTag> getHashTagsForDescription(String description) {
-        int[] indices = {};
+    protected Set<HashTag> getHashTagsForDescription(String description,Task task) {
         Set<HashTag> hashTags = new LinkedHashSet<>();
         if (description != null) {
 
@@ -111,7 +110,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    hashTags.add(new HashTag(m.group(USER_PROFILE_OUTPUT[i]), indices));
+                    hashTags.add(new HashTag(m.group(USER_PROFILE_OUTPUT[i]), task));
                 }
             }
         }
@@ -140,7 +139,7 @@ public class EntitiesFilter {
         return formattedText;
     }
 
-    protected Set<TickerSymbol> getTickerSymbolsFor(String description) {
+    protected Set<TickerSymbol> getTickerSymbolsFor(String description,Task task) {
         Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         if (description != null) {
 
@@ -161,7 +160,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    tickerSymbols.add(TickerSymbol.getTickerSymbolFactory(m.group(USER_PROFILE_OUTPUT[i])));
+                    tickerSymbols.add(new TickerSymbol(m.group(USER_PROFILE_OUTPUT[i]),task));
                 }
             }
         }
@@ -191,7 +190,7 @@ public class EntitiesFilter {
     }
 
 
-    protected Set<Media> getMediaForDescription(String description) {
+    protected Set<Media> getMediaForDescription(String description,Task task) {
         Set<Media> media =  new LinkedHashSet<Media>();
         if (description != null) {
 
@@ -212,7 +211,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    media.add(Media.getMediaFactory(m.group(USER_PROFILE_OUTPUT[i])));
+                    media.add(Media.getMediaFactory(m.group(USER_PROFILE_OUTPUT[i]),task));
                 }
             }
         }
@@ -257,7 +256,7 @@ public class EntitiesFilter {
         return formattedText;
     }
 
-    protected Set<Url> getUrlsForDescription(String description) {
+    protected Set<Url> getUrlsForDescription(String description,Task task) {
         Set<Url> urls = new LinkedHashSet<>();
         if (description != null) {
 
@@ -280,7 +279,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    urls.add(Url.getUrlFactory(m.group(USER_PROFILE_OUTPUT[i])));
+                    urls.add(new Url(m.group(USER_PROFILE_OUTPUT[i]),task));
                 }
             }
         }

@@ -7,6 +7,7 @@ import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.UrlTransformService;
@@ -21,16 +22,16 @@ import java.util.*;
 public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransformService {
 
     @Override
-    public Url transform(UrlEntity url) {
+    public Url transform(UrlEntity url, Task task) {
         String display = url.getDisplayUrl();
         String expanded = url.getExpandedUrl();
         String urlStr = url.getUrl();
-        Url myUrlEntity = new Url(display, expanded, urlStr);
+        Url myUrlEntity = new Url(display, expanded, urlStr, task);
         return myUrlEntity;
     }
 
     @Override
-    public Set<Url> getUrlsFor(TwitterProfile userSource) {
+    public Set<Url> getUrlsFor(TwitterProfile userSource,Task task) {
         Set<Url> urlsTarget = new LinkedHashSet<Url>();
         Map<String, Object> extraData = userSource.getExtraData();
         if(extraData.containsKey("status")){
@@ -45,7 +46,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url);
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url,task);
                                 urlsTarget.add(urlTarget);
                             }
                         }
@@ -65,7 +66,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url);
+                                Url urlTarget = new Url(displayUrl, expandedUrl, url,task);
                                 urlsTarget.add(urlTarget);
                             }
                         }
@@ -74,7 +75,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
             }
         }
         String description = userSource.getDescription();
-        Set<Url> rawUrlsFromDescription = getUrlsForDescription(description);
+        Set<Url> rawUrlsFromDescription = getUrlsForDescription(description,task);
         urlsTarget.addAll(rawUrlsFromDescription);
         return urlsTarget;
     }

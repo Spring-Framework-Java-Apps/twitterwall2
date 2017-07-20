@@ -5,6 +5,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 import org.woehlke.twitterwall.scheduled.service.transform.TickerSymbolTransformService;
@@ -20,15 +21,15 @@ import java.util.Set;
 public class TickerSymbolTransformServiceImpl extends EntitiesFilter implements TickerSymbolTransformService {
 
     @Override
-    public TickerSymbol transform(TickerSymbolEntity tickerSymbol) {
+    public TickerSymbol transform(TickerSymbolEntity tickerSymbol,Task task) {
         String tickerSymbolString = tickerSymbol.getTickerSymbol();
         String url = tickerSymbol.getUrl();
-        TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url);
+        TickerSymbol myTickerSymbolEntity = new TickerSymbol(tickerSymbolString, url,task);
         return myTickerSymbolEntity;
     }
 
     @Override
-    public Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource) {
+    public Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource,Task task) {
         return new LinkedHashSet<TickerSymbol>();
     }
 }

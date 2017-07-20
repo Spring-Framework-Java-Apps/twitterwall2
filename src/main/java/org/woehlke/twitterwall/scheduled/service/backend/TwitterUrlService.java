@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.scheduled.service.backend;
 
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 
 /**
@@ -7,5 +8,5 @@ import org.woehlke.twitterwall.oodm.entities.Url;
  */
 public interface TwitterUrlService {
 
-    Url fetchTransientUrl(String urlSrc);
+    Url fetchTransientUrl(String urlSrc,Task task);
 }

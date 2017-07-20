@@ -25,7 +25,7 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
     @Override
     public User storeUserProfileForUserList(TwitterProfile twitterProfile, Task task) {
         String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
-        User user = userTransformService.transform(twitterProfile);
+        User user = userTransformService.transform(twitterProfile,task);
         user = storeUserProcess.storeUserProcess(user, task);
         for(Mention mention:user.getEntities().getMentions()){
             String screenName = mention.getScreenName();

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class UrlServiceTestImpl implements UrlServiceTest {
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public List<Url> getTestData() {
+    public List<Url> getTestData(Task task) {
         Map<String, String> hostsTest = new HashMap<>();
         hostsTest.put("https://t.co/lQlse7u93G", "port80guru.tumblr.com");
         Map<String, String> urlsTest = new HashMap<>();
@@ -30,7 +32,6 @@ public class UrlServiceTestImpl implements UrlServiceTest {
             hostsTest = hosts;
             urlsTest = urls;
         }
-
         String urlSrc;
         String display;
         String expanded;
@@ -39,7 +40,7 @@ public class UrlServiceTestImpl implements UrlServiceTest {
             urlSrc = url.getKey();
             expanded = url.getValue();
             display = hostsTest.get(urlSrc);
-            Url myUrl = new Url(display, expanded, urlSrc);
+            Url myUrl = new Url(display, expanded, urlSrc,task);
             testData.add(myUrl);
         }
         return testData;

@@ -2,7 +2,6 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
@@ -176,11 +175,14 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
     private User user;
 
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt) {
+    public Tweet(long idTwitter, String idStr, String text, Date createdAt,Task task) {
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
         this.createdAt = createdAt;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     /**
@@ -197,7 +199,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
      * @param languageCode    The language code
      * @param source          The source of the tweet.
      */
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source,Task task) {
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
@@ -208,9 +210,12 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.fromUserId = fromUserId;
         this.languageCode = languageCode;
         this.source = source;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Tweet() {
+    private Tweet() {
     }
 
     public void removeAllEntities(){

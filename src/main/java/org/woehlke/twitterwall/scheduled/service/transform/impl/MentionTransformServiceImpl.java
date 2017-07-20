@@ -7,6 +7,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.transform.MentionTransformService;
@@ -23,18 +24,18 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
     private static final Logger log = LoggerFactory.getLogger(MentionTransformServiceImpl.class);
 
     @Override
-    public Mention transform(MentionEntity mention) {
+    public Mention transform(MentionEntity mention,Task task) {
         long idTwitter = mention.getId();
         String screenName = mention.getScreenName();
         String name = mention.getName();
-        Mention myMentionEntity = new Mention(idTwitter, screenName, name);
+        Mention myMentionEntity = new Mention(idTwitter, screenName, name,task);
         return myMentionEntity;
     }
 
     @Override
-    public Set<Mention> findByUser(TwitterProfile userSource) {
+    public Set<Mention> findByUser(TwitterProfile userSource,Task task) {
         String description = userSource.getDescription();
-        Set<Mention> mentionsTarget = findByUserDescription(description);
+        Set<Mention> mentionsTarget = findByUserDescription(description,task);
         return mentionsTarget;
     }
 }

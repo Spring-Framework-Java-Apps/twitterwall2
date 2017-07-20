@@ -43,7 +43,12 @@ public class UrlCacheServiceImpl implements UrlCacheService {
         UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
         if(urlCachePers!=null){
             urlCache.setId(urlCachePers.getId());
-            urlCache.setCreatedBy(urlCachePers.getCreatedBy());
+            Task creator = urlCachePers.getCreatedBy();
+            if(creator != null) {
+                urlCache.setCreatedBy(creator);
+            } else {
+                urlCache.setCreatedBy(task);
+            }
             urlCache.setUpdatedBy(task);
             UrlCache result = this.urlCacheRepository.save(urlCache);
             log.debug(name+" updated "+result.toString());

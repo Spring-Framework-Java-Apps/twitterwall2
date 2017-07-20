@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.transform;
 import org.springframework.social.twitter.api.HashTagEntity;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
 
 import java.util.Set;
@@ -14,5 +15,5 @@ public interface HashTagTransformService extends TransformService<HashTag,HashTa
 
     //Set<HashTag> getHashTagsFor(User user);
 
-    Set<HashTag> getHashTagsFor(TwitterProfile userSource);
+    Set<HashTag> getHashTagsFor(TwitterProfile userSource, Task task);
 }

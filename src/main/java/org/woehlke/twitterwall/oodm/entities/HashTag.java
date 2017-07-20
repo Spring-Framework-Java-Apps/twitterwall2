@@ -49,14 +49,9 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Column(name="text", nullable = false,length=4096)
     private String text;
 
+    /*
     public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {
         this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.text = text;
-    }
-
-    public HashTag(Task createdBy, Task updatedBy, String text) {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.text = text;
@@ -66,7 +61,23 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
+    */
 
+    public HashTag(Task createdBy, Task updatedBy, String text) {
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.text = text;
+    }
+
+    public HashTag(String text, Task task) {
+        this.text = text;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    private HashTag() {
+    }
 
     public Long getId() {
         return id;
@@ -79,13 +90,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     public String getText() {
         return this.text;
-    }
-
-    public HashTag(String text, int[] indices) {
-        this.text = text;
-    }
-
-    public HashTag() {
     }
 
     public static long getSerialVersionUID() {

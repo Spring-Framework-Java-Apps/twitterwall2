@@ -67,7 +67,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     private String mediaType;
 
 
-    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
+    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, Task task) {
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -75,8 +75,12 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.display = display;
         this.expanded = expanded;
         this.mediaType = mediaType;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
+    /*
     public Media(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
         this.taskInfo = taskInfo;
         this.createdBy = createdBy;
@@ -89,8 +93,9 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.expanded = expanded;
         this.mediaType = mediaType;
     }
+    */
 
-    public Media() {
+    private Media() {
         super();
     }
 
@@ -268,14 +273,13 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         return true;
     }
 
-    public static Media getMediaFactory(String url) {
+    public static Media getMediaFactory(String url,Task task) {
         long idTwitter = -1L;
         String mediaHttp = "UNKNOWN";
         String mediaHttps  = "UNKNOWN";
         String display = "UNKNOWN";
         String expanded = "UNKNOWN";
         String mediaType = "UNKNOWN";
-        int[] indices = {};
-        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, indices);
+        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, task);
     }
 }

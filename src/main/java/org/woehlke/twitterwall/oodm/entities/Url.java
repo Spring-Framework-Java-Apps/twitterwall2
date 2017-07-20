@@ -60,12 +60,16 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         return url.compareTo(expanded) == 0;
     }
 
-    public Url(String display, String expanded, String url) {
+    public Url(String display, String expanded, String url, Task task) {
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
+    /*
     public Url(TaskInfo taskInfo, Task createdBy, Task updatedBy, String display, String expanded, String url) {
         this.taskInfo = taskInfo;
         this.createdBy = createdBy;
@@ -73,6 +77,23 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+    }
+
+
+    public Url(Task task) {
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+    */
+
+    public Url(String url,Task task) {
+        this.display = Url.UNDEFINED;
+        this.expanded = Url.UNDEFINED;
+        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private Url() {
@@ -207,12 +228,5 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     public boolean isRawUrlsFromDescription() {
         return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
-    }
-
-    public static Url getUrlFactory(String url){
-        String display = Url.UNDEFINED;
-        String expanded = Url.UNDEFINED;
-        Url newurl = new Url(display, expanded, url);
-        return newurl;
     }
 }

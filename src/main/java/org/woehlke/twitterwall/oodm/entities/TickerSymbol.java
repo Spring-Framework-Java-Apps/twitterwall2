@@ -45,9 +45,20 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Column(name = "url",length=4096)
     private String url;
 
-    public TickerSymbol(String tickerSymbol, String url) {
+    public TickerSymbol(String tickerSymbol, String url,Task task) {
         this.tickerSymbol = tickerSymbol;
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    public TickerSymbol(String url,Task task) {
+        this.tickerSymbol = "UNDEFINED";
+        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     public TickerSymbol(TaskInfo taskInfo, Task createdBy, Task updatedBy, String tickerSymbol, String url) {
@@ -55,6 +66,8 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.tickerSymbol = tickerSymbol;
+        this.taskInfo.setTaskInfoFromTask(createdBy);
+        this.taskInfo.setTaskInfoFromTask(updatedBy);
         this.url = url;
     }
 
@@ -183,7 +196,4 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         return true;
     }
 
-    public static TickerSymbol getTickerSymbolFactory(String url) {
-        return new TickerSymbol(url,url);
-    }
 }
