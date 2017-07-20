@@ -21,10 +21,10 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Table(
-    name = "hashtag",
+    name = "hashtag"/*,
     uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
-    }
+    }*/
 )
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
