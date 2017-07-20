@@ -118,7 +118,7 @@ public class Task implements DomainObject<Task> {
     })
     private CountedEntities countedEntitiesAtFinish;
 
-    public Task() {
+    private Task() {
     }
 
     public Task(String description,TaskType taskType) {

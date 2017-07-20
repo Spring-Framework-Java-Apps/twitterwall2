@@ -103,7 +103,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
     */
 
-    public Mention() {
+    private Mention() {
     }
 
     public boolean hasUser() {

@@ -260,7 +260,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     })
     private Entities entities = new Entities();
 
-    public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
+    public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate,Task task) {
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -269,9 +269,12 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.description = description;
         this.location = location;
         this.createdDate = createdDate;
+        this.createdBy = task;
+        this.updatedBy =task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public User() {
+    private User() {
     }
 
     public void removeAllEntities(){
@@ -752,7 +755,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         return true;
     }
 
-    public static User getDummyUserForScreenName(String screenName){
+    public static User getDummyUserForScreenName(String screenName,Task task){
         long idTwitter= new Date().getTime();
         String name="Exception Handler Dummy Username";
         String url="https://github.com/phasenraum2010/twitterwall2";
@@ -760,7 +763,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate, task);
         return user;
     }
 }

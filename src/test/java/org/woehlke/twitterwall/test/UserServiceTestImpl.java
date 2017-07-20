@@ -94,12 +94,12 @@ public class UserServiceTestImpl implements UserServiceTest {
                 return user;
             } catch (EmptyResultDataAccessException ex){
                 log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: "+ex.getMessage());
-                User user = getDummyUser();
+                User user = getDummyUser(task);
                 log.info("model.addAttribute user = "+user.toString());
                 return user;
             } catch (NoResultException exe) {
                 log.warn("persistDataFromTwitter.storeUserProfile raised NoResultException: "+exe.getMessage());
-                User user = getDummyUser();
+                User user = getDummyUser(task);
                 log.info("model.addAttribute user = "+user.toString());
                 return user;
             }
@@ -110,7 +110,7 @@ public class UserServiceTestImpl implements UserServiceTest {
         }
     }
 
-    private User getDummyUser(){
+    private User getDummyUser(Task task){
         long idTwitter=0L;
         String screenName = imprintScreenName;
         String name="Exception Handler Dummy Username";
@@ -119,7 +119,7 @@ public class UserServiceTestImpl implements UserServiceTest {
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate,task);
         return user;
     }
 

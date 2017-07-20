@@ -168,7 +168,7 @@ public class CreateTestDataImpl implements CreateTestData {
                 userReturnValue = user2;
             } else {
                 log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: ");
-                User user3 = User.getDummyUserForScreenName(screenName);
+                User user3 = User.getDummyUserForScreenName(screenName,task);
                 //model.addAttribute("user", user3);
                 //log.info("model.addAttribute user = "+user3.toString());
                 userReturnValue = user3;

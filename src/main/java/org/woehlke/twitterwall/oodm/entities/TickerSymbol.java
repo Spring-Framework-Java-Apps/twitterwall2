@@ -60,7 +60,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.updatedBy = task;
         this.taskInfo.setTaskInfoFromTask(task);
     }
-
+/*
     public TickerSymbol(TaskInfo taskInfo, Task createdBy, Task updatedBy, String tickerSymbol, String url) {
         this.taskInfo = taskInfo;
         this.createdBy = createdBy;
@@ -69,9 +69,9 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.taskInfo.setTaskInfoFromTask(createdBy);
         this.taskInfo.setTaskInfoFromTask(updatedBy);
         this.url = url;
-    }
+    }*/
 
-    public TickerSymbol() {
+    private TickerSymbol() {
     }
 
     public static long getSerialVersionUID() {

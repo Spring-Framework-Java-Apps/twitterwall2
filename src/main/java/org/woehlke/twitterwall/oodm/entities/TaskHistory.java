@@ -59,7 +59,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @JoinColumn(name="task_id")
     private Task task;
 
-    public TaskHistory() {
+    private TaskHistory() {
     }
 
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow) {
