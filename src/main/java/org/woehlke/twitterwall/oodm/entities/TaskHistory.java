@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
@@ -32,6 +33,7 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @SafeHtml
     @NotNull
     @Column(name="description",nullable = false,columnDefinition="text")
     private String description = "NULL";

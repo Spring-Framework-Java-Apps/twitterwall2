@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -7,6 +9,12 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
 
 import javax.persistence.*;
+import javax.validation.OverridesAttribute;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -33,25 +41,32 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
-    @Column(length=4096)
-    private String display;
+    @NotNull
+    @Column(length=4096,nullable = false)
+    private String display="";
 
-    @Column(length=4096)
-    private String expanded;
+    @URL
+    @NotNull
+    @Column(length=4096,nullable = false)
+    private String expanded="";
 
     public static final String URL_PATTTERN_FOR_USER_HTTPS = "https://t\\.co/\\w*";
 
     public static final String URL_PATTTERN_FOR_USER_HTTP = "http://t\\.co/\\w*";
 
+    @URL
+    @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
 

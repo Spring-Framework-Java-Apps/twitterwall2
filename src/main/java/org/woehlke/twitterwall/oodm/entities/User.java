@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
@@ -10,10 +11,16 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -97,15 +104,18 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
+    @NotNull
     @Column(name="id_twitter",nullable = false)
     private long idTwitter;
 
@@ -117,9 +127,11 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         return m.matches();
     }
 
+    @NotEmpty
     @Column(name="screen_name", nullable = false)
     private String screenName;
 
+    @NotNull
     @Column(nullable = false)
     private String name;
 
@@ -135,6 +147,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Column(name="location")
     private String location;
 
+    @NotNull
     @Column(name="created_date",nullable = false)
     private Date createdDate;
 
@@ -225,6 +238,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Column(length = 4096)
     private String profileBannerUrl;
 
+    @NotNull
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
@@ -281,18 +295,22 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.entities.removeAll();
     }
 
+    @Transient
     public String getBigProfileImageUrl() {
         String bigProfileImageUrl = this.profileImageUrl;
         bigProfileImageUrl = bigProfileImageUrl.replace("_normal.jpg", "_400x400.jpg");
         return bigProfileImageUrl;
     }
 
+    @Transient
     public String getFormattedDescription() {
         String formattedDescription = this.description;
         formattedDescription = this.entities.getFormattedText(formattedDescription);
         return formattedDescription;
     }
 
+
+    @Transient
     public String getFormattedUrl() {
         String formattedUrl = this.url;
         Set<Url> urls = this.entities.getUrls();
@@ -300,6 +318,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         return formattedUrl;
     }
 
+    @Transient
     public String getCssBackgroundImage(){
         if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
             return "img-responsive my-background";
@@ -308,6 +327,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         }
     }
 
+    @Transient
     public String getCssProfileBannerUrl(){
         String style ="img-circle my-profile-image";
         if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){

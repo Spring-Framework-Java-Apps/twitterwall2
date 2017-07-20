@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
@@ -11,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 09.07.17.
@@ -35,6 +39,7 @@ public class Task implements DomainObject<Task> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @SafeHtml
     @NotNull
     @Column(columnDefinition="text",nullable = false)
     private String description = "NULL";
@@ -64,7 +69,7 @@ public class Task implements DomainObject<Task> {
     private Date timeFinished = null;
 
     @NotNull
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.EAGER,orphanRemoval=true, mappedBy="task")
+    @OneToMany(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER,orphanRemoval=true, mappedBy="task")
     private List<TaskHistory> history = new ArrayList<>();
 
     @NotNull

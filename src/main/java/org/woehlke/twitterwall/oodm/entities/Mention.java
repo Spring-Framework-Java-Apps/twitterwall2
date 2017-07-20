@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
@@ -8,8 +9,14 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.MentionListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -35,13 +42,15 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH ,CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "id_twitter")
@@ -57,11 +66,12 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return m.matches();
     }
 
-    @Column(name = "screen_name")
-    private String screenName;
+    @NotEmpty
+    @Column(name = "screen_name", nullable = false)
+    private String screenName = "";
 
-    @Column(name = "name",length=4096)
-    private String name;
+    @Column(name = "name",length=4096, nullable = false)
+    private String name = "";
 
     public boolean hasPersistentUser(){
         boolean result = false;
@@ -75,11 +85,13 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return result;
     }
 
-    @OneToOne(optional=true, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    @NotNull
+    @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
     private User user;
 
-    @Column(name = "id_twitte_of_user",nullable = true)
-    private Long idTwitterOfUser;
+    @NotNull
+    @Column(name = "id_twitte_of_user",nullable = false)
+    private Long idTwitterOfUser = 0L;
 
     public Mention(long idTwitter, String screenName, String name,Task task) {
         this.idTwitter = idTwitter;

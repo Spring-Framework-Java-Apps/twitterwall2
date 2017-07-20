@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
@@ -7,6 +9,10 @@ import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 23.06.17.
@@ -37,18 +43,19 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     private TaskInfo taskInfo = new TaskInfo();
 
     @NotNull
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = false)
+    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
     @NotNull
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @NotNull
     @Column(length=4096)
-    private String expanded;
+    private String expanded = "";
 
-    @NotNull
+    @URL
+    @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
 

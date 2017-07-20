@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
@@ -8,7 +9,13 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -74,23 +81,27 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
+    @NotNull
     @Column(nullable = false)
-    private String idStr;
+    private String idStr = "";
 
+    @NotEmpty
     @Column(nullable = false,length=4096)
-    private String text;
+    private String text = "";
 
     @Column(name="created_date", nullable = false)
     private Date createdAt;
@@ -128,7 +139,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Column
     private boolean retweeted;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = true)
     private Tweet retweetedStatus;
 
     @Column
@@ -172,7 +183,8 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     })
     private Entities entities;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
+    @NotNull
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
 
     public Tweet(long idTwitter, String idStr, String text, Date createdAt,Task task) {
@@ -185,20 +197,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    /**
-     * Constructs a Tweet
-     *
-     * @param idTwitter       The tweet's ID
-     * @param idStr           The tweet's ID as a String
-     * @param text            The tweet's text
-     * @param createdAt       Date Tweet was created
-     * @param fromUser        The username of the author of the tweet.
-     * @param profileImageUrl The URL to the profile picture of the tweet's author.
-     * @param toUserId        The user ID of the user to whom the tweet is targeted.
-     * @param fromUserId      The user ID of the tweet's author.
-     * @param languageCode    The language code
-     * @param source          The source of the tweet.
-     */
     public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source,Task task) {
         this.idTwitter = idTwitter;
         this.idStr = idStr;
@@ -222,15 +220,10 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.entities.removeAll();
     }
 
-
+    @Transient
     public String getFormattedText() {
-        String formattedText = this.text;
-
-        formattedText = this.entities.getFormattedText(formattedText);
-
-        return formattedText;
+        return this.entities.getFormattedText(this.text);
     }
-
 
     public Long getId() {
         return id;

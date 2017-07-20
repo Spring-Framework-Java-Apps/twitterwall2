@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
@@ -9,6 +10,10 @@ import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 import javax.persistence.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -32,10 +37,10 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = false)
+    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
@@ -46,8 +51,9 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         return m.matches();
     }
 
+    @SafeHtml
     @Column(name="text", nullable = false,length=4096)
-    private String text;
+    private String text = "";
 
     /*
     public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {

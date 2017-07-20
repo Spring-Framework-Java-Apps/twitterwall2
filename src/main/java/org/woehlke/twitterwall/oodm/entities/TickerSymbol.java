@@ -1,5 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -7,6 +10,11 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -30,20 +38,26 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH , CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH , CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
-    @Column(name = "ticker_symbol",length=4096)
-    private String tickerSymbol;
+    @NotEmpty
+    @SafeHtml
+    @Column(name = "ticker_symbol",length=4096,nullable = false)
+    private String tickerSymbol = "";
 
-    @Column(name = "url",length=4096)
-    private String url;
+    @URL
+    @NotEmpty
+    @Column(name = "url",length=4096,nullable = false)
+    private String url = "";
 
     public TickerSymbol(String tickerSymbol, String url,Task task) {
         this.tickerSymbol = tickerSymbol;

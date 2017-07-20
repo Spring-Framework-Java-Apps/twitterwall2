@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -8,6 +10,11 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -36,35 +43,45 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = false)
+    @NotNull
+    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER,optional = true)
+    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
+    @NotNull
     @Column(name="id_twitter", nullable = false)
     private long idTwitter;
 
-    @Column(name = "media_http",length=4096)
-    private String mediaHttp;
+    @NotNull
+    @Column(name = "media_http",length=4096, nullable = false)
+    private String mediaHttp = "";
 
-    @Column(name = "media_https",length=4096)
-    private String mediaHttps;
+    @NotNull
+    @Column(name = "media_https",length=4096, nullable = false)
+    private String mediaHttps = "";
 
-    @Column(length=4096)
+    @URL
+    @NotEmpty
+    @Column(length=4096, nullable = false)
     private String url;
 
-    @Column(length=4096)
-    private String display;
+    @NotNull
+    @Column(length=4096, nullable = false)
+    private String display = "";
 
-    @Column(length=4096)
-    private String expanded;
+    @NotNull
+    @Column(length=4096, nullable = false)
+    private String expanded = "";
 
-    @Column(name = "media_type",length=4096)
-    private String mediaType;
+    @NotNull
+    @Column(name = "media_type",length=4096, nullable = false)
+    private String mediaType = "";
 
 
     public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, Task task) {

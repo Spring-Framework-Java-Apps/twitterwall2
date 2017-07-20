@@ -3,9 +3,15 @@ package org.woehlke.twitterwall.oodm.entities.parts;
 import org.woehlke.twitterwall.oodm.entities.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 11.07.17.
@@ -13,19 +19,24 @@ import java.util.Set;
 @Embeddable
 public class Entities extends EntitiesFilter implements Serializable {
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @NotNull
+    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
     private Set<Url> urls = new LinkedHashSet<Url>();
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @NotNull
+    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
     private Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @NotNull
+    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
     private Set<Mention> mentions = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @NotNull
+    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
     private Set<Media> media = new LinkedHashSet<Media>();
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @NotNull
+    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
     public Entities(Set<Url> urls, Set<HashTag> hashTags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
