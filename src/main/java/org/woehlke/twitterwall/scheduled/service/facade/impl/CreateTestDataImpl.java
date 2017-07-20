@@ -12,7 +12,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -69,7 +69,7 @@ public class CreateTestDataImpl implements CreateTestData {
         try {
             log.info(msg + "--------------------------------------------------------------------");
             int loopId = 0;
-            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForTweetTest()) {
+            for (long idTwitter : twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
                 try {
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
@@ -111,7 +111,7 @@ public class CreateTestDataImpl implements CreateTestData {
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
-            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForUserControllerTest()) {
+            for (long idTwitter : twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest()) {
                 try {
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
@@ -184,13 +184,13 @@ public class CreateTestDataImpl implements CreateTestData {
     }
 
     @Autowired
-    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, ConfigTwitterwall configTwitterwall) {
+    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TwitterwallSchedulerProperties twitterwallSchedulerProperties) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
-        this.configTwitterwall = configTwitterwall;
+        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
     }
 
     private final TwitterApiService twitterApiService;
@@ -203,7 +203,7 @@ public class CreateTestDataImpl implements CreateTestData {
 
     private final UserService userService;
 
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
     private static final Logger log = LoggerFactory.getLogger(CreateTestDataImpl.class);
 

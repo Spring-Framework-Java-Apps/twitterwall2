@@ -7,16 +7,13 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.ConfigTwitterwall;
-import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.*;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,36 +38,13 @@ public class HashTagControllerTest {
     private HashTagController controller;
 
     @Autowired
-    private ConfigTwitterwall configTwitterwall;
-
-    @Autowired
     private TwitterProperties twitterProperties;
 
+    @Autowired
+    private TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
-    //TODO:
-    @Value("${twitterwall.frontend.menuAppName}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.infoWebpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.contextTest}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
+    @Autowired
+    private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Commit
     @Test
@@ -84,7 +58,7 @@ public class HashTagControllerTest {
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        for(long id:configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForTweetTest()){
+        for(long id: twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()){
             log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_TWEET_TEST: "+id);
         }
         //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);

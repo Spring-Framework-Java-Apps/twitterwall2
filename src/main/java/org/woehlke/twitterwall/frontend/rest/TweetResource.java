@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
@@ -32,28 +31,25 @@ public class TweetResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<Tweet> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         return this.tweetService.getAll(pageRequest);
     }
 
     @RequestMapping(path="/latest", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<Tweet> getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"createdAt");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         return this.tweetService.getAll(pageRequest);
     }
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
-
     private final TweetService tweetService;
 
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Autowired
-    public TweetResource(TweetService tweetService, ConfigTwitterwall configTwitterwall) {
+    public TweetResource(TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
     this.tweetService = tweetService;
-        this.configTwitterwall = configTwitterwall;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
     }
 
 }

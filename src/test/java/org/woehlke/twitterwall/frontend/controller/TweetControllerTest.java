@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -35,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TweetControllerTest extends PrepareDataTest {
+public class TweetControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetControllerTest.class);
 
@@ -84,13 +83,9 @@ public class TweetControllerTest extends PrepareDataTest {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
-
     @Autowired
-    private ConfigTwitterwall configTwitterwall;
+    private PrepareDataTest prepareDataTest;
 
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(configTwitterwall,taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
 
     @Commit
     @Test
@@ -103,8 +98,8 @@ public class TweetControllerTest extends PrepareDataTest {
     @Test
     public void setupTestData(){
         String msg = "setupTestData: ";
-        super.getTestDataTweets(msg);
-        super.getTestDataUser(msg);
+        prepareDataTest.getTestDataTweets(msg);
+        prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
     }
 

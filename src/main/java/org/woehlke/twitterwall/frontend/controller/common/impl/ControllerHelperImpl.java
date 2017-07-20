@@ -3,13 +3,13 @@ package org.woehlke.twitterwall.frontend.controller.common.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.Page;
 
@@ -22,13 +22,13 @@ public class ControllerHelperImpl implements ControllerHelper {
 
     public void logEnv(){
         log.info("--------------------------------------------------------------------");
-        log.info("twitterwall.frontend.menuAppName = "+configTwitterwall.getFrontend().getMenuAppName());
-        log.info("twitter.searchQuery = "+  searchterm);
-        log.info("twitterwall.frontend.infoWebpage = "+ configTwitterwall.getFrontend().getInfoWebpage());
-        log.info("twitterwall.frontend.theme = "+ configTwitterwall.getFrontend().getTheme());
-        log.info("twitterwall.frontend.contextTest = "+ configTwitterwall.getFrontend().getContextTest());
-        log.info("twitterwall.frontend.imprintScreenName = "+configTwitterwall.getFrontend().getImprintScreenName());
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+configTwitterwall.getFrontend().getIdGoogleAnalytics());
+        log.info("twitter.searchQuery = "+  twitterProperties.getSearchQuery());
+        log.info("twitterwall.frontend.menuAppName = "+ twitterwallFrontendProperties.getMenuAppName());
+        log.info("twitterwall.frontend.infoWebpage = "+ twitterwallFrontendProperties.getInfoWebpage());
+        log.info("twitterwall.frontend.theme = "+ twitterwallFrontendProperties.getTheme());
+        log.info("twitterwall.frontend.contextTest = "+ twitterwallFrontendProperties.getContextTest());
+        log.info("twitterwall.frontend.imprintScreenName = "+ twitterwallFrontendProperties.getImprintScreenName());
+        log.info("twitterwall.frontend.idGoogleAnalytics = "+ twitterwallFrontendProperties.getIdGoogleAnalytics());
         log.info("--------------------------------------------------------------------");
     }
 
@@ -36,15 +36,15 @@ public class ControllerHelperImpl implements ControllerHelper {
         page.setTitle(title);
         page.setSubtitle(subtitle);
         page.setSymbol(symbol);
-        page.setMenuAppName(configTwitterwall.getFrontend().getMenuAppName());
-        page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(configTwitterwall.getFrontend().getInfoWebpage());
-        page.setTheme(configTwitterwall.getFrontend().getTheme());
-        page.setContextTest(configTwitterwall.getFrontend().getContextTest());
+        page.setMenuAppName(twitterwallFrontendProperties.getMenuAppName());
+        page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
+        page.setInfoWebpage(twitterwallFrontendProperties.getInfoWebpage());
+        page.setTheme(twitterwallFrontendProperties.getTheme());
+        page.setContextTest(twitterwallFrontendProperties.getContextTest());
         page.setHistoryBack(true);
-        if(!configTwitterwall.getFrontend().getIdGoogleAnalytics().isEmpty()){
+        if(!twitterwallFrontendProperties.getIdGoogleAnalytics().isEmpty()){
             String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
-            html = html.replace("###GOOGLE_ANALYTICS_ID###",configTwitterwall.getFrontend().getIdGoogleAnalytics());
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", twitterwallFrontendProperties.getIdGoogleAnalytics());
             page.setGoogleAnalyticScriptHtml(html);
         } else {
             page.setGoogleAnalyticScriptHtml("");
@@ -73,16 +73,16 @@ public class ControllerHelperImpl implements ControllerHelper {
     }
 
     @Autowired
-    public ControllerHelperImpl(ConfigTwitterwall configTwitterwall) {
-        this.configTwitterwall = configTwitterwall;
+    public ControllerHelperImpl(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
 
     private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
 
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
+    private final TwitterProperties twitterProperties;
 
     private final static String GOOGLE_ANALYTICS_SCRIPT_HTML = "<script>\n" +
             "        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +

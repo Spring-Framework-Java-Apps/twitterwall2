@@ -13,8 +13,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 @EnableConfigurationProperties({
-        ConfigTwitterwall.class,
-        TwitterProperties.class
+    TwitterwallBackendProperties.class,
+    TwitterwallFrontendProperties.class,
+    TwitterwallSchedulerProperties.class,
+    TwitterProperties.class
 })
 public class Application {
 

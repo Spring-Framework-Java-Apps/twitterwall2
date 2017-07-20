@@ -1,14 +1,13 @@
 package org.woehlke.twitterwall.frontend.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
@@ -23,7 +22,7 @@ public class TaskHistoryResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;
     }
@@ -35,17 +34,13 @@ public class TaskHistoryResource {
         return taskHistory;
     }
 
-
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
-
     @Autowired
-    public TaskHistoryResource(ConfigTwitterwall configTwitterwall, TaskHistoryService taskHistoryService) {
-        this.configTwitterwall = configTwitterwall;
+    public TaskHistoryResource(TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
         this.taskHistoryService = taskHistoryService;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
     }
 
-    private final ConfigTwitterwall configTwitterwall;
-
     private final TaskHistoryService taskHistoryService;
+
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 }

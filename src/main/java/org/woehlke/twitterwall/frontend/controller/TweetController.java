@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -29,8 +29,8 @@ public class TweetController {
     @RequestMapping("/all")
     public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         controllerHelper.logEnv();
-        model = controllerHelper.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"createdAt");
+        model = controllerHelper.setupPage(model,"Tweets",twitterProperties.getSearchQuery(),Symbols.HOME.toString());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
@@ -40,20 +40,17 @@ public class TweetController {
 
     private final TweetService tweetService;
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final ControllerHelper controllerHelper;
 
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+
+    private final TwitterProperties twitterProperties;
 
     @Autowired
-    public TweetController(TweetService tweetService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
+    public TweetController(TweetService tweetService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
         this.tweetService = tweetService;
-        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
-
-    private final ConfigTwitterwall configTwitterwall;
-
-    private final ControllerHelper controllerHelper;
 }

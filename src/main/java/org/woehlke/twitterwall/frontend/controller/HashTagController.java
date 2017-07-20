@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
@@ -46,7 +46,7 @@ public class HashTagController {
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"text");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"text");
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/hashtag/all";
@@ -66,8 +66,8 @@ public class HashTagController {
         if (m.matches()) {
             String msg2 = msg + " parameter IS valid - START ";
             log.debug(msg2);
-            Pageable pageRequestTweet = new PageRequest(pageTweet, configTwitterwall.getFrontend().getPageSize());
-            Pageable pageRequestUser = new PageRequest(pageUser, configTwitterwall.getFrontend().getPageSize());
+            Pageable pageRequestTweet = new PageRequest(pageTweet, twitterwallFrontendProperties.getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, twitterwallFrontendProperties.getPageSize());
             String subtitle = "Tweets und User für HashTag";
             String title = text;
             String symbol = Symbols.HASHTAG.toString();
@@ -99,12 +99,12 @@ public class HashTagController {
         String msg = "/hashtag/overview ";
         controllerHelper.logEnv();
         String title = "HashTags";
-        String subtitle = searchterm;
+        String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterwallFrontendProperties.getPageSize());
         boolean hasNext = true;
         while(hasNext) {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
@@ -148,13 +148,9 @@ public class HashTagController {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final ConfigTwitterwall configTwitterwall;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
+    private final TwitterProperties twitterProperties;
 
     private final HashTagService hashTagService;
 
@@ -162,14 +158,15 @@ public class HashTagController {
 
     private final UserService userService;
 
+    private final ControllerHelper controllerHelper;
+
     @Autowired
-    public HashTagController(ConfigTwitterwall configTwitterwall, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
-        this.configTwitterwall = configTwitterwall;
+    public HashTagController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
         this.userService = userService;
         this.controllerHelper = controllerHelper;
     }
-
-    private final ControllerHelper controllerHelper;
 }

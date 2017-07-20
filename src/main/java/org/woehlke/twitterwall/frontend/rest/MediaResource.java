@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.TwitterwallProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.service.MediaService;
@@ -31,21 +31,18 @@ public class MediaResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<Media> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         return this.mediaService.getAll(pageRequest);
     }
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
-
     private final MediaService mediaService;
 
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Autowired
-    public MediaResource(MediaService mediaService, ConfigTwitterwall configTwitterwall) {
+    public MediaResource(MediaService mediaService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
         this.mediaService = mediaService;
-        this.configTwitterwall = configTwitterwall;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
     }
 
 }

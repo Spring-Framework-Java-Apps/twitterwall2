@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
@@ -32,7 +32,7 @@ public class TaskHistoryController {
         String title = "TaskHistory";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"timeEvent");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"timeEvent");
         Page<TaskHistory> myPageContent = taskHistoryService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
@@ -40,17 +40,17 @@ public class TaskHistoryController {
 
     private final TaskHistoryService taskHistoryService;
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final ConfigTwitterwall configTwitterwall;
-
-    @Autowired
-    public TaskHistoryController(TaskHistoryService taskHistoryService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
-        this.taskHistoryService = taskHistoryService;
-        this.configTwitterwall = configTwitterwall;
-        this.controllerHelper = controllerHelper;
-    }
+    private final TwitterProperties twitterProperties;
 
     private final ControllerHelper controllerHelper;
+
+    @Autowired
+    public TaskHistoryController(TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+        this.taskHistoryService = taskHistoryService;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
+        this.controllerHelper = controllerHelper;
+    }
 }

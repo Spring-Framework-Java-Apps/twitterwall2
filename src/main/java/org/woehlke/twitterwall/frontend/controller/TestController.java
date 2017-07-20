@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -32,9 +32,9 @@ public class TestController {
     @RequestMapping("/getTestData")
     public String getTestData(Model model) {
         controllerHelper.logEnv();
-        model = controllerHelper.setupPage(model,"Test Data Tweets",searchterm,Symbols.GET_TEST_DATA.toString());
+        model = controllerHelper.setupPage(model,"Test Data Tweets",twitterProperties.getSearchQuery(),Symbols.GET_TEST_DATA.toString());
         String msg = "/getTestData : ";
-        if(configTwitterwall.getFrontend().getContextTest()){
+        if(twitterwallFrontendProperties.getContextTest()){
             model.addAttribute("latestTweets", createTestData.getTestDataTweets());
             model.addAttribute("users", createTestData.getTestDataUser());
         } else {
@@ -46,7 +46,7 @@ public class TestController {
 
     @RequestMapping("/user/onlist/renew")
     public String getOnListRenew(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
         this.startOnListRenew();
         log.info(msg+"START userService.findOnList(): ");
@@ -67,28 +67,21 @@ public class TestController {
 
     private final CreateTestData createTestData;
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final ControllerHelper controllerHelper;
 
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    //@Value("${twitterwall.context.test}")
-    //private boolean contextTest;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterProperties twitterProperties;
 
     @Autowired
-    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
+    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
         this.userService = userService;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.createTestData = createTestData;
-        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
-
-    private final ControllerHelper controllerHelper;
 
     @Async
     protected void startOnListRenew(){

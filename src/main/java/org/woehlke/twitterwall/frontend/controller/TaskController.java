@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.TwitterwallProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -38,7 +39,7 @@ public class TaskController {
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"timeStarted");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"timeStarted");
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
         return "task/taskAll";
@@ -56,7 +57,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         //Task oneTask = taskService.findById(id);
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
         model.addAttribute("task",task);
         model.addAttribute("taskHistoryList",taskHistoryList);
@@ -158,22 +159,21 @@ public class TaskController {
 
     private final UpdateTweets updateTweets;
 
-    private final ConfigTwitterwall configTwitterwall;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
+    private final TwitterProperties twitterProperties;
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final ControllerHelper controllerHelper;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
         this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.updateTweets = updateTweets;
-        this.configTwitterwall = configTwitterwall;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
         this.controllerHelper = controllerHelper;
     }
-
-    private final ControllerHelper controllerHelper;
 }

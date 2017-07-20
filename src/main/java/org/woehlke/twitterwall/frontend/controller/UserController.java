@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -32,7 +32,7 @@ public class UserController {
 
     @RequestMapping("/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getAll(pageRequest));
         String symbol = Symbols.USER_ALL.toString();
         String title = "All Users";
@@ -49,7 +49,7 @@ public class UserController {
             if(user==null){
                 throw new IllegalArgumentException("/user/"+ screenName);
             }
-            Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"createdAt");
+            Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
             Page<Tweet> tweetsForUser = tweetService.findTweetsForUser(user,pageRequest);
             String symbol = Symbols.PROFILE.toString();
             String title = "@" + user.getScreenName();
@@ -65,7 +65,7 @@ public class UserController {
 
     @RequestMapping("/tweets")
     public String getTweetingUsers(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
         model.addAttribute("users", tweetingUsers);
         String symbol = Symbols.USER_TWEETS.toString();
@@ -76,7 +76,7 @@ public class UserController {
 
     @RequestMapping("/notyetfriends")
     public String getNotYetFriendUsers(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getNotYetFriendUsers(pageRequest));
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
@@ -86,7 +86,7 @@ public class UserController {
 
     @RequestMapping("/notyetonlist")
     public String getNotYetOnList(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         model.addAttribute("users", userService.getNotYetOnList(pageRequest));
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
@@ -96,7 +96,7 @@ public class UserController {
 
     @RequestMapping("/onlist")
     public String getOnList(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         Page<User> usersOnList = userService.getOnList(pageRequest);
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
@@ -111,20 +111,20 @@ public class UserController {
 
     private final TweetService tweetService;
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Autowired
-    public UserController(UserService userService, TweetService tweetService, ControllerHelper controllerHelper, ConfigTwitterwall configTwitterwall) {
-        this.userService = userService;
-        this.tweetService = tweetService;
-        this.controllerHelper = controllerHelper;
-        this.configTwitterwall = configTwitterwall;
-    }
+    private final TwitterProperties twitterProperties;
 
     private final ControllerHelper controllerHelper;
 
-    private final ConfigTwitterwall configTwitterwall;
-
     private static String subtitle = "Users";
+
+    @Autowired
+    public UserController(UserService userService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+        this.userService = userService;
+        this.tweetService = tweetService;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
+        this.controllerHelper = controllerHelper;
+    }
 }

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 
 import java.util.*;
 

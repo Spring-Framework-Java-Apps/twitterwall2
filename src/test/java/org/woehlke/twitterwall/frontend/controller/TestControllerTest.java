@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -36,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TestControllerTest extends PrepareDataTest {
+public class TestControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
 
@@ -88,13 +86,8 @@ public class TestControllerTest extends PrepareDataTest {
     @Value("${twitterwall.frontend.idGoogleAnalytics}")
     private String idGoogleAnalytics;
 
-
     @Autowired
-    private ConfigTwitterwall configTwitterwall;
-
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSetWithTesting(configTwitterwall,taskService,twitterApiService,storeOneTweet,storeUserProfile,userService,menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private PrepareDataTest prepareDataTest;
 
     @Commit
     @Test
@@ -107,8 +100,8 @@ public class TestControllerTest extends PrepareDataTest {
     @Test
     public void setupTestData(){
         String msg = "setupTestData: ";
-        super.getTestDataTweets(msg);
-        super.getTestDataUser(msg);
+        prepareDataTest.getTestDataTweets(msg);
+        prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
     }
 

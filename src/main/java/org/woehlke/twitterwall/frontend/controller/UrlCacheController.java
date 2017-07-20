@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.ConfigTwitterwall;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
@@ -32,25 +32,25 @@ public class UrlCacheController {
         String title = "UrlCache";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"url");
         Page<UrlCache> myPageContent = urlCacheService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
 
-    //@Value("${twitterwall.frontend.maxResults}")
-    //private int pageSize;
+    private final ControllerHelper controllerHelper;
+
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+
+    private final TwitterProperties twitterProperties;
 
     private final UrlCacheService urlCacheService;
 
     @Autowired
-    public UrlCacheController(UrlCacheService urlCacheService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
+    public UrlCacheController(UrlCacheService urlCacheService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
         this.urlCacheService = urlCacheService;
-        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
-
-    private final ConfigTwitterwall configTwitterwall;
-
-    private final ControllerHelper controllerHelper;
 }
