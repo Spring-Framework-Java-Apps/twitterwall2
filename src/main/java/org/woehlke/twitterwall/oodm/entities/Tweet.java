@@ -32,8 +32,9 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
         @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
         @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
-        @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
-        @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
+        @Index(name="idx_tweet_in_reply_to_screen_name", columnList="in_reply_to_screen_name"),
+        @Index(name="idx_tweet_from_user_id", columnList="from_user_id"),
+        @Index(name="idx_tweet_id_str", columnList="id_str")
     }
 )
 @NamedQueries({
@@ -83,24 +84,26 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
-    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = false)
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
-    private long idTwitter;
+    private Long idTwitter;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name="id_str",nullable = false)
     private String idStr = "";
 
     @NotEmpty
-    @Column(nullable = false,length=4096)
+    @Column(name="text", nullable = false,length=4096)
     private String text = "";
 
     @Column(name="created_date", nullable = false)
@@ -109,7 +112,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Column(name="from_user")
     private String fromUser;
 
-    @Column(length=4096)
+    @Column(name = "profile_image_url", length=4096)
     private String profileImageUrl;
 
     @Column(name="to_user_id")
@@ -121,31 +124,32 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Column(name="in_reply_to_user_id")
     private Long inReplyToUserId;
 
-    @Column(name="in_reply_to_screenName")
+    @Column(name="in_reply_to_screen_name")
     private String inReplyToScreenName;
 
     @Column(name="from_user_id")
-    private long fromUserId;
+    private Long fromUserId;
 
-    @Column
+    @Column(name="language_code")
     private String languageCode;
 
-    @Column(length=4096)
+    @Column(name="source", length=4096)
     private String source;
 
-    @Column
+    @Column(name="retweet_count")
     private Integer retweetCount;
 
-    @Column
-    private boolean retweeted;
+    @Column(name="retweeted")
+    private Boolean retweeted;
 
+    @JoinColumn(name="fk_tweet_retweeted")
     @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = true)
     private Tweet retweetedStatus;
 
-    @Column
-    private boolean favorited;
+    @Column(name="favorited")
+    private Boolean favorited;
 
-    @Column
+    @Column(name="favorite_count")
     private Integer favoriteCount;
 
     @Embedded
@@ -184,6 +188,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     private Entities entities;
 
     @NotNull
+    @JoinColumn(name="fk_user")
     @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
 
@@ -233,8 +238,14 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
+    }
+
+    @Override
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
     }
 
     public String getIdStr() {
@@ -297,11 +308,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.inReplyToScreenName = inReplyToScreenName;
     }
 
-    public long getFromUserId() {
+    public Long getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(long fromUserId) {
+    public void setFromUserId(Long fromUserId) {
         this.fromUserId = fromUserId;
     }
 
@@ -329,11 +340,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.retweetCount = retweetCount;
     }
 
-    public boolean isRetweeted() {
+    public Boolean getRetweeted() {
         return retweeted;
     }
 
-    public void setRetweeted(boolean retweeted) {
+    public void setRetweeted(Boolean retweeted) {
         this.retweeted = retweeted;
     }
 
@@ -345,11 +356,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.retweetedStatus = retweetedStatus;
     }
 
-    public boolean isFavorited() {
+    public Boolean getFavorited() {
         return favorited;
     }
 
-    public void setFavorited(boolean favorited) {
+    public void setFavorited(Boolean favorited) {
         this.favorited = favorited;
     }
 

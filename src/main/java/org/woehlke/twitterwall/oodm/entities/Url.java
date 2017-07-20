@@ -43,13 +43,15 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
-    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = false)
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @NotNull

@@ -45,18 +45,20 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
 
     @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
-    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @NotNull
     @Column(name="id_twitter", nullable = false)
-    private long idTwitter;
+    private Long idTwitter;
 
     @NotNull
     @Column(name = "media_http",length=4096, nullable = false)
@@ -129,11 +131,13 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
     }
 
-    public void setIdTwitter(long idTwitter) {
+    @Override
+    public void setIdTwitter(Long idTwitter) {
         this.idTwitter = idTwitter;
     }
 

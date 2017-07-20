@@ -106,26 +106,20 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
 
     @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
-    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { REFRESH , DETACH}, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @NotNull
     @Column(name="id_twitter",nullable = false)
-    private long idTwitter;
-
-    public final static String SCREEN_NAME_PATTERN = "\\w*";
-
-    public static boolean isValidScreenName(String screenName){
-        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
-    }
+    private Long idTwitter;
 
     @NotEmpty
     @Column(name="screen_name", nullable = false)
@@ -155,49 +149,49 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     private String language;
 
     @Column
-    private int statusesCount;
+    private Integer statusesCount;
 
     @Column
-    private int friendsCount;
+    private Integer friendsCount;
 
     @Column
-    private int followersCount;
+    private Integer followersCount;
 
     @Column
-    private int favoritesCount;
+    private Integer favoritesCount;
 
     @Column
-    private int listedCount;
+    private Integer listedCount;
 
     @Column
-    private boolean following;
+    private Boolean following;
 
     @Column
-    private boolean followRequestSent;
+    private Boolean followRequestSent;
 
     @Column
-    private boolean isProtected;
+    private Boolean isProtected;
 
     @Column
-    private boolean notificationsEnabled;
+    private Boolean notificationsEnabled;
 
     @Column
-    private boolean verified;
+    private Boolean verified;
 
     @Column
-    private boolean geoEnabled;
+    private Boolean geoEnabled;
 
     @Column
-    private boolean contributorsEnabled;
+    private Boolean contributorsEnabled;
 
     @Column
-    private boolean translator;
+    private Boolean translator;
 
     @Column
     private String timeZone;
 
     @Column
-    private int utcOffset;
+    private Integer utcOffset;
 
     @Column
     private String sidebarBorderColor;
@@ -209,13 +203,13 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     private String backgroundColor;
 
     @Column
-    private boolean useBackgroundImage;
+    private Boolean useBackgroundImage;
 
     @Column(length = 4096)
     private String backgroundImageUrl;
 
     @Column
-    private boolean backgroundImageTiled;
+    private Boolean backgroundImageTiled;
 
     @Column
     private String textColor;
@@ -224,16 +218,16 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     private String linkColor;
 
     @Column
-    private boolean showAllInlineMedia;
+    private Boolean showAllInlineMedia;
 
     @Column
-    private boolean follower;
+    private Boolean follower;
 
     @Column
-    private boolean friend;
+    private Boolean friend;
 
     @Column
-    private boolean tweeting;
+    private Boolean tweeting;
 
     @Column(length = 4096)
     private String profileBannerUrl;
@@ -291,6 +285,21 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     private User() {
     }
 
+    public final static String SCREEN_NAME_PATTERN = "\\w*";
+
+    public static boolean isValidScreenName(String screenName){
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
+    @Transient
+    public boolean hasValidScreenName(){
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
     public void removeAllEntities(){
         this.entities.removeAll();
     }
@@ -336,40 +345,91 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         return style;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public TaskInfo getTaskInfo() {
+        return taskInfo;
+    }
+
+    @Override
+    public void setTaskInfo(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
+    }
+
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
+    }
+
+    @Override
+    public String getScreenName() {
+        return screenName;
+    }
+
+    @Override
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUrl() {
         return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
 
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getLocation() {
         return location;
     }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getLanguage() {
@@ -380,107 +440,107 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.language = language;
     }
 
-    public int getStatusesCount() {
+    public Integer getStatusesCount() {
         return statusesCount;
     }
 
-    public void setStatusesCount(int statusesCount) {
+    public void setStatusesCount(Integer statusesCount) {
         this.statusesCount = statusesCount;
     }
 
-    public int getFriendsCount() {
+    public Integer getFriendsCount() {
         return friendsCount;
     }
 
-    public void setFriendsCount(int friendsCount) {
+    public void setFriendsCount(Integer friendsCount) {
         this.friendsCount = friendsCount;
     }
 
-    public int getFollowersCount() {
+    public Integer getFollowersCount() {
         return followersCount;
     }
 
-    public void setFollowersCount(int followersCount) {
+    public void setFollowersCount(Integer followersCount) {
         this.followersCount = followersCount;
     }
 
-    public int getFavoritesCount() {
+    public Integer getFavoritesCount() {
         return favoritesCount;
     }
 
-    public void setFavoritesCount(int favoritesCount) {
+    public void setFavoritesCount(Integer favoritesCount) {
         this.favoritesCount = favoritesCount;
     }
 
-    public int getListedCount() {
+    public Integer getListedCount() {
         return listedCount;
     }
 
-    public void setListedCount(int listedCount) {
+    public void setListedCount(Integer listedCount) {
         this.listedCount = listedCount;
     }
 
-    public boolean isFollowing() {
+    public Boolean getFollowing() {
         return following;
     }
 
-    public void setFollowing(boolean following) {
+    public void setFollowing(Boolean following) {
         this.following = following;
     }
 
-    public boolean isFollowRequestSent() {
+    public Boolean getFollowRequestSent() {
         return followRequestSent;
     }
 
-    public void setFollowRequestSent(boolean followRequestSent) {
+    public void setFollowRequestSent(Boolean followRequestSent) {
         this.followRequestSent = followRequestSent;
     }
 
-    public boolean isProtected() {
+    public Boolean getProtected() {
         return isProtected;
     }
 
-    public void setProtected(boolean aProtected) {
+    public void setProtected(Boolean aProtected) {
         isProtected = aProtected;
     }
 
-    public boolean isNotificationsEnabled() {
+    public Boolean getNotificationsEnabled() {
         return notificationsEnabled;
     }
 
-    public void setNotificationsEnabled(boolean notificationsEnabled) {
+    public void setNotificationsEnabled(Boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    public boolean isVerified() {
+    public Boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(boolean verified) {
+    public void setVerified(Boolean verified) {
         this.verified = verified;
     }
 
-    public boolean isGeoEnabled() {
+    public Boolean getGeoEnabled() {
         return geoEnabled;
     }
 
-    public void setGeoEnabled(boolean geoEnabled) {
+    public void setGeoEnabled(Boolean geoEnabled) {
         this.geoEnabled = geoEnabled;
     }
 
-    public boolean isContributorsEnabled() {
+    public Boolean getContributorsEnabled() {
         return contributorsEnabled;
     }
 
-    public void setContributorsEnabled(boolean contributorsEnabled) {
+    public void setContributorsEnabled(Boolean contributorsEnabled) {
         this.contributorsEnabled = contributorsEnabled;
     }
 
-    public boolean isTranslator() {
+    public Boolean getTranslator() {
         return translator;
     }
 
-    public void setTranslator(boolean translator) {
+    public void setTranslator(Boolean translator) {
         this.translator = translator;
     }
 
@@ -492,11 +552,11 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.timeZone = timeZone;
     }
 
-    public int getUtcOffset() {
+    public Integer getUtcOffset() {
         return utcOffset;
     }
 
-    public void setUtcOffset(int utcOffset) {
+    public void setUtcOffset(Integer utcOffset) {
         this.utcOffset = utcOffset;
     }
 
@@ -524,11 +584,11 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.backgroundColor = backgroundColor;
     }
 
-    public boolean isUseBackgroundImage() {
+    public Boolean getUseBackgroundImage() {
         return useBackgroundImage;
     }
 
-    public void setUseBackgroundImage(boolean useBackgroundImage) {
+    public void setUseBackgroundImage(Boolean useBackgroundImage) {
         this.useBackgroundImage = useBackgroundImage;
     }
 
@@ -540,11 +600,11 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.backgroundImageUrl = backgroundImageUrl;
     }
 
-    public boolean isBackgroundImageTiled() {
+    public Boolean getBackgroundImageTiled() {
         return backgroundImageTiled;
     }
 
-    public void setBackgroundImageTiled(boolean backgroundImageTiled) {
+    public void setBackgroundImageTiled(Boolean backgroundImageTiled) {
         this.backgroundImageTiled = backgroundImageTiled;
     }
 
@@ -564,12 +624,36 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.linkColor = linkColor;
     }
 
-    public boolean isShowAllInlineMedia() {
+    public Boolean getShowAllInlineMedia() {
         return showAllInlineMedia;
     }
 
-    public void setShowAllInlineMedia(boolean showAllInlineMedia) {
+    public void setShowAllInlineMedia(Boolean showAllInlineMedia) {
         this.showAllInlineMedia = showAllInlineMedia;
+    }
+
+    public Boolean getFollower() {
+        return follower;
+    }
+
+    public void setFollower(Boolean follower) {
+        this.follower = follower;
+    }
+
+    public Boolean getFriend() {
+        return friend;
+    }
+
+    public void setFriend(Boolean friend) {
+        this.friend = friend;
+    }
+
+    public Boolean getTweeting() {
+        return tweeting;
+    }
+
+    public void setTweeting(Boolean tweeting) {
+        this.tweeting = tweeting;
     }
 
     public String getProfileBannerUrl() {
@@ -578,75 +662,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
 
     public void setProfileBannerUrl(String profileBannerUrl) {
         this.profileBannerUrl = profileBannerUrl;
-    }
-
-    public boolean isFollower() {
-        return follower;
-    }
-
-    public void setFollower(boolean follower) {
-        this.follower |= follower;
-    }
-
-    public boolean isFriend() {
-        return friend;
-    }
-
-    public void setFriend(boolean friend) {
-        this.friend |= friend;
-    }
-
-    public boolean isTweeting() {
-        return tweeting;
-    }
-
-    public void setTweeting(boolean tweeting) {
-        this.tweeting |= tweeting;
-    }
-
-    public void setIdTwitter(long idTwitter) {
-        this.idTwitter = idTwitter;
-    }
-
-    @Override
-    public String getScreenName() {
-        return this.screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
     }
 
     public Task getCreatedBy() {

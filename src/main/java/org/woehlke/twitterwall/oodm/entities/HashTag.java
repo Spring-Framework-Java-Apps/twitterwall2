@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,22 +35,18 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { REFRESH, DETACH}, fetch = EAGER,optional = false)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
-
-    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
-
-    public static boolean isValidText(String hashtagText){
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        return m.matches();
-    }
 
     @SafeHtml
     @Column(name="text", nullable = false,length=4096)
@@ -83,6 +80,21 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     private HashTag() {
+    }
+
+    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
+
+    @Transient
+    public boolean hasValidText(){
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
+    public static boolean isValidText(String hashtagText){
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        return m.matches();
     }
 
     public Long getId() {

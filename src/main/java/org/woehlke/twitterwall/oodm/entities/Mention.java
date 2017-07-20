@@ -47,24 +47,16 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
+    @JoinColumn(name = "fk_user_created_by")
     @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
+    @JoinColumn(name = "fk_user_updated_by")
     @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "id_twitter")
-    private long idTwitter;
-
-    public boolean isProxy(){
-       return idTwitter < 0;
-    }
-
-    public static boolean isValidScreenName(String screenName) {
-        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
-    }
+    private Long idTwitter;
 
     @NotEmpty
     @Column(name = "screen_name", nullable = false)
@@ -73,19 +65,8 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "name",length=4096, nullable = false)
     private String name = "";
 
-    public boolean hasPersistentUser(){
-        boolean result = false;
-        User myUser = this.getUser();
-        if(myUser != null){
-            result =
-                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
-                (idTwitterOfUser != null ) &&
-                (myUser.getIdTwitter() == idTwitterOfUser);
-        }
-        return result;
-    }
-
     @NotNull
+    @JoinColumn(name = "fk_user")
     @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
     private User user;
 
@@ -118,6 +99,37 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     private Mention() {
     }
 
+    @Transient
+    public Boolean isProxy(){
+        return idTwitter < 0;
+    }
+
+    @Transient
+    public boolean hasPersistentUser(){
+        boolean result = false;
+        User myUser = this.getUser();
+        if(myUser != null){
+            result =
+                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
+                    (idTwitterOfUser != null ) &&
+                    (myUser.getIdTwitter() == idTwitterOfUser);
+        }
+        return result;
+    }
+
+    @Transient
+    public boolean hasValidScreenName() {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenName(String screenName) {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
     public boolean hasUser() {
         return user != null;
     }
@@ -126,22 +138,12 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return serialVersionUID;
     }
 
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    public long getIdTwitter() {
-        return idTwitter;
-    }
-
-    public void setIdTwitter(long idTwitter) {
-        this.idTwitter = idTwitter;
     }
 
     public String getScreenName() {
@@ -158,6 +160,16 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public Long getIdTwitter() {
+        return idTwitter;
+    }
+
+    @Override
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
     }
 
     public TaskInfo getTaskInfo() {
@@ -264,6 +276,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
             " }\n";
     }
 
+    @Transient
     public boolean isValid() {
         if((screenName == null) ||(screenName.isEmpty())|| isRawMentionFromUserDescription()){
             return false;
@@ -274,9 +287,11 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return true;
     }
 
+    @Transient
     public boolean isRawMentionFromUserDescription() {
         return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
     }
+
 
     public static Mention getMention(String mentionString,Task task) {
         try {

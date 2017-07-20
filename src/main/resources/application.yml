@@ -93,16 +93,17 @@ twitterwall:
     menuAppName: ${TWITTERWALL_APP_NAME}
     theme: ${TWITTERWALL_THEME}
   scheduler:
-    allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
+    #allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
     #allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
     #allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
     #allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
+    allowFetchTweetsFromTwitterSearch: true
     allowUpdateTweets: false
     allowUpdateUserProfiles: false
     allowUpdateUserProfilesFromMention: false
     fetchUserList:
       #allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
-      allow: true
+      allow: false
       name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
     skipFortesting: false
