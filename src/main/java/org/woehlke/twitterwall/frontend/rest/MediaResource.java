@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.woehlke.twitterwall.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.TwitterwallProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.service.MediaService;

@@ -2,36 +2,25 @@ package org.woehlke.twitterwall;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Validated
 @ConfigurationProperties(prefix="twitterwall.scheduler")
 public class TwitterwallSchedulerProperties {
 
-    @NotNull
     private Boolean allowFetchTweetsFromTwitterSearch;
 
-    @NotNull
     private Boolean allowUpdateTweets;
 
-    @NotNull
     private Boolean allowUpdateUserProfiles;
 
-    @NotNull
     private Boolean allowUpdateUserProfilesFromMention;
 
-    @NotNull
-    private Integer herokuDbRowsLimit;
+    private String herokuDbRowsLimit;
 
-    @NotNull
     private Boolean skipFortesting;
 
-    @Valid
     private FetchUserList fetchUserList = new FetchUserList();
 
     private Facade facade = new Facade();
@@ -68,11 +57,11 @@ public class TwitterwallSchedulerProperties {
         this.allowUpdateUserProfilesFromMention = allowUpdateUserProfilesFromMention;
     }
 
-    public Integer getHerokuDbRowsLimit() {
+    public String getHerokuDbRowsLimit() {
         return herokuDbRowsLimit;
     }
 
-    public void setHerokuDbRowsLimit(Integer herokuDbRowsLimit) {
+    public void setHerokuDbRowsLimit(String herokuDbRowsLimit) {
         this.herokuDbRowsLimit = herokuDbRowsLimit;
     }
 
@@ -86,10 +75,8 @@ public class TwitterwallSchedulerProperties {
 
     public static class FetchUserList {
 
-        @NotNull
         private Boolean allow;
 
-        @NotNull
         private String name;
 
         public Boolean getAllow() {

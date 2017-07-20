@@ -2,27 +2,18 @@ package org.woehlke.twitterwall;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-@Validated
 @ConfigurationProperties(prefix="twitterwall.backend")
 public class TwitterwallBackendProperties {
 
-    @Valid
     public Twitter twitter = new Twitter();
 
-    @Valid
     public Url url = new Url();
 
     public static class Twitter {
 
-        @NotNull
         private Integer millisToWaitBetweenTwoApiCalls;
 
-        @NotNull
         private Integer millisToWaitForFetchTweetsFromTwitterSearch;
 
         public Integer getMillisToWaitBetweenTwoApiCalls() {
@@ -44,13 +35,10 @@ public class TwitterwallBackendProperties {
 
     public static class Url {
 
-        @NotNull
         private Long connTimeToLive;
 
-        @NotNull
         private Long maxIdleTime;
 
-        @NotNull
         private Boolean fetchTestDataVerbose;
 
         public Long getConnTimeToLive() {
@@ -76,7 +64,6 @@ public class TwitterwallBackendProperties {
         public void setFetchTestDataVerbose(Boolean fetchTestDataVerbose) {
             this.fetchTestDataVerbose = fetchTestDataVerbose;
         }
-
     }
 
     public Twitter getTwitter() {

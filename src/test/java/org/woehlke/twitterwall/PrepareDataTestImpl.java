@@ -135,7 +135,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     private final TwitterProperties twitterProperties;
 
-    protected void logEnv(){
+    private void logEnv(){
         log.info("--------------------------------------------------------------------");
         log.info("twitter.searchQuery = "+twitterProperties.getSearchQuery());
         log.info("twitterwall.frontend.menuAppName = "+twitterwallFrontendProperties.getMenuAppName());

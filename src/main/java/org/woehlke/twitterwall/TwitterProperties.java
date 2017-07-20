@@ -2,20 +2,16 @@ package org.woehlke.twitterwall;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
-
-@Validated
 @ConfigurationProperties(prefix="twitterwall")
 public class TwitterProperties {
 
-    @NotNull private String accessToken;
-    @NotNull private String accessTokenSecret;
-    @NotNull private String consumerKey;
-    @NotNull private String consumerSecret;
-    @NotNull private Integer pageSize;
-    @NotNull private String searchQuery;
+    private String accessToken;
+    private String accessTokenSecret;
+    private String consumerKey;
+    private String consumerSecret;
+    private Integer pageSize;
+    private String searchQuery;
 
     public String getAccessToken() {
         return accessToken;
