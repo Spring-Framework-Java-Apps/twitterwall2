@@ -52,7 +52,7 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
                 String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
                 log.warn(eventMsg);
-                taskService.warn(task,eventMsg);
+                //taskService.warn(task,eventMsg);
                 mention.setScreenName(foundUser.getScreenName());
                 screenName = foundUser.getScreenName();
             }

@@ -40,14 +40,17 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         if(myFoundUser!= null){
             foundUser = myFoundUser;
         } else {
+            TwitterProfile twitterProfile = null;
             try {
-                TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-                User myFoundUser2 = userTransformService.transform(twitterProfile,task);
-                myFoundUser2 = this.storeUserProcess(myFoundUser2, task);
-                foundUser = myFoundUser2;
+                twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
             } catch (ApiException twitterApiException) {
                 taskService.error(task,twitterApiException, msg);
                 log.error(msg+twitterApiException.getMessage());
+            }
+            if(twitterProfile!=null){
+                User myFoundUser2 = userTransformService.transform(twitterProfile,task);
+                myFoundUser2 = this.storeUserProcess(myFoundUser2, task);
+                foundUser = myFoundUser2;
             }
         }
         return foundUser;
