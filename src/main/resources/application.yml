@@ -98,9 +98,9 @@ twitterwall:
     #allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
     #allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
     allowFetchTweetsFromTwitterSearch: true
-    allowUpdateTweets: true
-    allowUpdateUserProfiles: true
-    allowUpdateUserProfilesFromMention: true
+    allowUpdateTweets: false
+    allowUpdateUserProfiles: false
+    allowUpdateUserProfilesFromMention: false
     fetchUserList:
       #allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
       allow: true
