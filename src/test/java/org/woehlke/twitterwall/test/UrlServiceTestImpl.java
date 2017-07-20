@@ -1,9 +1,10 @@
 package org.woehlke.twitterwall.test;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.TwitterwallBackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 
@@ -16,8 +17,8 @@ import java.util.*;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTest {
 
-    @Value("${twitterwall.backend.url.fetchTestDataVerbose}")
-    private boolean fetchTestDataVerbose;
+    @Autowired
+    private TwitterwallBackendProperties twitterwallBackendProperties;
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
@@ -27,7 +28,7 @@ public class UrlServiceTestImpl implements UrlServiceTest {
         Map<String, String> urlsTest = new HashMap<>();
         urlsTest.put("https://t.co/lQlse7u93G", "https://port80guru.tumblr.com/");
 
-        if (fetchTestDataVerbose) {
+        if (twitterwallBackendProperties.getUrl().getFetchTestDataVerbose()) {
             hostsTest = hosts;
             urlsTest = urls;
         }

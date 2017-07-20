@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.woehlke.twitterwall.TwitterProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
@@ -22,7 +22,7 @@ public class DomainController {
         String msg = "/application/domain/count: ";
         controllerHelper.logEnv();
         String title = "Counted Entities";
-        String subtitle = searchterm;
+        String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         CountedEntities countedEntities =this.countedEntitiesService.countAll();
@@ -32,15 +32,15 @@ public class DomainController {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
     @Autowired
-    public DomainController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper) {
+    public DomainController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper, TwitterProperties twitterProperties) {
         this.countedEntitiesService = countedEntitiesService;
         this.controllerHelper = controllerHelper;
+        this.twitterProperties = twitterProperties;
     }
 
     private final ControllerHelper controllerHelper;
+
+    private final TwitterProperties twitterProperties;
 
 }

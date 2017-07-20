@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,10 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -44,7 +47,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         int loopId = 0;
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
         boolean hasNext=true;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
             Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
             hasNext = userProfileTwitterIds.hasNext();
@@ -80,13 +83,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                     log.debug(msg + user.toString());
                 }
                 log.debug(msg + "-----------------------------------------------------");
-                log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                log.debug(msg + "Start SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
                 try {
-                    Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                    Thread.sleep(twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls());
                 } catch (InterruptedException ex) {
                     log.debug(msg+" "+task.toString(),ex);
                 }
-                log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                log.debug(msg + "Done SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
                 log.debug(msg + "-----------------------------------------------------");
 
                 log.debug(msg + "---------------------------------------");
@@ -105,20 +108,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.backend.twitter.millisToWaitBetweenTwoApiCalls}")
-    private int millisToWaitBetweenTwoApiCalls;
+    private final TwitterwallBackendProperties twitterwallBackendProperties;
 
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
+    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    private final TwitterProperties twitterProperties;
 
     private final StoreUserProfile storeUserProfile;
 
@@ -131,7 +127,11 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 
     @Autowired
-    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+    public UpdateUserProfilesImpl(TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+        this.twitterwallBackendProperties = twitterwallBackendProperties;
+        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
         this.storeUserProfile = storeUserProfile;
         this.twitterApiService = twitterApiService;
         this.userService = userService;

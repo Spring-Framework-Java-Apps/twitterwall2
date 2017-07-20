@@ -95,12 +95,6 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    //@Value("${twitterwall.backend.url.connTimeToLive}")
-    //private long connTimeToLive;
-
-    //@Value("${twitterwall.backend.url.maxIdleTime}")
-    //private long maxIdleTime;
-
     private final TwitterwallBackendProperties twitterwallBackendProperties;
 
     @Autowired

@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
@@ -14,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -43,11 +44,11 @@ public class PagesControllerTest {
     @Autowired
     private UserServiceTest userServiceTest;
 
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
+    @Autowired
+    private TwitterProperties twitterProperties;
 
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
+    @Autowired
+    private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Commit
     @Test
@@ -60,9 +61,9 @@ public class PagesControllerTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+imprintScreenName+")");
-        userServiceTest.createUser(imprintScreenName);
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+imprintScreenName+")");
+        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+twitterwallFrontendProperties.getImprintScreenName()+")");
+        userServiceTest.createUser(twitterwallFrontendProperties.getImprintScreenName());
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+twitterwallFrontendProperties.getImprintScreenName()+")");
         log.info("------------------------------------");
         Assert.assertTrue(true);
     }

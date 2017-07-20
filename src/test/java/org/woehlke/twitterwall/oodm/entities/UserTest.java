@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.TwitterProperties;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
@@ -41,8 +42,8 @@ public class UserTest {
     @Autowired
     private UserServiceTest userServiceTest;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    @Autowired
+    private TwitterProperties twitterProperties;
 
     @Ignore
     @Commit
@@ -62,7 +63,7 @@ public class UserTest {
         String msg = "getAllDescriptionsTest";
         log.info(msg+"------------------------------------------------");
         boolean hasNext;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         do {
             Page<String> descriptions = userService.getAllDescriptions(pageRequest);
             hasNext = descriptions.hasNext();

@@ -3,12 +3,12 @@ package org.woehlke.twitterwall.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -29,30 +29,6 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTestImpl.class);
 
-    @Value("${twitterwall.frontend.menuAppName}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.infoWebpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.contextTest}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
     @Autowired
     private UserService userService;
 
@@ -65,10 +41,12 @@ public class UserServiceTestImpl implements UserServiceTest {
     @Autowired
     private StoreUserProfile storeUserProfile;
 
+    @Autowired
+    private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Override
     public User createImprintUser(){
-        return createUser(imprintScreenName);
+        return createUser(twitterwallFrontendProperties.getImprintScreenName());
     }
 
     @Override
@@ -112,7 +90,7 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private User getDummyUser(Task task){
         long idTwitter=0L;
-        String screenName = imprintScreenName;
+        String screenName = twitterwallFrontendProperties.getImprintScreenName();
         String name="Exception Handler Dummy Username";
         String url="https://github.com/phasenraum2010/twitterwall2";
         String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";

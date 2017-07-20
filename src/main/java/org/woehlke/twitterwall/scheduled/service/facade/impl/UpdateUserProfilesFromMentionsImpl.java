@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,10 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
+import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -21,7 +23,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfilesFromMentions;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -46,7 +47,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         int allLoop = 0;
         int loopId = 0;
         boolean hasNext=true;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
             Page<Mention> allPersMentions =  mentionService.getAll(pageRequest);
             hasNext = allPersMentions.hasNext();
@@ -84,14 +85,14 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                             }
                             log.debug(msg + user.toString());
                             log.debug(msg + "-----------------------------------------------------");
-                            log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                            log.debug(msg + "Start SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
                             try {
-                                Thread.sleep(millisToWaitBetweenTwoApiCalls);
+                                Thread.sleep(twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls());
                             } catch (InterruptedException ex) {
                                 log.warn(msg, ex);
                             }
 
-                            log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
+                            log.debug(msg + "Done SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
                             log.debug(msg + "-----------------------------------------------------");
                         }
                     }
@@ -112,21 +113,6 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.backend.twitter.millisToWaitBetweenTwoApiCalls}")
-    private int millisToWaitBetweenTwoApiCalls;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
-
     private final StoreUserProfile storeUserProfile;
 
     private final TwitterApiService twitterApiService;
@@ -137,12 +123,24 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 
+    private final TwitterwallBackendProperties twitterwallBackendProperties;
+
+    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+
+    private final TwitterProperties twitterProperties;
+
     @Autowired
-    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, CountedEntitiesService countedEntitiesService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
         this.mentionService = mentionService;
         this.taskService = taskService;
         this.storeUserProfileForScreenName = storeUserProfileForScreenName;
+        this.twitterwallBackendProperties = twitterwallBackendProperties;
+        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
 }
