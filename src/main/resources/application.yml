@@ -32,13 +32,13 @@ spring:
     name: @project.name@
   datasource:
     driverClassName: org.postgresql.Driver
-    #initialSize: 5
-    #max-total: 70
-    #maxActive: 60
-    #maxIdle: 5
-    #minIdle: 2
+    initialSize: 5
+    max-total: 70
+    maxActive: 60
+    maxIdle: 5
+    minIdle: 2
     platform: POSTGRESQL
-    #removeAbandoned: true
+    removeAbandoned: true
     tomcat:
       max-active: 50
       max-wait: 10000
@@ -55,21 +55,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
-  social:
-    twitter:
-      accessToken: ${TWITTER_ACCESS_TOKEN}
-      accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
-      appId: ${TWITTER_CONSUMER_KEY}
-      appSecret: ${TWITTER_CONSUMER_SECRET}
   template:
     cache: false
   thymeleaf:
     cache: false
 twitter:
-  accessToken: ${TWITTER_ACCESS_TOKEN}
-  accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
-  consumerKey: ${TWITTER_CONSUMER_KEY}
-  consumerSecret: ${TWITTER_CONSUMER_SECRET}
+  #  accessToken: ${TWITTER_ACCESS_TOKEN}
+  #  accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
+  #  consumerKey: ${TWITTER_CONSUMER_KEY}
+  #  consumerSecret: ${TWITTER_CONSUMER_SECRET}
   pageSize: ${TWITTER_PAGE_SIZE}
   searchQuery: ${TWITTER_SEARCH_TERM}
 twitterwall:
@@ -97,13 +91,8 @@ twitterwall:
     allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
     allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
     allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
-    #allowFetchTweetsFromTwitterSearch: true
-    #allowUpdateTweets: true
-    #allowUpdateUserProfiles: true
-    #allowUpdateUserProfilesFromMention: true
     fetchUserList:
       allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
-      #allow: true
       name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
     skipFortesting: false

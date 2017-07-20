@@ -23,6 +23,18 @@ public class TwitterwallBackendProperties {
     public static class Twitter {
 
         @NotNull
+        private String accessToken;
+
+        @NotNull
+        private String accessTokenSecret;
+
+        @NotNull
+        private String consumerKey;
+
+        @NotNull
+        private String consumerSecret;
+
+        @NotNull
         private Integer millisToWaitBetweenTwoApiCalls;
 
         @Valid
@@ -42,6 +54,38 @@ public class TwitterwallBackendProperties {
 
         public void setMillisToWaitForFetchTweetsFromTwitterSearch(Integer millisToWaitForFetchTweetsFromTwitterSearch) {
             this.millisToWaitForFetchTweetsFromTwitterSearch = millisToWaitForFetchTweetsFromTwitterSearch;
+        }
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public void setAccessToken(String accessToken) {
+            this.accessToken = accessToken;
+        }
+
+        public String getAccessTokenSecret() {
+            return accessTokenSecret;
+        }
+
+        public void setAccessTokenSecret(String accessTokenSecret) {
+            this.accessTokenSecret = accessTokenSecret;
+        }
+
+        public String getConsumerKey() {
+            return consumerKey;
+        }
+
+        public void setConsumerKey(String consumerKey) {
+            this.consumerKey = consumerKey;
+        }
+
+        public String getConsumerSecret() {
+            return consumerSecret;
+        }
+
+        public void setConsumerSecret(String consumerSecret) {
+            this.consumerSecret = consumerSecret;
         }
     }
 

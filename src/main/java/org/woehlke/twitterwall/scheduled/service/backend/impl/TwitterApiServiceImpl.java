@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.backend.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.TwitterProperties;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,16 +85,33 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
 
+    @Inject
+    private Environment environment;
+
     private static final Logger log = LoggerFactory.getLogger(TwitterApiServiceImpl.class);
 
     private final TwitterProperties twitterProperties;
 
     private Twitter getTwitterProxy() {
-        Twitter twitter = new TwitterTemplate(
-            twitterProperties.getConsumerSecret(),
-            twitterProperties.getConsumerSecret(),
-            twitterProperties.getAccessToken(),
-            twitterProperties.getConsumerSecret());
+
+        String consumerKey =  environment.getProperty("TWITTER_CONSUMER_KEY");
+        String consumerSecret =   environment.getProperty("TWITTER_CONSUMER_SECRET");
+        String accessToken =  environment.getProperty("TWITTER_ACCESS_TOKEN");
+        String accessTokenSecret =  environment.getProperty("TWITTER_ACCESS_TOKEN_SECRET");
+
+        /*
+            String consumerKey = twitterProperties.getConsumerSecret();
+            String consumerSecret = twitterProperties.getConsumerSecret();
+            String accessToken = twitterProperties.getAccessToken();
+            String accessTokenSecret =twitterProperties.getConsumerSecret());
+
+            String consumerKey = twitterwallBackendProperties.getTwitter().getConsumerSecret();
+            String consumerSecret = twitterwallBackendProperties.getTwitter().getConsumerSecret();
+            String accessToken = twitterwallBackendProperties.getTwitter().getAccessToken();
+            String accessTokenSecret = twitterwallBackendProperties.getTwitter().getConsumerSecret();
+        */
+
+        Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         return twitter;
     }
 
