@@ -54,12 +54,11 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
                 allLoop++;
                 subLoopId++;
                 String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
-                try {
-                    User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
-                    log.debug(msg+subCounter+userFromMention.toString());
-                } catch (IllegalArgumentException exe){
-                    taskService.warn(task,exe,msg+subCounter);
+                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
+                if(userFromMention == null){
+                    taskService.warn(task,msg+subCounter);
                 }
+                log.debug(msg+subCounter+userFromMention.toString());
             }
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
