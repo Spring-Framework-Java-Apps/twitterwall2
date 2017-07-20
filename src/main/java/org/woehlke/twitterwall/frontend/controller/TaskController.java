@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -37,7 +38,7 @@ public class TaskController {
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"timeStarted");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"timeStarted");
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
         return "task/taskAll";
@@ -55,7 +56,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         //Task oneTask = taskService.findById(id);
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
         model.addAttribute("task",task);
         model.addAttribute("taskHistoryList",taskHistoryList);
@@ -157,17 +158,20 @@ public class TaskController {
 
     private final UpdateTweets updateTweets;
 
+    private final ConfigTwitterwall configTwitterwall;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, ControllerHelper controllerHelper) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
         this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.updateTweets = updateTweets;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
 

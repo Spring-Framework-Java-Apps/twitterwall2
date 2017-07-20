@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.UrlService;
@@ -30,18 +31,21 @@ public class UrlResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<Url> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
         return this.urlService.getAll(pageRequest);
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     private final UrlService urlService;
 
+    private final ConfigTwitterwall configTwitterwall;
+
     @Autowired
-    public UrlResource(UrlService urlService) {
+    public UrlResource(UrlService urlService, ConfigTwitterwall configTwitterwall) {
         this.urlService = urlService;
+        this.configTwitterwall = configTwitterwall;
     }
 
 }

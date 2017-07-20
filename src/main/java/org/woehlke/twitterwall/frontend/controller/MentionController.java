@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -29,20 +30,23 @@ public class MentionController {
         String title = "Mention";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"screenName");
         Page<Mention> myPageContent = mentionService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/mention/all";
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final MentionService mentionService;
 
 
     @Autowired
-    public MentionController(MentionService mentionService, ControllerHelper controllerHelper) {
+    public MentionController(ConfigTwitterwall configTwitterwall, MentionService mentionService, ControllerHelper controllerHelper) {
+        this.configTwitterwall = configTwitterwall;
         this.mentionService = mentionService;
         this.controllerHelper = controllerHelper;
     }

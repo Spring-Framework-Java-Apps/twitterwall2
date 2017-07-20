@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
@@ -30,24 +31,27 @@ public class HashTagResource {
   @RequestMapping(path="/all",params = { "page" }, method= RequestMethod.GET)
   public @ResponseBody
   Page<HashTag> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-      Pageable pageRequest = new PageRequest(page, pageSize);
+      Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
       return this.hashTagService.getAll(pageRequest);
   }
 
     @RequestMapping(path="/overview", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody Page<HashTag> getOverview(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
         return this.hashTagService.getAll(pageRequest);
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     private final HashTagService hashTagService;
 
+    private final ConfigTwitterwall configTwitterwall;
+
     @Autowired
-    public HashTagResource(HashTagService hashTagService) {
+    public HashTagResource(HashTagService hashTagService, ConfigTwitterwall configTwitterwall) {
         this.hashTagService = hashTagService;
+        this.configTwitterwall = configTwitterwall;
     }
 
 }

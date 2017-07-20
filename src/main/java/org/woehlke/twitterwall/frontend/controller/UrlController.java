@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Url;
@@ -31,20 +32,23 @@ public class UrlController {
         String title = "Url";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"url");
         Page<Url> myPageContent = urlService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     private final UrlService urlService;
 
+    private final ConfigTwitterwall configTwitterwall;
+
     @Autowired
-    public UrlController(UrlService urlService, ControllerHelper controllerHelper) {
+    public UrlController(UrlService urlService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.urlService = urlService;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
 

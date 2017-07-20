@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
@@ -31,7 +32,7 @@ public class TaskHistoryController {
         String title = "TaskHistory";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"timeEvent");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"timeEvent");
         Page<TaskHistory> myPageContent = taskHistoryService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
@@ -39,12 +40,15 @@ public class TaskHistoryController {
 
     private final TaskHistoryService taskHistoryService;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     @Autowired
-    public TaskHistoryController(TaskHistoryService taskHistoryService, ControllerHelper controllerHelper) {
+    public TaskHistoryController(TaskHistoryService taskHistoryService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.taskHistoryService = taskHistoryService;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
 

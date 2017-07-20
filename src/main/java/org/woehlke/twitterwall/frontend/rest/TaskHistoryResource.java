@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
@@ -22,7 +23,7 @@ public class TaskHistoryResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
         Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;
     }
@@ -35,13 +36,16 @@ public class TaskHistoryResource {
     }
 
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     @Autowired
-    public TaskHistoryResource(TaskHistoryService taskHistoryService) {
+    public TaskHistoryResource(ConfigTwitterwall configTwitterwall, TaskHistoryService taskHistoryService) {
+        this.configTwitterwall = configTwitterwall;
         this.taskHistoryService = taskHistoryService;
     }
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final TaskHistoryService taskHistoryService;
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
@@ -31,20 +32,23 @@ public class TickerSymbolController {
         String title = "TickerSymbol";
         String symbol = Symbols.DATABASE.toString();
         model =  controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"url");
         Page<TickerSymbol> myPageContent = tickerSymbolService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
 
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final TickerSymbolService tickerSymbolService;
 
     @Autowired
-    public TickerSymbolController(TickerSymbolService tickerSymbolService, ControllerHelper controllerHelper) {
+    public TickerSymbolController(ConfigTwitterwall configTwitterwall, TickerSymbolService tickerSymbolService, ControllerHelper controllerHelper) {
+        this.configTwitterwall = configTwitterwall;
         this.tickerSymbolService = tickerSymbolService;
         this.controllerHelper = controllerHelper;
     }

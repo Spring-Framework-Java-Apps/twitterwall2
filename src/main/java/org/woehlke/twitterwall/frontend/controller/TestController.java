@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -33,7 +34,7 @@ public class TestController {
         controllerHelper.logEnv();
         model = controllerHelper.setupPage(model,"Test Data Tweets",searchterm,Symbols.GET_TEST_DATA.toString());
         String msg = "/getTestData : ";
-        if(contextTest){
+        if(configTwitterwall.getFrontend().getContextTest()){
             model.addAttribute("latestTweets", createTestData.getTestDataTweets());
             model.addAttribute("users", createTestData.getTestDataUser());
         } else {
@@ -45,7 +46,7 @@ public class TestController {
 
     @RequestMapping("/user/onlist/renew")
     public String getOnListRenew(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, pageSize);
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize());
         String msg = "getOnListRenew: ";
         this.startOnListRenew();
         log.info(msg+"START userService.findOnList(): ");
@@ -66,21 +67,24 @@ public class TestController {
 
     private final CreateTestData createTestData;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
 
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
+    //@Value("${twitterwall.context.test}")
+    //private boolean contextTest;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
+    private final ConfigTwitterwall configTwitterwall;
+
     @Autowired
-    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ControllerHelper controllerHelper) {
+    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.userService = userService;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.createTestData = createTestData;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
 

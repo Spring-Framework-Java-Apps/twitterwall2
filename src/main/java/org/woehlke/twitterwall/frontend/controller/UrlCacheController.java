@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
@@ -31,22 +32,25 @@ public class UrlCacheController {
         String title = "UrlCache";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"url");
         Page<UrlCache> myPageContent = urlCacheService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     private final UrlCacheService urlCacheService;
 
     @Autowired
-    public UrlCacheController(UrlCacheService urlCacheService, ControllerHelper controllerHelper) {
+    public UrlCacheController(UrlCacheService urlCacheService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.urlCacheService = urlCacheService;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final ControllerHelper controllerHelper;
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -32,9 +33,9 @@ public class PagesController {
         controllerHelper.logEnv();
         String symbol = Symbols.IMPRINT.toString();
         String title = "Impressum";
-        String subtitle = imprintSubtitle;
+        String subtitle = configTwitterwall.getFrontend().getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        String screenName = imprintScreenName;
+        String screenName = configTwitterwall.getFrontend().getImprintScreenName();
         User user = createTestData.addUserForScreenName(screenName);
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
@@ -43,18 +44,20 @@ public class PagesController {
 
     private static final Logger log = LoggerFactory.getLogger(PagesController.class);
 
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
+    //@Value("${twitterwall.frontend.imprintScreenName}")
+    //private String imprintScreenName;
 
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
+    //@Value("${twitterwall.frontend.imprintSubtitle}")
+    //private String imprintSubtitle;
 
     private final CreateTestData createTestData;
 
+    private final ConfigTwitterwall configTwitterwall;
 
     @Autowired
-    public PagesController(CreateTestData createTestData, ControllerHelper controllerHelper) {
+    public PagesController(CreateTestData createTestData, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.createTestData = createTestData;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
 

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
@@ -45,7 +46,7 @@ public class HashTagController {
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"text");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"text");
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/hashtag/all";
@@ -65,8 +66,8 @@ public class HashTagController {
         if (m.matches()) {
             String msg2 = msg + " parameter IS valid - START ";
             log.debug(msg2);
-            Pageable pageRequestTweet = new PageRequest(pageTweet, pageSize);
-            Pageable pageRequestUser = new PageRequest(pageUser, pageSize);
+            Pageable pageRequestTweet = new PageRequest(pageTweet, configTwitterwall.getFrontend().getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, configTwitterwall.getFrontend().getPageSize());
             String subtitle = "Tweets und User für HashTag";
             String title = text;
             String symbol = Symbols.HASHTAG.toString();
@@ -103,7 +104,7 @@ public class HashTagController {
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, configTwitterwall.getFrontend().getPageSize());
         boolean hasNext = true;
         while(hasNext) {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
@@ -147,8 +148,10 @@ public class HashTagController {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
@@ -160,7 +163,8 @@ public class HashTagController {
     private final UserService userService;
 
     @Autowired
-    public HashTagController(HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
+    public HashTagController(ConfigTwitterwall configTwitterwall, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
+        this.configTwitterwall = configTwitterwall;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
         this.userService = userService;

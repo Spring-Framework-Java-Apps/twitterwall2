@@ -3,6 +3,7 @@ package org.woehlke.twitterwall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -20,10 +21,6 @@ import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.scheduled.service.facade.impl.CreateTestDataImpl.ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST;
-import static org.woehlke.twitterwall.scheduled.service.facade.impl.CreateTestDataImpl.ID_TWITTER_TO_FETCH_FOR_TWEET_TEST;
-
-
 /**
  * Created by tw on 13.07.17.
  */
@@ -37,7 +34,7 @@ public abstract class PrepareDataTest implements InitializingBean {
         try {
             log.info(msg + "--------------------------------------------------------------------");
             int loopId = 0;
-            for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
+            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForTweetTest()) {
                 try {
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
@@ -71,7 +68,7 @@ public abstract class PrepareDataTest implements InitializingBean {
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
-            for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST) {
+            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForUserControllerTest()) {
                 try {
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
@@ -106,12 +103,13 @@ public abstract class PrepareDataTest implements InitializingBean {
         taskService.done(task);
     }
 
-    protected void setupAfterPropertiesSetWithTesting(TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest , String imprintScreenName, String idGoogleAnalytics) {
+    protected void setupAfterPropertiesSetWithTesting(ConfigTwitterwall configTwitterwall, TaskService taskService, TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, String menuAppName, String searchterm, String infoWebpage, String theme, boolean contextTest , String imprintScreenName, String idGoogleAnalytics) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
         this.taskService=taskService;
+        this.configTwitterwall = configTwitterwall;
         this.setupAfterPropertiesSet(menuAppName, searchterm, infoWebpage, theme, contextTest, imprintScreenName, idGoogleAnalytics);
     }
 
@@ -149,6 +147,8 @@ public abstract class PrepareDataTest implements InitializingBean {
     private String imprintScreenName;
 
     private String idGoogleAnalytics;
+
+    private ConfigTwitterwall configTwitterwall;
 
     protected void logEnv(){
         log.info("--------------------------------------------------------------------");

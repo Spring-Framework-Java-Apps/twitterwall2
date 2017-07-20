@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -29,7 +30,7 @@ public class TweetController {
     public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         controllerHelper.logEnv();
         model = controllerHelper.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
@@ -39,17 +40,20 @@ public class TweetController {
 
     private final TweetService tweetService;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
 
     @Autowired
-    public TweetController(TweetService tweetService, ControllerHelper controllerHelper) {
+    public TweetController(TweetService tweetService, ConfigTwitterwall configTwitterwall, ControllerHelper controllerHelper) {
         this.tweetService = tweetService;
+        this.configTwitterwall = configTwitterwall;
         this.controllerHelper = controllerHelper;
     }
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final ControllerHelper controllerHelper;
 }

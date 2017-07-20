@@ -12,6 +12,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -34,6 +35,7 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreateTestDataImpl implements CreateTestData {
 
+    /*
     public final static long[] ID_TWITTER_TO_FETCH_FOR_TWEET_TEST = {
             876329508009279488L,
             876356335784394752L,
@@ -57,6 +59,7 @@ public class CreateTestDataImpl implements CreateTestData {
             876441015523192832L, // Markus306
             876440419416109056L  // mattLefaux
     };
+    */
 
 
     public org.springframework.data.domain.Page<Tweet> getTestDataTweets(){
@@ -66,7 +69,7 @@ public class CreateTestDataImpl implements CreateTestData {
         try {
             log.info(msg + "--------------------------------------------------------------------");
             int loopId = 0;
-            for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_TWEET_TEST) {
+            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForTweetTest()) {
                 try {
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
@@ -108,7 +111,7 @@ public class CreateTestDataImpl implements CreateTestData {
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
-            for (long idTwitter : ID_TWITTER_TO_FETCH_FOR_PROFILE_CONTROLLER_TEST) {
+            for (long idTwitter : configTwitterwall.getScheduler().getFacade().getIdTwitterToFetchForUserControllerTest()) {
                 try {
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
@@ -181,12 +184,13 @@ public class CreateTestDataImpl implements CreateTestData {
     }
 
     @Autowired
-    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService) {
+    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, ConfigTwitterwall configTwitterwall) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
+        this.configTwitterwall = configTwitterwall;
     }
 
     private final TwitterApiService twitterApiService;
@@ -198,6 +202,8 @@ public class CreateTestDataImpl implements CreateTestData {
     private final StoreUserProfile storeUserProfile;
 
     private final UserService userService;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private static final Logger log = LoggerFactory.getLogger(CreateTestDataImpl.class);
 

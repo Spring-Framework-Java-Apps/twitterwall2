@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Media;
@@ -30,20 +31,23 @@ public class MediaController {
         String title = "Media";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, configTwitterwall.getFrontend().getPageSize(), Sort.Direction.ASC,"url");
         Page<Media> myPageContent = mediaService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/media/all";
     }
 
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    //@Value("${twitterwall.frontend.maxResults}")
+    //private int pageSize;
+
+    private final ConfigTwitterwall configTwitterwall;
 
     private final MediaService mediaService;
 
     @Autowired
-    public MediaController(MediaService mediaService, ControllerHelper controllerHelper) {
+    public MediaController(ConfigTwitterwall configTwitterwall, MediaService mediaService, ControllerHelper controllerHelper) {
+        this.configTwitterwall = configTwitterwall;
         this.mediaService = mediaService;
         this.controllerHelper = controllerHelper;
     }

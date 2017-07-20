@@ -9,10 +9,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
@@ -32,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterUrlServiceImpl implements TwitterUrlService {
 
+
     @Override
     public Url fetchTransientUrl(String urlSrc,Task task) {
         String msg = "fetchTransientUrl "+urlSrc+" ";
@@ -45,7 +48,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
         try {
             String display;
             String expanded;
-            httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(maxIdleTime, TimeUnit.SECONDS).build();
+            httpclient = HttpClients.custom().setConnectionTimeToLive(configTwitterwall.getBackenend().getUrl().getConnTimeToLive(), TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(configTwitterwall.getBackenend().getUrl().getMaxIdleTime(), TimeUnit.SECONDS).build();
             HttpGet httpGet = new HttpGet(urlSrc);
             HttpClientContext context = HttpClientContext.create();
             response1 = httpclient.execute(httpGet, context);
@@ -94,9 +97,17 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    @Value("${twitterwall.backend.url.connTimeToLive}")
-    private long connTimeToLive;
+    //@Value("${twitterwall.backend.url.connTimeToLive}")
+    //private long connTimeToLive;
 
-    @Value("${twitterwall.backend.url.maxIdleTime}")
-    private long maxIdleTime;
+    //@Value("${twitterwall.backend.url.maxIdleTime}")
+    //private long maxIdleTime;
+
+
+    private final ConfigTwitterwall configTwitterwall;
+
+    @Autowired
+    public TwitterUrlServiceImpl(ConfigTwitterwall configTwitterwall) {
+        this.configTwitterwall = configTwitterwall;
+    }
 }

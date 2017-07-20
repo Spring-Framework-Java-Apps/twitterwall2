@@ -2,12 +2,14 @@ package org.woehlke.twitterwall.frontend.controller.common.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
+import org.woehlke.twitterwall.ConfigTwitterwall;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.Page;
 
@@ -20,13 +22,13 @@ public class ControllerHelperImpl implements ControllerHelper {
 
     public void logEnv(){
         log.info("--------------------------------------------------------------------");
-        log.info("twitterwall.frontend.menuAppName = "+menuAppName);
-        log.info("twitter.searchQuery = "+searchterm);
-        log.info("twitterwall.frontend.infoWebpage = "+infoWebpage);
-        log.info("twitterwall.frontend.theme = "+theme);
-        log.info("twitterwall.frontend.contextTest = "+contextTest);
-        log.info("twitterwall.frontend.imprintScreenName = "+imprintScreenName);
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+idGoogleAnalytics);
+        log.info("twitterwall.frontend.menuAppName = "+configTwitterwall.getFrontend().getMenuAppName());
+        log.info("twitter.searchQuery = "+  searchterm);
+        log.info("twitterwall.frontend.infoWebpage = "+ configTwitterwall.getFrontend().getInfoWebpage());
+        log.info("twitterwall.frontend.theme = "+ configTwitterwall.getFrontend().getTheme());
+        log.info("twitterwall.frontend.contextTest = "+ configTwitterwall.getFrontend().getContextTest());
+        log.info("twitterwall.frontend.imprintScreenName = "+configTwitterwall.getFrontend().getImprintScreenName());
+        log.info("twitterwall.frontend.idGoogleAnalytics = "+configTwitterwall.getFrontend().getIdGoogleAnalytics());
         log.info("--------------------------------------------------------------------");
     }
 
@@ -34,15 +36,15 @@ public class ControllerHelperImpl implements ControllerHelper {
         page.setTitle(title);
         page.setSubtitle(subtitle);
         page.setSymbol(symbol);
-        page.setMenuAppName(menuAppName);
+        page.setMenuAppName(configTwitterwall.getFrontend().getMenuAppName());
         page.setTwitterSearchTerm(searchterm);
-        page.setInfoWebpage(infoWebpage);
-        page.setTheme(theme);
-        page.setContextTest(contextTest);
+        page.setInfoWebpage(configTwitterwall.getFrontend().getInfoWebpage());
+        page.setTheme(configTwitterwall.getFrontend().getTheme());
+        page.setContextTest(configTwitterwall.getFrontend().getContextTest());
         page.setHistoryBack(true);
-        if(!idGoogleAnalytics.isEmpty()){
+        if(!configTwitterwall.getFrontend().getIdGoogleAnalytics().isEmpty()){
             String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
-            html = html.replace("###GOOGLE_ANALYTICS_ID###",idGoogleAnalytics);
+            html = html.replace("###GOOGLE_ANALYTICS_ID###",configTwitterwall.getFrontend().getIdGoogleAnalytics());
             page.setGoogleAnalyticScriptHtml(html);
         } else {
             page.setGoogleAnalyticScriptHtml("");
@@ -70,32 +72,17 @@ public class ControllerHelperImpl implements ControllerHelper {
         return model;
     }
 
+    @Autowired
+    public ControllerHelperImpl(ConfigTwitterwall configTwitterwall) {
+        this.configTwitterwall = configTwitterwall;
+    }
+
     private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
 
-
-    @Value("${twitterwall.frontend.menuAppName}")
-    private String menuAppName;
+    private final ConfigTwitterwall configTwitterwall;
 
     @Value("${twitter.searchQuery}")
     private String searchterm;
-
-    @Value("${twitterwall.frontend.infoWebpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.contextTest}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprintScreenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.imprintSubtitle}")
-    private String imprintSubtitle;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
 
     private final static String GOOGLE_ANALYTICS_SCRIPT_HTML = "<script>\n" +
             "        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +

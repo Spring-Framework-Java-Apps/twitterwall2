@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.service.backend.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
@@ -10,6 +11,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.TwitterProperties;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 
 import java.util.ArrayList;
@@ -22,11 +24,12 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterApiServiceImpl implements TwitterApiService {
 
+
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
         String msg = MSG+"findTweetsForSearchQuery: ";
         log.debug(msg);
-        List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(searchQuery, pageSize).getTweets();
+        List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
         msg += " result: ";
         if(fetchedTweets == null){
             log.debug(msg+" result.size: 0");
@@ -83,32 +86,21 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterApiServiceImpl.class);
 
-    @Value("${twitter.consumerKey}")
-    private String twitterConsumerKey;
-
-    @Value("${twitter.consumerSecret}")
-    private String twitterConsumerSecret;
-
-    @Value("${twitter.accessToken}")
-    private String twitterAccessToken;
-
-    @Value("${twitter.accessTokenSecret}")
-    private String twitterAccessTokenSecret;
-
-    @Value("${twitter.pageSize}")
-    private int pageSize;
-
-    @Value("${twitter.searchQuery}")
-    private String searchQuery;
+    private final TwitterProperties twitterProperties;
 
     private Twitter getTwitterProxy() {
         Twitter twitter = new TwitterTemplate(
-            twitterConsumerKey,
-            twitterConsumerSecret,
-            twitterAccessToken,
-            twitterAccessTokenSecret);
+            twitterProperties.getConsumerSecret(),
+            twitterProperties.getConsumerSecret(),
+            twitterProperties.getAccessToken(),
+            twitterProperties.getConsumerSecret());
         return twitter;
     }
 
     private String MSG = "Remote API Call ";
+
+    @Autowired
+    public TwitterApiServiceImpl(TwitterProperties twitterProperties) {
+        this.twitterProperties = twitterProperties;
+    }
 }
