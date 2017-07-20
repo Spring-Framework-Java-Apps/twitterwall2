@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall;
+package org.woehlke.twitterwall.conf;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,16 +22,16 @@ public class TwitterwallBackendProperties {
 
     public static class Twitter {
 
-        @NotNull
+        //@NotNull
         private String accessToken;
 
-        @NotNull
+        //@NotNull
         private String accessTokenSecret;
 
-        @NotNull
+        //@NotNull
         private String consumerKey;
 
-        @NotNull
+        //@NotNull
         private String consumerSecret;
 
         @NotNull

@@ -14,6 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

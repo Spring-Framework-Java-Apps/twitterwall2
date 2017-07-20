@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 
 
 /**

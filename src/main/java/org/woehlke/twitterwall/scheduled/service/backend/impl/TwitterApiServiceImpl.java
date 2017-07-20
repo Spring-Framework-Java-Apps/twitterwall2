@@ -11,7 +11,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 
 import javax.inject.Inject;

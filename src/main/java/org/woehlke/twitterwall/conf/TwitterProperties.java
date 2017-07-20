@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall;
+package org.woehlke.twitterwall.conf;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,19 +12,19 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix="twitter")
 public class TwitterProperties {
 
-    @NotNull
+    //@NotNull
     private String accessToken;
 
-    @NotNull
+    //@NotNull
     private String accessTokenSecret;
 
-    @NotNull
+    //@NotNull
     private String consumerKey;
 
-    @NotNull
+    //@NotNull
     private String consumerSecret;
 
-    @NotNull
+    //@NotNull
     private Integer pageSize;
 
     @NotNull

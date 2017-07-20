@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;

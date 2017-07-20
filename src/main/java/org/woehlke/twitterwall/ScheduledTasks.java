@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.scheduled.service.facade.*;
 
 import java.text.SimpleDateFormat;

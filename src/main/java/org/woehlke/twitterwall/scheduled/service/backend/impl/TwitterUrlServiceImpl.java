@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
