@@ -3,7 +3,7 @@ package org.woehlke.twitterwall;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix="twitterwall")
+@ConfigurationProperties(prefix="twitter")
 public class TwitterProperties {
 
     private String accessToken;
