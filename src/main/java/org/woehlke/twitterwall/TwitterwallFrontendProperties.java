@@ -2,30 +2,47 @@ package org.woehlke.twitterwall;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+@Component
+@Validated
 @ConfigurationProperties(prefix="twitterwall.frontend")
 public class TwitterwallFrontendProperties {
 
+    @NotNull
     private String idGoogleAnalytics;
 
+    @NotNull
     private String imprintScreenName;
 
+    @NotNull
     private String imprintSubtitle;
 
+    @NotNull
     private String infoWebpage;
 
+    @NotNull
     private String menuAppName;
 
+    @NotNull
     private String theme;
 
+    @NotNull
     private Boolean contextTest;
 
+    @NotNull
     private Integer pageSize;
 
+    @Valid
     private Controller controller = new Controller();
 
     public static class Controller {
 
+        @NotNull
         private Boolean fetchUsersFromDefinedUserList;
 
         public Boolean getFetchUsersFromDefinedUserList() {
