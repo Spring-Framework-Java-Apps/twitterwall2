@@ -49,7 +49,7 @@ public class HashTagController {
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"text");
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return "/hashtag/all";
+        return "hashtag/all";
     }
 
     @RequestMapping(path="/{text}")
@@ -86,11 +86,11 @@ public class HashTagController {
             model.addAttribute("users", users);
             //
             log.debug(msg + " READY - DONE");
-            return "/hashtag/hashtagText";
+            return "hashtag/hashtagText";
         } else {
             String msg2 = msg + " parameter ist NOT valid";
             log.warn(msg2);
-            return "/hashtag/hashtagText";
+            return "hashtag/hashtagText";
         }
     }
 
@@ -143,7 +143,7 @@ public class HashTagController {
         }
         model.addAttribute("hashTagsTweets", hashTagsTweets);
         model.addAttribute("hashTagsUsers", hashTagsUsers);
-        return "/hashtag/overview";
+        return "hashtag/overview";
     }
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
