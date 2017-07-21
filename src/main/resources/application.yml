@@ -43,7 +43,7 @@ spring:
       max-active: 50
       max-wait: 10000
       test-on-borrow: true
-    url: ${JDBC_DATABASE_URL}
+    url: ${DATABASE_URL}
   devtools:
     livereload:
       enabled: false
