@@ -33,7 +33,7 @@ public class MentionController {
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         Page<Mention> myPageContent = mentionService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return "/mention/all";
+        return "mention/all";
     }
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
