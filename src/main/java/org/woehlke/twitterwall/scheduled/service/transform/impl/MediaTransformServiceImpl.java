@@ -5,6 +5,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.scheduled.service.transform.MediaTransformService;
@@ -20,7 +21,7 @@ import java.util.Set;
 public class MediaTransformServiceImpl extends EntitiesFilter implements MediaTransformService {
 
     @Override
-    public Media transform(MediaEntity medium) {
+    public Media transform(MediaEntity medium,Task task) {
         long idTwitter = medium.getId();
         String mediaHttp = medium.getMediaUrl();
         String mediaHttps = medium.getMediaSecureUrl();
@@ -28,17 +29,12 @@ public class MediaTransformServiceImpl extends EntitiesFilter implements MediaTr
         String display = medium.getDisplayUrl();
         String expanded = medium.getExpandedUrl();
         String type = medium.getType();
-        int[] indices = medium.getIndices();
-        Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, indices);
+        Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, task);
         return myMediaEntity;
     }
 
     @Override
-    public Set<Media> getMediaFor(TwitterProfile userSource) {
-        Set<Media> mediaTarget = new LinkedHashSet<Media>();
-        //TODO: bla
-        String description = userSource.getDescription();
-        //Set<Media> mediaTarget = getMediaForDescription(description);
-        return mediaTarget;
+    public Set<Media> getMediaFor(TwitterProfile userSource,Task task) {
+        return new LinkedHashSet<Media>();
     }
 }

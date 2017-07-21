@@ -28,27 +28,23 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
     public User storeUserProfileForScreenName(String screenName, Task task){
         String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
         if(screenName != null && !screenName.isEmpty()) {
-            try {
-                User userPersForMention = this.userService.findByScreenName(screenName);
-                return userPersForMention;
-            } catch (EmptyResultDataAccessException e) {
+            User userPersForMention = this.userService.findByScreenName(screenName);
+            if (userPersForMention == null) {
                 try {
                     TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                    User userFromMention = storeUserProfile.storeUserProfile(twitterProfile,task);
-                    log.debug(msg + " userFromMention: "+userFromMention.toString());
+                    User userFromMention = storeUserProfile.storeUserProfile(twitterProfile, task);
+                    log.debug(msg + " userFromMention: " + userFromMention.toString());
                     return userFromMention;
                 } catch (RateLimitExceededException ex) {
-                    taskService.warn(task,ex,msg);
-                    throw e;
+                    log.warn(msg+""+task.toString(),ex);
                 }
             }
+            return userPersForMention;
         } else {
-            taskService.event(task,msg+" throw new IllegalArgumentException");
-            throw new IllegalArgumentException("screenName is empty");
+            log.warn(msg+" "+task.toString());
+            return null;
         }
     }
-
-
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 
@@ -67,6 +63,5 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
         this.storeUserProfile = storeUserProfile;
         this.taskService = taskService;
     }
-
 
 }

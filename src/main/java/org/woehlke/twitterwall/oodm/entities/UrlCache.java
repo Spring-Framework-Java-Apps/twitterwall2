@@ -1,70 +1,82 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 23.06.17.
  */
 @Entity
-@Table(name = "url_cache",
-        uniqueConstraints = { @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
-}, indexes = {
+@Table(
+    name = "url_cache",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_url_cache", columnNames = {"url"})
+    },
+    indexes = {
         @Index(name="idx_url_cache_expanded", columnList="expanded")
-})
-/*
-@NamedQueries({
-        @NamedQuery(
-                name = "UrlCache.findByUrl",
-                query = "select t from UrlCache as t where t.url=:url"
-        ) ,
-    @NamedQuery(
-        name = "UrlCache.count",
-        query = "select count(t) from UrlCache as t"
-    ),
-    @NamedQuery(
-        name = "UrlCache.getAll",
-        query = "select t from UrlCache as t"
-    )
-})
-*/
+    }
+)
 @EntityListeners(UrlCacheListener.class)
 public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String UNDEFINED = "UNDEFINED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
+    @NotNull
     @Column(length=4096)
-    private String expanded;
+    private String expanded = "";
 
+    @URL
+    @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
 
-    public UrlCache(TaskInfo taskInfo, Task createdBy, Task updatedBy, String expanded, String url) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+    public UrlCache(String expanded, String url, Task task) {
         this.expanded = expanded;
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public UrlCache() {
+    public UrlCache(String url,Task task){
+        this.expanded = UrlCache.UNDEFINED;
+        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    private UrlCache(){
     }
 
     @Transient

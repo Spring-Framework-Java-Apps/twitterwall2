@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -23,13 +24,13 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
  */
 @Controller
 @RequestMapping("/tweet")
-public class TweetController extends AbstractTwitterwallController {
+public class TweetController {
 
     @RequestMapping("/all")
-    public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model) {
-        logEnv();
-        model = super.setupPage(model,"Tweets",searchterm,Symbols.HOME.toString());
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC,"createdAt");
+    public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+        controllerHelper.logEnv();
+        model = controllerHelper.setupPage(model,"Tweets",twitterProperties.getSearchQuery(),Symbols.HOME.toString());
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
@@ -39,37 +40,17 @@ public class TweetController extends AbstractTwitterwallController {
 
     private final TweetService tweetService;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    private final ControllerHelper controllerHelper;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
+    private final TwitterProperties twitterProperties;
 
     @Autowired
-    public TweetController(TweetService tweetService) {
+    public TweetController(TweetService tweetService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
         this.tweetService = tweetService;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
+        this.controllerHelper = controllerHelper;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
     }
 }

@@ -1,5 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -7,36 +10,25 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "tickersymbol", uniqueConstraints = {
-        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url"})
-}, indexes = {
+@Table(
+    name = "tickersymbol",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
+    },
+    indexes = {
         @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
-})
-/*
-@NamedQueries({
-        @NamedQuery(
-                name = "TickerSymbol.findByUrl",
-                query = "select t from TickerSymbol as t where t.url=:url"
-        ),
-        @NamedQuery(
-                name = "TickerSymbol.findByTickerSymbolAndUrl",
-                query = "select t from TickerSymbol as t where t.url=:url and t.tickerSymbol=:tickerSymbol"
-        ),
-    @NamedQuery(
-        name = "TickerSymbol.count",
-        query = "select count(t) from TickerSymbol as t"
-    ),
-    @NamedQuery(
-        name = "TickerSymbol.getAll",
-        query = "select t from TickerSymbol as t"
-    )
-})
-*/
+    }
+)
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
@@ -46,48 +38,46 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
-    @Column(name = "ticker_symbol",length=4096)
-    private String tickerSymbol;
+    @NotEmpty
+    @SafeHtml
+    @Column(name = "ticker_symbol",length=4096,nullable = false)
+    private String tickerSymbol = "";
 
-    @Column(length=4096)
-    private String url;
+    @URL
+    @NotEmpty
+    @Column(name = "url",length=4096,nullable = false)
+    private String url = "";
 
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "tickersymbol_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
-    public TickerSymbol(String tickerSymbol, String url, int[] indices) {
-        //setIndices(indices);
+    public TickerSymbol(String tickerSymbol, String url,Task task) {
         this.tickerSymbol = tickerSymbol;
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public TickerSymbol(TaskInfo taskInfo, Task createdBy, Task updatedBy, String tickerSymbol, String url) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.tickerSymbol = tickerSymbol;
+    public TickerSymbol(String url,Task task) {
+        this.tickerSymbol = "UNDEFINED";
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public TickerSymbol() {
+    private TickerSymbol() {
     }
 
     public static long getSerialVersionUID() {
@@ -197,14 +187,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
@@ -212,7 +194,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-                //", indices=" + myIndieces.toString() +
                 "\n}";
     }
 
@@ -221,8 +202,4 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         return true;
     }
 
-    public static TickerSymbol getTickerSymbolFactory(String url) {
-        int[] indices = {};
-        return new TickerSymbol(url,url,indices);
-    }
 }

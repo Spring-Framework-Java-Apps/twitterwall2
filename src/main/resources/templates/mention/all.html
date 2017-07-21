@@ -28,14 +28,22 @@
                                 </div>
                                 <div class="col-md-2">screenName:</div>
                                 <div class="col-md-10">
-                                    <span th:if="${myPageItem.idTwitter < 0}">
+                                    <span th:if="${myPageItem.idTwitter &lt; 0}">
                                         <a href="" th:href="@{|https://twitter.com/${myPageItem.screenName}|}">
                                             <span th:text="${myPageItem.screenName}">screenName</span>
                                         </a>
                                     </span>
-                                    <span th:if="${myPageItem.idTwitter > 0}">
+                                    <span th:if="${myPageItem.idTwitter &gt; 0}">
                                         <a href="" th:href="@{|/user/${myPageItem.screenName}|}">
                                             <span th:text="${myPageItem.screenName}">screenName</span>
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="col-md-2">has User:</div>
+                                <div class="col-md-10">
+                                    <span th:if="${myPageItem.hasPersistentUser()}">
+                                        <a href="" th:href="@{|/user/${myPageItem.user.screenName}|}">
+                                            <span th:text="${myPageItem.user.screenName}">user.screenName</span>
                                         </a>
                                     </span>
                                 </div>

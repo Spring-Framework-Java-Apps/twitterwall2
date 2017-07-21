@@ -2,7 +2,9 @@ package org.woehlke.twitterwall.oodm.entities.parts;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -11,14 +13,36 @@ import java.io.Serializable;
 @Embeddable
 public class TaskInfo implements Serializable {
 
+    @NotNull
+    @Column(nullable = false,name="scheduler_fetch_tweets_from_twitter_search")
     private Boolean updatedByFetchTweetsFromTwitterSearch = false;
+
+    @NotNull
+    @Column(nullable = false,name="scheduler_update_tweets")
     private Boolean updatedByUpdateTweets  = false;
+
+    @NotNull
+    @Column(nullable = false,name="scheduler_update_users")
     private Boolean updatedByUpdateUserProfiles  = false;
+
+    @NotNull
+    @Column(nullable = false,name="scheduler_update_users_from_mentions")
     private Boolean updatedByUpdateUserProfilesFromMentions  = false;
+
+    @NotNull
+    @Column(nullable = false,name="scheduler_fetch_users_from_defined_user_list")
     private Boolean updatedByFetchUsersFromDefinedUserList  = false;
 
+    @NotNull
+    @Column(nullable = false,name="controller_add_user_for_screen_name")
     private Boolean controllerAddUserForScreenName = false;
+
+    @NotNull
+    @Column(nullable = false,name="controller_get_testdata_for_tweets")
     private Boolean controllerGetTestdataForTweets = false;
+
+    @NotNull
+    @Column(nullable = false,name="controller_get_testdata_for_users")
     private Boolean controllerGetTestdataForUsers = false;
 
     public TaskInfo() {

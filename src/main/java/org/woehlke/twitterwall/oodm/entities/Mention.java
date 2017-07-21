@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
@@ -8,46 +9,28 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.MentionListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "mention", uniqueConstraints = {
-    @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
-}, indexes = {
-    @Index(name = "idx_mention_name", columnList = "name")
-})
-/*
-@NamedQueries({
-    @NamedQuery(
-        name = "Mention.findByIdTwitter",
-        query = "select t from Mention as t where t.idTwitter=:idTwitter"
-    ),
-    @NamedQuery(
-        name = "Mention.findByScreenName",
-        query = "select t from Mention as t where t.screenName=:screenName"
-    ),
-    @NamedQuery(
-        name = "Mention.findLowestIdTwitter",
-        query = "select t.idTwitter from Mention as t order by t.idTwitter ASC"
-    ),
-    @NamedQuery(
-        name = "Mention.findByIdTwitterAndScreenName",
-        query = "select t from Mention as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
-    ),
-    @NamedQuery(
-        name = "Mention.count",
-        query = "select count(t) from Mention as t"
-    ),
-    @NamedQuery(
-        name = "Mention.getAll",
-        query = "select t from Mention as t"
-    )
-})
-*/
+@Table(
+    name = "mention",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
+    },
+    indexes = {
+        @Index(name = "idx_mention_name", columnList = "name")
+    }
+)
 @EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
@@ -59,83 +42,79 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
     private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name = "id_twitter")
-    private long idTwitter;
+    private Long idTwitter;
 
-    public boolean isProxy(){
-       return idTwitter < 0;
+    @NotEmpty
+    @Column(name = "screen_name", nullable = false)
+    private String screenName = "";
+
+    @Column(name = "name",length=4096, nullable = false)
+    private String name = "";
+
+    @NotNull
+    @JoinColumn(name = "fk_user")
+    @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
+    private User user;
+
+    @NotNull
+    @Column(name = "id_twitte_of_user",nullable = false)
+    private Long idTwitterOfUser = 0L;
+
+    public Mention(long idTwitter, String screenName, String name,Task task) {
+        this.idTwitter = idTwitter;
+        this.screenName = screenName;
+        this.name = name;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    private Mention() {
+    }
+
+    @Transient
+    public Boolean isProxy(){
+        return idTwitter < 0;
+    }
+
+    @Transient
+    public boolean hasPersistentUser(){
+        boolean result = false;
+        User myUser = this.getUser();
+        if(myUser != null){
+            result =
+                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
+                    (idTwitterOfUser != null ) &&
+                    (myUser.getIdTwitter() == idTwitterOfUser);
+        }
+        return result;
+    }
+
+    @Transient
+    public boolean hasValidScreenName() {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
     }
 
     public static boolean isValidScreenName(String screenName) {
         Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
         Matcher m = p.matcher(screenName);
         return m.matches();
-    }
-
-    @Column(name = "screen_name")
-    private String screenName;
-
-    @Column(name = "name",length=4096)
-    private String name;
-
-    boolean hasPersistentUser(){
-        boolean result = false;
-        User myUser = this.getUser();
-        if(myUser != null){
-            result =
-                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
-                (idTwitterOfUser != null ) &&
-                (myUser.getIdTwitter() == idTwitterOfUser);
-        }
-        return result;
-    }
-
-    @OneToOne(optional=true, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
-    private User user;
-
-    @Column(name = "id_twitte_of_user",nullable = true)
-    private Long idTwitterOfUser;
-
-/*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "mention_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
-    public Mention(long idTwitter, String screenName, String name, int[] indices) {
-        //setIndices(indices);
-        this.idTwitter = idTwitter;
-        this.screenName = screenName;
-        this.name = name;
-    }
-
-    public Mention(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, User user, Long idTwitterOfUser) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.idTwitter = idTwitter;
-        this.screenName = screenName;
-        this.name = name;
-        this.user = user;
-        this.idTwitterOfUser = idTwitterOfUser;
-    }
-
-    public Mention() {
     }
 
     public boolean hasUser() {
@@ -146,22 +125,12 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return serialVersionUID;
     }
 
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    public long getIdTwitter() {
-        return idTwitter;
-    }
-
-    public void setIdTwitter(long idTwitter) {
-        this.idTwitter = idTwitter;
     }
 
     public String getScreenName() {
@@ -179,15 +148,17 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     public void setName(String name) {
         this.name = name;
     }
-/*
-    public List<Integer> getIndices() {
-        return indices;
+
+    @Override
+    public Long getIdTwitter() {
+        return idTwitter;
     }
 
-    public void setIndices(List<Integer> indices) {
-        this.indices = indices;
+    @Override
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
     }
-*/
+
     public TaskInfo getTaskInfo() {
         return taskInfo;
     }
@@ -281,14 +252,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "Mention{" +
             " id=" + id +
             ", idTwitter=" + idTwitter +
@@ -297,10 +260,10 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-            //", indices=" + myIndieces.toString() +
             " }\n";
     }
 
+    @Transient
     public boolean isValid() {
         if((screenName == null) ||(screenName.isEmpty())|| isRawMentionFromUserDescription()){
             return false;
@@ -311,11 +274,13 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         return true;
     }
 
+    @Transient
     public boolean isRawMentionFromUserDescription() {
         return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
     }
 
-    public static Mention getMention(String mentionString) {
+
+    public static Mention getMention(String mentionString,Task task) {
         try {
             Thread.sleep(100L);
         } catch (InterruptedException e) {
@@ -323,9 +288,7 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         long idTwitter = ID_TWITTER_UNDEFINED;
         String screenName = mentionString;
         String name = mentionString;
-        int[] myindices = {};
-        return new Mention(idTwitter, screenName, name, myindices);
+        return new Mention(idTwitter, screenName, name,task);
     }
-
 
 }

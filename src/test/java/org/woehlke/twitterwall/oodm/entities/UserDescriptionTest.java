@@ -56,7 +56,7 @@ public class UserDescriptionTest {
     };
 
     @Test
-    public void printDescriptionsTest(){
+    public void printDescriptionsTest(Task task){
         int lfdNr = 0;
         log.info("printDescriptionsTest");
         log.info("++++++++++++++++++++");
@@ -65,80 +65,77 @@ public class UserDescriptionTest {
             log.info("--------------------");
             lfdNr++;
             log.info("description "+lfdNr+": "+description);
-            for(HashTag hashTag:this.getHashTags(description)){
+            for(HashTag hashTag:this.getHashTags(description,task)){
                 log.info("found hashTag: "+hashTag.toString());
             }
-            for(Url url:this.getUrls(description)){
+            for(Url url:this.getUrls(description,task)){
                 log.info("found url: "+ url.toString());
             }
-            for(Mention mention:this.getMentions(description)){
+            for(Mention mention:this.getMentions(description,task)){
                 log.info("found mention: "+mention.toString());
             }
         }
         log.info("++++++++++++++++++++");
     }
 
-    private List<HashTag> getHashTags(String description){
+    private List<HashTag> getHashTags(String description,Task task){
         List<HashTag> hashTags = new ArrayList<>();
         Pattern hashTagPattern = Pattern.compile("#(\\w*)("+stopChar+")");
         Matcher m3 = hashTagPattern.matcher(description);
         while (m3.find()) {
-            hashTags.add(new HashTag(m3.group(1),indices));
+            hashTags.add(new HashTag(m3.group(1),task));
         }
         Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(description);
         while (m4.find()) {
-            hashTags.add(new HashTag(m4.group(1),indices));
+            hashTags.add(new HashTag(m4.group(1),task));
         }
         return hashTags;
     }
 
-    private List<Url> getUrls(String description){
+    private List<Url> getUrls(String description,Task task){
         List<Url> urls = new ArrayList<>();
         Pattern hashTagPattern = Pattern.compile("(https://t\\.co/\\w*)("+stopChar+")");
         Matcher m3 = hashTagPattern.matcher(description);
         while (m3.find()) {
-            urls.add(getUrl(m3.group(1)));
+            urls.add(getUrl(m3.group(1),task));
         }
         Pattern hashTagPattern2 = Pattern.compile("(https://t\\.co/\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(description);
         while (m4.find()) {
-            urls.add(getUrl(m4.group(1)));
+            urls.add(getUrl(m4.group(1),task));
         }
         return urls;
     }
 
-    private Url getUrl(String urlString){
+    private Url getUrl(String urlString,Task task){
         String display="";
         String expanded="";
-        Url newUrl = new Url(display,expanded,urlString,indices);
+        Url newUrl = new Url(display,expanded,urlString,task);
         return newUrl;
     }
 
-    private List<Mention> getMentions(String description){
+    private List<Mention> getMentions(String description,Task task){
         List<Mention> mentions = new ArrayList<>();
         Pattern mentionPattern1 = Pattern.compile("@(\\w*)("+stopChar+")");
         Matcher m3 = mentionPattern1.matcher(description);
         while (m3.find()) {
-            mentions.add(getMention(m3.group(1)));
+            mentions.add(getMention(m3.group(1),task));
         }
         Pattern mentionPattern2 = Pattern.compile("@(\\w*)$");
         Matcher m4 = mentionPattern2.matcher(description);
         while (m4.find()) {
-            mentions.add(getMention(m4.group(1)));
+            mentions.add(getMention(m4.group(1),task));
         }
         return mentions;
     }
 
-    private Mention getMention(String mentionString) {
+    private Mention getMention(String mentionString, Task task) {
         long idTwitter = 10000000L;
         String screenName=mentionString;
         String name=mentionString;
-        int[] myindices = indices;
-        return new Mention(idTwitter,screenName,name,myindices);
+        return new Mention(idTwitter,screenName,name,task);
     }
-
-    static private int[] indices = {};
 
     static private String stopChar = Entities.stopChar;
 

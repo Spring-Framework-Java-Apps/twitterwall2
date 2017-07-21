@@ -19,7 +19,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserFromMentionImpl implements StoreUserFromMention {
 
-
     @Override
     public User storeUserFromMention(User user, Task task) {
         String msg = "storeUserFromMention: ";
@@ -30,7 +29,6 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
         }
         return user;
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserFromMentionImpl.class);
 

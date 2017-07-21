@@ -9,15 +9,18 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,71 +34,71 @@ import java.util.concurrent.TimeUnit;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterUrlServiceImpl implements TwitterUrlService {
 
-    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
-
-    @Value("${twitterwall.backend.url.connTimeToLive}")
-    private long connTimeToLive;
-
-    @Value("${twitterwall.backend.url.maxIdleTime}")
-    private long maxIdleTime;
 
     @Override
-    public Url fetchTransientUrl(String urlSrc) {
-        String msg = "fetchTransientUrl "+urlSrc+" ";
+    public Url fetchTransientUrl(final String urlSource,Task task) {
+        String msg = "fetchTransientUrl " + urlSource + " ";
         log.debug(msg);
-        if(urlSrc == null) {
-            throw new IllegalArgumentException(msg);
-        }
         Url newUrl = null;
         CloseableHttpClient httpclient = null;
-        CloseableHttpResponse response1 = null;
-        try {
+        CloseableHttpResponse httpResponse = null;
+        if (urlSource != null) {
             String display;
             String expanded;
-            int[] indices = {};
-            httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, TimeUnit.SECONDS).disableCookieManagement().evictIdleConnections(maxIdleTime, TimeUnit.SECONDS).build();
-            HttpGet httpGet = new HttpGet(urlSrc);
+            final long connTimeToLive = twitterwallBackendProperties.getUrl().getConnTimeToLive();
+            final long maxIdleTime = twitterwallBackendProperties.getUrl().getMaxIdleTime();
+            final TimeUnit connTimeToLiveTimeUnit = TimeUnit.SECONDS;
+            httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit).disableCookieManagement().evictIdleConnections(maxIdleTime, connTimeToLiveTimeUnit).build();
+            HttpGet httpGetRequest = new HttpGet(urlSource);
             HttpClientContext context = HttpClientContext.create();
-            response1 = httpclient.execute(httpGet, context);
-            HttpHost target = context.getTargetHost();
-            List<URI> redirectLocations = context.getRedirectLocations();
-            URL location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations).toURL();
-            display = location.getHost();
-            expanded = location.toExternalForm();
-            newUrl = new Url(display, expanded, urlSrc, indices);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            log.warn(msg+ioe.getMessage());
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            log.warn(msg+npe.getMessage());
-        } catch (RuntimeException re){
-            re.printStackTrace();
-            log.warn(msg+re.getMessage());
-        } catch (URISyntaxException urise) {
-            urise.printStackTrace();
-            log.warn(msg+urise.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            log.warn(msg+e.getMessage());
-        } finally {
-            if(response1 != null){
+            HttpHost httpTargetHost = context.getTargetHost();
+            try {
+                httpResponse = httpclient.execute(httpGetRequest, context);
+            } catch (IOException ioe) {
+                log.warn(msg + ioe.getMessage());
+            }
+            if(httpResponse!= null) {
+                URL location = null;
+                URI uri = httpGetRequest.getURI();
+                List<URI> redirectLocations = context.getRedirectLocations();
                 try {
-                    response1.close();
-                } catch (IOException ioe2){
+                    location = URIUtils.resolve(uri, httpTargetHost, redirectLocations).toURL();
+                } catch (URISyntaxException urise) {
+                    log.warn(msg + urise.getMessage());
+                } catch (MalformedURLException e) {
+                    log.warn(msg + e.getMessage());
+                }
+                if(location != null){
+                    display = location.getHost();
+                    expanded = location.toExternalForm();
+                    newUrl = new Url(display, expanded, urlSource, task);
+                }
+                try {
+                    httpResponse.close();
+                } catch (IOException ioe2) {
                     ioe2.printStackTrace();
-                    log.warn(msg+ioe2.getMessage());
+                    log.warn(msg + ioe2.getMessage());
                 }
             }
-            if(httpclient!=null) {
-                try {
-                    httpclient.close();
-                } catch (IOException ioe2){
-                    ioe2.printStackTrace();
-                    log.warn(msg+ioe2.getMessage());
-                }
+        }
+        if(httpclient != null) {
+            try {
+                httpclient.close();
+            } catch (IOException ioe2) {
+                ioe2.printStackTrace();
+                log.warn(msg + ioe2.getMessage());
             }
         }
         return newUrl;
+    }
+
+
+    private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
+
+    private final TwitterwallBackendProperties twitterwallBackendProperties;
+
+    @Autowired
+    public TwitterUrlServiceImpl(TwitterwallBackendProperties twitterwallBackendProperties) {
+        this.twitterwallBackendProperties = twitterwallBackendProperties;
     }
 }

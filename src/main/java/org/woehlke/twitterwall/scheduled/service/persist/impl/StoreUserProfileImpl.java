@@ -20,15 +20,13 @@ import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileImpl implements StoreUserProfile {
 
-
     @Override
     public User storeUserProfile(TwitterProfile userProfile, Task task) {
         String msg = "storeUserProfile: ";
-        User user = userTransformService.transform(userProfile);
+        User user = userTransformService.transform(userProfile,task);
         user = storeUserProcess.storeUserProcess(user, task);
         return user;
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 

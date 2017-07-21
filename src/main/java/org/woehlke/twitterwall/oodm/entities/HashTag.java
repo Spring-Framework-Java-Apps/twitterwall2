@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
@@ -7,32 +8,24 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "hashtag", uniqueConstraints = {
+@Table(
+    name = "hashtag",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
-})
-/*
-@NamedQueries({
-        @NamedQuery(
-                name = "HashTag.findByText",
-                query = "select t from HashTag as t where t.text=:text"
-        ),
-        @NamedQuery(
-                name = "HashTag.getAll",
-                query = "select h from HashTag as h"
-        ),
-        @NamedQuery(
-                name = "HashTag.count" ,
-                query = "select count(h) from HashTag as h"
-        )
-})
-*/
+    }
+)
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
@@ -42,46 +35,22 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
-    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
-
-    public static boolean isValidText(String hashtagText){
-        //Pattern p = Pattern.compile("^"+HASHTAG_TEXT_PATTERN+"$");
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        return m.matches();
-    }
-
-    @Column(nullable = false,length=4096)
-    private String text;
-
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "hashtag_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }
-    */
-
-    public HashTag(TaskInfo taskInfo, Task createdBy, Task updatedBy, String text) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.text = text;
-    }
+    @SafeHtml
+    @Column(name="text", nullable = false,length=4096)
+    private String text = "";
 
     public HashTag(Task createdBy, Task updatedBy, String text) {
         this.createdBy = createdBy;
@@ -89,11 +58,30 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.text = text;
     }
 
-    public HashTag(String text) {
+    public HashTag(String text, Task task) {
         this.text = text;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
+    private HashTag() {
+    }
 
+    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
+
+    @Transient
+    public boolean hasValidText(){
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
+    public static boolean isValidText(String hashtagText){
+        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Matcher m = p.matcher(hashtagText);
+        return m.matches();
+    }
 
     public Long getId() {
         return id;
@@ -106,14 +94,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     public String getText() {
         return this.text;
-    }
-
-    public HashTag(String text, int[] indices) {
-        //setIndices(indices);
-        this.text = text;
-    }
-
-    public HashTag() {
     }
 
     public static long getSerialVersionUID() {
@@ -199,22 +179,12 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");
-        */
         return "HashTag{" +
                 " id=" + id +
                 ", text='" + text + '\'' +
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-                  //", indices=" + myIndieces.toString() +
                 " }\n";
     }
 

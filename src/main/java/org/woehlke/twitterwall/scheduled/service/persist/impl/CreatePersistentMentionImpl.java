@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +52,7 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
                 String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
                 log.warn(eventMsg);
-                taskService.warn(task,eventMsg);
+                //taskService.warn(task,eventMsg);
                 mention.setScreenName(foundUser.getScreenName());
                 screenName = foundUser.getScreenName();
             }
@@ -73,7 +72,7 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             return persMention;
         } else {
             String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
-            taskService.error(task,eventMsg);
+            //taskService.error(task,eventMsg);
             log.error(eventMsg);
             return null;
         }

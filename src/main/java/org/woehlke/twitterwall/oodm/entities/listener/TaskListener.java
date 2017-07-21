@@ -30,17 +30,17 @@ public class TaskListener {
 
     @PostPersist
     public void onPostPersist(Task domainObject) {
-        log.info("Persisted: "+domainObject.toString());
+        log.debug("Persisted: "+domainObject.toString());
     }
 
     @PostUpdate
     public void onPostUpdate(Task domainObject) {
-        log.info("Updated: "+domainObject.toString());
+        log.debug("Updated: "+domainObject.toString());
     }
 
     @PostRemove
     public void onPostRemove(Task domainObject) {
-        log.info("Removed: "+domainObject.toString());
+        log.debug("Removed: "+domainObject.toString());
     }
 
     @PostLoad

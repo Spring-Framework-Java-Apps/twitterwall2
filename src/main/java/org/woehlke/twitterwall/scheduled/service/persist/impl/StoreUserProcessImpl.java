@@ -30,7 +30,6 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         return user;
     }
 
-
     private static final Logger log = LoggerFactory.getLogger(StoreUserProcessImpl.class);
 
     private final UserService userService;

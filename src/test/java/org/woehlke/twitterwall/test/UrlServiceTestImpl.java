@@ -1,9 +1,11 @@
 package org.woehlke.twitterwall.test;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 
 import java.util.*;
@@ -15,32 +17,30 @@ import java.util.*;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTest {
 
-    @Value("${twitterwall.backend.url.fetchTestDataVerbose}")
-    private boolean fetchTestDataVerbose;
+    @Autowired
+    private TwitterwallBackendProperties twitterwallBackendProperties;
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public List<Url> getTestData() {
+    public List<Url> getTestData(Task task) {
         Map<String, String> hostsTest = new HashMap<>();
         hostsTest.put("https://t.co/lQlse7u93G", "port80guru.tumblr.com");
         Map<String, String> urlsTest = new HashMap<>();
         urlsTest.put("https://t.co/lQlse7u93G", "https://port80guru.tumblr.com/");
 
-        if (fetchTestDataVerbose) {
+        if (twitterwallBackendProperties.getUrl().getFetchTestDataVerbose()) {
             hostsTest = hosts;
             urlsTest = urls;
         }
-
         String urlSrc;
         String display;
         String expanded;
-        int[] indices = {};
         List<Url> testData = new ArrayList<>();
         for (Map.Entry<String, String> url : urlsTest.entrySet()) {
             urlSrc = url.getKey();
             expanded = url.getValue();
             display = hostsTest.get(urlSrc);
-            Url myUrl = new Url(display, expanded, urlSrc, indices);
+            Url myUrl = new Url(display, expanded, urlSrc,task);
             testData.add(myUrl);
         }
         return testData;

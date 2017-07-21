@@ -1,0 +1,120 @@
+endpoints:
+  env:
+    - keys-to-sanitize: "password"
+    - keys-to-sanitize: "secret"
+    - keys-to-sanitize: "key"
+    - keys-to-sanitize: "passwort"
+  health:
+    sensitive: false
+  endpoints:
+    shutdown:
+      enabled: false
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQL94Dialect
+info:
+  application:
+    artifactId: @project.artifactId@
+    description: @project.description@
+    groupId: @project.groupId@
+    name: @project.name@
+    version: @project.version@
+logging:
+  file: twitterwall.log
+management:
+  address: 127.0.0.1
+  context-path: "/manage"
+  security:
+    enabled: false
+spring:
+  application:
+    admin:
+      enabled: false
+    name: @project.name@
+  datasource:
+    driverClassName: org.postgresql.Driver
+    initialSize: 5
+    max-total: 70
+    maxActive: 60
+    maxIdle: 5
+    minIdle: 2
+    platform: POSTGRESQL
+    removeAbandoned: true
+    tomcat:
+      max-active: 50
+      max-wait: 10000
+      test-on-borrow: true
+    url: ${JDBC_DATABASE_URL}
+  devtools:
+    livereload:
+      enabled: false
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: ${TWITTERWALL_JPA_HIBERNATE_DDL_AUTO}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: false
+  template:
+    cache: false
+  thymeleaf:
+    cache: false
+twitter:
+  #  accessToken: ${TWITTER_ACCESS_TOKEN}
+  #  accessTokenSecret: ${TWITTER_ACCESS_TOKEN_SECRET}
+  #  consumerKey: ${TWITTER_CONSUMER_KEY}
+  #  consumerSecret: ${TWITTER_CONSUMER_SECRET}
+  pageSize: ${TWITTER_PAGE_SIZE}
+  searchQuery: ${TWITTER_SEARCH_TERM}
+twitterwall:
+  backend:
+    twitter:
+      millisToWaitBetweenTwoApiCalls: 5000
+      millisToWaitForFetchTweetsFromTwitterSearch: ${TWITTERWALL_WAIT_FOR_TEST}
+    url:
+      connTimeToLive: 10
+      fetchTestDataVerbose: ${TWITTERWALL_URL_TEST_DATA_VERBOSE}
+      maxIdleTime: 120
+  frontend:
+    contextTest: ${TWITTERWALL_CONTEXT_TEST}
+    controller:
+      fetchUsersFromDefinedUserList: true
+    idGoogleAnalytics: ${TWITTERWALL_GOOGLE_ANALYTICS_ID}
+    imprintScreenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}
+    imprintSubtitle: "www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com"
+    infoWebpage: ${TWITTERWALL_INFO_WEBPAGE}
+    pageSize: 12
+    menuAppName: ${TWITTERWALL_APP_NAME}
+    theme: ${TWITTERWALL_THEME}
+  scheduler:
+    allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
+    allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
+    allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
+    allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
+    fetchUserList:
+      allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
+      name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
+    skipFortesting: false
+    facade:
+      idTwitterToFetchForTweetTest:
+        - 876329508009279488
+        - 876356335784394752
+        - 876676270913880066
+        - 876566077836337152
+        - 876563676395962368
+        - 876514968933478400
+        - 876514568671023104
+        - 876513930478313472
+        - 876510758632386563
+        - 876496934676180992
+      idTwitterToFetchForUserControllerTest:
+        - 876433563561938944 #t3c_berlin
+        - 876456051016597504 #Codemonkey1988
+        - 876420491329892354 #Walter_kran
+        - 876425220147564544 #tobenschmidt
+        - 876819177746649088 #Oliver1973
+        - 876514968933478400 #wowa_TYPO3
+        - 876441863191920641 #dirscherl17
+        - 876441015523192832 #Markus306
+        - 876440419416109056 #mattLefaux

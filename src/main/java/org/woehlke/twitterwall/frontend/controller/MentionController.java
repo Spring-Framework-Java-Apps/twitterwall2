@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.frontend.controller.common.AbstractTwitterwallController;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 
@@ -20,55 +21,35 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
  */
 @Controller
 @RequestMapping("/mention")
-public class MentionController  extends AbstractTwitterwallController {
+public class MentionController {
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+FIRST_PAGE_NUMBER) int page, Model model){
-        logEnv();
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "Mention";
         String symbol = Symbols.DATABASE.toString();
-        model = setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"screenName");
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
         Page<Mention> myPageContent = mentionService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "/mention/all";
     }
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
-
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
-
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
+    private final TwitterProperties twitterProperties;
 
     private final MentionService mentionService;
 
+    private final ControllerHelper controllerHelper;
 
     @Autowired
-    public MentionController(MentionService mentionService) {
+    public MentionController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, MentionService mentionService, ControllerHelper controllerHelper) {
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
         this.mentionService = mentionService;
+        this.controllerHelper = controllerHelper;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
 }

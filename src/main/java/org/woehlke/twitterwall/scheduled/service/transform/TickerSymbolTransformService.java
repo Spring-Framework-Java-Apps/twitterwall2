@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.service.transform;
 
 import org.springframework.social.twitter.api.TickerSymbolEntity;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
 
@@ -14,6 +15,6 @@ public interface TickerSymbolTransformService extends TransformService<TickerSym
 
     //Set<TickerSymbol> getTickerSymbolsFor(User user);
 
-    Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource);
+    Set<TickerSymbol> getTickerSymbolsFor(TwitterProfile userSource, Task task);
 
 }

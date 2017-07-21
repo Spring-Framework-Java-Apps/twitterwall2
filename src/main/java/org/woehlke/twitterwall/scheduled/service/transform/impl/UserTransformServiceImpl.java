@@ -7,6 +7,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
@@ -32,7 +33,7 @@ public class UserTransformServiceImpl implements UserTransformService {
     }
 
     @Override
-    public User transform(TwitterProfile userSource) {
+    public User transform(TwitterProfile userSource,Task task) {
         String msg = "User.transform for "+userSource.getId();
         long idTwitter = userSource.getId();
         String screenName = userSource.getScreenName();
@@ -51,7 +52,7 @@ public class UserTransformServiceImpl implements UserTransformService {
             location = null;
         }
         Date createdDate = userSource.getCreatedDate();
-        User userTarget = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
+        User userTarget = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate,task);
         userTarget.setTweeting(true);
         userTarget.setLanguage(userSource.getLanguage());
         userTarget.setStatusesCount(userSource.getStatusesCount());
@@ -79,7 +80,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         userTarget.setLinkColor(userSource.getLinkColor());
         userTarget.setShowAllInlineMedia(userSource.showAllInlineMedia());
         userTarget.setProfileBannerUrl(userSource.getProfileBannerUrl());
-        Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource);
+        Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource,task);
         log.debug(msg+" entities = "+entities.toString());
         userTarget.setEntities(entities);
         log.debug(msg+" userTarget = "+userTarget.toString());

@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
-//import org.woehlke.twitterwall.oodm.dao.UrlDao;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 
@@ -24,45 +23,46 @@ public class UrlServiceImpl implements UrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    //private final UrlDao urlDao;
-
     private final UrlRepository urlRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public UrlServiceImpl(UrlRepository urlRepository) {
-        //this.urlDao = urlDao;
+    public UrlServiceImpl(UrlRepository urlRepository, TaskRepository taskRepository) {
         this.urlRepository = urlRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
     public Url store(Url domainObject, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "store "+domainObject.getUrl();
         log.debug(name);
         if(domainObject == null){
             String msg = "Url == null";
             log.debug(name+msg+domainObject.toString());
-            throw new IllegalArgumentException(msg);
+            return null;
         }
         String url = domainObject.getUrl();
         if(url == null){
             String msg = "Url.getUrl() == null";
             log.debug(name+msg+domainObject.toString());
-            throw new IllegalArgumentException();
+            return null;
         }
         Url result;
-        Url urlPersistent = urlRepository.findByUrl(url);//this.urlDao.findByUrl(url);
+        Url urlPersistent = urlRepository.findByUrl(url);
         if(urlPersistent!=null){
             domainObject.setId(urlPersistent.getId());
             domainObject.setCreatedBy(urlPersistent.getCreatedBy());
             domainObject.setUpdatedBy(task);
             result = urlRepository.save(domainObject);
-            //result = this.urlDao.update(domainObject);
             log.debug(name+" uodated "+result.toString());
             return result;
         } else {
             domainObject.setCreatedBy(task);
+            domainObject.setUpdatedBy(task);
             result = urlRepository.save(domainObject);
-            //result = this.urlDao.persist(domainObject);
             log.debug(name+" persisted "+result.toString());
             return result;
         }
@@ -72,26 +72,22 @@ public class UrlServiceImpl implements UrlService {
     public Url create(Url url, Task task) {
         url.setCreatedBy(task);
         return urlRepository.save(url);
-        //return this.urlDao.persist(url);
     }
 
     @Override
     public Url update(Url url, Task task) {
         url.setUpdatedBy(task);
         return urlRepository.save(url);
-        //return this.urlDao.update(url);
     }
 
     @Override
     public Page<Url> getAll(Pageable pageRequest) {
         return urlRepository.findAll(pageRequest);
-        //return this.urlDao.getAll(Url.class,pageRequest);
     }
 
     @Override
     public long count() {
         return urlRepository.count();
-        //return this.urlDao.count(Url.class);
     }
 
     @Override
@@ -100,7 +96,7 @@ public class UrlServiceImpl implements UrlService {
         if(url == null){
             throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
-        Url result = urlRepository.findByUrl(url); //this.urlDao.findByUrl(url);
+        Url result = urlRepository.findByUrl(url);
         log.debug(name+result.toString());
         return result;
     }

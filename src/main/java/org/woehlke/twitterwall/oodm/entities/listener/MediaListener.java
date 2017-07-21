@@ -30,17 +30,17 @@ public class MediaListener {
 
   @PostPersist
   public void onPostPersist(Media domainObject) {
-    log.info("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(Media domainObject) {
-    log.info("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(Media domainObject) {
-    log.info("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.toString());
   }
 
   @PostLoad

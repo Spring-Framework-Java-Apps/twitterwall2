@@ -1,71 +1,43 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "tweet", uniqueConstraints = {
-    @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
-}, indexes = {
-    @Index(name="idx_tweet_created_date", columnList="created_date"),
-    @Index(name="idx_tweet_from_user", columnList="from_user"),
-    @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
-    @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
-    @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
-    @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
-    @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
-})
+@Table(
+    name = "tweet",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
+    },
+    indexes = {
+        @Index(name="idx_tweet_created_date", columnList="created_date"),
+        @Index(name="idx_tweet_from_user", columnList="from_user"),
+        @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
+        @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
+        @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
+        @Index(name="idx_tweet_in_reply_to_screen_name", columnList="in_reply_to_screen_name"),
+        @Index(name="idx_tweet_from_user_id", columnList="from_user_id"),
+        @Index(name="idx_tweet_id_str", columnList="id_str")
+    }
+)
 @NamedQueries({
-        /*
-        @NamedQuery(
-                name="Tweet.findByIdTwitter",
-                query= "select t from Tweet as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name="Tweet.findLatestTweets",
-                query="select t from Tweet as t order by t.createdAt DESC"
-        ),
-        @NamedQuery(
-                name="Tweet.countTweetsForHashTag",
-                query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
-        ),
-        @NamedQuery(
-                name="Tweet.count",
-                query="select count(t) from Tweet as t"
-        ),
-        @NamedQuery(
-            name="Tweet.getAll",
-            query="select t from Tweet as t"
-        ),
-        @NamedQuery(
-                name="Tweet.findTweetsForUser",
-                query="select t from Tweet as t WHERE t.user=:user"
-        ),
-        */
-
-        /*
-        @NamedQuery(
-            name="Tweet.findByHashTag",
-            query="select t from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
-        ),
-        @NamedQuery(
-            name="Tweet.countByHashTag",
-            query="select count(t) from Tweet as t join t.entities.hashTags h WHERE ?1 member of h"
-        ),*/
-
-
     @NamedQuery(
         name="Tweet.getTweetsForHashTag",
         query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
@@ -74,10 +46,10 @@ import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
         name="Tweet.countTweetsForHashTag",
         query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
     ),
-        @NamedQuery(
-                name="Tweet.findAllTwitterIds",
-                query="select t.idTwitter from Tweet as t"
-        )
+    @NamedQuery(
+        name="Tweet.findAllTwitterIds",
+        query="select t.idTwitter from Tweet as t"
+    )
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
@@ -102,7 +74,7 @@ import static javax.persistence.ConstraintMode.PROVIDER_DEFAULT;
     )
 })
 @EntityListeners(TweetListener.class)
-public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithIdTwitter<Tweet>,DomainObjectWithTask<Tweet> {
+public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithEntities<Tweet>,DomainObjectWithTask<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -110,23 +82,29 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
-    private long idTwitter;
+    private Long idTwitter;
 
-    @Column(nullable = false)
-    private String idStr;
+    @NotNull
+    @Column(name="id_str",nullable = false)
+    private String idStr = "";
 
-    @Column(nullable = false,length=4096)
-    private String text;
+    @NotEmpty
+    @Column(name="text", nullable = false,length=4096)
+    private String text = "";
 
     @Column(name="created_date", nullable = false)
     private Date createdAt;
@@ -134,7 +112,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Column(name="from_user")
     private String fromUser;
 
-    @Column(length=4096)
+    @Column(name = "profile_image_url", length=4096)
     private String profileImageUrl;
 
     @Column(name="to_user_id")
@@ -146,31 +124,32 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Column(name="in_reply_to_user_id")
     private Long inReplyToUserId;
 
-    @Column(name="in_reply_to_screenName")
+    @Column(name="in_reply_to_screen_name")
     private String inReplyToScreenName;
 
     @Column(name="from_user_id")
-    private long fromUserId;
+    private Long fromUserId;
 
-    @Column
+    @Column(name="language_code")
     private String languageCode;
 
-    @Column(length=4096)
+    @Column(name="source", length=4096)
     private String source;
 
-    @Column
+    @Column(name="retweet_count")
     private Integer retweetCount;
 
-    @Column
-    private boolean retweeted;
+    @Column(name="retweeted")
+    private Boolean retweeted;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="fk_tweet_retweeted")
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = true)
     private Tweet retweetedStatus;
 
-    @Column
-    private boolean favorited;
+    @Column(name="favorited")
+    private Boolean favorited;
 
-    @Column
+    @Column(name="favorite_count")
     private Integer favoriteCount;
 
     @Embedded
@@ -185,17 +164,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
             name = "hashTags",
             joinTable = @JoinTable(
                 name="tweet_hashtag"
-                /*,
-                joinColumns={@JoinColumn(name="tweet_id")},
-                inverseJoinColumns={@JoinColumn(name="hashtag_id")},
-                uniqueConstraints = {
-                    @UniqueConstraint(
-                        name="unique_tweet_hashtag",
-                        columnNames = {"tweet_id","hashtag_id"})
-                },
-                foreignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_tweet"),
-                inverseForeignKey=@ForeignKey(value = PROVIDER_DEFAULT,name="tweet_hashtag_fk_hashtag")
-                */
             )
         ),
         @AssociationOverride(
@@ -219,31 +187,22 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     })
     private Entities entities;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
+    @NotNull
+    @JoinColumn(name="fk_user")
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
 
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt) {
+    public Tweet(long idTwitter, String idStr, String text, Date createdAt,Task task) {
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
         this.createdAt = createdAt;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    /**
-     * Constructs a Tweet
-     *
-     * @param idTwitter       The tweet's ID
-     * @param idStr           The tweet's ID as a String
-     * @param text            The tweet's text
-     * @param createdAt       Date Tweet was created
-     * @param fromUser        The username of the author of the tweet.
-     * @param profileImageUrl The URL to the profile picture of the tweet's author.
-     * @param toUserId        The user ID of the user to whom the tweet is targeted.
-     * @param fromUserId      The user ID of the tweet's author.
-     * @param languageCode    The language code
-     * @param source          The source of the tweet.
-     */
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source,Task task) {
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
@@ -254,19 +213,22 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.fromUserId = fromUserId;
         this.languageCode = languageCode;
         this.source = source;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Tweet() {
+    private Tweet() {
     }
 
+    public void removeAllEntities(){
+        this.entities.removeAll();
+    }
+
+    @Transient
     public String getFormattedText() {
-        String formattedText = this.text;
-
-        formattedText = this.entities.getFormattedText(formattedText);
-
-        return formattedText;
+        return this.entities.getFormattedText(this.text);
     }
-
 
     public Long getId() {
         return id;
@@ -276,8 +238,14 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
+    }
+
+    @Override
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
     }
 
     public String getIdStr() {
@@ -340,11 +308,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.inReplyToScreenName = inReplyToScreenName;
     }
 
-    public long getFromUserId() {
+    public Long getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(long fromUserId) {
+    public void setFromUserId(Long fromUserId) {
         this.fromUserId = fromUserId;
     }
 
@@ -372,11 +340,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.retweetCount = retweetCount;
     }
 
-    public boolean isRetweeted() {
+    public Boolean getRetweeted() {
         return retweeted;
     }
 
-    public void setRetweeted(boolean retweeted) {
+    public void setRetweeted(Boolean retweeted) {
         this.retweeted = retweeted;
     }
 
@@ -388,11 +356,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.retweetedStatus = retweetedStatus;
     }
 
-    public boolean isFavorited() {
+    public Boolean getFavorited() {
         return favorited;
     }
 
-    public void setFavorited(boolean favorited) {
+    public void setFavorited(Boolean favorited) {
         this.favorited = favorited;
     }
 
@@ -482,7 +450,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     @Override
     public int compareTo(Tweet other) {
-        return createdAt.compareTo(other.getCreatedAt());
+        return Long.compare(idTwitter,other.getIdTwitter());
     }
 
 

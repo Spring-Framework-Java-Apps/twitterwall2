@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
@@ -96,15 +95,6 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private int millisToWaitForFetchTweetsFromTwitterSearch;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
 
     private final TwitterApiService twitterApiService;
 

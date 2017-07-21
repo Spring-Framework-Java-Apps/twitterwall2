@@ -2,21 +2,26 @@ package org.woehlke.twitterwall;
 
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 
 
 /**
  * Created by tw on 10.06.17.
  */
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
-@IntegrationComponentScan
 @EnableScheduling
+@SpringBootApplication
+@EnableConfigurationProperties({
+    TwitterwallBackendProperties.class,
+    TwitterwallFrontendProperties.class,
+    TwitterwallSchedulerProperties.class,
+    TwitterProperties.class
+})
 public class Application {
 
     public static void main(String[] args) {

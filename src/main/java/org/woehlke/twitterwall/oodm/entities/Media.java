@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -8,39 +10,30 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "media", uniqueConstraints = {
+@Table(
+    name = "media",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_media_id_twitter", columnNames = {"id_twitter"})
-}, indexes = {
+    },
+    indexes = {
         @Index(name="idx_media_url", columnList= "url"),
         @Index(name="idx_media_expanded", columnList="expanded"),
         @Index(name="idx_media_display", columnList="display") ,
         @Index(name="idx_media_media_http", columnList="media_http"),
         @Index(name="idx_media_media_https", columnList="media_https"),
         @Index(name="idx_media_media_type", columnList="media_type")
-})
- /*@NamedQueries({
-        @NamedQuery(
-                name = "Media.findByIdTwitter",
-                query = "select t from Media as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-            name = "Media.count",
-            query = "select count(t) from Media as t"
-        ),
-        @NamedQuery(
-                name = "Media.getAll",
-                query = "select t from Media as t"
-        ),
-        @NamedQuery(
-                name = "Media.findByUrl",
-                query = "select t from Media as t where t.url=:url"
-        )
-})*/
+    }
+)
 @EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
@@ -50,50 +43,50 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
+    @NotNull
     @Column(name="id_twitter", nullable = false)
-    private long idTwitter;
+    private Long idTwitter;
 
-    @Column(name = "media_http",length=4096)
-    private String mediaHttp;
+    @NotNull
+    @Column(name = "media_http",length=4096, nullable = false)
+    private String mediaHttp = "";
 
-    @Column(name = "media_https",length=4096)
-    private String mediaHttps;
+    @NotNull
+    @Column(name = "media_https",length=4096, nullable = false)
+    private String mediaHttps = "";
 
-    @Column(length=4096)
+    @URL
+    @NotEmpty
+    @Column(length=4096, nullable = false)
     private String url;
 
-    @Column(length=4096)
-    private String display;
+    @NotNull
+    @Column(length=4096, nullable = false)
+    private String display = "";
 
-    @Column(length=4096)
-    private String expanded;
+    @NotNull
+    @Column(length=4096, nullable = false)
+    private String expanded = "";
 
-    @Column(name = "media_type",length=4096)
-    private String mediaType;
+    @NotNull
+    @Column(name = "media_type",length=4096, nullable = false)
+    private String mediaType = "";
 
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "media_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
 
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
-
-    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, int[] indices) {
-        //setIndices(indices);
+    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, Task task) {
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -101,22 +94,12 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.display = display;
         this.expanded = expanded;
         this.mediaType = mediaType;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Media(TaskInfo taskInfo, Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.idTwitter = idTwitter;
-        this.mediaHttp = mediaHttp;
-        this.mediaHttps = mediaHttps;
-        this.url = url;
-        this.display = display;
-        this.expanded = expanded;
-        this.mediaType = mediaType;
-    }
-
-    public Media() {
+    private Media() {
         super();
     }
 
@@ -133,11 +116,13 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
     }
 
-    public void setIdTwitter(long idTwitter) {
+    @Override
+    public void setIdTwitter(Long idTwitter) {
         this.idTwitter = idTwitter;
     }
 
@@ -273,14 +258,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     @Override
-    public String toString() {/*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
+    public String toString() {
         return "Media{" +
                 " id=" + id +
                 ", idTwitter=" + idTwitter +
@@ -293,7 +271,6 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-               // ", indices=" + myIndieces.toString() +
                 " }\n";
     }
 
@@ -302,14 +279,13 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         return true;
     }
 
-    public static Media getMediaFactory(String url) {
+    public static Media getMediaFactory(String url,Task task) {
         long idTwitter = -1L;
         String mediaHttp = "UNKNOWN";
         String mediaHttps  = "UNKNOWN";
         String display = "UNKNOWN";
         String expanded = "UNKNOWN";
         String mediaType = "UNKNOWN";
-        int[] indices = {};
-        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, indices);
+        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, task);
     }
 }

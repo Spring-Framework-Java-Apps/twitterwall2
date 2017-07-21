@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -7,30 +9,27 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.OverridesAttribute;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-@Table(name = "url", uniqueConstraints = {
+@Table(
+    name = "url",
+    uniqueConstraints = {
         @UniqueConstraint(name="unique_url", columnNames = {"url"})
-}, indexes = {
+    },
+    indexes = {
         @Index(name="idx_url_expanded", columnList="expanded"),
         @Index(name="idx_url_display", columnList="display")
-})
-/*
-@NamedQueries({
-        @NamedQuery(
-            name="Url.findByUrl",
-            query="select t from Url as t where t.url=:url"
-        ) ,
-        @NamedQuery(
-            name = "Url.count",
-            query = "select count(t) from Url as t"
-        ),
-})
-*/
+    }
+)
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
@@ -42,66 +41,58 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @NotNull
     @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
+    private TaskInfo taskInfo  = new TaskInfo();
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "fk_user_created_by")
+    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_updated_by")
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
     private Task updatedBy;
 
-    @Column(length=4096)
-    private String display;
+    @NotNull
+    @Column(length=4096,nullable = false)
+    private String display="";
 
-    @Column(length=4096)
-    private String expanded;
+    @URL
+    @NotNull
+    @Column(length=4096,nullable = false)
+    private String expanded="";
 
     public static final String URL_PATTTERN_FOR_USER_HTTPS = "https://t\\.co/\\w*";
 
     public static final String URL_PATTTERN_FOR_USER_HTTP = "http://t\\.co/\\w*";
 
+    @URL
+    @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
-
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "url_indices", joinColumns = @JoinColumn(name = "id"))
-    protected List<Integer> indices = new ArrayList<>();
-
-    public void setIndices(int[] indices) {
-        this.indices.clear();
-        for(Integer index: indices){
-            this.indices.add(index);
-        }
-    }*/
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
         return url.compareTo(expanded) == 0;
     }
 
-    public Url(String display, String expanded, String url, int[] indices) {
-        //setIndices(indices);
+    public Url(String display, String expanded, String url, Task task) {
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Url(String display, String expanded, String url, List<Integer> indices) {
-        //setIndices(indices);
-        this.display = display;
-        this.expanded = expanded;
+    public Url(String url,Task task) {
+        this.display = Url.UNDEFINED;
+        this.expanded = Url.UNDEFINED;
         this.url = url;
-    }
-
-    public Url(TaskInfo taskInfo, Task createdBy, Task updatedBy, String display, String expanded, String url) {
-        this.taskInfo = taskInfo;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.display = display;
-        this.expanded = expanded;
-        this.url = url;
+        this.createdBy = task;
+        this.updatedBy = task;
+        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private Url() {
@@ -217,14 +208,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public String toString() {
-        /*
-        StringBuffer myIndieces = new StringBuffer();
-        myIndieces.append("[ ");
-        for (Integer index : indices) {
-            myIndieces.append(index.toString());
-            myIndieces.append(", ");
-        }
-        myIndieces.append(" ]");*/
         return "Url{" +
                 "id=" + id +
                 ", display='" + display + '\'' +
@@ -233,7 +216,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
             ",\n createdBy="+ toStringCreatedBy() +
             ",\n updatedBy=" + toStringUpdatedBy() +
             ",\n taskInfo="+ toStringTaskInfo() +
-               // ", indices=" + myIndieces.toString() +
                 "}\n";
     }
 
@@ -245,13 +227,5 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     public boolean isRawUrlsFromDescription() {
         return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
-    }
-
-    public static Url getUrlFactory(String url){
-        String display = Url.UNDEFINED;
-        String expanded = Url.UNDEFINED;
-        int[] indices = {};
-        Url newurl = new Url(display, expanded, url, indices);
-        return newurl;
     }
 }

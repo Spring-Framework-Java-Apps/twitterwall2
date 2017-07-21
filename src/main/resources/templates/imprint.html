@@ -22,8 +22,8 @@
                          alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a></p>
                     </span>
                         <div class="caption">
-                            <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
-                            <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                            <h2><a href="" th:href="@{|/user/${user.screenName}|}"><span th:text="${user.name}">name</span></a></h2>
+                            <h3><a href="" th:href="@{|/user/${user.screenName}|}"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
                             <p th:if="${user.description != null}"><span th:utext="${user.formattedDescription}">description</span></p>
                             <p th:if="${user.location != null}"><span class="map-icon map-icon-postal-code"></span>&nbsp;&nbsp;<span th:text="${user.location}">location</span></p>
                             <p th:if="${user.url != null}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;&nbsp;<span th:utext="${user.formattedUrl}">url</span></p>
