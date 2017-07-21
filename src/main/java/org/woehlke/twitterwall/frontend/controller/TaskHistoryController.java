@@ -23,7 +23,7 @@ import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 @RequestMapping(path="/taskhistory")
 public class TaskHistoryController {
 
-    private final static String PATH="/taskhistory";
+    private final static String PATH="taskhistory";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){

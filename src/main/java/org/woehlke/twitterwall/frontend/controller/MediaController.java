@@ -34,7 +34,7 @@ public class MediaController {
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"url");
         Page<Media> myPageContent = mediaService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return "/media/all";
+        return "media/all";
     }
 
     private final MediaService mediaService;

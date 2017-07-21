@@ -23,7 +23,7 @@ import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 @RequestMapping("/tickersymbol")
 public class TickerSymbolController {
 
-    private final static String PATH="/tickersymbol";
+    private final static String PATH="tickersymbol";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){

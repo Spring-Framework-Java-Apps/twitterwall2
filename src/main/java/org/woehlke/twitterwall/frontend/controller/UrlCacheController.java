@@ -23,7 +23,7 @@ import org.woehlke.twitterwall.oodm.service.UrlCacheService;
 @RequestMapping("/urlcache")
 public class UrlCacheController {
 
-    private final static String PATH="/urlcache";
+    private final static String PATH="urlcache";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
