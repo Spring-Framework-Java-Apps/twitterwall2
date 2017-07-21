@@ -23,7 +23,7 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
 @RequestMapping("/url")
 public class UrlController {
 
-    private final static String PATH="/url";
+    private final static String PATH="url";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){

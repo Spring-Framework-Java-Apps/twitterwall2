@@ -28,7 +28,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-    private final static String PATH="/user";
+    private final static String PATH="user";
 
     @RequestMapping("/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {

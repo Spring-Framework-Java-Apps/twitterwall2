@@ -27,7 +27,7 @@ public class DomainController {
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         CountedEntities countedEntities =this.countedEntitiesService.countAll();
         model.addAttribute("countedEntities", countedEntities);
-        return "/application/domain/count";
+        return "application/domain/count";
     }
 
     private final CountedEntitiesService countedEntitiesService;
