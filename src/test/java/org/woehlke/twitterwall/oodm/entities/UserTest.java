@@ -7,9 +7,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +17,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
-import java.util.List;
-
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 
 /**
@@ -44,8 +41,8 @@ public class UserTest {
     @Autowired
     private UserServiceTest userServiceTest;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    @Autowired
+    private TwitterProperties twitterProperties;
 
     @Ignore
     @Commit
@@ -65,7 +62,7 @@ public class UserTest {
         String msg = "getAllDescriptionsTest";
         log.info(msg+"------------------------------------------------");
         boolean hasNext;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         do {
             Page<String> descriptions = userService.getAllDescriptions(pageRequest);
             hasNext = descriptions.hasNext();
@@ -77,7 +74,7 @@ public class UserTest {
             }
             pageRequest = pageRequest.next();
         } while (hasNext);
-        String message = "userService.getAllDescriptions(); ";
+        String message = "userService.findAllDescriptions(); ";
         Assert.assertTrue(message,true);
         log.info(msg+"------------------------------------------------");
     }

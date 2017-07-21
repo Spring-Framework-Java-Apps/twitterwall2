@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/tags">
+      xmlns:spring="http://www.springframework.org/hashTags">
 <head th:fragment="tw-head">
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -63,9 +63,24 @@
                             <li><a href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;&nbsp;Not Yet On List</a></li>
                             <li><a href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;On List</a></li>
                             <li><a href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;Renew List of Users On List</a></li>
+                            <li role="separator" class="divider"></li>
                             <li><a href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;Create Test Data</a></li>
-                            <li><a href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Count Bom</a></li>
+                            <li role="separator" class="divider"></li>
                             <li><a href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks</a></li>
+                            <li role="separator" class="divider"></li>
+
+                            <li><a href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: fetchTweetsFromTwitterSearch</a></li>
+
+                            <li><a href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateTweets</a></li>
+
+                            <li><a href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: fetchUsersFromDefinedUserList</a></li>
+
+                            <li><a href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateUserProfilesFromMentions</a></li>
+
+                            <li><a href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateUserProfiles</a></li>
+
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Count Entities</a></li>
                         </ul>
                     </li>
                     <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Users</a></li>

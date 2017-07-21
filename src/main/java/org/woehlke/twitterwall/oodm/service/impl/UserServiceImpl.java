@@ -3,15 +3,16 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.repository.UserRepository;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
+import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
 
@@ -26,26 +27,32 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
     public User store(User user, Task task) {
+        task.setTimeLastUpdate();
+        task = this.taskRepository.save(task);
         String name = "try to store: "+user.getIdTwitter()+" ";
         log.debug(name);
-        try {
-            User userPersistent = userRepository.findByIdTwitter(user.getIdTwitter(),User.class);
-            user.setCreatedBy(userPersistent.getCreatedBy());
+        User userPersistent = this.userRepository.findByIdTwitter(user.getIdTwitter());
+        if(userPersistent!=null) {
             user.setId(userPersistent.getId());
+            user.setCreatedBy(userPersistent.getCreatedBy());
             user.setUpdatedBy(task);
-            user = userRepository.update(user);
-            log.debug(name+" updated "+user.toString());
+            user = this.userRepository.save(user);
+            log.debug(name + " updated " + user.toString());
             return user;
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             user.setCreatedBy(task);
-            user = userRepository.persist(user);
+            user.setUpdatedBy(task);
+            user = this.userRepository.save(user);
             log.debug(name+" persisted "+user.toString());
             return user;
         }
@@ -54,23 +61,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user, Task task) {
         user.setCreatedBy(task);
-        return userRepository.persist(user);
+        return userRepository.save(user);
     }
 
     @Override
     public User update(User user, Task task) {
         user.setUpdatedBy(task);
-        return userRepository.update(user);
+        return userRepository.save(user);
     }
 
     @Override
     public Page<User> getAll(Pageable pageRequest) {
-        return userRepository.getAll(User.class,pageRequest);
+        return userRepository.findAll(pageRequest);
     }
 
     @Override
     public long count() {
-        return userRepository.count(User.class);
+        return userRepository.count();
     }
 
     @Override
@@ -83,48 +90,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getTweetingUsers(Pageable pageRequest) {
-        return userRepository.getTweetingUsers(pageRequest);
+        return userRepository.findTweetingUsers(pageRequest);
     }
 
     @Override
     public Page<User> getNotYetFriendUsers(Pageable pageRequest) {
-        return userRepository.getNotYetFriendUsers(pageRequest);
+        return userRepository.findNotYetFriendUsers(pageRequest);
     }
 
     @Override
     public Page<User> getNotYetOnList(Pageable pageRequest) {
-        return userRepository.getNotYetOnList(pageRequest);
+        return userRepository.findNotYetOnList(pageRequest);
     }
 
     @Override
     public Page<User> getOnList(Pageable pageRequest) {
-        return userRepository.getOnList(pageRequest);
+        return userRepository.findOnList(pageRequest);
     }
 
     @Override
     public User findByIdTwitter(long idTwitter) {
-        return userRepository.findByIdTwitter(idTwitter,User.class);
+        return userRepository.findByIdTwitter(idTwitter);
     }
 
     @Override
     public Page<String> getAllDescriptions(Pageable pageRequest) {
-        return userRepository.getAllDescriptions(pageRequest);
+        return userRepository.findAllDescriptions(pageRequest);
     }
 
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return userRepository.getAllTwitterIds(pageRequest);
+        return userRepository.findAllTwitterIds(pageRequest);
     }
 
     @Override
-    public Page<User> getUsersForHashTag(String hashtagText,Pageable pageRequest) {
-        Page<User> users = userRepository.getUsersForHashTag(hashtagText,pageRequest);
-        return users;
-    }
-
-    @Override
-    public long countUsersForHashTag(String hashtagText) {
-        long numberUsers = userRepository.countUsersForHashTag(hashtagText);
-        return numberUsers;
+    public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
+        return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
     }
 }

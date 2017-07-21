@@ -5,8 +5,8 @@ package org.woehlke.twitterwall.oodm.entities.common;
  */
 public interface DomainObjectWithIdTwitter<T extends DomainObjectWithIdTwitter> extends DomainObject<T> {
 
-    long getIdTwitter();
+    Long getIdTwitter();
 
-    void setIdTwitter(long idTwitter);
-    
+    void setIdTwitter(Long idTwitter);
+
 }

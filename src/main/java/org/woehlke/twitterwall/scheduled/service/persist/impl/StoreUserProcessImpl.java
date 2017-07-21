@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
@@ -29,7 +29,6 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         user = userService.store(user,task);
         return user;
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProcessImpl.class);
 

@@ -14,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.test.UrlServiceTest;
 
 import java.util.List;
@@ -55,10 +57,11 @@ public class TwitterUrlServiceTest {
         String msg = "fetchUrlTest ";
         log.info("------------------------------------");
         log.info(msg);
-        List<Url> testData = urlServiceTest.getTestData();
+        Task task = new Task("", TaskType.NULL);
+        List<Url> testData = urlServiceTest.getTestData(task);
         for(Url exprected:testData){
                 log.info(msg+"expected: " + exprected.toString());
-                Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl());
+                Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl(),task);
                 Assert.assertNotNull(foundUrl);
                 log.info(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());

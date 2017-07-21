@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
@@ -11,10 +10,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchTweetsFromTwitterSearch;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -96,15 +95,6 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     private static final Logger log = LoggerFactory.getLogger(FetchTweetsFromTwitterSearchImpl.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    @Value("${twitterwall.backend.twitter.millisToWaitForFetchTweetsFromTwitterSearch}")
-    private int millisToWaitForFetchTweetsFromTwitterSearch;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
 
     private final TwitterApiService twitterApiService;
 

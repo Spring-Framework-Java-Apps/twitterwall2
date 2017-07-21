@@ -30,9 +30,9 @@ public class TweetTransformServiceImpl implements TweetTransformService {
     }
 
     @Override
-    public org.woehlke.twitterwall.oodm.entities.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource) {
+    public org.woehlke.twitterwall.oodm.entities.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource,Task task) {
         if (tweetSource == null) { return null; } else {
-            org.woehlke.twitterwall.oodm.entities.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus());
+            org.woehlke.twitterwall.oodm.entities.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus(),task);
             long idTwitter = tweetSource.getId();
             String idStr = tweetSource.getIdStr();
             String text = tweetSource.getText();
@@ -43,7 +43,7 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             long fromUserId = tweetSource.getFromUserId();
             String languageCode = tweetSource.getLanguageCode();
             String source = tweetSource.getSource();
-            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
+            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source,task);
             tweetTarget.setFavoriteCount(tweetSource.getFavoriteCount());
             tweetTarget.setFavorited(tweetSource.isFavorited());
             tweetTarget.setInReplyToScreenName(tweetSource.getInReplyToScreenName());
@@ -58,12 +58,12 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             tweetTarget.setRetweetedStatus(retweetedStatus);
             TwitterProfile userSource = tweetSource.getUser();
 
-            org.woehlke.twitterwall.oodm.entities.Entities entitiesTarget = entitiesTransformService.transform(tweetSource.getEntities());
+            org.woehlke.twitterwall.oodm.entities.parts.Entities entitiesTarget = entitiesTransformService.transform(tweetSource.getEntities(),task);
 
             tweetTarget.setEntities(entitiesTarget);
 
             /* transform userTarget */
-            User userTarget = userTransformService.transform(userSource);
+            User userTarget = userTransformService.transform(userSource,task);
             tweetTarget.setUser(userTarget);
 
             return tweetTarget;

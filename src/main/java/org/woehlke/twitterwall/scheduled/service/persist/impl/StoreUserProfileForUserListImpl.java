@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
@@ -25,7 +25,7 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
     @Override
     public User storeUserProfileForUserList(TwitterProfile twitterProfile, Task task) {
         String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
-        User user = userTransformService.transform(twitterProfile);
+        User user = userTransformService.transform(twitterProfile,task);
         user = storeUserProcess.storeUserProcess(user, task);
         for(Mention mention:user.getEntities().getMentions()){
             String screenName = mention.getScreenName();
@@ -36,7 +36,6 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         }
         return user;
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileForUserListImpl.class);
 

@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +11,14 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.application.TaskService;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -26,9 +28,8 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-import static org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 09.07.17.
@@ -45,59 +46,58 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         int allLoop = 0;
         int loopId = 0;
         Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
-        try {
-            boolean hasNext;
-            Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, pageSize);
-            do {
-                Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
-                hasNext = userProfileTwitterIds.hasNext();
-                long number = userProfileTwitterIds.getTotalElements();
-                for (Long userProfileTwitterId : userProfileTwitterIds) {
-                    allLoop++;
-                    loopId++;
-                    String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
-                    try {
-                        log.debug(msg + counter);
-                        TwitterProfile userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
-                        User user = storeUserProfile.storeUserProfile(userProfile, task);
-                        log.debug(msg + counter + user.toString());
-                        int subLoopId = 0;
-                        int subNumber = user.getEntities().getMentions().size();
-                        for (Mention mention : user.getEntities().getMentions()) {
-                            allLoop++;
-                            subLoopId++;
-                            String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [" + allLoop + "] ";
-                            try {
-                                log.debug(msg + subCounter);
-                                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
-                                log.debug(msg + subCounter + userFromMention.toString());
-                            } catch (IllegalArgumentException exe) {
-                                this.taskService.warn(task, exe, msg + subCounter);
-                            }
-                        }
-                        log.debug(msg + user.toString());
-                        log.debug(msg + "-----------------------------------------------------");
-                        log.debug(msg + "Start SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
-                        Thread.sleep(millisToWaitBetweenTwoApiCalls);
-                        log.debug(msg + "Done SLEEP for " + millisToWaitBetweenTwoApiCalls + " ms " + counter);
-                        log.debug(msg + "-----------------------------------------------------");
-                    } catch (RateLimitExceededException e) {
-                        this.taskService.warn(task, e, msg);
-                    } catch (InterruptedException ex) {
-                        this.taskService.warn(task, ex, msg);
-                    } finally {
-                        log.debug(msg + "---------------------------------------");
-                    }
+        boolean hasNext=true;
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
+        while (hasNext) {
+            Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
+            hasNext = userProfileTwitterIds.hasNext();
+            long number = userProfileTwitterIds.getTotalElements();
+            for (Long userProfileTwitterId : userProfileTwitterIds) {
+                allLoop++;
+                loopId++;
+                String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
+                log.debug(msg + counter);
+                TwitterProfile userProfile = null;
+                try {
+                    userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
+                } catch (RateLimitExceededException e) {
+                    this.taskService.warn(task, e, msg);
                 }
-                pageRequest = pageRequest.next();
-            } while (hasNext);
-        } catch (ResourceAccessException e) {
-            this.taskService.warn(task,e,msg);
-        } catch (RateLimitExceededException e) {
-            this.taskService.warn(task,e,msg);
+                User user = storeUserProfile.storeUserProfile(userProfile, task);
+                if(user!=null){
+                    log.debug(msg + counter + user.toString());
+                    int subLoopId = 0;
+                    int subNumber = user.getEntities().getMentions().size();
+                    for (Mention mention : user.getEntities().getMentions()) {
+                        allLoop++;
+                        subLoopId++;
+                        String subCounter = counter + " ( " + subLoopId + " from " + subNumber + " ) [" + allLoop + "] ";
+                        try {
+                            log.debug(msg + subCounter);
+                            User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
+                            log.debug(msg + subCounter + userFromMention.toString());
+                        } catch (IllegalArgumentException exe) {
+                            this.taskService.warn(task, exe, msg + subCounter);
+                        }
+                    }
+                    log.debug(msg + user.toString());
+                }
+                log.debug(msg + "-----------------------------------------------------");
+                log.debug(msg + "Start SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
+                try {
+                    Thread.sleep(twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls());
+                } catch (InterruptedException ex) {
+                    log.debug(msg+" "+task.toString(),ex);
+                }
+                log.debug(msg + "Done SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
+                log.debug(msg + "-----------------------------------------------------");
+
+                log.debug(msg + "---------------------------------------");
+            }
+            pageRequest = pageRequest.next();
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        task.event(report);
+        taskService.event(task,report);
         this.taskService.done(task);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
@@ -108,17 +108,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.backend.twitter.millisToWaitBetweenTwoApiCalls}")
-    private int millisToWaitBetweenTwoApiCalls;
+    private final TwitterwallBackendProperties twitterwallBackendProperties;
 
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
+    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitterwall.frontend.maxResults}")
-    private int pageSize;
+    private final TwitterProperties twitterProperties;
 
     private final StoreUserProfile storeUserProfile;
 
@@ -131,7 +127,11 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 
     @Autowired
-    public UpdateUserProfilesImpl(StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+    public UpdateUserProfilesImpl(TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+        this.twitterwallBackendProperties = twitterwallBackendProperties;
+        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
         this.storeUserProfile = storeUserProfile;
         this.twitterApiService = twitterApiService;
         this.userService = userService;
