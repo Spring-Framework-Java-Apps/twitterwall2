@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.repositories" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.frontend.rest" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.frontend.model" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.frontend.controller" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.frontend.controller.common" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall" level="DEBUG" />
-    <root level="INFO"></root>
+    <logger name="org.woehlke.twitterwall.oodm.entities" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.repositories" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.service" level="INFO" />
+    <logger name="org.woehlke.twitterwall.frontend.rest" level="INFO" />
+    <logger name="org.woehlke.twitterwall.frontend.model" level="INFO" />
+    <logger name="org.woehlke.twitterwall.frontend.controller" level="INFO" />
+    <logger name="org.woehlke.twitterwall.frontend.controller.common" level="INFO" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="INFO" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="INFO" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="INFO" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="INFO" />
+    <logger name="org.woehlke.twitterwall" level="INFO" />
+    <root level="WARN"></root>
 </configuration>

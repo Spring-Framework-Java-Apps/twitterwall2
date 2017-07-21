@@ -29,17 +29,17 @@ public class TweetListener  {
 
   @PostPersist
   public void onPostPersist(Tweet domainObject) {
-    log.info("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(Tweet domainObject) {
-    log.info("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(Tweet domainObject) {
-    log.info("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.toString());
   }
 
   @PostLoad

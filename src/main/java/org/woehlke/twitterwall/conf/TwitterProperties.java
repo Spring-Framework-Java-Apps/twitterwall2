@@ -24,7 +24,7 @@ public class TwitterProperties {
     //@NotNull
     private String consumerSecret;
 
-    //@NotNull
+    @NotNull
     private Integer pageSize;
 
     @NotNull

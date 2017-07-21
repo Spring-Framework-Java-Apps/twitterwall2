@@ -50,11 +50,11 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${TWITTERWALL_JPA_HIBERNATE_DDL_AUTO}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
-    show-sql: true
+    show-sql: false
   template:
     cache: false
   thymeleaf:
