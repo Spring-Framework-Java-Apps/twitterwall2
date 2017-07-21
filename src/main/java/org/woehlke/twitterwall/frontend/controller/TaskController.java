@@ -72,7 +72,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         this.fetchTweetsFromTwitterSearch();
-        return "/scheduled/taskStarted";
+        return "scheduled/taskStarted";
     }
 
     @RequestMapping(path="/scheduled/tweets/update")
@@ -84,7 +84,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         this.updateTweets();
-        return "/scheduled/taskStarted";
+        return "scheduled/taskStarted";
     }
 
     @RequestMapping(path="/scheduled/users/list/fetch")
@@ -96,7 +96,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         this.fetchUsersFromDefinedUserList();
-        return "/scheduled/taskStarted";
+        return "scheduled/taskStarted";
     }
 
     @RequestMapping(path="/scheduled/users/mentions/update")
@@ -108,7 +108,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         this.updateUserProfilesFromMentions();
-        return "/scheduled/taskStarted";
+        return "scheduled/taskStarted";
     }
 
     @RequestMapping(path="/scheduled/users/update")
@@ -120,7 +120,7 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         this.updateUserProfiles();
-        return "/scheduled/taskStarted";
+        return "scheduled/taskStarted";
     }
 
     @Async

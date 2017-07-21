@@ -41,7 +41,7 @@ public class TestController {
             model.addAttribute("latestTweets",null);
             model.addAttribute("users",null);
         }
-        return "/test/getTestData";
+        return "test/getTestData";
     }
 
     @RequestMapping("/user/onlist/renew")
@@ -56,7 +56,7 @@ public class TestController {
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";
         model = controllerHelper.setupPage(model, title, "Users", symbol);
-        return "/test/user/onlist/renew";
+        return "test/user/onlist/renew";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);

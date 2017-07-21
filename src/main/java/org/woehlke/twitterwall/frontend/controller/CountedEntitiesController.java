@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 @RequestMapping(path="/application/countedEntities")
 public class CountedEntitiesController {
 
-    private final static String PATH="/application/countedEntities";
+    private final static String PATH="application/countedEntities";
 
 
     @RequestMapping(path="/tweet/hashtag")
@@ -93,7 +93,7 @@ public class CountedEntitiesController {
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
     }
-    
+
 
     @Autowired
     public CountedEntitiesController(ControllerHelper controllerHelper) {
