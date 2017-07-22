@@ -165,14 +165,6 @@ public class Task implements DomainObjectMinimal<Task> {
         return "" + taskType.name() +"_"+ timeStarted.getTime();
     }
 
-    @Override
-    public boolean equals(Task task) {
-        if (this == task) return true;
-        if (!id.equals(task.id)) return false;
-        if (taskType != task.taskType) return false;
-        return timeStarted.equals(task.timeStarted);
-    }
-
     public TaskType getTaskType() {
         return taskType;
     }

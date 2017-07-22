@@ -96,18 +96,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
-    @Override
-    public boolean equals(TaskHistory that) {
-        if (this == that) return true;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (taskStatusBefore != that.taskStatusBefore) return false;
-        if (taskStatusNow != that.taskStatusNow) return false;
-        if (idTask != that.idTask) return false;
-        return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
-    }
-
     public String getDescription() {
         return description;
     }
