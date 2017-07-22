@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -21,63 +20,16 @@ import org.woehlke.twitterwall.oodm.service.UserService;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
 
-    private final TaskRepository taskRepository;
-
     @Autowired
     public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
+        super(userRepository,taskRepository);
         this.userRepository = userRepository;
-        this.taskRepository = taskRepository;
-    }
-
-    @Override
-    public User store(User user, Task task) {
-        task.setTimeLastUpdate();
-        task = this.taskRepository.save(task);
-        String name = "try to store: "+user.getIdTwitter()+" ";
-        log.debug(name);
-        User userPersistent = this.userRepository.findByIdTwitter(user.getIdTwitter());
-        if(userPersistent!=null) {
-            user.setId(userPersistent.getId());
-            user.setCreatedBy(userPersistent.getCreatedBy());
-            user.setUpdatedBy(task);
-            user = this.userRepository.save(user);
-            log.debug(name + " updated " + user.toString());
-            return user;
-        } else {
-            user.setCreatedBy(task);
-            user.setUpdatedBy(task);
-            user = this.userRepository.save(user);
-            log.debug(name+" persisted "+user.toString());
-            return user;
-        }
-    }
-
-    @Override
-    public User create(User user, Task task) {
-        user.setCreatedBy(task);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User update(User user, Task task) {
-        user.setUpdatedBy(task);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Page<User> getAll(Pageable pageRequest) {
-        return userRepository.findAll(pageRequest);
-    }
-
-    @Override
-    public long count() {
-        return userRepository.count();
     }
 
     @Override

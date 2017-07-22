@@ -43,7 +43,7 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             long fromUserId = tweetSource.getFromUserId();
             String languageCode = tweetSource.getLanguageCode();
             String source = tweetSource.getSource();
-            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source,task);
+            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(task,null,idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
             tweetTarget.setFavoriteCount(tweetSource.getFavoriteCount());
             tweetTarget.setFavorited(tweetSource.isFavorited());
             tweetTarget.setInReplyToScreenName(tweetSource.getInReplyToScreenName());

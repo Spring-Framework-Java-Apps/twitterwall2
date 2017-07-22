@@ -10,7 +10,6 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.persist.*;
 
@@ -31,10 +30,6 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
             tweet.setRetweetedStatus(retweetedStatus);
         }
-        /** TaskInfo */
-        TaskInfo taskInfo = tweet.getTaskInfo();
-        taskInfo = taskInfo.setTaskInfoFromTask(task);
-        tweet.setTaskInfo(taskInfo);
         /** User */
         User user = tweet.getUser();
         user = storeUserProcess.storeUserProcess(user,task);

@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
@@ -20,12 +20,17 @@ import java.util.Date;
     },
     indexes = {
         @Index(name = "idx_task_history_status_before", columnList = "status_before"),
-        @Index(name = "idx_task_history_status_now", columnList = "status_now"),
-        @Index(name = "idx_task_history_time_event", columnList = "time_event"),
+        @Index(name = "idx_task_history_status_now", columnList = "status_now")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="TaskHistory.findByUniqueId",
+        query="select t from TaskHistory t where t.idTask=:idTask and t.timeEvent=:timeEvent"
+    )
+})
 @EntityListeners(TaskHistoryListener.class)
-public class TaskHistory implements DomainObject<TaskHistory> {
+public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     private static final long serialVersionUID = 1L;
 
@@ -87,15 +92,8 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     }
 
     @Override
-    public boolean equals(TaskHistory that) {
-        if (this == that) return true;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (taskStatusBefore != that.taskStatusBefore) return false;
-        if (taskStatusNow != that.taskStatusNow) return false;
-        if (idTask != that.idTask) return false;
-        return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
+    public String getUniqueId() {
+        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
     public String getDescription() {
@@ -147,34 +145,8 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     }
 
     @Override
-    public int compareTo(TaskHistory o) {
-        return timeEvent.compareTo(o.getTimeEvent());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TaskHistory)) return false;
-
-        TaskHistory that = (TaskHistory) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (taskStatusBefore != that.taskStatusBefore) return false;
-        if (taskStatusNow != that.taskStatusNow) return false;
-        if (idTask != that.idTask) return false;
-        return timeEvent != null ? timeEvent.equals(that.timeEvent) : that.timeEvent == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (taskStatusBefore != null ? taskStatusBefore.hashCode() : 0);
-        result = 31 * result + (taskStatusNow != null ? taskStatusNow.hashCode() : 0);
-        result = 31 * result + (timeEvent != null ? timeEvent.hashCode() : 0);
-        result = 31 * result + (idTask != null ? idTask.hashCode() : 0);
-        return result;
+    public int compareTo(TaskHistory other) {
+        return getUniqueId().compareTo(other.getUniqueId());
     }
 
     @Override
@@ -207,5 +179,26 @@ public class TaskHistory implements DomainObject<TaskHistory> {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TaskHistory)) return false;
+
+        TaskHistory that = (TaskHistory) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getTimeEvent() != null ? !getTimeEvent().equals(that.getTimeEvent()) : that.getTimeEvent() != null)
+            return false;
+        return getIdTask() != null ? getIdTask().equals(that.getIdTask()) : that.getIdTask() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getTimeEvent() != null ? getTimeEvent().hashCode() : 0);
+        result = 31 * result + (getIdTask() != null ? getIdTask().hashCode() : 0);
+        return result;
     }
 }

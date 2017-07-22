@@ -19,4 +19,5 @@ public interface DomainObjectWithTask<T extends DomainObjectWithTask> extends Do
     TaskInfo getTaskInfo();
 
     void setTaskInfo(TaskInfo taskInfo);
+
 }

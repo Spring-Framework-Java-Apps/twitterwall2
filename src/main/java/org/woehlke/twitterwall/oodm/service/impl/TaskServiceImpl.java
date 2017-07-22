@@ -43,21 +43,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task store(Task domainObject) {
-        return taskRepository.save(domainObject);
-    }
-
-    @Override
-    public Task create(Task domainObject) {
-        return taskRepository.save(domainObject);
-    }
-
-    @Override
-    public Task update(Task domainObject) {
-        return taskRepository.save(domainObject);
-    }
-
-    @Override
     public Page<Task> getAll(Pageable pageRequest) {
         return taskRepository.findAll(pageRequest);
     }

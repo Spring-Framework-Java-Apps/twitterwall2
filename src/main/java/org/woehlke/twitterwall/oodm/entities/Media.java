@@ -2,19 +2,14 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -34,27 +29,20 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name="idx_media_media_type", columnList="media_type")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Media.findByUniqueId",
+        query="select t from Media t where t.idTwitter=:idTwitter"
+    )
+})
 @EntityListeners(MediaListener.class)
-public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
+public class Media extends AbstractDomainObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @NotNull
     @Column(name="id_twitter", nullable = false)
@@ -86,7 +74,8 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     private String mediaType = "";
 
 
-    public Media(long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType, Task task) {
+    public Media(Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
         this.mediaHttps = mediaHttps;
@@ -94,9 +83,17 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.display = display;
         this.expanded = expanded;
         this.mediaType = mediaType;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    public Media(Task createdBy, Task updatedBy, String url){
+        super(createdBy,updatedBy);
+        this.idTwitter = -1L;
+        this.mediaHttp = "UNKNOWN";
+        this.mediaHttps  = "UNKNOWN";
+        this.display = "UNKNOWN";
+        this.expanded = "UNKNOWN";
+        this.mediaType = "UNKNOWN";
+        this.url=url;
     }
 
     private Media() {
@@ -114,6 +111,11 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
     }
 
     @Override
@@ -174,89 +176,6 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         this.mediaType = mediaType;
     }
 
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Media)) return false;
-        if (!super.equals(o)) return false;
-
-        Media media = (Media) o;
-
-        if (mediaHttp != null ? !mediaHttp.equals(media.mediaHttp) : media.mediaHttp != null) return false;
-        if (mediaHttps != null ? !mediaHttps.equals(media.mediaHttps) : media.mediaHttps != null) return false;
-        if (url != null ? !url.equals(media.url) : media.url != null) return false;
-        if (display != null ? !display.equals(media.display) : media.display != null) return false;
-        if (expanded != null ? !expanded.equals(media.expanded) : media.expanded != null) return false;
-        return mediaType != null ? mediaType.equals(media.mediaType) : media.mediaType == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (mediaHttp != null ? mediaHttp.hashCode() : 0);
-        result = 31 * result + (mediaHttps != null ? mediaHttps.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (display != null ? display.hashCode() : 0);
-        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
-        result = 31 * result + (mediaType != null ? mediaType.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public int compareTo(Media other) {
-        return Long.compare(idTwitter, other.getIdTwitter());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
     @Override
     public String toString() {
         return "Media{" +
@@ -268,9 +187,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", mediaType='" + mediaType + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+                    super.toString() +
                 " }\n";
     }
 
@@ -279,13 +196,5 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
         return true;
     }
 
-    public static Media getMediaFactory(String url,Task task) {
-        long idTwitter = -1L;
-        String mediaHttp = "UNKNOWN";
-        String mediaHttps  = "UNKNOWN";
-        String display = "UNKNOWN";
-        String expanded = "UNKNOWN";
-        String mediaType = "UNKNOWN";
-        return new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded,mediaType, task);
-    }
+
 }

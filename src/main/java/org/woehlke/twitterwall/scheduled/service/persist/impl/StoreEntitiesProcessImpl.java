@@ -27,10 +27,10 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
     public Entities storeEntitiesProcess(Entities entities, Task task) {
         String msg = "storeEntitiesProcess ";
         Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        Set<Media> media = new LinkedHashSet<>();
-        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
+        Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
+        Set<Mention> mentions = new LinkedHashSet<Mention>();
+        Set<Media> media = new LinkedHashSet<Media>();
+        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
         for (Url myUrl : entities.getUrls()) {
             if(myUrl != null) {
                 if (myUrl.isValid()) {
@@ -38,9 +38,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                     urls.add(urlPers);
                 } else if (myUrl.isRawUrlsFromDescription()){
                     String urlStr = myUrl.getUrl();
-                    Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr, task);
-                    if ((urlObj != null) && (urlObj.isValid())) {
-                        urls.add(urlObj);
+                    Url newUrlPers  = createPersistentUrl.createPersistentUrlFor(urlStr, task);
+                    if ((newUrlPers != null) && (newUrlPers.isValid())) {
+                        urls.add(newUrlPers);
                     }
                 }
             }
@@ -48,7 +48,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         for (HashTag hashTag : entities.getHashTags()) {
             if(hashTag.isValid()){
                 HashTag hashTagPers = hashTagService.store(hashTag, task);
-                hashTags.add(hashTagPers);
+                if(hashTagPers != null){
+                    hashTags.add(hashTagPers);
+                }
             }
         }
         for (Mention mention : entities.getMentions()) {
@@ -65,7 +67,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         for(Media medium:entities.getMedia()){
             if(medium.isValid()) {
                 Media mediumPers = mediaService.store(medium, task);
-                media.add(mediumPers);
+                if(mediumPers != null){
+                    media.add(mediumPers);
+                }
             }
         }
         for(TickerSymbol tickerSymbol:entities.getTickerSymbols()){

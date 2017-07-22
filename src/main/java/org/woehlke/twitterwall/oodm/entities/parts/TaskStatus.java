@@ -10,5 +10,5 @@ public enum TaskStatus {
     FINISHED,
     ERROR,
     WARN,
-    NULL;
+    NULL
 }

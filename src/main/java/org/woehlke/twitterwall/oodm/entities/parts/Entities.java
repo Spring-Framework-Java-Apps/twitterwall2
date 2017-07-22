@@ -29,7 +29,7 @@ public class Entities extends EntitiesFilter implements Serializable {
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
-    private Set<Mention> mentions = new LinkedHashSet<>();
+    private Set<Mention> mentions = new LinkedHashSet<Mention>();
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
@@ -296,30 +296,6 @@ public class Entities extends EntitiesFilter implements Serializable {
         return this.tickerSymbols.remove(tickerSymbol);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Entities)) return false;
-
-        Entities entities = (Entities) o;
-
-        if (!urls.equals(entities.urls)) return false;
-        if (!hashTags.equals(entities.hashTags)) return false;
-        if (!mentions.equals(entities.mentions)) return false;
-        if (!media.equals(entities.media)) return false;
-        return tickerSymbols.equals(entities.tickerSymbols);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = urls.hashCode();
-        result = 31 * result + hashTags.hashCode();
-        result = 31 * result + mentions.hashCode();
-        result = 31 * result + media.hashCode();
-        result = 31 * result + tickerSymbols.hashCode();
-        return result;
-    }
-
     private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
@@ -431,4 +407,30 @@ public class Entities extends EntitiesFilter implements Serializable {
     }
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Entities)) return false;
+
+        Entities entities = (Entities) o;
+
+        if (getUrls() != null ? !getUrls().equals(entities.getUrls()) : entities.getUrls() != null) return false;
+        if (getHashTags() != null ? !getHashTags().equals(entities.getHashTags()) : entities.getHashTags() != null)
+            return false;
+        if (getMentions() != null ? !getMentions().equals(entities.getMentions()) : entities.getMentions() != null)
+            return false;
+        if (getMedia() != null ? !getMedia().equals(entities.getMedia()) : entities.getMedia() != null) return false;
+        return getTickerSymbols() != null ? getTickerSymbols().equals(entities.getTickerSymbols()) : entities.getTickerSymbols() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUrls() != null ? getUrls().hashCode() : 0;
+        result = 31 * result + (getHashTags() != null ? getHashTags().hashCode() : 0);
+        result = 31 * result + (getMentions() != null ? getMentions().hashCode() : 0);
+        result = 31 * result + (getMedia() != null ? getMedia().hashCode() : 0);
+        result = 31 * result + (getTickerSymbols() != null ? getTickerSymbols().hashCode() : 0);
+        return result;
+    }
 }

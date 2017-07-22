@@ -2,10 +2,8 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
@@ -16,11 +14,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -33,7 +26,6 @@ import static javax.persistence.FetchType.EAGER;
     },
     indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
-        @Index(name="idx_userprofile_screen_name", columnList="screen_name"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
         @Index(name="idx_userprofile_url", columnList="url")
@@ -71,6 +63,10 @@ import static javax.persistence.FetchType.EAGER;
         @NamedQuery(
             name = "User.findAllTwitterIds",
             query = "select t.idTwitter from User as t"
+        ),
+        @NamedQuery(
+            name="User.findByUniqueId",
+            query="select t from User as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
         )
 })
 @NamedNativeQueries({
@@ -96,26 +92,13 @@ import static javax.persistence.FetchType.EAGER;
     )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractTwitterObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
+public class User extends AbstractDomainObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @NotNull
     @Column(name="id_twitter",nullable = false)
@@ -268,7 +251,8 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     })
     private Entities entities = new Entities();
 
-    public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate,Task task) {
+    public User(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -277,9 +261,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.description = description;
         this.location = location;
         this.createdDate = createdDate;
-        this.createdBy = task;
-        this.updatedBy =task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private User() {
@@ -356,13 +337,8 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     }
 
     @Override
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    @Override
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
+    public String getUniqueId() {
+        return idTwitter.toString();
     }
 
     @Override
@@ -664,77 +640,12 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.profileBannerUrl = profileBannerUrl;
     }
 
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        this.taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        this.taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
     public Entities getEntities() {
         return entities;
     }
 
     public void setEntities(Entities entities) {
         this.entities = entities;
-    }
-
-    @Override
-    public boolean equals(User o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        if (!super.equals(o)) return false;
-
-        User that = (User) o;
-
-        return idTwitter == that.idTwitter;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        return result;
-    }
-
-    @Override
-    public int compareTo(User other) {
-        return screenName.compareTo(other.getScreenName());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
     }
 
     @Override
@@ -778,9 +689,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n createdBy="+ toStringCreatedBy() +
-                ",\n updatedBy=" + toStringUpdatedBy() +
-                ",\n taskInfo="+ toStringTaskInfo() +
+                    super.toString() +
                 ",\n entities=" + this.entities.toString() +
                 "\n}";
     }
@@ -798,7 +707,30 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate, task);
+        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+
+        User user = (User) o;
+
+        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
+        if (getIdTwitter() != null ? !getIdTwitter().equals(user.getIdTwitter()) : user.getIdTwitter() != null)
+            return false;
+        return getScreenName() != null ? getScreenName().equals(user.getScreenName()) : user.getScreenName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
+        result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
+        return result;
     }
 }

@@ -23,7 +23,7 @@ public class HashTagTransformServiceImpl extends EntitiesFilter implements HashT
     @Override
     public HashTag transform(HashTagEntity hashTag,Task task) {
         String text = hashTag.getText();
-        HashTag myHashTagEntity = new HashTag(text, task);
+        HashTag myHashTagEntity = new HashTag(task, null, text);
         return myHashTagEntity;
     }
 

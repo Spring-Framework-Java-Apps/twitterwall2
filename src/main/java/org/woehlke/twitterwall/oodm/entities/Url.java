@@ -2,19 +2,13 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
 
 import javax.persistence.*;
-import javax.validation.OverridesAttribute;
 import javax.validation.constraints.NotNull;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -30,8 +24,14 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name="idx_url_display", columnList="display")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Url.findByUniqueId",
+        query="select t from Url t where t.url=:url"
+    )
+})
 @EntityListeners(UrlListener.class)
-public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
+public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,19 +40,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @NotNull
     @Column(length=4096,nullable = false)
@@ -77,22 +64,18 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         return url.compareTo(expanded) == 0;
     }
 
-    public Url(String display, String expanded, String url, Task task) {
+    public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
+        super(createdBy,updatedBy);
         this.display = display;
         this.expanded = expanded;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Url(String url,Task task) {
+    public Url(Task createdBy, Task updatedBy,String url) {
+        super(createdBy,updatedBy);
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private Url() {
@@ -108,6 +91,11 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return url;
     }
 
     public String getDisplay() {
@@ -134,78 +122,6 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
         this.url = url;
     }
 
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Url)) return false;
-
-        Url url1 = (Url) o;
-
-        return url != null ? url.equals(url1.url) : url1.url == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public int compareTo(Url other) {
-        return url.compareTo(other.getUrl());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
     @Override
     public String toString() {
         return "Url{" +
@@ -213,9 +129,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+                    super.toString() +
                 "}\n";
     }
 
@@ -227,5 +141,25 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     public boolean isRawUrlsFromDescription() {
         return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Url)) return false;
+        if (!super.equals(o)) return false;
+
+        Url url1 = (Url) o;
+
+        if (getId() != null ? !getId().equals(url1.getId()) : url1.getId() != null) return false;
+        return getUrl() != null ? getUrl().equals(url1.getUrl()) : url1.getUrl() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
     }
 }

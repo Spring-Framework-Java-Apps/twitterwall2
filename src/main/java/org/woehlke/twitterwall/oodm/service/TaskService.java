@@ -2,12 +2,12 @@ package org.woehlke.twitterwall.oodm.service;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.oodm.service.common.DomainService;
+import org.woehlke.twitterwall.oodm.service.common.DomainObjectMinimalService;
 
 /**
  * Created by tw on 09.07.17.
  */
-public interface TaskService extends DomainService<Task> {
+public interface TaskService extends DomainObjectMinimalService<Task> {
 
     Task create(String msg,TaskType type);
 
@@ -28,11 +28,5 @@ public interface TaskService extends DomainService<Task> {
     Task error(Task task, String msg);
 
     Task findById(long id);
-
-    Task store(Task domainObject);
-
-    Task create(Task domainObject);
-
-    Task update(Task domainObject);
 
 }

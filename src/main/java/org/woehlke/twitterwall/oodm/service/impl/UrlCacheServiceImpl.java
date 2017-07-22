@@ -3,12 +3,9 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
@@ -20,68 +17,16 @@ import org.woehlke.twitterwall.oodm.service.UrlCacheService;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-public class UrlCacheServiceImpl implements UrlCacheService {
+public class UrlCacheServiceImpl extends DomainServiceWithTaskImpl<UrlCache> implements UrlCacheService {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);
 
     private final UrlCacheRepository urlCacheRepository;
 
-    private final TaskRepository taskRepository;
-
     @Autowired
     public UrlCacheServiceImpl(UrlCacheRepository urlCacheRepository, TaskRepository taskRepository) {
+        super(urlCacheRepository,taskRepository);
         this.urlCacheRepository = urlCacheRepository;
-        this.taskRepository = taskRepository;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public UrlCache store(UrlCache urlCache, Task task) {
-        task.setTimeLastUpdate();
-        task = this.taskRepository.save(task);
-        String name = "UrlCache.store: store";
-        UrlCache urlCachePers = this.findByUrl(urlCache.getUrl());
-        if(urlCachePers!=null){
-            urlCache.setId(urlCachePers.getId());
-            Task creator = urlCachePers.getCreatedBy();
-            if(creator != null) {
-                urlCache.setCreatedBy(creator);
-            } else {
-                urlCache.setCreatedBy(task);
-            }
-            urlCache.setUpdatedBy(task);
-            UrlCache result = this.urlCacheRepository.save(urlCache);
-            log.debug(name+" updated "+result.toString());
-            return result;
-        } else {
-            urlCache.setCreatedBy(task);
-            urlCache.setUpdatedBy(task);
-            UrlCache result = this.urlCacheRepository.save(urlCache);
-            log.debug(name+" persisted "+result);
-            return result;
-        }
-    }
-
-    @Override
-    public UrlCache create(UrlCache domainObject, Task task) {
-        domainObject.setCreatedBy(task);
-        return urlCacheRepository.save(domainObject);
-    }
-
-    @Override
-    public UrlCache update(UrlCache domainObject, Task task) {
-        domainObject.setUpdatedBy(task);
-        return urlCacheRepository.save(domainObject);
-    }
-
-    @Override
-    public Page<UrlCache> getAll(Pageable pageRequest) {
-        return urlCacheRepository.findAll(pageRequest);
-    }
-
-    @Override
-    public long count() {
-        return urlCacheRepository.count();
     }
 
     @Override
