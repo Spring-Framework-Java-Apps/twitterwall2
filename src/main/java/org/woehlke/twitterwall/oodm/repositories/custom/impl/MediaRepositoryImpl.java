@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.MediaRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class MediaRepositoryImpl implements MediaRepositoryCustom {
 
@@ -21,7 +22,11 @@ public class MediaRepositoryImpl implements MediaRepositoryCustom {
         String name="Media.findByUniqueId";
         TypedQuery<Media> query = entityManager.createNamedQuery(name,Media.class);
         query.setParameter("idTwitter",domainObject.getIdTwitter());
-        Media result = query.getSingleResult();
-        return result;
+        List<Media> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

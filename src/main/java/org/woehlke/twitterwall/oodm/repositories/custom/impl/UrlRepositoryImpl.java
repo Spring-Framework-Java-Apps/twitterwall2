@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.UrlRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class UrlRepositoryImpl implements UrlRepositoryCustom {
 
@@ -21,7 +22,11 @@ public class UrlRepositoryImpl implements UrlRepositoryCustom {
         String name="Url.findByUniqueId";
         TypedQuery<Url> query = entityManager.createNamedQuery(name,Url.class);
         query.setParameter("url",domainObject.getUrl());
-        Url result = query.getSingleResult();
-        return result;
+        List<Url> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

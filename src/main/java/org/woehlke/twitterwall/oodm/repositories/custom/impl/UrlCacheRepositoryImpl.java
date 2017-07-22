@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.UrlCacheRepositoryCustom
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class UrlCacheRepositoryImpl implements UrlCacheRepositoryCustom {
 
@@ -21,7 +22,11 @@ public class UrlCacheRepositoryImpl implements UrlCacheRepositoryCustom {
         String name="UrlCache.findByUniqueId";
         TypedQuery<UrlCache> query = entityManager.createNamedQuery(name,UrlCache.class);
         query.setParameter("url",domainObject.getUrl());
-        UrlCache result = query.getSingleResult();
-        return result;
+        List<UrlCache> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

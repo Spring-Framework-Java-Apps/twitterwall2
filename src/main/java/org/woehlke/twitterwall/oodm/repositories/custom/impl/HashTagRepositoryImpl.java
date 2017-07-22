@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.HashTagRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
 
@@ -21,7 +22,11 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
         String name="HashTag.findByUniqueId";
         TypedQuery<HashTag> query = entityManager.createNamedQuery(name,HashTag.class);
         query.setParameter("text",domainObject.getText());
-        HashTag result = query.getSingleResult();
-        return result;
+        List<HashTag> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

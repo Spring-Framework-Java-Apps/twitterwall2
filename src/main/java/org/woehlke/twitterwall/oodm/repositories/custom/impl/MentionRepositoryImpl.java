@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.MentionRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class MentionRepositoryImpl implements MentionRepositoryCustom {
 
@@ -22,7 +23,11 @@ public class MentionRepositoryImpl implements MentionRepositoryCustom {
         TypedQuery<Mention> query = entityManager.createNamedQuery(name,Mention.class);
         query.setParameter("idTwitter",domainObject.getIdTwitter());
         query.setParameter("screenName",domainObject.getScreenName());
-        Mention result = query.getSingleResult();
-        return result;
+        List<Mention> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

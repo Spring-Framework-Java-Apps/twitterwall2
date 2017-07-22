@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
@@ -21,7 +22,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
         String name="Tweet.findByUniqueId";
         TypedQuery<Tweet> query = entityManager.createNamedQuery(name,Tweet.class);
         query.setParameter("idTwitter",domainObject.getIdTwitter());
-        Tweet result = query.getSingleResult();
-        return result;
+        List<Tweet> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

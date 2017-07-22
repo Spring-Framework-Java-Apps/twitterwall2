@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.TaskHistoryRepositoryCus
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class TaskHistoryRepositoryImpl implements TaskHistoryRepositoryCustom {
 
@@ -22,7 +23,11 @@ public class TaskHistoryRepositoryImpl implements TaskHistoryRepositoryCustom {
         TypedQuery<TaskHistory> query = entityManager.createNamedQuery(name,TaskHistory.class);
         query.setParameter("idTask",domainObject.getIdTask());
         query.setParameter("timeStarted",domainObject.getTimeEvent());
-        TaskHistory result = query.getSingleResult();
-        return result;
+        List<TaskHistory> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.TickerSymbolRepositoryCu
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class TickerSymbolRepositoryImpl implements TickerSymbolRepositoryCustom {
 
@@ -22,7 +23,11 @@ public class TickerSymbolRepositoryImpl implements TickerSymbolRepositoryCustom 
         TypedQuery<TickerSymbol> query = entityManager.createNamedQuery(name,TickerSymbol.class);
         query.setParameter("url",domainObject.getUrl());
         query.setParameter("tickerSymbol",domainObject.getTickerSymbol());
-        TickerSymbol result = query.getSingleResult();
-        return result;
+        List<TickerSymbol> resultList = query.getResultList();
+        if(resultList.size()>0){
+            return resultList.iterator().next();
+        } else {
+            return null;
+        }
     }
 }
