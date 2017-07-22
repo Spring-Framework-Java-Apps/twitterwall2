@@ -24,6 +24,12 @@ import javax.validation.constraints.NotNull;
         @Index(name="idx_url_display", columnList="display")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Url.findByUniqueId",
+        query="select t from Url t where t.url=:url"
+    )
+})
 @EntityListeners(UrlListener.class)
 public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 

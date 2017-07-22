@@ -24,6 +24,12 @@ import javax.validation.constraints.NotNull;
         @Index(name="idx_url_cache_expanded", columnList="expanded")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="UrlCache.findByUniqueId",
+        query="select t from UrlCache t where t.urlr=:url"
+    )
+})
 @EntityListeners(UrlCacheListener.class)
 public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 

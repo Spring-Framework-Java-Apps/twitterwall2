@@ -24,6 +24,12 @@ import java.util.Date;
         @Index(name = "idx_task_history_time_event", columnList = "time_event"),
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="TaskHistory.findByUniqueId",
+        query="select t from TaskHistory t join Task task where t.task.id=:taskId and t.timeEvent=:timeEvent"
+    )
+})
 @EntityListeners(TaskHistoryListener.class)
 public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 

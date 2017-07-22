@@ -69,6 +69,10 @@ import static javax.persistence.FetchType.EAGER;
         @NamedQuery(
             name = "User.findAllTwitterIds",
             query = "select t.idTwitter from User as t"
+        ),
+        @NamedQuery(
+            name="User.findByUniqueId",
+            query="select t from User as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
         )
 })
 @NamedNativeQueries({

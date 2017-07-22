@@ -23,6 +23,12 @@ import javax.persistence.*;
         @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="TickerSymbol.findByUniqueId",
+        query="select t from TickerSymbol t where t.urlr=:url and t.tickerSymbol=:tickerSymbol"
+    )
+})
 @EntityListeners(TickerSymbolListener.class)
 public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 

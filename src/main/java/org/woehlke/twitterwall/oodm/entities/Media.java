@@ -29,6 +29,12 @@ import javax.validation.constraints.NotNull;
         @Index(name="idx_media_media_type", columnList="media_type")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Media.findByUniqueId",
+        query="select t from Media t where t.idTwitter=:idTwitter"
+    )
+})
 @EntityListeners(MediaListener.class)
 public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 

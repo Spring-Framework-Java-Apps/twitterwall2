@@ -20,6 +20,12 @@ import java.util.regex.Pattern;
         @UniqueConstraint(name="unique_hashtag",columnNames = {"text"})
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="HashTag.findByUniqueId",
+        query="select t from HashTag t where t.text=:text"
+    )
+})
 @EntityListeners(HashTagListener.class)
 public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 

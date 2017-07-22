@@ -30,6 +30,12 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name = "idx_mention_name", columnList = "name")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Mention.findByUniqueId",
+        query="select t from Mention t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+    )
+})
 @EntityListeners(MentionListener.class)
 public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 

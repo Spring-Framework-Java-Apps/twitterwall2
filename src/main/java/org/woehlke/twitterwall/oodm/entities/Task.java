@@ -30,6 +30,12 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name = "idx_task_task_status", columnList = "task_status")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Task.findByUniqueId",
+        query="select t from Task t where t.taskType=:taskType and t.timeStarted=:timeStarted"
+    )
+})
 @EntityListeners(TaskListener.class)
 public class Task implements DomainObjectMinimal<Task> {
 

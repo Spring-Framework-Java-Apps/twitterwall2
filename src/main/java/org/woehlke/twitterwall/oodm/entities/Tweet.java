@@ -48,6 +48,10 @@ import static javax.persistence.FetchType.EAGER;
     @NamedQuery(
         name="Tweet.findAllTwitterIds",
         query="select t.idTwitter from Tweet as t"
+    ),
+    @NamedQuery(
+        name="Tweet.findByUniqueId",
+        query="select t from Tweet t where t.idTwitter=:idTwitter"
     )
 })
 @NamedNativeQueries({
