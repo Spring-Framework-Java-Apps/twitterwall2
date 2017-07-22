@@ -1,68 +1,83 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.common.AbstractFormattedText;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskInfo;
-import org.woehlke.twitterwall.oodm.entities.entities.*;
-import org.woehlke.twitterwall.oodm.listener.TweetListener;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Set;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
  */
 @Entity
-
-@Table(name = "tweet", uniqueConstraints = {
-    @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
-}, indexes = {
-    @Index(name="idx_tweet_created_date", columnList="created_date"),
-    @Index(name="idx_tweet_from_user", columnList="from_user"),
-    @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
-    @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
-    @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
-    @Index(name="idx_tweet_in_reply_to_screenName", columnList="in_reply_to_screenName"),
-    @Index(name="idx_tweet_from_user_id", columnList="from_user_id")
-})
+@Table(
+    name = "tweet",
+    uniqueConstraints = {
+        @UniqueConstraint(name="unique_tweet",columnNames = {"id_twitter"})
+    },
+    indexes = {
+        @Index(name="idx_tweet_created_date", columnList="created_date"),
+        @Index(name="idx_tweet_from_user", columnList="from_user"),
+        @Index(name="idx_tweet_to_user_id", columnList="to_user_id")  ,
+        @Index(name="idx_tweet_in_reply_to_status_id", columnList="in_reply_to_status_id"),
+        @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
+        @Index(name="idx_tweet_in_reply_to_screen_name", columnList="in_reply_to_screen_name"),
+        @Index(name="idx_tweet_from_user_id", columnList="from_user_id"),
+        @Index(name="idx_tweet_id_str", columnList="id_str")
+    }
+)
 @NamedQueries({
-        @NamedQuery(
-                name="Tweet.findByIdTwitter",
-                query= "select t from org.woehlke.twitterwall.oodm.entities.Tweet as t where t.idTwitter=:idTwitter"
-        ),
-        @NamedQuery(
-                name="Tweet.getLatestTweets",
-                query="select t from Tweet as t order by t.createdAt DESC"
-        ),
-        @NamedQuery(
-                name="Tweet.getTweetsForHashTag",
-                query="select t from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText order by t.createdAt DESC"
-        ),
-        @NamedQuery(
-                name="Tweet.countTweetsForHashTag",
-                query="select count(t) from Tweet as t join t.entities.tags tag WHERE tag.text=:hashtagText"
-        ),
-        @NamedQuery(
-                name="Tweet.count",
-                query="select count(t) from Tweet as t"
-        ),
-        @NamedQuery(
-            name="Tweet.getAll",
-            query="select t from Tweet as t"
-        ),
-        @NamedQuery(
-                name="Tweet.getTweetsForUser",
-                query="select t from Tweet as t WHERE t.user=:user"
-        ),
-        @NamedQuery(
-                name="Tweet.getAllTwitterIds",
-                query="select t.idTwitter from Tweet as t"
-        )
+    @NamedQuery(
+        name="Tweet.getTweetsForHashTag",
+        query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="Tweet.countTweetsForHashTag",
+        query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="Tweet.findAllTwitterIds",
+        query="select t.idTwitter from Tweet as t"
+    ),
+    @NamedQuery(
+        name="Tweet.findByUniqueId",
+        query="select t from Tweet t where t.idTwitter=:idTwitter"
+    )
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2HashTag",
+        query="select count(*) as z from tweet_hashtag"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Media",
+        query="select count(*) as z from tweet_media"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Mention",
+        query="select count(*) as z from tweet_mention"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2TickerSymbol",
+        query="select count(*) as z from tweet_tickersymbol"
+    ),
+    @NamedNativeQuery(
+        name="Tweet.countAllUser2Url",
+        query="select count(*) as z from tweet_url"
+    )
 })
 @EntityListeners(TweetListener.class)
-public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectWithIdTwitter<Tweet> {
+public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWithEntities<Tweet>,DomainObjectWithTask<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,23 +85,16 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Embedded
-    private TaskInfo taskInfo = new TaskInfo();
-
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
-    private Task createdBy;
-
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
-    private Task updatedBy;
-
     @Column(name="id_twitter", nullable = false)
-    private long idTwitter;
+    private Long idTwitter;
 
-    @Column(nullable = false)
-    private String idStr;
+    @NotNull
+    @Column(name="id_str",nullable = false)
+    private String idStr = "";
 
-    @Column(nullable = false,length=4096)
-    private String text;
+    @NotEmpty
+    @Column(name="text", nullable = false,length=4096)
+    private String text = "";
 
     @Column(name="created_date", nullable = false)
     private Date createdAt;
@@ -94,7 +102,7 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column(name="from_user")
     private String fromUser;
 
-    @Column(length=4096)
+    @Column(name = "profile_image_url", length=4096)
     private String profileImageUrl;
 
     @Column(name="to_user_id")
@@ -106,78 +114,84 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Column(name="in_reply_to_user_id")
     private Long inReplyToUserId;
 
-    @Column(name="in_reply_to_screenName")
+    @Column(name="in_reply_to_screen_name")
     private String inReplyToScreenName;
 
     @Column(name="from_user_id")
-    private long fromUserId;
+    private Long fromUserId;
 
-    @Column
+    @Column(name="language_code")
     private String languageCode;
 
-    @Column(length=4096)
+    @Column(name="source", length=4096)
     private String source;
 
-    @Column
+    @Column(name="retweet_count")
     private Integer retweetCount;
 
-    @Column
-    private boolean retweeted;
+    @Column(name="retweeted")
+    private Boolean retweeted;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="fk_tweet_retweeted")
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = true)
     private Tweet retweetedStatus;
 
-    @Column
-    private boolean favorited;
+    @Column(name="favorited")
+    private Boolean favorited;
 
-    @Column
+    @Column(name="favorite_count")
     private Integer favoriteCount;
 
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
             name = "urls",
-            joinTable = @JoinTable(name="tweet_url")),
+            joinTable = @JoinTable(
+                name="tweet_url"
+            )
+        ),
         @AssociationOverride(
-            name = "tags",
-            joinTable = @JoinTable(name="tweet_hashtag")),
+            name = "hashTags",
+            joinTable = @JoinTable(
+                name="tweet_hashtag"
+            )
+        ),
         @AssociationOverride(
             name = "mentions",
-            joinTable = @JoinTable(name="tweet_mention")),
+            joinTable = @JoinTable(
+                name="tweet_mention"
+            )
+        ),
         @AssociationOverride(
             name = "media",
-            joinTable = @JoinTable(name="tweet_media")),
+            joinTable = @JoinTable(
+                name="tweet_media"
+            )
+        ),
         @AssociationOverride(
             name = "tickerSymbols",
-            joinTable = @JoinTable(name="tweet_tickersymbol"))
+            joinTable = @JoinTable(
+                name="tweet_tickersymbol"
+            )
+        )
     })
     private Entities entities;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER, optional = false)
+    @NotNull
+    @JoinColumn(name="fk_user")
+    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
 
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt) {
+    public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
         this.createdAt = createdAt;
     }
 
-    /**
-     * Constructs a Tweet
-     *
-     * @param idTwitter       The tweet's ID
-     * @param idStr           The tweet's ID as a String
-     * @param text            The tweet's text
-     * @param createdAt       Date Tweet was created
-     * @param fromUser        The username of the author of the tweet.
-     * @param profileImageUrl The URL to the profile picture of the tweet's author.
-     * @param toUserId        The user ID of the user to whom the tweet is targeted.
-     * @param fromUserId      The user ID of the tweet's author.
-     * @param languageCode    The language code
-     * @param source          The source of the tweet.
-     */
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+    public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
@@ -193,24 +207,14 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     private Tweet() {
     }
 
-    public String getFormattedText() {
-        String formattedText = this.text;
-
-        formattedText = getFormattedTextForUserProfiles(formattedText);
-
-        formattedText = getFormattedTextForHashTags(formattedText);
-
-        Set<Media> media = this.entities.getMedia();
-        formattedText = getFormattedTextForMedia(media, formattedText);
-
-        Set<Url> urls = this.entities.getUrls();
-        formattedText = getFormattedTextForUrls(urls, formattedText);
-
-        Set<Mention> mentions = this.entities.getMentions();
-
-        return formattedText;
+    public void removeAllEntities(){
+        this.entities.removeAll();
     }
 
+    @Transient
+    public String getFormattedText() {
+        return this.entities.getFormattedText(this.text);
+    }
 
     public Long getId() {
         return id;
@@ -220,8 +224,19 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.id = id;
     }
 
-    public long getIdTwitter() {
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
+    }
+
+    @Override
+    public Long getIdTwitter() {
         return idTwitter;
+    }
+
+    @Override
+    public void setIdTwitter(Long idTwitter) {
+        this.idTwitter = idTwitter;
     }
 
     public String getIdStr() {
@@ -284,11 +299,11 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.inReplyToScreenName = inReplyToScreenName;
     }
 
-    public long getFromUserId() {
+    public Long getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(long fromUserId) {
+    public void setFromUserId(Long fromUserId) {
         this.fromUserId = fromUserId;
     }
 
@@ -316,11 +331,11 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.retweetCount = retweetCount;
     }
 
-    public boolean isRetweeted() {
+    public Boolean getRetweeted() {
         return retweeted;
     }
 
-    public void setRetweeted(boolean retweeted) {
+    public void setRetweeted(Boolean retweeted) {
         this.retweeted = retweeted;
     }
 
@@ -332,11 +347,11 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.retweetedStatus = retweetedStatus;
     }
 
-    public boolean isFavorited() {
+    public Boolean getFavorited() {
         return favorited;
     }
 
-    public void setFavorited(boolean favorited) {
+    public void setFavorited(Boolean favorited) {
         this.favorited = favorited;
     }
 
@@ -346,22 +361,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
 
     public void setFavoriteCount(Integer favoriteCount) {
         this.favoriteCount = favoriteCount;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
     public void setIdTwitter(long idTwitter) {
@@ -380,14 +379,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.createdAt = createdAt;
     }
 
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
     public Entities getEntities() {
         return entities;
     }
@@ -404,54 +395,6 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
         this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Tweet)) return false;
-        if (!super.equals(o)) return false;
-
-        Tweet myTweet = (Tweet) o;
-
-        return idTwitter == myTweet.idTwitter;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        return result;
-    }
-
-    @Override
-    public int compareTo(Tweet other) {
-        return createdAt.compareTo(other.getCreatedAt());
-    }
-
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
     private String toStringRetweetedStatus(){
         if(retweetedStatus==null){
             return " null ";
@@ -465,6 +408,14 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
             return " null ";
         } else {
             return user.toString();
+        }
+    }
+
+    private String toStringEntities(){
+        if(user==null){
+            return " null ";
+        } else {
+            return entities.toString();
         }
     }
 
@@ -491,10 +442,8 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
                 ",\n retweetedStatus=" + toStringRetweetedStatus() +
-                ",\n createdBy="+ toStringCreatedBy() +
-                ",\n updatedBy=" + toStringUpdatedBy() +
-                ",\n taskInfo="+ toStringTaskInfo() +
-                ",\n entities=" + this.entities.toString() +
+                    super.toString() +
+                ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";
     }
@@ -502,5 +451,25 @@ public class Tweet extends AbstractFormattedText<Tweet> implements DomainObjectW
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tweet)) return false;
+        if (!super.equals(o)) return false;
+
+        Tweet tweet = (Tweet) o;
+
+        if (getId() != null ? !getId().equals(tweet.getId()) : tweet.getId() != null) return false;
+        return getIdTwitter() != null ? getIdTwitter().equals(tweet.getIdTwitter()) : tweet.getIdTwitter() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
+        return result;
     }
 }

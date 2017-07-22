@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Entities;
+import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
@@ -19,6 +19,16 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProcessImpl implements StoreUserProcess {
+
+    @Override
+    public User storeUserProcess(User user, Task task){
+        String msg = "User.storeUserProcess ";
+        Entities entities = user.getEntities();
+        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
+        user.setEntities(entities);
+        user = userService.store(user,task);
+        return user;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProcessImpl.class);
 
@@ -32,13 +42,4 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         this.storeEntitiesProcess = storeEntitiesProcess;
     }
 
-    @Override
-    public User storeUserProcess(User user, Task task){
-        String msg = "User.storeUserProcess ";
-        Entities entities = user.getEntities();
-        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task,user.getUrl());
-        user.setEntities(entities);
-        user = userService.store(user,task);
-        return user;
-    }
 }

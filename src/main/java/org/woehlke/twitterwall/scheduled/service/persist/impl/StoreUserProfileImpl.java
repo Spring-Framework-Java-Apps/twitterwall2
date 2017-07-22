@@ -7,8 +7,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.application.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
@@ -21,6 +20,14 @@ import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileImpl implements StoreUserProfile {
 
+    @Override
+    public User storeUserProfile(TwitterProfile userProfile, Task task) {
+        String msg = "storeUserProfile: ";
+        User user = userTransformService.transform(userProfile,task);
+        user = storeUserProcess.storeUserProcess(user, task);
+        return user;
+    }
+
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 
     private final UserTransformService userTransformService;
@@ -31,15 +38,6 @@ public class StoreUserProfileImpl implements StoreUserProfile {
     public StoreUserProfileImpl(UserTransformService userTransformService, StoreUserProcess storeUserProcess) {
         this.userTransformService = userTransformService;
         this.storeUserProcess = storeUserProcess;
-    }
-
-    @Override
-    public User storeUserProfile(TwitterProfile userProfile, Task task) {
-        String msg = "storeUserProfile: ";
-        User user = userTransformService.transform(userProfile);
-        user.setOnDefinedUserList(task.getTaskType().equals(TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST));
-        user = storeUserProcess.storeUserProcess(user, task);
-        return user;
     }
 
 }

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
@@ -23,6 +24,28 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScreenName {
 
+    @Override
+    public User storeUserProfileForScreenName(String screenName, Task task){
+        String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
+        if(screenName != null && !screenName.isEmpty()) {
+            User userPersForMention = this.userService.findByScreenName(screenName);
+            if (userPersForMention == null) {
+                try {
+                    TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
+                    User userFromMention = storeUserProfile.storeUserProfile(twitterProfile, task);
+                    log.debug(msg + " userFromMention: " + userFromMention.toString());
+                    return userFromMention;
+                } catch (RateLimitExceededException ex) {
+                    log.warn(msg+""+task.toString(),ex);
+                }
+            }
+            return userPersForMention;
+        } else {
+            log.warn(msg+" "+task.toString());
+            return null;
+        }
+    }
+
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
 
     private final UserService userService;
@@ -31,38 +54,14 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
 
     private final StoreUserProfile storeUserProfile;
 
+    private final TaskService taskService;
+
     @Autowired
-    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile) {
+    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, TaskService taskService) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
+        this.taskService = taskService;
     }
 
-    @Override
-    public User storeUserProfileForScreenName(String screenName, Task task){
-        String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
-        if(screenName != null && !screenName.isEmpty()) {
-            try {
-                User userPersForMention = this.userService.findByScreenName(screenName);
-                return userPersForMention;
-            } catch (EmptyResultDataAccessException e) {
-                try {
-                    TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                    User userFromMention = storeUserProfile.storeUserProfile(twitterProfile,task);
-                    log.debug(msg + " userFromMention: "+userFromMention.toString());
-                    return userFromMention;
-                } catch (RateLimitExceededException ex) {
-                    log.warn(msg + ex.getMessage());
-                    Throwable t = ex.getCause();
-                    while(t != null){
-                        log.warn(msg + t.getMessage());
-                        t = t.getCause();
-                    }
-                    throw e;
-                }
-            }
-        } else  {
-            throw new IllegalArgumentException("screenName is empty");
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.test;
 
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Url;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
  */
 public interface UrlServiceTest {
 
-    List<Url> getTestData();
+    List<Url> getTestData(Task task);
 }

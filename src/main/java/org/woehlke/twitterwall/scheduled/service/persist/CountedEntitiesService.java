@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.scheduled.service.persist;
 
-import org.woehlke.twitterwall.oodm.entities.application.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 
 /**
  * Created by tw on 09.07.17.

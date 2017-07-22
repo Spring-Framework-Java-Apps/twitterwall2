@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserFromMention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -18,15 +18,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserFromMentionImpl implements StoreUserFromMention {
-
-    private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);
-
-    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
-
-    @Autowired
-    public StoreUserFromMentionImpl(StoreUserProfileForScreenName storeUserProfileForScreenName1) {
-        this.storeUserProfileForScreenName = storeUserProfileForScreenName1;
-    }
 
     @Override
     public User storeUserFromMention(User user, Task task) {
@@ -38,4 +29,14 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
         }
         return user;
     }
+
+    private static final Logger log = LoggerFactory.getLogger(StoreUserFromMentionImpl.class);
+
+    private final StoreUserProfileForScreenName storeUserProfileForScreenName;
+
+    @Autowired
+    public StoreUserFromMentionImpl(StoreUserProfileForScreenName storeUserProfileForScreenName1) {
+        this.storeUserProfileForScreenName = storeUserProfileForScreenName1;
+    }
+
 }

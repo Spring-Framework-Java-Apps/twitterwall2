@@ -3,25 +3,107 @@ package org.woehlke.twitterwall.frontend.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.frontend.common.AbstractTwitterwallController;
-import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
-import java.util.List;
-
 /**
  * Created by tw on 12.06.17.
  */
 @Controller
-public class UserController extends AbstractTwitterwallController {
+@RequestMapping("/user")
+public class UserController {
+
+    private final static String PATH="user";
+
+    @RequestMapping("/all")
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        model.addAttribute("users", userService.getAll(pageRequest));
+        String symbol = Symbols.USER_ALL.toString();
+        String title = "All Users";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/all";
+    }
+
+    @RequestMapping("/{screenName}")
+    public String getUserForScreeName(
+        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @PathVariable String screenName, Model model) {
+        if (User.isValidScreenName(screenName)) {
+            User user = userService.findByScreenName(screenName);
+            if(user==null){
+                throw new IllegalArgumentException("/user/"+ screenName);
+            }
+            Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
+            Page<Tweet> tweetsForUser = tweetService.findTweetsForUser(user,pageRequest);
+            String symbol = Symbols.PROFILE.toString();
+            String title = "@" + user.getScreenName();
+            String subtitle = user.getName();
+            model = controllerHelper.setupPage(model, title, subtitle, symbol);
+            model.addAttribute("user", user);
+            model.addAttribute("latestTweets",tweetsForUser);
+            return "user/screenName";
+        } else {
+            throw new IllegalArgumentException("/user/"+ screenName);
+        }
+    }
+
+    @RequestMapping("/tweets")
+    public String getTweetingUsers(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
+        model.addAttribute("users", tweetingUsers);
+        String symbol = Symbols.USER_TWEETS.toString();
+        String title = "With one or more Tweets";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/tweets";
+    }
+
+    @RequestMapping("/notyetfriends")
+    public String getNotYetFriendUsers(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        model.addAttribute("users", userService.getNotYetFriendUsers(pageRequest));
+        String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
+        String title = "Not Yet Friends";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/notyetfriends";
+    }
+
+    @RequestMapping("/notyetonlist")
+    public String getNotYetOnList(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        model.addAttribute("users", userService.getNotYetOnList(pageRequest));
+        String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
+        String title = "Not Yet On List";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/notyetonlist";
+    }
+
+    @RequestMapping("/onlist")
+    public String getOnList(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,Model model) {
+        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        Page<User> usersOnList = userService.getOnList(pageRequest);
+        model.addAttribute("users", usersOnList);
+        String symbol = Symbols.LEAF.toString();
+        String title = "On List";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/onlist";
+    }
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
@@ -29,101 +111,20 @@ public class UserController extends AbstractTwitterwallController {
 
     private final TweetService tweetService;
 
-    @Value("${twitterwall.frontend.menu.appname}")
-    private String menuAppName;
+    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    @Value("${twitter.searchQuery}")
-    private String searchterm;
+    private final TwitterProperties twitterProperties;
 
-    @Value("${twitterwall.frontend.info.webpage}")
-    private String infoWebpage;
-
-    @Value("${twitterwall.frontend.theme}")
-    private String theme;
-
-    @Value("${twitterwall.context.test}")
-    private boolean contextTest;
-
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
-
-    @Value("${twitterwall.frontend.idGoogleAnalytics}")
-    private String idGoogleAnalytics;
-
-    @Autowired
-    public UserController(UserService userService, TweetService tweetService) {
-        this.userService = userService;
-        this.tweetService = tweetService;
-    }
-
-    @RequestMapping("/user/all")
-    public String all(Model model) {
-        model.addAttribute("users", userService.getAll());
-        String symbol = Symbols.USER_ALL.toString();
-        String title = "All Users";
-        model = super.setupPage(model, title, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/user/tweets")
-    public String getTweetingUsers(Model model) {
-        List<User> tweetingUsers = userService.getTweetingUsers();
-        model.addAttribute("users", tweetingUsers);
-        String symbol = Symbols.USER_TWEETS.toString();
-        String title = "With one or more Tweets";
-        model = super.setupPage(model, title, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/user/notyetfriends")
-    public String getNotYetFriendUsers(Model model) {
-        model.addAttribute("users", userService.getNotYetFriendUsers());
-        String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
-        String title = "Not Yet Friends";
-        model = setupPage(model, title, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/user/notyetonlist")
-    public String getNotYetOnList(Model model) {
-        model.addAttribute("users", userService.getNotYetOnList());
-        String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
-        String title = "Not Yet On List";
-        model = setupPage(model, title, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/user/onlist")
-    public String getOnList(Model model) {
-        List<User> usersOnList = userService.getOnList();
-        model.addAttribute("users", usersOnList);
-        String symbol = Symbols.LEAF.toString();
-        String title = "On List";
-        model = setupPage(model, title, subtitle, symbol);
-        return "user";
-    }
-
-    @RequestMapping("/profile/{screenName}")
-    public String follower(@PathVariable String screenName, Model model) {
-        if (User.isValidScreenName(screenName)) {
-            User user = userService.findByScreenName(screenName);
-            List<Tweet> tweetsForUser = tweetService.getTweetsForUser(user);
-            String symbol = Symbols.PROFILE.toString();
-            String title = "@" + user.getScreenName();
-            String subtitle = user.getName();
-            model = super.setupPage(model, title, subtitle, symbol);
-            model.addAttribute("user", user);
-            model.addAttribute("latestTweets",tweetsForUser);
-            return "profile";
-        } else {
-            throw new IllegalArgumentException("/profile/"+ screenName);
-        }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.setupAfterPropertiesSet(menuAppName,searchterm,infoWebpage,theme,contextTest,imprintScreenName,idGoogleAnalytics);
-    }
+    private final ControllerHelper controllerHelper;
 
     private static String subtitle = "Users";
+
+    @Autowired
+    public UserController(UserService userService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+        this.userService = userService;
+        this.tweetService = tweetService;
+        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.twitterProperties = twitterProperties;
+        this.controllerHelper = controllerHelper;
+    }
 }

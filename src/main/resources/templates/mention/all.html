@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:spring="http://www.springframework.org/hashTags">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" >
+</header>
+<section>
+    <div class="container">
+        <div th:include="dataview :: tw-data-view-above" th:with="myEntity='mention'"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead th:include="dataview :: tw-data-view-thead">
+                    </thead>
+                    <tbody>
+                    <tr th:each="myPageItem : ${myPageContent}">
+                        <td>
+                            <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-2">idTwitter:</div>
+                                <div class="col-md-10">
+                                    <span th:text="${myPageItem.idTwitter}">idTwitter</span>
+                                </div>
+                                <div class="col-md-2">screenName:</div>
+                                <div class="col-md-10">
+                                    <span th:if="${myPageItem.idTwitter &lt; 0}">
+                                        <a href="" th:href="@{|https://twitter.com/${myPageItem.screenName}|}">
+                                            <span th:text="${myPageItem.screenName}">screenName</span>
+                                        </a>
+                                    </span>
+                                    <span th:if="${myPageItem.idTwitter &gt; 0}">
+                                        <a href="" th:href="@{|/user/${myPageItem.screenName}|}">
+                                            <span th:text="${myPageItem.screenName}">screenName</span>
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="col-md-2">has User:</div>
+                                <div class="col-md-10">
+                                    <span th:if="${myPageItem.hasPersistentUser()}">
+                                        <a href="" th:href="@{|/user/${myPageItem.user.screenName}|}">
+                                            <span th:text="${myPageItem.user.screenName}">user.screenName</span>
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="col-md-2">idTwitterOfUser:</div>
+                                <div class="col-md-10">
+                                    <span th:text="${myPageItem.idTwitterOfUser}">idTwitterOfUser</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span th:include="dataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot th:include="dataview :: tw-data-view-tfoot">
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div th:include="dataview :: tw-data-view-below" th:with="myEntity='mention'"></div>
+    </div>
+</section>
+<footer th:include="layout :: footer" >
+
+</footer>
+</body>
+</html>

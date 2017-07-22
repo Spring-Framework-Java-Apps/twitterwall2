@@ -82,6 +82,56 @@
         margin-top: -50px;
     }
 
+    .tw-vector {
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .tw-pager-arrow {
+        display: block;
+        font-size: 6em;
+        width: 100%
+    }
+
+    .tw-pager-arrow a span {
+        text-align: center;
+    }
+
+    .tw-pager-arrow a span i {
+        display: block !important;
+    }
+
+    .tw-pager-arrow a span i:hover {
+        text-decoration: none !important;
+        background-color: #DDDDDD;
+        color: rgb(51, 51, 51);
+    }
+
+    dl.tw-data-array {
+        list-style-type: none;
+    }
+
+    dl.tw-data-array dt {
+        display: inline-block;
+        float: left;
+        clear: both;
+        margin-right: 14px;
+    }
+
+    dl.tw-data-array dd {
+        display: inline-block;
+        font-weight: bold;
+        float: left;
+    }
+
+    ul.tw-data-view-common-fields,
+    ul.tw-data-view-common-fields li {
+        list-style-type: none;
+    }
+
+    #tw-application-management ul li {
+        list-style-type: none;
+    }
 }
 
 

@@ -3,16 +3,15 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
+import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
-import org.woehlke.twitterwall.oodm.entities.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.entities.UrlCache;
-import org.woehlke.twitterwall.oodm.repository.entities.UrlCacheRepository;
-import org.woehlke.twitterwall.oodm.repository.entities.UrlRepository;
+import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 
 import java.net.MalformedURLException;
@@ -24,6 +23,94 @@ import java.net.URL;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
+
+    @Override
+    public Url createPersistentUrlFor(String url, Task task) {
+        String msg = "Url.createPersistentUrlFor url="+url+" ";
+        if (url == null) {
+            return null;
+        } else {
+            log.debug(msg + " try to find ");
+            Url urlPers = urlRepository.findByUrl(url);
+            if (urlPers != null) {
+                log.debug(msg + " found: " + urlPers);
+                if (urlPers.isUrlAndExpandedTheSame()) {
+                    log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.toString());
+                    Url myTransientUrl = twitterUrlService.fetchTransientUrl(url,task);
+                    if (myTransientUrl == null) {
+                        log.debug(msg + "nothing found by fetchTransientUrl");
+                        return null;
+                    } else {
+                        urlPers.setExpanded(myTransientUrl.getExpanded());
+                        String displayUrl = myTransientUrl.getExpanded();
+                        try {
+                            URL newURL = new URL(myTransientUrl.getExpanded());
+                            displayUrl = newURL.getHost();
+                        } catch (MalformedURLException exe) {
+                            log.warn(exe.getMessage());
+                        }
+                        urlPers.setDisplay(displayUrl);
+                    }
+                }
+                urlPers.setUpdatedBy(task);
+                urlPers = urlRepository.save(urlPers);
+                return urlPers;
+            } else {
+                log.debug(msg + " not found ");
+                log.debug(msg + " try to find UrlCache");
+                UrlCache urlCache = urlCacheRepository.findByUrl(url);
+                if (urlCache != null) {
+                    log.debug(msg + " found: " + urlCache);
+                    String displayUrl = urlCache.getExpanded();
+                    try {
+                        URL myURL = new URL(urlCache.getExpanded());
+                        displayUrl = myURL.getHost();
+                    } catch (MalformedURLException exe) {
+                        log.warn(exe.getMessage());
+                    }
+                    Url newUrl = new Url(task, null, displayUrl, urlCache.getExpanded(), urlCache.getUrl());
+                    log.debug(msg + " try to persist: " + newUrl.toString());
+                    newUrl = urlRepository.save(newUrl);
+                    //TODO: delete ?
+                    if((!newUrl.isRawUrlsFromDescription())&&(!newUrl.isUrlAndExpandedTheSame())){
+                        urlCacheRepository.delete(urlCache);
+                    }
+                    log.debug(msg + " persisted: " + newUrl.toString());
+                    return newUrl;
+                } else {
+                    urlCache = new UrlCache(task,null,url);
+                    log.debug(msg + " try to fetchTransientUrl");
+                    Url myTransientUrl = twitterUrlService.fetchTransientUrl(url,task);
+                    if (myTransientUrl == null) {
+                        log.debug(msg + "nothing found by fetchTransientUrl");
+                        return null;
+                    } else {
+                        log.debug(msg + " found by fetchTransientUrl: " + myTransientUrl);
+                        urlCache.setExpanded(myTransientUrl.getExpanded());
+                        log.debug(msg + " try to persist: " + urlCache.toString());
+                        if (urlCache.isUrlAndExpandedTheSame()) {
+                            log.debug(msg + " not persisted: " + urlCache.toString());
+                        } else {
+                            urlCache = urlCacheRepository.save(urlCache);
+                            log.debug(msg + " persisted: " + urlCache.toString());
+                        }
+                        String displayUrl = myTransientUrl.getExpanded();
+                        try {
+                            URL newURL = new URL(myTransientUrl.getExpanded());
+                            displayUrl = newURL.getHost();
+                        } catch (MalformedURLException exe) {
+                            log.warn(exe.getMessage());
+                        }
+                        Url newUrl = new Url(task,null,displayUrl, myTransientUrl.getExpanded(), myTransientUrl.getUrl());
+                        log.debug(msg + " try to persist: " + newUrl.toString());
+                        newUrl = urlRepository.save(newUrl);
+                        log.debug(msg + " persisted: " + newUrl.toString());
+                        return newUrl;
+                    }
+                }
+            }
+        }
+    }
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
 
@@ -38,78 +125,5 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
         this.urlRepository = urlRepository;
         this.urlCacheRepository = urlCacheRepository;
         this.twitterUrlService = twitterUrlService;
-    }
-
-    @Override
-    public Url getPersistentUrlFor(String url, Task task) {
-        String msg = "Url.getPersistentUrlFor url="+url+" ";
-        int indices[] = {};
-        if (url == null) {
-            return null;
-        } else {
-            try {
-                log.debug(msg+" try to find ");
-                Url urlPers = this.urlRepository.findByUrl(url);
-                log.debug(msg+" found: "+urlPers);
-                if(urlPers.isUrlAndExpandedTheSame()){
-                    log.debug(msg+" urlPers.isUrlAndExpandedTheSame "+urlPers.toString());
-                }
-                urlPers.setUpdatedBy(task);
-                urlPers = this.urlRepository.update(urlPers);
-                return urlPers;
-            } catch (EmptyResultDataAccessException ex) {
-                log.debug(msg+" not found ");
-                try {
-                    log.debug(msg+" try to find UrlCache");
-                    UrlCache urlCache = urlCacheRepository.findByUrl(url);
-                    log.debug(msg+" found: "+urlCache);
-                    String displayUrl = urlCache.getExpanded();
-                    try {
-                        URL myURL = new URL(urlCache.getExpanded());
-                        displayUrl = myURL.getHost();
-                    } catch (MalformedURLException exe) {
-                        log.warn(exe.getMessage());
-                    }
-                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(), indices);
-                    newUrl.setCreatedBy(task);
-                    log.debug(msg+" try to persist: "+newUrl.toString());
-                    newUrl = this.urlRepository.persist(newUrl);
-                    log.debug(msg+" persisted: "+newUrl.toString());
-                    return newUrl;
-                } catch (EmptyResultDataAccessException e) {
-                    UrlCache urlCache = new UrlCache();
-                    log.debug(msg + " try to fetchTransientUrl");
-                    Url myUrl = twitterUrlService.fetchTransientUrl(url);
-                    if(myUrl == null) {
-                        log.debug(msg + "nothing found by fetchTransientUrl");
-                        return null;
-                    } else {
-                        log.debug(msg + " found by fetchTransientUrl: " + myUrl);
-                        urlCache.setUrl(myUrl.getUrl());
-                        urlCache.setExpanded(myUrl.getExpanded());
-                        log.debug(msg + " try to persist: " + urlCache.toString());
-                        if (urlCache.isUrlAndExpandedTheSame()) {
-                            log.debug(msg + " not persisted: " + urlCache.toString());
-                        } else {
-                            urlCache = urlCacheRepository.persist(urlCache);
-                            log.debug(msg + " persisted: " + urlCache.toString());
-                        }
-                        String displayUrl = myUrl.getExpanded();
-                        try {
-                            URL newURL = new URL(myUrl.getExpanded());
-                            displayUrl = newURL.getHost();
-                        } catch (MalformedURLException exe) {
-                            log.warn(exe.getMessage());
-                        }
-                        Url newUrl = new Url(displayUrl, myUrl.getExpanded(), myUrl.getUrl(), indices);
-                        newUrl.setCreatedBy(task);
-                        log.debug(msg+" try to persist: "+newUrl.toString());
-                        newUrl =this.urlRepository.persist(newUrl);
-                        log.debug(msg+" persisted: "+newUrl.toString());
-                        return newUrl;
-                    }
-                }
-            }
-        }
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/tags">
+      xmlns:spring="http://www.springframework.org/hashTags">
 <head  th:include="layout :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
@@ -9,104 +9,56 @@
 </header>
 <section>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 tw-col-3-wrapper">
-                <div class="thumbnail tw-col-3-box-center">
-                    <span>
-                    <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>
-                    <p>
-                    <a href="" th:href="@{|https://twitter.com/${user.screenName}|}"><img class="" src=""
-                        alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a></p>
-                    </span>
-                    <div class="caption">
-                        <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
-                        <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
-                        <p th:if="${user.description != null}"><span th:utext="${user.formattedDescription}">description</span></p>
-                        <p th:if="${user.location != null}"><span class="map-icon map-icon-postal-code"></span>&nbsp;&nbsp;<span th:text="${user.location}">location</span></p>
-                        <p th:if="${user.url != null}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;&nbsp;<span th:utext="${user.formattedUrl}">url</span></p>
-                        <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
-                        <p><hr/></p>
-                        <p>
-                            <div class="row">
-                                <div class="col-md-8"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Tweets:</div>
-                                <div class="col-md-4 text-right"><span th:text="${user.statusesCount}">statusesCount</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;Folge ich:</div>
-                                <div class="col-md-4 text-right"><span th:text="${user.friendsCount}">friendsCount</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;Follower:</div>
-                                <div class="col-md-4 text-right"><span th:text="${user.followersCount}">followersCount</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;Gefällt mir:</div>
-                                <div class="col-md-4 text-right"><span th:text="${user.favoritesCount}">favoritesCount</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;Listen:</div>
-                                <div class="col-md-4 text-right"><span th:text="${user.listedCount}">listedCount</span></div>
-                            </div>
-                        </p>
-                    </div>
-                </div>
-                <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 tw-col-4-wrapper">
-                <div class="thumbnail tw-col-4-box" th:each="tweet : ${latestTweets}">
-                    <span>
-                    <p><img class="" src="" th:attr="src=${tweet.user.profileBannerUrl},class=${tweet.user.cssBackgroundImage}" /></p>
-                    <p>
-                    <a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><img class="" src="" alt="Alt-Text"
-                           th:attr="src=${tweet.user.profileImageUrl},alt=${tweet.user.description},title=${tweet.user.description},class=${tweet.user.cssProfileBannerUrl}"/></a></p>
-                    </span>
-                    <div class="caption">
-                        <h2><a href="" th:href="@{|/profile/${tweet.user.screenName}|}"><span th:text="${tweet.user.name}">Username</span></a></h2>
-                        <h3><a href="" th:href="@{|/profile/${tweet.user.screenName}|}">@<span th:text="${tweet.user.screenName}">screenName</span></a></h3>
-                        <p th:if="${tweet.retweetedStatus} == null"><hr/></p>
-                        <p th:if="${tweet.retweetedStatus} == null"><span th:utext="${tweet.formattedText}">Text</span></p>
-                        <p th:if="${tweet.retweetedStatus} == null"><hr/></p>
-                        <p th:if="${tweet.retweetedStatus} == null">
-                            <i class="fa fa-retweet" aria-hidden="true"></i> <span th:text="${tweet.retweetCount}">12</span>&nbsp;
-                            <i class="fa fa-heart-o" aria-hidden="true"></i> <span th:text="${tweet.favoriteCount}">23</span>
-                        </p>
-                        <p th:if="${tweet.retweetedStatus} != null">
-                            RT<br/>
-                            <div class="thumbnail">
+        <div th:fragment="tw-show-user-profile">
+            <div class="row">
+                <div class="col-md-12 tw-col-3-wrapper">
+                    <div class="thumbnail tw-col-3-box-center">
                         <span>
-                        <p><img class="" src="" th:attr="src=${tweet.retweetedStatus.user.profileBannerUrl},class=${tweet.retweetedStatus.user.cssBackgroundImage}" /></p>
+                        <p><img class="" src="" th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" /></p>
                         <p>
-                            <a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><img class="" src="" alt="Alt-Text"
-                                 th:attr="src=${tweet.retweetedStatus.user.profileImageUrl},alt=${tweet.retweetedStatus.user.description},title=${tweet.retweetedStatus.user.description},class=${tweet.retweetedStatus.user.cssProfileBannerUrl}"/></a></p>
+                        <a href="" th:href="@{|https://twitter.com/${user.screenName}|}"><img class="" src=""
+                            alt="Alt-Text" th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/></a></p>
                         </span>
                         <div class="caption">
-                            <h2><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><span th:text="${tweet.retweetedStatus.user.name}">Username</span></a></h2>
-                            <h3><a href="" th:href="@{|/profile/${tweet.retweetedStatus.user.screenName}|}"><b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b></a></h3>
-                            <p><hr/></p>
-                            <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
+                            <h2><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><span th:text="${user.name}">name</span></a></h2>
+                            <h3><a href="" th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank"><b>@<span th:text="${user.screenName}">screenName</span></b></a></h3>
+                            <p th:if="${user.description != null}"><span th:utext="${user.formattedDescription}">description</span></p>
+                            <p th:if="${user.location != null}"><span class="map-icon map-icon-postal-code"></span>&nbsp;&nbsp;<span th:text="${user.location}">location</span></p>
+                            <p th:if="${user.url != null}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;&nbsp;<span th:utext="${user.formattedUrl}">url</span></p>
+                            <p th:if="${user.createdDate}"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Seit <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span></p>
                             <p><hr/></p>
                             <p>
-                                <i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;<span th:text="${tweet.retweetedStatus.retweetCount}">12</span>&nbsp;
-                                <i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;<span th:text="${tweet.retweetedStatus.favoriteCount}">23</span>
+                                <div class="row">
+                                    <div class="col-md-8"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Tweets:</div>
+                                    <div class="col-md-4 text-right"><span th:text="${user.statusesCount}">statusesCount</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;Folge ich:</div>
+                                    <div class="col-md-4 text-right"><span th:text="${user.friendsCount}">friendsCount</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;Follower:</div>
+                                    <div class="col-md-4 text-right"><span th:text="${user.followersCount}">followersCount</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;Gefällt mir:</div>
+                                    <div class="col-md-4 text-right"><span th:text="${user.favoritesCount}">favoritesCount</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;Listen:</div>
+                                    <div class="col-md-4 text-right"><span th:text="${user.listedCount}">listedCount</span></div>
+                                </div>
+                            </p>
+                            <p><hr/></p>
+                            <p>
+                                <div th:if="${page.historyBack}">
+                                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                                </div>
                             </p>
                         </div>
                     </div>
-                    </p>
-                    <p class="tw-debug"><hr class="tw-debug"/></p>
-                    <p th:text="${tweet.text}" class="tw-debug">Text</p>
-                    <p class="tw-debug"><hr class="tw-debug"/></p>
-                    <p th:text="${tweet.idTwitter}" class="tw-debug">idTwitter</p>
-                    <p class="tw-debug"><hr class="tw-debug"/></p>
                 </div>
             </div>
-            <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-            </div>
-        </div>
         </div>
     </div>
 </section>

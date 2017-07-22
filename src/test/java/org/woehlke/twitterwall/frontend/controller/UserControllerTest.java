@@ -1,20 +1,22 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.test.UserServiceTest;
+import org.woehlke.twitterwall.*;
+import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,38 +41,42 @@ public class UserControllerTest {
     private UserController controller;
 
     @Autowired
-    private UserServiceTest userServiceTest;
+    private TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
-    @Value("${twitterwall.frontend.imprint.screenName}")
-    private String imprintScreenName;
+    @Autowired
+    private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
+    @Autowired
+    private TwitterProperties twitterProperties;
+
+    @Autowired
+    private PrepareDataTest prepareDataTest;
+
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    private final static String screenName = "port80guru";
-
     @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        log.info("------------------------------------");
-        //tweetServiceTest.createTestData();
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+screenName+")");
-        userServiceTest.createUser(screenName);
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+screenName+")");
+    public void setupTestData(){
+        String msg = "setupTestData: ";
+        prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
-        log.info("------------------------------------");
     }
 
+    @Ignore
+    @Commit
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/profile/"+screenName))
-                .andExpect(status().isOk())
-                .andExpect(view().name("profile"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("page")).andReturn();
+    public void getAll() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/all"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/all"))
+            .andExpect(model().attributeExists("users"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
@@ -79,5 +85,108 @@ public class UserControllerTest {
         log.info(content);
         log.info("#######################################");
         log.info("#######################################");
+        Assert.assertTrue(true);
     }
+
+    @Commit
+    @Test
+    public void getUserForScreeName() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/"+twitterwallFrontendProperties.getImprintScreenName()))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/screenName"))
+            .andExpect(model().attributeExists("user"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @Commit
+    @Test
+    public void getTweetingUsers() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/tweets"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/tweets"))
+            .andExpect(model().attributeExists("users"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @Commit
+    @Test
+    public void getNotYetFriendUsers() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/notyetfriends"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/notyetfriends"))
+            .andExpect(model().attributeExists("users"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @Commit
+    @Test
+    public void getNotYetOnList() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/notyetonlist"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/notyetonlist"))
+            .andExpect(model().attributeExists("users"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @Commit
+    @Test
+    public void getOnList() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/user/onlist"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("user/onlist"))
+            .andExpect(model().attributeExists("users"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info("#######################################");
+        log.info("#######################################");
+        log.info(content);
+        log.info("#######################################");
+        log.info("#######################################");
+        Assert.assertTrue(true);
+    }
+
 }

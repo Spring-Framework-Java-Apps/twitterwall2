@@ -3,9 +3,11 @@ package org.woehlke.twitterwall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.scheduled.service.facade.*;
 
 import java.text.SimpleDateFormat;
@@ -14,37 +16,30 @@ import java.util.Date;
 /**
  * Created by tw on 10.06.17.
  */
-@Component
+@Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${twitterwall.scheduler.allowUpdateTweets}")
-    private boolean allowUpdateTweets;
+    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
 
-    @Value("${twitterwall.scheduler.allowUpdateUserProfiles}")
-    private boolean allowUpdateUserProfiles;
-
-    @Value("${twitterwall.scheduler.allowUpdateUserProfilesFromMention}")
-    private boolean allowUpdateUserProfilesFromMention;
-
-    @Value("${twitterwall.scheduler.allowFetchTweetsFromTwitterSearch}")
-    private boolean allowFetchTweetsFromTwitterSearch;
-
-    @Value("${twitterwall.scheduler.skipFortesting}")
-    private boolean skipFortesting;
-
-    @Value("${twitterwall.scheduler.herokuDbRowsLimit}")
-    private boolean herokuDbRowsLimit;
-
-    @Value("${twitterwall.scheduler.fetchUserList.name}")
-    private String fetchUserListName;
-
-    @Value("${twitterwall.scheduler.fetchUserList.allow}")
-    private boolean fetchUserListAllow;
-
+    private void logEnv(String msg){
+        log.info("====================================================================");
+        log.info(msg);
+        log.info("====================================================================");
+        log.info("twitterwall.scheduler.allowUpdateTweets = "+ twitterwallSchedulerProperties.getAllowUpdateTweets());
+        log.info("twitterwall.scheduler.allowUpdateUserProfiles = "+ twitterwallSchedulerProperties.getAllowUpdateUserProfiles());
+        log.info("twitterwall.scheduler.allowUpdateUserProfilesFromMention = "+ twitterwallSchedulerProperties.getAllowUpdateUserProfilesFromMention());
+        log.info("twitterwall.scheduler.allowFetchTweetsFromTwitterSearch = "+ twitterwallSchedulerProperties.getAllowFetchTweetsFromTwitterSearch());
+        log.info("twitterwall.scheduler.skipFortesting = "+ twitterwallSchedulerProperties.getSkipFortesting());
+        log.info("twitterwall.scheduler.herokuDbRowsLimit = "+ twitterwallSchedulerProperties.getHerokuDbRowsLimit());
+        log.info("twitterwall.scheduler.fetchUserList.name = "+ twitterwallSchedulerProperties.getFetchUserList().getName());
+        log.info("twitterwall.scheduler.fetchUserList.allow = "+ twitterwallSchedulerProperties.getFetchUserList().getAllow());
+        log.info("====================================================================");
+    }
 
     private final FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
 
@@ -57,7 +52,8 @@ public class ScheduledTasks {
     private final UpdateUserProfilesFromMentions updateUserProfilesFromMentions;
 
     @Autowired
-    public ScheduledTasks(FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, UpdateUserProfiles updateUserProfiles, UpdateUserProfilesFromMentions updateUserProfilesFromMentions) {
+    public ScheduledTasks(TwitterwallSchedulerProperties twitterwallSchedulerProperties, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, UpdateUserProfiles updateUserProfiles, UpdateUserProfilesFromMentions updateUserProfilesFromMentions) {
+        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.updateTweets = updateTweets;
@@ -85,8 +81,9 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
-        if(allowFetchTweetsFromTwitterSearch  && !skipFortesting){
-            String msg = "fetch Tweets From TwitterSearch ";
+        String msg = "fetch Tweets From TwitterSearch ";
+        logEnv(msg);
+        if(twitterwallSchedulerProperties.getAllowUpdateTweets()  && !twitterwallSchedulerProperties.getSkipFortesting()){
             log.info("START "+msg+": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
@@ -115,12 +112,14 @@ public class ScheduledTasks {
                 log.error("NOT DONE "+msg+" (NOK)");;
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
-        if(allowUpdateTweets  && !skipFortesting){
-            String msg = "update Tweets ";
+        String msg = "update Tweets ";
+        logEnv(msg);
+        if(twitterwallSchedulerProperties.getAllowUpdateTweets() && !twitterwallSchedulerProperties.getSkipFortesting()){
             log.info("START "+msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.updateTweets.updateTweets();
@@ -149,15 +148,17 @@ public class ScheduledTasks {
                 log.warn("NOT DONE "+msg+" (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
-        if(allowUpdateUserProfiles  && !skipFortesting) {
-            String msg = "update User Profiles ";
+        String msg = "update User Profiles ";
+        logEnv(msg);
+        if(twitterwallSchedulerProperties.getAllowUpdateUserProfiles()  && !twitterwallSchedulerProperties.getSkipFortesting()) {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.updateUserProfiles.updateUserProfiles();
+                //this.updateUserProfiles.updateUserProfiles();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 msg += " (RuntimeException) ";
@@ -181,15 +182,17 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK)  {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions(){
-        if(allowUpdateUserProfilesFromMention  && !skipFortesting) {
-            String msg = "update User Profiles From Mentions";
+        String msg = "update User Profiles From Mentions";
+        logEnv(msg);
+        if(twitterwallSchedulerProperties.getAllowUpdateUserProfilesFromMention() && !twitterwallSchedulerProperties.getSkipFortesting()) {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
-                this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
+                //this.updateUserProfilesFromMentions.updateUserProfilesFromMentions();
                 log.info("DONE " + msg + " (OK)" + ": The time is now {}", dateFormat.format(new Date()));
             } catch (RuntimeException e) {
                 msg += " (RuntimeException) ";
@@ -213,12 +216,14 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
-        if(fetchUserListAllow  && !skipFortesting) {
-            String msg = "fetch Users from Defined User List ";
+        String msg = "fetch Users from Defined User List ";
+        logEnv(msg);
+        if(twitterwallSchedulerProperties.getFetchUserList().getAllow()  && !twitterwallSchedulerProperties.getSkipFortesting()) {
             log.info("START " + msg + ": The time is now {}", dateFormat.format(new Date()));
             try {
                 this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
@@ -245,6 +250,6 @@ public class ScheduledTasks {
                 log.error(msg + " NOT DONE " + msg + " (NOK) {}", dateFormat.format(new Date()));
             }
         }
+        logEnv(msg);
     }
-
 }

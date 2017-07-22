@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:spring="http://www.springframework.org/hashTags">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" >
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Tweets HashTags</h3>
+                <div>
+                <span th:each="hashTag : ${hashTagsTweets}">
+                    <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
+                        <span class="tw-vector">
+                            <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr/>
+            </div>
+            <div class="col-md-12">
+                <h3>User HashTags</h3>
+                <div>
+                <span th:each="hashTag : ${hashTagsUsers}">
+                    <a href="" th:href="@{|/hashtag/${hashTag.text}|}">
+                        <span class="tw-vector">
+                            <span th:text="${hashTag.text}">hashTag</span> (<span th:text="${hashTag.number}">number</span>)
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h3>&nbsp;</h3>
+                <div th:if="${page.historyBack}">
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:include="layout :: footer" >
+
+</footer>
+</body>
+</html>

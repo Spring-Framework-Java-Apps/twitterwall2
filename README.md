@@ -18,29 +18,33 @@
 ### Setup Testing on Localhost
 - Get Credentials from your Twitter-Account: [Refer to "Manage your Apps" on Twitter's dev pages](https://dev.twitter.com/apps)
 - Edit your .profile with the Credentials from your Twitter-Account
-  - export JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/postgres?user=postgres
+  - export DATABASE_URL=jdbc:postgresql://localhost:5432/postgres?user=postgres
   - export TWITTER_CONSUMER_KEY={Credentials from your Twitter-Account}
   - export TWITTER_CONSUMER_SECRET={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN_SECRET={Credentials from your Twitter-Account}
 - Edit app behaviour
-  - export TWITTERWALL_FRONTEND_MAX_RESULTS=60
   - export TWITTERWALL_SHOW_USERS_MENU=true
+  - export TWITTERWALL_CONTEXT_TEST=true
   - export TWITTER_PAGE_SIZE=500
-  - export TWITTER_FETCH_TESTDATA=true
-  - export TWITTERWALL_WAIT_FOR_TEST=20000
-  - export TWITTERWALL_URL_TEST_DATA_VERBOSE=true
-  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS=false
-  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS=false
+  - export TWITTER_FETCH_TESTDATA=false
+  - export TWITTERWALL_WAIT_FOR_TEST=120000
+  - export TWITTERWALL_URL_TEST_DATA_VERBOSE=false
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS=true
+  - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS=true
   - export TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION=true
   - export TWITTERWALL_SCHEDULER_ALLOW_SEARCH=true
-  - export TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT=true
-- Edit Use Case  
-  - export TWITTER_SEARCH_TERM='#hibernate OR #java OR #TYPO3'
+  - export TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT=false
+  - export TWITTERWALL_SCHEDULER_USER_LIST_ALLOW=true
+- Edit Use Case 
+  - export TWITTER_SEARCH_TERM=#hibernate OR #java OR #TYPO3
   - export TWITTERWALL_INFO_WEBPAGE=https://github.com/phasenraum2010/twitterwall2
   - export TWITTERWALL_THEME=typo3
-  - export TWITTERWALL_APP_NAME='Twitterwall'
+  - export TWITTERWALL_APP_NAME=Twitterwall
   - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
+  - export TWITTERWALL_GOOGLE_ANALYTICS_ID=TWITTERWALL_GOOGLE_ANALYTICS_ID
+  - export TWITTERWALL_SCHEDULER_USER_LIST_NAME=test-typo3-hibernate-java
+  
 - run with: mvn clean spring-boot:run
 
 ## Contribute

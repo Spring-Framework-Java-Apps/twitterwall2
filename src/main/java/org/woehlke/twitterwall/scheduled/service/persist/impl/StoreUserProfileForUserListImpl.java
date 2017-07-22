@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.application.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
@@ -21,6 +21,21 @@ import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserList {
+
+    @Override
+    public User storeUserProfileForUserList(TwitterProfile twitterProfile, Task task) {
+        String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
+        User user = userTransformService.transform(twitterProfile,task);
+        user = storeUserProcess.storeUserProcess(user, task);
+        for(Mention mention:user.getEntities().getMentions()){
+            String screenName = mention.getScreenName();
+            if(screenName != null){
+                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
+                log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
+            }
+        }
+        return user;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileForUserListImpl.class);
 
@@ -37,19 +52,4 @@ public class StoreUserProfileForUserListImpl implements StoreUserProfileForUserL
         this.storeUserProfileForScreenName = storeUserProfileForScreenName;
     }
 
-    @Override
-    public User storeUserProfileForUserList(TwitterProfile twitterProfile, Task task) {
-        String msg = "storeUserProfileForUserList: idTwitter="+twitterProfile.getId();
-        User user = userTransformService.transform(twitterProfile);
-        user.setOnDefinedUserList(true);
-        user = storeUserProcess.storeUserProcess(user, task);
-        for(Mention mention:user.getEntities().getMentions()){
-            String screenName = mention.getScreenName();
-            if(screenName != null){
-                User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
-                log.debug(msg+"storeUserProfile.storeUserProfileForScreenName("+screenName+") = "+userFromMention.toString());
-            }
-        }
-        return user;
-    }
 }
