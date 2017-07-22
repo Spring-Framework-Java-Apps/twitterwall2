@@ -71,7 +71,7 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
                 if(location != null){
                     display = location.getHost();
                     expanded = location.toExternalForm();
-                    newUrl = new Url(display, expanded, urlSource, task);
+                    newUrl = new Url(task,null,display, expanded, urlSource);
                 }
                 try {
                     httpResponse.close();
