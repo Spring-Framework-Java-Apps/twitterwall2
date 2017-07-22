@@ -41,7 +41,7 @@ spring:
     removeAbandoned: true
     tomcat:
       max-active: 50
-      max-wait: 10000
+      max-wait: 100000
       test-on-borrow: true
     url: ${DATABASE_URL}
   devtools:

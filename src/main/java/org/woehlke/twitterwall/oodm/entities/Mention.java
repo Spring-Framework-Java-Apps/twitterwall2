@@ -57,8 +57,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Column(name = "name",length=4096, nullable = false)
     private String name = "";
 
-    @NotNull
-    @JoinColumn(name = "fk_user")
+    @JoinColumn(name = "fk_user",nullable = true)
     @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
     private User user;
 
@@ -78,10 +77,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.idTwitter = ID_TWITTER_UNDEFINED;
         this.screenName = mentionString;
         this.name = mentionString;
-        try {
-            Thread.sleep(100L);
-        } catch (InterruptedException e) {
-        }
     }
 
     private Mention() {
