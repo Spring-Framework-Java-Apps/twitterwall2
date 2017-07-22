@@ -142,4 +142,24 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
     public boolean isRawUrlsFromDescription() {
         return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Url)) return false;
+        if (!super.equals(o)) return false;
+
+        Url url1 = (Url) o;
+
+        if (getId() != null ? !getId().equals(url1.getId()) : url1.getId() != null) return false;
+        return getUrl() != null ? getUrl().equals(url1.getUrl()) : url1.getUrl() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
+    }
 }

@@ -452,4 +452,24 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     public boolean isValid() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tweet)) return false;
+        if (!super.equals(o)) return false;
+
+        Tweet tweet = (Tweet) o;
+
+        if (getId() != null ? !getId().equals(tweet.getId()) : tweet.getId() != null) return false;
+        return getIdTwitter() != null ? getIdTwitter().equals(tweet.getIdTwitter()) : tweet.getIdTwitter() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
+        return result;
+    }
 }

@@ -65,26 +65,6 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
       this.extraData = extraData;
     }
 
-  @Override
-    public boolean equals(T o) {
-      if(o == null) return false;
-      return this.getUniqueId().equals(o.getUniqueId());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == null) return false;
-        if (this == o) return true;
-        if (!(o instanceof AbstractDomainObject)) return false;
-        AbstractDomainObject that = (AbstractDomainObject) o;
-        return this.getUniqueId().equals(that.getUniqueId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.getUniqueId().hashCode();
-    }
-
 
   @Override
   public String toString() {
@@ -114,7 +94,6 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
 
     public void setTaskInfo(TaskInfo taskInfo) {
         this.taskInfo = taskInfo;
-        //this.taskInfo.setTaskInfoFrom(taskInfo);
     }
 
     public Task getCreatedBy() {

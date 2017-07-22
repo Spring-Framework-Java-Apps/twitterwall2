@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
     },
     indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
-        @Index(name="idx_userprofile_screen_name", columnList="screen_name"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
         @Index(name="idx_userprofile_url", columnList="url")
@@ -710,5 +709,28 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         Date createdDate = new Date();
         User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+
+        User user = (User) o;
+
+        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
+        if (getIdTwitter() != null ? !getIdTwitter().equals(user.getIdTwitter()) : user.getIdTwitter() != null)
+            return false;
+        return getScreenName() != null ? getScreenName().equals(user.getScreenName()) : user.getScreenName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
+        result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
+        return result;
     }
 }

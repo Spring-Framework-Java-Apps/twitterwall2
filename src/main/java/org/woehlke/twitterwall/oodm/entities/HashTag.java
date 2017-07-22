@@ -105,4 +105,22 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
         }
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HashTag)) return false;
+
+        HashTag hashTag = (HashTag) o;
+
+        if (getId() != null ? !getId().equals(hashTag.getId()) : hashTag.getId() != null) return false;
+        return getText() != null ? getText().equals(hashTag.getText()) : hashTag.getText() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getText() != null ? getText().hashCode() : 0);
+        return result;
+    }
 }

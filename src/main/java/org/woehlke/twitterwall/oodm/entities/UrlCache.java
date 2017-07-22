@@ -116,4 +116,23 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UrlCache)) return false;
+        if (!super.equals(o)) return false;
+
+        UrlCache urlCache = (UrlCache) o;
+
+        if (getId() != null ? !getId().equals(urlCache.getId()) : urlCache.getId() != null) return false;
+        return getUrl() != null ? getUrl().equals(urlCache.getUrl()) : urlCache.getUrl() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
+    }
 }

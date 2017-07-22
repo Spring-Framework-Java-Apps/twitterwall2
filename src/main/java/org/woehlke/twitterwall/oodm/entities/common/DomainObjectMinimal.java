@@ -10,8 +10,6 @@ public interface DomainObjectMinimal<T extends DomainObjectMinimal> extends Seri
 
     String getUniqueId();
 
-    boolean equals(T o);
-
     boolean equals(Object o);
 
     int hashCode();

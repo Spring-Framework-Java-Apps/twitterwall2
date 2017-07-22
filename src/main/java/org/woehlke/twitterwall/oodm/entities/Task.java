@@ -27,7 +27,8 @@ import static javax.persistence.FetchType.EAGER;
     },
     indexes = {
         @Index(name = "idx_task_time_finished", columnList = "time_finished"),
-        @Index(name = "idx_task_task_status", columnList = "task_status")
+        @Index(name = "idx_task_task_status", columnList = "task_status"),
+        @Index(name = "idx_task_task_type", columnList = "task_type")
     }
 )
 @NamedQueries({
@@ -172,24 +173,6 @@ public class Task implements DomainObjectMinimal<Task> {
         return timeStarted.equals(task.timeStarted);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
-
-        Task task = (Task) o;
-
-        if (getTaskType() != task.getTaskType()) return false;
-        return getTimeStarted().equals(task.getTimeStarted());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getTaskType().hashCode();
-        result = 31 * result + getTimeStarted().hashCode();
-        return result;
-    }
-
     public TaskType getTaskType() {
         return taskType;
     }
@@ -301,5 +284,25 @@ public class Task implements DomainObjectMinimal<Task> {
     @Override
     public int compareTo(Task other) {
         return getUniqueId().compareTo(other.getUniqueId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task task = (Task) o;
+
+        if (getId() != null ? !getId().equals(task.getId()) : task.getId() != null) return false;
+        if (getTaskType() != task.getTaskType()) return false;
+        return getTimeStarted() != null ? getTimeStarted().equals(task.getTimeStarted()) : task.getTimeStarted() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getTaskType() != null ? getTaskType().hashCode() : 0);
+        result = 31 * result + (getTimeStarted() != null ? getTimeStarted().hashCode() : 0);
+        return result;
     }
 }

@@ -150,30 +150,33 @@ public class TaskInfo implements Serializable {
 
         TaskInfo taskInfo = (TaskInfo) o;
 
-        if (updatedByFetchTweetsFromTwitterSearch != null ? !updatedByFetchTweetsFromTwitterSearch.equals(taskInfo.updatedByFetchTweetsFromTwitterSearch) : taskInfo.updatedByFetchTweetsFromTwitterSearch != null)
+        if (getUpdatedByFetchTweetsFromTwitterSearch() != null ? !getUpdatedByFetchTweetsFromTwitterSearch().equals(taskInfo.getUpdatedByFetchTweetsFromTwitterSearch()) : taskInfo.getUpdatedByFetchTweetsFromTwitterSearch() != null)
             return false;
-        if (updatedByUpdateTweets != null ? !updatedByUpdateTweets.equals(taskInfo.updatedByUpdateTweets) : taskInfo.updatedByUpdateTweets != null)
+        if (getUpdatedByUpdateTweets() != null ? !getUpdatedByUpdateTweets().equals(taskInfo.getUpdatedByUpdateTweets()) : taskInfo.getUpdatedByUpdateTweets() != null)
             return false;
-        if (updatedByUpdateUserProfiles != null ? !updatedByUpdateUserProfiles.equals(taskInfo.updatedByUpdateUserProfiles) : taskInfo.updatedByUpdateUserProfiles != null)
+        if (getUpdatedByUpdateUserProfiles() != null ? !getUpdatedByUpdateUserProfiles().equals(taskInfo.getUpdatedByUpdateUserProfiles()) : taskInfo.getUpdatedByUpdateUserProfiles() != null)
             return false;
-        if (updatedByUpdateUserProfilesFromMentions != null ? !updatedByUpdateUserProfilesFromMentions.equals(taskInfo.updatedByUpdateUserProfilesFromMentions) : taskInfo.updatedByUpdateUserProfilesFromMentions != null)
+        if (getUpdatedByUpdateUserProfilesFromMentions() != null ? !getUpdatedByUpdateUserProfilesFromMentions().equals(taskInfo.getUpdatedByUpdateUserProfilesFromMentions()) : taskInfo.getUpdatedByUpdateUserProfilesFromMentions() != null)
             return false;
-        if (updatedByFetchUsersFromDefinedUserList != null ? !updatedByFetchUsersFromDefinedUserList.equals(taskInfo.updatedByFetchUsersFromDefinedUserList) : taskInfo.updatedByFetchUsersFromDefinedUserList != null)
+        if (getUpdatedByFetchUsersFromDefinedUserList() != null ? !getUpdatedByFetchUsersFromDefinedUserList().equals(taskInfo.getUpdatedByFetchUsersFromDefinedUserList()) : taskInfo.getUpdatedByFetchUsersFromDefinedUserList() != null)
             return false;
-        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(taskInfo.controllerAddUserForScreenName) : taskInfo.controllerAddUserForScreenName != null)
+        if (getControllerAddUserForScreenName() != null ? !getControllerAddUserForScreenName().equals(taskInfo.getControllerAddUserForScreenName()) : taskInfo.getControllerAddUserForScreenName() != null)
             return false;
-        if (controllerGetTestdataForTweets != null ? !controllerGetTestdataForTweets.equals(taskInfo.controllerGetTestdataForTweets) : taskInfo.controllerGetTestdataForTweets != null)
+        if (getControllerGetTestdataForTweets() != null ? !getControllerGetTestdataForTweets().equals(taskInfo.getControllerGetTestdataForTweets()) : taskInfo.getControllerGetTestdataForTweets() != null)
             return false;
-        return controllerGetTestdataForUsers != null ? controllerGetTestdataForUsers.equals(taskInfo.controllerGetTestdataForUsers) : taskInfo.controllerGetTestdataForUsers == null;
+        return getControllerGetTestdataForUsers() != null ? getControllerGetTestdataForUsers().equals(taskInfo.getControllerGetTestdataForUsers()) : taskInfo.getControllerGetTestdataForUsers() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = updatedByFetchTweetsFromTwitterSearch != null ? updatedByFetchTweetsFromTwitterSearch.hashCode() : 0;
-        result = 31 * result + (updatedByUpdateTweets != null ? updatedByUpdateTweets.hashCode() : 0);
-        result = 31 * result + (updatedByUpdateUserProfiles != null ? updatedByUpdateUserProfiles.hashCode() : 0);
-        result = 31 * result + (updatedByUpdateUserProfilesFromMentions != null ? updatedByUpdateUserProfilesFromMentions.hashCode() : 0);
-        result = 31 * result + (updatedByFetchUsersFromDefinedUserList != null ? updatedByFetchUsersFromDefinedUserList.hashCode() : 0);
+        int result = getUpdatedByFetchTweetsFromTwitterSearch() != null ? getUpdatedByFetchTweetsFromTwitterSearch().hashCode() : 0;
+        result = 31 * result + (getUpdatedByUpdateTweets() != null ? getUpdatedByUpdateTweets().hashCode() : 0);
+        result = 31 * result + (getUpdatedByUpdateUserProfiles() != null ? getUpdatedByUpdateUserProfiles().hashCode() : 0);
+        result = 31 * result + (getUpdatedByUpdateUserProfilesFromMentions() != null ? getUpdatedByUpdateUserProfilesFromMentions().hashCode() : 0);
+        result = 31 * result + (getUpdatedByFetchUsersFromDefinedUserList() != null ? getUpdatedByFetchUsersFromDefinedUserList().hashCode() : 0);
+        result = 31 * result + (getControllerAddUserForScreenName() != null ? getControllerAddUserForScreenName().hashCode() : 0);
+        result = 31 * result + (getControllerGetTestdataForTweets() != null ? getControllerGetTestdataForTweets().hashCode() : 0);
+        result = 31 * result + (getControllerGetTestdataForUsers() != null ? getControllerGetTestdataForUsers().hashCode() : 0);
         return result;
     }
 
@@ -226,4 +229,5 @@ public class TaskInfo implements Serializable {
         this.setControllerGetTestdataForUsers(taskInfoFrom.getControllerGetTestdataForUsers());
     }
     */
+
 }

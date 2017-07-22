@@ -18,9 +18,6 @@ import javax.persistence.*;
     name = "tickersymbol",
     uniqueConstraints = {
         @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
-    },
-    indexes = {
-        @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
     }
 )
 @NamedQueries({
@@ -113,4 +110,26 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TickerSymbol)) return false;
+        if (!super.equals(o)) return false;
+
+        TickerSymbol that = (TickerSymbol) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getTickerSymbol() != null ? !getTickerSymbol().equals(that.getTickerSymbol()) : that.getTickerSymbol() != null)
+            return false;
+        return getUrl() != null ? getUrl().equals(that.getUrl()) : that.getUrl() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getTickerSymbol() != null ? getTickerSymbol().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
+    }
 }
