@@ -97,7 +97,7 @@ public class UserServiceTestImpl implements UserServiceTest {
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate,task);
+        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
     }
 

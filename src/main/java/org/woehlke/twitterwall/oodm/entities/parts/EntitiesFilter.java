@@ -33,7 +33,7 @@ public class EntitiesFilter {
                 Pattern mentionPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = mentionPattern.matcher(description);
                 while (m.find()) {
-                    Mention newMention = Mention.getMention(m.group(USER_PROFILE_OUTPUT[i]),task);
+                    Mention newMention = new Mention(task,null,m.group(USER_PROFILE_OUTPUT[i]));
                     if(!mentions.contains(newMention)){
                         mentions.add(newMention);
                     }
@@ -110,7 +110,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    hashTags.add(new HashTag(m.group(USER_PROFILE_OUTPUT[i]), task));
+                    hashTags.add(new HashTag(task,null,m.group(USER_PROFILE_OUTPUT[i])));
                 }
             }
         }
@@ -160,7 +160,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    tickerSymbols.add(new TickerSymbol(m.group(USER_PROFILE_OUTPUT[i]),task));
+                    tickerSymbols.add(new TickerSymbol(task,null,m.group(USER_PROFILE_OUTPUT[i])));
                 }
             }
         }
@@ -211,7 +211,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    media.add(Media.getMediaFactory(m.group(USER_PROFILE_OUTPUT[i]),task));
+                    media.add(new Media(task,null,m.group(USER_PROFILE_OUTPUT[i])));
                 }
             }
         }
@@ -279,7 +279,7 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    urls.add(new Url(m.group(USER_PROFILE_OUTPUT[i]),task));
+                    urls.add(new Url(task,null, m.group(USER_PROFILE_OUTPUT[i])));
                 }
             }
         }

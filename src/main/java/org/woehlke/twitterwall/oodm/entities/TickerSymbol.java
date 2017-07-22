@@ -3,18 +3,12 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.URL;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -24,32 +18,22 @@ import static javax.persistence.FetchType.EAGER;
     name = "tickersymbol",
     uniqueConstraints = {
         @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
-    },
-    indexes = {
-        @Index(name="idx_tickersymbol_ticker_symbol", columnList="ticker_symbol")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="TickerSymbol.findByUniqueId",
+        query="select t from TickerSymbol t where t.url=:url and t.tickerSymbol=:tickerSymbol"
+    )
+})
 @EntityListeners(TickerSymbolListener.class)
-public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
+public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @NotEmpty
     @SafeHtml
@@ -61,20 +45,16 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Column(name = "url",length=4096,nullable = false)
     private String url = "";
 
-    public TickerSymbol(String tickerSymbol, String url,Task task) {
+    public TickerSymbol(Task createdBy, Task updatedBy, String tickerSymbol, String url) {
+        super(createdBy,updatedBy);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public TickerSymbol(String url,Task task) {
+    public TickerSymbol(Task createdBy, Task updatedBy, String url) {
+        super(createdBy,updatedBy);
         this.tickerSymbol = "UNDEFINED";
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private TickerSymbol() {
@@ -110,79 +90,9 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.id = id;
     }
 
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
     @Override
-    public boolean equals(TickerSymbol o) {
-        if (this == o) return true;
-        if (!(o instanceof TickerSymbol)) return false;
-        if (!super.equals(o)) return false;
-
-        TickerSymbol that = (TickerSymbol) o;
-
-        if (!tickerSymbol.equals(that.tickerSymbol)) return false;
-        return url.equals(that.url);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + tickerSymbol.hashCode();
-        result = 31 * result + url.hashCode();
-        return result;
-    }
-
-    @Override
-    public int compareTo(TickerSymbol other) {
-        return tickerSymbol.compareTo(other.getTickerSymbol());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
+    public String getUniqueId() {
+        return "" + url  +"_"+  tickerSymbol;
     }
 
     @Override
@@ -191,9 +101,7 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
                 ", url='" + url + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+                    super.toString() +
                 "\n}";
     }
 
@@ -202,4 +110,26 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TickerSymbol)) return false;
+        if (!super.equals(o)) return false;
+
+        TickerSymbol that = (TickerSymbol) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getTickerSymbol() != null ? !getTickerSymbol().equals(that.getTickerSymbol()) : that.getTickerSymbol() != null)
+            return false;
+        return getUrl() != null ? getUrl().equals(that.getUrl()) : that.getUrl() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getTickerSymbol() != null ? getTickerSymbol().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
+    }
 }

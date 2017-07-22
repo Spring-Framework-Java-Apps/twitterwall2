@@ -3,12 +3,10 @@ package org.woehlke.twitterwall.scheduled.service.facade.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
@@ -19,7 +17,6 @@ import org.woehlke.twitterwall.scheduled.service.facade.FetchTweetsFromTwitterSe
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
-import javax.persistence.NoResultException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -35,23 +32,35 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
 
     @Override
     public void fetchTweetsFromTwitterSearch() {
-        String msg = "fetch Tweets from Twitter: ";
+        String msg = "fetch Tweets from Twitter Search: ";
         log.debug(msg+"---------------------------------------");
         log.debug(msg+ "START fetchTweetsFromTwitterSearch: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
         Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH);
         int allLoop = 0;
         int loopId = 0;
+        List<Tweet> tweetsForSearchQuery = null;
         try {
-            List<Tweet> tweetsForSearchQuery = twitterApiService.findTweetsForSearchQuery();
+            tweetsForSearchQuery = twitterApiService.findTweetsForSearchQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(msg + e);
+        }
+        if(tweetsForSearchQuery!=null){
             int number = tweetsForSearchQuery.size();
             for (Tweet tweet : tweetsForSearchQuery) {
                 allLoop++;
                 loopId++;
                 String counter = " ("+loopId+" from "+number+")  ["+allLoop+"] ";
                 log.debug(msg+counter);
+                org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = null;
                 try {
-                    org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
+                    tweetPers = this.storeOneTweet.storeOneTweet(tweet,task);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.error(msg + e);
+                }
+                if(tweetPers!=null){
                     log.debug(msg+counter+tweetPers.toString());
                     Set<Mention> mentions = tweetPers.getEntities().getMentions();
                     int subNumber = mentions.size();
@@ -64,24 +73,14 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
                         try {
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                             log.debug(msg+subCounter+userFromMention.toString());
-                        } catch (IllegalArgumentException exe){
-                            task = taskService.warn(task,exe,msg+subCounter);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                            log.error(msg+subCounter+e);
+                            task = taskService.warn(task,e,msg+subCounter);
                         }
                     }
-                } catch (EmptyResultDataAccessException e)  {
-                    task = taskService.warn(task,e,msg+counter);
-                } catch (NoResultException e){
-                    task = taskService.warn(task,e,msg+counter);
-                } catch (Exception e){
-                    task = taskService.warn(task,e,msg+counter);
                 }
             }
-        } catch (ResourceAccessException e) {
-            task = taskService.warn(task,e,msg);
-        } catch (RuntimeException e) {
-            task = taskService.warn(task,e,msg);
-        } catch (Exception e) {
-            task = taskService.warn(task,e,msg);
         }
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
         taskService.event(task,report);

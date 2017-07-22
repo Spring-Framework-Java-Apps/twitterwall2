@@ -8,5 +8,5 @@ import org.woehlke.twitterwall.oodm.entities.Url;
  */
 public interface CreatePersistentUrl {
 
-    Url getPersistentUrlFor(String url, Task task);
+    Url createPersistentUrlFor(String url, Task task);
 }

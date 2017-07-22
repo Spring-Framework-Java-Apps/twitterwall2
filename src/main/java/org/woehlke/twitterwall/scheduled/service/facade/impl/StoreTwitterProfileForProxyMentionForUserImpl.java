@@ -78,7 +78,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
                 urls.add(urlPers);
             } else if((myUrl != null)&&(myUrl.isRawUrlsFromDescription())){
                 String urlStr = myUrl.getUrl();
-                Url urlObj = createPersistentUrl.getPersistentUrlFor(urlStr,task);
+                Url urlObj = createPersistentUrl.createPersistentUrlFor(urlStr,task);
                 if((urlObj != null)&&(urlObj.isValid())){
                     urls.add(urlObj);
                 }

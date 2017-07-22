@@ -40,7 +40,7 @@ public class UrlServiceTestImpl implements UrlServiceTest {
             urlSrc = url.getKey();
             expanded = url.getValue();
             display = hostsTest.get(urlSrc);
-            Url myUrl = new Url(display, expanded, urlSrc,task);
+            Url myUrl = new Url(task, null, display, expanded, urlSrc);
             testData.add(myUrl);
         }
         return testData;

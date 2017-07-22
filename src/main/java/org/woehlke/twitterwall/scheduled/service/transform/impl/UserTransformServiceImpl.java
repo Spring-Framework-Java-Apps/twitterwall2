@@ -52,7 +52,7 @@ public class UserTransformServiceImpl implements UserTransformService {
             location = null;
         }
         Date createdDate = userSource.getCreatedDate();
-        User userTarget = new User(idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate,task);
+        User userTarget = new User(task,null,idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
         userTarget.setTweeting(true);
         userTarget.setLanguage(userSource.getLanguage());
         userTarget.setStatusesCount(userSource.getStatusesCount());

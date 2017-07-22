@@ -25,8 +25,8 @@ import java.net.URL;
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     @Override
-    public Url getPersistentUrlFor(String url, Task task) {
-        String msg = "Url.getPersistentUrlFor url="+url+" ";
+    public Url createPersistentUrlFor(String url, Task task) {
+        String msg = "Url.createPersistentUrlFor url="+url+" ";
         if (url == null) {
             return null;
         } else {
@@ -68,7 +68,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     } catch (MalformedURLException exe) {
                         log.warn(exe.getMessage());
                     }
-                    Url newUrl = new Url(displayUrl, urlCache.getExpanded(), urlCache.getUrl(),task);
+                    Url newUrl = new Url(task, null, displayUrl, urlCache.getExpanded(), urlCache.getUrl());
                     log.debug(msg + " try to persist: " + newUrl.toString());
                     newUrl = urlRepository.save(newUrl);
                     //TODO: delete ?
@@ -78,7 +78,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     log.debug(msg + " persisted: " + newUrl.toString());
                     return newUrl;
                 } else {
-                    urlCache = new UrlCache(url,task);
+                    urlCache = new UrlCache(task,null,url);
                     log.debug(msg + " try to fetchTransientUrl");
                     Url myTransientUrl = twitterUrlService.fetchTransientUrl(url,task);
                     if (myTransientUrl == null) {
@@ -101,7 +101,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         } catch (MalformedURLException exe) {
                             log.warn(exe.getMessage());
                         }
-                        Url newUrl = new Url(displayUrl, myTransientUrl.getExpanded(), myTransientUrl.getUrl(),task);
+                        Url newUrl = new Url(task,null,displayUrl, myTransientUrl.getExpanded(), myTransientUrl.getUrl());
                         log.debug(msg + " try to persist: " + newUrl.toString());
                         newUrl = urlRepository.save(newUrl);
                         log.debug(msg + " persisted: " + newUrl.toString());

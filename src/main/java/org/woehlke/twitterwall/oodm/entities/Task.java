@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
 
 import javax.persistence.*;
@@ -27,11 +27,18 @@ import static javax.persistence.FetchType.EAGER;
     },
     indexes = {
         @Index(name = "idx_task_time_finished", columnList = "time_finished"),
-        @Index(name = "idx_task_task_status", columnList = "task_status")
+        @Index(name = "idx_task_task_status", columnList = "task_status"),
+        @Index(name = "idx_task_task_type", columnList = "task_type")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name="Task.findByUniqueId",
+        query="select t from Task t where t.taskType=:taskType and t.timeStarted=:timeStarted"
+    )
+})
 @EntityListeners(TaskListener.class)
-public class Task implements DomainObject<Task> {
+public class Task implements DomainObjectMinimal<Task> {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,38 +161,8 @@ public class Task implements DomainObject<Task> {
     }
 
     @Override
-    public boolean equals(Task task) {
-        if (this == task) return true;
-        if (!id.equals(task.id)) return false;
-        if (taskType != task.taskType) return false;
-        return timeStarted.equals(task.timeStarted);
-    }
-
-    @Override
-    public int compareTo(Task other) {
-        int result = this.taskType.compareTo(other.getTaskType());
-        if(result==0){
-            return this.timeStarted.compareTo(other.getTimeStarted());
-        }
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
-
-        Task task = (Task) o;
-
-        if (getTaskType() != task.getTaskType()) return false;
-        return getTimeStarted().equals(task.getTimeStarted());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getTaskType().hashCode();
-        result = 31 * result + getTimeStarted().hashCode();
-        return result;
+    public String getUniqueId() {
+        return "" + taskType.name() +"_"+ timeStarted.getTime();
     }
 
     public TaskType getTaskType() {
@@ -294,5 +271,30 @@ public class Task implements DomainObject<Task> {
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public int compareTo(Task other) {
+        return getUniqueId().compareTo(other.getUniqueId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task task = (Task) o;
+
+        if (getId() != null ? !getId().equals(task.getId()) : task.getId() != null) return false;
+        if (getTaskType() != task.getTaskType()) return false;
+        return getTimeStarted() != null ? getTimeStarted().equals(task.getTimeStarted()) : task.getTimeStarted() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getTaskType() != null ? getTaskType().hashCode() : 0);
+        result = 31 * result + (getTimeStarted() != null ? getTimeStarted().hashCode() : 0);
+        return result;
     }
 }
