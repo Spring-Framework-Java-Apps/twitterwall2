@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
-import org.woehlke.twitterwall.oodm.repositories.impl.TweetRepositoryCustom;
+import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
 /**
  * Created by tw on 15.07.17.

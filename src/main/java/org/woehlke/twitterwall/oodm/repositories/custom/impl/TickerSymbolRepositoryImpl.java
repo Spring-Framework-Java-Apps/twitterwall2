@@ -1,7 +1,8 @@
-package org.woehlke.twitterwall.oodm.repositories.impl;
+package org.woehlke.twitterwall.oodm.repositories.custom.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.repositories.custom.TickerSymbolRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

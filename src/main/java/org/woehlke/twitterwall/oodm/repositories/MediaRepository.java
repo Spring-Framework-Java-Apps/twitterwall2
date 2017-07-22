@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.repositories;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
-import org.woehlke.twitterwall.oodm.repositories.impl.MediaRepositoryCustom;
+import org.woehlke.twitterwall.oodm.repositories.custom.MediaRepositoryCustom;
 
 /**
  * Created by tw on 15.07.17.

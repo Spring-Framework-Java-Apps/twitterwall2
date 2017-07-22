@@ -4,7 +4,7 @@ package org.woehlke.twitterwall.oodm.repositories;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
-import org.woehlke.twitterwall.oodm.repositories.impl.HashTagRepositoryCustom;
+import org.woehlke.twitterwall.oodm.repositories.custom.HashTagRepositoryCustom;
 
 /**
  * Created by tw on 15.07.17.

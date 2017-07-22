@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
-import org.woehlke.twitterwall.oodm.repositories.impl.UserRepositoryCustom;
+import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
 /**
  * Created by tw on 15.07.17.
