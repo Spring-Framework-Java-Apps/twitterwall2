@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
@@ -31,7 +31,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(UrlListener.class)
-public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
+public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
     private static final long serialVersionUID = 1L;
 
@@ -95,7 +95,7 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
 
     @Override
     public String getUniqueId() {
-        return url.toString();
+        return url;
     }
 
     public String getDisplay() {
@@ -123,30 +123,13 @@ public class Url extends AbstractTwitterObject<Url> implements DomainObjectWithU
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Url)) return false;
-
-        Url url1 = (Url) o;
-
-        return url != null ? url.equals(url1.url) : url1.url == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Url{" +
                 "id=" + id +
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-            super.toString() +
+                    super.toString() +
                 "}\n";
     }
 

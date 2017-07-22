@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -37,7 +37,7 @@ import static javax.persistence.FetchType.EAGER;
     )
 })
 @EntityListeners(MentionListener.class)
-public class Mention extends AbstractTwitterObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
+public class Mention extends AbstractDomainObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
     private static final long serialVersionUID = 1L;
 
@@ -182,33 +182,13 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Mention)) return false;
-        if (!super.equals(o)) return false;
-
-        Mention mention = (Mention) o;
-
-        if (screenName != null ? !screenName.equals(mention.screenName) : mention.screenName != null) return false;
-        return name != null ? name.equals(mention.name) : mention.name == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (screenName != null ? screenName.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Mention{" +
             " id=" + id +
             ", idTwitter=" + idTwitter +
             ", screenName='" + screenName + '\'' +
             ", name='" + name + '\'' +
-            super.toString() +
+                super.toString() +
             " }\n";
     }
 

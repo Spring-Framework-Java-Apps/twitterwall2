@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
@@ -77,7 +77,7 @@ import static javax.persistence.FetchType.EAGER;
     )
 })
 @EntityListeners(TweetListener.class)
-public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectWithEntities<Tweet>,DomainObjectWithTask<Tweet> {
+public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWithEntities<Tweet>,DomainObjectWithTask<Tweet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -395,24 +395,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Tweet)) return false;
-        if (!super.equals(o)) return false;
-
-        Tweet myTweet = (Tweet) o;
-
-        return idTwitter == myTweet.idTwitter;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        return result;
-    }
-
     private String toStringRetweetedStatus(){
         if(retweetedStatus==null){
             return " null ";
@@ -460,7 +442,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
                 ",\n retweetedStatus=" + toStringRetweetedStatus() +
-                super.toString() +
+                    super.toString() +
                 ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";

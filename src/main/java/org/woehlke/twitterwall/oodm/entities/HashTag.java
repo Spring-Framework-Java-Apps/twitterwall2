@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(HashTagListener.class)
-public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
+public class HashTag extends AbstractDomainObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
@@ -90,29 +90,11 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HashTag)) return false;
-        if (!super.equals(o)) return false;
-
-        HashTag hashTag = (HashTag) o;
-
-        return text != null ? text.equals(hashTag.text) : hashTag.text == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (text != null ? text.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "HashTag{" +
                 " id=" + id +
                 ", text='" + text + '\'' +
-                super.toString() +
+                    super.toString() +
                 " }\n";
     }
 

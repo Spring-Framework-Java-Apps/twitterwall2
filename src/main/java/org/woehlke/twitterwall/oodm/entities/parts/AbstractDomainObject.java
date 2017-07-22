@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.EAGER;
  * Created by tw on 10.06.17.
  */
 @MappedSuperclass
-public abstract class AbstractTwitterObject<T extends DomainObject> implements DomainObject<T> {
+public abstract class AbstractDomainObject<T extends DomainObject> implements DomainObject<T> {
 
     @NotNull
     @Embedded
@@ -35,14 +35,14 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
     @Transient
     private Map<String, Object> extraData = new HashMap<>();
 
-    protected AbstractTwitterObject(Task createdBy, Task updatedBy) {
+    protected AbstractDomainObject(Task createdBy, Task updatedBy) {
         this.createdBy=createdBy;
         this.updatedBy=updatedBy;
         this.taskInfo.setTaskInfoFromTask(createdBy);
         this.taskInfo.setTaskInfoFromTask(updatedBy);
     }
 
-    protected AbstractTwitterObject() {}
+    protected AbstractDomainObject() {}
 
     /**
      * @return Any fields in response from Twitter that are otherwise not mapped to any properties.
@@ -67,18 +67,24 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
 
   @Override
     public boolean equals(T o) {
+      if(o == null) return false;
+      return this.getUniqueId().equals(o.getUniqueId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null) return false;
         if (this == o) return true;
-        if (!(o instanceof AbstractTwitterObject)) return false;
-
-        AbstractTwitterObject that = (AbstractTwitterObject) o;
-
-        return extraData != null ? extraData.equals(that.extraData) : that.extraData == null;
+        if (!(o instanceof AbstractDomainObject)) return false;
+        AbstractDomainObject that = (AbstractDomainObject) o;
+        return this.getUniqueId().equals(that.getUniqueId());
     }
 
     @Override
     public int hashCode() {
-        return extraData != null ? extraData.hashCode() : 0;
+        return this.getUniqueId().hashCode();
     }
+
 
   @Override
   public String toString() {
@@ -87,11 +93,12 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
     for (String extraDatumKey : extraData.keySet()) {
       myExtraData.append(extraDatumKey);
       myExtraData.append(", ");
+      myExtraData.append(extraData.get(extraDatumKey));
     }
-    myExtraData.append(",\n createdBy="+ toStringCreatedBy());
-    myExtraData.append(",\n updatedBy=" + toStringUpdatedBy());
-    myExtraData.append(",\n taskInfo="+ toStringTaskInfo());
-    return   myExtraData.toString();
+    myExtraData.append(",\n createdBy="+ this.toStringCreatedBy());
+    myExtraData.append(",\n updatedBy=" + this.toStringUpdatedBy());
+    myExtraData.append(",\n taskInfo="+ this.toStringTaskInfo());
+    return myExtraData.toString();
   }
 
     public abstract String getUniqueId();

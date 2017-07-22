@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
@@ -93,7 +93,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractTwitterObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
+public class User extends AbstractDomainObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -650,24 +650,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     }
 
     @Override
-    public boolean equals(User o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        if (!super.equals(o)) return false;
-
-        User that = (User) o;
-
-        return idTwitter == that.idTwitter;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -708,7 +690,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-            super.toString() +
+                    super.toString() +
                 ",\n entities=" + this.entities.toString() +
                 "\n}";
     }

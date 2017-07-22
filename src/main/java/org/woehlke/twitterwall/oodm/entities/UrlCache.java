@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(UrlCacheListener.class)
-public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
+public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 
     private static final long serialVersionUID = 1L;
 
@@ -99,20 +99,7 @@ public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainO
         this.url = url;
     }
 
-    @Override
-    public boolean equals(UrlCache o) {
-        if (this == o) return true;
-        if (!(o instanceof UrlCache)) return false;
 
-        UrlCache urlCache = (UrlCache) o;
-
-        return url.equals(urlCache.url);
-    }
-
-    @Override
-    public int hashCode() {
-        return url.hashCode();
-    }
 
     @Override
     public String toString() {
@@ -120,7 +107,7 @@ public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainO
                 " id=" + id +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-            super.toString() +
+                    super.toString() +
                 "}\n";
     }
 
@@ -129,8 +116,4 @@ public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainO
         return true;
     }
 
-    @Override
-    public int compareTo(UrlCache other) {
-        return getUniqueId().compareTo(other.getUniqueId());
-    }
 }

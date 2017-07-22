@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -36,7 +36,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(MediaListener.class)
-public class Media extends AbstractTwitterObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
+public class Media extends AbstractDomainObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
     private static final long serialVersionUID = 1L;
 
@@ -177,34 +177,6 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Media)) return false;
-        if (!super.equals(o)) return false;
-
-        Media media = (Media) o;
-
-        if (mediaHttp != null ? !mediaHttp.equals(media.mediaHttp) : media.mediaHttp != null) return false;
-        if (mediaHttps != null ? !mediaHttps.equals(media.mediaHttps) : media.mediaHttps != null) return false;
-        if (url != null ? !url.equals(media.url) : media.url != null) return false;
-        if (display != null ? !display.equals(media.display) : media.display != null) return false;
-        if (expanded != null ? !expanded.equals(media.expanded) : media.expanded != null) return false;
-        return mediaType != null ? mediaType.equals(media.mediaType) : media.mediaType == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (mediaHttp != null ? mediaHttp.hashCode() : 0);
-        result = 31 * result + (mediaHttps != null ? mediaHttps.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (display != null ? display.hashCode() : 0);
-        result = 31 * result + (expanded != null ? expanded.hashCode() : 0);
-        result = 31 * result + (mediaType != null ? mediaType.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Media{" +
                 " id=" + id +
@@ -215,7 +187,7 @@ public class Media extends AbstractTwitterObject<Media> implements DomainObjectW
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
                 ", mediaType='" + mediaType + '\'' +
-                super.toString() +
+                    super.toString() +
                 " }\n";
     }
 
