@@ -29,7 +29,7 @@ public class MediaTransformServiceImpl extends EntitiesFilter implements MediaTr
         String display = medium.getDisplayUrl();
         String expanded = medium.getExpandedUrl();
         String type = medium.getType();
-        Media myMediaEntity = new Media(idTwitter, mediaHttp, mediaHttps, url, display, expanded, type, task);
+        Media myMediaEntity = new Media(task, null, idTwitter, mediaHttp, mediaHttps, url, display, expanded, type);
         return myMediaEntity;
     }
 

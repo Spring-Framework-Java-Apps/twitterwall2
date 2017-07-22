@@ -26,7 +26,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
         String display = url.getDisplayUrl();
         String expanded = url.getExpandedUrl();
         String urlStr = url.getUrl();
-        Url myUrlEntity = new Url(display, expanded, urlStr, task);
+        Url myUrlEntity = new Url(task,null,display, expanded, urlStr);
         return myUrlEntity;
     }
 
@@ -46,7 +46,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url,task);
+                                Url urlTarget = new Url(task, null, displayUrl, expandedUrl, url);
                                 urlsTarget.add(urlTarget);
                             }
                         }
@@ -66,7 +66,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(displayUrl, expandedUrl, url,task);
+                                Url urlTarget = new Url(task,null,displayUrl, expandedUrl, url);
                                 urlsTarget.add(urlTarget);
                             }
                         }

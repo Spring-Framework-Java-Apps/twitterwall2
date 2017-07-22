@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
@@ -25,7 +25,7 @@ import java.util.Date;
     }
 )
 @EntityListeners(TaskHistoryListener.class)
-public class TaskHistory implements DomainObject<TaskHistory> {
+public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,6 +84,11 @@ public class TaskHistory implements DomainObject<TaskHistory> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
     @Override
@@ -147,8 +152,8 @@ public class TaskHistory implements DomainObject<TaskHistory> {
     }
 
     @Override
-    public int compareTo(TaskHistory o) {
-        return timeEvent.compareTo(o.getTimeEvent());
+    public int compareTo(TaskHistory other) {
+        return getUniqueId().compareTo(other.getUniqueId());
     }
 
     @Override

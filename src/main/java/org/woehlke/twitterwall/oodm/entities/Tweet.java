@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
@@ -81,19 +80,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @Column(name="id_twitter", nullable = false)
     private Long idTwitter;
@@ -192,17 +178,16 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
     @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
 
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt,Task task) {
+    public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
         this.createdAt = createdAt;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public Tweet(long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source,Task task) {
+    public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.idStr = idStr;
         this.text = text;
@@ -213,9 +198,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.fromUserId = fromUserId;
         this.languageCode = languageCode;
         this.source = source;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private Tweet() {
@@ -236,6 +218,11 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
     }
 
     @Override
@@ -372,24 +359,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         this.favoriteCount = favoriteCount;
     }
 
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
     public void setIdTwitter(long idTwitter) {
         this.idTwitter = idTwitter;
     }
@@ -404,14 +373,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
     }
 
     public Entities getEntities() {
@@ -446,36 +407,6 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
         int result = super.hashCode();
         result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
         return result;
-    }
-
-    @Override
-    public int compareTo(Tweet other) {
-        return Long.compare(idTwitter,other.getIdTwitter());
-    }
-
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
     }
 
     private String toStringRetweetedStatus(){
@@ -525,9 +456,7 @@ public class Tweet extends AbstractTwitterObject<Tweet> implements DomainObjectW
                 ", favorited=" + favorited +
                 ", favoriteCount=" + favoriteCount +
                 ",\n retweetedStatus=" + toStringRetweetedStatus() +
-                ",\n createdBy="+ toStringCreatedBy() +
-                ",\n updatedBy=" + toStringUpdatedBy() +
-                ",\n taskInfo="+ toStringTaskInfo() +
+                super.toString() +
                 ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";

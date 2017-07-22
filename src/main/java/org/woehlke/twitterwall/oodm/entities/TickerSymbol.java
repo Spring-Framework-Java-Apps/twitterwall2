@@ -6,15 +6,9 @@ import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -38,19 +32,6 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
-
     @NotEmpty
     @SafeHtml
     @Column(name = "ticker_symbol",length=4096,nullable = false)
@@ -61,20 +42,16 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     @Column(name = "url",length=4096,nullable = false)
     private String url = "";
 
-    public TickerSymbol(String tickerSymbol, String url,Task task) {
+    public TickerSymbol(Task createdBy, Task updatedBy, String tickerSymbol, String url) {
+        super(createdBy,updatedBy);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public TickerSymbol(String url,Task task) {
+    public TickerSymbol(Task createdBy, Task updatedBy, String url) {
+        super(createdBy,updatedBy);
         this.tickerSymbol = "UNDEFINED";
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private TickerSymbol() {
@@ -110,30 +87,9 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
         this.id = id;
     }
 
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
+    @Override
+    public String getUniqueId() {
+        return "" + url  +"_"+  tickerSymbol;
     }
 
     @Override
@@ -157,43 +113,12 @@ public class TickerSymbol extends AbstractTwitterObject<TickerSymbol> implements
     }
 
     @Override
-    public int compareTo(TickerSymbol other) {
-        return tickerSymbol.compareTo(other.getTickerSymbol());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
-    @Override
     public String toString() {
         return "TickerSymbol{" +
                 "id=" + id +
                 ", tickerSymbol='" + tickerSymbol + '\'' +
                 ", url='" + url + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+            super.toString() +
                 "\n}";
     }
 

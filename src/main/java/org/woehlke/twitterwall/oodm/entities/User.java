@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -18,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.FetchType.EAGER;
 
@@ -268,7 +266,8 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     })
     private Entities entities = new Entities();
 
-    public User(long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate,Task task) {
+    public User(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
@@ -277,9 +276,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.description = description;
         this.location = location;
         this.createdDate = createdDate;
-        this.createdBy = task;
-        this.updatedBy =task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private User() {
@@ -353,6 +349,11 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
     }
 
     @Override
@@ -708,11 +709,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         return result;
     }
 
-    @Override
-    public int compareTo(User other) {
-        return screenName.compareTo(other.getScreenName());
-    }
-
     private String toStringCreatedBy(){
         if(createdBy==null){
             return " null ";
@@ -798,7 +794,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate, task);
+        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
     }
 }

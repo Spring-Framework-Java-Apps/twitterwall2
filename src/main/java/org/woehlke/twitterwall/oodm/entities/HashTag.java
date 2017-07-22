@@ -3,18 +3,12 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -35,37 +29,17 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
-
     @SafeHtml
     @Column(name="text", nullable = false,length=4096)
     private String text = "";
 
     public HashTag(Task createdBy, Task updatedBy, String text) {
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        super(createdBy,updatedBy);
         this.text = text;
-    }
-
-    public HashTag(String text, Task task) {
-        this.text = text;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private HashTag() {
+        super();
     }
 
     public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
@@ -91,6 +65,11 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
         this.id = id;
     }
 
+    @Override
+    public String getUniqueId() {
+        return text;
+    }
+
 
     public String getText() {
         return this.text;
@@ -102,32 +81,6 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -149,42 +102,11 @@ public class HashTag extends AbstractTwitterObject<HashTag> implements DomainObj
     }
 
     @Override
-    public int compareTo(HashTag other) {
-        return text.compareTo(other.getText());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
-    @Override
     public String toString() {
         return "HashTag{" +
                 " id=" + id +
                 ", text='" + text + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+                super.toString() +
                 " }\n";
     }
 

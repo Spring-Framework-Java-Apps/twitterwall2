@@ -31,10 +31,6 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
             tweet.setRetweetedStatus(retweetedStatus);
         }
-        /** TaskInfo */
-        TaskInfo taskInfo = tweet.getTaskInfo();
-        taskInfo = taskInfo.setTaskInfoFromTask(task);
-        tweet.setTaskInfo(taskInfo);
         /** User */
         User user = tweet.getUser();
         user = storeUserProcess.storeUserProcess(user,task);

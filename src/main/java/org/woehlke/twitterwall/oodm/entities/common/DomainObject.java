@@ -1,23 +1,23 @@
 package org.woehlke.twitterwall.oodm.entities.common;
 
-import java.io.Serializable;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 
 /**
  * Created by tw on 24.06.17.
  */
-public interface DomainObject<T extends DomainObject> extends Serializable, Comparable<T>  {
+public interface DomainObject<T extends DomainObject> extends DomainObjectMinimal<T>  {
 
-    Long getId();
+    TaskInfo getTaskInfo();
 
-    void setId(Long id);
+    void setTaskInfo(TaskInfo taskInfo);
 
-    boolean equals(T o);
+    Task getCreatedBy();
 
-    boolean equals(Object o);
+    void setCreatedBy(Task createdBy);
 
-    int hashCode();
+    Task getUpdatedBy();
 
-    String toString();
+    void setUpdatedBy(Task updatedBy);
 
-    boolean isValid();
 }

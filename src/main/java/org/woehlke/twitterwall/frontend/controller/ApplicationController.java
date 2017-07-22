@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
  */
 @Controller
 @RequestMapping(path="/application")
-public class DomainController {
+public class ApplicationController {
 
     @RequestMapping(path="/domain/count")
     public String domainCount(Model model) {
@@ -30,10 +30,25 @@ public class DomainController {
         return "application/domain/count";
     }
 
+    @RequestMapping(path="/management")
+    public String dmanagementPage(Model model) {
+        String msg = "/application/domain/count: ";
+        controllerHelper.logEnv();
+        String title = "Application Management";
+        String subtitle = twitterProperties.getSearchQuery();
+        String symbol = Symbols.DATABASE.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        //CountedEntities countedEntities =this.countedEntitiesService.countAll();
+        //model.addAttribute("countedEntities", countedEntities);
+
+        return "application/management";
+    }
+
+
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public DomainController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper, TwitterProperties twitterProperties) {
+    public ApplicationController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper, TwitterProperties twitterProperties) {
         this.countedEntitiesService = countedEntitiesService;
         this.controllerHelper = controllerHelper;
         this.twitterProperties = twitterProperties;

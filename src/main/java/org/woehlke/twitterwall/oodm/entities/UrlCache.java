@@ -4,15 +4,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 23.06.17.
@@ -28,7 +25,7 @@ import static javax.persistence.FetchType.EAGER;
     }
 )
 @EntityListeners(UrlCacheListener.class)
-public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
+public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,19 +36,6 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     private Long id;
 
     @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
-
-    @NotNull
     @Column(length=4096)
     private String expanded = "";
 
@@ -60,20 +44,16 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     @Column(nullable = false,length=4096)
     private String url;
 
-    public UrlCache(String expanded, String url, Task task) {
+    public UrlCache(Task createdBy, Task updatedBy, String expanded, String url) {
+        super(createdBy,updatedBy);
         this.expanded = expanded;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
-    public UrlCache(String url,Task task){
+    public UrlCache(Task createdBy, Task updatedBy, String url){
+        super(createdBy,updatedBy);
         this.expanded = UrlCache.UNDEFINED;
         this.url = url;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
     }
 
     private UrlCache(){
@@ -92,6 +72,11 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
         this.id = id;
     }
 
+    @Override
+    public String getUniqueId() {
+        return url;
+    }
+
     public String getExpanded() {
         return expanded;
     }
@@ -106,32 +91,6 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -150,48 +109,22 @@ public class UrlCache implements DomainObjectWithUrl<UrlCache>,DomainObjectWithT
     }
 
     @Override
-    public int compareTo(UrlCache other) {
-        return url.compareTo(other.getUrl());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
-    @Override
     public String toString() {
         return "UrlCache{" +
                 " id=" + id +
                 ", expanded='" + expanded + '\'' +
                 ", url='" + url + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+            super.toString() +
                 "}\n";
     }
 
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public int compareTo(UrlCache other) {
+        return getUniqueId().compareTo(other.getUniqueId());
     }
 }

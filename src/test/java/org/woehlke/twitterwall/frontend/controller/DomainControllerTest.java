@@ -35,7 +35,7 @@ public class DomainControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private DomainController controller;
+    private ApplicationController controller;
 
     @Autowired
     private PrepareDataTest prepareDataTest;

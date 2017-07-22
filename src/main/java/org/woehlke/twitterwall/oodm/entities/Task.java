@@ -1,10 +1,10 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ import static javax.persistence.FetchType.EAGER;
     }
 )
 @EntityListeners(TaskListener.class)
-public class Task implements DomainObject<Task> {
+public class Task implements DomainObjectMinimal<Task> {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,20 +154,16 @@ public class Task implements DomainObject<Task> {
     }
 
     @Override
+    public String getUniqueId() {
+        return "" + taskType.name() +"_"+ timeStarted.getTime();
+    }
+
+    @Override
     public boolean equals(Task task) {
         if (this == task) return true;
         if (!id.equals(task.id)) return false;
         if (taskType != task.taskType) return false;
         return timeStarted.equals(task.timeStarted);
-    }
-
-    @Override
-    public int compareTo(Task other) {
-        int result = this.taskType.compareTo(other.getTaskType());
-        if(result==0){
-            return this.timeStarted.compareTo(other.getTimeStarted());
-        }
-        return result;
     }
 
     @Override
@@ -294,5 +290,10 @@ public class Task implements DomainObject<Task> {
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public int compareTo(Task other) {
+        return getUniqueId().compareTo(other.getUniqueId());
     }
 }

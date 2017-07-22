@@ -29,7 +29,7 @@ public class Entities extends EntitiesFilter implements Serializable {
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
-    private Set<Mention> mentions = new LinkedHashSet<>();
+    private Set<Mention> mentions = new LinkedHashSet<Mention>();
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)

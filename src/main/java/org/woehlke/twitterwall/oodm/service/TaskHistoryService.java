@@ -4,12 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
-import org.woehlke.twitterwall.oodm.service.common.DomainService;
+import org.woehlke.twitterwall.oodm.service.common.DomainObjectMinimalService;
 
 /**
  * Created by tw on 11.07.17.
  */
-public interface TaskHistoryService  extends DomainService<TaskHistory> {
+public interface TaskHistoryService  extends DomainObjectMinimalService<TaskHistory> {
 
     TaskHistory store(TaskHistory domainObject);
 

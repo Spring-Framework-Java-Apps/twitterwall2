@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.MentionListener;
 
@@ -42,19 +41,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
-
     @Column(name = "id_twitter")
     private Long idTwitter;
 
@@ -74,13 +60,22 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Column(name = "id_twitte_of_user",nullable = false)
     private Long idTwitterOfUser = 0L;
 
-    public Mention(long idTwitter, String screenName, String name,Task task) {
+    public Mention(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name) {
+        super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
         this.name = name;
-        this.createdBy = task;
-        this.updatedBy = task;
-        this.taskInfo.setTaskInfoFromTask(task);
+    }
+
+    public Mention(Task createdBy, Task updatedBy, String mentionString) {
+        super(createdBy,updatedBy);
+        this.idTwitter = ID_TWITTER_UNDEFINED;
+        this.screenName = mentionString;
+        this.name = mentionString;
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException e) {
+        }
     }
 
     private Mention() {
@@ -133,6 +128,11 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
         this.id = id;
     }
 
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString() +"_"+ screenName.toString();
+    }
+
     public String getScreenName() {
         return screenName;
     }
@@ -157,32 +157,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Override
     public void setIdTwitter(Long idTwitter) {
         this.idTwitter = idTwitter;
-    }
-
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
     }
 
     public User getUser() {
@@ -222,44 +196,13 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     }
 
     @Override
-    public int compareTo(Mention other) {
-        return screenName.compareTo(other.getScreenName());
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
-    }
-
-    @Override
     public String toString() {
         return "Mention{" +
             " id=" + id +
             ", idTwitter=" + idTwitter +
             ", screenName='" + screenName + '\'' +
             ", name='" + name + '\'' +
-            ",\n createdBy="+ toStringCreatedBy() +
-            ",\n updatedBy=" + toStringUpdatedBy() +
-            ",\n taskInfo="+ toStringTaskInfo() +
+            super.toString() +
             " }\n";
     }
 
@@ -277,18 +220,6 @@ public class Mention extends AbstractTwitterObject<Mention> implements DomainObj
     @Transient
     public boolean isRawMentionFromUserDescription() {
         return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
-    }
-
-
-    public static Mention getMention(String mentionString,Task task) {
-        try {
-            Thread.sleep(100L);
-        } catch (InterruptedException e) {
-        }
-        long idTwitter = ID_TWITTER_UNDEFINED;
-        String screenName = mentionString;
-        String name = mentionString;
-        return new Mention(idTwitter, screenName, name,task);
     }
 
 }
