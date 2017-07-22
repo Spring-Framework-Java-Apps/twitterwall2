@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractTwitterObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
@@ -15,10 +14,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 10.06.17.
@@ -105,19 +100,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-
-    @NotNull
-    @Embedded
-    private TaskInfo taskInfo  = new TaskInfo();
-
-    @NotNull
-    @JoinColumn(name = "fk_user_created_by")
-    @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
-    private Task createdBy;
-
-    @JoinColumn(name = "fk_user_updated_by")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
-    private Task updatedBy;
 
     @NotNull
     @Column(name="id_twitter",nullable = false)
@@ -358,16 +340,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
     @Override
     public String getUniqueId() {
         return idTwitter.toString();
-    }
-
-    @Override
-    public TaskInfo getTaskInfo() {
-        return taskInfo;
-    }
-
-    @Override
-    public void setTaskInfo(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
     }
 
     @Override
@@ -669,24 +641,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         this.profileBannerUrl = profileBannerUrl;
     }
 
-    public Task getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Task createdBy) {
-        this.taskInfo.setTaskInfoFromTask(createdBy);
-        this.createdBy = createdBy;
-    }
-
-    public Task getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Task updatedBy) {
-        this.taskInfo.setTaskInfoFromTask(updatedBy);
-        this.updatedBy = updatedBy;
-    }
-
     public Entities getEntities() {
         return entities;
     }
@@ -711,30 +665,6 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
         int result = super.hashCode();
         result = 31 * result + (int) (idTwitter ^ (idTwitter >>> 32));
         return result;
-    }
-
-    private String toStringCreatedBy(){
-        if(createdBy==null){
-            return " null ";
-        } else {
-            return createdBy.toString();
-        }
-    }
-
-    private String toStringUpdatedBy(){
-        if(updatedBy==null){
-            return " null ";
-        } else {
-            return updatedBy.toString();
-        }
-    }
-
-    private String toStringTaskInfo(){
-        if(taskInfo==null){
-            return " null ";
-        } else {
-            return taskInfo.toString();
-        }
     }
 
     @Override
@@ -778,9 +708,7 @@ public class User extends AbstractTwitterObject<User> implements DomainObjectWit
                 ", friend=" + friend +
                 ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
-                ",\n createdBy="+ toStringCreatedBy() +
-                ",\n updatedBy=" + toStringUpdatedBy() +
-                ",\n taskInfo="+ toStringTaskInfo() +
+            super.toString() +
                 ",\n entities=" + this.entities.toString() +
                 "\n}";
     }

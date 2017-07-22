@@ -178,35 +178,52 @@ public class TaskInfo implements Serializable {
     }
 
     public TaskInfo setTaskInfoFromTask(Task task) {
-        TaskType useCase = task.getTaskType();
-        switch (useCase){
-            case FETCH_TWEETS_FROM_TWITTER_SEARCH:
-                this.updatedByFetchTweetsFromTwitterSearch = true;
-                break;
-            case UPDATE_TWEETS:
-                this.updatedByUpdateTweets = true;
-                break;
-            case UPDATE_USER_PROFILES:
-                this.updatedByUpdateUserProfiles = true;
-                break;
-            case UPDATE_USER_PROFILES_FROM_MENTIONS:
-                this.updatedByUpdateUserProfilesFromMentions = true;
-                break;
-            case FETCH_USERS_FROM_DEFINED_USER_LIST:
-                this.updatedByFetchUsersFromDefinedUserList = true;
-                break;
-            case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                this.controllerAddUserForScreenName = true;
-                break;
-            case CONTROLLER_GET_TESTDATA_TWEETS:
-                this.controllerGetTestdataForTweets = true;
-                break;
-            case CONTROLLER_GET_TESTDATA_USER:
-                this.controllerGetTestdataForUsers = true;
-                break;
-                default: break;
+        if(task!=null) {
+            TaskType useCase = task.getTaskType();
+            switch (useCase) {
+                case FETCH_TWEETS_FROM_TWITTER_SEARCH:
+                    this.updatedByFetchTweetsFromTwitterSearch = true;
+                    break;
+                case UPDATE_TWEETS:
+                    this.updatedByUpdateTweets = true;
+                    break;
+                case UPDATE_USER_PROFILES:
+                    this.updatedByUpdateUserProfiles = true;
+                    break;
+                case UPDATE_USER_PROFILES_FROM_MENTIONS:
+                    this.updatedByUpdateUserProfilesFromMentions = true;
+                    break;
+                case FETCH_USERS_FROM_DEFINED_USER_LIST:
+                    this.updatedByFetchUsersFromDefinedUserList = true;
+                    break;
+                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
+                    this.controllerAddUserForScreenName = true;
+                    break;
+                case CONTROLLER_GET_TESTDATA_TWEETS:
+                    this.controllerGetTestdataForTweets = true;
+                    break;
+                case CONTROLLER_GET_TESTDATA_USER:
+                    this.controllerGetTestdataForUsers = true;
+                    break;
+                default:
+                    break;
+            }
         }
         return this;
     }
 
+/*
+    public void setTaskInfoFrom(TaskInfo taskInfoFrom) {
+
+        this.setUpdatedByFetchTweetsFromTwitterSearch(taskInfoFrom.getUpdatedByFetchTweetsFromTwitterSearch());
+        this.setUpdatedByUpdateTweets(taskInfoFrom.getUpdatedByUpdateTweets());
+        this.setUpdatedByUpdateUserProfiles(taskInfoFrom.getUpdatedByUpdateUserProfiles());
+        this.setUpdatedByUpdateUserProfilesFromMentions(taskInfoFrom.getUpdatedByUpdateUserProfilesFromMentions());
+        this.setUpdatedByFetchUsersFromDefinedUserList(taskInfoFrom.getUpdatedByFetchUsersFromDefinedUserList());
+
+        this.setControllerAddUserForScreenName(taskInfoFrom.getControllerAddUserForScreenName());
+        this.setControllerGetTestdataForTweets(taskInfoFrom.getControllerGetTestdataForTweets());
+        this.setControllerGetTestdataForUsers(taskInfoFrom.getControllerGetTestdataForUsers());
+    }
+    */
 }

@@ -10,7 +10,6 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.persist.*;
 

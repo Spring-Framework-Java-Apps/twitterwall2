@@ -24,12 +24,12 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
     private TaskInfo taskInfo  = new TaskInfo();
 
     @NotNull
-    @JoinColumn(name = "fk_created_by_task")
+    @JoinColumn(name = "fk_created_by_task",nullable = false)
     @ManyToOne(cascade = { REFRESH, DETACH }, fetch = EAGER,optional = false)
     private Task createdBy;
 
-    @JoinColumn(name = "fk_updated_by_task")
-    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER,optional = true)
+    @JoinColumn(name = "fk_updated_by_task",nullable = true)
+    @ManyToOne(cascade = { REFRESH ,DETACH}, fetch = EAGER, optional = true)
     private Task updatedBy;
 
     @Transient
@@ -107,6 +107,7 @@ public abstract class AbstractTwitterObject<T extends DomainObject> implements D
 
     public void setTaskInfo(TaskInfo taskInfo) {
         this.taskInfo = taskInfo;
+        //this.taskInfo.setTaskInfoFrom(taskInfo);
     }
 
     public Task getCreatedBy() {
