@@ -26,7 +26,7 @@ import javax.persistence.*;
 @NamedQueries({
     @NamedQuery(
         name="TickerSymbol.findByUniqueId",
-        query="select t from TickerSymbol t where t.urlr=:url and t.tickerSymbol=:tickerSymbol"
+        query="select t from TickerSymbol t where t.url=:url and t.tickerSymbol=:tickerSymbol"
     )
 })
 @EntityListeners(TickerSymbolListener.class)

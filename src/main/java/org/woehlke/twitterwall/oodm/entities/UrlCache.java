@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(
         name="UrlCache.findByUniqueId",
-        query="select t from UrlCache t where t.urlr=:url"
+        query="select t from UrlCache t where t.url=:url"
     )
 })
 @EntityListeners(UrlCacheListener.class)
@@ -47,7 +47,7 @@ public class UrlCache extends AbstractTwitterObject<UrlCache> implements DomainO
 
     @URL
     @NotEmpty
-    @Column(nullable = false,length=4096)
+    @Column(name="url",nullable = false,length=4096)
     private String url;
 
     public UrlCache(Task createdBy, Task updatedBy, String expanded, String url) {

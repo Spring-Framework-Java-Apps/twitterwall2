@@ -21,7 +21,7 @@ public class TaskHistoryRepositoryImpl implements TaskHistoryRepositoryCustom {
     public TaskHistory findByUniqueId(TaskHistory domainObject) {
         String name="TaskHistory.findByUniqueId";
         TypedQuery<TaskHistory> query = entityManager.createNamedQuery(name,TaskHistory.class);
-        query.setParameter("taskType",domainObject.getIdTask());
+        query.setParameter("idTask",domainObject.getIdTask());
         query.setParameter("timeStarted",domainObject.getTimeEvent());
         TaskHistory result = query.getSingleResult();
         return result;

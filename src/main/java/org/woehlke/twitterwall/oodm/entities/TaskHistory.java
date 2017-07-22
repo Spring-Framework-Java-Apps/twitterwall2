@@ -27,7 +27,7 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(
         name="TaskHistory.findByUniqueId",
-        query="select t from TaskHistory t join Task task where t.task.id=:taskId and t.timeEvent=:timeEvent"
+        query="select t from TaskHistory t where t.idTask=:idTask and t.timeEvent=:timeEvent"
     )
 })
 @EntityListeners(TaskHistoryListener.class)
