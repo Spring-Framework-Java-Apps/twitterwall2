@@ -1,13 +1,11 @@
 package org.woehlke.twitterwall.oodm.repositories.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Url;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-@Repository
 public class UrlRepositoryImpl implements UrlRepositoryCustom {
 
     private final EntityManager entityManager;

@@ -1,13 +1,11 @@
 package org.woehlke.twitterwall.oodm.repositories.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-@Repository
 public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
 
     private final EntityManager entityManager;

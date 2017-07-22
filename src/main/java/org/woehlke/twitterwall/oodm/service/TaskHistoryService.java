@@ -9,7 +9,7 @@ import org.woehlke.twitterwall.oodm.service.common.DomainObjectMinimalService;
 /**
  * Created by tw on 11.07.17.
  */
-public interface TaskHistoryService  extends DomainObjectMinimalService<TaskHistory> {
+public interface TaskHistoryService extends DomainObjectMinimalService<TaskHistory> {
 
     TaskHistory store(TaskHistory domainObject);
 
