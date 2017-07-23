@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint;
+package org.woehlke.twitterwall.scheduled.mq.endoint;
 
 import org.woehlke.twitterwall.oodm.entities.User;
 

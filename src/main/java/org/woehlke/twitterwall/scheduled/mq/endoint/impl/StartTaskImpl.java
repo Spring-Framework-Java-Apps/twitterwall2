@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.core.MessagingTemplate;
@@ -11,8 +11,8 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.schedulled.mq.endoint.StartTask;
-import org.woehlke.twitterwall.schedulled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 
 @Component
 public class StartTaskImpl implements StartTask {

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -7,8 +7,8 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
-import org.woehlke.twitterwall.schedulled.mq.endoint.UserPersistor;
-import org.woehlke.twitterwall.schedulled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.endoint.UserPersistor;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component("mqUserPersistorApi")
 public class UserPersistorImpl implements UserPersistor {

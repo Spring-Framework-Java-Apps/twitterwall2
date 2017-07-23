@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.schedulled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 
 
 /**

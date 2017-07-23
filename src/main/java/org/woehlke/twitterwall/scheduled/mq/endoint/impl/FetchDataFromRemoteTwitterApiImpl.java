@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,9 @@ import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.schedulled.mq.endoint.FetchDataFromRemoteTwitterApi;
-import org.woehlke.twitterwall.schedulled.mq.msg.TwitterProfileMessage;
-import org.woehlke.twitterwall.schedulled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.endoint.FetchDataFromRemoteTwitterApi;
+import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 
 @Component("mqFetchDataFromRemoteTwitterApi")
 public class FetchDataFromRemoteTwitterApiImpl implements FetchDataFromRemoteTwitterApi {

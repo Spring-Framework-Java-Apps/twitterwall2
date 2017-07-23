@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +7,8 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.schedulled.mq.endoint.FetchDataFromDatabase;
-import org.woehlke.twitterwall.schedulled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.endoint.FetchDataFromDatabase;
+import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 
 @Component("mqFetchDataFromDatabase")
 public class FetchDataFromDatabaseImpl implements FetchDataFromDatabase {

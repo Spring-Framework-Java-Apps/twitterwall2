@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.endoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
@@ -8,9 +8,9 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
-import org.woehlke.twitterwall.schedulled.mq.endoint.UserTransformator;
-import org.woehlke.twitterwall.schedulled.mq.msg.TwitterProfileMessage;
-import org.woehlke.twitterwall.schedulled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.endoint.UserTransformator;
+import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component("mqUserTransformator")
 public class UserTransformatorImpl implements UserTransformator {

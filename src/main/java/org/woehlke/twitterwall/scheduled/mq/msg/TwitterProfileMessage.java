@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.schedulled.mq.msg;
+package org.woehlke.twitterwall.scheduled.mq.msg;
 
 import org.springframework.social.twitter.api.TwitterProfile;
 
