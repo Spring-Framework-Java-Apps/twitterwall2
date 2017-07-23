@@ -114,9 +114,18 @@
                                method="fetchUsersFromDefinedUserList" />
     </int:chain>
 
-    <int:chain input-channel="startFetchTestDataForUserChannels">
-        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                               method="createTestDataForUser" />
+    <int:chain input-channel="startFetchTestDataForUserChannel">
+        <int:splitter id="splitter"
+                      ref="mqCreateTestDataForUsers"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqUserTransformator"
+                               method="transformUser" />
+        <int:service-activator ref="mqUserPersistor"
+                               method="persistUser" />
+        <int:aggregator message-store="store"
+                        release-strategy="mqCreateTestDataForUsersReleaseStrategy" />
+        <int:service-activator ref="mqUserFinisher"
+                               method="finish" />
     </int:chain>
 
 
@@ -135,7 +144,7 @@
     </int:chain>
 
     <int:chain input-channel="startFetchImprintUserChannel">
-        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+        <int:service-activator ref="mqCreateImprintUser"
                                method="createImprintUser" />
         <int:service-activator ref="mqUserTransformator"
                                method="transformUser" />

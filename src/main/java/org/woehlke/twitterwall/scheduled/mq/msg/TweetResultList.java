@@ -2,9 +2,10 @@ package org.woehlke.twitterwall.scheduled.mq.msg;
 
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TweetResultList {
+public class TweetResultList implements Serializable {
 
     private final long taskId;
     private final List<Tweet> tweetList;

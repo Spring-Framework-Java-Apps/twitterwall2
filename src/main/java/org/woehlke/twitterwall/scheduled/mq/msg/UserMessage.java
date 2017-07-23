@@ -6,12 +6,20 @@ import java.io.Serializable;
 
 public class UserMessage implements Serializable {
 
+    private final long taskId;
     private final TwitterProfileMessage twitterProfileMessage;
     private final User user;
+
+    public UserMessage(User user,long taskId){
+        this.twitterProfileMessage = null;
+        this.user = user;
+        this.taskId = taskId;
+    }
 
     public UserMessage(TwitterProfileMessage twitterProfileMessage, User user) {
         this.twitterProfileMessage = twitterProfileMessage;
         this.user = user;
+        this.taskId = twitterProfileMessage.getTaskMessage().taskId;
     }
 
     public TwitterProfileMessage getTwitterProfileMessage() {
@@ -22,6 +30,10 @@ public class UserMessage implements Serializable {
         return user;
     }
 
+    public long getTaskId() {
+        return taskId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +41,7 @@ public class UserMessage implements Serializable {
 
         UserMessage that = (UserMessage) o;
 
+        if (getTaskId() != that.getTaskId()) return false;
         if (getTwitterProfileMessage() != null ? !getTwitterProfileMessage().equals(that.getTwitterProfileMessage()) : that.getTwitterProfileMessage() != null)
             return false;
         return getUser() != null ? getUser().equals(that.getUser()) : that.getUser() == null;
@@ -36,7 +49,8 @@ public class UserMessage implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = getTwitterProfileMessage() != null ? getTwitterProfileMessage().hashCode() : 0;
+        int result = (int) (getTaskId() ^ (getTaskId() >>> 32));
+        result = 31 * result + (getTwitterProfileMessage() != null ? getTwitterProfileMessage().hashCode() : 0);
         result = 31 * result + (getUser() != null ? getUser().hashCode() : 0);
         return result;
     }
@@ -44,7 +58,8 @@ public class UserMessage implements Serializable {
     @Override
     public String toString() {
         return "UserMessage{" +
-            "twitterProfileMessage=" + twitterProfileMessage +
+            "taskId=" + taskId +
+            ", twitterProfileMessage=" + twitterProfileMessage +
             ", user=" + user +
             '}';
     }

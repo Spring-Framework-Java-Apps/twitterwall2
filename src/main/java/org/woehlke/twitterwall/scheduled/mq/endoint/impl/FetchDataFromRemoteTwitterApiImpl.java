@@ -3,16 +3,13 @@ package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.FetchDataFromRemoteTwitterApi;
-import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 
 @Component("mqFetchDataFromRemoteTwitterApi")
@@ -62,19 +59,6 @@ public class FetchDataFromRemoteTwitterApiImpl implements FetchDataFromRemoteTwi
     public void createTestDataForUser(Message<TaskMessage> mqMessage) {
         String logMsg = "createTestDataForUser: ";
         this.react(logMsg, mqMessage);
-    }
-
-    @Override
-    public Message<TwitterProfileMessage> createImprintUser(Message<TaskMessage> mqMessageIn) {
-        String logMsg = "createImprintUser: ";
-        TaskMessage receivedMessage = mqMessageIn.getPayload();
-        String screenName = twitterwallFrontendProperties.getImprintScreenName();
-        TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-        TwitterProfileMessage outMsg = new TwitterProfileMessage(receivedMessage,screenName,twitterProfile);
-        Message<TwitterProfileMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
-            .setHeader("twitter_profile_id", twitterProfile.getId())
-            .build();
-        return mqMessageOut;
     }
 
 }

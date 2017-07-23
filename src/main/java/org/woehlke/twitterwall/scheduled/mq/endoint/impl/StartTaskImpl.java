@@ -15,6 +15,8 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserResultList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,9 +123,14 @@ public class StartTaskImpl implements StartTask {
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
-        if( o instanceof User){
-            return (User) o;
-        }    else {
+        if( o instanceof UserMessage){
+            UserMessage msg = (UserMessage) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            taskService.done(task);
+            return msg.getUser();
+        } else {
+            taskService.error(task,"Wrong type of returnedMessage");
             return null;
         }
     }
@@ -131,8 +138,26 @@ public class StartTaskImpl implements StartTask {
     @Override
     public List<User> createTestDataForUser() {
         TaskType taskType = TaskType.CONTROLLER_GET_TESTDATA_USER;
-        messageSender(taskType);
-        return new ArrayList<>();
+        Task task = taskService.create("Start via MQ", taskType);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
+            .setHeader("task_id", task.getId())
+            .setHeader("task_uid", task.getUniqueId())
+            .setHeader("task_type", task.getTaskType())
+            .build();
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        if( o instanceof UserResultList){
+            UserResultList result = (UserResultList) o;
+            long taskId =result.getTaskId();
+            task = taskService.findById(taskId);
+            taskService.done(task);
+            return result.getUserList();
+        } else {
+            taskService.error(task,"Wrong type of returnedMessage");
+            return new ArrayList<>();
+        }
     }
 
     @Override

@@ -24,12 +24,12 @@ public class UserPersistorImpl implements UserPersistor {
     }
 
     @Override
-    public User persistUser(Message<UserMessage> incomingUserMessage) {
+    public UserMessage persistUser(Message<UserMessage> incomingUserMessage) {
         UserMessage receivedMessage = incomingUserMessage.getPayload();
         long id = receivedMessage.getTwitterProfileMessage().getTaskMessage().getTaskId();
         Task task = taskService.findById(id);
         User user = storeUserProcess.storeUserProcess(receivedMessage.getUser(),task);
-        taskService.done(task);
-        return user;
+        UserMessage userMessage = new UserMessage(user,id);
+        return userMessage;
     }
 }

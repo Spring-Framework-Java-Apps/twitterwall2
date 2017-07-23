@@ -10,6 +10,12 @@ public class TwitterProfileMessage implements Serializable {
     private final String screenName;
     private final TwitterProfile twitterProfile;
 
+    public TwitterProfileMessage(TaskMessage taskMessage, TwitterProfile twitterProfile){
+        this.taskMessage = taskMessage;
+        this.screenName = twitterProfile.getScreenName();
+        this.twitterProfile = twitterProfile;
+    }
+
     public TwitterProfileMessage(TaskMessage taskMessage, String screenName, TwitterProfile twitterProfile) {
         this.taskMessage = taskMessage;
         this.screenName = screenName;

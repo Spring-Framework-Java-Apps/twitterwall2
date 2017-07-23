@@ -6,5 +6,5 @@ import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 public interface UserPersistor {
 
-    User persistUser(Message<UserMessage> incomingUserMessage);
+    UserMessage persistUser(Message<UserMessage> incomingUserMessage);
 }

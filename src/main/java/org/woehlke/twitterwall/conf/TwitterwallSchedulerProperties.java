@@ -126,6 +126,8 @@ public class TwitterwallSchedulerProperties {
 
         private List<Long> idTwitterToFetchForUserControllerTest = new ArrayList<Long>();
 
+        private List<String> screenNamesToFetchForUserControllerTest = new ArrayList<String>();
+
         public List<Long> getIdTwitterToFetchForTweetTest() {
             return idTwitterToFetchForTweetTest;
         }
@@ -140,6 +142,14 @@ public class TwitterwallSchedulerProperties {
 
         public void setIdTwitterToFetchForUserControllerTest(List<Long> idTwitterToFetchForUserControllerTest) {
             this.idTwitterToFetchForUserControllerTest = idTwitterToFetchForUserControllerTest;
+        }
+
+        public List<String> getScreenNamesToFetchForUserControllerTest() {
+            return screenNamesToFetchForUserControllerTest;
+        }
+
+        public void setScreenNamesToFetchForUserControllerTest(List<String> screenNamesToFetchForUserControllerTest) {
+            this.screenNamesToFetchForUserControllerTest = screenNamesToFetchForUserControllerTest;
         }
     }
 

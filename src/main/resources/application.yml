@@ -120,12 +120,32 @@ twitterwall:
         - 876510758632386563
         - 876496934676180992
       idTwitterToFetchForUserControllerTest:
-        - 876433563561938944 #t3c_berlin
-        - 876456051016597504 #Codemonkey1988
-        - 876420491329892354 #Walter_kran
-        - 876425220147564544 #tobenschmidt
-        - 876819177746649088 #Oliver1973
-        - 876514968933478400 #wowa_TYPO3
-        - 876441863191920641 #dirscherl17
-        - 876441015523192832 #Markus306
-        - 876440419416109056 #mattLefaux
+        #t3c_berlin
+        - 876433563561938944
+        #Codemonkey1988
+        - 876456051016597504
+        #Walter_kran
+        - 876420491329892354
+        #tobenschmidt
+        - 876425220147564544
+        #Oliver1973
+        - 876819177746649088
+        #wowa_TYPO3
+        - 876514968933478400
+        #dirscherl17
+        - 876441863191920641
+        #Markus306
+        - 876441015523192832
+        #mattLefaux
+        - 876440419416109056
+      screenNamesToFetchForUserControllerTest:
+        - t3c_berlin
+        - Codemonkey1988
+        - Walter_kran
+        - tobenschmidt
+        - Oliver1973
+        - wowa_TYPO3
+        - dirscherl17
+        - Markus306
+        - mattLefaux
+
