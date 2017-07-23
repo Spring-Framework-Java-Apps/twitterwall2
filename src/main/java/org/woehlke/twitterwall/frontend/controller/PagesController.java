@@ -7,12 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 
 
 /**
@@ -35,8 +34,9 @@ public class PagesController {
         String title = "Impressum";
         String subtitle = twitterwallFrontendProperties.getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        String screenName = twitterwallFrontendProperties.getImprintScreenName();
-        User user = createTestData.addUserForScreenName(screenName);
+        User user = startTask.createImprintUser();
+        //String screenName = twitterwallFrontendProperties.getImprintScreenName();
+        //User user = createTestData.addUserForScreenName(screenName);
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
         return "imprint";
@@ -46,15 +46,18 @@ public class PagesController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
+    //private final TwitterProperties twitterProperties;
 
-    private final CreateTestData createTestData;
+    //private final CreateTestData createTestData;
+
+    private final StartTask startTask;
 
     @Autowired
-    public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CreateTestData createTestData, ControllerHelper controllerHelper) {
+    public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, StartTask startTask, ControllerHelper controllerHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
-        this.createTestData = createTestData;
+        //this.twitterProperties = twitterProperties;
+        //this.createTestData = createTestData;
+        this.startTask = startTask;
         this.controllerHelper = controllerHelper;
     }
 

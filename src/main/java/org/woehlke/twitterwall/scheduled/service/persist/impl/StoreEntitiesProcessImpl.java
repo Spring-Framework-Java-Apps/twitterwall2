@@ -57,12 +57,12 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             if(mention.isValid()){
                 Mention mentionPers =mentionService.store(mention, task);
                 mentions.add(mentionPers);
-            } else if(mention.isRawMentionFromUserDescription()){
+            }/* else if(mention.isRawMentionFromUserDescription()){
                 Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
                 if((mentionPers != null) && mentionPers.isValid()){
                     mentions.add(mentionPers);
                 }
-            }
+            }*/
         }
         for(Media medium:entities.getMedia()){
             if(medium.isValid()) {

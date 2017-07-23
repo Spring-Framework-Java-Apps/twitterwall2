@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.StoreTwitterProfileForProxyMentionForUser;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.impl.StoreEntitiesProcessImpl;
 import org.woehlke.twitterwall.scheduled.service.persist.impl.StoreUserProcessImpl;
@@ -32,6 +34,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
 
     @Override
     public User storeTwitterProfileForProxyMentionForUser(Mention mention, Task task) {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "storeTwitterProfileForProxyMentionForUser:";
         String screenName = mention.getScreenName();
         User foundUser = null;
@@ -43,7 +46,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
             try {
                 twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
             } catch (ApiException twitterApiException) {
-                taskService.error(task,twitterApiException, msg);
+                taskService.error(task,twitterApiException, msg,countedEntities);
                 log.error(msg+twitterApiException.getMessage());
             }
             if(twitterProfile!=null){
@@ -145,7 +148,9 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
 
     private final CreatePersistentUrl createPersistentUrl;
 
-    public StoreTwitterProfileForProxyMentionForUserImpl(UserService userService, TwitterApiService twitterApiService, TaskService taskService, UserTransformService userTransformService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+    private final CountedEntitiesService countedEntitiesService;
+
+    public StoreTwitterProfileForProxyMentionForUserImpl(UserService userService, TwitterApiService twitterApiService, TaskService taskService, UserTransformService userTransformService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CountedEntitiesService countedEntitiesService) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
@@ -156,5 +161,6 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         this.mediaService = mediaService;
         this.tickerSymbolService = tickerSymbolService;
         this.createPersistentUrl = createPersistentUrl;
+        this.countedEntitiesService = countedEntitiesService;
     }
 }

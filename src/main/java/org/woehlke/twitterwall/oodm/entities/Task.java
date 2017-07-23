@@ -75,61 +75,6 @@ public class Task implements DomainObjectMinimal<Task> {
     @Column(name="time_finished")
     private Date timeFinished = null;
 
-    @NotNull
-    @OneToMany(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER,orphanRemoval=true, mappedBy="task")
-    private List<TaskHistory> history = new ArrayList<>();
-
-    @NotNull
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "countUser", column = @Column(name = "start_count_user",nullable=false)),
-        @AttributeOverride(name = "countTweets", column = @Column(name = "start_count_tweets",nullable=false)),
-        @AttributeOverride(name = "countHashTags", column = @Column(name = "start_count_hashtags",nullable=false)),
-        @AttributeOverride(name = "countMedia", column = @Column(name = "start_count_media",nullable=false)),
-        @AttributeOverride(name = "countMention", column = @Column(name = "start_count_mention",nullable=false)),
-        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "start_count_tickersymbol",nullable=false)),
-        @AttributeOverride(name = "countUrl", column = @Column(name = "start_count_url",nullable=false)),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "start_count_urlcache",nullable=false)),
-        @AttributeOverride(name = "countTask", column = @Column(name = "start_count_task",nullable=false)),
-        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "start_count_task_history",nullable=false)),
-        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "start_count_tweet2hashtag",nullable=false)),
-        @AttributeOverride(name = "tweet2media", column = @Column(name = "start_count_tweet2media",nullable=false)),
-        @AttributeOverride(name = "tweet2mention", column = @Column(name = "start_count_tweet2mention",nullable=false)),
-        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "start_count_tweet2tickersymbol",nullable=false)),
-        @AttributeOverride(name = "tweet2url", column = @Column(name = "start_count_tweet2url",nullable=false)),
-        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "start_count_userprofile2hashtag",nullable=false)),
-        @AttributeOverride(name = "userprofile2media", column = @Column(name = "start_count_userprofile2media",nullable=false)),
-        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "start_count_userprofile2mention",nullable=false)),
-        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "start_count_userprofile2tickersymbol",nullable=false)),
-        @AttributeOverride(name = "userprofile2url", column = @Column(name = "start_count_userprofile2url",nullable=false))
-    })
-    private CountedEntities countedEntitiesAtStart;
-
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "countUser", column = @Column(name = "done_count_user")),
-        @AttributeOverride(name = "countTweets", column = @Column(name = "done_count_tweets")),
-        @AttributeOverride(name = "countHashTags", column = @Column(name = "done_count_hashtags")),
-        @AttributeOverride(name = "countMedia", column = @Column(name = "done_count_media")),
-        @AttributeOverride(name = "countMention", column = @Column(name = "done_count_mention")),
-        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "done_count_tickersymbol")),
-        @AttributeOverride(name = "countUrl", column = @Column(name = "done_count_url")),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "done_count_urlcache")),
-        @AttributeOverride(name = "countTask", column = @Column(name = "done_count_task")),
-        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "done_count_task_history")),
-        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "done_count_tweet2hashtag")),
-        @AttributeOverride(name = "tweet2media", column = @Column(name = "done_count_tweet2media")),
-        @AttributeOverride(name = "tweet2mention", column = @Column(name = "done_count_tweet2mention")),
-        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "done_count_tweet2tickersymbol")),
-        @AttributeOverride(name = "tweet2url", column = @Column(name = "done_count_tweet2url")),
-        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "done_count_userprofile2hashtag")),
-        @AttributeOverride(name = "userprofile2media", column = @Column(name = "done_count_userprofile2media")),
-        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "done_count_userprofile2mention")),
-        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "done_count_userprofile2tickersymbol")),
-        @AttributeOverride(name = "userprofile2url", column = @Column(name = "done_count_userprofile2url"))
-    })
-    private CountedEntities countedEntitiesAtFinish;
-
     private Task() {
     }
 
@@ -138,16 +83,13 @@ public class Task implements DomainObjectMinimal<Task> {
         this.description = description;
     }
 
-    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished, List<TaskHistory> history, CountedEntities countedEntitiesAtStart, CountedEntities countedEntitiesAtFinish) {
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
         this.description = description;
         this.taskType = taskType;
         this.taskStatus = taskStatus;
         this.timeStarted = timeStarted;
         this.timeLastUpdate = timeLastUpdate;
         this.timeFinished = timeFinished;
-        this.history = history;
-        this.countedEntitiesAtStart = countedEntitiesAtStart;
-        this.countedEntitiesAtFinish = countedEntitiesAtFinish;
     }
 
     @Override
@@ -189,22 +131,6 @@ public class Task implements DomainObjectMinimal<Task> {
         this.timeFinished = timeFinished;
     }
 
-    public CountedEntities getCountedEntitiesAtStart() {
-        return countedEntitiesAtStart;
-    }
-
-    public void setCountedEntitiesAtStart(CountedEntities countedEntitiesAtStart) {
-        this.countedEntitiesAtStart = countedEntitiesAtStart;
-    }
-
-    public CountedEntities getCountedEntitiesAtFinish() {
-        return countedEntitiesAtFinish;
-    }
-
-    public void setCountedEntitiesAtFinish(CountedEntities countedEntitiesAtFinish) {
-        this.countedEntitiesAtFinish = countedEntitiesAtFinish;
-    }
-
     public TaskStatus getTaskStatus() {
         return taskStatus;
     }
@@ -219,18 +145,6 @@ public class Task implements DomainObjectMinimal<Task> {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<TaskHistory> getHistory() {
-        return history;
-    }
-
-    public void setHistory(List<TaskHistory> history) {
-        this.history = history;
-    }
-
-    public void addHistory(TaskHistory history) {
-        this.history.add(history);
     }
 
     public Date getTimeLastUpdate() {
@@ -248,14 +162,6 @@ public class Task implements DomainObjectMinimal<Task> {
 
     @Override
     public String toString() {
-        String countedEntitiesAtFinishStr = "null";
-        if(countedEntitiesAtFinish != null){
-            countedEntitiesAtFinishStr = countedEntitiesAtFinish.toString();
-        }
-        String countedEntitiesAtStartStr = "null";
-        if(countedEntitiesAtStart != null){
-            countedEntitiesAtStartStr = countedEntitiesAtStart.toString();
-        }
         return "Task{" +
             "id=" + id +
             ", taskType=" + taskType +
@@ -263,8 +169,6 @@ public class Task implements DomainObjectMinimal<Task> {
             ", timeStarted=" + timeStarted +
             ", timeLastUpdate=" + timeLastUpdate +
             ", timeFinished=" + timeFinished +
-            ", countedEntitiesAtStart=" + countedEntitiesAtStartStr +
-            ", countedEntitiesAtFinish=" + countedEntitiesAtFinishStr +
             '}';
     }
 

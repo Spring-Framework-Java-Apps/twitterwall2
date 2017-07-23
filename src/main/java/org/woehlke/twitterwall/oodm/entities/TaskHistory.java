@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
@@ -66,16 +67,44 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     @JoinColumn(name="task_id")
     private Task task;
 
+    //@NotNull
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "countUser", column = @Column(name = "count_user",nullable=false)),
+        @AttributeOverride(name = "countTweets", column = @Column(name = "count_tweets",nullable=false)),
+        @AttributeOverride(name = "countHashTags", column = @Column(name = "count_hashtags",nullable=false)),
+        @AttributeOverride(name = "countMedia", column = @Column(name = "count_media",nullable=false)),
+        @AttributeOverride(name = "countMention", column = @Column(name = "count_mention",nullable=false)),
+        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "count_tickersymbol",nullable=false)),
+        @AttributeOverride(name = "countUrl", column = @Column(name = "count_url",nullable=false)),
+        @AttributeOverride(name = "countUrlCache", column = @Column(name = "count_urlcache",nullable=false)),
+        @AttributeOverride(name = "countTask", column = @Column(name = "count_task",nullable=false)),
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "count_task_history",nullable=false)),
+        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "count_tweet2hashtag",nullable=false)),
+        @AttributeOverride(name = "tweet2media", column = @Column(name = "count_tweet2media",nullable=false)),
+        @AttributeOverride(name = "tweet2mention", column = @Column(name = "count_tweet2mention",nullable=false)),
+        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "count_tweet2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "tweet2url", column = @Column(name = "count_tweet2url",nullable=false)),
+        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "count_userprofile2hashtag",nullable=false)),
+        @AttributeOverride(name = "userprofile2media", column = @Column(name = "count_userprofile2media",nullable=false)),
+        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "count_userprofile2mention",nullable=false)),
+        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "count_userprofile2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "count_userprofile2url",nullable=false))
+    })
+    private CountedEntities countedEntities = new CountedEntities();
+
     private TaskHistory() {
     }
 
-    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow) {
+    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, CountedEntities countedEntities) {
+        this.countedEntities = countedEntities;
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
     }
 
-    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task) {
+    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task, CountedEntities countedEntities) {
+        this.countedEntities = countedEntities;
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
@@ -142,6 +171,14 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     public void setIdTask(Long idTask) {
         this.idTask = idTask;
+    }
+
+    public CountedEntities getCountedEntities() {
+        return countedEntities;
+    }
+
+    public void setCountedEntities(CountedEntities countedEntities) {
+        this.countedEntities = countedEntities;
     }
 
     @Override

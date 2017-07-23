@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
@@ -44,6 +46,10 @@ public class UserServiceTestImpl implements UserServiceTest {
     @Autowired
     private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
+
+    @Autowired
+    private CountedEntitiesService countedEntitiesService;
+
     @Override
     public User createImprintUser(){
         return createUser(twitterwallFrontendProperties.getImprintScreenName());
@@ -51,8 +57,9 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     @Override
     public User createUser(String screenName) {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);
@@ -82,7 +89,8 @@ public class UserServiceTestImpl implements UserServiceTest {
                 return user;
             }
         }  finally {
-            taskService.done(task);
+            countedEntities = countedEntitiesService.countAll();
+            taskService.done(task,countedEntities);
             log.info("... finally done ...");
             log.info("-----------------------------------------");
         }

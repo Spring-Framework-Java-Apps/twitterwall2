@@ -16,11 +16,13 @@ import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
@@ -63,8 +65,9 @@ public class CreateTestDataImpl implements CreateTestData {
 
 
     public org.springframework.data.domain.Page<Tweet> getTestDataTweets(){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "getTestDataTweets: ";
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS,countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -106,8 +109,9 @@ public class CreateTestDataImpl implements CreateTestData {
 
 
     public org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.User> getTestDataUser(){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "getTestDataUser: ";
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
@@ -129,7 +133,7 @@ public class CreateTestDataImpl implements CreateTestData {
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         }
-        taskService.done(task);
+        taskService.done(task,countedEntities);
         //model.addAttribute("user", user);
 
         int numberOfUser = user.size();
@@ -145,9 +149,10 @@ public class CreateTestDataImpl implements CreateTestData {
     }
 
     public User addUserForScreenName(String screenName) {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         User userReturnValue = null;
         String msg="addUserForScreenName "+screenName+": ";
-        Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_ADD_USER_FOR_SCREEN_NAME,countedEntities);
         log.info("--------------------------------------------------------------------");
         log.info("screenName = "+ screenName);
         User user = userService.findByScreenName(screenName);
@@ -158,10 +163,10 @@ public class CreateTestDataImpl implements CreateTestData {
             //log.info("model.addAttribute user = "+user.toString());
         } else {
             String msg2 = "EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName;
-            task = taskService.warn(task,msg2);
+            task = taskService.warn(task,msg2,countedEntities);
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
             String msg3 = "twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString();
-            task = taskService.event(task,msg3);
+            task = taskService.event(task,msg3,countedEntities);
             log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
             User user2 = storeUserProfile.storeUserProfile(twitterProfile,task);
             if(user2!=null){
@@ -177,20 +182,21 @@ public class CreateTestDataImpl implements CreateTestData {
                 userReturnValue = user3;
             }
         }
-        taskService.done(task);
+        taskService.done(task,countedEntities);
         log.info("... finally done ...");
         log.info("--------------------------------------------------------------------");
         return userReturnValue;
     }
 
     @Autowired
-    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TwitterwallSchedulerProperties twitterwallSchedulerProperties) {
+    public CreateTestDataImpl(TwitterApiService twitterApiService, TaskService taskService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TwitterwallSchedulerProperties twitterwallSchedulerProperties, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
     private final TwitterApiService twitterApiService;
@@ -204,6 +210,8 @@ public class CreateTestDataImpl implements CreateTestData {
     private final UserService userService;
 
     private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+
+    private final CountedEntitiesService countedEntitiesService;
 
     private static final Logger log = LoggerFactory.getLogger(CreateTestDataImpl.class);
 

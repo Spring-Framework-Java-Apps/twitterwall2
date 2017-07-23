@@ -14,8 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,6 +43,9 @@ public class TaskControllerTest {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private CountedEntitiesService countedEntitiesService;
 
     @Commit
     @Test
@@ -72,8 +77,9 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void getTaskByIdTest() throws Exception {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
-        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH);
+        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
