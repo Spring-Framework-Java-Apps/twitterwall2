@@ -15,9 +15,12 @@
         </property>
     </bean>
 
-    <bean id="releaserSequenceSizeReleaseStrategy" class="org.springframework.integration.aggregator.SequenceSizeReleaseStrategy"/>
+    <bean id="releaserSequenceSizeReleaseStrategy"
+          class="org.springframework.integration.aggregator.SequenceSizeReleaseStrategy"/>
 
-    <bean id="releaserSimpleSequenceSizeReleaseStrategy" class="org.springframework.integration.aggregator.SimpleSequenceSizeReleaseStrategy"/>
+    <bean id="releaserSimpleSequenceSizeReleaseStrategy"
+          class="org.springframework.integration.aggregator.SimpleSequenceSizeReleaseStrategy"/>
+
     <!-- CHANNEL -->
 
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
