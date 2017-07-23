@@ -13,6 +13,7 @@ import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
+import org.woehlke.twitterwall.schedulled.mq.endoint.StartTask;
 
 
 /**
@@ -35,6 +36,7 @@ public class PagesController {
         String title = "Impressum";
         String subtitle = twitterwallFrontendProperties.getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        startTask.createImprintUser();
         String screenName = twitterwallFrontendProperties.getImprintScreenName();
         User user = createTestData.addUserForScreenName(screenName);
         model.addAttribute("user", user);
@@ -50,11 +52,14 @@ public class PagesController {
 
     private final CreateTestData createTestData;
 
+    private final StartTask startTask;
+
     @Autowired
-    public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CreateTestData createTestData, ControllerHelper controllerHelper) {
+    public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CreateTestData createTestData, StartTask startTask, ControllerHelper controllerHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
         this.createTestData = createTestData;
+        this.startTask = startTask;
         this.controllerHelper = controllerHelper;
     }
 
