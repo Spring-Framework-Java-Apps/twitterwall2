@@ -18,6 +18,6 @@ public class CreateTestDataForUsersReleaseStrategy implements ReleaseStrategy {
 
     @Override
     public boolean canRelease(MessageGroup group) {
-        return ! (group.size() < twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest().size());
+        return ! (group.size() < twitterwallSchedulerProperties.getFacade().getScreenNamesToFetchForUserControllerTest().size());
     }
 }

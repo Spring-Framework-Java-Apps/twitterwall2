@@ -150,7 +150,7 @@ public class StartTaskImpl implements StartTask {
         Object o = returnedMessage.getPayload();
         if( o instanceof UserResultList){
             UserResultList result = (UserResultList) o;
-            long taskId =result.getTaskId();
+            long taskId = result.getTaskId();
             task = taskService.findById(taskId);
             taskService.done(task);
             return result.getUserList();

@@ -35,17 +35,17 @@ spring:
     name: @project.name@
   datasource:
     driverClassName: org.postgresql.Driver
-    initialSize: 5
-    max-total: 70
-    maxActive: 60
-    maxIdle: 5
-    minIdle: 2
+    #initialSize: 5
+    #max-total: 70
+    #maxActive: 60
+    #maxIdle: 5
+    #minIdle: 2
     platform: POSTGRESQL
-    removeAbandoned: true
-    tomcat:
-      max-active: 50
-      max-wait: 100000
-      test-on-borrow: true
+    #removeAbandoned: true
+    #tomcat:
+      #max-active: 200
+      #max-wait: 100000
+      #test-on-borrow: true
     url: ${DATABASE_URL}
   devtools:
     livereload:
