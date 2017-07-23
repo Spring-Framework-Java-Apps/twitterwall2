@@ -77,8 +77,6 @@
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="startFetchImprintUserChannel"/>
     </int:router>
 
-
-
     <int:chain input-channel="startUpdateTweetsChannel">
         <int:service-activator ref="mqFetchDataFromDatabase"
                                method="updateTweets" />
