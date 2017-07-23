@@ -26,6 +26,9 @@ management:
   security:
     enabled: false
 spring:
+  activemq:
+    in-memory: true
+    pooled: false
   application:
     admin:
       enabled: false
