@@ -89,6 +89,15 @@ twitterwall:
     pageSize: 12
     menuAppName: ${TWITTERWALL_APP_NAME}
     theme: ${TWITTERWALL_THEME}
+  mq:
+    starttask:
+      time:
+        fetchTweetsFromTwitterSearch: 3600000 # One Hour
+        fetchUsersFromDefinedUserList: 43200000 # 12 Hours
+        updateTweets:  43200000 # 12 Hours
+        updateUserProfiles:  43200000 # 12 Hours
+        updateUserProfilesFromMentions: 3600000 # One Hour
+
   scheduler:
     allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
     allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}

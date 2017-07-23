@@ -57,7 +57,7 @@ public class TaskServiceImpl implements TaskService {
         CountedEntities countedEntities = this.countedEntitiesService.countAll();
         Task task = new Task("start: "+msg,type);
         task.setCountedEntitiesAtStart(countedEntities);
-        TaskHistory event = new TaskHistory("start: "+msg,TaskStatus.READY, TaskStatus.RUNNING);
+        TaskHistory event = new TaskHistory("create: "+msg,TaskStatus.READY, TaskStatus.READY);
         task.setTaskStatus(TaskStatus.RUNNING);
         task.setTimeStarted(new Date());
         task.setTimeLastUpdate(new Date());
@@ -212,5 +212,23 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task findById(long id) {
         return taskRepository.findOne(id);
+    }
+
+    @Override
+    public Task start(Task task) {
+        CountedEntities countedEntities = this.countedEntitiesService.countAll();
+        task.setCountedEntitiesAtFinish(countedEntities);
+        TaskHistory event = new TaskHistory("start",task.getTaskStatus(),TaskStatus.RUNNING);
+        event.setIdTask(task.getId());
+        task.setTaskStatus(TaskStatus.RUNNING);
+        task.setTimeLastUpdate(new Date());
+        event = taskHistoryRepository.save(event);
+        task.addHistory(event);
+        task = taskRepository.save(task);
+        event.setTask(task);
+        task.addHistory(event);
+        event = taskHistoryRepository.save(event);
+        log.debug(task.toString());
+        return task;
     }
 }

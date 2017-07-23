@@ -1,25 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
-       xmlns:int-http="http://www.springframework.org/schema/integration/http"
        xsi:schemaLocation="
     http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/integration
-    http://www.springframework.org/schema/integration/spring-integration.xsd
-    http://www.springframework.org/schema/integration/http
-    http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <!-- CHANNEL -->
-    <int:channel id="requestChannel" />
-    <int:channel id="outputChannel" />
-    <int-http:inbound-gateway request-channel="requestChannel"
-                              reply-channel="outputChannel" supported-methods="GET"
-                              path="/welcome/{name}" payload-expression="#pathVariables.name">
-        <int-http:request-mapping consumes="application/json" produces="application/json" />
-    </int-http:inbound-gateway>
 
-    <int:service-activator ref="welcomeEndpoint"
-                           method="get" input-channel="requestChannel" output-channel="outputChannel" />
+    <int:logging-channel-adapter id="logger" level="DEBUG"/>
+
+    <int:channel id="startTaskChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startUpdateTweetsChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startUpdateUserProfilesChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startUpdateUserProfilesFromMentionsChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startFetchTweetsFromTwitterSearchChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startFetchUsersFromDefinedUserListChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startFetchTestDataForUserChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startFetchTestDataForTweetsChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="startFetchImprintUserChannel" >
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:router input-channel="startTaskChannel" expression="payload.taskType">
+        <int:mapping value="UPDATE_TWEETS" channel="startUpdateTweetsChannel"/>
+        <int:mapping value="UPDATE_USER_PROFILES" channel="startUpdateUserProfilesChannel"/>
+        <int:mapping value="UPDATE_USER_PROFILES_FROM_MENTIONS" channel="startUpdateUserProfilesFromMentionsChannel"/>
+        <int:mapping value="FETCH_TWEETS_FROM_TWITTER_SEARCH" channel="startFetchTweetsFromTwitterSearchChannel"/>
+        <int:mapping value="FETCH_USERS_FROM_DEFINED_USER_LIST" channel="startFetchUsersFromDefinedUserListChannel"/>
+        <int:mapping value="CONTROLLER_GET_TESTDATA_USER" channel="startFetchTestDataForUserChannel"/>
+        <int:mapping value="CONTROLLER_GET_TESTDATA_TWEETS" channel="startFetchTestDataForTweetsChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="startFetchImprintUserChannel"/>
+    </int:router>
+
+    <int:service-activator ref="mqFetchDataFromDatabase"
+                           method="updateTweets" input-channel="startUpdateTweetsChannel"  />
+
+    <int:service-activator ref="mqFetchDataFromDatabase"
+                           method="updateUserProfiles" input-channel="startUpdateUserProfilesChannel"  />
+
+    <int:service-activator ref="mqFetchDataFromDatabase"
+                           method="updateUserProfilesFromMentions" input-channel="startUpdateUserProfilesFromMentionsChannel"  />
+
+
+    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                           method="fetchTweetsFromTwitterSearch" input-channel="startFetchTweetsFromTwitterSearchChannel"  />
+
+    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                           method="fetchUsersFromDefinedUserList" input-channel="startFetchUsersFromDefinedUserListChannel"  />
+
+    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                           method="createTestDataForUser" input-channel="startFetchTestDataForUserChannel" />
+
+    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                           method="createtestDataForTweets" input-channel="startFetchTestDataForTweetsChannel"  />
+
+    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                           method="createImprintUser" input-channel="startFetchImprintUserChannel"  />
 
 </beans>

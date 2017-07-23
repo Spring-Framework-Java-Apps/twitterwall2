@@ -79,7 +79,7 @@ public class ScheduledTasks {
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST = ZWOELF_STUNDEN;
 
-    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
+    //@Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets From TwitterSearch ";
         logEnv(msg);
@@ -115,7 +115,7 @@ public class ScheduledTasks {
         logEnv(msg);
     }
 
-    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
+    //@Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
         String msg = "update Tweets ";
         logEnv(msg);
@@ -151,7 +151,7 @@ public class ScheduledTasks {
         logEnv(msg);
     }
 
-    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
+    //@Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
         logEnv(msg);
@@ -185,7 +185,7 @@ public class ScheduledTasks {
         logEnv(msg);
     }
 
-    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
+    //@Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
         logEnv(msg);
@@ -219,7 +219,7 @@ public class ScheduledTasks {
         logEnv(msg);
     }
 
-    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
+    //@Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
         logEnv(msg);

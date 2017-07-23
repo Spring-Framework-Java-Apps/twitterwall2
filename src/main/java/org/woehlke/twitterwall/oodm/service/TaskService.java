@@ -29,4 +29,5 @@ public interface TaskService extends DomainObjectMinimalService<Task> {
 
     Task findById(long id);
 
+    Task start(Task task);
 }
