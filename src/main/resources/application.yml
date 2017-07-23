@@ -26,9 +26,6 @@ management:
   security:
     enabled: false
 spring:
-  activemq:
-    in-memory: true
-    pooled: false
   application:
     admin:
       enabled: false
@@ -57,7 +54,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
-    show-sql: false
+    show-sql: true
   template:
     cache: false
   thymeleaf:

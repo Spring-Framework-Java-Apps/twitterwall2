@@ -12,12 +12,14 @@ import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForUserList;
 
@@ -35,8 +37,9 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
 
     @Override
     public void fetchUsersFromDefinedUserList() {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "update Tweets: ";
-        Task task = taskService.create(msg, TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST);
+        Task task = taskService.create(msg, TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST,countedEntities);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "START The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
@@ -59,14 +62,15 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
                 String subCounter = counter+" ( "+subLoopId+ "from "+subNumber+" ) ["+allLoop+"] ";
                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(),task);
                 if(userFromMention == null){
-                    taskService.warn(task,msg+subCounter);
+                    taskService.warn(task,msg+subCounter,countedEntities);
                 }
                 log.debug(msg+subCounter+userFromMention.toString());
             }
         }
+        countedEntities = countedEntitiesService.countAll();
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        taskService.event(task,report);
-        taskService.done(task);
+        taskService.event(task,report,countedEntities);
+        taskService.done(task,countedEntities);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
@@ -93,8 +97,10 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
 
     private final TwitterProperties twitterProperties;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public FetchUsersFromDefinedUserListImpl(StoreUserProfileForUserList storeUserProfileForUserList, TwitterApiService twitterApiService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
         this.storeUserProfileForUserList = storeUserProfileForUserList;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
@@ -103,5 +109,6 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 }

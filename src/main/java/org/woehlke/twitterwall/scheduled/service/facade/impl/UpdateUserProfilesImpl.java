@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -23,6 +24,7 @@ import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfiles;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -40,12 +42,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     @Override
     public void updateUserProfiles(){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "update User Profiles From ProfileId: ";
         log.debug(msg+"---------------------------------------");
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
         int allLoop = 0;
         int loopId = 0;
-        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES);
+        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES,countedEntities);
         boolean hasNext=true;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
@@ -61,7 +64,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                 try {
                     userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
                 } catch (RateLimitExceededException e) {
-                    this.taskService.warn(task, e, msg);
+                    this.taskService.warn(task, e, msg,countedEntities);
                 }
                 User user = storeUserProfile.storeUserProfile(userProfile, task);
                 if(user!=null){
@@ -77,7 +80,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                             User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
                             log.debug(msg + subCounter + userFromMention.toString());
                         } catch (IllegalArgumentException exe) {
-                            this.taskService.warn(task, exe, msg + subCounter);
+                            this.taskService.warn(task, exe, msg + subCounter,countedEntities);
                         }
                     }
                     log.debug(msg + user.toString());
@@ -96,9 +99,10 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             }
             pageRequest = pageRequest.next();
         }
+        countedEntities = countedEntitiesService.countAll();
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        taskService.event(task,report);
-        this.taskService.done(task);
+        taskService.event(task,report,countedEntities);
+        this.taskService.done(task,countedEntities);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
@@ -126,8 +130,10 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     private final StoreUserProfileForScreenName storeUserProfileForScreenName;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public UpdateUserProfilesImpl(TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName) {
+    public UpdateUserProfilesImpl(TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StoreUserProfile storeUserProfile, TwitterApiService twitterApiService, UserService userService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, CountedEntitiesService countedEntitiesService) {
         this.twitterwallBackendProperties = twitterwallBackendProperties;
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
@@ -137,5 +143,6 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         this.userService = userService;
         this.taskService = taskService;
         this.storeUserProfileForScreenName = storeUserProfileForScreenName;
+        this.countedEntitiesService = countedEntitiesService;
     }
 }

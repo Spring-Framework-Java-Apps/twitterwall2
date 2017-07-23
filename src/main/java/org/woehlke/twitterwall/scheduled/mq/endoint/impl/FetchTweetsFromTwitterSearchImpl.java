@@ -5,11 +5,13 @@ import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.FetchTweetsFromTwitterSearch;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +23,23 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
 
     private final TaskService taskService;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, TaskService taskService) {
+    public FetchTweetsFromTwitterSearchImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
     @Override
     public List<TweetFromTwitter> splitMessage(Message<TaskMessage> message) {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         List<TweetFromTwitter> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
-        task =  taskService.start(task);
+        task =  taskService.start(task,countedEntities);
         List<Tweet> twitterTweets = twitterApiService.findTweetsForSearchQuery();
         for (Tweet tweet: twitterTweets) {
             TweetFromTwitter tweetMsg = new TweetFromTwitter(task.getId(),tweet);

@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.FetchDataFromDatabase;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 @Component("mqFetchDataFromDatabase")
 public class FetchDataFromDatabaseImpl implements FetchDataFromDatabase {
@@ -17,16 +19,20 @@ public class FetchDataFromDatabaseImpl implements FetchDataFromDatabase {
 
     private final TaskService taskService;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public FetchDataFromDatabaseImpl(TaskService taskService) {
+    public FetchDataFromDatabaseImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {
         this.taskService = taskService;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
 
     private void react(String logMsg,Message<TaskMessage> mqMessage){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage receivedMessage = mqMessage.getPayload();
         Task task = taskService.findById(receivedMessage.getTaskId());
-        taskService.start(task);
+        taskService.start(task,countedEntities);
         log.info(logMsg+"##############################################");
         log.info(logMsg+"##############################################");
         log.info(logMsg+"##############################################");

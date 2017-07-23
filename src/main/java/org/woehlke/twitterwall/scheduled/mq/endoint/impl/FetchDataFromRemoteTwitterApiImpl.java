@@ -7,10 +7,12 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.FetchDataFromRemoteTwitterApi;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 @Component("mqFetchDataFromRemoteTwitterApi")
 public class FetchDataFromRemoteTwitterApiImpl implements FetchDataFromRemoteTwitterApi {
@@ -23,17 +25,21 @@ public class FetchDataFromRemoteTwitterApiImpl implements FetchDataFromRemoteTwi
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public FetchDataFromRemoteTwitterApiImpl(TaskService taskService, TwitterApiService twitterApiService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public FetchDataFromRemoteTwitterApiImpl(TaskService taskService, TwitterApiService twitterApiService, TwitterwallFrontendProperties twitterwallFrontendProperties, CountedEntitiesService countedEntitiesService) {
         this.taskService = taskService;
         this.twitterApiService = twitterApiService;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
     private void react(String logMsg,Message<TaskMessage> mqMessage){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage receivedMessage = mqMessage.getPayload();
         Task task = taskService.findById(receivedMessage.getTaskId());
-        taskService.start(task);
+        taskService.start(task,countedEntities);
         log.info(logMsg+"##############################################");
         log.info(logMsg+"##############################################");
         log.info(logMsg+"##############################################");
