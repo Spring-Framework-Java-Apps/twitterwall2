@@ -65,12 +65,6 @@ public class FetchDataFromRemoteTwitterApiImpl implements FetchDataFromRemoteTwi
     }
 
     @Override
-    public void createtestDataForTweets(Message<TaskMessage> mqMessage) {
-        String logMsg = "createtestDataForTweets: ";
-        this.react(logMsg, mqMessage);
-    }
-
-    @Override
     public Message<TwitterProfileMessage> createImprintUser(Message<TaskMessage> mqMessageIn) {
         String logMsg = "createImprintUser: ";
         TaskMessage receivedMessage = mqMessageIn.getPayload();

@@ -1,6 +1,9 @@
 package org.woehlke.twitterwall.scheduled.mq.endoint;
 
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+
+import java.util.List;
 
 public interface StartTask {
 
@@ -16,8 +19,8 @@ public interface StartTask {
 
     User createImprintUser();
 
-    void createTestDataForUser();
+    List<User> createTestDataForUser();
 
-    void createtestDataForTweets();
+    List<Tweet> createTestDataForTweets();
 
 }

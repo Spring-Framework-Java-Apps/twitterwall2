@@ -8,11 +8,16 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class StartTaskImpl implements StartTask {
@@ -124,15 +129,35 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
-    public void createTestDataForUser() {
+    public List<User> createTestDataForUser() {
         TaskType taskType = TaskType.CONTROLLER_GET_TESTDATA_USER;
         messageSender(taskType);
+        return new ArrayList<>();
     }
 
     @Override
-    public void createtestDataForTweets() {
+    public List<Tweet> createTestDataForTweets() {
         TaskType taskType = TaskType.CONTROLLER_GET_TESTDATA_TWEETS;
-        messageSender(taskType);
+        Task task = taskService.create("Start via MQ", taskType);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
+            .setHeader("task_id", task.getId())
+            .setHeader("task_uid", task.getUniqueId())
+            .setHeader("task_type", task.getTaskType())
+            .build();
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        if( o instanceof TweetResultList){
+            TweetResultList result = (TweetResultList) o;
+            long taskId =result.getTaskId();
+            task = taskService.findById(taskId);
+            taskService.done(task);
+            return result.getTweetList();
+        } else {
+            taskService.error(task,"Wrong type of returnedMessage");
+            return new ArrayList<>();
+        }
     }
 }
 

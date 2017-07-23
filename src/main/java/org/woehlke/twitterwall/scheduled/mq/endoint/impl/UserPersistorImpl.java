@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.mq.endoint.UserPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
-@Component("mqUserPersistorApi")
+@Component("mqUserPersistor")
 public class UserPersistorImpl implements UserPersistor {
 
     private final TaskService taskService;

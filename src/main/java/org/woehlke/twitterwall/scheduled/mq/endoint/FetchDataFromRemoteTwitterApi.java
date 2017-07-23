@@ -12,7 +12,5 @@ public interface FetchDataFromRemoteTwitterApi {
 
     void createTestDataForUser(Message<TaskMessage> mqMessage);
 
-    void createtestDataForTweets(Message<TaskMessage> mqMessage);
-
     Message<TwitterProfileMessage> createImprintUser(Message<TaskMessage> mqMessage);
 }

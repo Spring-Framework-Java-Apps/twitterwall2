@@ -7,6 +7,14 @@
     http://www.springframework.org/schema/integration
     http://www.springframework.org/schema/integration/spring-integration.xsd">
 
+    <bean id="store" class="org.springframework.integration.store.SimpleMessageStore">
+        <property name="messageGroupFactory">
+            <bean class="org.springframework.integration.store.SimpleMessageGroupFactory">
+                <constructor-arg value="BLOCKING_QUEUE"/>
+            </bean>
+        </property>
+    </bean>
+
     <!-- CHANNEL -->
 
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
@@ -113,8 +121,17 @@
 
 
     <int:chain input-channel="startFetchTestDataForTweetsChannel">
-        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                               method="createtestDataForTweets"  />
+        <int:splitter id="splitter"
+                      ref="mqCreateTestDataForTweets"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqTweetTransformator"
+                               method="transformTweet" />
+        <int:service-activator ref="mqTweetPersistor"
+                               method="persistTweet" />
+        <int:aggregator message-store="store"
+                        release-strategy="mqCreateTestDataForTweetsReleaseStrategy" />
+        <int:service-activator ref="mqTweetFinisher"
+                               method="finish" />
     </int:chain>
 
     <int:chain input-channel="startFetchImprintUserChannel">
@@ -122,7 +139,7 @@
                                method="createImprintUser" />
         <int:service-activator ref="mqUserTransformator"
                                method="transformUser" />
-        <int:service-activator ref="mqUserPersistorApi"
+        <int:service-activator ref="mqUserPersistor"
                                method="persistUser" />
     </int:chain>
 
