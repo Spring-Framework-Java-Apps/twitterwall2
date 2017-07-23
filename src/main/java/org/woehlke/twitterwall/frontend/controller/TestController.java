@@ -90,8 +90,8 @@ public class TestController {
     @Async
     protected void startOnListRenew(){
         String msg = "startOnListRenew: ";
-        log.info(msg+"START scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
-        fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
-        log.info(msg+"DONE scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
+        log.info(msg+"START startTask.fetchUsersFromDefinedUserList: ");
+        startTask.fetchUsersFromDefinedUserList();
+        log.info(msg+"DONE startTask.fetchUsersFromDefinedUserList: ");
     }
 }

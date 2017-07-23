@@ -15,6 +15,9 @@
         </property>
     </bean>
 
+    <bean id="releaserSequenceSizeReleaseStrategy" class="org.springframework.integration.aggregator.SequenceSizeReleaseStrategy"/>
+
+    <bean id="releaserSimpleSequenceSizeReleaseStrategy" class="org.springframework.integration.aggregator.SimpleSequenceSizeReleaseStrategy"/>
     <!-- CHANNEL -->
 
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
@@ -104,14 +107,32 @@
 
 
     <int:chain input-channel="startFetchTweetsFromTwitterSearchChannel">
-        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                               method="fetchTweetsFromTwitterSearch" />
+        <int:splitter id="splitter"
+                      ref="mqFetchTweetsFromTwitterSearch"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqTweetTransformator"
+                               method="transformTweet" />
+        <int:service-activator ref="mqTweetPersistor"
+                               method="persistTweet" />
+        <int:aggregator message-store="store"
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator ref="mqTweetFinisher"
+                               method="finish" />
     </int:chain>
 
 
     <int:chain input-channel="startFetchUsersFromDefinedUserListChannel">
-        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                               method="fetchUsersFromDefinedUserList" />
+        <int:splitter id="splitter"
+                      ref="mqFetchUsersFromDefinedUserList"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqTweetTransformator"
+                               method="transformTweet" />
+        <int:service-activator ref="mqTweetPersistor"
+                               method="persistTweet" />
+        <int:aggregator message-store="store"
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator ref="mqTweetFinisher"
+                               method="finish" />
     </int:chain>
 
     <int:chain input-channel="startFetchTestDataForUserChannel">

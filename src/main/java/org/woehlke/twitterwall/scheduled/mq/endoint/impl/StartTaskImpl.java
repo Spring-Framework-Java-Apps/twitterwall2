@@ -79,7 +79,7 @@ public class StartTaskImpl implements StartTask {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
-        messageSender(taskType);
+        sendAndReceive(taskType);
     }
 
     @Override
@@ -103,11 +103,32 @@ public class StartTaskImpl implements StartTask {
         messageSender(taskType);
     }
 
+    private void sendAndReceive(TaskType taskType){
+        Task task = taskService.create("Start via MQ", taskType);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
+            .setHeader("task_id", task.getId())
+            .setHeader("task_uid", task.getUniqueId())
+            .setHeader("task_type", task.getTaskType())
+            .build();
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        if( o instanceof UserMessage){
+            UserMessage msg = (UserMessage) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            taskService.done(task);
+        } else {
+            taskService.error(task,"Wrong type of returnedMessage");
+        }
+    }
+
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList() {
         TaskType taskType = TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST;
-        messageSender(taskType);
+        sendAndReceive(taskType);
     }
 
     @Override
