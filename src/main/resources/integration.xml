@@ -147,7 +147,7 @@
         <int:service-activator ref="mqUserPersistor"
                                method="persistUser" />
         <int:aggregator message-store="store"
-                        release-strategy="mqCreateTestDataForUsersReleaseStrategy" />
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator ref="mqUserFinisher"
                                method="finish" />
     </int:chain>
@@ -162,7 +162,7 @@
         <int:service-activator ref="mqTweetPersistor"
                                method="persistTweet" />
         <int:aggregator message-store="store"
-                        release-strategy="mqCreateTestDataForTweetsReleaseStrategy" />
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator ref="mqTweetFinisher"
                                method="finish" />
     </int:chain>
