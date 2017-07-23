@@ -18,12 +18,14 @@ import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -42,11 +44,12 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     @Override
     public void updateTweets() {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "update Tweets: ";
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "START: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
-        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS);
+        Task task = taskService.create(msg, TaskType.UPDATE_TWEETS,countedEntities);
         int loopId = 0;
         int allLoop = 0;
         try {
@@ -77,7 +80,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
                                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(mention.getScreenName(), task);
                                 log.debug(msg + subCounter + userFromMention.toString());
                             } catch (IllegalArgumentException exe) {
-                                task = taskService.warn(task, exe, msg + subCounter);
+                                task = taskService.warn(task, exe, msg + subCounter,countedEntities);
                             }
                         }
                         log.debug(msg + "-----------------------------------------------------");
@@ -86,10 +89,10 @@ public class UpdateTweetsImpl implements UpdateTweets {
                         log.debug(msg + "Done SLEEP for " + twitterwallBackendProperties.getTwitter().getMillisToWaitBetweenTwoApiCalls() + " ms " + counter);
                         log.debug(msg + "-----------------------------------------------------");
                     } catch (RateLimitExceededException e) {
-                        task = taskService.error(task, e, msg + counter);
+                        task = taskService.error(task, e, msg + counter,countedEntities);
                         throw e;
                     } catch (InterruptedException ex) {
-                        task = taskService.warn(task, ex, msg + counter);
+                        task = taskService.warn(task, ex, msg + counter,countedEntities);
                     } finally {
                         log.debug(msg + "---------------------------------------");
                     }
@@ -97,13 +100,14 @@ public class UpdateTweetsImpl implements UpdateTweets {
                 pageRequest = pageRequest.next();
             } while (hasNext);
         } catch (ResourceAccessException e) {
-            task = taskService.error(task,e,msg + " check your Network Connection!");
+            task = taskService.error(task,e,msg + " check your Network Connection!",countedEntities);
         } catch (RateLimitExceededException e) {
-            task = taskService.error(task,e,msg);
+            task = taskService.error(task,e,msg,countedEntities);
         }
+        countedEntities = countedEntitiesService.countAll();
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        this.taskService.event(task,report);
-        this.taskService.done(task);
+        this.taskService.event(task,report,countedEntities);
+        this.taskService.done(task,countedEntities);
         log.debug(msg + "---------------------------------------");
         log.debug(msg + "DONE: The time is now {}", dateFormat.format(new Date()));
         log.debug(msg + "---------------------------------------");
@@ -132,8 +136,10 @@ public class UpdateTweetsImpl implements UpdateTweets {
 
     private final TwitterProperties twitterProperties;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public UpdateTweetsImpl(TwitterApiService twitterApiService, TweetService tweetService, StoreOneTweet storeOneTweet, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.tweetService = tweetService;
         this.storeOneTweet = storeOneTweet;
@@ -143,6 +149,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
 }

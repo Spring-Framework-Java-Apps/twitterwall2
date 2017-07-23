@@ -52,8 +52,18 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
     @Override
+    public List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds) {
+        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds;
+        log.debug(msg);
+        List<TwitterProfile> result = getTwitterProxy().userOperations().getUsers(userProfileTwitterIds);
+        msg += " result: ";
+        log.debug(msg+" size: "+result.size());
+        return result;
+    }
+
+    @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
-        String msg = MSG+"findOneTweetById: "+userProfileTwitterId;
+        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterId;
         log.debug(msg);
         TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
         msg += " result: ";

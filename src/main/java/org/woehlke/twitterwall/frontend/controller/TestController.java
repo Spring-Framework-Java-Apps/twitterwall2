@@ -17,6 +17,7 @@ import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
 import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 
@@ -35,8 +36,8 @@ public class TestController {
         model = controllerHelper.setupPage(model,"Test Data Tweets",twitterProperties.getSearchQuery(),Symbols.GET_TEST_DATA.toString());
         String msg = "/getTestData : ";
         if(twitterwallFrontendProperties.getContextTest()){
-            model.addAttribute("latestTweets", createTestData.getTestDataTweets());
-            model.addAttribute("users", createTestData.getTestDataUser());
+            model.addAttribute("latestTweets", startTask.createTestDataForTweets());
+            model.addAttribute("users", startTask.createTestDataForUser());
         } else {
             model.addAttribute("latestTweets",null);
             model.addAttribute("users",null);
@@ -73,21 +74,24 @@ public class TestController {
 
     private final TwitterProperties twitterProperties;
 
+    private final StartTask startTask;
+
     @Autowired
-    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StartTask startTask) {
         this.userService = userService;
         this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
         this.createTestData = createTestData;
         this.controllerHelper = controllerHelper;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
+        this.startTask = startTask;
     }
 
     @Async
     protected void startOnListRenew(){
         String msg = "startOnListRenew: ";
-        log.info(msg+"START scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
-        fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
-        log.info(msg+"DONE scheduledTasksFacade.fetchUsersFromDefinedUserList: ");
+        log.info(msg+"START startTask.fetchUsersFromDefinedUserList: ");
+        startTask.fetchUsersFromDefinedUserList();
+        log.info(msg+"DONE startTask.fetchUsersFromDefinedUserList: ");
     }
 }

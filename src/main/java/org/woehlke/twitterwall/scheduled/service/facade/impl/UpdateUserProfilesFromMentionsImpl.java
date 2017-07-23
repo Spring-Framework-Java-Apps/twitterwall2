@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
@@ -23,6 +24,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.scheduled.service.facade.UpdateUserProfilesFromMentions;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -41,9 +43,10 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     @Override
     public void updateUserProfilesFromMentions(){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "update User Profiles from Mentions: ";
         log.debug(msg + "START - The time is now {}", dateFormat.format(new Date()));
-        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS);
+        Task task = this.taskService.create(msg, TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS,countedEntities);
         int allLoop = 0;
         int loopId = 0;
         boolean hasNext=true;
@@ -62,7 +65,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                     try {
                         twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                     } catch (RateLimitExceededException e) {
-                        task = taskService.error(task, e, msg);
+                        task = taskService.error(task, e, msg,countedEntities);
                     }
                     if (twitterProfile != null) {
                         User user = storeUserProfile.storeUserProfile(twitterProfile, task);
@@ -100,9 +103,10 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             }
             pageRequest = pageRequest.next();
         }
+        countedEntities = countedEntitiesService.countAll();
         String report = msg+" processed: "+loopId+" [ "+allLoop+" ] ";
-        this.taskService.event(task,report);
-        this.taskService.done(task);
+        this.taskService.event(task,report,countedEntities);
+        this.taskService.done(task,countedEntities);
         log.debug(msg +"---------------------------------------");
         log.debug(msg + "DONE - The time is now {}", dateFormat.format(new Date()));
         log.debug(msg+"---------------------------------------");
@@ -131,8 +135,10 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final TwitterProperties twitterProperties;
 
+    private final CountedEntitiesService countedEntitiesService;
+
     @Autowired
-    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public UpdateUserProfilesFromMentionsImpl(TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, MentionService mentionService, TaskService taskService, StoreUserProfileForScreenName storeUserProfileForScreenName, TwitterwallBackendProperties twitterwallBackendProperties, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
         this.mentionService = mentionService;
@@ -142,5 +148,6 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 }

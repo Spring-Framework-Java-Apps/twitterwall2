@@ -15,10 +15,12 @@ import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.frontend.controller.TestControllerTest;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
@@ -36,7 +38,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
 
     @Autowired
-    public PrepareDataTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public PrepareDataTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
@@ -45,10 +47,12 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
+        this.countedEntitiesService = countedEntitiesService;
     }
 
     public void getTestDataTweets(String msg){
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS,countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -79,11 +83,12 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         for(Tweet tweet:latest){
             log.debug(msg + tweet.toString());
         }
-        taskService.done(task);
+        taskService.done(task,countedEntities);
     }
 
     public void getTestDataUser(String msg){
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
@@ -119,7 +124,8 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         for(org.woehlke.twitterwall.oodm.entities.User oneUser:user){
             log.debug(msg + oneUser.toString());
         }
-        taskService.done(task);
+        countedEntities = countedEntitiesService.countAll();
+        taskService.done(task,countedEntities);
     }
 
     private final TwitterApiService twitterApiService;
@@ -137,6 +143,8 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     private final TwitterProperties twitterProperties;
+
+    private final CountedEntitiesService countedEntitiesService;
 
     private void logEnv(){
         log.info("--------------------------------------------------------------------");
