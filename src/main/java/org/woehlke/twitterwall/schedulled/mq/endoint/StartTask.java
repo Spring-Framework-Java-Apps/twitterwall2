@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.schedulled.mq.endoint;
 
+import org.woehlke.twitterwall.oodm.entities.User;
+
 public interface StartTask {
 
     void fetchTweetsFromTwitterSearch();
@@ -12,7 +14,7 @@ public interface StartTask {
 
     void fetchUsersFromDefinedUserList();
 
-    void createImprintUser();
+    User createImprintUser();
 
     void createTestDataForUser();
 

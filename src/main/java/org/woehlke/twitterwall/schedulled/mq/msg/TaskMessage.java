@@ -7,9 +7,9 @@ import java.util.Date;
 
 public class TaskMessage implements Serializable {
 
-    private final long taskId;
-    private final TaskType taskType;
-    private final Date timeStarted;
+    protected final long taskId;
+    protected final TaskType taskType;
+    protected final Date timeStarted;
 
     public TaskMessage(long taskId, TaskType taskType,Date timeStarted) {
         this.taskId = taskId;

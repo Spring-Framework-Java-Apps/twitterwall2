@@ -8,6 +8,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.schedulled.mq.endoint.StartTask;
@@ -103,9 +104,23 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
-    public void createImprintUser() {
+    public User createImprintUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
-        messageSender(taskType);
+        Task task = taskService.create("Start via MQ", taskType);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
+            .setHeader("task_id", task.getId())
+            .setHeader("task_uid", task.getUniqueId())
+            .setHeader("task_type", task.getTaskType())
+            .build();
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        if( o instanceof User){
+            return (User) o;
+        }    else {
+            return null;
+        }
     }
 
     @Override

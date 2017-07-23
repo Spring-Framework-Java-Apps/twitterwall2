@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.schedulled.mq.endoint;
 
 import org.springframework.messaging.Message;
+import org.woehlke.twitterwall.schedulled.mq.msg.TwitterProfileMessage;
 import org.woehlke.twitterwall.schedulled.mq.msg.TaskMessage;
 
 public interface FetchDataFromRemoteTwitterApi {
@@ -13,5 +14,5 @@ public interface FetchDataFromRemoteTwitterApi {
 
     void createtestDataForTweets(Message<TaskMessage> mqMessage);
 
-    void createImprintUser(Message<TaskMessage> mqMessage);
+    Message<TwitterProfileMessage> createImprintUser(Message<TaskMessage> mqMessage);
 }

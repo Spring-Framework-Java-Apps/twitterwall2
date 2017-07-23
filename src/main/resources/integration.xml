@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="
-    http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/integration
     http://www.springframework.org/schema/integration/spring-integration.xsd">
@@ -77,29 +77,55 @@
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="startFetchImprintUserChannel"/>
     </int:router>
 
-    <int:service-activator ref="mqFetchDataFromDatabase"
-                           method="updateTweets" input-channel="startUpdateTweetsChannel"  />
-
-    <int:service-activator ref="mqFetchDataFromDatabase"
-                           method="updateUserProfiles" input-channel="startUpdateUserProfilesChannel"  />
-
-    <int:service-activator ref="mqFetchDataFromDatabase"
-                           method="updateUserProfilesFromMentions" input-channel="startUpdateUserProfilesFromMentionsChannel"  />
 
 
-    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                           method="fetchTweetsFromTwitterSearch" input-channel="startFetchTweetsFromTwitterSearchChannel"  />
+    <int:chain input-channel="startUpdateTweetsChannel">
+        <int:service-activator ref="mqFetchDataFromDatabase"
+                               method="updateTweets" />
+    </int:chain>
 
-    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                           method="fetchUsersFromDefinedUserList" input-channel="startFetchUsersFromDefinedUserListChannel"  />
 
-    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                           method="createTestDataForUser" input-channel="startFetchTestDataForUserChannel" />
+    <int:chain input-channel="startUpdateUserProfilesChannel">
+        <int:service-activator ref="mqFetchDataFromDatabase"
+                               method="updateUserProfiles" />
+    </int:chain>
 
-    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                           method="createtestDataForTweets" input-channel="startFetchTestDataForTweetsChannel"  />
 
-    <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
-                           method="createImprintUser" input-channel="startFetchImprintUserChannel"  />
+    <int:chain input-channel="startUpdateUserProfilesFromMentionsChannel">
+        <int:service-activator ref="mqFetchDataFromDatabase"
+                               method="updateUserProfilesFromMentions" />
+    </int:chain>
+
+
+    <int:chain input-channel="startFetchTweetsFromTwitterSearchChannel">
+        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                               method="fetchTweetsFromTwitterSearch" />
+    </int:chain>
+
+
+    <int:chain input-channel="startFetchUsersFromDefinedUserListChannel">
+        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                               method="fetchUsersFromDefinedUserList" />
+    </int:chain>
+
+    <int:chain input-channel="startFetchTestDataForUserChannels">
+        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                               method="createTestDataForUser" />
+    </int:chain>
+
+
+    <int:chain input-channel="startFetchTestDataForTweetsChannel">
+        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                               method="createtestDataForTweets"  />
+    </int:chain>
+
+    <int:chain input-channel="startFetchImprintUserChannel">
+        <int:service-activator ref="mqFetchDataFromRemoteTwitterApi"
+                               method="createImprintUser" />
+        <int:service-activator ref="mqUserTransformator"
+                               method="transformUser" />
+        <int:service-activator ref="mqUserPersistorApi"
+                               method="persistUser" />
+    </int:chain>
 
 </beans>

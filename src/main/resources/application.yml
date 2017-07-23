@@ -97,7 +97,6 @@ twitterwall:
         updateTweets:  43200000 # 12 Hours
         updateUserProfiles:  43200000 # 12 Hours
         updateUserProfilesFromMentions: 3600000 # One Hour
-
   scheduler:
     allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
     allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
