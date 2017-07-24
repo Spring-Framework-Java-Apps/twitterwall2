@@ -39,7 +39,7 @@ spring:
     #minIdle: 2
     platform: POSTGRESQL
     #removeAbandoned: true
-    #tomcat:
+    tomcat:
       max-active: 60
       #max-wait: 100000
       #test-on-borrow: true
