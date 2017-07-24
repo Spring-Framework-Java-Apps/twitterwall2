@@ -92,21 +92,21 @@ public class StartTaskImpl implements StartTask {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
         TaskType taskType = TaskType.UPDATE_TWEETS;
-        messageSender(taskType);
+        sendAndReceive(taskType);
     }
 
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
         TaskType taskType = TaskType.UPDATE_USER_PROFILES;
-        messageSender(taskType);
+        sendAndReceive(taskType);
     }
 
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions() {
         TaskType taskType = TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS;
-        messageSender(taskType);
+        sendAndReceive(taskType);
     }
 
     private void sendAndReceive(TaskType taskType){

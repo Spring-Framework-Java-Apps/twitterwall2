@@ -92,20 +92,47 @@
     </int:router>
 
     <int:chain input-channel="startUpdateTweetsChannel">
-        <int:service-activator ref="mqFetchDataFromDatabase"
-                               method="updateTweets" />
+        <int:splitter id="splitter"
+                      ref="mqUpdateTweets"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqTweetTransformator"
+                               method="transformTweet" />
+        <int:service-activator ref="mqTweetPersistor"
+                               method="persistTweet" />
+        <int:aggregator message-store="store"
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator ref="mqTweetFinisher"
+                               method="finish" />
     </int:chain>
 
 
     <int:chain input-channel="startUpdateUserProfilesChannel">
-        <int:service-activator ref="mqFetchDataFromDatabase"
-                               method="updateUserProfiles" />
+        <int:splitter id="splitter"
+                      ref="mqUpdateUserProfiles"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqUserTransformator"
+                               method="transformUser" />
+        <int:service-activator ref="mqUserPersistor"
+                               method="persistUser" />
+        <int:aggregator message-store="store"
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator ref="mqUserFinisher"
+                               method="finish" />
     </int:chain>
 
 
     <int:chain input-channel="startUpdateUserProfilesFromMentionsChannel">
-        <int:service-activator ref="mqFetchDataFromDatabase"
-                               method="updateUserProfilesFromMentions" />
+        <int:splitter id="splitter"
+                      ref="mqUpdateUserProfilesFromMentions"
+                      method="splitMessage"  />
+        <int:service-activator ref="mqUserTransformator"
+                               method="transformUser" />
+        <int:service-activator ref="mqUserPersistor"
+                               method="persistUser" />
+        <int:aggregator message-store="store"
+                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator ref="mqUserFinisher"
+                               method="finish" />
     </int:chain>
 
 
