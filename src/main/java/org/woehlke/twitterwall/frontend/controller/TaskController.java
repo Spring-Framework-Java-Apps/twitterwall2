@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
@@ -19,9 +18,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.facade.FetchTweetsFromTwitterSearch;
-import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
-import org.woehlke.twitterwall.scheduled.service.facade.UpdateTweets;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 
 /**
  * Created by tw on 11.07.17.
@@ -125,54 +122,45 @@ public class TaskController {
 
     @Async
     protected void fetchTweetsFromTwitterSearch() {
-        fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();;
+        startTask.fetchTweetsFromTwitterSearch();
     }
 
     @Async
     protected void updateTweets() {
-        updateTweets.updateTweets();
+        startTask.updateTweets();
     }
 
     @Async
     protected void fetchUsersFromDefinedUserList(){
-        fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
+        startTask.fetchUsersFromDefinedUserList();
     }
 
     @Async
     protected void updateUserProfilesFromMentions(){
-
+        startTask.updateUserProfilesFromMentions();
     }
 
     @Async
     protected void updateUserProfiles() {
-
+        startTask.updateUserProfiles();
     }
 
     private final TaskService taskService;
 
     private final TaskHistoryService taskHistoryService;
 
-    private final FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
-
-    private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
-
-    private final UpdateTweets updateTweets;
-
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
-
-    private final TwitterProperties twitterProperties;
 
     private final ControllerHelper controllerHelper;
 
+    private final StartTask startTask;
+
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, UpdateTweets updateTweets, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, StartTask startTask) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
-        this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
-        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
-        this.updateTweets = updateTweets;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
         this.controllerHelper = controllerHelper;
+        this.startTask = startTask;
     }
 }

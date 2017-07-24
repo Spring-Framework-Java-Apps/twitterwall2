@@ -85,31 +85,54 @@ public class StartTaskImpl implements StartTask {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
-        sendAndReceive(taskType);
+        sendAndReceiveTweet(taskType);
     }
 
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
         TaskType taskType = TaskType.UPDATE_TWEETS;
-        sendAndReceive(taskType);
+        sendAndReceiveTweet(taskType);
     }
 
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
         TaskType taskType = TaskType.UPDATE_USER_PROFILES;
-        sendAndReceive(taskType);
+        sendAndReceiveUser(taskType);
     }
 
     @Override
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions() {
         TaskType taskType = TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS;
-        sendAndReceive(taskType);
+        sendAndReceiveUser(taskType);
     }
 
-    private void sendAndReceive(TaskType taskType){
+    private void sendAndReceiveTweet(TaskType taskType){
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create("Start via MQ", taskType,countedEntities);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
+                .setHeader("task_id", task.getId())
+                .setHeader("task_uid", task.getUniqueId())
+                .setHeader("task_type", task.getTaskType())
+                .build();
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        countedEntities = countedEntitiesService.countAll();
+        if( o instanceof TweetResultList){
+            TweetResultList msg = (TweetResultList) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            taskService.done(task,countedEntities);
+        } else {
+            taskService.error(task,"Wrong type of returnedMessage",countedEntities);
+        }
+    }
+
+    private void sendAndReceiveUser(TaskType taskType){
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType,countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
@@ -136,7 +159,7 @@ public class StartTaskImpl implements StartTask {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList() {
         TaskType taskType = TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST;
-        sendAndReceive(taskType);
+        sendAndReceiveUser(taskType);
     }
 
     @Override
