@@ -70,6 +70,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             worklistProfileTwitterIds.addAll(userProfileTwitterIds.getContent());
         }
         long number = worklistProfileTwitterIds.size();
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             allLoop++;
             loopId++;
@@ -84,6 +85,10 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             if(userProfile != null){
                 TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);
                 userProfileList.add(userMsg);
+            }
+            try {
+                Thread.sleep(millisToWaitBetweenTwoApiCalls);
+            } catch (InterruptedException e) {
             }
         }
         return userProfileList;

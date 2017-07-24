@@ -28,6 +28,9 @@ public class TwitterProperties {
     private Integer pageSize;
 
     @NotNull
+    private Integer millisToWaitBetweenTwoApiCalls;
+
+    @NotNull
     private String searchQuery;
 
     public String getAccessToken() {
@@ -76,5 +79,13 @@ public class TwitterProperties {
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
+    }
+
+    public Integer getMillisToWaitBetweenTwoApiCalls() {
+        return millisToWaitBetweenTwoApiCalls;
+    }
+
+    public void setMillisToWaitBetweenTwoApiCalls(Integer millisToWaitBetweenTwoApiCalls) {
+        this.millisToWaitBetweenTwoApiCalls = millisToWaitBetweenTwoApiCalls;
     }
 }

@@ -59,10 +59,15 @@ public class UpdateTweetsImpl implements UpdateTweets {
             hasNext = tweetTwitterIds.hasNext();
             worklistTwitterIds.addAll(tweetTwitterIds.getContent());
         }
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(Long tweetTwitterId : worklistTwitterIds){
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
             tweets.add(result);
+            try {
+                Thread.sleep(millisToWaitBetweenTwoApiCalls);
+            } catch (InterruptedException e) {
+            }
         }
         return tweets;
     }

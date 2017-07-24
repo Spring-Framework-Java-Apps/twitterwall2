@@ -73,11 +73,16 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             }
             pageRequest = pageRequest.next();
         }
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(String screenName:screenNames){
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             if(userProfile!=null){
                 TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);
                 userProfileList.add(userMsg);
+            }
+            try {
+                Thread.sleep(millisToWaitBetweenTwoApiCalls);
+            } catch (InterruptedException e) {
             }
         }
         return userProfileList;
