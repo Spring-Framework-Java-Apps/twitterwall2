@@ -54,7 +54,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
-    show-sql: true
+    show-sql: false
   template:
     cache: false
   thymeleaf:
