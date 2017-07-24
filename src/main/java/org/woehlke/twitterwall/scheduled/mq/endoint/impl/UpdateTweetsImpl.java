@@ -56,8 +56,9 @@ public class UpdateTweetsImpl implements UpdateTweets {
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while(hasNext) {
             Page<Long> tweetTwitterIds = tweetService.findAllTwitterIds(pageRequest);
-            hasNext = tweetTwitterIds.hasNext();
             worklistTwitterIds.addAll(tweetTwitterIds.getContent());
+            hasNext = tweetTwitterIds.hasNext();
+            pageRequest = pageRequest.next();
         }
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(Long tweetTwitterId : worklistTwitterIds){

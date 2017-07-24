@@ -30,7 +30,6 @@ public class TaskController {
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         String msg = "/task/all: ";
-        controllerHelper.logEnv();
         String title = "Tasks";
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
@@ -44,15 +43,12 @@ public class TaskController {
     @RequestMapping(path="/{id}")
     public String getTaskById(
         @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
-        //@PathVariable long id, Model model) {
         @PathVariable("id") Task task, Model model) {
         String msg = "/task/ "+task.getId();
-        controllerHelper.logEnv();
         String title = "Tasks";
         String subtitle = "List aller TasksHistory für Task";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        //Task oneTask = taskService.findById(id);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
         model.addAttribute("task",task);
@@ -63,7 +59,6 @@ public class TaskController {
     @RequestMapping(path="/scheduled/tweets/fetch")
     public String  fetchTweetsFromTwitterSearchRequest(Model model) {
         String msg = "/scheduled/tweets/fetch";
-        controllerHelper.logEnv();
         String title = "Scheduled Task started";
         String subtitle = "/scheduled/tweets/fetch";
         String symbol = Symbols.TASK.toString();
@@ -75,7 +70,6 @@ public class TaskController {
     @RequestMapping(path="/scheduled/tweets/update")
     public String updateTweetsRequest(Model model) {
         String msg = "/scheduled/tweets/fetch";
-        controllerHelper.logEnv();
         String title = "Scheduled Task started";
         String subtitle = "/scheduled/tweets/fetch";
         String symbol = Symbols.TASK.toString();
@@ -87,7 +81,6 @@ public class TaskController {
     @RequestMapping(path="/scheduled/users/list/fetch")
     public String fetchUsersFromDefinedUserListRequest(Model model){
         String msg = "/scheduled/users/list/fetch";
-        controllerHelper.logEnv();
         String title = "Scheduled Task started";
         String subtitle = "/scheduled/users/list/fetch";
         String symbol = Symbols.TASK.toString();
@@ -99,7 +92,6 @@ public class TaskController {
     @RequestMapping(path="/scheduled/users/mentions/update")
     public String updateUserProfilesFromMentionsRequest(Model model){
         String msg = "/scheduled/users/mentions/update";
-        controllerHelper.logEnv();
         String title = "Scheduled Task started";
         String subtitle = "/scheduled/users/mentions/update";
         String symbol = Symbols.TASK.toString();
@@ -111,7 +103,6 @@ public class TaskController {
     @RequestMapping(path="/scheduled/users/update")
     public String updateUserProfilesRequest(Model model) {
         String msg = "/scheduled/users/update";
-        controllerHelper.logEnv();
         String title = "Scheduled Task started";
         String subtitle = "/scheduled/users/update";
         String symbol = Symbols.TASK.toString();

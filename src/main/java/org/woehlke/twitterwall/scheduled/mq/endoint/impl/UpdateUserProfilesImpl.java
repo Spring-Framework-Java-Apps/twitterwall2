@@ -66,8 +66,9 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
             Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
-            hasNext = userProfileTwitterIds.hasNext();
             worklistProfileTwitterIds.addAll(userProfileTwitterIds.getContent());
+            hasNext = userProfileTwitterIds.hasNext();
+            pageRequest = pageRequest.next();
         }
         long number = worklistProfileTwitterIds.size();
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();

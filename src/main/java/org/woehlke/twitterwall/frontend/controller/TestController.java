@@ -18,8 +18,6 @@ import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
-import org.woehlke.twitterwall.scheduled.service.facade.CreateTestData;
-import org.woehlke.twitterwall.scheduled.service.facade.FetchUsersFromDefinedUserList;
 
 
 /**
@@ -32,7 +30,6 @@ public class TestController {
 
     @RequestMapping("/getTestData")
     public String getTestData(Model model) {
-        controllerHelper.logEnv();
         model = controllerHelper.setupPage(model,"Test Data Tweets",twitterProperties.getSearchQuery(),Symbols.GET_TEST_DATA.toString());
         String msg = "/getTestData : ";
         if(twitterwallFrontendProperties.getContextTest()){
@@ -64,10 +61,6 @@ public class TestController {
 
     private final UserService userService;
 
-    private final FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
-
-    private final CreateTestData createTestData;
-
     private final ControllerHelper controllerHelper;
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
@@ -77,10 +70,8 @@ public class TestController {
     private final StartTask startTask;
 
     @Autowired
-    public TestController(UserService userService, FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList, CreateTestData createTestData, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StartTask startTask) {
+    public TestController(UserService userService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, StartTask startTask) {
         this.userService = userService;
-        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
-        this.createTestData = createTestData;
         this.controllerHelper = controllerHelper;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
@@ -27,7 +26,6 @@ public class TickerSymbolController {
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
-        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "TickerSymbol";
         String symbol = Symbols.DATABASE.toString();
@@ -40,16 +38,13 @@ public class TickerSymbolController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
-
     private final TickerSymbolService tickerSymbolService;
 
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public TickerSymbolController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, TickerSymbolService tickerSymbolService, ControllerHelper controllerHelper) {
+    public TickerSymbolController(TwitterwallFrontendProperties twitterwallFrontendProperties, TickerSymbolService tickerSymbolService, ControllerHelper controllerHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
         this.tickerSymbolService = tickerSymbolService;
         this.controllerHelper = controllerHelper;
     }

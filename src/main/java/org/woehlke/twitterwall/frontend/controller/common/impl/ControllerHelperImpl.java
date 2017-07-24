@@ -20,18 +20,6 @@ import org.woehlke.twitterwall.frontend.model.Page;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ControllerHelperImpl implements ControllerHelper {
 
-    public void logEnv(){
-        log.info("--------------------------------------------------------------------");
-        log.info("twitter.searchQuery = "+  twitterProperties.getSearchQuery());
-        log.info("twitterwall.frontend.menuAppName = "+ twitterwallFrontendProperties.getMenuAppName());
-        log.info("twitterwall.frontend.infoWebpage = "+ twitterwallFrontendProperties.getInfoWebpage());
-        log.info("twitterwall.frontend.theme = "+ twitterwallFrontendProperties.getTheme());
-        log.info("twitterwall.frontend.contextTest = "+ twitterwallFrontendProperties.getContextTest());
-        log.info("twitterwall.frontend.imprintScreenName = "+ twitterwallFrontendProperties.getImprintScreenName());
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+ twitterwallFrontendProperties.getIdGoogleAnalytics());
-        log.info("--------------------------------------------------------------------");
-    }
-
     private Page setupPage(Page page, String title, String subtitle, String symbol)  {
         page.setTitle(title);
         page.setSubtitle(subtitle);
@@ -49,7 +37,6 @@ public class ControllerHelperImpl implements ControllerHelper {
         } else {
             page.setGoogleAnalyticScriptHtml("");
         }
-        logEnv();
         log.info("--------------------------------------------------------------------");
         log.info("setupPage = "+page.toString());
         log.info("--------------------------------------------------------------------");

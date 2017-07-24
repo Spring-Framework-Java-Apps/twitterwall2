@@ -29,14 +29,11 @@ public class PagesController {
     @RequestMapping("/imprint")
     public String imprint(Model model) {
         log.info("-----------------------------------------");
-        controllerHelper.logEnv();
         String symbol = Symbols.IMPRINT.toString();
         String title = "Impressum";
         String subtitle = twitterwallFrontendProperties.getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         User user = startTask.createImprintUser();
-        //String screenName = twitterwallFrontendProperties.getImprintScreenName();
-        //User user = createTestData.addUserForScreenName(screenName);
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
         return "imprint";
@@ -46,17 +43,11 @@ public class PagesController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    //private final TwitterProperties twitterProperties;
-
-    //private final CreateTestData createTestData;
-
     private final StartTask startTask;
 
     @Autowired
     public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, StartTask startTask, ControllerHelper controllerHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        //this.twitterProperties = twitterProperties;
-        //this.createTestData = createTestData;
         this.startTask = startTask;
         this.controllerHelper = controllerHelper;
     }
