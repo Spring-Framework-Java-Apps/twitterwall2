@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
@@ -46,6 +47,31 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     @Override
     public Page<Long> findAllTwitterIds(Pageable pageRequest) {
         return tweetRepository.findAllTwitterIds(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2HashTag(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Media(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Media(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Mention(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Mention(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Url(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Url(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2TickerSymbol(pageRequest);
     }
 
     @Override
