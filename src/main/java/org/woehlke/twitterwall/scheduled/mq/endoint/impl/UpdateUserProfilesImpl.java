@@ -53,14 +53,13 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
 
     @Override
     public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
-        String msg = "mqUpdateUserProfiles.splitMessage: ";
+        String msg = "### mqUpdateUserProfiles.splitMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        int allLoop = 0;
         int loopId = 0;
         boolean hasNext=true;
         List<Long> worklistProfileTwitterIds = new ArrayList<>();
@@ -68,7 +67,8 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         while (hasNext) {
             Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
             for(User user:userProfileTwitterIds.getContent()){
-                log.debug(msg+ " userService.getAllTwitterIds:  "+user.getIdTwitter());
+                loopId++;
+                log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());
                 worklistProfileTwitterIds.add(user.getIdTwitter());
             }
             hasNext = userProfileTwitterIds.hasNext();
@@ -78,20 +78,20 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<TwitterProfileMessage> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
-            allLoop++;
-            loopId++;
-            String counter = " ( " + loopId + " from " + number + " ) [" + allLoop + "] ";
+            String counter = " ( " + loopId + " from " + number + " ) ";
             log.debug(msg + counter);
             TwitterProfile userProfile = null;
             try {
+                log.debug(msg+"### twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter);
                 userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
             } catch (RateLimitExceededException e) {
-                log.error(msg + counter+ "twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") ",e);
+                log.error(msg + "### ERROR: twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter,e);
             }
             if(userProfile != null){
                 TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);
                 userProfileList.add(userMsg);
             }
+            log.debug(msg + "### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
             try {
                 Thread.sleep(millisToWaitBetweenTwoApiCalls);
             } catch (InterruptedException e) {

@@ -55,10 +55,14 @@ public class UpdateTweetsImpl implements UpdateTweets {
         List<Long> worklistTwitterIds = new ArrayList<>();
         boolean hasNext=true;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
+        int lfdNr = 0;
+        int all = 0;
         while(hasNext) {
             Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
             for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
-                log.debug("### tweetService.findAllTwitterIds (1): "+tweetTwitterId.getIdTwitter());
+                lfdNr++;
+                all++;
+                log.debug("### tweetService.findAllTwitterIds from DB ("+lfdNr+"): "+tweetTwitterId.getIdTwitter());
                 worklistTwitterIds.add(tweetTwitterId.getIdTwitter());
             }
             hasNext = tweetTwitterIds.hasNext();
@@ -66,8 +70,10 @@ public class UpdateTweetsImpl implements UpdateTweets {
         }
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<TweetFromTwitter> tweets = new ArrayList<>();
+        lfdNr = 0;
         for(Long tweetTwitterId : worklistTwitterIds){
-            log.debug("### tweetService.findAllTwitterIds (2): "+tweetTwitterId);
+            lfdNr++;
+            log.debug("### witterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
             tweets.add(result);

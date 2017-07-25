@@ -62,7 +62,7 @@ public class TaskController {
         String subtitle = "/scheduled/tweets/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.fetchUsersFromDefinedUserList();
+        mqAsyncStartTask.fetchTweetsFromTwitterSearch();
         return "scheduled/taskStarted";
     }
 

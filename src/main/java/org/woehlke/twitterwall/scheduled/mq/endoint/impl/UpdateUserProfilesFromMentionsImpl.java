@@ -59,17 +59,19 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
         List<String> screenNames = new ArrayList<>();
-        int allLoop = 0;
-        int loopId = 0;
+        int lfdNr = 0;
+        int all = 0;
         boolean hasNext=true;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
-            Page<Mention> allPersMentions = mentionService.getAll(pageRequest);
+            Page<Mention> allPersMentions = mentionService.getAllWithoutPersistentUser(pageRequest);
             hasNext = allPersMentions.hasNext();
-            long number = allPersMentions.getTotalElements();
             for (Mention onePersMentions : allPersMentions) {
                 if (!onePersMentions.hasPersistentUser()) {
+                    lfdNr++;
+                    all++;
                     String screenName = onePersMentions.getScreenName();
+                    log.debug("### mentionService.getAll from DB ("+lfdNr+"): "+screenName);
                     screenNames.add(screenName);
                 }
             }
@@ -77,12 +79,14 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         }
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(String screenName:screenNames){
+            lfdNr++;
+            log.debug("### twitterApiService.getUserProfileForScreenName("+screenName+") from Twiiter API ("+lfdNr+" of "+all+")");
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             if(userProfile!=null) {
                 TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn, userProfile);
                 userProfileList.add(userMsg);
             }
-            log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
+            log.debug(msg+"### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
             try {
                 Thread.sleep(millisToWaitBetweenTwoApiCalls);
             } catch (InterruptedException e) {
