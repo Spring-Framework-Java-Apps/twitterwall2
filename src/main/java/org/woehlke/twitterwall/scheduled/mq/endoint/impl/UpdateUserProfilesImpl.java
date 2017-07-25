@@ -75,12 +75,14 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             pageRequest = pageRequest.next();
         }
         long number = worklistProfileTwitterIds.size();
+        loopId = 0;
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<TwitterProfileMessage> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             String counter = " ( " + loopId + " from " + number + " ) ";
             log.debug(msg + counter);
             TwitterProfile userProfile = null;
+            loopId++;
             try {
                 log.debug(msg+"### twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter);
                 userProfile = twitterApiService.getUserProfileForTwitterId(userProfileTwitterId);
