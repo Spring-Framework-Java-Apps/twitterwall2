@@ -75,7 +75,7 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
                 pageRequest=myPage.nextPageable();
             }
         }
-        return null;
+        return new HashTagOverview(hashTagsTweets,hashTagsUsers);
     }
 
     private static final Logger log = LoggerFactory.getLogger(HashTagsOverviewHelperImpl.class);

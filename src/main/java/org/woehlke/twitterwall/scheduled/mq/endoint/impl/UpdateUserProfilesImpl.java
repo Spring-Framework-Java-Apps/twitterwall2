@@ -12,6 +12,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -54,7 +55,6 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
         String msg = "mqUpdateUserProfiles.splitMessage: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        List<TwitterProfileMessage> userProfileList = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
@@ -65,13 +65,17 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         List<Long> worklistProfileTwitterIds = new ArrayList<>();
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
-            Page<Long> userProfileTwitterIds = userService.getAllTwitterIds(pageRequest);
-            worklistProfileTwitterIds.addAll(userProfileTwitterIds.getContent());
+            Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
+            for(User user:userProfileTwitterIds.getContent()){
+                log.debug(msg+ " userService.getAllTwitterIds:  "+user.getIdTwitter());
+                worklistProfileTwitterIds.add(user.getIdTwitter());
+            }
             hasNext = userProfileTwitterIds.hasNext();
             pageRequest = pageRequest.next();
         }
         long number = worklistProfileTwitterIds.size();
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
+        List<TwitterProfileMessage> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             allLoop++;
             loopId++;

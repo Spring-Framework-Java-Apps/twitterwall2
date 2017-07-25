@@ -5,6 +5,7 @@ import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -32,12 +33,14 @@ public class StartTaskImpl implements StartTask {
         sendAndReceiveTweet(taskType);
     }
 
+    @Async
     @Override
     public void updateTweets() {
         TaskType taskType = TaskType.UPDATE_TWEETS;
         sendAndReceiveTweet(taskType);
     }
 
+    @Async
     @Override
     public void updateUserProfiles() {
         TaskType taskType = TaskType.UPDATE_USER_PROFILES;

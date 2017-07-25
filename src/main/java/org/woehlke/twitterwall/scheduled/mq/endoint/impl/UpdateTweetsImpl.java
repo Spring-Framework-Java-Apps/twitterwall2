@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +48,6 @@ public class UpdateTweetsImpl implements UpdateTweets {
     @Override
     public List<TweetFromTwitter> splitMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        List<TweetFromTwitter> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long taskId = msgIn.getTaskId();
         Task task = taskService.findById(taskId);
@@ -55,13 +56,18 @@ public class UpdateTweetsImpl implements UpdateTweets {
         boolean hasNext=true;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while(hasNext) {
-            Page<Long> tweetTwitterIds = tweetService.findAllTwitterIds(pageRequest);
-            worklistTwitterIds.addAll(tweetTwitterIds.getContent());
+            Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
+            for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
+                log.debug("### tweetService.findAllTwitterIds (1): "+tweetTwitterId.getIdTwitter());
+                worklistTwitterIds.add(tweetTwitterId.getIdTwitter());
+            }
             hasNext = tweetTwitterIds.hasNext();
             pageRequest = pageRequest.next();
         }
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
+        List<TweetFromTwitter> tweets = new ArrayList<>();
         for(Long tweetTwitterId : worklistTwitterIds){
+            log.debug("### tweetService.findAllTwitterIds (2): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
             tweets.add(result);
@@ -72,4 +78,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
         }
         return tweets;
     }
+
+    private static final Logger log = LoggerFactory.getLogger(UpdateTweetsImpl.class);
+
 }
