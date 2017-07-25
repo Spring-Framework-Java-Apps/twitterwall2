@@ -44,7 +44,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from tweet_hashtag";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
@@ -56,11 +56,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllTweet2Media(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
-        String sqlCount = "select count(*) as counted from tweet_hashtag";
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String sqlCount = "select count(*) as counted from tweet_media";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
-        String sql = "select * from tweet_hashtag"+pagerSQL;
+        String sql = "select * from tweet_media"+pagerSQL;
         List<Object2Entity> list =  jdbcTemplate.query(sql, new Tweet2MediaRowMapper());
         PageImpl<Object2Entity> resultPage = new PageImpl<>(list,pageRequest,total);
         return resultPage;
@@ -68,11 +68,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllTweet2Mention(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
-        String sqlCount = "select count(*) as counted from tweet_hashtag";
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String sqlCount = "select count(*) as counted from tweet_mention";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
-        String sql = "select * from tweet_hashtag"+pagerSQL;
+        String sql = "select * from tweet_mention"+pagerSQL;
         List<Object2Entity> list =  jdbcTemplate.query(sql, new Tweet2MentionRowMapper());
         PageImpl<Object2Entity> resultPage = new PageImpl<>(list,pageRequest,total);
         return resultPage;
@@ -80,11 +80,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllTweet2Url(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
-        String sqlCount = "select count(*) as counted from tweet_hashtag";
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String sqlCount = "select count(*) as counted from tweet_url";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
-        String sql = "select * from tweet_hashtag"+pagerSQL;
+        String sql = "select * from tweet_url"+pagerSQL;
         List<Object2Entity> list =  jdbcTemplate.query(sql, new Tweet2UrlRowMapper());
         PageImpl<Object2Entity> resultPage = new PageImpl<>(list,pageRequest,total);
         return resultPage;
@@ -92,11 +92,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest){
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
-        String sqlCount = "select count(*) as counted from tweet_hashtag";
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String sqlCount = "select count(*) as counted from tweet_tickersymbol";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
-        String sql = "select * from tweet_hashtag"+pagerSQL;
+        String sql = "select * from tweet_tickersymbol"+pagerSQL;
         List<Object2Entity> list =  jdbcTemplate.query(sql, new Tweet2TickerSymbolRowMapper());
         PageImpl<Object2Entity> resultPage = new PageImpl<>(list,pageRequest,total);
         return resultPage;

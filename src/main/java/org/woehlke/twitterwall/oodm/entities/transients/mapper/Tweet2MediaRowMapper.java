@@ -13,7 +13,7 @@ public class Tweet2MediaRowMapper implements RowMapper<Object2Entity> {
     public Object2Entity mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Object2Entity(
                 rs.getLong("tweet_id"),
-                rs.getLong(" tweet_media"),
+                rs.getLong("media_id"),
                 Object2EntityTable.TWEET_MEDIA
         );
     }

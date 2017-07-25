@@ -45,7 +45,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_hashtag";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
@@ -57,7 +57,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2Media(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_media";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
@@ -69,7 +69,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2Mentiong(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_mention";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
@@ -81,7 +81,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2Url(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_url";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();
@@ -93,7 +93,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest) {
-        String pagerSQL = " WHERE ROW_COUNT > "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
+        String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_tickersymbol";
         List<Long> countedList =  jdbcTemplate.query(sqlCount, new RowMapperCount());
         long total= countedList.iterator().next().longValue();

@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.transients.User2HashTag;
-import org.woehlke.twitterwall.oodm.entities.transients.User2Media;
-import org.woehlke.twitterwall.oodm.entities.transients.User2Mention;
-import org.woehlke.twitterwall.oodm.entities.transients.User2Url;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
