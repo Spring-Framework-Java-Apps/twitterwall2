@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
@@ -26,7 +25,6 @@ public class MediaController {
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
-        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "Media";
         String symbol = Symbols.DATABASE.toString();
@@ -41,16 +39,13 @@ public class MediaController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
-
     private final ControllerHelper controllerHelper;
 
 
     @Autowired
-    public MediaController(MediaService mediaService, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+    public MediaController(MediaService mediaService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper) {
         this.mediaService = mediaService;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
         this.controllerHelper = controllerHelper;
     }
 

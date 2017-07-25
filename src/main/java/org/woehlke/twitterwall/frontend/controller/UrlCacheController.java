@@ -27,7 +27,6 @@ public class UrlCacheController {
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
-        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "UrlCache";
         String symbol = Symbols.DATABASE.toString();
@@ -42,8 +41,6 @@ public class UrlCacheController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
-
     private final UrlCacheService urlCacheService;
 
     @Autowired
@@ -51,6 +48,5 @@ public class UrlCacheController {
         this.urlCacheService = urlCacheService;
         this.controllerHelper = controllerHelper;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
     }
 }

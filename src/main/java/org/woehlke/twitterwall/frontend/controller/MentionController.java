@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
@@ -25,7 +24,6 @@ public class MentionController {
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
-        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "Mention";
         String symbol = Symbols.DATABASE.toString();
@@ -38,16 +36,13 @@ public class MentionController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
-
     private final MentionService mentionService;
 
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public MentionController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, MentionService mentionService, ControllerHelper controllerHelper) {
+    public MentionController(TwitterwallFrontendProperties twitterwallFrontendProperties, MentionService mentionService, ControllerHelper controllerHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
         this.mentionService = mentionService;
         this.controllerHelper = controllerHelper;
     }

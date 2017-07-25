@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserFinisher {
 
     UserResultList finish(Message<List<UserMessage>> incomingMessageList);
+
+    void finishAsnyc(Message<List<UserMessage>> incomingMessageList);
 }

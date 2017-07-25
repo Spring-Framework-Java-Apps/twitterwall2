@@ -33,14 +33,14 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     #initialSize: 5
-    #max-total: 70
-    #maxActive: 60
+    max-total: 70
+    maxActive: 60
     #maxIdle: 5
     #minIdle: 2
     platform: POSTGRESQL
     #removeAbandoned: true
-    #tomcat:
-      #max-active: 200
+    tomcat:
+      max-active: 60
       #max-wait: 100000
       #test-on-borrow: true
     url: ${DATABASE_URL}
@@ -66,6 +66,7 @@ twitter:
   #  consumerSecret: ${TWITTER_CONSUMER_SECRET}
   pageSize: ${TWITTER_PAGE_SIZE}
   searchQuery: ${TWITTER_SEARCH_TERM}
+  millisToWaitBetweenTwoApiCalls: 5000
 twitterwall:
   backend:
     twitter:

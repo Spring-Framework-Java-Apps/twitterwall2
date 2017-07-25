@@ -72,7 +72,7 @@ public class TaskServiceImpl implements TaskService {
         task.setTaskStatus(TaskStatus.FINISHED);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
-        TaskHistory event = new TaskHistory("done",task.getTaskStatus(),TaskStatus.FINISHED,countedEntities);
+        TaskHistory event = new TaskHistory("DONE ",task.getTaskStatus(),TaskStatus.FINISHED,countedEntities);
         event.setIdTask(task.getId());
         event.setTask(task);
         event = taskHistoryRepository.save(event);
@@ -175,7 +175,33 @@ public class TaskServiceImpl implements TaskService {
         task.setTaskStatus(TaskStatus.RUNNING);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
-        TaskHistory event = new TaskHistory("start",task.getTaskStatus(),TaskStatus.RUNNING,countedEntities);
+        TaskHistory event = new TaskHistory("START",task.getTaskStatus(),TaskStatus.RUNNING,countedEntities);
+        event.setIdTask(task.getId());
+        event.setTask(task);
+        event = taskHistoryRepository.save(event);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task finalError(Task task, String msg, CountedEntities countedEntities) {
+        task.setTaskStatus(TaskStatus.ERROR);
+        task.setTimeLastUpdate(new Date());
+        task = taskRepository.save(task);
+        TaskHistory event = new TaskHistory("FINAL ERROR: "+msg,task.getTaskStatus(),TaskStatus.ERROR,countedEntities);
+        event.setIdTask(task.getId());
+        event.setTask(task);
+        event = taskHistoryRepository.save(event);
+        log.debug(task.toString());
+        return task;
+    }
+
+    @Override
+    public Task done(String logMsg, Task task, CountedEntities countedEntities) {
+        task.setTaskStatus(TaskStatus.FINISHED);
+        task.setTimeLastUpdate(new Date());
+        task = taskRepository.save(task);
+        TaskHistory event = new TaskHistory("DONE "+logMsg,task.getTaskStatus(),TaskStatus.FINISHED,countedEntities);
         event.setIdTask(task.getId());
         event.setTask(task);
         event = taskHistoryRepository.save(event);

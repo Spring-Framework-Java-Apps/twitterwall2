@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
@@ -113,18 +112,15 @@ public class UserController {
 
     private final TwitterwallFrontendProperties twitterwallFrontendProperties;
 
-    private final TwitterProperties twitterProperties;
-
     private final ControllerHelper controllerHelper;
 
     private static String subtitle = "Users";
 
     @Autowired
-    public UserController(UserService userService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, ControllerHelper controllerHelper) {
+    public UserController(UserService userService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper) {
         this.userService = userService;
         this.tweetService = tweetService;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
         this.controllerHelper = controllerHelper;
     }
 }

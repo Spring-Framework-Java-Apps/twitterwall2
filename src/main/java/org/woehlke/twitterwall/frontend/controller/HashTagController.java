@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.TwitterProperties;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.frontend.model.HashTagCounted;
+import org.woehlke.twitterwall.frontend.model.HashTagOverview;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
@@ -24,8 +25,6 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +40,6 @@ public class HashTagController {
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ FIRST_PAGE_NUMBER) int page, Model model){
-        controllerHelper.logEnv();
         String subtitle = "all";
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
@@ -60,7 +58,6 @@ public class HashTagController {
          Model model)
     {
         String msg = "/hashtag/" + text + " ";
-        controllerHelper.logEnv();
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(text);
         if (m.matches()) {
@@ -97,52 +94,13 @@ public class HashTagController {
     @RequestMapping(path="/overview")
     public String hashTagsOverview(Model model) {
         String msg = "/hashtag/overview ";
-        controllerHelper.logEnv();
         String title = "HashTags";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        List<HashTagCounted> hashTagsTweets = new ArrayList<>();
-        List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterwallFrontendProperties.getPageSize());
-        boolean hasNext = true;
-        while(hasNext) {
-            Page<HashTag> myPage = hashTagService.getAll(pageRequest);
-            for (HashTag hashTag : myPage.getContent()) {
-                Pageable pageRequestTeets = new PageRequest(0, 1);
-                Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag, pageRequestTeets);
-                String myMSg = msg + " tweetService.findTweetsForHashTag= " + hashTag.getText();
-                if (tweets == null) {
-                    log.debug(myMSg + " result: null");
-                } else {
-                    long numberTweets = tweets.getTotalElements();
-                    log.debug(myMSg + " result: numberTweets=" + numberTweets);
-                    if (numberTweets > 0) {
-                        HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
-                        hashTagsTweets.add(c);
-                    }
-                }
-                Pageable pageRequestUsers = new PageRequest(0, 1);
-                Page<User> users = userService.getUsersForHashTag(hashTag, pageRequestUsers);
-                myMSg = msg + " userService.getUsersForHashTag= " + hashTag.getText();
-                if (users == null) {
-                    log.debug(myMSg + " result: null");
-                } else {
-                    long numberUsers = users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
-                    log.debug(myMSg + " result: numberUsers=" + numberUsers);
-                    if (numberUsers > 0) {
-                        HashTagCounted c = new HashTagCounted(numberUsers, hashTag.getText());
-                        hashTagsUsers.add(c);
-                    }
-                }
-            }
-            hasNext = myPage.hasNext();
-            if(hasNext){
-                pageRequest=myPage.nextPageable();
-            }
-        }
-        model.addAttribute("hashTagsTweets", hashTagsTweets);
-        model.addAttribute("hashTagsUsers", hashTagsUsers);
+        HashTagOverview overview = hashTagsOverviewHelper.getHashTagOverview();
+        model.addAttribute("hashTagsTweets", overview.getHashTagsTweets());
+        model.addAttribute("hashTagsUsers", overview.getHashTagsUsers());
         return "hashtag/overview";
     }
 
@@ -160,13 +118,16 @@ public class HashTagController {
 
     private final ControllerHelper controllerHelper;
 
+    private final HashTagsOverviewHelper hashTagsOverviewHelper;
+
     @Autowired
-    public HashTagController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper) {
+    public HashTagController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper, HashTagsOverviewHelper hashTagsOverviewHelper) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.twitterProperties = twitterProperties;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
         this.userService = userService;
         this.controllerHelper = controllerHelper;
+        this.hashTagsOverviewHelper = hashTagsOverviewHelper;
     }
 }

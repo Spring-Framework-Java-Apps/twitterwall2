@@ -5,17 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 
 import java.util.List;
 
-public interface StartTask {
-
-    void fetchTweetsFromTwitterSearch();
-
-    void updateTweets();
-
-    void updateUserProfiles();
-
-    void updateUserProfilesFromMentions();
-
-    void fetchUsersFromDefinedUserList();
+public interface StartTask extends AsyncStartTask {
 
     User createImprintUser();
 
