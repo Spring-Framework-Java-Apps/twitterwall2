@@ -61,7 +61,7 @@ public class TestControllerTest {
     public void getTestDataTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/test/getTestData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "/test/getTestData"))
+                .andExpect(view().name( "test/getTestData"))
                 .andExpect(model().attributeExists("latestTweets"))
                 //.andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("page"))
@@ -82,7 +82,7 @@ public class TestControllerTest {
     public void getOnListRenewTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/test/user/onlist/renew"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "/test/user/onlist/renew"))
+            .andExpect(view().name( "test/user/onlist/renew"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();

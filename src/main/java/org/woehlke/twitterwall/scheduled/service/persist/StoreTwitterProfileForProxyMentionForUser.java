@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade;
+package org.woehlke.twitterwall.scheduled.service.persist;
 
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;

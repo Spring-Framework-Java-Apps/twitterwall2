@@ -11,7 +11,8 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.MentionService;
-import org.woehlke.twitterwall.scheduled.service.facade.StoreTwitterProfileForProxyMentionForUser;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreTwitterProfileForProxyMentionForUser;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention;
 
 /**
@@ -84,12 +85,15 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
 
     private final StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser;
 
+    private final StartTask startTask;
+
     private final TaskService taskService;
 
     @Autowired
-    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser, TaskService taskService) {
+    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser, StartTask startTask, TaskService taskService) {
         this.mentionService = mentionService;
         this.storeTwitterProfileForProxyMentionForUser = storeTwitterProfileForProxyMentionForUser;
+        this.startTask = startTask;
         this.taskService = taskService;
     }
 }

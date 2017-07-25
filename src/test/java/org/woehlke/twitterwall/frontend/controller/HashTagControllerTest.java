@@ -41,13 +41,7 @@ public class HashTagControllerTest {
     private HashTagController controller;
 
     @Autowired
-    private TwitterProperties twitterProperties;
-
-    @Autowired
     private TwitterwallSchedulerProperties twitterwallSchedulerProperties;
-
-    @Autowired
-    private TwitterwallFrontendProperties twitterwallFrontendProperties;
 
     @Commit
     @Test
@@ -76,7 +70,7 @@ public class HashTagControllerTest {
         String hashtagText = "java";
         MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/hashtag/all"))
+                .andExpect(view().name("hashtag/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
@@ -97,7 +91,7 @@ public class HashTagControllerTest {
         String hashtagText = "java";
         MvcResult result = this.mockMvc.perform(get("/hashtag/"+hashtagText))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/hashtag/hashtagText"))
+                .andExpect(view().name("hashtag/hashtagText"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("latestTweets"))
                 .andExpect(model().attributeExists("hashTag"))
@@ -120,7 +114,7 @@ public class HashTagControllerTest {
     public void hashTagsOverview()  throws Exception {
         MvcResult result = this.mockMvc.perform(get("/hashtag/overview"))
             .andExpect(status().isOk())
-            .andExpect(view().name("/hashtag/overview"))
+            .andExpect(view().name("hashtag/overview"))
             .andExpect(model().attributeExists("hashTagsTweets"))
             .andExpect(model().attributeExists("hashTagsUsers"))
             .andExpect(model().attributeExists("page"))

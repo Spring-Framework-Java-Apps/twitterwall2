@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 /**
@@ -32,14 +33,14 @@ public class FetchUsersFromDefinedUserListTest  extends AbstractFacadeTest {
     private CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    private FetchUsersFromDefinedUserList fetchUsersFromDefinedUserList;
+    private StartTask startTask;
 
     @Ignore
     @Commit
     @Test
     public void fetchUsersFromDefinedUserListTest(){
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.fetchUsersFromDefinedUserList.fetchUsersFromDefinedUserList();
+        this.startTask.fetchUsersFromDefinedUserList();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

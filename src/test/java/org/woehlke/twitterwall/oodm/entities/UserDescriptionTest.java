@@ -56,7 +56,8 @@ public class UserDescriptionTest {
     };
 
     @Test
-    public void printDescriptionsTest(Task task){
+    public void printDescriptionsTest(){
+        Task task = null;
         int lfdNr = 0;
         log.info("printDescriptionsTest");
         log.info("++++++++++++++++++++");

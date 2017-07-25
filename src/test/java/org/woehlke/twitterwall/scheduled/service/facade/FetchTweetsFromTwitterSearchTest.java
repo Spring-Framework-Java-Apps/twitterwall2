@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.ScheduledTasks;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 
@@ -31,7 +32,7 @@ public class FetchTweetsFromTwitterSearchTest extends AbstractFacadeTest {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
     @Autowired
-    private FetchTweetsFromTwitterSearch fetchTweetsFromTwitterSearch;
+    private StartTask startTask;
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
@@ -41,7 +42,7 @@ public class FetchTweetsFromTwitterSearchTest extends AbstractFacadeTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest(){
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.fetchTweetsFromTwitterSearch.fetchTweetsFromTwitterSearch();
+        this.startTask.fetchTweetsFromTwitterSearch();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
