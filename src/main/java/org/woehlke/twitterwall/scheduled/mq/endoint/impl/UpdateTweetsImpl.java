@@ -73,7 +73,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
         lfdNr = 0;
         for(Long tweetTwitterId : worklistTwitterIds){
             lfdNr++;
-            log.debug("### witterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
+            log.debug("### twitterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
             tweets.add(result);
