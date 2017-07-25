@@ -44,14 +44,14 @@ public class UserFinisherImpl implements UserFinisher {
         if(incomingMessageList.getHeaders().containsKey("task_id")){
             long taskId = (Long) incomingMessageList.getHeaders().get( "task_id");
             Task task = taskService.findById(taskId);
-            String msgDone = "Sucessfully finished task "+task.getTaskType()+"via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
+            String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
             taskService.done(msgDone,task,countedEntities);
             log.info(msgDone);
         } else {
             if(userMessageList.size()>0) {
                 long taskId = userMessageList.get(0).getTaskId();
                 Task task = taskService.findById(taskId);
-                String msgDone = "Sucessfully finished task "+task.getTaskType()+"via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
+                String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
                 taskService.done(task,countedEntities);
                 log.info(msgDone);
             } else {
