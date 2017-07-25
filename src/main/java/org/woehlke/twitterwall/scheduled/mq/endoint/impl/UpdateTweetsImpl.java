@@ -71,6 +71,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
             tweets.add(result);
+            log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
             try {
                 Thread.sleep(millisToWaitBetweenTwoApiCalls);
             } catch (InterruptedException e) {

@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +9,6 @@ import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
@@ -27,7 +28,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 @Component("mqUpdateUserProfilesFromMentions")
 public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFromMentions {
 
-    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private static final Logger log = LoggerFactory.getLogger(UpdateUserProfilesFromMentionsImpl.class);
 
     private final TwitterProperties twitterProperties;
 
@@ -39,8 +40,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public UpdateUserProfilesFromMentionsImpl(TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, CountedEntitiesService countedEntitiesService) {
-        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+    public UpdateUserProfilesFromMentionsImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, CountedEntitiesService countedEntitiesService) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
@@ -50,6 +50,8 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     @Override
     public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
+        String msg ="splitMessage: ";
+        log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<TwitterProfileMessage> userProfileList = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
@@ -76,10 +78,11 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         for(String screenName:screenNames){
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
-            if(userProfile!=null){
-                TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);
+            if(userProfile!=null) {
+                TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn, userProfile);
                 userProfileList.add(userMsg);
             }
+            log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
             try {
                 Thread.sleep(millisToWaitBetweenTwoApiCalls);
             } catch (InterruptedException e) {

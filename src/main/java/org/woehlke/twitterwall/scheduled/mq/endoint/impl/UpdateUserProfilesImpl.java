@@ -54,6 +54,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     @Override
     public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
         String msg = "mqUpdateUserProfiles.splitMessage: ";
+        log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
@@ -96,6 +97,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
             } catch (InterruptedException e) {
             }
         }
+        log.debug(msg+ " DONE");
         return userProfileList;
     }
 }

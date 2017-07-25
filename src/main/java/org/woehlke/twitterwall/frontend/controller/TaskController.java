@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +17,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endoint.AsyncStartTask;
 
 /**
  * Created by tw on 11.07.17.
@@ -63,7 +62,7 @@ public class TaskController {
         String subtitle = "/scheduled/tweets/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        this.fetchTweetsFromTwitterSearch();
+        mqAsyncStartTask.fetchUsersFromDefinedUserList();
         return "scheduled/taskStarted";
     }
 
@@ -74,7 +73,7 @@ public class TaskController {
         String subtitle = "/scheduled/tweets/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        this.updateTweets();
+        mqAsyncStartTask.updateTweets();
         return "scheduled/taskStarted";
     }
 
@@ -85,7 +84,7 @@ public class TaskController {
         String subtitle = "/scheduled/users/list/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        this.fetchUsersFromDefinedUserList();
+        mqAsyncStartTask.fetchUsersFromDefinedUserList();
         return "scheduled/taskStarted";
     }
 
@@ -96,7 +95,7 @@ public class TaskController {
         String subtitle = "/scheduled/users/mentions/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        this.updateUserProfilesFromMentions();
+        mqAsyncStartTask.updateUserProfilesFromMentions();
         return "scheduled/taskStarted";
     }
 
@@ -107,33 +106,8 @@ public class TaskController {
         String subtitle = "/scheduled/users/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        this.updateUserProfiles();
+        mqAsyncStartTask.updateUserProfiles();
         return "scheduled/taskStarted";
-    }
-
-    @Async
-    protected void fetchTweetsFromTwitterSearch() {
-        startTask.fetchTweetsFromTwitterSearch();
-    }
-
-    @Async
-    protected void updateTweets() {
-        startTask.updateTweets();
-    }
-
-    @Async
-    protected void fetchUsersFromDefinedUserList(){
-        startTask.fetchUsersFromDefinedUserList();
-    }
-
-    @Async
-    protected void updateUserProfilesFromMentions(){
-        startTask.updateUserProfilesFromMentions();
-    }
-
-    @Async
-    protected void updateUserProfiles() {
-        startTask.updateUserProfiles();
     }
 
     private final TaskService taskService;
@@ -144,14 +118,14 @@ public class TaskController {
 
     private final ControllerHelper controllerHelper;
 
-    private final StartTask startTask;
+    private final AsyncStartTask mqAsyncStartTask;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, StartTask startTask) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, AsyncStartTask mqAsyncStartTask) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.controllerHelper = controllerHelper;
-        this.startTask = startTask;
+        this.mqAsyncStartTask = mqAsyncStartTask;
     }
 }
