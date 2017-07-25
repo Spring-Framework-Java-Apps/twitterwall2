@@ -51,7 +51,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
     }
 
     private void send(TaskType taskType){
-        String msg = "START Task "+taskType+"via MQ by "+SenderType.FIRE_AND_FORGET_SENDER;
+        String msg = "START Task "+taskType+" via MQ by "+SenderType.FIRE_AND_FORGET_SENDER;
         log.info(msg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(msg, taskType,countedEntities);
