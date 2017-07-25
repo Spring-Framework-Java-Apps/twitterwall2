@@ -66,6 +66,7 @@ twitter:
   #  consumerSecret: ${TWITTER_CONSUMER_SECRET}
   pageSize: ${TWITTER_PAGE_SIZE}
   searchQuery: ${TWITTER_SEARCH_TERM}
+  millisToWaitBetweenTwoApiCalls: 5000
 twitterwall:
   backend:
     twitter:

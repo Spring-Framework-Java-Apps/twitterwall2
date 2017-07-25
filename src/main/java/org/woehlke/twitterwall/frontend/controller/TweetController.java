@@ -28,7 +28,6 @@ public class TweetController {
 
     @RequestMapping("/all")
     public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        controllerHelper.logEnv();
         model = controllerHelper.setupPage(model,"Tweets",twitterProperties.getSearchQuery(),Symbols.HOME.toString());
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);

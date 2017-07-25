@@ -10,8 +10,6 @@ public interface ControllerHelper {
 
     int FIRST_PAGE_NUMBER = 0;
 
-    void logEnv();
-
     ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol);
 
     Model setupPage(Model model, String title, String subtitle, String symbol);

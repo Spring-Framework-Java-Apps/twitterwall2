@@ -16,11 +16,7 @@ import java.util.List;
  */
 public interface TweetService extends DomainServiceWithIdTwitter<Tweet>,DomainServiceWithTask<Tweet> {
 
-    //Page<Tweet> findLatestTweets(Pageable pageRequest);
-
     Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest);
-
-    //long countTweetsForHashTag(String hashtagText);
 
     Page<Tweet> findTweetsForUser(User user, Pageable pageRequest);
 

@@ -65,4 +65,9 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
         mention = mentionRepository.save(mention);
         return mention;
     }
+
+    @Override
+    public Page<Mention> getAllWithoutPersistentUser(Pageable pageRequest) {
+        return mentionRepository.findAllByUserNull(pageRequest);
+    }
 }

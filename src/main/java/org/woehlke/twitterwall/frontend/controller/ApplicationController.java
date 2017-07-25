@@ -20,7 +20,6 @@ public class ApplicationController {
     @RequestMapping(path="/domain/count")
     public String domainCount(Model model) {
         String msg = "/application/domain/count: ";
-        controllerHelper.logEnv();
         String title = "Counted Entities";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
@@ -33,26 +32,21 @@ public class ApplicationController {
     @RequestMapping(path="/management")
     public String dmanagementPage(Model model) {
         String msg = "/application/domain/count: ";
-        controllerHelper.logEnv();
         String title = "Application Management";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        //CountedEntities countedEntities =this.countedEntitiesService.countAll();
-        //model.addAttribute("countedEntities", countedEntities);
-
         return "application/management";
     }
-
-
-    private final CountedEntitiesService countedEntitiesService;
-
+    
     @Autowired
     public ApplicationController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper, TwitterProperties twitterProperties) {
         this.countedEntitiesService = countedEntitiesService;
         this.controllerHelper = controllerHelper;
         this.twitterProperties = twitterProperties;
     }
+
+    private final CountedEntitiesService countedEntitiesService;
 
     private final ControllerHelper controllerHelper;
 

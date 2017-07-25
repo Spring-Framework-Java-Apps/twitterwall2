@@ -31,4 +31,9 @@ public interface TaskService extends DomainObjectMinimalService<Task> {
     Task error(Task task, String msg,CountedEntities countedEntities);
 
     Task start(Task task,CountedEntities countedEntities);
+
+    Task finalError(Task task, String s, CountedEntities countedEntities);
+
+    Task done(String logMsg, Task task, CountedEntities countedEntities);
+
 }

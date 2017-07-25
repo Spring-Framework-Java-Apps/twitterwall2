@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <!--
     <logger name="org.woehlke.twitterwall.oodm.entities" level="INFO" />
     <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="INFO" />
     <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="INFO" />
@@ -15,7 +14,7 @@
     <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="INFO" />
     <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="INFO" />
     <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="INFO" />
-    -->
+    <logger name="org.woehlke.twitterwall.scheduled.mq" level="INFO" />
     <logger name="org.woehlke.twitterwall" level="INFO" />
     <root level="WARN"></root>
 </configuration>

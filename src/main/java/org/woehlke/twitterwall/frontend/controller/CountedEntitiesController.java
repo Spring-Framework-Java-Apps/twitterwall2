@@ -88,7 +88,6 @@ public class CountedEntitiesController {
     }
 
     private void setUpThisPage(String title,Model model){
-        controllerHelper.logEnv();
         String subtitle = "Counted Entities";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);

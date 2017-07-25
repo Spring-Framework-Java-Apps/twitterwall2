@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
@@ -13,4 +15,6 @@ import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 public interface MentionService extends DomainServiceWithScreenName<Mention>,DomainServiceWithIdTwitter<Mention>,DomainServiceWithTask<Mention> {
 
     Mention createProxyMention(Mention mention, Task task);
+
+    Page<Mention> getAllWithoutPersistentUser(Pageable pageRequest);
 }

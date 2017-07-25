@@ -30,9 +30,16 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public List<Tweet> findTweetsForSearchQuery() {
         String msg = MSG+"findTweetsForSearchQuery: ";
         log.debug(msg);
-        List<Tweet> fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
+        } catch (Exception e) {
+            fetchedTweets = new ArrayList<>();
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         msg += " result: ";
-        if(fetchedTweets == null){
+        if(fetchedTweets.size()==0){
             log.debug(msg+" result.size: 0");
             return new ArrayList<>();
         } else {
@@ -45,7 +52,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public Tweet findOneTweetById(long id) {
         String msg = MSG+"findOneTweetById: "+id;
         log.debug(msg);
-        Tweet result = getTwitterProxy().timelineOperations().getStatus(id);
+        Tweet result;
+        try {
+            result = getTwitterProxy().timelineOperations().getStatus(id);
+        } catch (Exception e){
+            result = null;
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         msg += " result: ";
         log.debug(msg+" Id: "+result.getId());
         return result;
@@ -55,7 +69,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds) {
         String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds;
         log.debug(msg);
-        List<TwitterProfile> result = getTwitterProxy().userOperations().getUsers(userProfileTwitterIds);
+        List<TwitterProfile> result;
+        try {
+            result = getTwitterProxy().userOperations().getUsers(userProfileTwitterIds);
+        } catch (Exception e){
+            result = null;
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         msg += " result: ";
         log.debug(msg+" size: "+result.size());
         return result;
@@ -65,7 +86,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
         String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterId;
         log.debug(msg);
-        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+        TwitterProfile result;
+        try {
+            result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+        } catch (Exception e) {
+            result = null;
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         msg += " result: ";
         log.debug(msg+" Id:         "+result.getId());
         log.debug(msg+" ScreenName: "+result.getScreenName());
@@ -77,8 +105,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public TwitterProfile getUserProfileForScreenName(String screenName) {
         String msg = MSG+"getUserProfileForScreenName: "+screenName;
         log.debug(msg);
-        TwitterProfile result = getTwitterProxy().userOperations().getUserProfile(screenName);
-        log.debug(msg+result.getId());
+        TwitterProfile result;
+        try {
+            result= getTwitterProxy().userOperations().getUserProfile(screenName);
+        } catch (Exception e) {
+            result = null;
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         msg += " result: ";
         log.debug(msg+" ScreenName: "+result.getScreenName());
         log.debug(msg+" Name:       "+result.getName());
@@ -89,7 +123,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     public List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName) {
         String msg = MSG+"findUsersFromDefinedList: "+fetchUserListName+" ";
         log.debug(msg);
-        List<TwitterProfile> result = getTwitterProxy().listOperations().getListMembers(screenName,fetchUserListName);
+        List<TwitterProfile> result;
+        try {
+            result = getTwitterProxy().listOperations().getListMembers(screenName, fetchUserListName);
+        } catch (Exception e) {
+            result = new ArrayList<>();
+            log.debug(msg + e.getMessage());
+            e.printStackTrace();
+        }
         log.debug(msg+" result.size: "+result.size());
         return result;
     }
