@@ -60,9 +60,10 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public User createImprintUser() {
-        CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
         String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType,countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
         Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
@@ -71,7 +72,6 @@ public class StartTaskImpl implements StartTask {
             .setHeader("task_type", task.getTaskType())
             .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
-        log.info(logMsg);
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
         countedEntities = countedEntitiesService.countAll();
@@ -93,9 +93,10 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public List<User> createTestDataForUser() {
-        CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType taskType = TaskType.CONTROLLER_GET_TESTDATA_USER;
         String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType, countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
         Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
@@ -104,7 +105,6 @@ public class StartTaskImpl implements StartTask {
                 .setHeader("task_type", task.getTaskType())
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
-        log.info(logMsg);
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
         countedEntities = countedEntitiesService.countAll();
@@ -126,9 +126,10 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public List<Tweet> createTestDataForTweets() {
-        CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType taskType = TaskType.CONTROLLER_GET_TESTDATA_TWEETS;
         String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
         Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
@@ -137,7 +138,6 @@ public class StartTaskImpl implements StartTask {
                 .setHeader("task_type", task.getTaskType())
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
-        log.info(logMsg);
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
         countedEntities = countedEntitiesService.countAll();
@@ -159,6 +159,7 @@ public class StartTaskImpl implements StartTask {
 
     private void sendAndReceiveTweet(TaskType taskType){
         String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType,countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
@@ -168,7 +169,6 @@ public class StartTaskImpl implements StartTask {
                 .setHeader("task_type", task.getTaskType())
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
-        log.info(logMsg);
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
         countedEntities = countedEntitiesService.countAll();
@@ -187,6 +187,7 @@ public class StartTaskImpl implements StartTask {
 
     private void sendAndReceiveUser(TaskType taskType){
         String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(logMsg, taskType,countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
@@ -196,7 +197,6 @@ public class StartTaskImpl implements StartTask {
                 .setHeader("task_type", task.getTaskType())
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
-        log.info(logMsg);
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
         countedEntities = countedEntitiesService.countAll();
