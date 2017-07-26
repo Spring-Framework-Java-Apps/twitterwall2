@@ -20,9 +20,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <span  class="tw-pager-arrow tw-pager-up" th:if="${listObject2Entity.hasPrevious()}">
-                        <a href="" th:href="@{|/application/countedEntities/userprofile/mention?page=${listObject2Entity.previousPageable().pageNumber}|}">
+                        <a href="" th:href="@{|/application/countedEntities/${nameObject}/${nameEntity}?page=${listObject2Entity.previousPageable().pageNumber}|}">
                             <span>
-                                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                            <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                             </span>
                         </a>
                     </span>
@@ -34,8 +34,8 @@
                 <table class="table table-striped">
                     <thead th:fragment="tw-data-view-thead">
                     <tr>
-                        <th>Tweet ID</th>
-                        <th>HashTag ID</th>
+                        <th><span th:text="${nameObject}">nameObject</span> ID</th>
+                        <th><span th:text="${nameEntity}">nameEntity</span> ID</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,7 +43,7 @@
                         <td>
                             <span class="tw-vector">
                                 <i class="fa fa-database" aria-hidden="true"></i>
-                                <a href="/tweet/id" th:href="@{|/tweet/${object2Entity.objectId}|}">
+                                <a href="/tweet/id" th:href="@{|/${nameObject}/id/${object2Entity.objectId}|}">
                                     <span th:text="${object2Entity.objectId}">objectId</span>
                                     <span th:text="${object2Entity.objectInfo}" class="tw-left-space">objectInfo</span>
                                 </a>
@@ -52,18 +52,16 @@
                         <td>
                             <span class="tw-vector">
                                 <i class="fa fa-database" aria-hidden="true"></i>
-                                <a href="/hashtag/id" th:href="@{|/mention/${object2Entity.entityId}|}">
-                                    <span th:text="${object2Entity.entityId}">entityId</span>
-                                    <span th:text="${object2Entity.entityInfo}" class="tw-left-space">entityInfo</span>
-                                </a>
+                                <span th:text="${object2Entity.entityId}">entityId</span>
+                                <span th:text="${object2Entity.entityInfo}" class="tw-left-space">entityInfo</span>
                             </span>
                         </td>
                     </tr>
                     </tbody>
                     <tfoot th:fragment="tw-data-view-tfoot">
                     <tr>
-                        <th>Tweet ID</th>
-                        <th>HashTag ID</th>
+                        <th><span th:text="${nameObject}">nameObject</span> ID</th>
+                        <th><span th:text="${nameEntity}">nameEntity</span> ID</th>
                     </tr>
                     </tfoot>
                 </table>
@@ -72,13 +70,13 @@
         <div th:fragment="tw-data-view-below">
             <div class="row">
                 <div class="col-md-12">
-                        <span class="tw-pager-arrow tw-pager-down" th:if="${listObject2Entity.hasNext()}">
-                            <a href="" th:href="@{|/application/countedEntities/userprofile/mention?page=${listObject2Entity.nextPageable().pageNumber}|}" >
-                                <span>
-                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </span>
+                    <span class="tw-pager-arrow tw-pager-down" th:if="${listObject2Entity.hasNext()}">
+                        <a href="" th:href="@{|/application/countedEntities/${nameObject}/${nameEntity}?page=${listObject2Entity.nextPageable().pageNumber}|}" >
+                            <span>
+                            <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </span>
                 </div>
             </div>
             <div class="row">

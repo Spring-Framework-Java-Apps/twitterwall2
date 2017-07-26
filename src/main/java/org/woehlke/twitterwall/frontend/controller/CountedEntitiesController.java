@@ -28,7 +28,12 @@ public class CountedEntitiesController {
     private final static String PATH="application/countedEntities";
 
     @RequestMapping(path="/tweet/hashtag")
-    public String domainCountTweet2hashtag(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String domainCountTweet2hashtag(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "Tweet -&gt; HashTag";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -43,11 +48,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/tweet/hashtag";
+        model.addAttribute("nameObject", "tweet");
+        model.addAttribute("nameEntity", "hashtag");
+        return PATH;
     }
 
     @RequestMapping(path="/tweet/media")
-    public String domainCountTweet2media(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String domainCountTweet2media(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "Tweet -&gt; Media";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -62,7 +74,9 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/tweet/media";
+        model.addAttribute("nameObject", "tweet");
+        model.addAttribute("nameEntity", "media");
+        return PATH;
     }
 
     @RequestMapping(path="/tweet/mention")
@@ -81,11 +95,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/tweet/mention";
+        model.addAttribute("nameObject", "tweet");
+        model.addAttribute("nameEntity", "mention");
+        return PATH;
     }
 
     @RequestMapping(path="/tweet/tickersymbol")
-    public String domainCountTweet2tickersymbol(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String domainCountTweet2tickersymbol(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "Tweet -&gt; TickerSymbol";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -100,11 +121,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/tweet/tickersymbol";
+        model.addAttribute("nameObject", "tweet");
+        model.addAttribute("nameEntity", "tickersymbol");
+        return PATH;
     }
 
     @RequestMapping(path="/tweet/url")
-    public String domainCountTweet2url(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String domainCountTweet2url(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "Tweet -&gt; Url";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -119,11 +147,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/tweet/url";
+        model.addAttribute("nameObject", "tweet");
+        model.addAttribute("nameEntity", "url");
+        return PATH;
     }
 
-    @RequestMapping(path="/userprofile/hashtag")
-    public String domainCountUserprofile2hashtag(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    @RequestMapping(path="/user/hashtag")
+    public String domainCountUserprofile2hashtag(
+            @RequestParam(
+                    name= "page" ,
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "UserProfile -&gt; HashTag";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -138,11 +173,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
-        return PATH+"/userprofile/hashtag";
+        model.addAttribute("nameObject", "user");
+        model.addAttribute("nameEntity", "hashtag");
+        return PATH;
     }
 
-    @RequestMapping(path="/userprofil/media")
-    public String domainCountUserprofile2media(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    @RequestMapping(path="/user/media")
+    public String domainCountUserprofile2media(
+            @RequestParam(
+                    name= "page" ,
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "UserProfile -&gt; Media";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -157,11 +199,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
-        return PATH+"/userprofile/media";
+        model.addAttribute("nameObject", "user");
+        model.addAttribute("nameEntity", "media");
+        return PATH;
     }
 
-    @RequestMapping(path="/userprofile/mention")
-    public String domainCountUserprofile2mention(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    @RequestMapping(path="/user/mention")
+    public String domainCountUserprofile2mention(
+            @RequestParam(
+                name= "page",
+                defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "UserProfile -&gt; Mention";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -176,11 +225,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
-        return PATH+"/userprofile/mention";
+        model.addAttribute("nameObject", "user");
+        model.addAttribute("nameEntity", "mention");
+        return PATH;
     }
 
-    @RequestMapping(path="/userprofile/tickersymbol")
-    public String domainCountUserprofile2Tickersymbol(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    @RequestMapping(path="/user/tickersymbol")
+    public String domainCountUserprofile2Tickersymbol(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "UserProfile -&gt; TickerSymbol";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -195,11 +251,18 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
-        return PATH+"/userprofile/tickersymbol";
+        model.addAttribute("nameObject", "user");
+        model.addAttribute("nameEntity", "tickersymbol");
+        return PATH;
     }
 
-    @RequestMapping(path="/userprofile/url")
-    public String domainCountUserprofile2Url(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    @RequestMapping(path="/user/url")
+    public String domainCountUserprofile2Url(
+            @RequestParam(
+                    name= "page",
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
         String title = "UserProfile -&gt; Url";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
@@ -214,7 +277,9 @@ public class CountedEntitiesController {
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
-        return PATH+"/userprofile/url";
+        model.addAttribute("nameObject", "user");
+        model.addAttribute("nameEntity", "url");
+        return PATH;
     }
 
     private void setUpThisPage(String title,Model model){
