@@ -45,6 +45,7 @@
                                 <i class="fa fa-database" aria-hidden="true"></i>
                                 <a href="/tweet/id" th:href="@{|/tweet/${object2Entity.objectId}|}">
                                     <span th:text="${object2Entity.objectId}">objectId</span>
+                                    <span th:text="${object2Entity.objectInfo}" class="tw-left-space">objectInfo</span>
                                 </a>
                             </span>
                         </td>
@@ -53,6 +54,7 @@
                                 <i class="fa fa-database" aria-hidden="true"></i>
                                 <a href="/hashtag/id" th:href="@{|/hashtag/${object2Entity.entityId}|}">
                                     <span th:text="${object2Entity.entityId}">entityId</span>
+                                    <span th:text="${object2Entity.entityInfo}" class="tw-left-space">entityInfo</span>
                                 </a>
                             </span>
                         </td>
