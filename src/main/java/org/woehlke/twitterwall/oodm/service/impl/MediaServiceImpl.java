@@ -37,4 +37,5 @@ public class MediaServiceImpl extends DomainServiceWithTaskImpl<Media> implement
     public Media findByUrl(String url) {
         return mediaRepository.findByUrl(url);
     }
+
 }

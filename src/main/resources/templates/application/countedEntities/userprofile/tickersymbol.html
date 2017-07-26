@@ -8,80 +8,82 @@
 <header th:include="layout :: tw-header" >
 </header>
 <section>
-    <div th:fragment="tw-data-view-above">
-        <div class="row">
-            <div class="col-md-12">
-                <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+    <div class="container">
+        <div th:fragment="tw-data-view-above">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${page.historyBack}">
+                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span  class="tw-pager-arrow tw-pager-up" th:if="${listObject2Entity.hasPrevious()}">
+                        <a href="" th:href="@{|/application/countedEntities/user/tickersymbol?page=${listObject2Entity.previousPageable().pageNumber}|}">
+                            <span>
+                                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <span  class="tw-pager-arrow tw-pager-up" th:if="${listObject2Entity.hasPrevious()}">
-                    <a href="" th:href="@{|/application/countedEntities/user/tickersymbol?page=${listObject2Entity.previousPageable().pageNumber}|}">
-                        <span>
-                            <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
-                        </span>
-                    </a>
-                </span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead th:fragment="tw-data-view-thead">
-                <tr>
-                    <th>Tweet ID</th>
-                    <th>HashTag ID</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="object2Entity : ${listObject2Entity.getContent()}">
-                    <td>
-                        <span class="tw-vector">
-                            <i class="fa fa-database" aria-hidden="true"></i>
-                            <a href="/tweet/id" th:href="@{|/tweet/${object2Entity.objectId}|}">
-                                <span th:text="${object2Entity.objectId}">objectId</span>
-                            </a>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="tw-vector">
-                            <i class="fa fa-database" aria-hidden="true"></i>
-                            <a href="/hashtag/id" th:href="@{|/tickersymbol/${object2Entity.entityId}|}">
-                                <span th:text="${object2Entity.entityId}">entityId</span>
-                            </a>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-                <tfoot th:fragment="tw-data-view-tfoot">
-                <tr>
-                    <th>Tweet ID</th>
-                    <th>HashTag ID</th>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <div th:fragment="tw-data-view-below">
-        <div class="row">
-            <div class="col-md-12">
-                    <span class="tw-pager-arrow tw-pager-down" th:if="${listObject2Entity.hasNext()}">
-                        <a href="" th:href="@{|/application/countedEntities/user/tickersymbol?page=${listObject2Entity.nextPageable().pageNumber}|}" >
-                            <span>
-                            <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                <table class="table table-striped">
+                    <thead th:fragment="tw-data-view-thead">
+                    <tr>
+                        <th>Tweet ID</th>
+                        <th>HashTag ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="object2Entity : ${listObject2EntityContent}">
+                        <td>
+                            <span class="tw-vector">
+                                <i class="fa fa-database" aria-hidden="true"></i>
+                                <a href="/tweet/id" th:href="@{|/tweet/${object2Entity.objectId}|}">
+                                    <span th:text="${object2Entity.objectId}">objectId</span>
+                                </a>
                             </span>
-                        </a>
-                    </span>
+                        </td>
+                        <td>
+                            <span class="tw-vector">
+                                <i class="fa fa-database" aria-hidden="true"></i>
+                                <a href="/hashtag/id" th:href="@{|/tickersymbol/${object2Entity.entityId}|}">
+                                    <span th:text="${object2Entity.entityId}">entityId</span>
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot th:fragment="tw-data-view-tfoot">
+                    <tr>
+                        <th>Tweet ID</th>
+                        <th>HashTag ID</th>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div th:if="${page.historyBack}">
-                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+        <div th:fragment="tw-data-view-below">
+            <div class="row">
+                <div class="col-md-12">
+                        <span class="tw-pager-arrow tw-pager-down" th:if="${listObject2Entity.hasNext()}">
+                            <a href="" th:href="@{|/application/countedEntities/user/tickersymbol?page=${listObject2Entity.nextPageable().pageNumber}|}" >
+                                <span>
+                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${page.historyBack}">
+                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                    </div>
                 </div>
             </div>
         </div>

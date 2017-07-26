@@ -36,4 +36,5 @@ public class UrlCacheServiceImpl extends DomainServiceWithTaskImpl<UrlCache> imp
         log.debug("UrlCache.findByUrl: found: "+urlCache.toString());
         return urlCache;
     }
+
 }

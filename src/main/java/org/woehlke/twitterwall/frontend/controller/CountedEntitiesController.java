@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
+import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
-import org.woehlke.twitterwall.oodm.service.TweetService;
-import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.oodm.service.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tw on 16.07.17.
@@ -30,6 +33,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2HashTag(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            Tweet tweet = tweetService.findById(object2Entity.getObjectId());
+            HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setEntityInfo(hashTag.getText());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/tweet/hashtag";
     }
@@ -40,6 +52,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Media(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            Tweet tweet = tweetService.findById(object2Entity.getObjectId());
+            Media medium = mediaService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setEntityInfo(medium.getUrl());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/tweet/media";
     }
@@ -50,6 +71,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Mention(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            Tweet tweet = tweetService.findById(object2Entity.getObjectId());
+            Mention mention = mentionService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setEntityInfo(mention.getScreenName());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/tweet/mention";
     }
@@ -60,6 +90,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2TickerSymbol(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            Tweet tweet = tweetService.findById(object2Entity.getObjectId());
+            TickerSymbol tickerSymbol = tickerSymbolService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setEntityInfo(tickerSymbol.getUniqueId());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/tweet/tickersymbol";
     }
@@ -70,6 +109,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Url(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            Tweet tweet = tweetService.findById(object2Entity.getObjectId());
+            Url url = urlService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setEntityInfo(url.getExpanded());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/tweet/url";
     }
@@ -80,6 +128,15 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2HashTag(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            User user = userService.findById(object2Entity.getObjectId());
+            HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setEntityInfo(hashTag.getText());
+            listObject2EntityContent.add(object2Entity);
+        }
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         model.addAttribute("listObject2Entity", listObject2Entity);
         return PATH+"/userprofile/hashtag";
     }
@@ -90,7 +147,16 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Media(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            User user = userService.findById(object2Entity.getObjectId());
+            Media medium = mediaService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setEntityInfo(medium.getUrl());
+            listObject2EntityContent.add(object2Entity);
+        }
         model.addAttribute("listObject2Entity", listObject2Entity);
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         return PATH+"/userprofile/media";
     }
 
@@ -100,7 +166,16 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Mentiong(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            User user = userService.findById(object2Entity.getObjectId());
+            Mention mention = mentionService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setEntityInfo(mention.getScreenName());
+            listObject2EntityContent.add(object2Entity);
+        }
         model.addAttribute("listObject2Entity", listObject2Entity);
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         return PATH+"/userprofile/mention";
     }
 
@@ -110,7 +185,16 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2TickerSymbol(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            User user = userService.findById(object2Entity.getObjectId());
+            TickerSymbol tickerSymbol = tickerSymbolService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setEntityInfo(tickerSymbol.getUniqueId());
+            listObject2EntityContent.add(object2Entity);
+        }
         model.addAttribute("listObject2Entity", listObject2Entity);
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         return PATH+"/userprofile/tickersymbol";
     }
 
@@ -120,7 +204,16 @@ public class CountedEntitiesController {
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Url(pageRequest);
+        List<Object2Entity> listObject2EntityContent = new ArrayList();
+        for(Object2Entity object2Entity:listObject2Entity.getContent()){
+            User user = userService.findById(object2Entity.getObjectId());
+            Url url = urlService.findById(object2Entity.getEntityId());
+            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setEntityInfo(url.getExpanded());
+            listObject2EntityContent.add(object2Entity);
+        }
         model.addAttribute("listObject2Entity", listObject2Entity);
+        model.addAttribute("listObject2EntityContent",listObject2EntityContent);
         return PATH+"/userprofile/url";
     }
 
@@ -132,11 +225,16 @@ public class CountedEntitiesController {
 
 
     @Autowired
-    public CountedEntitiesController(TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, TweetService tweetService, UserService userService) {
+    public CountedEntitiesController(TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, TweetService tweetService, UserService userService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
         this.twitterwallFrontendProperties = twitterwallFrontendProperties;
         this.controllerHelper = controllerHelper;
         this.tweetService = tweetService;
         this.userService = userService;
+        this.hashTagService = hashTagService;
+        this.mediaService = mediaService;
+        this.mentionService = mentionService;
+        this.tickerSymbolService = tickerSymbolService;
+        this.urlService = urlService;
     }
 
 
@@ -148,4 +246,14 @@ public class CountedEntitiesController {
     private final TweetService tweetService;
 
     private final UserService userService;
+
+    private final HashTagService hashTagService;
+
+    private final MediaService mediaService;
+
+    private final MentionService mentionService;
+
+    private final TickerSymbolService tickerSymbolService;
+
+    private final UrlService urlService;
 }

@@ -9,8 +9,6 @@ import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
-import java.util.List;
-
 
 /**
  * Created by tw on 10.06.17.

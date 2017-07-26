@@ -24,6 +24,11 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
     }
 
     @Override
+    public T findById(long id) {
+        return domainRepository.findOne(id);
+    }
+
+    @Override
     public Page<T> getAll(Pageable pageRequest) {
         return domainRepository.findAll(pageRequest);
     }
