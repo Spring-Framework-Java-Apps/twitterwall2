@@ -13,7 +13,6 @@ import org.woehlke.twitterwall.scheduled.mq.channel.SenderType;
 import org.woehlke.twitterwall.scheduled.mq.endoint.UserFinisher;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserResultList;
-import org.woehlke.twitterwall.scheduled.service.backend.impl.TwitterApiServiceImpl;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ public class UserFinisherImpl implements UserFinisher {
             }
         }
     }
-
 
     @Autowired
     public UserFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {

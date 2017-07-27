@@ -11,22 +11,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
                 <h2>Welcome to Application Management.</h2>
-
                 <h3>Your Options:</h3>
-
                 <div id="tw-application-management">
                     <div class="list-group">
                         <a class="list-group-item" href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Count Entities</a>
-
                         <hr class="divider" role="separator"  />
                         <a class="list-group-item" href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;List All Users</a>
                         <a class="list-group-item" href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are Not Yet Friends</a>
                         <a class="list-group-item" href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are On List</a>
                         <a class="list-group-item" href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are Not Yet On List</a>
                         <a class="list-group-item" href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;Update List of Users On List</a>
-
                         <hr class="divider" role="separator" />
                         <a class="list-group-item" href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;List Tasks</a>
                         <a class="list-group-item" href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: Create Test Data</a>
@@ -38,7 +33,7 @@
                     </div>
                 </div>
                 <span th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                    <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
                 </span>
             </div>
         </div>

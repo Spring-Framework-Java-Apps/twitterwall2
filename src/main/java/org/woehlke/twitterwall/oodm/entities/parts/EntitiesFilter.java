@@ -21,8 +21,8 @@ public class EntitiesFilter {
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
-                "@("+ User.SCREEN_NAME_PATTERN+")(" + Entities.stopChar + ")",
-                "@("+User.SCREEN_NAME_PATTERN+")$"
+                "@("+ User.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
+                "@("+ User.SCREEN_NAME_PATTERN +")$"
             };
 
             int USER_PROFILE_OUTPUT[] = {
@@ -54,8 +54,8 @@ public class EntitiesFilter {
                 };
 
                 String USER_PROFILE_OUTPUT[] = {
-                    "<a class=\"tweet-action tweet-profile1\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2",
-                    "<a class=\"tweet-action tweet-profile2\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> "
+                    " <a class=\"tweet-action tweet-profile1\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2",
+                    " <a class=\"tweet-action tweet-profile2\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> "
                 };
 
                 for(int i=0;i<2;i++){
@@ -78,10 +78,10 @@ public class EntitiesFilter {
         };
 
         String USER_PROFILE_OUTPUT[] = {
-            "<a class=\"tweet-action tweet-profile1\" href=\"/user/$2\">@$2</a>$3",
-            "<a class=\"tweet-action tweet-profile2\" href=\"/user/$2\">@$2</a>",
-            "<a class=\"tweet-action tweet-profile3\" href=\"/user/$1\">@$1</a>$2",
-            "<a class=\"tweet-action tweet-profile4\" href=\"/user/$1\">@$1</a>"
+            " <a class=\"tweet-action tweet-profile1\" href=\"/user/$2\">@$2</a>$3",
+            " <a class=\"tweet-action tweet-profile2\" href=\"/user/$2\">@$2</a>",
+            " <a class=\"tweet-action tweet-profile3\" href=\"/user/$1\">@$1</a>$2",
+            " <a class=\"tweet-action tweet-profile4\" href=\"/user/$1\">@$1</a>"
         };
 
         for(int i=0;i<4;i++){
@@ -126,8 +126,8 @@ public class EntitiesFilter {
             };
 
             String USER_PROFILE_OUTPUT[] = {
-                "<a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/$1\">#$1</a>$2",
-                "<a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/$1\">#$1</a> "
+                " <a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/$1\">#$1</a>$2",
+                " <a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/$1\">#$1</a> "
             };
 
             for(int i=0;i<2;i++){
@@ -332,12 +332,12 @@ public class EntitiesFilter {
             };
 
             String USER_PROFILE_OUTPUT[] = {
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-display1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-display2\" target=\"_blank\">" + url.getDisplay() + "</a> ",
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-expanded1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-expanded2\" target=\"_blank\">" + url.getDisplay() + "</a> ",
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-url1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
-                "<a href=\"" + url.getExpanded() + "\" class=\"tw-url2\" target=\"_blank\">" + url.getDisplay() + "</a> "
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-display1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-display2\" target=\"_blank\">" + url.getDisplay() + "</a> ",
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-expanded1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-expanded2\" target=\"_blank\">" + url.getDisplay() + "</a> ",
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-url1\" target=\"_blank\">" + url.getDisplay() + "</a>$2",
+                " <a href=\"" + url.getExpanded() + "\" class=\"tw-url2\" target=\"_blank\">" + url.getDisplay() + "</a> "
             };
 
             for(int i=0;i<6;i++){

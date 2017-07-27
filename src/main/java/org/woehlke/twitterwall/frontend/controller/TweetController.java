@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.TwitterProperties;
@@ -27,12 +28,35 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 public class TweetController {
 
     @RequestMapping("/all")
-    public String getLatestTweets(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        model = controllerHelper.setupPage(model,"Tweets",twitterProperties.getSearchQuery(),Symbols.HOME.toString());
+    public String getLatestTweets(
+            @RequestParam(
+                    name= "page" ,
+                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
+            ) int page, Model model
+    ) {
+        model = controllerHelper.setupPage(
+                model,
+                "Tweets",
+                twitterProperties.getSearchQuery(),Symbols.HOME.toString()
+        );
         Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
+    }
+
+    @RequestMapping("/id/{id}")
+    public String getLatestTweets(
+            @PathVariable("id") Tweet tweet,  Model model
+    ) {
+        model = controllerHelper.setupPage(
+                model,
+                "Tweet",
+                twitterProperties.getSearchQuery(),
+                Symbols.HOME.toString()
+        );
+        model.addAttribute("tweet", tweet);
+        return "tweet/one";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TweetController.class);
