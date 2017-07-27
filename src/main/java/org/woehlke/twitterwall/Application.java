@@ -24,7 +24,6 @@ import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
     TwitterwallSchedulerProperties.class,
     TwitterProperties.class
 })
-//@EnableWebMvc
 @EnableSpringDataWebSupport
 @ImportResource("classpath:integration.xml")
 public class Application {

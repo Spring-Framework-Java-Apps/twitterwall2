@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
@@ -79,4 +80,30 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
         return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
     }
+
+    @Override
+    public Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest) {
+        return userRepository.findAllUser2HashTag(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllUser2Media(Pageable pageRequest) {
+        return userRepository.findAllUser2Media(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllUser2Mentiong(Pageable pageRequest) {
+        return userRepository.findAllUser2Mentiong(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllUser2Url(Pageable pageRequest) {
+        return userRepository.findAllUser2Url(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest){
+        return userRepository.findAllUser2TickerSymbol(pageRequest);
+    }
+
 }

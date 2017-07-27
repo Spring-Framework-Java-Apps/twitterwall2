@@ -33,4 +33,5 @@ public class TickerSymbolServiceImpl extends DomainServiceWithTaskImpl<TickerSym
     public TickerSymbol findByUrl(String url) {
         return tickerSymbolRepository.findByUrl(url);
     }
+
 }

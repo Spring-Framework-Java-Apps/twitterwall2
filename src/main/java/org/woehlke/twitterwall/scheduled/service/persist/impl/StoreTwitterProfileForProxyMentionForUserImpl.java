@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.facade.impl;
+package org.woehlke.twitterwall.scheduled.service.persist.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +13,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
-import org.woehlke.twitterwall.scheduled.service.facade.StoreTwitterProfileForProxyMentionForUser;
+import org.woehlke.twitterwall.scheduled.service.persist.StoreTwitterProfileForProxyMentionForUser;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
-import org.woehlke.twitterwall.scheduled.service.persist.impl.StoreEntitiesProcessImpl;
-import org.woehlke.twitterwall.scheduled.service.persist.impl.StoreUserProcessImpl;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
 import java.util.LinkedHashSet;

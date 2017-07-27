@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
@@ -43,5 +44,4 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     @Query(name="Tweet.countAllUser2Url",nativeQuery=true)
     long countAllUser2Url();
-
 }

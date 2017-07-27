@@ -132,6 +132,10 @@
     #tw-application-management ul li {
         list-style-type: none;
     }
+
+    .tw-left-space {
+        margin-left: 12px ;
+    }
 }
 
 
