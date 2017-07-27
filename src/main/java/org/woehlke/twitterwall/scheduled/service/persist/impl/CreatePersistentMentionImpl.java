@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
-import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.MentionService;
-import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreTwitterProfileForProxyMentionForUser;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention;
 
@@ -53,7 +51,6 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
                 String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
                 log.warn(eventMsg);
-                //taskService.warn(task,eventMsg);
                 mention.setScreenName(foundUser.getScreenName());
                 screenName = foundUser.getScreenName();
             }
@@ -73,7 +70,6 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
             return persMention;
         } else {
             String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
-            //taskService.error(task,eventMsg);
             log.error(eventMsg);
             return null;
         }
@@ -85,15 +81,9 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
 
     private final StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser;
 
-    private final StartTask startTask;
-
-    private final TaskService taskService;
-
     @Autowired
-    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser, StartTask startTask, TaskService taskService) {
+    public CreatePersistentMentionImpl(MentionService mentionService, StoreTwitterProfileForProxyMentionForUser storeTwitterProfileForProxyMentionForUser) {
         this.mentionService = mentionService;
         this.storeTwitterProfileForProxyMentionForUser = storeTwitterProfileForProxyMentionForUser;
-        this.startTask = startTask;
-        this.taskService = taskService;
     }
 }
