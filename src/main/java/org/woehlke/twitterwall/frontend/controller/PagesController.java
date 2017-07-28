@@ -26,6 +26,17 @@ public class PagesController {
         return new ModelAndView("redirect:/tweet/all");
     }
 
+    @RequestMapping("/login")
+    public String login(Model model) {
+        log.info("-----------------------------------------");
+        String symbol = Symbols.LEAF.toString();
+        String title = "Login";
+        String subtitle = "Enter your Credentials";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        log.info("-----------------------------------------");
+        return "login";
+    }
+
     @RequestMapping("/imprint")
     public String imprint(Model model) {
         log.info("-----------------------------------------");
