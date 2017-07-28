@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -39,7 +39,7 @@ public class TweetController {
                 "Tweets",
                 twitterProperties.getSearchQuery(),Symbols.HOME.toString()
         );
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
@@ -65,15 +65,15 @@ public class TweetController {
 
     private final ControllerHelper controllerHelper;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 
     @Autowired
-    public TweetController(TweetService tweetService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public TweetController(TweetService tweetService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
         this.tweetService = tweetService;
         this.controllerHelper = controllerHelper;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
     }
 }

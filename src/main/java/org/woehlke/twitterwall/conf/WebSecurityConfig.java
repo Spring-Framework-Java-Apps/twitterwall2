@@ -7,10 +7,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,8 +31,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        String user = frontendProperties.getLoginUsername();
+        String pwd = frontendProperties.getLoginPassword();
+        String role = "USER";
         auth
                 .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
+                .withUser(user).password(pwd).roles(role);
     }
+
+    @Autowired
+    public WebSecurityConfig(FrontendProperties frontendProperties) {
+        this.frontendProperties = frontendProperties;
+    }
+
+    private final FrontendProperties frontendProperties;
 }

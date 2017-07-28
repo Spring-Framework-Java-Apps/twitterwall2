@@ -5,7 +5,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.scheduled.mq.endoint.CreateImprintUser;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
@@ -16,19 +16,19 @@ public class CreateImprintUserImpl implements CreateImprintUser {
 
     private final TwitterApiService twitterApiService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     @Autowired
-    public CreateImprintUserImpl(TwitterApiService twitterApiService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public CreateImprintUserImpl(TwitterApiService twitterApiService, FrontendProperties frontendProperties) {
         this.twitterApiService = twitterApiService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
     @Override
     public Message<TwitterProfileMessage> createImprintUser(Message<TaskMessage> mqMessageIn) {
         String logMsg = "createImprintUser: ";
         TaskMessage receivedMessage = mqMessageIn.getPayload();
-        String screenName = twitterwallFrontendProperties.getImprintScreenName();
+        String screenName = frontendProperties.getImprintScreenName();
         TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
         TwitterProfileMessage outMsg = new TwitterProfileMessage(receivedMessage,screenName,twitterProfile);
         Message<TwitterProfileMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())

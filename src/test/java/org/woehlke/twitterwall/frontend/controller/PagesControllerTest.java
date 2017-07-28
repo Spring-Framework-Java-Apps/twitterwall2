@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.test.UserServiceTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -48,7 +48,7 @@ public class PagesControllerTest {
     private TwitterProperties twitterProperties;
 
     @Autowired
-    private TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private FrontendProperties frontendProperties;
 
     @Commit
     @Test
@@ -61,9 +61,9 @@ public class PagesControllerTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+twitterwallFrontendProperties.getImprintScreenName()+")");
-        userServiceTest.createUser(twitterwallFrontendProperties.getImprintScreenName());
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+twitterwallFrontendProperties.getImprintScreenName()+")");
+        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
+        userServiceTest.createUser(frontendProperties.getImprintScreenName());
+        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
         log.info("------------------------------------");
         Assert.assertTrue(true);
     }

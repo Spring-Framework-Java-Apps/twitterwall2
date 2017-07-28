@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Component
 @Validated
 @ConfigurationProperties(prefix="twitterwall.frontend")
-public class TwitterwallFrontendProperties {
+public class FrontendProperties {
 
     @NotNull
     private String idGoogleAnalytics;
@@ -36,6 +36,12 @@ public class TwitterwallFrontendProperties {
 
     @NotNull
     private Integer pageSize;
+
+    @NotNull
+    private String loginUsername;
+
+    @NotNull
+    private String loginPassword;
 
     @Valid
     private Controller controller = new Controller();
@@ -124,5 +130,21 @@ public class TwitterwallFrontendProperties {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getLoginUsername() {
+        return loginUsername;
+    }
+
+    public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
+    }
+
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
     }
 }

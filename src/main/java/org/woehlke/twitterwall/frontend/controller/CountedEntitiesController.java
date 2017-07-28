@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.*;
@@ -36,7 +36,7 @@ public class CountedEntitiesController {
     ) {
         String title = "Tweet -&gt; HashTag";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2HashTag(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -62,7 +62,7 @@ public class CountedEntitiesController {
     ) {
         String title = "Tweet -&gt; Media";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Media(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -83,7 +83,7 @@ public class CountedEntitiesController {
     public String domainCountTweet2mention(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
         String title = "Tweet -&gt; Mention";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Mention(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -109,7 +109,7 @@ public class CountedEntitiesController {
     ) {
         String title = "Tweet -&gt; TickerSymbol";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2TickerSymbol(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -135,7 +135,7 @@ public class CountedEntitiesController {
     ) {
         String title = "Tweet -&gt; Url";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = tweetService.findAllTweet2Url(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -161,7 +161,7 @@ public class CountedEntitiesController {
     ) {
         String title = "UserProfile -&gt; HashTag";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2HashTag(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -187,7 +187,7 @@ public class CountedEntitiesController {
     ) {
         String title = "UserProfile -&gt; Media";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Media(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -213,7 +213,7 @@ public class CountedEntitiesController {
     ) {
         String title = "UserProfile -&gt; Mention";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Mentiong(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -239,7 +239,7 @@ public class CountedEntitiesController {
     ) {
         String title = "UserProfile -&gt; TickerSymbol";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2TickerSymbol(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -265,7 +265,7 @@ public class CountedEntitiesController {
     ) {
         String title = "UserProfile -&gt; Url";
         setUpThisPage(title,model);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Object2Entity> listObject2Entity = userService.findAllUser2Url(pageRequest);
         List<Object2Entity> listObject2EntityContent = new ArrayList();
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
@@ -290,8 +290,8 @@ public class CountedEntitiesController {
 
 
     @Autowired
-    public CountedEntitiesController(TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, TweetService tweetService, UserService userService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+    public CountedEntitiesController(FrontendProperties frontendProperties, ControllerHelper controllerHelper, TweetService tweetService, UserService userService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
+        this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
         this.tweetService = tweetService;
         this.userService = userService;
@@ -304,7 +304,7 @@ public class CountedEntitiesController {
 
 
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final ControllerHelper controllerHelper;
 

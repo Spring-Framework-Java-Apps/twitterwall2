@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.HashTagOverview;
@@ -26,11 +26,11 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
 
 
-    public HashTagsOverviewHelperImpl(UserService userService, HashTagService hashTagService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public HashTagsOverviewHelperImpl(UserService userService, HashTagService hashTagService, TweetService tweetService, FrontendProperties frontendProperties) {
         this.userService = userService;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
         String msg = "getHashTagOverview";
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, frontendProperties.getPageSize());
         boolean hasNext = true;
         while(hasNext) {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
@@ -86,5 +86,5 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
 
     private final TweetService tweetService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 }

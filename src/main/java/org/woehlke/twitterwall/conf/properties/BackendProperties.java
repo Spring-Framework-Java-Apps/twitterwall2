@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Component
 @Validated
 @ConfigurationProperties(prefix="twitterwall.backend")
-public class TwitterwallBackendProperties {
+public class BackendProperties {
 
     @Valid
     public Twitter twitter = new Twitter();

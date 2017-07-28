@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,10 +41,10 @@ public class UserControllerTest {
     private UserController controller;
 
     @Autowired
-    private TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private SchedulerProperties schedulerProperties;
 
     @Autowired
-    private TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private FrontendProperties frontendProperties;
 
     @Autowired
     private TwitterProperties twitterProperties;
@@ -91,7 +91,7 @@ public class UserControllerTest {
     @Commit
     @Test
     public void getUserForScreeName() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/user/"+twitterwallFrontendProperties.getImprintScreenName()))
+        MvcResult result = this.mockMvc.perform(get("/user/"+ frontendProperties.getImprintScreenName()))
             .andExpect(status().isOk())
             .andExpect(view().name("user/screenName"))
             .andExpect(model().attributeExists("user"))

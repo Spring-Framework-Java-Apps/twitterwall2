@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @Validated
 @ConfigurationProperties(prefix="twitterwall.scheduler")
-public class TwitterwallSchedulerProperties {
+public class SchedulerProperties {
 
     @NotNull
     private Boolean allowFetchTweetsFromTwitterSearch;

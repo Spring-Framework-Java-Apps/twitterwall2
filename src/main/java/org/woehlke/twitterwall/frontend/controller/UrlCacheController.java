@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
@@ -31,7 +31,7 @@ public class UrlCacheController {
         String title = "UrlCache";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"url");
         Page<UrlCache> myPageContent = urlCacheService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
@@ -39,14 +39,14 @@ public class UrlCacheController {
 
     private final ControllerHelper controllerHelper;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final UrlCacheService urlCacheService;
 
     @Autowired
-    public UrlCacheController(UrlCacheService urlCacheService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
+    public UrlCacheController(UrlCacheService urlCacheService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
         this.urlCacheService = urlCacheService;
         this.controllerHelper = controllerHelper;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 }

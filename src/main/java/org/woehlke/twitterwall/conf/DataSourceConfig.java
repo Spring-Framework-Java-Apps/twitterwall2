@@ -14,7 +14,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableJpaRepositories("org.woehlke.twitterwall.oodm.repositories")
-public class DataSourceConf {
+public class DataSourceConfig {
 
     @Bean
     @Primary

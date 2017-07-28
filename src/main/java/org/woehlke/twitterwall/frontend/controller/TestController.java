@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -32,7 +32,7 @@ public class TestController {
     public String getTestData(Model model) {
         model = controllerHelper.setupPage(model,"Test Data Tweets",twitterProperties.getSearchQuery(),Symbols.GET_TEST_DATA.toString());
         String msg = "/getTestData : ";
-        if(twitterwallFrontendProperties.getContextTest()){
+        if(frontendProperties.getContextTest()){
             model.addAttribute("latestTweets", mqStartTask.createTestDataForTweets());
             model.addAttribute("users", mqStartTask.createTestDataForUser());
         } else {
@@ -44,7 +44,7 @@ public class TestController {
 
     @RequestMapping("/user/onlist/renew")
     public String getOnListRenew(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
         log.info(msg+"START startTask.fetchUsersFromDefinedUserList: ");
         mqAsyncStartTask.fetchUsersFromDefinedUserList();
@@ -65,7 +65,7 @@ public class TestController {
 
     private final ControllerHelper controllerHelper;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 
@@ -74,10 +74,10 @@ public class TestController {
     private final StartTask mqStartTask;
 
     @Autowired
-    public TestController(UserService userService, ControllerHelper controllerHelper, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, AsyncStartTask mqAsyncStartTask, StartTask mqStartTask) {
+    public TestController(UserService userService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties, AsyncStartTask mqAsyncStartTask, StartTask mqStartTask) {
         this.userService = userService;
         this.controllerHelper = controllerHelper;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
         this.mqAsyncStartTask = mqAsyncStartTask;
         this.mqStartTask = mqStartTask;

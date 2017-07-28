@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.conf.properties.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.properties.BackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 
@@ -18,7 +18,7 @@ import java.util.*;
 public class UrlServiceTestImpl implements UrlServiceTest {
 
     @Autowired
-    private TwitterwallBackendProperties twitterwallBackendProperties;
+    private BackendProperties backendProperties;
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
@@ -28,7 +28,7 @@ public class UrlServiceTestImpl implements UrlServiceTest {
         Map<String, String> urlsTest = new HashMap<>();
         urlsTest.put("https://t.co/lQlse7u93G", "https://port80guru.tumblr.com/");
 
-        if (twitterwallBackendProperties.getUrl().getFetchTestDataVerbose()) {
+        if (backendProperties.getUrl().getFetchTestDataVerbose()) {
             hostsTest = hosts;
             urlsTest = urls;
         }

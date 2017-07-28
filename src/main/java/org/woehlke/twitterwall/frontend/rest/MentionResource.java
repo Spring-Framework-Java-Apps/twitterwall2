@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.MentionService;
@@ -30,18 +30,18 @@ public class MentionResource {
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
     Page<Mention> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         return this.mentionService.getAll(pageRequest);
     }
 
     private final MentionService mentionService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     @Autowired
-    public MentionResource(MentionService mentionService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public MentionResource(MentionService mentionService, FrontendProperties frontendProperties) {
         this.mentionService = mentionService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
 }

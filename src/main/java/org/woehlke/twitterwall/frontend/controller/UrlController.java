@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Url;
@@ -30,21 +30,21 @@ public class UrlController {
         String title = "Url";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"url");
         Page<Url> myPageContent = urlService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return PATH+"/all";
     }
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final UrlService urlService;
 
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public UrlController(TwitterwallFrontendProperties twitterwallFrontendProperties, UrlService urlService, ControllerHelper controllerHelper) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+    public UrlController(FrontendProperties frontendProperties, UrlService urlService, ControllerHelper controllerHelper) {
+        this.frontendProperties = frontendProperties;
         this.urlService = urlService;
         this.controllerHelper = controllerHelper;
     }

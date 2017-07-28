@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.Page;
 
@@ -24,15 +24,15 @@ public class ControllerHelperImpl implements ControllerHelper {
         page.setTitle(title);
         page.setSubtitle(subtitle);
         page.setSymbol(symbol);
-        page.setMenuAppName(twitterwallFrontendProperties.getMenuAppName());
+        page.setMenuAppName(frontendProperties.getMenuAppName());
         page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
-        page.setInfoWebpage(twitterwallFrontendProperties.getInfoWebpage());
-        page.setTheme(twitterwallFrontendProperties.getTheme());
-        page.setContextTest(twitterwallFrontendProperties.getContextTest());
+        page.setInfoWebpage(frontendProperties.getInfoWebpage());
+        page.setTheme(frontendProperties.getTheme());
+        page.setContextTest(frontendProperties.getContextTest());
         page.setHistoryBack(true);
-        if(!twitterwallFrontendProperties.getIdGoogleAnalytics().isEmpty()){
+        if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
             String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
-            html = html.replace("###GOOGLE_ANALYTICS_ID###", twitterwallFrontendProperties.getIdGoogleAnalytics());
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
             page.setGoogleAnalyticScriptHtml(html);
         } else {
             page.setGoogleAnalyticScriptHtml("");
@@ -60,14 +60,14 @@ public class ControllerHelperImpl implements ControllerHelper {
     }
 
     @Autowired
-    public ControllerHelperImpl(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+    public ControllerHelperImpl(FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
+        this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
     }
 
     private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 

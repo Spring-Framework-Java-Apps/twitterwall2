@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -33,7 +33,7 @@ public class TaskController {
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.DESC,"timeStarted");
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.DESC,"timeStarted");
         Page<Task> allTasks = taskService.getAll(pageRequest);
         model.addAttribute("tasks",allTasks);
         return "task/taskAll";
@@ -48,7 +48,7 @@ public class TaskController {
         String subtitle = "List aller TasksHistory für Task";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
         model.addAttribute("task",task);
         model.addAttribute("taskHistoryList",taskHistoryList);
@@ -114,17 +114,17 @@ public class TaskController {
 
     private final TaskHistoryService taskHistoryService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final ControllerHelper controllerHelper;
 
     private final AsyncStartTask mqAsyncStartTask;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties, ControllerHelper controllerHelper, AsyncStartTask mqAsyncStartTask) {
+    public TaskController(TaskService taskService, TaskHistoryService taskHistoryService, FrontendProperties frontendProperties, ControllerHelper controllerHelper, AsyncStartTask mqAsyncStartTask) {
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
         this.mqAsyncStartTask = mqAsyncStartTask;
     }

@@ -8,7 +8,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
@@ -44,7 +44,7 @@ public class UserServiceTestImpl implements UserServiceTest {
     private StoreUserProfile storeUserProfile;
 
     @Autowired
-    private TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private FrontendProperties frontendProperties;
 
 
     @Autowired
@@ -52,7 +52,7 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     @Override
     public User createImprintUser(){
-        return createUser(twitterwallFrontendProperties.getImprintScreenName());
+        return createUser(frontendProperties.getImprintScreenName());
     }
 
     @Override
@@ -98,7 +98,7 @@ public class UserServiceTestImpl implements UserServiceTest {
 
     private User getDummyUser(Task task){
         long idTwitter=0L;
-        String screenName = twitterwallFrontendProperties.getImprintScreenName();
+        String screenName = frontendProperties.getImprintScreenName();
         String name="Exception Handler Dummy Username";
         String url="https://github.com/phasenraum2010/twitterwall2";
         String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";

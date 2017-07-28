@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.frontend.controller.TestControllerTest;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -38,14 +38,14 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
 
     @Autowired
-    public PrepareDataTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
+    public PrepareDataTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, SchedulerProperties schedulerProperties, FrontendProperties frontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.storeOneTweet = storeOneTweet;
         this.storeUserProfile = storeUserProfile;
         this.userService = userService;
         this.taskService = taskService;
-        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.schedulerProperties = schedulerProperties;
+        this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
         this.countedEntitiesService = countedEntitiesService;
     }
@@ -57,7 +57,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         try {
             log.info(msg + "--------------------------------------------------------------------");
             int loopId = 0;
-            for (long idTwitter : twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
+            for (long idTwitter : schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
                 try {
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
                     loopId++;
@@ -92,7 +92,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
-            for (long idTwitter : twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest()) {
+            for (long idTwitter : schedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest()) {
                 try {
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
                     loopId++;
@@ -106,7 +106,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                 }
             }
             try {
-                TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(twitterwallFrontendProperties.getImprintScreenName());
+                TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(frontendProperties.getImprintScreenName());
                 loopId++;
                 log.info(msg + loopId);
                 org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
@@ -138,9 +138,9 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     private final TaskService taskService;
 
-    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private final SchedulerProperties schedulerProperties;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 
@@ -149,12 +149,12 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     private void logEnv(){
         log.info("--------------------------------------------------------------------");
         log.info("twitter.searchQuery = "+twitterProperties.getSearchQuery());
-        log.info("twitterwall.frontend.menuAppName = "+twitterwallFrontendProperties.getMenuAppName());
-        log.info("twitterwall.frontend.infoWebpage = "+twitterwallFrontendProperties.getInfoWebpage());
-        log.info("twitterwall.frontend.theme = "+twitterwallFrontendProperties.getTheme());
-        log.info("twitterwall.frontend.contextTest = "+twitterwallFrontendProperties.getContextTest());
-        log.info("twitterwall.frontend.imprintScreenName = "+twitterwallFrontendProperties.getImprintScreenName());
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+twitterwallFrontendProperties.getIdGoogleAnalytics());
+        log.info("twitterwall.frontend.menuAppName = "+ frontendProperties.getMenuAppName());
+        log.info("twitterwall.frontend.infoWebpage = "+ frontendProperties.getInfoWebpage());
+        log.info("twitterwall.frontend.theme = "+ frontendProperties.getTheme());
+        log.info("twitterwall.frontend.contextTest = "+ frontendProperties.getContextTest());
+        log.info("twitterwall.frontend.imprintScreenName = "+ frontendProperties.getImprintScreenName());
+        log.info("twitterwall.frontend.idGoogleAnalytics = "+ frontendProperties.getIdGoogleAnalytics());
         log.info("--------------------------------------------------------------------");
     }
 }

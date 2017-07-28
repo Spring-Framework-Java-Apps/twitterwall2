@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.conf.properties.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.properties.BackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
@@ -45,8 +45,8 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
         if (urlSource != null) {
             String display;
             String expanded;
-            final long connTimeToLive = twitterwallBackendProperties.getUrl().getConnTimeToLive();
-            final long maxIdleTime = twitterwallBackendProperties.getUrl().getMaxIdleTime();
+            final long connTimeToLive = backendProperties.getUrl().getConnTimeToLive();
+            final long maxIdleTime = backendProperties.getUrl().getMaxIdleTime();
             final TimeUnit connTimeToLiveTimeUnit = TimeUnit.SECONDS;
             httpclient = HttpClients.custom().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit).disableCookieManagement().evictIdleConnections(maxIdleTime, connTimeToLiveTimeUnit).build();
             HttpGet httpGetRequest = new HttpGet(urlSource);
@@ -95,10 +95,10 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    private final TwitterwallBackendProperties twitterwallBackendProperties;
+    private final BackendProperties backendProperties;
 
     @Autowired
-    public TwitterUrlServiceImpl(TwitterwallBackendProperties twitterwallBackendProperties) {
-        this.twitterwallBackendProperties = twitterwallBackendProperties;
+    public TwitterUrlServiceImpl(BackendProperties backendProperties) {
+        this.backendProperties = backendProperties;
     }
 }

@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component("mqCreateTestDataForUsers")
 public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
 
-    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private final SchedulerProperties schedulerProperties;
 
     private final TwitterApiService twitterApiService;
 
@@ -27,8 +27,8 @@ public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public CreateTestDataForUsersImpl(TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
-        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+    public CreateTestDataForUsersImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+        this.schedulerProperties = schedulerProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
@@ -42,7 +42,7 @@ public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        List<String> userIdList = twitterwallSchedulerProperties.getFacade().getScreenNamesToFetchForUserControllerTest();
+        List<String> userIdList = schedulerProperties.getFacade().getScreenNamesToFetchForUserControllerTest();
         for (String screenName : userIdList) {
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);

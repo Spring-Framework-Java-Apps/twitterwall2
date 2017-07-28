@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -32,7 +32,7 @@ public class PagesController {
         log.info("-----------------------------------------");
         String symbol = Symbols.IMPRINT.toString();
         String title = "Impressum";
-        String subtitle = twitterwallFrontendProperties.getImprintSubtitle();
+        String subtitle = frontendProperties.getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         User user = startTask.createImprintUser();
         model.addAttribute("user", user);
@@ -42,13 +42,13 @@ public class PagesController {
 
     private static final Logger log = LoggerFactory.getLogger(PagesController.class);
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final StartTask startTask;
 
     @Autowired
-    public PagesController(TwitterwallFrontendProperties twitterwallFrontendProperties, StartTask startTask, ControllerHelper controllerHelper) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+    public PagesController(FrontendProperties frontendProperties, StartTask startTask, ControllerHelper controllerHelper) {
+        this.frontendProperties = frontendProperties;
         this.startTask = startTask;
         this.controllerHelper = controllerHelper;
     }

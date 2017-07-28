@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
@@ -44,7 +44,7 @@ public class HashTagController {
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize(), Sort.Direction.ASC,"text");
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"text");
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "hashtag/all";
@@ -63,8 +63,8 @@ public class HashTagController {
         if (m.matches()) {
             String msg2 = msg + " parameter IS valid - START ";
             log.debug(msg2);
-            Pageable pageRequestTweet = new PageRequest(pageTweet, twitterwallFrontendProperties.getPageSize());
-            Pageable pageRequestUser = new PageRequest(pageUser, twitterwallFrontendProperties.getPageSize());
+            Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
             String subtitle = "Tweets und User für HashTag";
             String title = text;
             String symbol = Symbols.HASHTAG.toString();
@@ -106,7 +106,7 @@ public class HashTagController {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagController.class);
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 
@@ -121,8 +121,8 @@ public class HashTagController {
     private final HashTagsOverviewHelper hashTagsOverviewHelper;
 
     @Autowired
-    public HashTagController(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper, HashTagsOverviewHelper hashTagsOverviewHelper) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+    public HashTagController(FrontendProperties frontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper, HashTagsOverviewHelper hashTagsOverviewHelper) {
+        this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;

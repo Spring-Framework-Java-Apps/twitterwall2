@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
@@ -30,24 +30,24 @@ public class HashTagResource {
   @RequestMapping(path="/all",params = { "page" }, method= RequestMethod.GET)
   public @ResponseBody
   Page<HashTag> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-      Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+      Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
       return this.hashTagService.getAll(pageRequest);
   }
 
     @RequestMapping(path="/overview", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody Page<HashTag> getOverview(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         return this.hashTagService.getAll(pageRequest);
     }
 
     private final HashTagService hashTagService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     @Autowired
-    public HashTagResource(HashTagService hashTagService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public HashTagResource(HashTagService hashTagService, FrontendProperties frontendProperties) {
         this.hashTagService = hashTagService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
 }

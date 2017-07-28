@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
@@ -39,7 +39,7 @@ public class UserController {
     ) {
         Pageable pageRequest = new PageRequest(
                 page,
-                twitterwallFrontendProperties.getPageSize(),
+                frontendProperties.getPageSize(),
                 Sort.Direction.ASC,
                 "screenName"
         );
@@ -60,7 +60,7 @@ public class UserController {
     ) {
         Pageable pageRequest = new PageRequest(
                 page,
-                twitterwallFrontendProperties.getPageSize(),
+                frontendProperties.getPageSize(),
                 Sort.Direction.DESC,
                 "createdAt"
         );
@@ -89,7 +89,7 @@ public class UserController {
             }
             Pageable pageRequest = new PageRequest(
                     page,
-                    twitterwallFrontendProperties.getPageSize(),
+                    frontendProperties.getPageSize(),
                     Sort.Direction.DESC,
                     "createdAt"
             );
@@ -115,7 +115,7 @@ public class UserController {
     ) {
         Pageable pageRequest = new PageRequest(
                 page,
-                twitterwallFrontendProperties.getPageSize(),
+                frontendProperties.getPageSize(),
                 Sort.Direction.ASC,
                 "screenName"
         );
@@ -137,7 +137,7 @@ public class UserController {
     ) {
         Pageable pageRequest = new PageRequest(
                 page,
-                twitterwallFrontendProperties.getPageSize(),
+                frontendProperties.getPageSize(),
                 Sort.Direction.ASC,
                 "screenName"
         );
@@ -156,7 +156,7 @@ public class UserController {
             ) int page, Model model
     ) {
         Pageable pageRequest = new PageRequest(
-                page, twitterwallFrontendProperties.getPageSize(),
+                page, frontendProperties.getPageSize(),
                 Sort.Direction.ASC,
                 "screenName"
         );
@@ -176,7 +176,7 @@ public class UserController {
     ) {
         Pageable pageRequest = new PageRequest(
                 page,
-                twitterwallFrontendProperties.getPageSize(),
+                frontendProperties.getPageSize(),
                 Sort.Direction.ASC,
                 "screenName"
         );
@@ -194,7 +194,7 @@ public class UserController {
 
     private final TweetService tweetService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final ControllerHelper controllerHelper;
 
@@ -204,12 +204,12 @@ public class UserController {
     public UserController(
             UserService userService,
             TweetService tweetService,
-            TwitterwallFrontendProperties twitterwallFrontendProperties,
+            FrontendProperties frontendProperties,
             ControllerHelper controllerHelper
     ) {
         this.userService = userService;
         this.tweetService = tweetService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
     }
 }
