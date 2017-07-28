@@ -30,7 +30,7 @@ public class ApplicationController {
     }
 
     @RequestMapping(path="/management")
-    public String dmanagementPage(Model model) {
+    public String managementPage(Model model) {
         String msg = "/application/domain/count: ";
         String title = "Application Management";
         String subtitle = twitterProperties.getSearchQuery();
