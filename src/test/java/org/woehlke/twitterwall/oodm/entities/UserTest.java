@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.test.UserServiceTest;
 

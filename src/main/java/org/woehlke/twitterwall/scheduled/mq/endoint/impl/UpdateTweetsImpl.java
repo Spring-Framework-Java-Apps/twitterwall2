@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;

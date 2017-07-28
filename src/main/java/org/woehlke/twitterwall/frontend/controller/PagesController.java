@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -20,22 +19,13 @@ import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 @Controller
 public class PagesController {
 
-
+/*
     @RequestMapping("/")
     public ModelAndView index(Model model) {
         return new ModelAndView("redirect:/tweet/all");
     }
+*/
 
-    @RequestMapping("/login")
-    public String login(Model model) {
-        log.info("-----------------------------------------");
-        String symbol = Symbols.LEAF.toString();
-        String title = "Login";
-        String subtitle = "Enter your Credentials";
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        log.info("-----------------------------------------");
-        return "login";
-    }
 
     @RequestMapping("/imprint")
     public String imprint(Model model) {

@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.scheduled.mq.endoint.impl;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallSchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;

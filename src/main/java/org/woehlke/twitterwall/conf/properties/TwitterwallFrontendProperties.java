@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.conf;
+package org.woehlke.twitterwall.conf.properties;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -5,7 +5,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.scheduled.mq.endoint.CreateImprintUser;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;

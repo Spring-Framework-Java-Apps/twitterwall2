@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallBackendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallSchedulerProperties;
 
 
 /**

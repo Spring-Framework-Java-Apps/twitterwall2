@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterwallFrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.HashTagOverview;
