@@ -9,218 +9,171 @@
 </header>
 <section>
     <div class="container">
-        <div th:fragment="tw-data-view-above">
+        <div class="tw-data-view">
             <div class="row">
                 <div class="col-md-12">
-                    <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
-                        <a href="" th:href="@{|/${myEntity}/all?page=${myPageContent.previousPageable().pageNumber}|}">
-                            <span>
-                            <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped">
-                    <thead th:fragment="tw-data-view-thead">
-                        <tr>
-                            <th>ID</th>
-                            <th>Data Fields</th>
-                            <th>Common Fields</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="myPageItem : ${myPageContent}">
-                        <td>
-                            <span th:fragment="tw-data-view-id">
-                                <span class="tw-vector">
-                                    <i class="fa fa-database" aria-hidden="true"></i>
-                                    <span th:text="${myPageItem.id}">id</span>
+                    <table class="table table-striped">
+                        <thead th:fragment="tw-data-view-thead">
+                            <tr>
+                                <th>ID</th>
+                                <th>Data Fields</th>
+                                <th>Common Fields</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="myPageItem : ${myPageContent}">
+                            <td>
+                                <span th:fragment="tw-data-view-id">
+                                    <span class="tw-vector">
+                                        <i class="fa fa-database" aria-hidden="true"></i>
+                                        <span th:text="${myPageItem.id}">id</span>
+                                    </span>
                                 </span>
-                            </span>
-                        </td>
-                        <td>
-                            <p>&nbsp;&nbsp;</p>
-                        </td>
-                        <td>
-                            <span th:fragment="tw-data-view-common-fields">
-                                <button class="btn btn-primary" type="button"
-                                        data-toggle="collapse"
-                                        data-target="#collapseExample"
-                                        aria-expanded="false"
-                                        aria-controls="collapseExample"
-                                        th:attr="data-target='#esd-'+${myPageItem.id}+'-tw',aria-controls=${myPageItem.id}">
-                                    <i class="fa fa-bars" aria-hidden="true"></i>
-                                </button>
-                                <div class="collapse" id="collapseExample" th:attr="id='esd-'+${myPageItem.id}+'-tw'">
-                                    <p>&nbsp;&nbsp;</p>
-                                    <div class="well">
-                                        <ul class="tw-data-view-common-fields">
-                                            <li>Scheduler:
-                                                <ul>
-                                                    <li>
+                            </td>
+                            <td>
+                                <p>&nbsp;&nbsp;</p>
+                            </td>
+                            <td>
+                                <span th:fragment="tw-data-view-common-fields">
+                                    <button class="btn btn-primary" type="button"
+                                            data-toggle="collapse"
+                                            data-target="#collapseExample"
+                                            aria-expanded="false"
+                                            aria-controls="collapseExample"
+                                            th:attr="data-target='#esd-'+${myPageItem.id}+'-tw',aria-controls=${myPageItem.id}">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="collapse" id="collapseExample" th:attr="id='esd-'+${myPageItem.id}+'-tw'">
+                                        <p>&nbsp;&nbsp;</p>
+                                        <div class="well">
+                                            <ul class="tw-data-view-common-fields">
+                                                <li>
+                                                    <span>Scheduler:</span>
+                                                    <ul>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.updatedByFetchTweetsFromTwitterSearch}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.updatedByFetchTweetsFromTwitterSearch}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedByFetchTweetsFromTwitterSearch}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>FetchTweetsFromTwitterSearch</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>FetchTweetsFromTwitterSearch</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.updatedByUpdateTweets}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.updatedByUpdateTweets}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateTweets}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>UpdateTweets</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>UpdateTweets</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.updatedByUpdateUserProfiles}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfiles}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfiles}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>UpdateUserProfiles</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>UpdateUserProfiles</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.updatedByUpdateUserProfilesFromMentions}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfilesFromMentions}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfilesFromMentions}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>UpdateUserProfilesFromMentions</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>UpdateUserProfilesFromMentions</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.updatedByFetchUsersFromDefinedUserList}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.updatedByFetchUsersFromDefinedUserList}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedByFetchUsersFromDefinedUserList}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>FetchUsersFromDefinedUserList</b>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <span>controller:</span>
-                                                <ul>
-                                                    <li>
+                                                            <b>FetchUsersFromDefinedUserList</b>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <span>Controller:</span>
+                                                    <ul>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.controllerAddUserForScreenName}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.controllerAddUserForScreenName}">
+                                                            <span th:if="${!myPageItem.taskInfo.controllerAddUserForScreenName}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>AddUserForScreenName</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>AddUserForScreenName</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.controllerGetTestdataForTweets}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForTweets}">
+                                                            <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForTweets}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>GetTestdataForTweets</b>
-                                                    </li>
-                                                    <li>
+                                                            <b>GetTestdataForTweets</b>
+                                                        </li>
+                                                        <li>
                                                             <span th:if="${myPageItem.taskInfo.controllerGetTestdataForUsers}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForUsers}">
+                                                            <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForUsers}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <b>GetTestdataForUsers</b>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <span>Task</span>
-                                                <ul>
-                                                    <li>
-                                                        <div><b>createdBy:</b></div>
-                                                        <span th:if="${myPageItem.createdBy != null}">
-                                                            <a th:href="@{|/task/${myPageItem.createdBy.id}|}">
-                                                                <i class="fa fa-external-link" aria-hidden="true"></i>
-                                                                <span>&nbsp;&nbsp;</span>
-                                                                <span th:text="${myPageItem.createdBy.id}">id</span>
-                                                                <span>&nbsp;&nbsp;</span>
-                                                                <span th:text="${myPageItem.createdBy.taskType}">taskType</span>
-                                                            </a>
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <div><b>updatedBy:</b></div>
-                                                        <span th:if="${myPageItem.updatedBy != null}">
+                                                            <b>GetTestdataForUsers</b>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <span>Task</span>
+                                                    <ul>
+                                                        <li>
+                                                            <div><b>createdBy:</b></div>
+                                                            <span th:if="${myPageItem.createdBy != null}">
+                                                                <a th:href="@{|/task/${myPageItem.createdBy.id}|}">
+                                                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                                                    <span th:text="${myPageItem.createdBy.id}">id</span>
+                                                                    <span th:text="${myPageItem.createdBy.taskType}">taskType</span>
+                                                                </a>
+                                                            </span>
+                                                        </li>
+                                                        <li>
+                                                            <div><b>updatedBy:</b></div>
+                                                            <span th:if="${myPageItem.updatedBy != null}">
                                                                 <a th:href="@{|/task/${myPageItem.updatedBy.id}|}">
                                                                     <i class="fa fa-external-link" aria-hidden="true"></i>
-                                                                    <span>&nbsp;&nbsp;</span>
                                                                     <span th:text="${myPageItem.updatedBy.id}">id</span>
-                                                                    <span>&nbsp;&nbsp;</span>
                                                                     <span th:text="${myPageItem.updatedBy.taskType}">taskType</span>
                                                                 </a>
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
-                            </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tfoot th:fragment="tw-data-view-tfoot">
-                        <tr>
-                            <th>ID</th>
-                            <th>Data Fields</th>
-                            <th>Common Fields</th>
+                                </span>
+                            </td>
                         </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-        <div th:fragment="tw-data-view-below">
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
-                        <a href="" th:href="@{|/${myEntity}/all?page=${myPageContent.nextPageable().pageNumber}|}" >
-                            <span>
-                            <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                    </span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                    </div>
+                        </tbody>
+                        <tfoot th:fragment="tw-data-view-tfoot">
+                            <tr>
+                                <th>ID</th>
+                                <th>Data Fields</th>
+                                <th>Common Fields</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
+
+
     </div>
 </section>
 <footer th:include="layout :: footer" >

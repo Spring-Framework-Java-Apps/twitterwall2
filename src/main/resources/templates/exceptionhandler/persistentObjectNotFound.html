@@ -7,7 +7,7 @@
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:include="layout :: tw-header" >
 </header>
-<section>
+<main class="page-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -39,12 +39,12 @@
                     </div>
                 </div>
                 <span th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
+                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
                 </span>
             </div>
         </div>
     </div>
-</section>
+</main>
 <footer th:include="layout :: footer" >
 
 </footer>

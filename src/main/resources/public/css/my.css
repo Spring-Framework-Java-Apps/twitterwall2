@@ -134,7 +134,19 @@
     }
 
     .tw-left-space {
-        margin-left: 12px ;
+        margin-left: 12px;
+    }
+
+    .tw-right-space {
+        margin-right: 12px;
+    }
+
+    .tw-vector-hashtag-overview {
+        margin-right: 1em;
+    }
+
+    i.fa, span.map-icon, span.glyphicon  {
+        margin-right: 0.5em;
     }
 }
 

@@ -5,9 +5,8 @@
 <head  th:include="layout :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
-</header>
-<section>
+<header th:include="layout :: tw-header" ></header>
+<main class="page-content">
     <div class="container">
         <div th:include="dataview :: tw-data-view-above" th:with="myEntity='hashtag'"></div>
         <div class="row">
@@ -37,7 +36,7 @@
         </div>
         <div th:include="dataview :: tw-data-view-below" th:with="myEntity='hashtag'"></div>
     </div>
-</section>
+</main>
 <footer th:include="layout :: footer" >
 
 </footer>

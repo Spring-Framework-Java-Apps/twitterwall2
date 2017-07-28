@@ -7,7 +7,7 @@
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:include="layout :: tw-header" >
 </header>
-<section>
+<main class="page-content">
     <div class="container">
         <div th:if="${latestTweets} != null">
             <div th:include="timeline :: tw-show-latest-tweets" >
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-</section>
+</main>
 <footer th:include="layout :: footer" >
 
 </footer>

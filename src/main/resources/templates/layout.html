@@ -56,36 +56,36 @@
             <div class="collapse navbar-collapse" id="tw-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="dropdown" th:if="${page.contextTest}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;Test <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i>Test <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;All Users</a></li>
-                            <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;Not Yet Friends</a></li>
-                            <li><a href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;&nbsp;Not Yet On List</a></li>
-                            <li><a href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;On List</a></li>
-                            <li><a href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;Renew List of Users On List</a></li>
+                            <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>All Users</a></li>
+                            <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>Not Yet Friends</a></li>
+                            <li><a href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>Not Yet On List</a></li>
+                            <li><a href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>On List</a></li>
+                            <li><a href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>Renew List of Users On List</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;Create Test Data</a></li>
+                            <li><a href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>Create Test Data</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks</a></li>
+                            <li><a href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks</a></li>
                             <li role="separator" class="divider"></li>
 
-                            <li><a href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: fetchTweetsFromTwitterSearch</a></li>
+                            <li><a href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: fetchTweetsFromTwitterSearch</a></li>
 
-                            <li><a href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateTweets</a></li>
+                            <li><a href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateTweets</a></li>
 
-                            <li><a href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: fetchUsersFromDefinedUserList</a></li>
+                            <li><a href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: fetchUsersFromDefinedUserList</a></li>
 
-                            <li><a href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateUserProfilesFromMentions</a></li>
+                            <li><a href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateUserProfilesFromMentions</a></li>
 
-                            <li><a href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Tasks: updateUserProfiles</a></li>
+                            <li><a href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateUserProfiles</a></li>
 
                             <li role="separator" class="divider"></li>
-                            <li><a href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Count Entities</a></li>
+                            <li><a href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>Count Entities</a></li>
                         </ul>
                     </li>
-                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Users</a></li>
-                    <li><a href="/hashtag/overview" th:href="@{/hashtag/overview}"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;HashTags</a></li>
-                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i>&nbsp;&nbsp;Impressum</a></li>
+                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>Users</a></li>
+                    <li><a href="/hashtag/overview" th:href="@{/hashtag/overview}"><i class="fa fa-hashtag" aria-hidden="true"></i>HashTags</a></li>
+                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i>Impressum</a></li>
                 </ul>
                 <!--
                 <form class="navbar-form navbar-right">
@@ -102,9 +102,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="page-header">
-                <h1><span th:utext="${page.symbol}" >symbol</span>&nbsp;&nbsp;<span th:utext="${page.title}" class="header-h1">Titel</span><br/>
-                    <small th:utext="${page.subtitle}">Untertitel</small>
-                </h1>
+                    <h1>
+                        <span th:utext="${page.symbol}">symbol</span>
+                        <span th:utext="${page.title}" class="header-h1">Titel</span>
+                        <br/>
+                        <small th:utext="${page.subtitle}">Untertitel</small>
+                    </h1>
                 </div>
             </div>
         </div>
@@ -113,25 +116,62 @@
 
 <main class="page-content">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>cities</h1>
-                <div id="tw-content-frame">
-                    Something to show.
+        <!--
+        <div th:fragment="tw-data-view-above">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${page.historyBack}">
+                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
+                        <a href="" th:href="@{|/${myEntity}/all?page=${myPageContent.previousPageable().pageNumber}|}">
+                            <span>
+                            <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </span>
                 </div>
             </div>
         </div>
+        <div th:fragment="tw-data-view-below">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
+                        <a href="" th:href="@{|/${myEntity}/all?page=${myPageContent.nextPageable().pageNumber}|}" >
+                            <span>
+                            <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${page.historyBack}">
+                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
     </div>
 </main>
-<footer>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="webjars/jquery/1.11.1/jquery.min.js" th:attr="src=@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" th:attr="src=@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-<!-- my own JavaScript -->
-<script src="map-icons/js/map-icons.min.js" th:attr="src=@{/map-icons/js/map-icons.min.js}"></script>
-<script src="js/my.js" th:attr="src=@{/js/my.js}"></script>
-    <span th:if="${!page.contextTest}"><span th:utext="${page.googleAnalyticScriptHtml}" ></span></span>
+<footer th:fragment="tw-footer">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="webjars/jquery/1.11.1/jquery.min.js" th:attr="src=@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" th:attr="src=@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <!-- Map Icons -->
+    <script src="map-icons/js/map-icons.min.js" th:attr="src=@{/map-icons/js/map-icons.min.js}"></script>
+    <!-- my own JavaScript -->
+    <script src="js/my.js" th:attr="src=@{/js/my.js}"></script>
+    <span th:if="${!page.contextTest}">
+        <span th:utext="${page.googleAnalyticScriptHtml}" ></span>
+    </span>
 </footer>
 </body>
 </html>
