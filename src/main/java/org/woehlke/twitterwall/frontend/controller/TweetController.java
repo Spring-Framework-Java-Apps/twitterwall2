@@ -51,7 +51,7 @@ public class TweetController {
         return "tweet/all";
     }
 
-    @RequestMapping("/id/{id}")
+    @RequestMapping("/{id}")
     public String getLatestTweets(
         @PathVariable("id") Tweet tweet, Model model
     ) {
