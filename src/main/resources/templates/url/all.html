@@ -28,7 +28,7 @@
                         <tbody>
                             <tr th:each="myPageItem : ${myPageContent.getContent()}">
                                 <td>
-                                    <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                                    <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
                                 </td>
                                 <td>
                                     <div class="row">

@@ -71,50 +71,50 @@
                             <li>
                                 <a href="/task/all" th:href="@{/task/all}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Tasks
+                                    <span>Tasks</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="/task/start/createTestData" th:href="@{/task/start/createTestData}">
                                     <i class="fa fa-cubes" aria-hidden="true"></i>
-                                    Start Task: Create Test Data
+                                    <span>Start Task: Create Test Data</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/tweets/search" th:href="@{/task/start/tweets/search}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Start Task: fetch Tweets from Twitter Search
+                                    <span>Start Task: fetch Tweets from Twitter Search</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/tweets/update" th:href="@{/task/start/tweets/update}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Start Task: update Tweets
+                                    <span>Start Task: update Tweets</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/user/onlist/renew" th:href="@{/task/start/user/onlist/renew}">
                                     <i class="fa fa-leaf" aria-hidden="true"></i>
-                                    Start Task: Renew List of Users On Defined User List
+                                    <span>Start Task: Renew List of Users On Defined User List</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/users/list/fetch" th:href="@{/task/start/users/list/fetch}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Start Task: fetch Users from Defined User List
+                                    <span>Start Task: fetch Users from Defined User List</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/users/mentions/update" th:href="@{/task/start/users/mentions/update}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Start Task: update Users from Mentions
+                                    <span>Start Task: update Users from Mentions</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/task/start/users/update" th:href="@{/task/start/users/update}">
                                     <i class="fa fa-check-square" aria-hidden="true"></i>
-                                    Start Task: update Users
+                                    <span>Start Task: update Users</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -136,49 +136,49 @@
                             <li>
                                 <a href="/user/all" th:href="@{/user/all}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    All Users
+                                    <span>All Users</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/tweets" th:href="@{/user/list/tweets}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users with Tweets
+                                    <span>Users with Tweets</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/follower" th:href="@{/user/list/follower}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, Follower
+                                    <span>Users, Follower</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetfollower" th:href="@{/user/list/notyetfollower}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, Not Yet Follower
+                                    <span>Users, Not Yet Follower</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/friends" th:href="@{/user/list/friends}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, Friends
+                                    <span>Users, Friends</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetfriends" th:href="@{/user/list/notyetfriends}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, Not Yet Friends
+                                    <span>Users, Not Yet Friends</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/onlist" th:href="@{/user/list/onlist}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, on Defined User List
+                                    <span>Users, on Defined User List</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetonlist" th:href="@{/user/list/notyetonlist}">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    Users, Not Yet on Defined User List
+                                    <span>Users, Not Yet on Defined User List</span>
                                 </a>
                             </li>
                         </ul>
@@ -186,19 +186,19 @@
                     <li sec:authorize="!isAuthenticated()" >
                         <a href="/user/list/tweets" th:href="@{/user/list/tweets}">
                             <i class="fa fa-users" aria-hidden="true"></i>
-                            Users
+                            <span>Users</span>
                         </a>
                     </li>
                     <li>
                         <a href="/hashtag/overview" th:href="@{/hashtag/overview}">
                             <i class="fa fa-hashtag" aria-hidden="true"></i>
-                            HashTags
+                            <span>HashTags</span>
                         </a>
                     </li>
                     <li>
                         <a href="/imprint" th:href="@{/imprint}">
                             <i class="fa fa-university" aria-hidden="true"></i>
-                            Imprint
+                            <span>Imprint</span>
                         </a>
                     </li>
                 </ul>

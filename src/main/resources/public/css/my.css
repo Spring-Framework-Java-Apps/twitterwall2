@@ -146,7 +146,7 @@
     }
 
     i.fa, span.map-icon, span.glyphicon  {
-        margin-right: 0.5em;
+        margin-right: 0.25em;
     }
 }
 
@@ -162,6 +162,7 @@ lg: Large devices - Desktops (≥1200px)
 
 /* xs: Extra small devices - Phones (<768px) */
 @media screen and (max-width: 767px) {
+
     .navbar-nav .open .dropdown-menu {
         background-color: #317eac !important;
     }
