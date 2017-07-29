@@ -44,35 +44,40 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
      */
     @Override
     public Mention getPersistentMentionAndUserFor(Mention mention, Task task) {
-        String msg = "getPersistentMentionAndUserFor:";
-        String screenName = mention.getScreenName();
-        User foundUser = storeTwitterProfileForProxyMentionForUser.storeTwitterProfileForProxyMentionForUser(mention,task);
-        if(foundUser != null){
-            if(foundUser.getScreenName().compareTo(mention.getScreenName())!=0){
-                String eventMsg = msg + "KNOWN_BUG - ScreenName user: "+foundUser.getScreenName()+" mention: "+mention.getScreenName();
-                log.warn(eventMsg);
-                mention.setScreenName(foundUser.getScreenName());
-                screenName = foundUser.getScreenName();
-            }
-            Mention persMention = null;
-            Mention myFoundMention = mentionService.findByScreenName(screenName);
-            if(myFoundMention!=null){
-                myFoundMention.setUser(foundUser);
-                myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
-                persMention = mentionService.update(myFoundMention,task);
-                log.debug(msg+" updated: "+persMention.toString());
+        String msg = "getPersistentMentionAndUserFor: "+mention.getUniqueId()+" : "+task.getUniqueId() +" : ";
+        try {
+            String screenName = mention.getScreenName();
+            User foundUser = storeTwitterProfileForProxyMentionForUser.storeTwitterProfileForProxyMentionForUser(mention, task);
+            if (foundUser != null) {
+                if (foundUser.getScreenName().compareTo(mention.getScreenName()) != 0) {
+                    String eventMsg = msg + "KNOWN_BUG - ScreenName user: " + foundUser.getScreenName() + " mention: " + mention.getScreenName();
+                    log.warn(eventMsg);
+                    mention.setScreenName(foundUser.getScreenName());
+                    screenName = foundUser.getScreenName();
+                }
+                Mention persMention = null;
+                Mention myFoundMention = mentionService.findByScreenName(screenName);
+                if (myFoundMention != null) {
+                    myFoundMention.setUser(foundUser);
+                    myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
+                    persMention = mentionService.update(myFoundMention, task);
+                    log.debug(msg + " updated: " + persMention.toString());
+                } else {
+                    mention.setUser(foundUser);
+                    mention.setIdTwitterOfUser(foundUser.getIdTwitter());
+                    persMention = mentionService.createProxyMention(mention, task);
+                    log.debug(msg + " persisted: " + persMention.toString());
+                }
+                return persMention;
             } else {
-                mention.setUser(foundUser);
-                mention.setIdTwitterOfUser(foundUser.getIdTwitter());
-                persMention = mentionService.createProxyMention(mention,task);
-                log.debug(msg+" persisted: "+persMention.toString());
+                String eventMsg = msg + "ERROR: useful Persistent Mention expectet, but there is none!";
+                log.error(eventMsg);
+                return null;
             }
-            return persMention;
-        } else {
-            String eventMsg = msg+"ERROR: useful Persistent Mention expectet, but there is none!";
-            log.error(eventMsg);
-            return null;
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
         }
+        return null;
     }
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentMentionImpl.class);

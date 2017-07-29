@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.entities.common;
 
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 
-public interface DomainObjectWithEntities<T extends DomainObjectWithEntities> extends DomainObjectWithIdTwitter<T>  {
+public interface DomainObjectWithEntities<T extends DomainObjectWithEntities> extends DomainObjectWithIdTwitter<T>,DomainObjectWithTask<T>  {
 
     void removeAllEntities();
 

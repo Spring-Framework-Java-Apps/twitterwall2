@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
@@ -20,27 +20,31 @@ import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 public class TaskHistoryResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
-    public @ResponseBody
-    Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+    public @ResponseBody Page<TaskHistory> countedEntities(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page
+    ) {
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;
     }
 
-    @RequestMapping(path="/{id}",method= RequestMethod.GET)
-    public @ResponseBody
-    TaskHistory countedEntities(@PathVariable long id, Model model) {
-        TaskHistory taskHistory = taskHistoryService.findById(id);
+    @RequestMapping(path="/{id}", method= RequestMethod.GET)
+    public @ResponseBody TaskHistory findById(
+        @PathVariable("id") TaskHistory taskHistory
+    ) {
         return taskHistory;
-    }
-
-    @Autowired
-    public TaskHistoryResource(TaskHistoryService taskHistoryService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
-        this.taskHistoryService = taskHistoryService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
     }
 
     private final TaskHistoryService taskHistoryService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
+
+    @Autowired
+    public TaskHistoryResource(
+            TaskHistoryService taskHistoryService,
+            FrontendProperties frontendProperties
+    ) {
+        this.taskHistoryService = taskHistoryService;
+        this.frontendProperties = frontendProperties;
+    }
 }

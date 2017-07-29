@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/tags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
+<header th:include="layoutMain :: tw-header" >
 </header>
-<section>
+<main class="page-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <span  class="tw-pager-arrow tw-pager-up"  th:if="${latestTweets.hasPrevious()}">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${latestTweets.hasPrevious()}">
                     <a href="" th:href="@{|/tweet/all?page=${latestTweets.previousPageable().pageNumber}|}">
                         <span>
                         <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
@@ -20,7 +19,7 @@
                 </span>
             </div>
         </div>
-        <div th:include="timeline :: tw-show-latest-tweets" ></div>
+        <div th:include="layoutTweetList :: tw-tweet-list" ></div>
         <div class="row">
             <div class="col-md-12">
                 <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
@@ -33,8 +32,12 @@
             </div>
         </div>
     </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
 </section>
-<footer th:include="layout :: footer" >
+
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

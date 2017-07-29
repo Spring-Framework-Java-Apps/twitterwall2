@@ -32,10 +32,16 @@ public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements Ur
     public Url findByUrl(String url) {
         String name = "findByUrl "+url+" ";
         if(url == null){
-            throw new IllegalArgumentException("Url.findByUrl: url == null");
+            log.debug(name+"Url.findByUrl: url == null");
+            return null;
+            //throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
         Url result = urlRepository.findByUrl(url);
-        log.debug(name+result.toString());
+        if(result == null){
+            log.debug(name+"Url.findByUrl: url == null");
+        } else {
+            log.debug(name+result.toString());
+        }
         return result;
     }
 

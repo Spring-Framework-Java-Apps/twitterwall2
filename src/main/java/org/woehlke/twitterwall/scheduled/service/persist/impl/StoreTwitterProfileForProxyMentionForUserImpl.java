@@ -32,28 +32,33 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
 
     @Override
     public User storeTwitterProfileForProxyMentionForUser(Mention mention, Task task) {
-        CountedEntities countedEntities = countedEntitiesService.countAll();
-        String msg = "storeTwitterProfileForProxyMentionForUser:";
-        String screenName = mention.getScreenName();
-        User foundUser = null;
-        User myFoundUser = userService.findByScreenName(screenName);
-        if(myFoundUser!= null){
-            foundUser = myFoundUser;
-        } else {
-            TwitterProfile twitterProfile = null;
-            try {
-                twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-            } catch (ApiException twitterApiException) {
-                taskService.error(task,twitterApiException, msg,countedEntities);
-                log.error(msg+twitterApiException.getMessage());
+        String msg = "storeTwitterProfileForProxyMentionForUser: "+mention.getUniqueId()+" : "+task.getUniqueId() +" : ";
+        try {
+            CountedEntities countedEntities = countedEntitiesService.countAll();
+            String screenName = mention.getScreenName();
+            User foundUser = null;
+            User myFoundUser = userService.findByScreenName(screenName);
+            if (myFoundUser != null) {
+                foundUser = myFoundUser;
+            } else {
+                TwitterProfile twitterProfile = null;
+                try {
+                    twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
+                } catch (ApiException twitterApiException) {
+                    taskService.error(task, twitterApiException, msg, countedEntities);
+                    log.error(msg + twitterApiException.getMessage());
+                }
+                if (twitterProfile != null) {
+                    User myFoundUser2 = userTransformService.transform(twitterProfile, task);
+                    myFoundUser2 = this.storeUserProcess(myFoundUser2, task);
+                    foundUser = myFoundUser2;
+                }
             }
-            if(twitterProfile!=null){
-                User myFoundUser2 = userTransformService.transform(twitterProfile,task);
-                myFoundUser2 = this.storeUserProcess(myFoundUser2, task);
-                foundUser = myFoundUser2;
-            }
+            return foundUser;
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
         }
-        return foundUser;
+        return null;
     }
 
     /**
@@ -67,59 +72,65 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
     private User storeUserProcess(User user, Task task){
         String msg = "User.storeUserProcess ";
 
-        /** @see StoreEntitiesProcessImpl.storeEntitiesProcess(Entities entities, Task task) */
-        Set<Url> urls = new LinkedHashSet<>();
-        Set<HashTag> hashTags = new LinkedHashSet<>();
-        Set<Mention> mentions = new LinkedHashSet<>();
-        Set<Media> media = new LinkedHashSet<>();
-        Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
-        for (Url myUrl : user.getEntities().getUrls()) {
-            if((myUrl != null)&&(myUrl.isValid())){
-                Url urlPers = urlService.store(myUrl, task);
-                urls.add(urlPers);
-            } else if((myUrl != null)&&(myUrl.isRawUrlsFromDescription())){
-                String urlStr = myUrl.getUrl();
-                Url urlObj = createPersistentUrl.createPersistentUrlFor(urlStr,task);
-                if((urlObj != null)&&(urlObj.isValid())){
-                    urls.add(urlObj);
+        try {
+
+            /** @see StoreEntitiesProcessImpl.storeEntitiesProcess(Entities entities, Task task) */
+            Set<Url> urls = new LinkedHashSet<>();
+            Set<HashTag> hashTags = new LinkedHashSet<>();
+            Set<Mention> mentions = new LinkedHashSet<>();
+            Set<Media> media = new LinkedHashSet<>();
+            Set<TickerSymbol> tickerSymbols = new LinkedHashSet<>();
+            for (Url myUrl : user.getEntities().getUrls()) {
+                if ((myUrl != null) && (myUrl.isValid())) {
+                    Url urlPers = urlService.store(myUrl, task);
+                    urls.add(urlPers);
+                } else if ((myUrl != null) && (myUrl.isRawUrlsFromDescription())) {
+                    String urlStr = myUrl.getUrl();
+                    Url urlObj = createPersistentUrl.createPersistentUrlFor(urlStr, task);
+                    if ((urlObj != null) && (urlObj.isValid())) {
+                        urls.add(urlObj);
+                    }
                 }
             }
-        }
-        for (HashTag hashTag : user.getEntities().getHashTags()) {
-            if(hashTag.isValid()){
-                HashTag hashTagPers = hashTagService.store(hashTag, task);
-                hashTags.add(hashTagPers);
+            for (HashTag hashTag : user.getEntities().getHashTags()) {
+                if (hashTag.isValid()) {
+                    HashTag hashTagPers = hashTagService.store(hashTag, task);
+                    hashTags.add(hashTagPers);
+                }
             }
-        }
-        /** hier wird kein Proxy user mehr angelegt */
-        for (Mention mention : user.getEntities().getMentions()) {
-            if(mention.isValid()){
-                Mention mentionPers =mentionService.store(mention, task);
-                mentions.add(mentionPers);
+            /** hier wird kein Proxy user mehr angelegt */
+            for (Mention mention : user.getEntities().getMentions()) {
+                if (mention.isValid()) {
+                    Mention mentionPers = mentionService.store(mention, task);
+                    mentions.add(mentionPers);
+                }
             }
-        }
-        for(Media medium:user.getEntities().getMedia()){
-            if(medium.isValid()) {
-                Media mediumPers = mediaService.store(medium, task);
-                media.add(mediumPers);
+            for (Media medium : user.getEntities().getMedia()) {
+                if (medium.isValid()) {
+                    Media mediumPers = mediaService.store(medium, task);
+                    media.add(mediumPers);
+                }
             }
-        }
-        for(TickerSymbol tickerSymbol:user.getEntities().getTickerSymbols()){
-            if(tickerSymbol.isValid()){
-                TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol,task);
-                tickerSymbols.add(tickerSymbolPers);
+            for (TickerSymbol tickerSymbol : user.getEntities().getTickerSymbols()) {
+                if (tickerSymbol.isValid()) {
+                    TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol, task);
+                    tickerSymbols.add(tickerSymbolPers);
+                }
             }
-        }
-        user.removeAllEntities();
-        user = userService.store(user,task);
+            user.removeAllEntities();
+            user = userService.store(user, task);
 
-        user.getEntities().setUrls(urls);
-        user.getEntities().setHashTags(hashTags);
-        user.getEntities().setMentions(mentions);
-        user.getEntities().setMedia(media);
-        user.getEntities().setTickerSymbols(tickerSymbols);
+            user.getEntities().setUrls(urls);
+            user.getEntities().setHashTags(hashTags);
+            user.getEntities().setMentions(mentions);
+            user.getEntities().setMedia(media);
+            user.getEntities().setTickerSymbols(tickerSymbols);
 
-        user = userService.store(user,task);
+            user = userService.store(user, task);
+
+        } catch (Exception e){
+            log.debug(msg+e.getMessage());
+        }
         return user;
     }
 

@@ -2,11 +2,12 @@ package org.woehlke.twitterwall.frontend.controller.common.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.model.HashTagCounted;
 import org.woehlke.twitterwall.frontend.model.HashTagOverview;
@@ -25,20 +26,15 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 @Component
 public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
 
-
-    public HashTagsOverviewHelperImpl(UserService userService, HashTagService hashTagService, TweetService tweetService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
-        this.userService = userService;
-        this.hashTagService = hashTagService;
-        this.tweetService = tweetService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-    }
-
     @Override
     public HashTagOverview getHashTagOverview() {
         String msg = "getHashTagOverview";
         List<HashTagCounted> hashTagsTweets = new ArrayList<>();
         List<HashTagCounted> hashTagsUsers = new ArrayList<>();
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterwallFrontendProperties.getPageSize());
+        Pageable pageRequest = new PageRequest(
+                FIRST_PAGE_NUMBER,
+                frontendProperties.getPageSize()
+        );
         boolean hasNext = true;
         while(hasNext) {
             Page<HashTag> myPage = hashTagService.getAll(pageRequest);
@@ -52,7 +48,7 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
                     long numberTweets = tweets.getTotalElements();
                     log.debug(myMSg + " result: numberTweets=" + numberTweets);
                     if (numberTweets > 0) {
-                        HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(),numberTweets, hashTag.getText());
                         hashTagsTweets.add(c);
                     }
                 }
@@ -62,10 +58,10 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
                 if (users == null) {
                     log.debug(myMSg + " result: null");
                 } else {
-                    long numberUsers = users.getTotalElements(); //userService.countUsersForHashTag(hashTag.getText());
+                    long numberUsers = users.getTotalElements();
                     log.debug(myMSg + " result: numberUsers=" + numberUsers);
                     if (numberUsers > 0) {
-                        HashTagCounted c = new HashTagCounted(numberUsers, hashTag.getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(), numberUsers, hashTag.getText());
                         hashTagsUsers.add(c);
                     }
                 }
@@ -86,5 +82,18 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
 
     private final TweetService tweetService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
+
+    @Autowired
+    public HashTagsOverviewHelperImpl(
+            UserService userService,
+            HashTagService hashTagService,
+            TweetService tweetService,
+            FrontendProperties frontendProperties
+    ) {
+        this.userService = userService;
+        this.hashTagService = hashTagService;
+        this.tweetService = tweetService;
+        this.frontendProperties = frontendProperties;
+    }
 }

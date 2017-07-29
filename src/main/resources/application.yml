@@ -87,6 +87,8 @@ twitterwall:
     pageSize: 12
     menuAppName: ${TWITTERWALL_APP_NAME}
     theme: ${TWITTERWALL_THEME}
+    loginUsername: ${TWITTERWALL_LOGIN_USERNAME}
+    loginPassword: ${TWITTERWALL_LOGIN_PASSWORD}
   mq:
     starttask:
       time:

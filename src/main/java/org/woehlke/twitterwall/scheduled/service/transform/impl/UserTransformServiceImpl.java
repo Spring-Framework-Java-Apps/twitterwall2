@@ -62,7 +62,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         userTarget.setListedCount(userSource.getListedCount());
         userTarget.setFollowing(userSource.isFollowing());
         userTarget.setFollowRequestSent(userSource.isFollowRequestSent());
-        userTarget.setProtected(userSource.isProtected());
+        userTarget.setProtectedUser(userSource.isProtected());
         userTarget.setNotificationsEnabled(userSource.isNotificationsEnabled());
         userTarget.setVerified(userSource.isVerified());
         userTarget.setGeoEnabled(userSource.isGeoEnabled());

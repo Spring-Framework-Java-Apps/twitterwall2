@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -31,7 +32,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(UrlListener.class)
-public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
+public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity<Url>,DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +62,61 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
+        if(url == null){
+            return false;
+        }
+        if(expanded == null){
+            return false;
+        }
+        if(this.url.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
         return url.compareTo(expanded) == 0;
+    }
+
+    @Transient
+    public boolean isRawUrlsFromDescription() {
+        if(this.display == null){
+            return false;
+        }
+        if(this.expanded == null){
+            return false;
+        }
+        if(this.display.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
+        return (this.display.compareTo(UNDEFINED)==0)&&(this.expanded.compareTo(UNDEFINED)==0);
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.url == null){
+            return false;
+        }
+        if(this.expanded == null){
+            return false;
+        }
+        if(this.display == null){
+            return false;
+        }
+        if(this.url.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
+        if(this.display.isEmpty()){
+            return false;
+        }
+        boolean isInvalid = this.isRawUrlsFromDescription()||this.isUrlAndExpandedTheSame();
+        return !isInvalid;
     }
 
     public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
@@ -131,16 +186,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
                 ", url='" + url + '\'' +
                     super.toString() +
                 "}\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        boolean isInvalid = (this.url == null)||(this.url.isEmpty()||isRawUrlsFromDescription())||(this.url.compareTo(this.expanded)==0);
-        return !isInvalid;
-    }
-
-    public boolean isRawUrlsFromDescription() {
-        return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
     }
 
     @Override

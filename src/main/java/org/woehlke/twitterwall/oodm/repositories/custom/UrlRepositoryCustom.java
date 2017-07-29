@@ -1,9 +1,9 @@
 package org.woehlke.twitterwall.oodm.repositories.custom;
 
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.repositories.common.DomainObjectMinimalRepository;
+import org.woehlke.twitterwall.oodm.repositories.common.DomainObjectEntityRepository;
 
-public interface UrlRepositoryCustom extends DomainObjectMinimalRepository<Url> {
+public interface UrlRepositoryCustom extends DomainObjectEntityRepository<Url> {
 
     Url findByUniqueId(Url domainObject);
 }

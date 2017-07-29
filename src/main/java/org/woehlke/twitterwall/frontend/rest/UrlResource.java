@@ -5,13 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.springframework.web.bind.annotation.*;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 
 /**
@@ -29,19 +27,32 @@ public class UrlResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    Page<Url> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+    Page<Url> getAll(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page
+    ) {
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         return this.urlService.getAll(pageRequest);
+    }
+
+    @RequestMapping(path="/{id}", method= RequestMethod.GET)
+    public @ResponseBody
+    Url findById(
+            @PathVariable("id") Url url
+    ) {
+        return url;
     }
 
     private final UrlService urlService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     @Autowired
-    public UrlResource(UrlService urlService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public UrlResource(
+            UrlService urlService,
+            FrontendProperties frontendProperties
+    ) {
         this.urlService = urlService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
 }

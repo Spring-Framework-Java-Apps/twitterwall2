@@ -4,7 +4,7 @@
 
     <groupId>org.woehlke.twitterwall</groupId>
     <artifactId>twitterwall2</artifactId>
-    <version>1.0.17-SNAPSHOT</version>
+    <version>1.0.18-SNAPSHOT</version>
     <name>twitterwall2</name>
 
     <description>Twitterwall with spring:boot for heroku</description>
@@ -80,12 +80,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-integration</artifactId>
         </dependency>
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mobile</artifactId>
@@ -112,6 +110,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>

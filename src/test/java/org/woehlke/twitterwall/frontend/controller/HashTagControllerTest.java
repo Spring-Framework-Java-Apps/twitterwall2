@@ -14,9 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
-import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,7 +39,7 @@ public class HashTagControllerTest {
     private HashTagController controller;
 
     @Autowired
-    private TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private SchedulerProperties schedulerProperties;
 
     @Commit
     @Test
@@ -55,7 +53,7 @@ public class HashTagControllerTest {
     public void fetchTweetsFromTwitterSearchTest() {
         log.info("------------------------------------");
         log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        for(long id: twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()){
+        for(long id: schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()){
             log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_TWEET_TEST: "+id);
         }
         //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);

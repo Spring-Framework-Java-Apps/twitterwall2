@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.URL;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
@@ -27,7 +28,7 @@ import javax.persistence.*;
     )
 })
 @EntityListeners(TickerSymbolListener.class)
-public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
+public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements DomainObjectEntity<TickerSymbol>,DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 

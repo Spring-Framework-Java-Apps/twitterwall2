@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -36,7 +37,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(MediaListener.class)
-public class Media extends AbstractDomainObject<Media> implements DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
+public class Media extends AbstractDomainObject<Media> implements DomainObjectEntity<Media>,DomainObjectWithIdTwitter<Media>,DomainObjectWithUrl<Media>,DomainObjectWithTask<Media> {
 
     private static final long serialVersionUID = 1L;
 
