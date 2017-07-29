@@ -21,6 +21,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     @Override
     public CountedEntities countAll() {
+        String msg = "countAll: ";
         CountedEntities c = new CountedEntities();
 
         long countUser = userRepository.count();
@@ -57,7 +58,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setUserprofile2tickersymbol(userRepository.countAllUser2TickerSymbol());
         c.setUserprofile2url(userRepository.countAllUser2Url());
 
-        log.debug("countAll: "+c.toString());
+        log.debug(msg+c.toString());
         return c;
     }
 

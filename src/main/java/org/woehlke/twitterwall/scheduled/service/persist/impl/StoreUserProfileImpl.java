@@ -22,10 +22,15 @@ public class StoreUserProfileImpl implements StoreUserProfile {
 
     @Override
     public User storeUserProfile(TwitterProfile userProfile, Task task) {
-        String msg = "storeUserProfile: ";
-        User user = userTransformService.transform(userProfile,task);
-        user = storeUserProcess.storeUserProcess(user, task);
-        return user;
+        String msg = "storeUserProfile: "+userProfile.getScreenName() + ": "+task.getUniqueId() + " : ";
+        try {
+            User user = userTransformService.transform(userProfile, task);
+            user = storeUserProcess.storeUserProcess(user, task);
+            return user;
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
+            return null;
+        }
     }
 
     private static final Logger log = LoggerFactory.getLogger(StoreUserProfileImpl.class);

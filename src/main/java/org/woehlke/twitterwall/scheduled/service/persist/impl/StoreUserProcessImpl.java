@@ -22,11 +22,15 @@ public class StoreUserProcessImpl implements StoreUserProcess {
 
     @Override
     public User storeUserProcess(User user, Task task){
-        String msg = "User.storeUserProcess ";
-        Entities entities = user.getEntities();
-        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
-        user.setEntities(entities);
-        user = userService.store(user,task);
+        String msg = "User.storeUserProcess "+user.getUniqueId()+" : "+task.getUniqueId()+" : ";
+        try {
+            Entities entities = user.getEntities();
+            entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
+            user.setEntities(entities);
+            user = userService.store(user, task);
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
+        }
         return user;
     }
 
