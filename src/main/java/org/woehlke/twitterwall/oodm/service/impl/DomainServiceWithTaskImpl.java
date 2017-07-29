@@ -86,7 +86,7 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
             }
         } catch (Exception e)  {
             log.warn(msg,e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return domainObjectResult;
     }

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" ></header>
+<main class="page-content">
+    <div class="container">
+        <div th:fragment="tw-user-list">
+            <div class="row">
+                <div class="col-md-12 tw-col-4-wrapper">
+                    <div class="tw-col-4-box tw-user-list" th:each="user : ${users}">
+                        <div class="thumbnail tw-user"
+                             th:include="layoutUser :: tw-user-thumbnail"
+                             th:with="user=${user}">
+                        </div>
+                        <!--
+                        <div>
+                            <p>
+                                <img th:attr="src=${user.profileBannerUrl},class=${user.cssBackgroundImage}" />
+                            </p>
+                            <p>
+                                <a href="" th:href="@{|https://twitter.com/${user.screenName}|}">
+                                    <img th:attr="src=${user.profileImageUrl},alt=${user.description},title=${user.description},class=${user.cssProfileBannerUrl}"/>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="caption">
+                            <h2>
+                                <a href="" th:href="@{|/user/${user.screenName}|}">
+                                    <span th:text="${user.name}">name</span>
+                                </a>
+                            </h2>
+                            <h3>
+                                <a href="" th:href="@{|/user/${user.screenName}|}">
+                                    <b>@<span th:text="${user.screenName}">screenName</span></b>
+                                </a>
+                            </h3>
+                            <div>
+                                <p th:if="${user.description != null}">
+                                    <span th:utext="${user.formattedDescription}">description</span>
+                                </p>
+                                <p th:if="${user.location != null}">
+                                    <span class="map-icon map-icon-postal-code"></span>
+                                    <span th:text="${user.location}">location</span>
+                                </p>
+                                <p th:if="${user.url != null}">
+                                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                                    <span th:utext="${user.formattedUrl}">url</span>
+                                </p>
+                                <p th:if="${user.createdDate}">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    <span>Seit</span>
+                                    <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span>
+                                </p>
+                            </div>
+                            <hr/>
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        Tweets:
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <span th:text="${user.statusesCount}">statusesCount</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                   <div class="col-md-8">
+                                       <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                       Folge ich:
+                                   </div>
+                                   <div class="col-md-4 text-right">
+                                       <span th:text="${user.friendsCount}">friendsCount</span>
+                                   </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                        Follower:
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <span th:text="${user.followersCount}">
+                                            followersCount
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                        Gefällt mir:
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <span th:text="${user.favoritesCount}">favoritesCount</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                        Listen:
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <span th:text="${user.listedCount}">listedCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div th:if="${page.historyBack}">
+                                <a href="javascript:history.back()">
+                                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                    <span>zurück</span>
+                                </a>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:include="layout :: footer" >
+</footer>
+</body>
+</html>

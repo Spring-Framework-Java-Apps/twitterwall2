@@ -22,25 +22,29 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
 
     /** Method because of recursive Method Call in this Method **/
     public Tweet storeOneTweetPerform(Tweet tweet, Task task){
-        String msg = "storeOneTweetPerform( idTwitter="+tweet.getIdTwitter()+" ) ";
-        /** Retweeted Tweet */
-        Tweet retweetedStatus = tweet.getRetweetedStatus();
-        if (retweetedStatus != null) {
-            /** Method because of recursive Method Call in this Method **/
-            retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
-            tweet.setRetweetedStatus(retweetedStatus);
+        String msg = "storeOneTweetPerform( idTwitter=" + tweet.getUniqueId() + " ) "+task.getUniqueId() + " : ";
+        try {
+            /** Retweeted Tweet */
+            Tweet retweetedStatus = tweet.getRetweetedStatus();
+            if (retweetedStatus != null) {
+                /** Method because of recursive Method Call in this Method **/
+                retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
+                tweet.setRetweetedStatus(retweetedStatus);
+            }
+            /** User */
+            User user = tweet.getUser();
+            user = storeUserProcess.storeUserProcess(user, task);
+            tweet.setUser(user);
+            /** Entities */
+            Entities entities = tweet.getEntities();
+            entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
+            tweet.setEntities(entities);
+            /** Tweet itself */
+            tweet = tweetService.store(tweet, task);
+            log.debug(msg + "tweetService.store: " + tweet.toString());
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
         }
-        /** User */
-        User user = tweet.getUser();
-        user = storeUserProcess.storeUserProcess(user,task);
-        tweet.setUser(user);
-        /** Entities */
-        Entities entities = tweet.getEntities();
-        entities = storeEntitiesProcess.storeEntitiesProcess(entities,task);
-        tweet.setEntities(entities);
-        /** Tweet itself */
-        tweet = tweetService.store(tweet,task);
-        log.debug(msg+"tweetService.store: "+tweet.toString());
         return tweet;
     }
 

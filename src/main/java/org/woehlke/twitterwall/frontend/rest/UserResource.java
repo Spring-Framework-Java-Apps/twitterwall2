@@ -5,12 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.springframework.web.bind.annotation.*;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
+import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
@@ -29,19 +27,32 @@ public class UserResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
     public @ResponseBody
-    Page<User> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page) {
-        Pageable pageRequest = new PageRequest(page, twitterwallFrontendProperties.getPageSize());
+    Page<User> getAll(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page
+    ) {
+        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         return this.userService.getAll(pageRequest);
+    }
+
+    @RequestMapping(path="/{id}", method= RequestMethod.GET)
+    public @ResponseBody
+    User findById(
+        @PathVariable("id") User user
+    ) {
+        return user;
     }
 
     private final UserService userService;
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     @Autowired
-    public UserResource(UserService userService, TwitterwallFrontendProperties twitterwallFrontendProperties) {
+    public UserResource(
+            UserService userService,
+            FrontendProperties frontendProperties
+    ) {
         this.userService = userService;
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
+        this.frontendProperties = frontendProperties;
     }
 
 }

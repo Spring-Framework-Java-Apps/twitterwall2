@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -20,7 +20,7 @@ import java.util.List;
 @Component("mqCreateTestDataForTweets")
 public class CreateTestDataForTweetsImpl implements CreateTestDataForTweets {
 
-    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private final SchedulerProperties schedulerProperties;
 
     private final TwitterApiService twitterApiService;
 
@@ -29,8 +29,8 @@ public class CreateTestDataForTweetsImpl implements CreateTestDataForTweets {
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public CreateTestDataForTweetsImpl(TwitterwallSchedulerProperties twitterwallSchedulerProperties, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
-        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+    public CreateTestDataForTweetsImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+        this.schedulerProperties = schedulerProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
@@ -44,7 +44,7 @@ public class CreateTestDataForTweetsImpl implements CreateTestDataForTweets {
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        for (long idTwitter : twitterwallSchedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
+        for (long idTwitter : schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
             Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
             TweetFromTwitter tweetMsg = new TweetFromTwitter(task.getId(),tweet);
             tweets.add(tweetMsg);

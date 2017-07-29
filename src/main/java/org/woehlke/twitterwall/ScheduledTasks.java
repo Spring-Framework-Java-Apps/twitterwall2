@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
 
 /**
@@ -20,7 +20,7 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets From TwitterSearch ";
-        if(twitterwallSchedulerProperties.getAllowUpdateTweets()  && !twitterwallSchedulerProperties.getSkipFortesting()) {
+        if(schedulerProperties.getAllowUpdateTweets()  && !schedulerProperties.getSkipFortesting()) {
             startTask.fetchTweetsFromTwitterSearch();
         }
     }
@@ -28,7 +28,7 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
         String msg = "update Tweets ";
-        if(twitterwallSchedulerProperties.getAllowUpdateTweets() && !twitterwallSchedulerProperties.getSkipFortesting()){
+        if(schedulerProperties.getAllowUpdateTweets() && !schedulerProperties.getSkipFortesting()){
             startTask.updateTweets();
         }
     }
@@ -36,7 +36,7 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
-        if(twitterwallSchedulerProperties.getAllowUpdateUserProfiles()  && !twitterwallSchedulerProperties.getSkipFortesting()) {
+        if(schedulerProperties.getAllowUpdateUserProfiles()  && !schedulerProperties.getSkipFortesting()) {
             startTask.updateUserProfiles();
         }
     }
@@ -44,7 +44,7 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
-        if(twitterwallSchedulerProperties.getAllowUpdateUserProfilesFromMention() && !twitterwallSchedulerProperties.getSkipFortesting()) {
+        if(schedulerProperties.getAllowUpdateUserProfilesFromMention() && !schedulerProperties.getSkipFortesting()) {
             startTask.updateUserProfilesFromMentions();
         }
     }
@@ -52,14 +52,14 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
-        if(twitterwallSchedulerProperties.getFetchUserList().getAllow()  && !twitterwallSchedulerProperties.getSkipFortesting()) {
+        if(schedulerProperties.getFetchUserList().getAllow()  && !schedulerProperties.getSkipFortesting()) {
             startTask.fetchUsersFromDefinedUserList();
         }
     }
 
     @Autowired
-    public ScheduledTasks(TwitterwallSchedulerProperties twitterwallSchedulerProperties, StartTask startTask) {
-        this.twitterwallSchedulerProperties = twitterwallSchedulerProperties;
+    public ScheduledTasks(SchedulerProperties schedulerProperties, StartTask startTask) {
+        this.schedulerProperties = schedulerProperties;
         this.startTask = startTask;
     }
 
@@ -83,7 +83,7 @@ public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    private final TwitterwallSchedulerProperties twitterwallSchedulerProperties;
+    private final SchedulerProperties schedulerProperties;
 
     private final StartTask startTask;
 }

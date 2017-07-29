@@ -11,7 +11,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.conf.TwitterProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 
 import javax.inject.Inject;
@@ -35,12 +35,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
         } catch (Exception e) {
             fetchedTweets = new ArrayList<>();
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             e.printStackTrace();
         }
         msg += " result: ";
         if(fetchedTweets.size()==0){
-            log.debug(msg+" result.size: 0");
+            log.error(msg+" result.size: 0");
             return new ArrayList<>();
         } else {
             log.debug(msg+" result.size: "+fetchedTweets.size());
@@ -55,49 +55,50 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         Tweet result;
         try {
             result = getTwitterProxy().timelineOperations().getStatus(id);
+            log.debug(msg+" Id: "+result.getId());
+            msg += " result: ";
+            log.debug(msg+result);
         } catch (Exception e){
             result = null;
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             e.printStackTrace();
         }
-        msg += " result: ";
-        log.debug(msg+" Id: "+result.getId());
         return result;
     }
 
     @Override
     public List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds) {
-        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds;
+        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds+" : ";
         log.debug(msg);
         List<TwitterProfile> result;
         try {
             result = getTwitterProxy().userOperations().getUsers(userProfileTwitterIds);
+            msg += " result: ";
+            log.debug(msg+" size: "+result.size());
         } catch (Exception e){
             result = null;
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             e.printStackTrace();
         }
-        msg += " result: ";
-        log.debug(msg+" size: "+result.size());
         return result;
     }
 
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
-        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterId;
+        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterId+" : ";
         log.debug(msg);
         TwitterProfile result;
         try {
             result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
+            msg += " result: ";
+            log.debug(msg+" Id:         "+result.getId());
+            log.debug(msg+" ScreenName: "+result.getScreenName());
+            log.debug(msg+" Name:       "+result.getName());
         } catch (Exception e) {
             result = null;
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             e.printStackTrace();
         }
-        msg += " result: ";
-        log.debug(msg+" Id:         "+result.getId());
-        log.debug(msg+" ScreenName: "+result.getScreenName());
-        log.debug(msg+" Name:       "+result.getName());
         return result;
     }
 
@@ -108,14 +109,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         TwitterProfile result;
         try {
             result= getTwitterProxy().userOperations().getUserProfile(screenName);
+            msg += " result: ";
+            log.debug(msg+" ScreenName: "+result.getScreenName());
+            log.debug(msg+" Name:       "+result.getName());
         } catch (Exception e) {
             result = null;
             log.debug(msg + e.getMessage());
             e.printStackTrace();
         }
-        msg += " result: ";
-        log.debug(msg+" ScreenName: "+result.getScreenName());
-        log.debug(msg+" Name:       "+result.getName());
         return result;
     }
 
@@ -126,12 +127,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<TwitterProfile> result;
         try {
             result = getTwitterProxy().listOperations().getListMembers(screenName, fetchUserListName);
+            log.debug(msg+" result.size: "+result.size());
         } catch (Exception e) {
             result = new ArrayList<>();
             log.debug(msg + e.getMessage());
             e.printStackTrace();
         }
-        log.debug(msg+" result.size: "+result.size());
         return result;
     }
 
@@ -150,20 +151,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         String accessToken =  environment.getProperty("TWITTER_ACCESS_TOKEN");
         String accessTokenSecret =  environment.getProperty("TWITTER_ACCESS_TOKEN_SECRET");
 
-        /*
-            String consumerKey = twitterProperties.getConsumerSecret();
-            String consumerSecret = twitterProperties.getConsumerSecret();
-            String accessToken = twitterProperties.getAccessToken();
-            String accessTokenSecret =twitterProperties.getConsumerSecret());
-
-            String consumerKey = twitterwallBackendProperties.getTwitter().getConsumerSecret();
-            String consumerSecret = twitterwallBackendProperties.getTwitter().getConsumerSecret();
-            String accessToken = twitterwallBackendProperties.getTwitter().getAccessToken();
-            String accessTokenSecret = twitterwallBackendProperties.getTwitter().getConsumerSecret();
-        */
-
-        Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-        return twitter;
+        Twitter twitterTemplate = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+        return twitterTemplate;
     }
 
     private String MSG = "Remote API Call ";

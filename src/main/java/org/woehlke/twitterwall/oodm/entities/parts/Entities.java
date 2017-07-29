@@ -384,7 +384,7 @@ public class Entities extends EntitiesFilter implements Serializable {
 
     public String getFormattedText(String formattedText ) {
 
-        formattedText = getFormattedTextForUserProfiles(formattedText);
+        //formattedText = getFormattedTextForUserProfiles(formattedText);
 
         Set<HashTag> tags = this.getHashTags();
         formattedText = getFormattedTextForHashTags(tags,formattedText);
@@ -395,7 +395,7 @@ public class Entities extends EntitiesFilter implements Serializable {
         Set<Url> urls = this.getUrls();
         formattedText = getFormattedTextForUrls(urls, formattedText);
 
-        formattedText = getFormattedTextForUrls( formattedText );
+        //formattedText = getFormattedTextForUrls( formattedText );
 
         Set<Mention> mentions = this.getMentions();
         formattedText = super.getFormattedTextForMentions(mentions, formattedText);

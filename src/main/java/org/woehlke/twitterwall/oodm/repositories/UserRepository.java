@@ -22,6 +22,15 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     @Query(name="User.findTweetingUsers")
     Page<User> findTweetingUsers(Pageable pageRequest);
 
+    @Query(name="User.findFollower")
+    Page<User> findFollower(Pageable pageRequest);
+
+    @Query(name="User.findNotYetFollower")
+    Page<User> findNotYetFollower(Pageable pageRequest);
+
+    @Query(name="User.findFriendUsers")
+    Page<User> findFriendUsers(Pageable pageRequest);
+
     @Query(name="User.findNotYetFriendUsers")
     Page<User> findNotYetFriendUsers(Pageable pageRequest);
 

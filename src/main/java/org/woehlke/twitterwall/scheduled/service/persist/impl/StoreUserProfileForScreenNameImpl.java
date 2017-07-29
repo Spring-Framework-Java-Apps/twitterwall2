@@ -26,22 +26,27 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
 
     @Override
     public User storeUserProfileForScreenName(String screenName, Task task){
-        String msg = "storeUserProfileForScreenName( screenName = "+screenName+") ";
-        if(screenName != null && !screenName.isEmpty()) {
-            User userPersForMention = this.userService.findByScreenName(screenName);
-            if (userPersForMention == null) {
-                try {
-                    TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
-                    User userFromMention = storeUserProfile.storeUserProfile(twitterProfile, task);
-                    log.debug(msg + " userFromMention: " + userFromMention.toString());
-                    return userFromMention;
-                } catch (RateLimitExceededException ex) {
-                    log.warn(msg+""+task.toString(),ex);
+        String msg = "storeUserProfileForScreenName( screenName = "+screenName+") "+task.getUniqueId()+" : ";
+        try {
+            if (screenName != null && !screenName.isEmpty()) {
+                User userPersForMention = this.userService.findByScreenName(screenName);
+                if (userPersForMention == null) {
+                    try {
+                        TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
+                        User userFromMention = storeUserProfile.storeUserProfile(twitterProfile, task);
+                        log.debug(msg + " userFromMention: " + userFromMention.toString());
+                        return userFromMention;
+                    } catch (RateLimitExceededException ex) {
+                        log.warn(msg + "" + task.toString(), ex);
+                    }
                 }
+                return userPersForMention;
+            } else {
+                log.warn(msg + " " + task.toString());
+                return null;
             }
-            return userPersForMention;
-        } else {
-            log.warn(msg+" "+task.toString());
+        } catch (Exception e){
+            log.error(msg+e.getMessage());
             return null;
         }
     }

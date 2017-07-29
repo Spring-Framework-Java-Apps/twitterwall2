@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
@@ -37,7 +38,7 @@ import static javax.persistence.FetchType.EAGER;
     )
 })
 @EntityListeners(MentionListener.class)
-public class Mention extends AbstractDomainObject<Mention> implements DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
+public class Mention extends AbstractDomainObject<Mention> implements DomainObjectEntity<Mention>,DomainObjectWithIdTwitter<Mention>, DomainObjectWithScreenName<Mention>,DomainObjectWithTask<Mention> {
 
     private static final long serialVersionUID = 1L;
 
