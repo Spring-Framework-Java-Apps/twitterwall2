@@ -20,27 +20,31 @@ import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 public class TaskHistoryResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
-    public @ResponseBody
-    Page<TaskHistory> countedEntities(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public @ResponseBody Page<TaskHistory> countedEntities(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page
+    ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<TaskHistory> allTasks = taskHistoryService.getAll(pageRequest);
         return allTasks;
     }
 
-    @RequestMapping(path="/{id}",method= RequestMethod.GET)
-    public @ResponseBody
-    TaskHistory countedEntities(@PathVariable long id, Model model) {
-        TaskHistory taskHistory = taskHistoryService.findById(id);
+    @RequestMapping(path="/{id}", method= RequestMethod.GET)
+    public @ResponseBody TaskHistory findById(
+        @PathVariable("id") TaskHistory taskHistory
+    ) {
         return taskHistory;
-    }
-
-    @Autowired
-    public TaskHistoryResource(TaskHistoryService taskHistoryService, FrontendProperties frontendProperties) {
-        this.taskHistoryService = taskHistoryService;
-        this.frontendProperties = frontendProperties;
     }
 
     private final TaskHistoryService taskHistoryService;
 
     private final FrontendProperties frontendProperties;
+
+    @Autowired
+    public TaskHistoryResource(
+            TaskHistoryService taskHistoryService,
+            FrontendProperties frontendProperties
+    ) {
+        this.taskHistoryService = taskHistoryService;
+        this.frontendProperties = frontendProperties;
+    }
 }

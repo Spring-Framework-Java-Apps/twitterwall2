@@ -39,15 +39,50 @@ import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN
 public class HashTagController {
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(
+            @RequestParam(name= "page" ,defaultValue=""+ FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
         String subtitle = "all";
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"text");
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "text"
+        );
         Page<HashTag> myPageContent = hashTagService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "hashtag/all";
+    }
+
+    @RequestMapping(path="/id/{id}")
+    public String findById(
+            @PathVariable("id") HashTag hashTag,
+            @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
+            @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
+            Model model
+    ) {
+        String msg = "/hashtag/" + hashTag.getId()+ " ";
+        String msg2 = msg + " parameter IS valid - START ";
+        log.debug(msg2);
+        Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
+        Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
+        String subtitle = "Tweets und User für HashTag";
+        String title = hashTag.getText();
+        String symbol = Symbols.HASHTAG.toString();
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        model.addAttribute("hashTag",hashTag);
+        log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
+        Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
+        model.addAttribute("latestTweets", tweets);
+        log.debug(msg+" try to: userService.getUsersForHashTag: ");
+        Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
+        model.addAttribute("users", users);
+        log.debug(msg + " READY - DONE");
+        return "hashtag/id";
     }
 
     @RequestMapping(path="/{text}")
@@ -55,8 +90,8 @@ public class HashTagController {
         @PathVariable("text") String text,
         @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
         @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
-         Model model)
-    {
+         Model model
+    ) {
         String msg = "/hashtag/" + text + " ";
         Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
         Matcher m = p.matcher(text);
@@ -73,21 +108,18 @@ public class HashTagController {
             HashTag hashTag = hashTagService.findByText(text);
             model.addAttribute("hashTag",hashTag);
             log.debug(msg + " found:  " + text);
-            //
             log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
             Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
             model.addAttribute("latestTweets", tweets);
-            //
             log.debug(msg+" try to: userService.getUsersForHashTag: ");
             Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
             model.addAttribute("users", users);
-            //
             log.debug(msg + " READY - DONE");
-            return "hashtag/hashtagText";
+            return "hashtag/id";
         } else {
             String msg2 = msg + " parameter ist NOT valid";
             log.warn(msg2);
-            return "hashtag/hashtagText";
+            return "hashtag/id";
         }
     }
 
@@ -121,7 +153,15 @@ public class HashTagController {
     private final HashTagsOverviewHelper hashTagsOverviewHelper;
 
     @Autowired
-    public HashTagController(FrontendProperties frontendProperties, TwitterProperties twitterProperties, HashTagService hashTagService, TweetService tweetService, UserService userService, ControllerHelper controllerHelper, HashTagsOverviewHelper hashTagsOverviewHelper) {
+    public HashTagController(
+            FrontendProperties frontendProperties,
+            TwitterProperties twitterProperties,
+            HashTagService hashTagService,
+            TweetService tweetService,
+            UserService userService,
+            ControllerHelper controllerHelper,
+            HashTagsOverviewHelper hashTagsOverviewHelper
+    ) {
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
         this.hashTagService = hashTagService;
@@ -130,4 +170,5 @@ public class HashTagController {
         this.controllerHelper = controllerHelper;
         this.hashTagsOverviewHelper = hashTagsOverviewHelper;
     }
+
 }

@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
+<header th:include="layoutMain :: tw-header" >
 </header>
-<section>
+<main class="page-content">
     <div class="container">
         <div class="tw-data-view">
             <div class="row">
-                <div class="col-md-12">
+                <details class="col-md-12">
                     <table class="table table-striped">
                         <thead th:fragment="tw-data-view-thead">
                             <tr>
@@ -34,7 +33,7 @@
                                 <p>&nbsp;&nbsp;</p>
                             </td>
                             <td>
-                                <span th:fragment="tw-data-view-common-fields">
+                                <details th:fragment="tw-data-view-common-fields">
                                     <button class="btn btn-primary" type="button"
                                             data-toggle="collapse"
                                             data-target="#collapseExample"
@@ -157,7 +156,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </span>
+                                </details>
                             </td>
                         </tr>
                         </tbody>
@@ -172,11 +171,9 @@
                 </div>
             </div>
         </div>
-
-
     </div>
-</section>
-<footer th:include="layout :: footer" >
+</main>
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

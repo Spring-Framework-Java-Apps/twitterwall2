@@ -17,16 +17,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/", "/tweet/all","/user/tweets","/hashtag/overview","/imprint","/user/*","/hashtag/*","/css/**","/favicon/**","/js","/map-icons","/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+            .authorizeRequests()
+            .antMatchers(
+                    "/",
+                    "/tweet/all",
+                    "/user/tweets",
+                    "/hashtag/overview",
+                    "/imprint",
+                    "/user/*",
+                    "/hashtag/*",
+                    "/css/*","/css/**",
+                    "/favicon/*","/favicon/**",
+                    "/js/*","/js/**",
+                    "/map-icons/*","/map-icons/**",
+                    "/webjars/*","/webjars/**"
+            ).permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .permitAll()
+            .and()
+            .logout()
+            .logoutSuccessUrl("/")
+            .permitAll();
     }
 
     @Autowired

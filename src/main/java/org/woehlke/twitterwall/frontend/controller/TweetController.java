@@ -29,17 +29,23 @@ public class TweetController {
 
     @RequestMapping("/all")
     public String getLatestTweets(
-            @RequestParam(
-                    name= "page" ,
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
+        String title = "Tweets";
         model = controllerHelper.setupPage(
-                model,
-                "Tweets",
-                twitterProperties.getSearchQuery(),Symbols.HOME.toString()
+            model,
+            title,
+            twitterProperties.getSearchQuery(),
+            Symbols.HOME.toString()
         );
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.DESC,"createdAt");
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
         Page<Tweet> latest = tweetService.getAll(pageRequest);
         model.addAttribute("latestTweets", latest);
         return "tweet/all";
@@ -47,16 +53,17 @@ public class TweetController {
 
     @RequestMapping("/id/{id}")
     public String getLatestTweets(
-            @PathVariable("id") Tweet tweet,  Model model
+        @PathVariable("id") Tweet tweet, Model model
     ) {
+        String title = "Tweet";
         model = controllerHelper.setupPage(
-                model,
-                "Tweet",
-                twitterProperties.getSearchQuery(),
-                Symbols.HOME.toString()
+            model,
+            title,
+            twitterProperties.getSearchQuery(),
+            Symbols.HOME.toString()
         );
         model.addAttribute("tweet", tweet);
-        return "tweet/one";
+        return "tweet/id";
     }
 
     private static final Logger log = LoggerFactory.getLogger(TweetController.class);
@@ -70,10 +77,16 @@ public class TweetController {
     private final TwitterProperties twitterProperties;
 
     @Autowired
-    public TweetController(TweetService tweetService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
+    public TweetController(
+            TweetService tweetService,
+            ControllerHelper controllerHelper,
+            FrontendProperties frontendProperties,
+            TwitterProperties twitterProperties
+    ) {
         this.tweetService = tweetService;
         this.controllerHelper = controllerHelper;
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
     }
+
 }

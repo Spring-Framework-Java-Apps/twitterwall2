@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
+<header th:include="layoutMain :: tw-header" >
 </header>
 <main class="page-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h3>Backend Task Started.</h3>
                 <div>
-                    <a href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks</a>
-                </div>
-                <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
+                    <a href="/task/all" th:href="@{/task/all}">
+                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <span>Tasks</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </main>
-<footer th:include="layout :: footer" >
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

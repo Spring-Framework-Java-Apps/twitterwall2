@@ -23,12 +23,19 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
 public class MentionController {
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
         String subtitle = "all";
         String title = "Mention";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"screenName");
+        Pageable pageRequest = new PageRequest(
+                page, frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
         Page<Mention> myPageContent = mentionService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
         return "mention/all";
@@ -41,7 +48,10 @@ public class MentionController {
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public MentionController(FrontendProperties frontendProperties, MentionService mentionService, ControllerHelper controllerHelper) {
+    public MentionController(
+            FrontendProperties frontendProperties,
+            MentionService mentionService,
+            ControllerHelper controllerHelper) {
         this.frontendProperties = frontendProperties;
         this.mentionService = mentionService;
         this.controllerHelper = controllerHelper;

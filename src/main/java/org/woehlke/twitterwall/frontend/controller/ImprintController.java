@@ -17,42 +17,38 @@ import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
  * Created by tw on 12.07.17.
  */
 @Controller
-public class PagesController {
-
-/*
-    @RequestMapping("/")
-    public ModelAndView index(Model model) {
-        return new ModelAndView("redirect:/tweet/all");
-    }
-*/
-
+public class ImprintController {
 
     @RequestMapping("/imprint")
     public String imprint(Model model) {
         log.info("-----------------------------------------");
         String symbol = Symbols.IMPRINT.toString();
-        String title = "Impressum";
+        String title = "Imprint";
         String subtitle = frontendProperties.getImprintSubtitle();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         User user = startTask.createImprintUser();
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
-        return "imprint";
+        return "imprint/imprint";
     }
 
-    private static final Logger log = LoggerFactory.getLogger(PagesController.class);
+    private static final Logger log = LoggerFactory.getLogger(ImprintController.class);
 
     private final FrontendProperties frontendProperties;
 
     private final StartTask startTask;
 
+    private final ControllerHelper controllerHelper;
+
     @Autowired
-    public PagesController(FrontendProperties frontendProperties, StartTask startTask, ControllerHelper controllerHelper) {
+    public ImprintController(
+            FrontendProperties frontendProperties,
+            StartTask startTask,
+            ControllerHelper controllerHelper
+    ) {
         this.frontendProperties = frontendProperties;
         this.startTask = startTask;
         this.controllerHelper = controllerHelper;
     }
-
-    private final ControllerHelper controllerHelper;
 
 }

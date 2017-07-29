@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
@@ -23,18 +22,26 @@ import org.woehlke.twitterwall.oodm.service.UrlCacheService;
 @RequestMapping("/urlcache")
 public class UrlCacheController {
 
-    private final static String PATH="urlcache";
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(
+            @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ){
         String subtitle = "all";
         String title = "UrlCache";
+        String sortByColumn = "url";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.ASC,
+            sortByColumn
+        );
         Page<UrlCache> myPageContent = urlCacheService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return PATH+"/all";
+        return "urlcache/all";
     }
 
     private final ControllerHelper controllerHelper;
@@ -44,9 +51,14 @@ public class UrlCacheController {
     private final UrlCacheService urlCacheService;
 
     @Autowired
-    public UrlCacheController(UrlCacheService urlCacheService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
+    public UrlCacheController(
+            UrlCacheService urlCacheService,
+            ControllerHelper controllerHelper,
+            FrontendProperties frontendProperties
+    ) {
         this.urlCacheService = urlCacheService;
         this.controllerHelper = controllerHelper;
         this.frontendProperties = frontendProperties;
     }
+
 }

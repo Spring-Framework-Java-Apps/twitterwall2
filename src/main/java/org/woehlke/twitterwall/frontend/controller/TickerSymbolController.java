@@ -22,18 +22,25 @@ import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
 @RequestMapping("/tickersymbol")
 public class TickerSymbolController {
 
-    private final static String PATH="tickersymbol";
-
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ){
         String subtitle = "all";
         String title = "TickerSymbol";
+        String sortByColumn = "url";
         String symbol = Symbols.DATABASE.toString();
         model =  controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                sortByColumn
+        );
         Page<TickerSymbol> myPageContent = tickerSymbolService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return PATH+"/all";
+        return "tickersymbol/all";
     }
 
     private final FrontendProperties frontendProperties;
@@ -43,9 +50,14 @@ public class TickerSymbolController {
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public TickerSymbolController(FrontendProperties frontendProperties, TickerSymbolService tickerSymbolService, ControllerHelper controllerHelper) {
+    public TickerSymbolController(
+            FrontendProperties frontendProperties,
+            TickerSymbolService tickerSymbolService,
+            ControllerHelper controllerHelper
+    ) {
         this.frontendProperties = frontendProperties;
         this.tickerSymbolService = tickerSymbolService;
         this.controllerHelper = controllerHelper;
     }
+
 }

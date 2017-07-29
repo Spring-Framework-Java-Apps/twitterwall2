@@ -54,4 +54,12 @@ public class HashTagOverview implements Serializable {
         result = 31 * result + (hashTagsUsers != null ? hashTagsUsers.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "HashTagOverview{" +
+                "hashTagsTweets=" + hashTagsTweets +
+                ", hashTagsUsers=" + hashTagsUsers +
+                '}';
+    }
 }

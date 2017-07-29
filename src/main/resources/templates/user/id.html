@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" ></header>
+<header th:include="layoutMain :: tw-header" ></header>
 <main class="page-content">
     <div class="container">
+        <div th:include="layoutUser :: tw-one-user" ></div>
         <div class="tw-pager-above">
             <div class="row">
                 <div class="col-md-12">
-                    <span  class="tw-pager-arrow tw-pager-up" th:if="${users.hasPrevious()}">
-                        <a href="" th:href="@{|/user/tweets?page=${users.previousPageable().pageNumber}|}">
+                    <span  class="tw-pager-arrow tw-pager-up" th:if="${latestTweets.hasPrevious()}">
+                        <a href="" th:href="@{|/user/tweets?page=${latestTweets.previousPageable().pageNumber}|}">
                             <span>
                             <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                             </span>
@@ -21,12 +21,12 @@
                 </div>
             </div>
         </div>
-        <div th:include="user :: tw-show-users" ></div>
+        <div th:include="layouTweetList :: tw-tweet-list" ></div>
         <div class="tw-pager-below">
             <div class="row">
                 <div class="col-md-12">
-                    <span class="tw-pager-arrow tw-pager-down" th:if="${users.hasNext()}">
-                        <a href="" th:href="@{|/user/tweets?page=${users.nextPageable().pageNumber}|}" >
+                    <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
+                        <a href="" th:href="@{|/user/tweets?page=${latestTweets.nextPageable().pageNumber}|}" >
                             <span>
                             <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                             </span>
@@ -37,7 +37,11 @@
         </div>
     </div>
 </main>
-<footer th:include="layout :: footer" >
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
 </footer>
 </body>
 </html>

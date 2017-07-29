@@ -22,18 +22,23 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
 @RequestMapping("/url")
 public class UrlController {
 
-    private final static String PATH="url";
 
     @RequestMapping(path="/all")
     public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
         String subtitle = "all";
         String title = "Url";
+        String sortByColumn = "url";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.ASC,"url");
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.ASC,
+            sortByColumn
+        );
         Page<Url> myPageContent = urlService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return PATH+"/all";
+        return "url/all";
     }
 
     private final FrontendProperties frontendProperties;
@@ -43,9 +48,14 @@ public class UrlController {
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public UrlController(FrontendProperties frontendProperties, UrlService urlService, ControllerHelper controllerHelper) {
+    public UrlController(
+            FrontendProperties frontendProperties,
+            UrlService urlService,
+            ControllerHelper controllerHelper
+    ) {
         this.frontendProperties = frontendProperties;
         this.urlService = urlService;
         this.controllerHelper = controllerHelper;
     }
+
 }

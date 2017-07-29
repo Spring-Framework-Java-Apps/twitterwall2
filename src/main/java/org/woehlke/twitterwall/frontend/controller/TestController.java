@@ -30,7 +30,11 @@ public class TestController {
 
     @RequestMapping("/getTestData")
     public String getTestData(Model model) {
-        model = controllerHelper.setupPage(model,"Test Data Tweets",twitterProperties.getSearchQuery(),Symbols.GET_TEST_DATA.toString());
+        model = controllerHelper.setupPage(
+                model,"Test Data Tweets",
+                twitterProperties.getSearchQuery(),
+                Symbols.GET_TEST_DATA.toString()
+        );
         String msg = "/getTestData : ";
         if(frontendProperties.getContextTest()){
             model.addAttribute("latestTweets", mqStartTask.createTestDataForTweets());
@@ -43,7 +47,10 @@ public class TestController {
     }
 
     @RequestMapping("/user/onlist/renew")
-    public String getOnListRenew(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String getOnListRenew(
+            @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
         log.info(msg+"START startTask.fetchUsersFromDefinedUserList: ");
@@ -74,7 +81,14 @@ public class TestController {
     private final StartTask mqStartTask;
 
     @Autowired
-    public TestController(UserService userService, ControllerHelper controllerHelper, FrontendProperties frontendProperties, TwitterProperties twitterProperties, AsyncStartTask mqAsyncStartTask, StartTask mqStartTask) {
+    public TestController(
+            UserService userService,
+            ControllerHelper controllerHelper,
+            FrontendProperties frontendProperties,
+            TwitterProperties twitterProperties,
+            AsyncStartTask mqAsyncStartTask,
+            StartTask mqStartTask
+    ) {
         this.userService = userService;
         this.controllerHelper = controllerHelper;
         this.frontendProperties = frontendProperties;

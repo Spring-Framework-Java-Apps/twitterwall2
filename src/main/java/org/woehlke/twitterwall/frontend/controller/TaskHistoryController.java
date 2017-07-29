@@ -22,18 +22,25 @@ import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 @RequestMapping(path="/taskhistory")
 public class TaskHistoryController {
 
-    private final static String PATH="taskhistory";
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(
+            @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ){
         String subtitle = "all";
         String title = "TaskHistory";
         String symbol = Symbols.DATABASE.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize(), Sort.Direction.DESC,"timeEvent");
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.DESC,
+                "timeEvent"
+        );
         Page<TaskHistory> myPageContent = taskHistoryService.getAll(pageRequest);
         model.addAttribute("myPageContent",myPageContent);
-        return PATH+"/all";
+        return "taskhistory/all";
     }
 
     private final TaskHistoryService taskHistoryService;
@@ -43,9 +50,14 @@ public class TaskHistoryController {
     private final ControllerHelper controllerHelper;
 
     @Autowired
-    public TaskHistoryController(TaskHistoryService taskHistoryService, FrontendProperties frontendProperties, ControllerHelper controllerHelper) {
+    public TaskHistoryController(
+            TaskHistoryService taskHistoryService,
+            FrontendProperties frontendProperties,
+            ControllerHelper controllerHelper
+    ) {
         this.taskHistoryService = taskHistoryService;
         this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
     }
+
 }

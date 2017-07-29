@@ -20,15 +20,17 @@ public class LoginController {
         String subtitle = "Enter your Credentials";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         log.info("-----------------------------------------");
-        return "login";
-    }
-
-    @Autowired
-    public LoginController(ControllerHelper controllerHelper) {
-        this.controllerHelper = controllerHelper;
+        return "login/login";
     }
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     private final ControllerHelper controllerHelper;
+
+    @Autowired
+    public LoginController(
+        ControllerHelper controllerHelper
+    ) {
+        this.controllerHelper = controllerHelper;
+    }
 }

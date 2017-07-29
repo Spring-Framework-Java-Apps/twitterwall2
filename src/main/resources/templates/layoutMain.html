@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:fragment="tw-head">
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -50,42 +50,125 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="active"><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;&nbsp;<small th:text="${page.menuAppName}">AppName</small></a></span>
+                <span class="active">
+                    <a class="navbar-brand" href="/">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                        <small th:text="${page.menuAppName}">AppName</small>
+                    </a>
+                </span>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="tw-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown" th:if="${page.contextTest}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i>Test <span class="caret"></span></a>
+                    <li class="dropdown" sec:authorize="isAuthenticated()" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-o" aria-hidden="true"></i>
+                            <span>Test </span>
+                            <span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>All Users</a></li>
-                            <li><a href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>Not Yet Friends</a></li>
-                            <li><a href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>Not Yet On List</a></li>
-                            <li><a href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>On List</a></li>
-                            <li><a href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>Renew List of Users On List</a></li>
+                            <li>
+                                <a href="/user/all" th:href="@{/user/all}">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                    All Users
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/notyetfriends" th:href="@{/user/notyetfriends}">
+                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                    Not Yet Friends
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/notyetonlist" th:href="@{/user/notyetonlist}">
+                                    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                                    Not Yet On List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/onlist" th:href="@{/user/onlist}">
+                                    <i class="fa fa-leaf" aria-hidden="true"></i>
+                                    On List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}">
+                                    <i class="fa fa-leaf" aria-hidden="true"></i>
+                                    Renew List of Users On List
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>Create Test Data</a></li>
+                            <li>
+                                <a href="/test/getTestData" th:href="@{/test/getTestData}">
+                                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                                    Create Test Data
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks</a></li>
+                            <li>
+                                <a href="/task/all" th:href="@{/task/all}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    Tasks
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
-
-                            <li><a href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: fetchTweetsFromTwitterSearch</a></li>
-
-                            <li><a href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateTweets</a></li>
-
-                            <li><a href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: fetchUsersFromDefinedUserList</a></li>
-
-                            <li><a href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateUserProfilesFromMentions</a></li>
-
-                            <li><a href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}"><i class="fa fa-check-square" aria-hidden="true"></i>Tasks: updateUserProfiles</a></li>
-
+                            <li>
+                                <a href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    Tasks: fetchTweetsFromTwitterSearch
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    Tasks: updateTweets
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    Tasks: fetchUsersFromDefinedUserList
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    asks: updateUserProfilesFromMentions
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    Tasks: updateUserProfiles
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>Count Entities</a></li>
+                            <li>
+                                <a href="/application/domain/count" th:href="@{/application/domain/count}">
+                                    <i class="fa fa-database" aria-hidden="true"></i>
+                                    Count Entities
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    <li><a href="/user/tweets" th:href="@{/user/tweets}"><i class="fa fa-users" aria-hidden="true"></i>Users</a></li>
-                    <li><a href="/hashtag/overview" th:href="@{/hashtag/overview}"><i class="fa fa-hashtag" aria-hidden="true"></i>HashTags</a></li>
-                    <li><a href="/imprint" th:href="@{/imprint}"><i class="fa fa-university" aria-hidden="true"></i>Impressum</a></li>
+                    <li>
+                        <a href="/user/tweets" th:href="@{/user/tweets}">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            Users
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/hashtag/overview" th:href="@{/hashtag/overview}">
+                            <i class="fa fa-hashtag" aria-hidden="true"></i>
+                            HashTags
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/imprint" th:href="@{/imprint}">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                            Imprint
+                        </a>
+                    </li>
                 </ul>
                 <!--
                 <form class="navbar-form navbar-right">
@@ -160,6 +243,20 @@
         -->
     </div>
 </main>
+<section th:fragment="tw-history-back-section">
+    <div class="container">
+        <div class="row" th:fragment="tw-history-back-row">
+            <div class="col-md-12">
+                <div>
+                    <a href="javascript:history.back()">
+                        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                        <span>zurück</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <footer th:fragment="tw-footer">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="webjars/jquery/1.11.1/jquery.min.js" th:attr="src=@{/webjars/jquery/1.11.1/jquery.min.js}"></script>

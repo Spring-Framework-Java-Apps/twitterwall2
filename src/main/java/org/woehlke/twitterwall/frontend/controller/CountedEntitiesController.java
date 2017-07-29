@@ -29,10 +29,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/hashtag")
     public String domainCountTweet2hashtag(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
     ) {
         String title = "Tweet -&gt; HashTag";
         setUpThisPage(title,model);
@@ -55,10 +53,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/media")
     public String domainCountTweet2media(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
     ) {
         String title = "Tweet -&gt; Media";
         setUpThisPage(title,model);
@@ -80,7 +76,10 @@ public class CountedEntitiesController {
     }
 
     @RequestMapping(path="/tweet/mention")
-    public String domainCountTweet2mention(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public String domainCountTweet2mention(
+            @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
         String title = "Tweet -&gt; Mention";
         setUpThisPage(title,model);
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
@@ -102,10 +101,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/tickersymbol")
     public String domainCountTweet2tickersymbol(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "Tweet -&gt; TickerSymbol";
         setUpThisPage(title,model);
@@ -128,10 +125,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/url")
     public String domainCountTweet2url(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "Tweet -&gt; Url";
         setUpThisPage(title,model);
@@ -154,10 +149,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/hashtag")
     public String domainCountUserprofile2hashtag(
-            @RequestParam(
-                    name= "page" ,
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "UserProfile -&gt; HashTag";
         setUpThisPage(title,model);
@@ -180,10 +173,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/media")
     public String domainCountUserprofile2media(
-            @RequestParam(
-                    name= "page" ,
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "UserProfile -&gt; Media";
         setUpThisPage(title,model);
@@ -206,10 +197,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/mention")
     public String domainCountUserprofile2mention(
-            @RequestParam(
-                name= "page",
-                defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "UserProfile -&gt; Mention";
         setUpThisPage(title,model);
@@ -232,10 +221,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/tickersymbol")
     public String domainCountUserprofile2Tickersymbol(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "UserProfile -&gt; TickerSymbol";
         setUpThisPage(title,model);
@@ -258,10 +245,8 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/url")
     public String domainCountUserprofile2Url(
-            @RequestParam(
-                    name= "page",
-                    defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER
-            ) int page, Model model
+            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
     ) {
         String title = "UserProfile -&gt; Url";
         setUpThisPage(title,model);
@@ -289,21 +274,6 @@ public class CountedEntitiesController {
     }
 
 
-    @Autowired
-    public CountedEntitiesController(FrontendProperties frontendProperties, ControllerHelper controllerHelper, TweetService tweetService, UserService userService, HashTagService hashTagService, MediaService mediaService, MentionService mentionService, TickerSymbolService tickerSymbolService, UrlService urlService) {
-        this.frontendProperties = frontendProperties;
-        this.controllerHelper = controllerHelper;
-        this.tweetService = tweetService;
-        this.userService = userService;
-        this.hashTagService = hashTagService;
-        this.mediaService = mediaService;
-        this.mentionService = mentionService;
-        this.tickerSymbolService = tickerSymbolService;
-        this.urlService = urlService;
-    }
-
-
-
     private final FrontendProperties frontendProperties;
 
     private final ControllerHelper controllerHelper;
@@ -321,4 +291,27 @@ public class CountedEntitiesController {
     private final TickerSymbolService tickerSymbolService;
 
     private final UrlService urlService;
+
+    @Autowired
+    public CountedEntitiesController(
+            FrontendProperties frontendProperties,
+            ControllerHelper controllerHelper,
+            TweetService tweetService,
+            UserService userService,
+            HashTagService hashTagService,
+            MediaService mediaService,
+            MentionService mentionService,
+            TickerSymbolService tickerSymbolService,
+            UrlService urlService
+    ) {
+        this.frontendProperties = frontendProperties;
+        this.controllerHelper = controllerHelper;
+        this.tweetService = tweetService;
+        this.userService = userService;
+        this.hashTagService = hashTagService;
+        this.mediaService = mediaService;
+        this.mentionService = mentionService;
+        this.tickerSymbolService = tickerSymbolService;
+        this.urlService = urlService;
+    }
 }

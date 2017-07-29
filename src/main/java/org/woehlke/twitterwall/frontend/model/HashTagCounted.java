@@ -53,4 +53,12 @@ public class HashTagCounted implements Serializable, Comparable<HashTagCounted> 
     public int hashCode() {
         return text.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "HashTagCounted{" +
+                "number=" + number +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

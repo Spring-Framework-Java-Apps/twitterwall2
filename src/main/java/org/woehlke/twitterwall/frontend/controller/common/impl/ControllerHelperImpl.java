@@ -59,12 +59,6 @@ public class ControllerHelperImpl implements ControllerHelper {
         return model;
     }
 
-    @Autowired
-    public ControllerHelperImpl(FrontendProperties frontendProperties, TwitterProperties twitterProperties) {
-        this.frontendProperties = frontendProperties;
-        this.twitterProperties = twitterProperties;
-    }
-
     private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
 
     private final FrontendProperties frontendProperties;
@@ -80,4 +74,14 @@ public class ControllerHelperImpl implements ControllerHelper {
             "        ga('create', '###GOOGLE_ANALYTICS_ID###', 'auto');\n" +
             "        ga('send', 'pageview');\n" +
             "    </script>";
+
+
+    @Autowired
+    public ControllerHelperImpl(
+            FrontendProperties frontendProperties,
+            TwitterProperties twitterProperties
+    ) {
+        this.frontendProperties = frontendProperties;
+        this.twitterProperties = twitterProperties;
+    }
 }

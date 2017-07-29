@@ -23,16 +23,19 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 public class TaskResource {
 
     @RequestMapping(path="/all", params = { "page" }, method= RequestMethod.GET)
-    public @ResponseBody Page<Task> getAll(@RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model) {
+    public @ResponseBody Page<Task> getAll(
+        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page
+    ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<Task> allTasks = taskService.getAll(pageRequest);
         return allTasks;
     }
 
     @RequestMapping(path="/{id}", params = { "page" }, method= RequestMethod.GET)
-    public @ResponseBody
-    TaskResourceModel findByTaskId(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
-                                   @PathVariable long id, Model model) {
+    public @ResponseBody TaskResourceModel findByTaskId(
+        @RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @PathVariable long id
+    ) {
         Task oneTask = taskService.findById(id);
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(oneTask,pageRequest);

@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
+<header th:include="layoutMain :: tw-header" >
 </header>
 <main class="page-content">
     <div class="container">
         <div th:fragment="tw-data-view-above">
-            <div class="row">
-                <div class="col-md-12">
-                    <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-12">
                     <span  class="tw-pager-arrow tw-pager-up" th:if="${listObject2Entity.hasPrevious()}">
@@ -81,17 +73,10 @@
                     </span>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>zurück</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </main>
-<footer th:include="layout :: footer" >
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

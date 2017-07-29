@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
+      xmlns:th="http://www.thymeleaf.org">
 <head  th:include="layout :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
@@ -10,16 +9,19 @@
 <main class="page-content">
     <div class="container">
         <div th:if="${latestTweets} != null">
-            <div th:include="timeline :: tw-show-latest-tweets" >
+            <div th:include="layoutTweetList :: tw-tweet-list" >
             </div>
         </div>
         <div th:if="${users} != null">
-            <div th:include="user :: tw-show-users" >
+            <div th:include="layoutUserList :: tw-user-list" >
             </div>
         </div>
     </div>
 </main>
 <footer th:include="layout :: footer" >
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
 
 </footer>
 </body>

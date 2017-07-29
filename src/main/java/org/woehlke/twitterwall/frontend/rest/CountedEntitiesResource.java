@@ -25,7 +25,9 @@ public class CountedEntitiesResource {
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public CountedEntitiesResource(CountedEntitiesService countedEntitiesService) {
+    public CountedEntitiesResource(
+            CountedEntitiesService countedEntitiesService
+    ) {
         this.countedEntitiesService = countedEntitiesService;
     }
 }

@@ -39,17 +39,20 @@ public class ApplicationController {
         return "application/management";
     }
 
-    @Autowired
-    public ApplicationController(CountedEntitiesService countedEntitiesService, ControllerHelper controllerHelper, TwitterProperties twitterProperties) {
-        this.countedEntitiesService = countedEntitiesService;
-        this.controllerHelper = controllerHelper;
-        this.twitterProperties = twitterProperties;
-    }
-
     private final CountedEntitiesService countedEntitiesService;
 
     private final ControllerHelper controllerHelper;
 
     private final TwitterProperties twitterProperties;
+
+    @Autowired
+    public ApplicationController(
+            CountedEntitiesService countedEntitiesService,
+            ControllerHelper controllerHelper,
+            TwitterProperties twitterProperties) {
+        this.countedEntitiesService = countedEntitiesService;
+        this.controllerHelper = controllerHelper;
+        this.twitterProperties = twitterProperties;
+    }
 
 }

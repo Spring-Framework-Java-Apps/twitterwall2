@@ -31,12 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class PagesControllerTest {
+public class ImprintControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(PagesControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ImprintControllerTest.class);
 
     @Autowired
-    private PagesController controller;
+    private ImprintController controller;
 
     @Autowired
     private MockMvc mockMvc;
