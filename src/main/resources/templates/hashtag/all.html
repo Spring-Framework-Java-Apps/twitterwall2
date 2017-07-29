@@ -29,7 +29,7 @@
                             <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
                         </td>
                         <td>
-                            <a href="" th:href="@{|/hashtag/${myPageItem.text}|}">
+                            <a href="" th:href="@{|/hashtag/${myPageItem.id}|}">
                                 <span th:text="${myPageItem.text}">text</span>
                             </a>
                         </td>

@@ -48,7 +48,7 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
                     long numberTweets = tweets.getTotalElements();
                     log.debug(myMSg + " result: numberTweets=" + numberTweets);
                     if (numberTweets > 0) {
-                        HashTagCounted c = new HashTagCounted(numberTweets, hashTag.getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(),numberTweets, hashTag.getText());
                         hashTagsTweets.add(c);
                     }
                 }
@@ -61,7 +61,7 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
                     long numberUsers = users.getTotalElements();
                     log.debug(myMSg + " result: numberUsers=" + numberUsers);
                     if (numberUsers > 0) {
-                        HashTagCounted c = new HashTagCounted(numberUsers, hashTag.getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(), numberUsers, hashTag.getText());
                         hashTagsUsers.add(c);
                     }
                 }

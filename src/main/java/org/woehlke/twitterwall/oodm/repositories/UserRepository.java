@@ -57,4 +57,8 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
 
     @Query(name="User.countAllUser2Url",nativeQuery=true)
     long countAllUser2Url();
+
+    Page<User> findByFriendIsTrue(Pageable pageRequest);
+
+    Page<User> findByFollowerIsTrue(Pageable pageRequest);
 }

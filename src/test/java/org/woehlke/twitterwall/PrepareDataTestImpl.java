@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
-import org.woehlke.twitterwall.frontend.controller.TestControllerTest;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
@@ -35,7 +34,7 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class PrepareDataTestImpl implements PrepareDataTest {
 
-    private static final Logger log = LoggerFactory.getLogger(TestControllerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(PrepareDataTestImpl.class);
 
     @Autowired
     public PrepareDataTestImpl(TwitterApiService twitterApiService, StoreOneTweet storeOneTweet, StoreUserProfile storeUserProfile, UserService userService, TaskService taskService, SchedulerProperties schedulerProperties, FrontendProperties frontendProperties, TwitterProperties twitterProperties, CountedEntitiesService countedEntitiesService) {

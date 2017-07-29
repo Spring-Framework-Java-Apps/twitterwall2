@@ -78,10 +78,10 @@ public class EntitiesFilter {
         };
 
         String USER_PROFILE_OUTPUT[] = {
-            " <a class=\"tweet-action tweet-profile1\" href=\"/user/$2\">@$2</a>$3",
-            " <a class=\"tweet-action tweet-profile2\" href=\"/user/$2\">@$2</a>",
-            " <a class=\"tweet-action tweet-profile3\" href=\"/user/$1\">@$1</a>$2",
-            " <a class=\"tweet-action tweet-profile4\" href=\"/user/$1\">@$1</a>"
+            " <a class=\"tweet-action tweet-profile1\" href=\"/user/screenName/$2\">@$2</a>$3",
+            " <a class=\"tweet-action tweet-profile2\" href=\"/user/screenName/$2\">@$2</a>",
+            " <a class=\"tweet-action tweet-profile3\" href=\"/user/screenName/$1\">@$1</a>$2",
+            " <a class=\"tweet-action tweet-profile4\" href=\"/user/screenName/$1\">@$1</a>"
         };
 
         for(int i=0;i<4;i++){
@@ -120,14 +120,16 @@ public class EntitiesFilter {
     protected String getFormattedTextForHashTags(Set<HashTag> tags, String formattedText ) {
         for (HashTag tag : tags) {
 
+            long tagId = tag.getId();
+
             String USER_PROFILE_INPUT[] = {
                 "#(" + tag.getText() + ")(" + stopChar + ")",
                 "#(" + tag.getText() + ")$"
             };
 
             String USER_PROFILE_OUTPUT[] = {
-                " <a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/$1\">#$1</a>$2",
-                " <a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/$1\">#$1</a> "
+                " <a class=\"tweet-action tweet-hashtag1\" href=\"/hashtag/"+tagId+"\">#$1</a>$2",
+                " <a class=\"tweet-action tweet-hashtag2\" href=\"/hashtag/"+tagId+"\">#$1</a> "
             };
 
             for(int i=0;i<2;i++){

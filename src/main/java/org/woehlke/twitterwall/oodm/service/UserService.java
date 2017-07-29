@@ -29,6 +29,10 @@ public interface UserService extends DomainServiceWithIdTwitter<User>,DomainServ
 
     Page<User> getUsersForHashTag(HashTag hashTag,Pageable pageRequest);
 
+    Page<User> getFriends(Pageable pageRequest);
+
+    Page<User> getFollower(Pageable pageRequest);
+
     Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest);
 
     Page<Object2Entity> findAllUser2Media(Pageable pageRequest);

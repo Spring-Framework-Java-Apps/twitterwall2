@@ -153,7 +153,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     private Boolean followRequestSent;
 
     @Column
-    private Boolean isProtected;
+    private Boolean protectedUser;
 
     @Column
     private Boolean notificationsEnabled;
@@ -309,8 +309,8 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     @Transient
-    public String getCssBackgroundImage(){
-        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+    public String getCssProfileBannerUrl(){
+        if((profileBannerUrl != null) && (!profileBannerUrl.isEmpty())){
             return "img-responsive my-background";
         } else {
             return "hidden";
@@ -318,12 +318,16 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     @Transient
-    public String getCssProfileBannerUrl(){
-        String style ="img-circle my-profile-image";
-        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
-            style += " my-profile-image-with-bg";
+    public String getCssProfileImageUrl(){
+        if((profileImageUrl != null) && (!profileImageUrl.isEmpty())){
+            String style ="img-circle my-profile-image";
+            if((profileBannerUrl != null) && (!profileBannerUrl.isEmpty())) {
+                style += " my-profile-image-with-bg";
+            }
+            return style;
+        } else {
+            return "hidden";
         }
-        return style;
     }
 
     @Override
@@ -472,12 +476,16 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.followRequestSent = followRequestSent;
     }
 
-    public Boolean getProtected() {
-        return isProtected;
+    public Boolean getProtectedUser() {
+        if(protectedUser==null){
+            return false;
+        } else {
+            return protectedUser;
+        }
     }
 
-    public void setProtected(Boolean aProtected) {
-        isProtected = aProtected;
+    public void setProtectedUser(Boolean protectedUser) {
+        this.protectedUser = protectedUser;
     }
 
     public Boolean getNotificationsEnabled() {
@@ -489,7 +497,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getVerified() {
-        return verified;
+        if(verified==null){
+            return false;
+        } else {
+            return verified;
+        }
     }
 
     public void setVerified(Boolean verified) {
@@ -609,7 +621,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFollower() {
-        return follower;
+        if(follower==null){
+            return false;
+        } else {
+            return follower;
+        }
     }
 
     public void setFollower(Boolean follower) {
@@ -617,7 +633,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFriend() {
-        return friend;
+        if(friend==null){
+            return false;
+        } else {
+            return friend;
+        }
     }
 
     public void setFriend(Boolean friend) {
@@ -625,7 +645,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getTweeting() {
-        return tweeting;
+        if(tweeting==null){
+            return false;
+        } else {
+            return tweeting;
+        }
     }
 
     public void setTweeting(Boolean tweeting) {
@@ -668,7 +692,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                 ", listedCount=" + listedCount +
                 ", following=" + following +
                 ", followRequestSent=" + followRequestSent +
-                ", isProtected=" + isProtected +
+                ", protectedUser=" + protectedUser +
                 ", notificationsEnabled=" + notificationsEnabled +
                 ", verified=" + verified +
                 ", geoEnabled=" + geoEnabled +

@@ -58,7 +58,7 @@ public class HashTagController {
         return "hashtag/all";
     }
 
-    @RequestMapping(path="/id/{id}")
+    @RequestMapping(path="/{id}")
     public String findById(
             @PathVariable("id") HashTag hashTag,
             @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
@@ -85,7 +85,7 @@ public class HashTagController {
         return "hashtag/id";
     }
 
-    @RequestMapping(path="/{text}")
+    @RequestMapping(path="/text/{text}")
     public String hashTagFromTweetsAndUsers(
         @PathVariable("text") String text,
         @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,

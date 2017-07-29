@@ -47,7 +47,7 @@ public class UserController {
         return "user/all";
     }
 
-    @RequestMapping("/id/{id}")
+    @RequestMapping("/{id}")
     public String getUserForId(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") User user, Model model
@@ -68,36 +68,47 @@ public class UserController {
         return "user/id";
     }
 
-    @RequestMapping("/{screenName}")
+    @RequestMapping("/screenName/{screenName}")
     public String getUserForScreeName(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable String screenName, Model model
     ) {
+
         if (User.isValidScreenName(screenName)) {
             User user = userService.findByScreenName(screenName);
             if(user==null){
-                throw new IllegalArgumentException("/user/"+ screenName);
+                String symbol = Symbols.PROFILE.toString();
+                String title = "404";
+                String subtitle = "404: no user found for  @"+screenName;
+                model = controllerHelper.setupPage(model, title, subtitle, symbol);
+                return "user/id";
+            } else {
+                String symbol = Symbols.PROFILE.toString();
+                String title = "@" + user.getScreenName();
+                String subtitle = user.getName();
+                model = controllerHelper.setupPage(model, title, subtitle, symbol);
+                Pageable pageRequest = new PageRequest(
+                        page,
+                        frontendProperties.getPageSize(),
+                        Sort.Direction.DESC,
+                        "createdAt"
+                );
+                Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
+
+                model.addAttribute("user", user);
+                model.addAttribute("latestTweets",latestTweets);
+                return "user/id";
             }
-            Pageable pageRequest = new PageRequest(
-                page,
-                frontendProperties.getPageSize(),
-                Sort.Direction.DESC,
-                "createdAt"
-            );
-            Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
-            String symbol = Symbols.PROFILE.toString();
-            String title = "@" + user.getScreenName();
-            String subtitle = user.getName();
-            model = controllerHelper.setupPage(model, title, subtitle, symbol);
-            model.addAttribute("user", user);
-            model.addAttribute("latestTweets",latestTweets);
-            return "user/id";
         } else {
-            throw new IllegalArgumentException("/user/"+ screenName);
+            String symbol = Symbols.PROFILE.toString();
+            String title = "400";
+            String subtitle = "400: screenName not valid: for  /user/screenName/"+screenName;
+            model = controllerHelper.setupPage(model, title, subtitle, symbol);
+            return "user/id";
         }
     }
 
-    @RequestMapping("/tweets")
+    @RequestMapping("/list/tweets")
     public String getTweetingUsers(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         Model model
@@ -113,10 +124,10 @@ public class UserController {
         String symbol = Symbols.USER_TWEETS.toString();
         String title = "With one or more Tweets";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/allWithTweets";
+        return "user/list/allWithTweets";
     }
 
-    @RequestMapping("/notyetfriends")
+    @RequestMapping("/list/notyetfriends")
     public String getNotYetFriendUsers(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         Model model
@@ -127,14 +138,53 @@ public class UserController {
             Sort.Direction.ASC,
             "screenName"
         );
-        model.addAttribute("users", userService.getNotYetFriendUsers(pageRequest));
+        Page<User> users = userService.getNotYetFriendUsers(pageRequest);
+        model.addAttribute("users", users);
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/notyetfriends";
+        return "user/list/notyetfriends";
     }
 
-    @RequestMapping("/notyetonlist")
+    @RequestMapping("/list/friends")
+    public String getFriendUsers(
+            @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        Page<User> users = userService.getFriends(pageRequest);
+        model.addAttribute("users", users);
+        String symbol = Symbols.USER_FRIENDS.toString();
+        String title = "Friends";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/friends";
+    }
+
+    @RequestMapping("/list/follower")
+    public String getFollower(
+            @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        Page<User> users = userService.getFollower(pageRequest);
+        model.addAttribute("users", users);
+        String symbol = Symbols.USER_FOLLOWER.toString();
+        String title = "Follower";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/follower";
+    }
+
+    @RequestMapping("/list/notyetonlist")
     public String getNotYetOnList(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         Model model
@@ -149,10 +199,10 @@ public class UserController {
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/notyetonlist";
+        return "user/list/notyetonlist";
     }
 
-    @RequestMapping("/onlist")
+    @RequestMapping("/list/onlist")
     public String getOnList(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         Model model
@@ -168,7 +218,7 @@ public class UserController {
         String symbol = Symbols.LEAF.toString();
         String title = "On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/onlist";
+        return "user/list/onlist";
     }
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

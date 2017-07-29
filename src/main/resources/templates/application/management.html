@@ -23,50 +23,58 @@
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <span>List All Users</span>
                         </a>
-                        <a class="list-group-item" href="/user/notyetfriends" th:href="@{/user/notyetfriends}">
+                        <a class="list-group-item" href="/user/list/follower" th:href="@{/user/list/follower}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>List Users, who are Follower</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/friends" th:href="@{/user/list/friends}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>List Users, who are Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/notyetfriends" th:href="@{/user/list/notyetfriends}">
                             <i class="fa fa-plus-square" aria-hidden="true"></i>
                             <span>List Users, who are Not Yet Friends</span>
                         </a>
-                        <a class="list-group-item" href="/user/onlist" th:href="@{/user/onlist}">
+                        <a class="list-group-item" href="/user/list/onlist" th:href="@{/user/list/onlist}">
                             <i class="fa fa-leaf" aria-hidden="true"></i>
-                            <span>List Users, who are On List</span>
+                            <span>List Users, who are On Defined User List</span>
                         </a>
-                        <a class="list-group-item" href="/user/notyetonlist" th:href="@{/user/notyetonlist}">
+                        <a class="list-group-item" href="/user/list/notyetonlist" th:href="@{/user/list/notyetonlist}">
                             <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                            <span>List Users, who are Not Yet On List</span>
-                        </a>
-                        <a class="list-group-item" href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}">
-                            <i class="fa fa-leaf" aria-hidden="true"></i>
-                            <span>Update List of Users On List</span>
+                            <span>List Users, who are Not Yet on Defined User List</span>
                         </a>
                         <hr class="divider" role="separator" />
                         <a class="list-group-item" href="/task/all" th:href="@{/task/all}">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
                             <span>List Tasks</span>
                         </a>
-                        <a class="list-group-item" href="/test/getTestData" th:href="@{/test/getTestData}">
+                        <a class="list-group-item" href="/task/start/createTestData" th:href="@{/task/start/createTestData}">
                             <i class="fa fa-cubes" aria-hidden="true"></i>
                             <span>Start Task: Create Test Data</span>
                         </a>
-                        <a class="list-group-item" href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}">
+                        <a class="list-group-item" href="/task/start/tweets/search" th:href="@{/task/start/tweets/search}">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Start Task: fetchTweetsFromTwitterSearch</span>
+                            <span>Start Task: fetch Tweets from Twitter Search</span>
                         </a>
-                        <a class="list-group-item" href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}">
+                        <a class="list-group-item" href="/task/start/tweets/update" th:href="@{/task/start/tweets/update}">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Start Task: updateTweets</span>
+                            <span>Start Task: update Tweets</span>
                         </a>
-                        <a class="list-group-item" href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}">
-                            <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Start Task: fetchUsersFromDefinedUserList</span>
+                        <a class="list-group-item" href="/task/start/user/onlist/renew" th:href="@{/task/start/user/onlist/renew}">
+                            <i class="fa fa-leaf" aria-hidden="true"></i>
+                            <span>Start Task: Update List of Users on Defined User List</span>
                         </a>
-                        <a class="list-group-item" href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}">
+                        <a class="list-group-item" href="/task/start/users/list/fetch" th:href="@{/task/start/users/list/fetch}">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Start Task: updateUserProfilesFromMentions</span>
+                            <span>Start Task: fetch Users from Defined User List</span>
                         </a>
-                        <a class="list-group-item" href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}">
+                        <a class="list-group-item" href="/task/start/users/mentions/update" th:href="@{/task/start/users/mentions/update}">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Start Task: updateUserProfiles</span>
+                            <span>Start Task: update Users from Mentions</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/update" th:href="@{/task/start/users/update}">
+                            <i class="fa fa-check-square" aria-hidden="true"></i>
+                            <span>Start Task: update Users</span>
                         </a>
                     </div>
                 </div>

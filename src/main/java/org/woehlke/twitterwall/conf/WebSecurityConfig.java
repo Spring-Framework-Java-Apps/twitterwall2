@@ -13,7 +13,6 @@ import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -21,12 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(
                     "/",
                     "/tweet/all",
-                    "/user/tweets",
-                    "/hashtag/overview",
-                    "/imprint",
                     "/user/*",
-                    "/user/id/*",
+                    "/user/screenName/*",
+                    "/user/list/tweets",
+                    "/hashtag/overview",
                     "/hashtag/*",
+                    "/hashtag/text/*",
+                    "/imprint",
                     "/css/*","/css/**",
                     "/favicon/*","/favicon/**",
                     "/js/*","/js/**",
