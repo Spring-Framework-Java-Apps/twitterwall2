@@ -19,15 +19,6 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl implements UserRepositoryCustom {
 
-    private final EntityManager entityManager;
-
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public UserRepositoryImpl(EntityManager entityManager,DataSource dataSource) {
-        this.entityManager = entityManager;
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     @Override
     public User findByUniqueId(User domainObject) {
@@ -41,11 +32,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Page<User> findNotYetFollower(Pageable pageRequest) {
-        return null;
     }
 
     @Override
@@ -106,5 +92,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         List<Object2Entity> list =  jdbcTemplate.query(sql, new User2TickerSymbolRowMapper());
         PageImpl<Object2Entity> resultPage = new PageImpl<>(list,pageRequest,total);
         return resultPage;
+    }
+
+    private final EntityManager entityManager;
+
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public UserRepositoryImpl(EntityManager entityManager,DataSource dataSource) {
+        this.entityManager = entityManager;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 }
