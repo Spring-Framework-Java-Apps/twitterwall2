@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(HashTagListener.class)
-public class HashTag extends AbstractDomainObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
+public class HashTag extends AbstractDomainObject<HashTag> implements DomainObjectEntity<HashTag>, DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
     private static final long serialVersionUID = 1L;
 

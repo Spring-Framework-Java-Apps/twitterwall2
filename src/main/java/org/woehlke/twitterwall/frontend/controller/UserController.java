@@ -143,7 +143,7 @@ public class UserController {
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
         String title = "Not Yet Friends";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/list/notyetfriends";
+        return "user/list/friendsNotYet";
     }
 
     @RequestMapping("/list/friends")
@@ -199,7 +199,7 @@ public class UserController {
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
         String title = "Not Yet On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/list/notyetonlist";
+        return "user/list/onlistNotYet";
     }
 
     @RequestMapping("/list/onlist")

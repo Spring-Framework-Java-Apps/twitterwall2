@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.transients.*;
+import org.woehlke.twitterwall.oodm.service.common.DomainObjectWithEntitiesService;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
@@ -13,7 +14,7 @@ import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 /**
  * Created by tw on 11.06.17.
  */
-public interface UserService extends DomainServiceWithIdTwitter<User>,DomainServiceWithScreenName<User>,DomainServiceWithTask<User> {
+public interface UserService extends DomainObjectWithEntitiesService<User>,DomainServiceWithScreenName<User> {
 
     Page<User> getTweetingUsers(Pageable pageRequest);
 
