@@ -83,12 +83,17 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
 
     @Override
     public Page<User> getFriends(Pageable pageRequest) {
-        return userRepository.findByFriendIsTrue(pageRequest);
+        return userRepository.findFriendUsers(pageRequest);
     }
 
     @Override
     public Page<User> getFollower(Pageable pageRequest) {
-        return userRepository.findByFollowerIsTrue(pageRequest);
+        return userRepository.findFollower(pageRequest);
+    }
+
+    @Override
+    public Page<User> getNotYetFollower(Pageable pageRequest) {
+        return userRepository.findNotYetFollower(pageRequest);
     }
 
     @Override

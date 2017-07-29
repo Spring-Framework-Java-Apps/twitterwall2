@@ -184,6 +184,44 @@ public class UserController {
         return "user/list/follower";
     }
 
+    @RequestMapping("/list/notyetfollower")
+    public String getNotYetFollower(
+            @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        Page<User> users = userService.getNotYetFollower(pageRequest);
+        model.addAttribute("users", users);
+        String symbol = Symbols.USER_FOLLOWER.toString();
+        String title = "Follower";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/followerNotYet";
+    }
+
+    @RequestMapping("/list/onlist")
+    public String getOnList(
+            @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        Page<User> usersOnList = userService.getOnList(pageRequest);
+        model.addAttribute("users", usersOnList);
+        String symbol = Symbols.LEAF.toString();
+        String title = "On List";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/onlist";
+    }
+
     @RequestMapping("/list/notyetonlist")
     public String getNotYetOnList(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
@@ -200,25 +238,6 @@ public class UserController {
         String title = "Not Yet On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/onlistNotYet";
-    }
-
-    @RequestMapping("/list/onlist")
-    public String getOnList(
-        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
-        Model model
-    ) {
-        Pageable pageRequest = new PageRequest(
-            page,
-            frontendProperties.getPageSize(),
-            Sort.Direction.ASC,
-            "screenName"
-        );
-        Page<User> usersOnList = userService.getOnList(pageRequest);
-        model.addAttribute("users", usersOnList);
-        String symbol = Symbols.LEAF.toString();
-        String title = "On List";
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        return "user/list/onlist";
     }
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

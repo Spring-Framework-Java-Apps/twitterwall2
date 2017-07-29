@@ -44,6 +44,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
+    public Page<User> findNotYetFollower(Pageable pageRequest) {
+        return null;
+    }
+
+    @Override
     public Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest) {
         String pagerSQL = " OFFSET "+pageRequest.getOffset()+" LIMIT "+pageRequest.getPageSize();
         String sqlCount = "select count(*) as counted from userprofile_hashtag";

@@ -37,16 +37,28 @@ import java.util.regex.Pattern;
             query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
         ),
         @NamedQuery(
+                name = "User.findFollower",
+                query = "select t from User as t where t.follower=true"
+        ),
+        @NamedQuery(
+                name = "User.findNotYetFollower",
+                query = "select t from User as t where t.follower=false"
+        ),
+        @NamedQuery(
+                name = "User.findFriendUsers",
+                query = "select t from User as t where t.friend=true"
+        ),
+        @NamedQuery(
             name = "User.findNotYetFriendUsers",
-            query = "select t from User as t where t.following=false"
+            query = "select t from User as t where t.friend=false"
+        ),
+        @NamedQuery(
+                name = "User.findOnList",
+                query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
         ),
         @NamedQuery(
             name = "User.findNotYetOnList",
             query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
-        ),
-        @NamedQuery(
-            name = "User.findOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
         ),
         @NamedQuery(
             name="User.getUsersForHashTag",

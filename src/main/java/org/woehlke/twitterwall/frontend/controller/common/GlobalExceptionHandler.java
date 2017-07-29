@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,4 +61,7 @@ public class GlobalExceptionHandler {
     }
 
     private final ControllerHelper controllerHelper;
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 }
