@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
+      xmlns:th="http://www.thymeleaf.org">
 <head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
@@ -11,8 +10,8 @@
     <div class="container">
         <div th:fragment="tw-one-tweet">
             <div class="row">
-                <div class="col-md-12 tw-col-4-wrapper">
-                    <div class="tw-col-4-box" th:each="tweet : ${latestTweets}">
+                <div class="col-md-12 tw-col-3-wrapper">
+                    <div class="tw-col-3-box-center">
                         <div class="thumbnail tw-tweet" th:fragment="tw-one-tweet-thumbnail">
                             <div>
                                 <p>

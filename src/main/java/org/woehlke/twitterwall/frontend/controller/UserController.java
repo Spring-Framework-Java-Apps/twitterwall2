@@ -58,13 +58,13 @@ public class UserController {
             Sort.Direction.DESC,
             "createdAt"
         );
-        Page<Tweet> tweetsForUser = tweetService.findTweetsForUser(user,pageRequest);
+        Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
         String symbol = Symbols.PROFILE.toString();
         String title = "@" + user.getScreenName();
         String subtitle = user.getName();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         model.addAttribute("user", user);
-        model.addAttribute("latestTweets",tweetsForUser);
+        model.addAttribute("latestTweets",latestTweets);
         return "user/id";
     }
 
@@ -84,13 +84,13 @@ public class UserController {
                 Sort.Direction.DESC,
                 "createdAt"
             );
-            Page<Tweet> tweetsForUser = tweetService.findTweetsForUser(user,pageRequest);
+            Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
             String symbol = Symbols.PROFILE.toString();
             String title = "@" + user.getScreenName();
             String subtitle = user.getName();
             model = controllerHelper.setupPage(model, title, subtitle, symbol);
             model.addAttribute("user", user);
-            model.addAttribute("latestTweets",tweetsForUser);
+            model.addAttribute("latestTweets",latestTweets);
             return "user/id";
         } else {
             throw new IllegalArgumentException("/user/"+ screenName);

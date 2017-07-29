@@ -22,12 +22,12 @@
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped">
-                    <thead th:include="dataview :: tw-data-view-thead">
+                    <thead th:include="layoutDataview :: tw-data-view-thead">
                     </thead>
                     <tbody>
                     <tr th:each="myPageItem : ${myPageContent}">
                         <td>
-                            <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                            <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
                         </td>
                         <td>
                             <div class="row">
@@ -63,11 +63,11 @@
                             </div>
                         </td>
                         <td>
-                            <span th:include="dataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                            <span th:include="layoutDataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
                         </td>
                     </tr>
                     </tbody>
-                    <tfoot th:include="dataview :: tw-data-view-tfoot">
+                    <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
                     </tfoot>
                 </table>
             </div>

@@ -25,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/hashtag/overview",
                     "/imprint",
                     "/user/*",
+                    "/user/id/*",
                     "/hashtag/*",
                     "/css/*","/css/**",
                     "/favicon/*","/favicon/**",
