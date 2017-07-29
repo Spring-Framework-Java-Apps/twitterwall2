@@ -15,6 +15,6 @@
     <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.scheduled.mq" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall" level="INFO" />
     <root level="WARN"></root>
 </configuration>
