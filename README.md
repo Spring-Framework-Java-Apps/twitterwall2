@@ -44,6 +44,8 @@
   - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
   - export TWITTERWALL_GOOGLE_ANALYTICS_ID=TWITTERWALL_GOOGLE_ANALYTICS_ID
   - export TWITTERWALL_SCHEDULER_USER_LIST_NAME=test-typo3-hibernate-java
+  - export TWITTERWALL_LOGIN_USERNAME=admin
+  - export TWITTERWALL_LOGIN_PASSWORD=password
   
 - run with: mvn clean spring-boot:run
 
