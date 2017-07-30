@@ -23,7 +23,7 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
         name="Tweet.getTweetsForHashTag",
         countName="Tweet.countTweetsForHashTag"
     )
-    Page<Tweet> findByHashTag(@Param("hashtagText") HashTagText hashtagText, Pageable pageRequest);
+    Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
     Page<Tweet> findByUser(User user, Pageable pageRequest);
 

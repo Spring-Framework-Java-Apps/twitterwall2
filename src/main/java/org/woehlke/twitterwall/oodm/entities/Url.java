@@ -1,6 +1,5 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
@@ -31,8 +30,12 @@ import java.util.Map;
 )
 @NamedQueries({
     @NamedQuery(
+        name="Url.findByUrl",
+        query="select t from Url t where t.urlField.url=:url"
+    ),
+    @NamedQuery(
         name="Url.findByUniqueId",
-        query="select t from Url t where t.url=:url"
+        query="select t from Url t where t.urlField.url=:url"
     )
 })
 @EntityListeners(UrlListener.class)
@@ -58,23 +61,23 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Valid
     @NotNull
     @Embedded
-    private UrlField url;
+    private UrlField urlField;
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
-        if(url == null){
+        if(urlField == null){
             return false;
         }
         if(expanded == null){
             return false;
         }
-        if(this.url.isValid()){
+        if(this.urlField.isValid()){
             return false;
         }
         if(this.expanded.isEmpty()){
             return false;
         }
-        return url.getUrl().compareTo(expanded) == 0;
+        return urlField.getUrl().compareTo(expanded) == 0;
     }
 
     @Transient
@@ -97,7 +100,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Transient
     @Override
     public boolean isValid() {
-        if(this.url == null){
+        if(this.urlField == null){
             return false;
         }
         if(this.expanded == null){
@@ -106,30 +109,29 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         if(this.display == null){
             return false;
         }
-        if(!this.url.isValid()){
-            return false;
-        }
         if(this.expanded.isEmpty()){
             return false;
         }
         if(this.display.isEmpty()){
             return false;
         }
-        boolean isInvalid = this.isRawUrlsFromDescription()||this.isUrlAndExpandedTheSame();
-        return !isInvalid;
+        if(!this.urlField.isValid()){
+            return false;
+        }
+        return true;
     }
 
     @Transient
     @Override
     public String getUniqueId() {
-        return url.getUrl();
+        return urlField.getUrl();
     }
 
     @Transient
     @Override
     public Map<String, Object> getParametersForFindByUniqueId() {
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("url",this.url);
+        parameters.put("url",this.urlField.getUrl());
         return parameters;
     }
 
@@ -139,18 +141,18 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         return "Url.findByUniqueId";
     }
 
-    public Url(Task createdBy, Task updatedBy,String display, String expanded, UrlField url) {
+    public Url(Task createdBy, Task updatedBy,String display, String expanded, UrlField urlField) {
         super(createdBy,updatedBy);
         this.display = display;
         this.expanded = expanded;
-        this.url = url;
+        this.urlField = urlField;
     }
 
-    public Url(Task createdBy, Task updatedBy,UrlField url) {
+    public Url(Task createdBy, Task updatedBy,UrlField urlField) {
         super(createdBy,updatedBy);
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
-        this.url = url;
+        this.urlField = urlField;
     }
 
     private Url() {
@@ -186,11 +188,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
 
     @Override
     public UrlField getUrl() {
-        return url;
+        return urlField;
     }
 
-    public void setUrl(UrlField url) {
-        this.url = url;
+    public void setUrl(UrlField urlField) {
+        this.urlField = urlField;
     }
 
     @Override
@@ -199,7 +201,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
                 "id=" + id +
                 ", display='" + display + '\'' +
                 ", expanded='" + expanded + '\'' +
-                ", url='" + url + '\'' +
+                ", urlField='" + urlField + '\'' +
                     super.toString() +
                 "}\n";
     }

@@ -9,5 +9,5 @@ public interface DomainObjectWithUrl <T extends DomainObjectWithUrl> extends Dom
 
     UrlField getUrl();
 
-    void setUrl(UrlField url);
+    void setUrl(UrlField urlField);
 }

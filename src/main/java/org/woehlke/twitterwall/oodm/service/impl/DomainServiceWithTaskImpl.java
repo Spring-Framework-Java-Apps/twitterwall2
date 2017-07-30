@@ -45,52 +45,57 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
         try {
             task.setTimeLastUpdate();
             task = this.taskRepository.save(task);
-            T domainObjectPersistent = null;
+            Long id = domainObject.getId();
             T storedObject = null;
-            if(domainObject.getId() != null){
-                storedObject = domainRepository.findOne(domainObject.getId());
-                if(storedObject!=null)  {
-                    if(storedObject.getUniqueId().compareTo(domainObject.getUniqueId())==0) {
-                        domainObjectPersistent = storedObject;
-                    } else {
-                        domainObjectPersistent = null;
-                        log.error(msg+"Something strange happened!");
-                        log.debug(msg+"tried to persist: " + domainObject.toString());
-                        log.debug(msg+"found: " + domainObjectPersistent.toString());
-                    }
+            if(id != null){
+                storedObject = domainRepository.findOne(id);
+            }
+            if(storedObject!=null){
+                try {
+                    domainObject.setId(storedObject.getId());
+                    domainObject.setTaskInfo(storedObject.getTaskInfo());
+                    domainObject.setCreatedBy(storedObject.getCreatedBy());
+                    domainObject.setUpdatedBy(task);
+                    domainObjectResult = domainRepository.save(domainObject);
+                    log.debug(msg + "merged: " + domainObjectResult.toString());
+                    return domainObjectResult;
+                } catch (Exception e){
+                    return null;
                 }
             }
-            if(domainObjectPersistent==null){
-                //try {
-                    domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
-                //} catch (Exception e){
-                //    log.debug(msg+ e.getMessage());
-                 //   //e.printStackTrace();
-               // }
-            }
+            T domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
             if (domainObjectPersistent != null) {
-                domainObject.setId(domainObjectPersistent.getId());
-                domainObject.setTaskInfo(domainObjectPersistent.getTaskInfo());
-                domainObject.setCreatedBy(domainObjectPersistent.getCreatedBy());
-                domainObject.setUpdatedBy(task);
-                storedObject = domainRepository.save(domainObject);
-                domainObjectResult = storedObject;
-                log.debug(msg+"merged: " + domainObjectResult.toString());
+                try {
+                    domainObject.setId(domainObjectPersistent.getId());
+                    domainObject.setTaskInfo(domainObjectPersistent.getTaskInfo());
+                    domainObject.setCreatedBy(domainObjectPersistent.getCreatedBy());
+                    domainObject.setUpdatedBy(task);
+                    domainObjectResult = domainRepository.save(domainObject);
+                    log.debug(msg + "merged: " + domainObjectResult.toString());
+                    return domainObjectResult;
+                } catch (Exception e) {
+                    return null;
+                }
             } else {
-                domainObject.setCreatedBy(task);
-                domainObject.setUpdatedBy(task);
-                log.debug("try to persist: " + domainObject.toString());
-                storedObject = domainRepository.save(domainObject);
-                domainObjectResult = storedObject;
-                log.debug("persisted: " + domainObjectResult.toString());
+                try {
+                    domainObject.setCreatedBy(task);
+                    domainObject.setUpdatedBy(task);
+                    log.debug("try to persist: " + domainObject.toString());
+                    domainObjectResult = domainRepository.save(domainObject);
+                    log.debug("persisted: " + domainObjectResult.toString());
+                    return domainObjectResult;
+                } catch (Exception e){
+                    return null;
+                }
             }
         } catch (Exception e)  {
             log.warn(msg,e.getMessage());
             //e.printStackTrace();
         }
-        return domainObjectResult;
+        return null;
     }
 
+    /*
     @Override
     public T create(T domainObject, Task task) {
         domainObject.setCreatedBy(task);
@@ -102,5 +107,5 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
         domainObject.setUpdatedBy(task);
         return domainRepository.save(domainObject);
     }
-
+    */
 }

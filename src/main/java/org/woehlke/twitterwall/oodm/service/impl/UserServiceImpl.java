@@ -79,7 +79,7 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
-        return userRepository.findUsersForHashTag(hashTag.getText().getText(),pageRequest);
+        return userRepository.findUsersForHashTag(hashTag.getHashTagText().getText(),pageRequest);
     }
 
     @Override

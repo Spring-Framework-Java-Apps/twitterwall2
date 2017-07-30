@@ -41,27 +41,27 @@ public class HashTagsOverviewHelperImpl implements HashTagsOverviewHelper {
             for (HashTag hashTag : myPage.getContent()) {
                 Pageable pageRequestTeets = new PageRequest(0, 1);
                 Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag, pageRequestTeets);
-                String myMSg = msg + " tweetService.findTweetsForHashTag= " + hashTag.getText();
+                String myMSg = msg + " tweetService.findTweetsForHashTag= " + hashTag.getHashTagText().getText();
                 if (tweets == null) {
                     log.debug(myMSg + " result: null");
                 } else {
                     long numberTweets = tweets.getTotalElements();
                     log.debug(myMSg + " result: numberTweets=" + numberTweets);
                     if (numberTweets > 0) {
-                        HashTagCounted c = new HashTagCounted(hashTag.getId(),numberTweets, hashTag.getText().getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(),numberTweets, hashTag.getHashTagText().getText());
                         hashTagsTweets.add(c);
                     }
                 }
                 Pageable pageRequestUsers = new PageRequest(0, 1);
                 Page<User> users = userService.getUsersForHashTag(hashTag, pageRequestUsers);
-                myMSg = msg + " userService.getUsersForHashTag= " + hashTag.getText();
+                myMSg = msg + " userService.getUsersForHashTag= " + hashTag.getHashTagText().getText();
                 if (users == null) {
                     log.debug(myMSg + " result: null");
                 } else {
                     long numberUsers = users.getTotalElements();
                     log.debug(myMSg + " result: numberUsers=" + numberUsers);
                     if (numberUsers > 0) {
-                        HashTagCounted c = new HashTagCounted(hashTag.getId(), numberUsers, hashTag.getText().getText());
+                        HashTagCounted c = new HashTagCounted(hashTag.getId(), numberUsers, hashTag.getHashTagText().getText());
                         hashTagsUsers.add(c);
                     }
                 }

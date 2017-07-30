@@ -1,6 +1,5 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
@@ -11,8 +10,6 @@ import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
@@ -27,7 +24,7 @@ import java.util.regex.Pattern;
 @NamedQueries({
     @NamedQuery(
         name="HashTag.findByUniqueId",
-        query="select t from HashTag t where t.text=:text"
+        query="select t from HashTag t where t.hashTagText.text=:text"
     )
 })
 @EntityListeners(HashTagListener.class)
@@ -40,7 +37,7 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     protected Long id;
 
     @Embedded
-    private HashTagText text;
+    private HashTagText hashTagText;
 
     @Column
     private Long numberOfTweets;
@@ -48,16 +45,16 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     @Column
     private Long numberOfUsers;
 
-    public HashTag(Task createdBy, Task updatedBy, HashTagText text,Long numberOfTweets, Long numberOfUsers) {
+    public HashTag(Task createdBy, Task updatedBy, HashTagText hashTagText,Long numberOfTweets, Long numberOfUsers) {
         super(createdBy,updatedBy);
-        this.text = text;
+        this.hashTagText = hashTagText;
         this.numberOfTweets = numberOfTweets;
         this.numberOfUsers = numberOfUsers;
     }
 
-    public HashTag(Task createdBy, Task updatedBy, HashTagText text) {
+    public HashTag(Task createdBy, Task updatedBy, HashTagText hashTagText) {
         super(createdBy,updatedBy);
-        this.text = text;
+        this.hashTagText = hashTagText;
     }
 
     private HashTag() {
@@ -74,10 +71,10 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
 
     @Override
     public boolean isValid() {
-        if(this.text == null){
+        if(this.hashTagText == null){
             return false;
         }
-        if(!text.isValid()){
+        if(!hashTagText.isValid()){
             return false;
         }
         return true;
@@ -85,13 +82,13 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
 
     @Override
     public String getUniqueId() {
-        return this.getText().getText();
+        return this.getHashTagText().getText();
     }
 
     @Override
     public Map<String, Object> getParametersForFindByUniqueId() {
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("text",this.text);
+        parameters.put("text",this.hashTagText.getText());
         return parameters;
     }
 
@@ -100,12 +97,12 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
         return "HashTag.findByUniqueId";
     }
 
-    public HashTagText getText() {
-        return text;
+    public HashTagText getHashTagText() {
+        return hashTagText;
     }
 
-    public void setText(HashTagText text) {
-        this.text = text;
+    public void setHashTagText(HashTagText hashTagText) {
+        this.hashTagText = hashTagText;
     }
 
     public static long getSerialVersionUID() {
@@ -137,29 +134,35 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     }
 
     @Override
-    public String toString() {
-        return "HashTag{" +
-                " id=" + id +
-                ", text='" + text + '\'' +
-                    super.toString() +
-                " }\n";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HashTag)) return false;
 
         HashTag hashTag = (HashTag) o;
 
-        if (getId() != null ? !getId().equals(hashTag.getId()) : hashTag.getId() != null) return false;
-        return getText() != null ? getText().equals(hashTag.getText()) : hashTag.getText() == null;
+        if (id != null ? !id.equals(hashTag.id) : hashTag.id != null) return false;
+        if (hashTagText != null ? !hashTagText.equals(hashTag.hashTagText) : hashTag.hashTagText != null) return false;
+        if (numberOfTweets != null ? !numberOfTweets.equals(hashTag.numberOfTweets) : hashTag.numberOfTweets != null)
+            return false;
+        return numberOfUsers != null ? numberOfUsers.equals(hashTag.numberOfUsers) : hashTag.numberOfUsers == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getText() != null ? getText().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (hashTagText != null ? hashTagText.hashCode() : 0);
+        result = 31 * result + (numberOfTweets != null ? numberOfTweets.hashCode() : 0);
+        result = 31 * result + (numberOfUsers != null ? numberOfUsers.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "HashTag{" +
+                "id=" + id +
+                ", hashTagText=" + hashTagText +
+                ", numberOfTweets=" + numberOfTweets +
+                ", numberOfUsers=" + numberOfUsers +
+                '}';
     }
 }

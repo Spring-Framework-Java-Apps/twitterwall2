@@ -71,7 +71,7 @@ public class HashTagController {
         Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
         Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
         String subtitle = "Tweets und User für HashTag";
-        String title = hashTag.getText().getText();
+        String title = hashTag.getHashTagText().getText();
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         model.addAttribute("hashTag",hashTag);

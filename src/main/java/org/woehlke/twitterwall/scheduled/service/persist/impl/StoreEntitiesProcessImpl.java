@@ -33,13 +33,30 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             Set<Media> media = new LinkedHashSet<Media>();
             Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
             for (Url myUrl : entities.getUrls()) {
-                if (myUrl != null) {
-                    if (myUrl.isValid()) {
-                        Url urlPers = urlService.findByUrl(myUrl.getUrl().getUrl());
+                if (myUrl.isValid()) {
+                    Url urlPers = createPersistentUrl.createPersistentUrlFor(myUrl.getUrl().getUrl(), task);
+                    if(urlPers!=null){
+                        urls.add(urlPers);
+                    }
+                }
+            }
+
+/*
+
+                        Url urlPers = urlService.findByUniqueId(myUrl);
+
                         if (urlPers != null) {
-                            urlPers.setDisplay(myUrl.getDisplay());
-                            urlPers.setExpanded(myUrl.getExpanded());
-                            urlPers = urlService.store(urlPers, task);
+                            if(urlPers.isUrlAndExpandedTheSame()||urlPers.isRawUrlsFromDescription()){
+                                if(myUrl.isRawUrlsFromDescription()|| myUrl.isUrlAndExpandedTheSame()){
+
+                                } else {
+                                    urlPers.setDisplay(myUrl.getDisplay());
+                                    urlPers.setExpanded(myUrl.getExpanded());
+                                    urlPers = urlService.store(urlPers, task);
+                                }
+                            }
+
+
                         } else {
                             urlPers = urlService.store(myUrl, task);
                         }
@@ -52,7 +69,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                         }
                     }
                 }
-            }
+                */
             for (HashTag hashTag : entities.getHashTags()) {
                 if (hashTag.isValid()) {
                     HashTag hashTagPers = hashTagService.store(hashTag, task);
@@ -64,7 +81,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             for (Mention mention : entities.getMentions()) {
                 if (mention.isValid()) {
                     Mention mentionPers = mentionService.store(mention, task);
-                    mentions.add(mentionPers);
+                    if(mentionPers != null){
+                        mentions.add(mentionPers);
+                    }
                 }/* else if(mention.isRawMentionFromUserDescription()){
                 Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
                 if((mentionPers != null) && mentionPers.isValid()){
@@ -83,7 +102,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             for (TickerSymbol tickerSymbol : entities.getTickerSymbols()) {
                 if (tickerSymbol.isValid()) {
                     TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol, task);
-                    tickerSymbols.add(tickerSymbolPers);
+                    if(tickerSymbolPers != null){
+                        tickerSymbols.add(tickerSymbolPers);
+                    }
                 }
             }
             entities.setUrls(urls);
@@ -100,8 +121,6 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     private static final Logger log = LoggerFactory.getLogger(StoreEntitiesProcessImpl.class);
 
-    private final UrlService urlService;
-
     private final HashTagService hashTagService;
 
     private final MentionService mentionService;
@@ -115,8 +134,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
     private final CreatePersistentMention createPersistentMention;
 
     @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
-        this.urlService = urlService;
+    public StoreEntitiesProcessImpl(HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;

@@ -15,17 +15,17 @@
                     <div class="tw-col-3-box-center">
                         <div class="thumbnail tw-user" th:fragment="tw-user-thumbnail">
                             <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
-                                 th:with="user=${user},userUrl=@{|https://twitter.com/${user.screenName}|}">
+                                 th:with="user=${user},userUrl=@{|https://twitter.com/${user.screenName.screenName}|}">
                             </div>
                             <div class="caption">
                                 <h2>
-                                    <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
+                                    <a th:href="@{|https://twitter.com/${user.screenName.screenName}|}" target="_blank">
                                         <span th:text="${user.name}">name</span>
                                     </a>
                                 </h2>
                                 <h3>
-                                    <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
-                                        <b>@<span th:text="${user.screenName}">screenName</span></b>
+                                    <a th:href="@{|https://twitter.com/${user.screenName.screenName}|}" target="_blank">
+                                        <b>@<span th:text="${user.screenName.screenName}">screenName</span></b>
                                     </a>
                                 </h3>
                                 <div>

@@ -30,7 +30,7 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
 
     @Override
     public HashTag findByText(String text) {
-        return hashTagRepository.findByText(text);
+        return hashTagRepository.findByHashTagTextText(text);
     }
 
     @Override

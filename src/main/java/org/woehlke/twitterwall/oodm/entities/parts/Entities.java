@@ -7,7 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;

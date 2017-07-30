@@ -43,11 +43,11 @@ import static javax.persistence.FetchType.EAGER;
 @NamedQueries({
     @NamedQuery(
         name="Tweet.getTweetsForHashTag",
-        query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+        query="select t from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.hashTagText.text=:hashtagText"
     ),
     @NamedQuery(
         name="Tweet.countTweetsForHashTag",
-        query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+        query="select count(t) from Tweet as t join t.entities.hashTags hashTag WHERE hashTag.hashTagText.text=:hashtagText"
     ),
     @NamedQuery(
         name="Tweet.findAllTwitterIds",

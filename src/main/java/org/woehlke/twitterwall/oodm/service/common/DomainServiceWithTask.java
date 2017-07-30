@@ -10,7 +10,9 @@ public interface DomainServiceWithTask<T extends DomainObjectWithTask> extends D
 
     T store(T domainObject, Task task);
 
+    /*
     T create(T domainObject, Task task);
 
     T update(T domainObject, Task task);
+    */
 }

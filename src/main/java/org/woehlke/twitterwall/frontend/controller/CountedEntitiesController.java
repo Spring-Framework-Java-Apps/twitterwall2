@@ -41,7 +41,7 @@ public class CountedEntitiesController {
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
             object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
-            object2Entity.setEntityInfo(hashTag.getText().getText());
+            object2Entity.setEntityInfo(hashTag.getHashTagText().getText());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
@@ -161,7 +161,7 @@ public class CountedEntitiesController {
             User user = userService.findById(object2Entity.getObjectId());
             HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
             object2Entity.setObjectInfo(user.getScreenName().getScreenName());
-            object2Entity.setEntityInfo(hashTag.getText().getText());
+            object2Entity.setEntityInfo(hashTag.getHashTagText().getText());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);

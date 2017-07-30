@@ -12,5 +12,5 @@ import org.woehlke.twitterwall.oodm.repositories.custom.HashTagRepositoryCustom;
 @Repository
 public interface HashTagRepository extends DomainRepository<HashTag>,HashTagRepositoryCustom {
 
-    HashTag findByText(String text);
+    HashTag findByHashTagTextText(String text);
 }
