@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
@@ -105,7 +107,9 @@ public class UserServiceTestImpl implements UserServiceTest {
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
-        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        UrlField urlField = new UrlField(url);
+        ScreenName screenNameField = new ScreenName(screenName);
+        User user = new User(task,null,idTwitter,screenNameField, name, urlField, profileImageUrl, description, location, createdDate);
         return user;
     }
 

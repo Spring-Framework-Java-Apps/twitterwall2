@@ -6,8 +6,11 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
+import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,9 +39,8 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @SafeHtml
-    @Column(name="text", nullable = false,length=4096)
-    private String text = "";
+    @Embedded
+    private HashTagText text;
 
     @Column
     private Long numberOfTweets;
@@ -46,35 +48,20 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     @Column
     private Long numberOfUsers;
 
-    public HashTag(Task createdBy, Task updatedBy, String text,Long numberOfTweets, Long numberOfUsers) {
+    public HashTag(Task createdBy, Task updatedBy, HashTagText text,Long numberOfTweets, Long numberOfUsers) {
         super(createdBy,updatedBy);
         this.text = text;
         this.numberOfTweets = numberOfTweets;
         this.numberOfUsers = numberOfUsers;
     }
 
-    public HashTag(Task createdBy, Task updatedBy, String text) {
+    public HashTag(Task createdBy, Task updatedBy, HashTagText text) {
         super(createdBy,updatedBy);
         this.text = text;
     }
 
     private HashTag() {
         super();
-    }
-
-    public final static String HASHTAG_TEXT_PATTERN = "[öÖäÄüÜßa-zA-Z0-9_]{1,139}";
-
-    @Transient
-    public boolean hasValidText(){
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(text);
-        return m.matches();
-    }
-
-    public static boolean isValidText(String hashtagText){
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
-        Matcher m = p.matcher(hashtagText);
-        return m.matches();
     }
 
     public Long getId() {
@@ -86,20 +73,43 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     }
 
     @Override
+    public boolean isValid() {
+        if(this.text == null){
+            return false;
+        }
+        if(!text.isValid()){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String getUniqueId() {
+        return this.getText().getText();
+    }
+
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("text",this.text);
+        return parameters;
+    }
+
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "HashTag.findByUniqueId";
+    }
+
+    public HashTagText getText() {
         return text;
     }
 
-    public String getText() {
-        return this.text;
+    public void setText(HashTagText text) {
+        this.text = text;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public Long getNumberOfTweets() {
@@ -133,14 +143,6 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
                 ", text='" + text + '\'' +
                     super.toString() +
                 " }\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        if((text == null)||(text.isEmpty())){
-            return false;
-        }
-        return true;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
         String msg = "storeUserFromMention: "+user.getUniqueId()+" : "+task.getUniqueId()+" : ";
         try {
             for (Mention mention : user.getEntities().getMentions()) {
-                String screenName = mention.getScreenName();
+                String screenName = mention.getScreenName().getScreenName();
                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
                 log.debug(msg + " userFromScreenName: " + userFromMention.toString());
             }

@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
@@ -52,7 +54,12 @@ public class UserTransformServiceImpl implements UserTransformService {
             location = null;
         }
         Date createdDate = userSource.getCreatedDate();
-        User userTarget = new User(task,null,idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
+
+        ScreenName screenNameField = new ScreenName(screenName);
+
+        UrlField urlField = new UrlField(url);
+
+        User userTarget = new User(task,null,idTwitter, screenNameField, name, urlField, profileImageUrl, description, location, createdDate);
         userTarget.setTweeting(true);
         userTarget.setLanguage(userSource.getLanguage());
         userTarget.setStatusesCount(userSource.getStatusesCount());

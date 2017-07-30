@@ -8,9 +8,12 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tw on 10.06.17.
@@ -57,10 +60,8 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
     @Column(name = "media_https",length=4096, nullable = false)
     private String mediaHttps = "";
 
-    @URL
-    @NotEmpty
-    @Column(length=4096, nullable = false)
-    private String url;
+    @Embedded
+    private UrlField url;
 
     @NotNull
     @Column(length=4096, nullable = false)
@@ -74,8 +75,36 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
     @Column(name = "media_type",length=4096, nullable = false)
     private String mediaType = "";
 
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(idTwitter == null){
+            return false;
+        }
+        return true;
+    }
 
-    public Media(Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, String url, String display, String expanded, String mediaType) {
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
+    }
+
+    @Transient
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("idTwitter",this.idTwitter);
+        return parameters;
+    }
+
+    @Transient
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "Media.findByUniqueId";
+    }
+
+    public Media(Task createdBy, Task updatedBy, long idTwitter, String mediaHttp, String mediaHttps, UrlField url, String display, String expanded, String mediaType) {
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.mediaHttp = mediaHttp;
@@ -86,7 +115,7 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         this.mediaType = mediaType;
     }
 
-    public Media(Task createdBy, Task updatedBy, String url){
+    public Media(Task createdBy, Task updatedBy, UrlField url){
         super(createdBy,updatedBy);
         this.idTwitter = -1L;
         this.mediaHttp = "UNKNOWN";
@@ -105,18 +134,12 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         return serialVersionUID;
     }
 
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -145,11 +168,13 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         this.mediaHttps = mediaHttps;
     }
 
-    public String getUrl() {
+    @Override
+    public UrlField getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    @Override
+    public void setUrl(UrlField url) {
         this.url = url;
     }
 
@@ -190,11 +215,6 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
                 ", mediaType='" + mediaType + '\'' +
                     super.toString() +
                 " }\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
 

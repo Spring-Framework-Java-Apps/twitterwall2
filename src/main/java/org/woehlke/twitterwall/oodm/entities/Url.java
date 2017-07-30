@@ -7,9 +7,13 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tw on 10.06.17.
@@ -51,14 +55,10 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Column(length=4096,nullable = false)
     private String expanded="";
 
-    public static final String URL_PATTTERN_FOR_USER_HTTPS = "https://t\\.co/\\w*";
-
-    public static final String URL_PATTTERN_FOR_USER_HTTP = "http://t\\.co/\\w*";
-
-    @URL
-    @NotEmpty
-    @Column(nullable = false,length=4096)
-    private String url;
+    @Valid
+    @NotNull
+    @Embedded
+    private UrlField url;
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -68,13 +68,13 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         if(expanded == null){
             return false;
         }
-        if(this.url.isEmpty()){
+        if(this.url.isValid()){
             return false;
         }
         if(this.expanded.isEmpty()){
             return false;
         }
-        return url.compareTo(expanded) == 0;
+        return url.getUrl().compareTo(expanded) == 0;
     }
 
     @Transient
@@ -106,7 +106,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         if(this.display == null){
             return false;
         }
-        if(this.url.isEmpty()){
+        if(!this.url.isValid()){
             return false;
         }
         if(this.expanded.isEmpty()){
@@ -119,14 +119,34 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         return !isInvalid;
     }
 
-    public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return url.getUrl();
+    }
+
+    @Transient
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("url",this.url);
+        return parameters;
+    }
+
+    @Transient
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "Url.findByUniqueId";
+    }
+
+    public Url(Task createdBy, Task updatedBy,String display, String expanded, UrlField url) {
         super(createdBy,updatedBy);
         this.display = display;
         this.expanded = expanded;
         this.url = url;
     }
 
-    public Url(Task createdBy, Task updatedBy,String url) {
+    public Url(Task createdBy, Task updatedBy,UrlField url) {
         super(createdBy,updatedBy);
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
@@ -148,11 +168,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.id = id;
     }
 
-    @Override
-    public String getUniqueId() {
-        return url;
-    }
-
     public String getDisplay() {
         return display;
     }
@@ -169,11 +184,12 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.expanded = expanded;
     }
 
-    public String getUrl() {
+    @Override
+    public UrlField getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(UrlField url) {
         this.url = url;
     }
 

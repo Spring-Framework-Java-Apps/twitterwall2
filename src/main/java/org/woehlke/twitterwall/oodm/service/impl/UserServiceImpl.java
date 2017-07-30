@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
 import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
@@ -35,7 +36,7 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
 
     @Override
     public User findByScreenName(String screenName) {
-        if (!User.isValidScreenName(screenName)) {
+        if (!ScreenName.isValidScreenName(screenName)) {
             throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
         }
         return userRepository.findByScreenName(screenName);
@@ -78,7 +79,7 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
-        return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
+        return userRepository.findUsersForHashTag(hashTag.getText().getText(),pageRequest);
     }
 
     @Override
@@ -121,4 +122,8 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
         return userRepository.findAllUser2TickerSymbol(pageRequest);
     }
 
+    @Override
+    public User findByUniqueId(User example) {
+        return userRepository.findByUniqueId(example);
+    }
 }

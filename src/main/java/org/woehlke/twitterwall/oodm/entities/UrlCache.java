@@ -4,11 +4,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
+import org.woehlke.twitterwall.oodm.entities.common.UniqueId;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -31,7 +36,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(UrlCacheListener.class)
-public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache> {
+public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainObjectWithUrl<UrlCache>,DomainObjectWithTask<UrlCache>,UniqueId {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,18 +50,18 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
     @Column(length=4096)
     private String expanded = "";
 
-    @URL
-    @NotEmpty
-    @Column(name="url",nullable = false,length=4096)
-    private String url;
+    @Valid
+    @NotNull
+    @Embedded
+    private UrlField url;
 
-    public UrlCache(Task createdBy, Task updatedBy, String expanded, String url) {
+    public UrlCache(Task createdBy, Task updatedBy, String expanded, UrlField url) {
         super(createdBy,updatedBy);
         this.expanded = expanded;
         this.url = url;
     }
 
-    public UrlCache(Task createdBy, Task updatedBy, String url){
+    public UrlCache(Task createdBy, Task updatedBy, UrlField url){
         super(createdBy,updatedBy);
         this.expanded = UrlCache.UNDEFINED;
         this.url = url;
@@ -65,9 +70,32 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
     private UrlCache(){
     }
 
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return url.getUrl();
+    }
+
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("url",this.url);
+        return parameters;
+    }
+
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "UrlCache.findByUniqueId";
+    }
+
+
     @Transient
     public boolean isUrlAndExpandedTheSame(){
-       return  url.compareTo(expanded) == 0;
+       return  url.getUrl().compareTo(expanded) == 0;
     }
 
     public Long getId() {
@@ -79,8 +107,13 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
     }
 
     @Override
-    public String getUniqueId() {
+    public UrlField getUrl() {
         return url;
+    }
+
+    @Override
+    public void setUrl(UrlField url) {
+        this.url = url;
     }
 
     public String getExpanded() {
@@ -91,15 +124,9 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
         this.expanded = expanded;
     }
 
-    public String getUrl() {
-        return url;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-
 
     @Override
     public String toString() {
@@ -109,11 +136,6 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
                 ", url='" + url + '\'' +
                     super.toString() +
                 "}\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

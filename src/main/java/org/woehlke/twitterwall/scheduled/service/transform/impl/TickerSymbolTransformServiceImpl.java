@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.scheduled.service.transform.TickerSymbolTransformService;
 
 import java.util.LinkedHashSet;
@@ -24,7 +25,8 @@ public class TickerSymbolTransformServiceImpl extends EntitiesFilter implements 
     public TickerSymbol transform(TickerSymbolEntity tickerSymbol,Task task) {
         String tickerSymbolString = tickerSymbol.getTickerSymbol();
         String url = tickerSymbol.getUrl();
-        TickerSymbol myTickerSymbolEntity = new TickerSymbol(task, null, tickerSymbolString, url);
+        UrlField urlField = new UrlField(url);
+        TickerSymbol myTickerSymbolEntity = new TickerSymbol(task, null, tickerSymbolString, urlField);
         return myTickerSymbolEntity;
     }
 

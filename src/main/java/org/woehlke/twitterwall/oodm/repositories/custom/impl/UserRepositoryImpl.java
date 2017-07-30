@@ -12,27 +12,11 @@ import org.woehlke.twitterwall.oodm.entities.transients.mapper.*;
 import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class UserRepositoryImpl implements UserRepositoryCustom {
-
-
-    @Override
-    public User findByUniqueId(User domainObject) {
-        String name="User.findByUniqueId";
-        TypedQuery<User> query = entityManager.createNamedQuery(name,User.class);
-        query.setParameter("idTwitter",domainObject.getIdTwitter());
-        query.setParameter("screenName",domainObject.getScreenName());
-        List<User> resultList = query.getResultList();
-        if(resultList.size()>0){
-            return resultList.iterator().next();
-        } else {
-            return null;
-        }
-    }
+public class UserRepositoryImpl extends AbstractDomainRepositoryImpl<User> implements UserRepositoryCustom {
 
     @Override
     public Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest) {
@@ -94,13 +78,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return resultPage;
     }
 
-    private final EntityManager entityManager;
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public UserRepositoryImpl(EntityManager entityManager,DataSource dataSource) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 }

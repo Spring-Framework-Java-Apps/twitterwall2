@@ -70,7 +70,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
                 if (!onePersMentions.hasPersistentUser()) {
                     lfdNr++;
                     all++;
-                    String screenName = onePersMentions.getScreenName();
+                    String screenName = onePersMentions.getScreenName().getScreenName();
                     log.debug("### mentionService.getAll from DB ("+lfdNr+"): "+screenName);
                     screenNames.add(screenName);
                 }

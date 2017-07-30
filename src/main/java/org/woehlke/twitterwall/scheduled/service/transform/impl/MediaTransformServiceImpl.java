@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Media;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.scheduled.service.transform.MediaTransformService;
 
 import java.util.LinkedHashSet;
@@ -29,7 +30,8 @@ public class MediaTransformServiceImpl extends EntitiesFilter implements MediaTr
         String display = medium.getDisplayUrl();
         String expanded = medium.getExpandedUrl();
         String type = medium.getType();
-        Media myMediaEntity = new Media(task, null, idTwitter, mediaHttp, mediaHttps, url, display, expanded, type);
+        UrlField urlField = new UrlField(url);
+        Media myMediaEntity = new Media(task, null, idTwitter, mediaHttp, mediaHttps, urlField, display, expanded, type);
         return myMediaEntity;
     }
 

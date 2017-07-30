@@ -61,7 +61,7 @@ public class TwitterUrlServiceTest {
         List<Url> testData = urlServiceTest.getTestData(task);
         for(Url exprected:testData){
                 log.info(msg+"expected: " + exprected.toString());
-                Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl(),task);
+                Url foundUrl = twitterUrlService.fetchTransientUrl(exprected.getUrl().getUrl(),task);
                 Assert.assertNotNull(foundUrl);
                 log.info(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprected.getUrl(), foundUrl.getUrl());

@@ -40,8 +40,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
-            object2Entity.setEntityInfo(hashTag.getText());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
+            object2Entity.setEntityInfo(hashTag.getText().getText());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
@@ -64,8 +64,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             Media medium = mediaService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
-            object2Entity.setEntityInfo(medium.getUrl());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
+            object2Entity.setEntityInfo(medium.getUrl().getUrl());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
@@ -88,8 +88,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             Mention mention = mentionService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
-            object2Entity.setEntityInfo(mention.getScreenName());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
+            object2Entity.setEntityInfo(mention.getScreenName().getScreenName());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
@@ -112,7 +112,7 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             TickerSymbol tickerSymbol = tickerSymbolService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
             object2Entity.setEntityInfo(tickerSymbol.getUniqueId());
             listObject2EntityContent.add(object2Entity);
         }
@@ -136,7 +136,7 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             Tweet tweet = tweetService.findById(object2Entity.getObjectId());
             Url url = urlService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(tweet.getUser().getScreenName());
+            object2Entity.setObjectInfo(tweet.getUser().getScreenName().getScreenName());
             object2Entity.setEntityInfo(url.getExpanded());
             listObject2EntityContent.add(object2Entity);
         }
@@ -160,8 +160,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             User user = userService.findById(object2Entity.getObjectId());
             HashTag hashTag = hashTagService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(user.getScreenName());
-            object2Entity.setEntityInfo(hashTag.getText());
+            object2Entity.setObjectInfo(user.getScreenName().getScreenName());
+            object2Entity.setEntityInfo(hashTag.getText().getText());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2EntityContent",listObject2EntityContent);
@@ -184,8 +184,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             User user = userService.findById(object2Entity.getObjectId());
             Media medium = mediaService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(user.getScreenName());
-            object2Entity.setEntityInfo(medium.getUrl());
+            object2Entity.setObjectInfo(user.getScreenName().getScreenName());
+            object2Entity.setEntityInfo(medium.getUrl().getUrl());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
@@ -208,8 +208,8 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             User user = userService.findById(object2Entity.getObjectId());
             Mention mention = mentionService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(user.getScreenName());
-            object2Entity.setEntityInfo(mention.getScreenName());
+            object2Entity.setObjectInfo(user.getScreenName().getScreenName());
+            object2Entity.setEntityInfo(mention.getScreenName().getScreenName());
             listObject2EntityContent.add(object2Entity);
         }
         model.addAttribute("listObject2Entity", listObject2Entity);
@@ -232,7 +232,7 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             User user = userService.findById(object2Entity.getObjectId());
             TickerSymbol tickerSymbol = tickerSymbolService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setObjectInfo(user.getScreenName().getScreenName());
             object2Entity.setEntityInfo(tickerSymbol.getUniqueId());
             listObject2EntityContent.add(object2Entity);
         }
@@ -256,7 +256,7 @@ public class CountedEntitiesController {
         for(Object2Entity object2Entity:listObject2Entity.getContent()){
             User user = userService.findById(object2Entity.getObjectId());
             Url url = urlService.findById(object2Entity.getEntityId());
-            object2Entity.setObjectInfo(user.getScreenName());
+            object2Entity.setObjectInfo(user.getScreenName().getScreenName());
             object2Entity.setEntityInfo(url.getExpanded());
             listObject2EntityContent.add(object2Entity);
         }

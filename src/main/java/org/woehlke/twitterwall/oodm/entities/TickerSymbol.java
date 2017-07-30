@@ -8,8 +8,13 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tw on 10.06.17.
@@ -41,18 +46,18 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
     @Column(name = "ticker_symbol",length=4096,nullable = false)
     private String tickerSymbol = "";
 
-    @URL
-    @NotEmpty
-    @Column(name = "url",length=4096,nullable = false)
-    private String url = "";
+    @Valid
+    @NotNull
+    @Embedded
+    private UrlField url;
 
-    public TickerSymbol(Task createdBy, Task updatedBy, String tickerSymbol, String url) {
+    public TickerSymbol(Task createdBy, Task updatedBy, String tickerSymbol, UrlField url) {
         super(createdBy,updatedBy);
         this.tickerSymbol = tickerSymbol;
         this.url = url;
     }
 
-    public TickerSymbol(Task createdBy, Task updatedBy, String url) {
+    public TickerSymbol(Task createdBy, Task updatedBy, UrlField url) {
         super(createdBy,updatedBy);
         this.tickerSymbol = "UNDEFINED";
         this.url = url;
@@ -61,10 +66,48 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
     private TickerSymbol() {
     }
 
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return "" + url  +"_"+  tickerSymbol;
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.url == null){
+            return false;
+        }
+        if(this.url.isValid()){
+            return false;
+        }
+        if(this.tickerSymbol == null){
+            return false;
+        }
+        if(this.tickerSymbol.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    @Transient
+    @Override
+    public Map<String,Object> getParametersForFindByUniqueId(){
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("url",this.url);
+        parameters.put("tickerSymbol",this.tickerSymbol);
+        return parameters;
+    }
+
+    @Transient
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "TickerSymbol.findByUniqueId";
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-
 
     public String getTickerSymbol() {
         return tickerSymbol;
@@ -74,14 +117,15 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
         this.tickerSymbol = tickerSymbol;
     }
 
-    public String getUrl() {
+    @Override
+    public UrlField getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    @Override
+    public void setUrl(UrlField url) {
         this.url = url;
     }
-
 
     public Long getId() {
         return id;
@@ -91,10 +135,6 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
         this.id = id;
     }
 
-    @Override
-    public String getUniqueId() {
-        return "" + url  +"_"+  tickerSymbol;
-    }
 
     @Override
     public String toString() {
@@ -104,11 +144,6 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
                 ", url='" + url + '\'' +
                     super.toString() +
                 "\n}";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

@@ -8,6 +8,8 @@ public interface DomainObjectMinimalService<T extends DomainObjectMinimal> {
 
     T findById(long id);
 
+    T findByUniqueId(T example);
+
     Page<T> getAll(Pageable pageRequest);
 
     long count();

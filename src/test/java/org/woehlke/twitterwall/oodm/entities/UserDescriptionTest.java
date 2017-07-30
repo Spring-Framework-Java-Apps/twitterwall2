@@ -4,6 +4,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,12 +87,14 @@ public class UserDescriptionTest {
         Pattern hashTagPattern = Pattern.compile("#(\\w*)("+stopChar+")");
         Matcher m3 = hashTagPattern.matcher(description);
         while (m3.find()) {
-            hashTags.add(new HashTag(task,null,m3.group(1)));
+            HashTagText hashTagText = new HashTagText(m3.group(1));
+            hashTags.add(new HashTag(task,null,hashTagText));
         }
         Pattern hashTagPattern2 = Pattern.compile("#(\\w*)$");
         Matcher m4 = hashTagPattern2.matcher(description);
         while (m4.find()) {
-            hashTags.add(new HashTag(task,null,m4.group(1)));
+            HashTagText hashTagText = new HashTagText(m4.group(1));
+            hashTags.add(new HashTag(task,null,hashTagText));
         }
         return hashTags;
     }
@@ -112,7 +117,8 @@ public class UserDescriptionTest {
     private Url getUrl(String urlString,Task task){
         String display="";
         String expanded="";
-        Url newUrl = new Url(task,null,display,expanded,urlString);
+        UrlField urlField = new UrlField(urlString);
+        Url newUrl = new Url(task,null,display,expanded,urlField);
         return newUrl;
     }
 
@@ -135,7 +141,8 @@ public class UserDescriptionTest {
         long idTwitter = 10000000L;
         String screenName=mentionString;
         String name=mentionString;
-        return new Mention(task,null,idTwitter,screenName,name);
+        ScreenName screenNameField = new ScreenName(screenName);
+        return new Mention(task,null,idTwitter,screenNameField,name);
     }
 
     static private String stopChar = Entities.stopChar;

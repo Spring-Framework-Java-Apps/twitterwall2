@@ -38,4 +38,8 @@ public class MediaServiceImpl extends DomainServiceWithTaskImpl<Media> implement
         return mediaRepository.findByUrl(url);
     }
 
+    @Override
+    public Media findByUniqueId(Media example) {
+        return mediaRepository.findByUniqueId(example);
+    }
 }

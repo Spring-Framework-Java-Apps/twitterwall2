@@ -54,6 +54,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task findByUniqueId(Task example) {
+        return taskRepository.findByUniqueId(example);
+    }
+
+    @Override
     public Task create(String msg,TaskType type,CountedEntities countedEntities) {
         Task task = new Task("start: "+msg,type);
         task.setTaskStatus(TaskStatus.RUNNING);

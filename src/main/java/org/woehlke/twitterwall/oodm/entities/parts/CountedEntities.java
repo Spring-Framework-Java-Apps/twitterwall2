@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -7,6 +9,7 @@ import java.io.Serializable;
 /**
  * Created by tw on 03.07.17.
  */
+@Validated
 @Embeddable
 public class CountedEntities implements Serializable {
 

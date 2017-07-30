@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
 import org.woehlke.twitterwall.scheduled.service.transform.HashTagTransformService;
 
 import java.util.Set;
@@ -23,7 +24,8 @@ public class HashTagTransformServiceImpl extends EntitiesFilter implements HashT
     @Override
     public HashTag transform(HashTagEntity hashTag,Task task) {
         String text = hashTag.getText();
-        HashTag myHashTagEntity = new HashTag(task, null, text);
+        HashTagText hashTagText = new HashTagText(text);
+        HashTag myHashTagEntity = new HashTag(task, null, hashTagText);
         return myHashTagEntity;
     }
 

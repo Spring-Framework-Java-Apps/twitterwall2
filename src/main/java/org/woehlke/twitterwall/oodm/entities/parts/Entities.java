@@ -1,11 +1,16 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEmbededField;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.DETACH;
@@ -16,8 +21,9 @@ import static javax.persistence.FetchType.EAGER;
 /**
  * Created by tw on 11.07.17.
  */
+@Validated
 @Embeddable
-public class Entities extends EntitiesFilter implements Serializable {
+public class Entities extends EntitiesFilter implements DomainObjectEmbededField {
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
@@ -432,5 +438,26 @@ public class Entities extends EntitiesFilter implements Serializable {
         result = 31 * result + (getMedia() != null ? getMedia().hashCode() : 0);
         result = 31 * result + (getTickerSymbols() != null ? getTickerSymbols().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public boolean isValid() {
+        List<Set<? extends DomainObjectWithTask>> toBeValidatedList = new ArrayList<>();
+        toBeValidatedList.add(this.urls);
+        toBeValidatedList.add(this.hashTags);
+        toBeValidatedList.add(this.mentions);
+        toBeValidatedList.add(this.media);
+        toBeValidatedList.add(this.tickerSymbols);
+        for(Set<? extends DomainObjectWithTask> toBeValidated:toBeValidatedList){
+            if(toBeValidated == null){
+                return false;
+            }
+            for(DomainObjectWithTask domainObjectWithTask:toBeValidated){
+                if(!domainObjectWithTask.isValid()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

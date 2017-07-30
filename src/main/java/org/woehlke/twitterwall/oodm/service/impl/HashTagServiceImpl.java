@@ -33,4 +33,8 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
         return hashTagRepository.findByText(text);
     }
 
+    @Override
+    public HashTag findByUniqueId(HashTag example) {
+        return hashTagRepository.findByUniqueId(example);
+    }
 }

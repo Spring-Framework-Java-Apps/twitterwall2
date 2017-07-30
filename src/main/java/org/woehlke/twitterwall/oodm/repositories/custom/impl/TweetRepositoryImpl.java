@@ -12,34 +12,18 @@ import org.woehlke.twitterwall.oodm.entities.transients.mapper.*;
 import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class TweetRepositoryImpl implements TweetRepositoryCustom {
-
-    private final EntityManager entityManager;
+public class TweetRepositoryImpl extends AbstractDomainRepositoryImpl<Tweet> implements TweetRepositoryCustom {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TweetRepositoryImpl(EntityManager entityManager,DataSource dataSource) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    @Override
-    public Tweet findByUniqueId(Tweet domainObject) {
-        String name="Tweet.findByUniqueId";
-        TypedQuery<Tweet> query = entityManager.createNamedQuery(name,Tweet.class);
-        query.setParameter("idTwitter",domainObject.getIdTwitter());
-        List<Tweet> resultList = query.getResultList();
-        if(resultList.size()>0){
-            return resultList.iterator().next();
-        } else {
-            return null;
-        }
     }
 
     @Override

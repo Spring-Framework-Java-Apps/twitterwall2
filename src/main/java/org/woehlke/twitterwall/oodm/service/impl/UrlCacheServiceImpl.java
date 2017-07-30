@@ -37,4 +37,8 @@ public class UrlCacheServiceImpl extends DomainServiceWithTaskImpl<UrlCache> imp
         return urlCache;
     }
 
+    @Override
+    public UrlCache findByUniqueId(UrlCache example) {
+        return this.urlCacheRepository.findByUniqueId(example);
+    }
 }

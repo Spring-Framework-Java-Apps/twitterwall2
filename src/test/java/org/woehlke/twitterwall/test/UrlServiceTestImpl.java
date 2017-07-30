@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.BackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import java.util.*;
 
@@ -40,7 +41,8 @@ public class UrlServiceTestImpl implements UrlServiceTest {
             urlSrc = url.getKey();
             expanded = url.getValue();
             display = hostsTest.get(urlSrc);
-            Url myUrl = new Url(task, null, display, expanded, urlSrc);
+            UrlField urlField = new UrlField(urlSrc);
+            Url myUrl = new Url(task, null, display, expanded, urlField);
             testData.add(myUrl);
         }
         return testData;

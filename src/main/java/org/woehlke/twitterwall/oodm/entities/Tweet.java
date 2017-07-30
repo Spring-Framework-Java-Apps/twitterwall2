@@ -8,8 +8,12 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static javax.persistence.CascadeType.DETACH;
 import static javax.persistence.CascadeType.REFRESH;
@@ -142,6 +146,8 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     @Column(name="favorite_count")
     private Integer favoriteCount;
 
+    @Valid
+    @NotNull
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
@@ -177,10 +183,37 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     })
     private Entities entities;
 
+    @Valid
     @NotNull
     @JoinColumn(name="fk_user")
     @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
     private User user;
+
+    @AssertTrue
+    @Transient
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
+    }
+
+    @Transient
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("idTwitter",this.idTwitter);
+        return parameters;
+    }
+    @Transient
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "Tweet.findByUniqueId";
+    }
 
     public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt) {
         super(createdBy,updatedBy);
@@ -222,11 +255,6 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -446,11 +474,6 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
                 ",\n entities=" + toStringEntities() +
                 ",\n user=" + toStringUser() +
                 "\n}";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

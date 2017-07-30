@@ -36,7 +36,7 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
 
     @Override
     public Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest) {
-        return tweetRepository.findByHashTag(hashtag.getText(),pageRequest);
+        return tweetRepository.findByHashTag(hashtag.getText().getText(),pageRequest);
     }
 
     @Override
@@ -79,4 +79,8 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByIdTwitter(idTwitter);
     }
 
+    @Override
+    public Tweet findByUniqueId(Tweet example) {
+        return tweetRepository.findByUniqueId(example);
+    }
 }

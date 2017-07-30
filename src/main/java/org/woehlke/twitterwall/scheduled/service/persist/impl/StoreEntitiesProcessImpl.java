@@ -35,7 +35,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             for (Url myUrl : entities.getUrls()) {
                 if (myUrl != null) {
                     if (myUrl.isValid()) {
-                        Url urlPers = urlService.findByUrl(myUrl.getUrl());
+                        Url urlPers = urlService.findByUrl(myUrl.getUrl().getUrl());
                         if (urlPers != null) {
                             urlPers.setDisplay(myUrl.getDisplay());
                             urlPers.setExpanded(myUrl.getExpanded());
@@ -45,7 +45,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                         }
                         urls.add(urlPers);
                     } else if (myUrl.isRawUrlsFromDescription()) {
-                        String urlStr = myUrl.getUrl();
+                        String urlStr = myUrl.getUrl().getUrl();
                         Url newUrlPers = createPersistentUrl.createPersistentUrlFor(urlStr, task);
                         if ((newUrlPers != null) && (newUrlPers.isValid())) {
                             urls.add(newUrlPers);

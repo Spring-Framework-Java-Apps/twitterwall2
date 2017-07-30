@@ -46,14 +46,14 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
     public Mention getPersistentMentionAndUserFor(Mention mention, Task task) {
         String msg = "getPersistentMentionAndUserFor: "+mention.getUniqueId()+" : "+task.getUniqueId() +" : ";
         try {
-            String screenName = mention.getScreenName();
+            String screenName = mention.getScreenName().getScreenName();
             User foundUser = storeTwitterProfileForProxyMentionForUser.storeTwitterProfileForProxyMentionForUser(mention, task);
             if (foundUser != null) {
                 if (foundUser.getScreenName().compareTo(mention.getScreenName()) != 0) {
                     String eventMsg = msg + "KNOWN_BUG - ScreenName user: " + foundUser.getScreenName() + " mention: " + mention.getScreenName();
                     log.warn(eventMsg);
                     mention.setScreenName(foundUser.getScreenName());
-                    screenName = foundUser.getScreenName();
+                    screenName = foundUser.getScreenName().getScreenName();
                 }
                 Mention persMention = null;
                 Mention myFoundMention = mentionService.findByScreenName(screenName);

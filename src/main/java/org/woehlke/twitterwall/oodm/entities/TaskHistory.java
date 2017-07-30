@@ -2,13 +2,17 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
+import org.woehlke.twitterwall.oodm.entities.common.UniqueId;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tw on 10.07.17.
@@ -31,7 +35,7 @@ import java.util.Date;
     )
 })
 @EntityListeners(TaskHistoryListener.class)
-public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
+public class TaskHistory implements DomainObjectMinimal<TaskHistory>,UniqueId {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,7 +71,8 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     @JoinColumn(name="task_id")
     private Task task;
 
-    //@NotNull
+    @Valid
+    @NotNull
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "countUser", column = @Column(name = "count_user",nullable=false)),
@@ -92,6 +97,44 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         @AttributeOverride(name = "userprofile2url", column = @Column(name = "count_userprofile2url",nullable=false))
     })
     private CountedEntities countedEntities = new CountedEntities();
+
+    @Override
+    public boolean isValid() {
+        if(taskStatusBefore == null){
+            return false;
+        }
+        if(taskStatusNow == null){
+            return false;
+        }
+        if(timeEvent == null){
+            return false;
+        }
+        if((description == null)||(description.isEmpty())){
+            return false;
+        }
+        if(idTask == null){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
+    }
+
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("idTask",this.idTask);
+        parameters.put("timeEvent",this.timeEvent);
+        return parameters;
+    }
+
+    @Override
+    public String getQueryNameForFindByUniqueId() {
+        return "TaskHistory.findByUniqueId";
+    }
 
     private TaskHistory() {
     }
@@ -118,11 +161,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
     public String getDescription() {
@@ -196,26 +234,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
             ", timeEvent=" + timeEvent +
             ", task.id=" + idTask +
             '}';
-    }
-
-    @Override
-    public boolean isValid() {
-        if(taskStatusBefore == null){
-            return false;
-        }
-        if(taskStatusNow == null){
-            return false;
-        }
-        if(timeEvent == null){
-            return false;
-        }
-        if((description == null)||(description.isEmpty())){
-            return false;
-        }
-        if(idTask == null){
-            return false;
-        }
-        return true;
     }
 
     @Override

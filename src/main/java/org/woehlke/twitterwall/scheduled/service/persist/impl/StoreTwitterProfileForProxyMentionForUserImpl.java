@@ -35,7 +35,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
         String msg = "storeTwitterProfileForProxyMentionForUser: "+mention.getUniqueId()+" : "+task.getUniqueId() +" : ";
         try {
             CountedEntities countedEntities = countedEntitiesService.countAll();
-            String screenName = mention.getScreenName();
+            String screenName = mention.getScreenName().getScreenName();
             User foundUser = null;
             User myFoundUser = userService.findByScreenName(screenName);
             if (myFoundUser != null) {
@@ -85,7 +85,7 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
                     Url urlPers = urlService.store(myUrl, task);
                     urls.add(urlPers);
                 } else if ((myUrl != null) && (myUrl.isRawUrlsFromDescription())) {
-                    String urlStr = myUrl.getUrl();
+                    String urlStr = myUrl.getUrl().getUrl();
                     Url urlObj = createPersistentUrl.createPersistentUrlFor(urlStr, task);
                     if ((urlObj != null) && (urlObj.isValid())) {
                         urls.add(urlObj);

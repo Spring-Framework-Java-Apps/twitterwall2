@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.scheduled.service.transform.UrlTransformService;
 
 import java.util.*;
@@ -26,7 +27,8 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
         String display = url.getDisplayUrl();
         String expanded = url.getExpandedUrl();
         String urlStr = url.getUrl();
-        Url myUrlEntity = new Url(task,null,display, expanded, urlStr);
+        UrlField urlField = new UrlField(urlStr);
+        Url myUrlEntity = new Url(task,null,display, expanded, urlField);
         return myUrlEntity;
     }
 
@@ -46,7 +48,8 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(task, null, displayUrl, expandedUrl, url);
+                                UrlField urlField = new UrlField(url);
+                                Url urlTarget = new Url(task, null, displayUrl, expandedUrl, urlField);
                                 urlsTarget.add(urlTarget);
                             }
                         }
@@ -66,7 +69,8 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                                 String url = ((Map<String, String>) o4).get("url");
                                 String expandedUrl = ((Map<String, String>) o4).get("expanded_url");
                                 String displayUrl = ((Map<String, String>) o4).get("display_url");
-                                Url urlTarget = new Url(task,null,displayUrl, expandedUrl, url);
+                                UrlField urlField = new UrlField(url);
+                                Url urlTarget = new Url(task,null,displayUrl, expandedUrl, urlField);
                                 urlsTarget.add(urlTarget);
                             }
                         }

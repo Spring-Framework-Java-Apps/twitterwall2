@@ -1,19 +1,21 @@
 package org.woehlke.twitterwall.oodm.entities;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by tw on 10.06.17.
@@ -116,16 +118,17 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column(name="id_twitter",nullable = false)
     private Long idTwitter;
 
-    @NotEmpty
-    @Column(name="screen_name", nullable = false)
-    private String screenName;
+    @Embedded
+    private ScreenName screenName;
 
     @NotNull
     @Column(nullable = false)
     private String name;
 
-    @Column(name="url", length = 4096)
-    private String url;
+    @Valid
+    @NotNull
+    @Embedded
+    private UrlField url;
 
     @Column(length = 4096)
     private String profileImageUrl;
@@ -227,6 +230,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column(length = 4096)
     private String profileBannerUrl;
 
+    @Valid
     @NotNull
     @Embedded
     @AssociationOverrides({
@@ -263,7 +267,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     })
     private Entities entities = new Entities();
 
-    public User(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
+    public User(Task createdBy, Task updatedBy, long idTwitter, ScreenName screenName, String name, UrlField url, String profileImageUrl, String description, String location, Date createdDate) {
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
@@ -276,21 +280,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     private User() {
-    }
-
-    public final static String SCREEN_NAME_PATTERN = "\\w*";
-
-    public static boolean isValidScreenName(String screenName){
-        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
-    }
-
-    @Transient
-    public boolean hasValidScreenName(){
-        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
     }
 
     public void removeAllEntities(){
@@ -314,7 +303,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
 
     @Transient
     public String getFormattedUrl() {
-        String formattedUrl = this.url;
+        String formattedUrl = this.url.getUrl();
         Set<Url> urls = this.entities.getUrls();
         formattedUrl = this.entities.getFormattedUrlForUrls(urls, formattedUrl);
         return formattedUrl;
@@ -342,6 +331,42 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         }
     }
 
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return this.screenName+"_"+idTwitter.toString();
+    }
+
+    @Transient
+    @Override
+    public Map<String, Object> getParametersForFindByUniqueId() {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("idTwitter",this.idTwitter);
+        parameters.put("screenName",this.screenName);
+        return parameters;
+    }
+
+    @Transient
+    @Override
+    public String getQueryNameForFindByUniqueId(){
+        return "User.findByUniqueId";
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.idTwitter == null){
+            return false;
+        }
+        if(this.idTwitter < 0){
+            return false;
+        }
+        if(this.screenName == null){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -350,11 +375,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -367,12 +387,12 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     @Override
-    public String getScreenName() {
+    public ScreenName getScreenName() {
         return screenName;
     }
 
     @Override
-    public void setScreenName(String screenName) {
+    public void setScreenName(ScreenName screenName) {
         this.screenName = screenName;
     }
 
@@ -384,11 +404,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.name = name;
     }
 
-    public String getUrl() {
+    public UrlField getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(UrlField url) {
         this.url = url;
     }
 
@@ -730,19 +750,15 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                 "\n}";
     }
 
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    public static User getDummyUserForScreenName(String screenName,Task task){
+    public static User getDummyUserForScreenName(ScreenName screenName,Task task){
         long idTwitter= new Date().getTime();
         String name="Exception Handler Dummy Username";
-        String url="https://github.com/phasenraum2010/twitterwall2";
+        String urlText="https://github.com/phasenraum2010/twitterwall2";
         String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
         String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
         String location="Berlin, Germany";
         Date createdDate = new Date();
+        UrlField url = new UrlField(urlText);
         User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
     }

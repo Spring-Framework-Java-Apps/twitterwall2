@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.BackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 
@@ -71,7 +72,8 @@ public class TwitterUrlServiceImpl implements TwitterUrlService {
                 if(location != null){
                     display = location.getHost();
                     expanded = location.toExternalForm();
-                    newUrl = new Url(task,null,display, expanded, urlSource);
+                    UrlField urlField = new UrlField(urlSource);
+                    newUrl = new Url(task,null,display, expanded, urlField);
                 }
                 try {
                     httpResponse.close();

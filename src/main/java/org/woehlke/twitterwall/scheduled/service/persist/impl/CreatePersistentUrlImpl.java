@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
@@ -79,7 +80,8 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         log.debug(msg + " persisted: " + newUrl.toString());
                         return newUrl;
                     } else {
-                        urlCache = new UrlCache(task, null, url);
+                        UrlField urlField = new UrlField(url);
+                        urlCache = new UrlCache(task, null, urlField);
                         log.debug(msg + " try to fetchTransientUrl");
                         Url myTransientUrl = twitterUrlService.fetchTransientUrl(url, task);
                         if (myTransientUrl == null) {

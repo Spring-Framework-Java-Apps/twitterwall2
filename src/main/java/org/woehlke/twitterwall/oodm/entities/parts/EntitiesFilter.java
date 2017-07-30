@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN;
-import static org.woehlke.twitterwall.oodm.entities.Url.URL_PATTTERN_FOR_USER_HTTP;
-import static org.woehlke.twitterwall.oodm.entities.Url.URL_PATTTERN_FOR_USER_HTTPS;
+import static org.woehlke.twitterwall.oodm.entities.parts.HashTagText.HASHTAG_TEXT_PATTERN;
+import static org.woehlke.twitterwall.oodm.entities.parts.UrlField.URL_PATTTERN_FOR_USER_HTTP;
+import static org.woehlke.twitterwall.oodm.entities.parts.UrlField.URL_PATTTERN_FOR_USER_HTTPS;
 
 /**
  * Created by tw on 15.07.17.
@@ -21,8 +21,8 @@ public class EntitiesFilter {
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
-                "@("+ User.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
-                "@("+ User.SCREEN_NAME_PATTERN +")$"
+                "@("+ ScreenName.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
+                "@("+ ScreenName.SCREEN_NAME_PATTERN +")$"
             };
 
             int USER_PROFILE_OUTPUT[] = {
@@ -46,11 +46,11 @@ public class EntitiesFilter {
     protected String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
 
-            if(mention.isProxy() && mention.hasUser() && (!mention.getScreenName().isEmpty())) {
+            if(mention.isProxy() && mention.hasUser() && (!mention.getScreenName().getScreenName().isEmpty())) {
 
                 String USER_PROFILE_INPUT[] = {
-                    "@(" + mention.getScreenName() + ")(" + stopChar + ")",
-                    "@(" + mention.getScreenName() + ")$"
+                    "@(" + mention.getScreenName().getScreenName() + ")(" + stopChar + ")",
+                    "@(" + mention.getScreenName().getScreenName() + ")$"
                 };
 
                 String USER_PROFILE_OUTPUT[] = {
@@ -110,7 +110,8 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    hashTags.add(new HashTag(task,null,m.group(USER_PROFILE_OUTPUT[i])));
+                    HashTagText text = new HashTagText(m.group(USER_PROFILE_OUTPUT[i]));
+                    hashTags.add(new HashTag(task,null,text));
                 }
             }
         }
@@ -162,7 +163,8 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    tickerSymbols.add(new TickerSymbol(task,null,m.group(USER_PROFILE_OUTPUT[i])));
+                    UrlField uf = new UrlField(m.group(USER_PROFILE_OUTPUT[i]));
+                    tickerSymbols.add(new TickerSymbol(task,null,uf));
                 }
             }
         }
@@ -213,7 +215,8 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    media.add(new Media(task,null,m.group(USER_PROFILE_OUTPUT[i])));
+                    UrlField uf = new UrlField(m.group(USER_PROFILE_OUTPUT[i]));
+                    media.add(new Media(task,null,uf));
                 }
             }
         }
@@ -248,7 +251,7 @@ public class EntitiesFilter {
     public String getFormattedUrlForUrls(Set<Url> urls, String formattedText) {
         for (Url url : urls) {
 
-            String USER_PROFILE_INPUT=url.getUrl();
+            String USER_PROFILE_INPUT=url.getUrl().getUrl();
             String USER_PROFILE_OUTPUT="<a href=\"" + url.getExpanded() + "\" class=\"tw-url-db\" target=\"_blank\">" + url.getDisplay() + "</a>";
 
             Pattern myUrl = Pattern.compile(USER_PROFILE_INPUT);
@@ -281,7 +284,8 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    urls.add(new Url(task,null, m.group(USER_PROFILE_OUTPUT[i])));
+                    UrlField uf = new UrlField(m.group(USER_PROFILE_OUTPUT[i]));
+                    urls.add(new Url(task,null, uf));
                 }
             }
         }
@@ -329,8 +333,8 @@ public class EntitiesFilter {
                 "(" + url.getDisplay() + ")$",
                 "(" + url.getExpanded() + ")(" + stopChar + ")",
                 "(" + url.getExpanded() + ")$",
-                "(" + url.getUrl() + ")(" + stopChar + ")",
-                "(" + url.getUrl() + ")$"
+                "(" + url.getUrl().getUrl() + ")(" + stopChar + ")",
+                "(" + url.getUrl().getUrl() + ")$"
             };
 
             String USER_PROFILE_OUTPUT[] = {

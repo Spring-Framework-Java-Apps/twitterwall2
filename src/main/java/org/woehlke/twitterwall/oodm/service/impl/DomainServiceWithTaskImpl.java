@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
-public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainServiceWithTask<T> {
+public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainServiceWithTask<T> {
 
     private static final Logger log = LoggerFactory.getLogger(DomainServiceWithTaskImpl.class);
 

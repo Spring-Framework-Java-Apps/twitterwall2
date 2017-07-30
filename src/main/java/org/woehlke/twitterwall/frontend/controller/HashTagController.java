@@ -29,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
-import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN;
+import static org.woehlke.twitterwall.oodm.entities.parts.HashTagText.HASHTAG_TEXT_PATTERN;
 
 /**
  * Created by tw on 12.07.17.
@@ -71,7 +71,7 @@ public class HashTagController {
         Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
         Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
         String subtitle = "Tweets und User für HashTag";
-        String title = hashTag.getText();
+        String title = hashTag.getText().getText();
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         model.addAttribute("hashTag",hashTag);
@@ -93,7 +93,7 @@ public class HashTagController {
          Model model
     ) {
         String msg = "/hashtag/" + text + " ";
-        Pattern p = Pattern.compile(HASHTAG_TEXT_PATTERN);
+        Pattern p = HASHTAG_TEXT_PATTERN;
         Matcher m = p.matcher(text);
         if (m.matches()) {
             String msg2 = msg + " parameter IS valid - START ";

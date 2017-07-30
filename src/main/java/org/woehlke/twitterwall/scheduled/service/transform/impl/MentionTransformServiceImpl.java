@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.parts.ScreenName;
 import org.woehlke.twitterwall.scheduled.service.transform.MentionTransformService;
 
 import java.util.Set;
@@ -28,7 +29,8 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
         long idTwitter = mention.getId();
         String screenName = mention.getScreenName();
         String name = mention.getName();
-        Mention myMentionEntity = new Mention(task,null,idTwitter, screenName, name);
+        ScreenName screenNameField = new ScreenName(screenName);
+        Mention myMentionEntity = new Mention(task,null,idTwitter, screenNameField, name);
         return myMentionEntity;
     }
 

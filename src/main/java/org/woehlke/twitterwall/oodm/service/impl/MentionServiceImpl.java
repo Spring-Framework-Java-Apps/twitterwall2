@@ -71,4 +71,8 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
         return mentionRepository.findAllByUserNull(pageRequest);
     }
 
+    @Override
+    public Mention findByUniqueId(Mention example) {
+        return mentionRepository.findByUniqueId(example);
+    }
 }
