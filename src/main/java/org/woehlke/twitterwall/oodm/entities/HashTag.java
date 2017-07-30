@@ -40,6 +40,19 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     @Column(name="text", nullable = false,length=4096)
     private String text = "";
 
+    @Column
+    private Long numberOfTweets;
+
+    @Column
+    private Long numberOfUsers;
+
+    public HashTag(Task createdBy, Task updatedBy, String text,Long numberOfTweets, Long numberOfUsers) {
+        super(createdBy,updatedBy);
+        this.text = text;
+        this.numberOfTweets = numberOfTweets;
+        this.numberOfUsers = numberOfUsers;
+    }
+
     public HashTag(Task createdBy, Task updatedBy, String text) {
         super(createdBy,updatedBy);
         this.text = text;
@@ -77,7 +90,6 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
         return text;
     }
 
-
     public String getText() {
         return this.text;
     }
@@ -88,6 +100,30 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Long getNumberOfTweets() {
+        return numberOfTweets;
+    }
+
+    public void setNumberOfTweets(Long numberOfTweets) {
+        this.numberOfTweets = numberOfTweets;
+    }
+
+    public void increaseNumberOfTweets() {
+        this.numberOfTweets++;
+    }
+
+    public Long getNumberOfUsers() {
+        return numberOfUsers;
+    }
+
+    public void setNumberOfUsers(Long numberOfUsers) {
+        this.numberOfUsers = numberOfUsers;
+    }
+
+    public void increaseNumberOfUsers() {
+        this.numberOfUsers++;
     }
 
     @Override
