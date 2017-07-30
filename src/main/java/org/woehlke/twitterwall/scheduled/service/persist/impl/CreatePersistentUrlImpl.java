@@ -3,13 +3,13 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
+import org.woehlke.twitterwall.oodm.service.UrlCacheService;
+import org.woehlke.twitterwall.oodm.service.UrlService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.UrlCache;
@@ -21,8 +21,7 @@ import java.net.URL;
 /**
  * Created by tw on 09.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     @Override
@@ -33,7 +32,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                 return null;
             } else {
                 log.debug(msg + " try to find ");
-                Url urlPers = urlRepository.findByUrl(url);
+                Url urlPers = urlService.findByUrl(url);
                 if (urlPers != null) {
                     log.debug(msg + " found: " + urlPers);
                     if (urlPers.isUrlAndExpandedTheSame()) {
@@ -55,12 +54,12 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         }
                     }
                     urlPers.setUpdatedBy(task);
-                    urlPers = urlRepository.save(urlPers);
+                    urlPers = urlService.store(urlPers,task);
                     return urlPers;
                 } else {
                     log.debug(msg + " not found ");
                     log.debug(msg + " try to find UrlCache");
-                    UrlCache urlCache = urlCacheRepository.findByUrl(url);
+                    UrlCache urlCache = urlCacheService.findByUrl(url);
                     if (urlCache != null) {
                         log.debug(msg + " found: " + urlCache);
                         String displayUrl = urlCache.getExpanded();
@@ -72,10 +71,10 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         }
                         Url newUrl = new Url(task, null, displayUrl, urlCache.getExpanded(), urlCache.getUrl());
                         log.debug(msg + " try to persist: " + newUrl.toString());
-                        newUrl = urlRepository.save(newUrl);
+                        newUrl = urlService.store(newUrl,task);
                         //TODO: delete ?
                         if ((!newUrl.isRawUrlsFromDescription()) && (!newUrl.isUrlAndExpandedTheSame())) {
-                            urlCacheRepository.delete(urlCache);
+                            urlCacheService.delete(urlCache);
                         }
                         log.debug(msg + " persisted: " + newUrl.toString());
                         return newUrl;
@@ -94,7 +93,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                             if (urlCache.isUrlAndExpandedTheSame()) {
                                 log.debug(msg + " not persisted: " + urlCache.toString());
                             } else {
-                                urlCache = urlCacheRepository.save(urlCache);
+                                urlCache = urlCacheService.store(urlCache,task);
                                 log.debug(msg + " persisted: " + urlCache.toString());
                             }
                             String displayUrl = myTransientUrl.getExpanded();
@@ -106,7 +105,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                             }
                             Url newUrl = new Url(task, null, displayUrl, myTransientUrl.getExpanded(), myTransientUrl.getUrl());
                             log.debug(msg + " try to persist: " + newUrl.toString());
-                            newUrl = urlRepository.save(newUrl);
+                            newUrl = urlService.store(newUrl,task);
                             log.debug(msg + " persisted: " + newUrl.toString());
                             return newUrl;
                         }
@@ -121,16 +120,22 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
 
-    private final UrlRepository urlRepository;
+    //private final UrlRepository urlRepository;
 
-    private final UrlCacheRepository urlCacheRepository;
+    //private final UrlCacheRepository urlCacheRepository;
+
+    private final UrlService urlService;
+
+    private final UrlCacheService urlCacheService;
 
     private final TwitterUrlService twitterUrlService;
 
     @Autowired
-    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
-        this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
+    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, UrlService urlService, UrlCacheService urlCacheService, TwitterUrlService twitterUrlService) {
+        this.urlService = urlService;
+        this.urlCacheService = urlCacheService;
+        //this.urlRepository = urlRepository;
+        //this.urlCacheRepository = urlCacheRepository;
         this.twitterUrlService = twitterUrlService;
     }
 }

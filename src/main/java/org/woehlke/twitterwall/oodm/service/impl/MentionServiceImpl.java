@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> implements MentionService {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceImpl.class);
@@ -48,6 +48,7 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Mention createProxyMention(Mention mention, Task task) {
         long lowestIdTwitter = 0;
         int page = 0;

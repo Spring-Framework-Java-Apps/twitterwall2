@@ -4,13 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
-import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
+import org.woehlke.twitterwall.oodm.service.common.DomainService;
 
-public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainServiceWithTask<T> {
+
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainService<T> {
 
     private static final Logger log = LoggerFactory.getLogger(DomainServiceWithTaskImpl.class);
 
@@ -39,6 +43,7 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public T store(T domainObject, Task task) {
         String msg = "store "+domainObject.getUniqueId()+" in Task "+task.getUniqueId()+" ";
         T domainObjectResult = null;

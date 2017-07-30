@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
  * Created by tw on 11.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -37,9 +37,11 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public User findByScreenName(String screenName) {
         if (!ScreenName.isValidScreenName(screenName)) {
-            throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
+            log.error("User.isValidScreenName("+screenName+") = false" );
+            return null;
+        } else {
+            return userRepository.findByScreenName(screenName);
         }
-        return userRepository.findByScreenName(screenName);
     }
 
     @Override
