@@ -40,7 +40,7 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
 
     @Override
     public T store(T domainObject, Task task) {
-        String msg = "store "+domainObject.getUniqueId()+" in Task "+task.getId()+" "+task.getTaskType()+" ";
+        String msg = "store "+domainObject.getUniqueId()+" in Task "+task.getUniqueId()+" ";
         T domainObjectResult = null;
         try {
             task.setTimeLastUpdate();
