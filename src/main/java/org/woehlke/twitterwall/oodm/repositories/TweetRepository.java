@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.transients.*;
+import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
@@ -23,7 +23,7 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
         name="Tweet.getTweetsForHashTag",
         countName="Tweet.countTweetsForHashTag"
     )
-    Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
+    Page<Tweet> findByHashTag(@Param("hashtagText") HashTagText hashtagText, Pageable pageRequest);
 
     Page<Tweet> findByUser(User user, Pageable pageRequest);
 

@@ -209,6 +209,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
         parameters.put("idTwitter",this.idTwitter);
         return parameters;
     }
+
     @Transient
     @Override
     public String getQueryNameForFindByUniqueId() {

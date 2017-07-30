@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Embeddable
 public class ScreenName implements DomainObjectEmbededField, Comparable<ScreenName> {
 
-    public final static String SCREEN_NAME_PATTERN_TEXT = "\\w*";
+    public final static String SCREEN_NAME_PATTERN_TEXT = "\\w{1,15}";
 
     public final static Pattern SCREEN_NAME_PATTERN = Pattern.compile("^"+ SCREEN_NAME_PATTERN_TEXT +"$");
 

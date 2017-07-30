@@ -8,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.woehlke.twitterwall.oodm.entities.parts.HashTagText.HASHTAG_TEXT_PATTERN;
+import static org.woehlke.twitterwall.oodm.entities.parts.HashTagText.HASHTAG_TEXT_PATTERN_TEXT;
+import static org.woehlke.twitterwall.oodm.entities.parts.ScreenName.SCREEN_NAME_PATTERN_TEXT;
 import static org.woehlke.twitterwall.oodm.entities.parts.UrlField.URL_PATTTERN_FOR_USER_HTTP;
 import static org.woehlke.twitterwall.oodm.entities.parts.UrlField.URL_PATTTERN_FOR_USER_HTTPS;
 
@@ -21,8 +23,8 @@ public class EntitiesFilter {
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
-                "@("+ ScreenName.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
-                "@("+ ScreenName.SCREEN_NAME_PATTERN +")$"
+                "@("+ SCREEN_NAME_PATTERN_TEXT +")(" + Entities.stopChar + ")",
+                "@("+ SCREEN_NAME_PATTERN_TEXT +")$"
             };
 
             int USER_PROFILE_OUTPUT[] = {
@@ -71,10 +73,10 @@ public class EntitiesFilter {
     protected String getFormattedTextForUserProfiles(String formattedText) {
 
         String USER_PROFILE_INPUT[] = {
-            "(" + stopChar + ")@(\\w{1,15})(" + stopChar + ")",
-            "(" + stopChar + ")@(\\w{1,15})$",
-            "^@(\\w{1,15})(" + stopChar + ")",
-            "^@(\\w{1,15})$"
+            "(" + stopChar + ")@("+SCREEN_NAME_PATTERN_TEXT+")(" + stopChar + ")",
+            "(" + stopChar + ")@("+SCREEN_NAME_PATTERN_TEXT+")$",
+            "^@("+SCREEN_NAME_PATTERN_TEXT+")(" + stopChar + ")",
+            "^@("+SCREEN_NAME_PATTERN_TEXT+")$"
         };
 
         String USER_PROFILE_OUTPUT[] = {
@@ -98,8 +100,8 @@ public class EntitiesFilter {
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
-                "#("+HASHTAG_TEXT_PATTERN+")(" + Entities.stopChar + ")",
-                "#("+HASHTAG_TEXT_PATTERN+")$"
+                "#("+HASHTAG_TEXT_PATTERN_TEXT+")(" + Entities.stopChar + ")",
+                "#("+HASHTAG_TEXT_PATTERN_TEXT+")$"
             };
 
             int USER_PROFILE_OUTPUT[] = {
@@ -124,8 +126,8 @@ public class EntitiesFilter {
             long tagId = tag.getId();
 
             String USER_PROFILE_INPUT[] = {
-                "#(" + tag.getText() + ")(" + stopChar + ")",
-                "#(" + tag.getText() + ")$"
+                "#(" + tag.getText().getText() + ")(" + stopChar + ")",
+                "#(" + tag.getText().getText() + ")$"
             };
 
             String USER_PROFILE_OUTPUT[] = {
@@ -175,13 +177,13 @@ public class EntitiesFilter {
         for(TickerSymbol tickerSymbol:tickerSymbols){
 
             String USER_PROFILE_INPUT[] = {
-                "(" + tickerSymbol.getUrl() + ")(" + stopChar + ")",
-                "(" + tickerSymbol.getUrl() + ")$"
+                "(" + tickerSymbol.getUrl().getUrl() + ")(" + stopChar + ")",
+                "(" + tickerSymbol.getUrl().getUrl() + ")$"
             };
 
             String USER_PROFILE_OUTPUT[] = {
-                "<br/><br/><a class=\"tweet-action tweet-photo1\" href=\"" + tickerSymbol.getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a>$2",
-                "<br/><br/><a class=\"tweet-action tweet-photo2\" href=\"" + tickerSymbol.getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a> "
+                "<br/><br/><a class=\"tweet-action tweet-photo1\" href=\"" + tickerSymbol.getUrl().getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a>$2",
+                "<br/><br/><a class=\"tweet-action tweet-photo2\" href=\"" + tickerSymbol.getUrl().getUrl() + "\" target=\"_blank\">"+tickerSymbol.getTickerSymbol()+"</a> "
             };
 
             for(int i=0;i<2;i++){
@@ -229,8 +231,8 @@ public class EntitiesFilter {
             if (medium.getMediaType().compareTo("photo") == 0) {
 
                 String USER_PROFILE_INPUT[] = {
-                    "(" + medium.getUrl() + ")(" + stopChar + ")",
-                    "(" + medium.getUrl() + ")$"
+                    "(" + medium.getUrl().getUrl() + ")(" + stopChar + ")",
+                    "(" + medium.getUrl().getUrl() + ")$"
                 };
 
                 String USER_PROFILE_OUTPUT[] = {
