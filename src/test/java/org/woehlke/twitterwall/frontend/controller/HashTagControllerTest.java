@@ -62,6 +62,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getAllTest()throws Exception {
@@ -83,6 +84,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {

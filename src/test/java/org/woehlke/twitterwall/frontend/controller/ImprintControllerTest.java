@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class ImprintControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    @Ignore
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() {
@@ -68,6 +70,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void imprintTest1() throws Exception {
@@ -76,6 +79,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void imprintTest2() throws Exception {

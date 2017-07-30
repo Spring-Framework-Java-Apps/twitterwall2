@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -68,6 +69,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getAllTest()throws Exception {
@@ -88,6 +90,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getTaskByIdTest() throws Exception {
@@ -113,6 +116,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void createTestDataTest() throws Exception {
@@ -134,6 +138,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getOnListRenewTest() throws Exception {

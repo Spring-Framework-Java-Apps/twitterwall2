@@ -88,6 +88,7 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getUserForScreeName() throws Exception {
@@ -109,6 +110,7 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getTweetingUsers() throws Exception {
@@ -129,6 +131,7 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
@@ -149,6 +152,7 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getNotYetOnList() throws Exception {
@@ -169,6 +173,7 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Ignore
     @Commit
     @Test
     public void getOnList() throws Exception {
