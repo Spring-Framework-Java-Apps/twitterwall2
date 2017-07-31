@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.frontend.model.Page;
+import org.woehlke.twitterwall.oodm.entities.transients.PageContent;
 
 /**
  * Created by tw on 18.07.17.
@@ -20,42 +20,42 @@ import org.woehlke.twitterwall.frontend.model.Page;
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ControllerHelperImpl implements ControllerHelper {
 
-    private Page setupPage(Page page, String title, String subtitle, String symbol)  {
-        page.setTitle(title);
-        page.setSubtitle(subtitle);
-        page.setSymbol(symbol);
-        page.setMenuAppName(frontendProperties.getMenuAppName());
-        page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
-        page.setInfoWebpage(frontendProperties.getInfoWebpage());
-        page.setTheme(frontendProperties.getTheme());
-        page.setContextTest(frontendProperties.getContextTest());
-        page.setHistoryBack(true);
+    private PageContent setupPage(PageContent pageContent, String title, String subtitle, String symbol)  {
+        pageContent.setTitle(title);
+        pageContent.setSubtitle(subtitle);
+        pageContent.setSymbol(symbol);
+        pageContent.setMenuAppName(frontendProperties.getMenuAppName());
+        pageContent.setTwitterSearchTerm(twitterProperties.getSearchQuery());
+        pageContent.setInfoWebpage(frontendProperties.getInfoWebpage());
+        pageContent.setTheme(frontendProperties.getTheme());
+        pageContent.setContextTest(frontendProperties.getContextTest());
+        pageContent.setHistoryBack(true);
         if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
             String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
             html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
-            page.setGoogleAnalyticScriptHtml(html);
+            pageContent.setGoogleAnalyticScriptHtml(html);
         } else {
-            page.setGoogleAnalyticScriptHtml("");
+            pageContent.setGoogleAnalyticScriptHtml("");
         }
         log.info("--------------------------------------------------------------------");
-        log.info("setupPage = "+page.toString());
+        log.info("setupPage = "+ pageContent.toString());
         log.info("--------------------------------------------------------------------");
-        return page;
+        return pageContent;
     }
 
     public ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
-        Page page = new Page();
-        page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
-        mav.addObject("page", page);
+        PageContent pageContent = new PageContent();
+        pageContent = setupPage(pageContent, title, subtitle, symbol);
+        log.info("pageContent: "+ pageContent.toString());
+        mav.addObject("pageContent", pageContent);
         return mav;
     }
 
     public Model setupPage(Model model, String title, String subtitle, String symbol) {
-        Page page = new Page();
-        page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
-        model.addAttribute("page", page);
+        PageContent pageContent = new PageContent();
+        pageContent = setupPage(pageContent, title, subtitle, symbol);
+        log.info("pageContent: "+ pageContent.toString());
+        model.addAttribute("pageContent", pageContent);
         return model;
     }
 

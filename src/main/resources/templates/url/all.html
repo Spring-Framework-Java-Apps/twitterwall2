@@ -3,19 +3,19 @@
       xmlns:th="http://www.thymeleaf.org">
 <head  th:include="layoutMain :: tw-head">
 </head>
-<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<body id="pageContent-top" class="pageContent-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:include="layoutMain :: tw-header" >
 </header>
 
 <section th:include="layoutMain :: tw-history-back-section" >
 </section>
 
-<main class="page-content">
+<main class="pageContent-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
-                    <a href="" th:href="@{|/url/all?page=${myPageContent.previousPageable().pageNumber}|}">
+                    <a href="" th:href="@{|/url/all?pageContent=${myPageContent.previousPageable().pageNumber}|}">
                         <span>
                         <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                         </span>
@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col-md-12">
                 <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
-                    <a href="" th:href="@{|/url/all?page=${myPageContent.nextPageable().pageNumber}|}" >
+                    <a href="" th:href="@{|/url/all?pageContent=${myPageContent.nextPageable().pageNumber}|}" >
                         <span>
                         <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                         </span>

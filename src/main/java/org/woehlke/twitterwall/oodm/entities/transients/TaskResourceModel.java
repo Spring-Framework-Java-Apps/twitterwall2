@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.model;
+package org.woehlke.twitterwall.oodm.entities.transients;
 
 import org.springframework.data.domain.Page;
 import org.woehlke.twitterwall.oodm.entities.Task;

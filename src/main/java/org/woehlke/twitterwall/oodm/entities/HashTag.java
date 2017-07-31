@@ -8,6 +8,9 @@ import org.woehlke.twitterwall.oodm.entities.listener.HashTagListener;
 import org.woehlke.twitterwall.oodm.entities.parts.HashTagText;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +39,8 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Valid
+    @NotNull
     @Embedded
     private HashTagText hashTagText;
 
@@ -69,6 +74,8 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
         this.id = id;
     }
 
+    @AssertTrue
+    @Transient
     @Override
     public boolean isValid() {
         if(this.hashTagText == null){

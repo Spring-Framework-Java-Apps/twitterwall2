@@ -11,6 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
@@ -118,6 +119,8 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column(name="id_twitter",nullable = false)
     private Long idTwitter;
 
+    @Valid
+    @NotNull
     @Embedded
     private ScreenName screenName;
 
@@ -352,6 +355,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         return "User.findByUniqueId";
     }
 
+    @AssertTrue
     @Transient
     @Override
     public boolean isValid() {
@@ -362,6 +366,15 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
             return false;
         }
         if(this.screenName == null){
+            return false;
+        }
+        if(!this.screenName.isValid()){
+            return false;
+        }
+        if(this.url==null){
+            return false;
+        }
+        if(!this.url.isValid()){
             return false;
         }
         return true;

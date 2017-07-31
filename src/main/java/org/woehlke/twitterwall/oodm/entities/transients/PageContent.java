@@ -1,11 +1,11 @@
-package org.woehlke.twitterwall.frontend.model;
+package org.woehlke.twitterwall.oodm.entities.transients;
 
 import java.io.Serializable;
 
 /**
  * Created by tw on 13.06.17.
  */
-public class Page implements Serializable {
+public class PageContent implements Serializable {
 
     private String title;
     private String subtitle;
@@ -81,7 +81,7 @@ public class Page implements Serializable {
     public void setHistoryBack(boolean historyBack) {
         this.historyBack = historyBack;
     }
-    
+
     public String getTheme() {
         return theme;
     }
@@ -100,7 +100,7 @@ public class Page implements Serializable {
 
     @Override
     public String toString() {
-        return "Page{" +
+        return "PageContent{" +
                 "title='" + title + '\'' +
                 ", subtitle='" + subtitle + '\'' +
                 ", menuAppName='" + menuAppName + '\'' +

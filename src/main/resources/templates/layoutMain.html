@@ -6,7 +6,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title th:text="${page.title}">Cities</title>
+    <title th:text="${pageContent.title}">Cities</title>
     <!-- Bootstrap -->
     <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="webjars/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
@@ -15,30 +15,30 @@
     <link href="css/my.css" th:href="@{/css/my.css}" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!-- WARNING: Respond.js doesn't work if you view the pageContent via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" th:href="@{|/favicon/${page.theme}/apple-icon-57x57.png|}" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" th:href="@{|/favicon/${page.theme}/apple-icon-60x60.png|}" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png" th:href="@{|/favicon/${page.theme}/apple-icon-72x72.png|}" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png" th:href="@{|/favicon/${page.theme}/apple-icon-76x76.png|}" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png" th:href="@{|/favicon/${page.theme}/apple-icon-114x114.png|}" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png" th:href="@{|/favicon/${page.theme}/apple-icon-120x120.png|}" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png" th:href="@{|/favicon/${page.theme}/apple-icon-144x144.png|}" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png" th:href="@{|/favicon/${page.theme}/apple-icon-152x152.png|}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png" th:href="@{|/favicon/${page.theme}/apple-icon-180x180.png|}" />
-    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png" th:href="@{|/favicon/${page.theme}/android-icon-192x192.png|}" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" th:href="@{|/favicon/${page.theme}/favicon-32x32.png|}" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" th:href="@{|/favicon/${page.theme}/favicon-96x96.png|}" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" th:href="@{|/favicon/${page.theme}/favicon-16x16.png|}" />
-    <link rel="manifest" href="/favicon/manifest.json" th:href="@{|/favicon/${page.theme}/manifest.json|}|" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-57x57.png|}" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-60x60.png|}" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-72x72.png|}" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-76x76.png|}" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-114x114.png|}" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-120x120.png|}" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-144x144.png|}" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-152x152.png|}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png" th:href="@{|/favicon/${pageContent.theme}/apple-icon-180x180.png|}" />
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png" th:href="@{|/favicon/${pageContent.theme}/android-icon-192x192.png|}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" th:href="@{|/favicon/${pageContent.theme}/favicon-32x32.png|}" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" th:href="@{|/favicon/${pageContent.theme}/favicon-96x96.png|}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" th:href="@{|/favicon/${pageContent.theme}/favicon-16x16.png|}" />
+    <link rel="manifest" href="/favicon/manifest.json" th:href="@{|/favicon/${pageContent.theme}/manifest.json|}|" />
     <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png" th:attr="content=@{|/favicon/${page.theme}/ms-icon-144x144.png|}" />
+    <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png" th:attr="content=@{|/favicon/${pageContent.theme}/ms-icon-144x144.png|}" />
     <meta name="theme-color" content="#ffffff" />
 </head>
-<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<body id="pageContent-top" class="pageContent-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:fragment="tw-header">
     <nav id="main-navbar" class="navbar navbar-fixed-top Fixed navbar-inverse">
         <div class="container">
@@ -53,7 +53,7 @@
                 <span class="active">
                     <a class="navbar-brand" href="/">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                        <small th:text="${page.menuAppName}">AppName</small>
+                        <small th:text="${pageContent.menuAppName}">AppName</small>
                     </a>
                 </span>
             </div>
@@ -216,12 +216,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="page-header">
+                <div class="pageContent-header">
                     <h1>
-                        <span th:utext="${page.symbol}">symbol</span>
-                        <span th:utext="${page.title}" class="header-h1">Titel</span>
+                        <span th:utext="${pageContent.symbol}">symbol</span>
+                        <span th:utext="${pageContent.title}" class="header-h1">Titel</span>
                         <br/>
-                        <small th:utext="${page.subtitle}">Untertitel</small>
+                        <small th:utext="${pageContent.subtitle}">Untertitel</small>
                     </h1>
                 </div>
             </div>
@@ -229,7 +229,7 @@
     </div>
 </header>
 
-<main class="page-content">
+<main class="pageContent-content">
     <div class="container">
         <div>
             <div class="row">
@@ -288,8 +288,8 @@
     <script src="map-icons/js/map-icons.min.js" th:attr="src=@{/map-icons/js/map-icons.min.js}"></script>
     <!-- my own JavaScript -->
     <script src="js/my.js" th:attr="src=@{/js/my.js}"></script>
-    <span th:if="${!page.contextTest}">
-        <span th:utext="${page.googleAnalyticScriptHtml}" ></span>
+    <span th:if="${!pageContent.contextTest}">
+        <span th:utext="${pageContent.googleAnalyticScriptHtml}" ></span>
     </span>
 </footer>
 </body>

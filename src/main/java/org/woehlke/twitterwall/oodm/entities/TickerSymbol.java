@@ -29,7 +29,7 @@ import java.util.Map;
 @NamedQueries({
     @NamedQuery(
         name="TickerSymbol.findByUniqueId",
-        query="select t from TickerSymbol t where t.url=:url and t.tickerSymbol=:tickerSymbol"
+        query="select t from TickerSymbol t where t.url.url=:url and t.tickerSymbol=:tickerSymbol"
     )
 })
 @EntityListeners(TickerSymbolListener.class)
@@ -94,7 +94,7 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
     @Override
     public Map<String,Object> getParametersForFindByUniqueId(){
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("url",this.url);
+        parameters.put("url",this.url.getUrl());
         parameters.put("tickerSymbol",this.tickerSymbol);
         return parameters;
     }

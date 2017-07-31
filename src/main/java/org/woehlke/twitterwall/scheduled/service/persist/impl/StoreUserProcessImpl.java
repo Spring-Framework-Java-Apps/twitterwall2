@@ -24,7 +24,10 @@ public class StoreUserProcessImpl implements StoreUserProcess {
             Entities entities = user.getEntities();
             entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
             user.setEntities(entities);
-            user = userService.store(user, task);
+            User userPers = userService.store(user, task);
+            if(userPers!=null){
+                return userPers;
+            }
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }

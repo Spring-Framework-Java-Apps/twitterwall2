@@ -4,9 +4,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head  th:include="layout :: tw-head">
 </head>
-<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<body id="pageContent-top" class="pageContent-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:include="layout :: tw-header" ></header>
-<main class="page-content">
+<main class="pageContent-content">
     <div class="container">
         <div th:fragment="tw-user-list">
             <div class="row">
@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                             <hr/>
-                            <div th:if="${page.historyBack}">
+                            <div th:if="${pageContent.historyBack}">
                                 <a href="javascript:history.back()">
                                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                     <span>zurück</span>

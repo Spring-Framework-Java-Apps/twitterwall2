@@ -23,7 +23,7 @@ When creating a new issue, try following [necolas's guidelines][issue-guidelines
 
 ### Support
 
-Let me know if you are using Twitterwall. I may get around to creating a showcase page listing user sites.
+Let me know if you are using Twitterwall. I may get around to creating a showcase pageContent listing user sites.
 
 [Contact me][av-site] if you have questions about Twitterwall, or just like to say something about it.
 If you _really really_ like it and want to support the author, I will be glad to

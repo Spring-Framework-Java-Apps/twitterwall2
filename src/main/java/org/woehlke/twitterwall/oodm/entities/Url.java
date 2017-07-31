@@ -10,6 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +98,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         return (this.display.compareTo(UNDEFINED)==0)&&(this.expanded.compareTo(UNDEFINED)==0);
     }
 
+    @AssertTrue
     @Transient
     @Override
     public boolean isValid() {

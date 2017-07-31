@@ -47,7 +47,7 @@
         </brand>
         <slogan>Small Twitterwall Responsive for Desktop and Mobile - Deployable to Heroku</slogan>
         <titleTemplate>%2$s | %1$s</titleTemplate>
-        <!-- Use Table of Contents at the top of the page (max 6 elements) -->
+        <!-- Use Table of Contents at the top of the pageContent (max 6 elements) -->
         <toc>top</toc>
         <tocTopMax>6</tocTopMax>
         <!-- Include the documentation and tools in the top navigation (in addition to links) -->
@@ -71,9 +71,9 @@
             <index project="twitterwall2">
                 <!-- Override the title -->
                 <titleTemplate>Twitterwall</titleTemplate>
-                <!-- no breadcrumbs on the main index page -->
+                <!-- no breadcrumbs on the main index pageContent -->
                 <breadcrumbs>false</breadcrumbs>
-                <!-- no ToC on the main index page -->
+                <!-- no ToC on the main index pageContent -->
                 <toc>false</toc>
                 <markPageHeader>false</markPageHeader>
                 <sections>

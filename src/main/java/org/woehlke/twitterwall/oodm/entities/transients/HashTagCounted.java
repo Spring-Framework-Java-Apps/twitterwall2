@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.model;
+package org.woehlke.twitterwall.oodm.entities.transients;
 
 import java.io.Serializable;
 

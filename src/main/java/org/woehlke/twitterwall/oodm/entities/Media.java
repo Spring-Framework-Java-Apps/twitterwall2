@@ -11,6 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
 import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,14 +53,18 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
     @Column(name="id_twitter", nullable = false)
     private Long idTwitter;
 
+    @URL
     @NotNull
     @Column(name = "media_http",length=4096, nullable = false)
     private String mediaHttp = "";
 
+    @URL
     @NotNull
     @Column(name = "media_https",length=4096, nullable = false)
     private String mediaHttps = "";
 
+    @Valid
+    @NotNull
     @Embedded
     private UrlField url;
 
@@ -67,6 +72,7 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
     @Column(length=4096, nullable = false)
     private String display = "";
 
+    @URL
     @NotNull
     @Column(length=4096, nullable = false)
     private String expanded = "";

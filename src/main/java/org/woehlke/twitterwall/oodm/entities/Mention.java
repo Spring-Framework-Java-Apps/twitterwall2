@@ -55,6 +55,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     private Long idTwitter;
 
     @Valid
+    @NotNull
     @Embedded
     private ScreenName screenName;
 

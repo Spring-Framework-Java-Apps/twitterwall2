@@ -4,20 +4,20 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head  th:include="layoutMain :: tw-head">
 </head>
-<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<body id="pageContent-top" class="pageContent-2" style="padding-top:50px; padding-bottom:200px;">
 <header th:include="layoutMain :: tw-header" ></header>
 
 <section th:include="layoutMain :: tw-history-back-section" >
 </section>
 
-<main class="page-content">
+<main class="pageContent-content">
     <div class="container">
         <div th:include="layoutUser :: tw-one-user" ></div>
         <div class="tw-pager-above" th:if="${latestTweets != null}">
             <div class="row">
                 <div class="col-md-12">
                     <span  class="tw-pager-arrow tw-pager-up" th:if="${latestTweets.hasPrevious()}">
-                        <a href="" th:href="@{|/user/tweets?page=${latestTweets.previousPageable().pageNumber}|}">
+                        <a href="" th:href="@{|/user/tweets?pageContent=${latestTweets.previousPageable().pageNumber}|}">
                             <span>
                             <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                             </span>
@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
-                        <a href="" th:href="@{|/user/tweets?page=${latestTweets.nextPageable().pageNumber}|}" >
+                        <a href="" th:href="@{|/user/tweets?pageContent=${latestTweets.nextPageable().pageNumber}|}" >
                             <span>
                             <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                             </span>
