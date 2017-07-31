@@ -2,7 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.repositories" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />

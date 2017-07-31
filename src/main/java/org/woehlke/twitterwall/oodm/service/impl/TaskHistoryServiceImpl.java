@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
  * Created by tw on 11.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceImpl.class);

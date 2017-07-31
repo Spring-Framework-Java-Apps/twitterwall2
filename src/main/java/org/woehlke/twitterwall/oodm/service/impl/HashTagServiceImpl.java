@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.oodm.service.HashTagService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> implements HashTagService {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceImpl.class);

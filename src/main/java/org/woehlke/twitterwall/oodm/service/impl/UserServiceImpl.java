@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
  * Created by tw on 11.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);

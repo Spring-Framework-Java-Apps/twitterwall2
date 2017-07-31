@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> implements MentionService {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceImpl.class);

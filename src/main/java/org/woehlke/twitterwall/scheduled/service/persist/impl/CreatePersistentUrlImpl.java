@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.UrlField;
-import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
-import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlCacheService;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
@@ -120,10 +118,6 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
 
-    //private final UrlRepository urlRepository;
-
-    //private final UrlCacheRepository urlCacheRepository;
-
     private final UrlService urlService;
 
     private final UrlCacheService urlCacheService;
@@ -131,11 +125,9 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
     private final TwitterUrlService twitterUrlService;
 
     @Autowired
-    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, UrlService urlService, UrlCacheService urlCacheService, TwitterUrlService twitterUrlService) {
+    public CreatePersistentUrlImpl(UrlService urlService, UrlCacheService urlCacheService, TwitterUrlService twitterUrlService) {
         this.urlService = urlService;
         this.urlCacheService = urlCacheService;
-        //this.urlRepository = urlRepository;
-        //this.urlCacheRepository = urlCacheRepository;
         this.twitterUrlService = twitterUrlService;
     }
 }

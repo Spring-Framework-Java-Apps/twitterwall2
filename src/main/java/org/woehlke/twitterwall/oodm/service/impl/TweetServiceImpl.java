@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
  * Created by tw on 10.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);

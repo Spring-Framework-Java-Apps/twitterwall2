@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.service.TickerSymbolService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TickerSymbolServiceImpl extends DomainServiceWithTaskImpl<TickerSymbol> implements TickerSymbolService {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);

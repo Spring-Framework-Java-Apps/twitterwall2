@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
 

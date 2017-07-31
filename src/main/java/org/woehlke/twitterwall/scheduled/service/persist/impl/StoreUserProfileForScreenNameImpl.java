@@ -3,16 +3,12 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
@@ -20,8 +16,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 /**
  * Created by tw on 11.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
 public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScreenName {
 
     @Override
@@ -59,14 +54,11 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
 
     private final StoreUserProfile storeUserProfile;
 
-    private final TaskService taskService;
-
     @Autowired
-    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, TaskService taskService) {
+    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
-        this.taskService = taskService;
     }
 
 }

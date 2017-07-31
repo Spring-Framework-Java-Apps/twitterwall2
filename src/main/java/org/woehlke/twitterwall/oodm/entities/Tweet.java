@@ -15,9 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 
 /**
@@ -137,7 +135,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     private Boolean retweeted;
 
     @JoinColumn(name="fk_tweet_retweeted")
-    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = true)
+    @ManyToOne(cascade = {ALL}, fetch = EAGER, optional = true)
     private Tweet retweetedStatus;
 
     @Column(name="favorited")
@@ -186,7 +184,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     @Valid
     @NotNull
     @JoinColumn(name="fk_user")
-    @ManyToOne(cascade = {DETACH, REFRESH, REMOVE}, fetch = EAGER, optional = false)
+    @ManyToOne(cascade = { ALL }, fetch = EAGER, optional = false)
     private User user;
 
     @AssertTrue
