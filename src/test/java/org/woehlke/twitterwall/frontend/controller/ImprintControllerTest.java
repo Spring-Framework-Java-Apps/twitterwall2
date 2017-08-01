@@ -88,7 +88,7 @@ public class ImprintControllerTest {
     public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "imprint"))
+                .andExpect(view().name( "imprint/imprint"))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeExists("page")).andReturn();
 

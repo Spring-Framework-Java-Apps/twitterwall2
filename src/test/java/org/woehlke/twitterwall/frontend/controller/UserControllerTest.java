@@ -149,9 +149,9 @@ public class UserControllerTest {
     public void getUserForScreeNameTest() throws Exception {
         String msg = "getUserForScreeNameTest: ";
         User user = findOneUser();
-        MvcResult result = this.mockMvc.perform(get("/user/"+ user.getScreenName()))
+        MvcResult result = this.mockMvc.perform(get("/user/screenName/"+ user.getScreenName()))
             .andExpect(status().isOk())
-            .andExpect(view().name("user/screenName"))
+            .andExpect(view().name("user/id"))
             .andExpect(model().attributeExists("user"))
             .andExpect(model().attributeExists("latestTweets"))
             .andExpect(model().attributeExists("page"))
