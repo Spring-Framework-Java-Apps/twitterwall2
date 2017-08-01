@@ -15,6 +15,7 @@ buildNumber.properties
 *.iml
 twitterwall.log
 twitterwall.log*
+tw.txt
 docs2
 .bundle
 .sass-cache
