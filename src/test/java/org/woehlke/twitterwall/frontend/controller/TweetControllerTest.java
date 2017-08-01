@@ -51,13 +51,14 @@ public class TweetControllerTest {
 
     @Commit
     @Test
-    public void setupTestData(){
+    public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
     }
 
+    //TODO: #194 https://github.com/phasenraum2010/twitterwall2/issues/194
     @Ignore
     @Commit
     @Test

@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.test.UrlServiceTest;
+import org.woehlke.twitterwall.test.UrlServiceTestHelper;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class TwitterUrlServiceTest {
     private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTest.class);
 
     @Autowired
-    private UrlServiceTest urlServiceTest;
+    private UrlServiceTestHelper urlServiceTest;
 
     @Autowired
     private TwitterUrlService twitterUrlService;

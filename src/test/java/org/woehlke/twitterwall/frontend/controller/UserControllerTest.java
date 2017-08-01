@@ -61,12 +61,15 @@ public class UserControllerTest {
 
     @Commit
     @Test
-    public void setupTestData(){
+    public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
+        prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
     }
 
+
+    //TODO: #196 https://github.com/phasenraum2010/twitterwall2/issues/196
     @Ignore
     @Commit
     @Test
@@ -88,6 +91,8 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #191 https://github.com/phasenraum2010/twitterwall2/issues/191
+    @Ignore
     @Commit
     @Test
     public void getUserForScreeName() throws Exception {
@@ -109,6 +114,9 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+
+    //TODO: #190 https://github.com/phasenraum2010/twitterwall2/issues/190
+    @Ignore
     @Commit
     @Test
     public void getTweetingUsers() throws Exception {
@@ -129,6 +137,8 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #187 https://github.com/phasenraum2010/twitterwall2/issues/187
+    @Ignore
     @Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
@@ -149,6 +159,8 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #188 https://github.com/phasenraum2010/twitterwall2/issues/188
+    @Ignore
     @Commit
     @Test
     public void getNotYetOnList() throws Exception {
@@ -169,6 +181,8 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #189 https://github.com/phasenraum2010/twitterwall2/issues/189
+    @Ignore
     @Commit
     @Test
     public void getOnList() throws Exception {

@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,7 +46,6 @@ public class TaskControllerTest {
     @Autowired
     private TaskService taskService;
 
-
     @Autowired
     private PrepareDataTest prepareDataTest;
 
@@ -61,13 +61,15 @@ public class TaskControllerTest {
 
     @Commit
     @Test
-    public void setupTestData(){
+    public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
     }
 
+    //TODO: #201 https://github.com/phasenraum2010/twitterwall2/issues/201
+    @Ignore
     @Commit
     @Test
     public void getAllTest()throws Exception {
@@ -88,6 +90,8 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #186 https://github.com/phasenraum2010/twitterwall2/issues/186
+    @Ignore
     @Commit
     @Test
     public void getTaskByIdTest() throws Exception {
@@ -113,6 +117,8 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #183 https://github.com/phasenraum2010/twitterwall2/issues/183
+    @Ignore
     @Commit
     @Test
     public void createTestDataTest() throws Exception {
@@ -134,6 +140,8 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #185 https://github.com/phasenraum2010/twitterwall2/issues/185
+    @Ignore
     @Commit
     @Test
     public void getOnListRenewTest() throws Exception {

@@ -39,6 +39,9 @@ public class HashTagControllerTest {
     private HashTagController controller;
 
     @Autowired
+    private PrepareDataTest prepareDataTest;
+
+    @Autowired
     private SchedulerProperties schedulerProperties;
 
     @Commit
@@ -46,6 +49,15 @@ public class HashTagControllerTest {
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
+    }
+
+    @Commit
+    @Test
+    public void setupTestData(){
+        String msg = "setupTestData: ";
+        prepareDataTest.getTestDataTweets(msg);
+        prepareDataTest.getTestDataUser(msg);
+        Assert.assertTrue(true);
     }
 
     @Commit
@@ -62,6 +74,9 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+
+    //TODO: #192 https://github.com/phasenraum2010/twitterwall2/issues/192
+    @Ignore
     @Commit
     @Test
     public void getAllTest()throws Exception {
@@ -83,6 +98,8 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #181 https://github.com/phasenraum2010/twitterwall2/issues/181
+    @Ignore
     @Commit
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {
@@ -106,6 +123,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #195 https://github.com/phasenraum2010/twitterwall2/issues/195
     @Ignore
     @Commit
     @Test
