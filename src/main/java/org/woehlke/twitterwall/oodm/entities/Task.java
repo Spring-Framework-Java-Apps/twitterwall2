@@ -2,19 +2,13 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 09.07.17.
@@ -78,10 +72,12 @@ public class Task implements DomainObjectMinimal<Task> {
     private Task() {
     }
 
+    /*
     public Task(String description,TaskType taskType) {
         this.taskType = taskType;
         this.description = description;
     }
+    */
 
     public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
         this.description = description;
@@ -92,6 +88,30 @@ public class Task implements DomainObjectMinimal<Task> {
         this.timeFinished = timeFinished;
     }
 
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return "" + taskType.name() +"_"+ timeStarted.getTime();
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(taskType == null){
+            return false;
+        }
+        if(taskType == TaskType.NULL){
+            return false;
+        }
+        if(timeStarted == null){
+            return false;
+        }
+        if(timeStarted.after(new Date())){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -100,11 +120,6 @@ public class Task implements DomainObjectMinimal<Task> {
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return "" + taskType.name() +"_"+ timeStarted.getTime();
     }
 
     public TaskType getTaskType() {
@@ -170,11 +185,6 @@ public class Task implements DomainObjectMinimal<Task> {
             ", timeLastUpdate=" + timeLastUpdate +
             ", timeFinished=" + timeFinished +
             '}';
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

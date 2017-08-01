@@ -278,6 +278,27 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     private User() {
     }
 
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.idTwitter == null){
+            return false;
+        }
+        if(this.screenName == null){
+            return false;
+        }
+        if(!this.hasValidScreenName()){
+            return false;
+        }
+        return true;
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
+    }
+
     public final static String SCREEN_NAME_PATTERN = "\\w*";
 
     public static boolean isValidScreenName(String screenName){
@@ -342,6 +363,18 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         }
     }
 
+    public static User getDummyUserForScreenName(String screenName,Task task){
+        long idTwitter= new Date().getTime();
+        String name="Exception Handler Dummy Username";
+        String url="https://github.com/phasenraum2010/twitterwall2";
+        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
+        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
+        String location="Berlin, Germany";
+        Date createdDate = new Date();
+        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        return user;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -350,11 +383,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -728,23 +756,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                     super.toString() +
                 ",\n entities=" + this.entities.toString() +
                 "\n}";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    public static User getDummyUserForScreenName(String screenName,Task task){
-        long idTwitter= new Date().getTime();
-        String name="Exception Handler Dummy Username";
-        String url="https://github.com/phasenraum2010/twitterwall2";
-        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
-        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
-        String location="Berlin, Germany";
-        Date createdDate = new Date();
-        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
-        return user;
     }
 
     @Override
