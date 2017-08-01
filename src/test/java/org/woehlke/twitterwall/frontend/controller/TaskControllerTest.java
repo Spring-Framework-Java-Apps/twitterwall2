@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,13 +70,14 @@ public class TaskControllerTest {
     }
 
     //TODO: #201 https://github.com/phasenraum2010/twitterwall2/issues/201
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "task/taskAll"))
+            .andExpect(view().name( "/task/all"))
             .andExpect(model().attributeExists("tasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -91,7 +93,8 @@ public class TaskControllerTest {
     }
 
     //TODO: #186 https://github.com/phasenraum2010/twitterwall2/issues/186
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getTaskByIdTest() throws Exception {
@@ -101,7 +104,7 @@ public class TaskControllerTest {
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
-            .andExpect(view().name( "task/taskHistory"))
+            .andExpect(view().name( "/task/id"))
             .andExpect(model().attributeExists("task"))
             .andExpect(model().attributeExists("taskHistoryList"))
             .andExpect(model().attributeExists("page"))
@@ -118,15 +121,16 @@ public class TaskControllerTest {
     }
 
     //TODO: #183 https://github.com/phasenraum2010/twitterwall2/issues/183
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void createTestDataTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "test/getTestData"))
+                .andExpect(view().name( "/task/start/createTestData"))
                 .andExpect(model().attributeExists("latestTweets"))
-                //.andExpect(model().attributeExists("users"))
+                .andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -141,13 +145,14 @@ public class TaskControllerTest {
     }
 
     //TODO: #185 https://github.com/phasenraum2010/twitterwall2/issues/185
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getOnListRenewTest() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/test/user/onlist/renew"))
+        MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "test/user/onlist/renew"))
+                .andExpect(view().name( "/task/start/renew"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -70,7 +71,8 @@ public class UserControllerTest {
 
 
     //TODO: #196 https://github.com/phasenraum2010/twitterwall2/issues/196
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getAll() throws Exception {
@@ -138,13 +140,14 @@ public class UserControllerTest {
     }
 
     //TODO: #187 https://github.com/phasenraum2010/twitterwall2/issues/187
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/user/notyetfriends"))
+        MvcResult result = this.mockMvc.perform(get("/user/list/notyetfriends"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user/notyetfriends"))
+            .andExpect(view().name("user/list/friendsNotYet"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -160,13 +163,14 @@ public class UserControllerTest {
     }
 
     //TODO: #188 https://github.com/phasenraum2010/twitterwall2/issues/188
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getNotYetOnList() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/user/notyetonlist"))
+        MvcResult result = this.mockMvc.perform(get("/user/list/notyetonlist"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user/notyetonlist"))
+            .andExpect(view().name("user/list/onlistNotYet"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -182,13 +186,14 @@ public class UserControllerTest {
     }
 
     //TODO: #189 https://github.com/phasenraum2010/twitterwall2/issues/189
-    @Ignore
+    //@Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getOnList() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/user/onlist"))
+        MvcResult result = this.mockMvc.perform(get("/user/list/onlist"))
             .andExpect(status().isOk())
-            .andExpect(view().name("user/onlist"))
+            .andExpect(view().name("user/list/onlist"))
             .andExpect(model().attributeExists("users"))
             .andExpect(model().attributeExists("page"))
             .andReturn();

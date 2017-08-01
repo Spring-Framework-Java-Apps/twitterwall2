@@ -123,7 +123,7 @@ twitterwall:
         #t3c_berlin
         # - 876433563561938944
         #Codemonkey1988
-        - 876456051016597504
+        # - 876456051016597504
         #Walter_kran
         - 876420491329892354
         #tobenschmidt
@@ -138,6 +138,28 @@ twitterwall:
         - 876441015523192832
         #mattLefaux
         - 876440419416109056
+        #protos1575
+        - 2330581648
+        #tobenschmidt
+        - 177242614
+        #sirdiego
+        - 16235243
+        #port80guru
+        - 18332907
+        #Markus306
+        - 14100660
+        #mrsharkwhite
+        - 349208705
+        #wowa_TYPO3
+        - 28753358
+        #t3c_berlin
+        - 245287738
+        #cpsitgmbh
+        - 135916714
+        #Cabanaramma
+        - 76700624
+        #TYPO3Ruhr
+        - 76901331
       screenNamesToFetchForUserControllerTest:
         - t3c_berlin
         - Codemonkey1988
@@ -148,4 +170,12 @@ twitterwall:
         - dirscherl17
         - Markus306
         - mattLefaux
+        - protos1575
+        - sirdiego
+        - port80guru
+        - mrsharkwhite
+        - cpsitgmbh
+        - Cabanaramma
+        - TYPO3Ruhr
+
 

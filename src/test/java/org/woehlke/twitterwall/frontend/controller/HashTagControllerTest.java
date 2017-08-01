@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -77,13 +78,13 @@ public class HashTagControllerTest {
 
     //TODO: #192 https://github.com/phasenraum2010/twitterwall2/issues/192
     @Ignore
+    @WithMockUser
     @Commit
     @Test
     public void getAllTest()throws Exception {
-        String hashtagText = "java";
         MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("hashtag/all"))
+                .andExpect(view().name("/hashtag/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
