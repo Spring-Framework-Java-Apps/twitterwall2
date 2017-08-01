@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -92,8 +91,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #186 https://github.com/phasenraum2010/twitterwall2/issues/186
-    //@Ignore
+
     @WithMockUser
     @Commit
     @Test
@@ -120,8 +118,6 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #183 https://github.com/phasenraum2010/twitterwall2/issues/183
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -144,8 +140,6 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #185 https://github.com/phasenraum2010/twitterwall2/issues/185
-    //@Ignore
     @WithMockUser
     @Commit
     @Test

@@ -55,8 +55,6 @@ public class ApplicationControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #180 https://github.com/phasenraum2010/twitterwall2/issues/180
-    //@Ignore
     @WithMockUser
     @Commit
     @Test

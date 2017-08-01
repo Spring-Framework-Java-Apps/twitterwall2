@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -69,8 +68,6 @@ public class TweetControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #194 https://github.com/phasenraum2010/twitterwall2/issues/194
-    //@Ignore
     @WithAnonymousUser
     @Commit
     @Test

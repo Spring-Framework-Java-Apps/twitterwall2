@@ -2,7 +2,6 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -44,9 +43,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     @Autowired
     private SchedulerProperties schedulerProperties;
 
-
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void updateTweetsTest() throws Exception {
@@ -57,8 +53,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void updateUserProfilesTest() throws Exception {
@@ -69,8 +63,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void updateUserProfilesFromMentionsTest() throws Exception {
@@ -81,8 +73,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() throws Exception {
@@ -93,8 +83,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void fetchUsersFromDefinedUserListTest() throws Exception {
@@ -105,9 +93,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void createImprintUserTest() throws Exception {
@@ -116,8 +101,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertEquals(user.getScreenName(),screenName);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void createTestDataForUserTest() throws Exception {
@@ -128,8 +111,6 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(msg,userList.size()==expectedSize);
     }
 
-    //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    //@Ignore
     @Commit
     @Test
     public void createTestDataForTweetsTest() throws Exception {

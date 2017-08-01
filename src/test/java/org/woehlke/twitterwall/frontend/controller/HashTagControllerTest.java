@@ -70,8 +70,6 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #192 https://github.com/phasenraum2010/twitterwall2/issues/192
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -104,7 +102,7 @@ public class HashTagControllerTest {
         }
     }
 
-    //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void findByIdTest() throws Exception {
@@ -130,8 +128,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #181 https://github.com/phasenraum2010/twitterwall2/issues/181
-    //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {
@@ -157,8 +154,6 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #195 https://github.com/phasenraum2010/twitterwall2/issues/195
-    //@Ignore
     @WithAnonymousUser
     @Commit
     @Test

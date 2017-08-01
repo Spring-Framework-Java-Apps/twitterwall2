@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -79,9 +78,6 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
-
-    //TODO: #196 https://github.com/phasenraum2010/twitterwall2/issues/196
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -103,8 +99,6 @@ public class UserControllerTest {
         log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
-
-
 
     private User findOneUser(){
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, 1);
@@ -141,8 +135,6 @@ public class UserControllerTest {
 
     }
 
-    //TODO: #191 https://github.com/phasenraum2010/twitterwall2/issues/191
-    //@Ignore
     @WithAnonymousUser
     @Commit
     @Test
