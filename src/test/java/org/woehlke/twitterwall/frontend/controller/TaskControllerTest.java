@@ -68,8 +68,6 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #201 https://github.com/phasenraum2010/twitterwall2/issues/201
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -90,7 +88,6 @@ public class TaskControllerTest {
         log.info("#######################################");
         Assert.assertTrue(true);
     }
-
 
     @WithMockUser
     @Commit
@@ -268,7 +265,5 @@ public class TaskControllerTest {
         log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
-
-
 
 }

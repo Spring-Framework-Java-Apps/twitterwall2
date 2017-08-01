@@ -159,9 +159,6 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
-
-    //TODO: #190 https://github.com/phasenraum2010/twitterwall2/issues/190
-    //@Ignore
     @WithAnonymousUser
     @Commit
     @Test
@@ -184,8 +181,6 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #187 https://github.com/phasenraum2010/twitterwall2/issues/187
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -279,8 +274,6 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #189 https://github.com/phasenraum2010/twitterwall2/issues/189
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -303,8 +296,6 @@ public class UserControllerTest {
         Assert.assertTrue(true);
     }
 
-    //TODO: #188 https://github.com/phasenraum2010/twitterwall2/issues/188
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
