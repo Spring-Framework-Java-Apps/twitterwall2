@@ -71,7 +71,7 @@ public class HashTagControllerTest {
     }
 
     //TODO: #192 https://github.com/phasenraum2010/twitterwall2/issues/192
-    @Ignore
+    //@Ignore
     @WithMockUser
     @Commit
     @Test

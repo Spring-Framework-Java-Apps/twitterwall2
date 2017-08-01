@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,6 +71,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
+    @WithAnonymousUser
     @Commit
     @Test
     public void imprintTest1() throws Exception {
@@ -79,7 +81,8 @@ public class ImprintControllerTest {
     }
 
     //TODO: #182 https://github.com/phasenraum2010/twitterwall2/issues/182
-    @Ignore
+    //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void imprintTest2() throws Exception {

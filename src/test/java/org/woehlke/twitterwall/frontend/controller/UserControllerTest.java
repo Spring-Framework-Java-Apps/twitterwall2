@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -141,7 +142,8 @@ public class UserControllerTest {
     }
 
     //TODO: #191 https://github.com/phasenraum2010/twitterwall2/issues/191
-    @Ignore
+    //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void getUserForScreeNameTest() throws Exception {
@@ -168,6 +170,7 @@ public class UserControllerTest {
 
     //TODO: #190 https://github.com/phasenraum2010/twitterwall2/issues/190
     //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void getTweetingUsersTest() throws Exception {
