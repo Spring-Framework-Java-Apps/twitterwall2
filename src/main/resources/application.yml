@@ -18,8 +18,8 @@ info:
     groupId: @project.groupId@
     name: @project.name@
     version: @project.version@
-logging:
-  file: twitterwall.log
+#logging:
+#  file: twitterwall.log
 management:
   address: 127.0.0.1
   context-path: "/manage"
@@ -125,19 +125,19 @@ twitterwall:
         #Codemonkey1988
         # - 876456051016597504
         #Walter_kran
-        - 876420491329892354
+        # - 876420491329892354
         #tobenschmidt
-        - 876425220147564544
+        #- 876425220147564544
         #Oliver1973
-        - 876819177746649088
+        #- 876819177746649088
         #wowa_TYPO3
-        - 876514968933478400
+        #- 876514968933478400
         #dirscherl17
-        - 876441863191920641
+        #- 876441863191920641
         #Markus306
-        - 876441015523192832
+        #- 876441015523192832
         #mattLefaux
-        - 876440419416109056
+        #- 876440419416109056
         #protos1575
         - 2330581648
         #tobenschmidt
@@ -177,5 +177,18 @@ twitterwall:
         - cpsitgmbh
         - Cabanaramma
         - TYPO3Ruhr
+        - hypersistence
+        - vlad_mihalcea
+        - Java_EE
+        - JavaOOQ
+        - java
+        - AdamBien
+        - olivergierke
+        - JavaPerformance
+        - JavaMagazin
+        - jcon_conference
+        - JavaBot_
+        - JavaUnofficial
+        - Hibernate
 
 

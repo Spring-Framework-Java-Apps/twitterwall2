@@ -16,8 +16,10 @@ buildNumber.properties
 twitterwall.log
 twitterwall.log*
 maven-build.log
+maven-build.log.txt
 maven-testing.log.txt
 spring-boot.log.txt
+maven-testing-site.log.txt
 docs2
 .bundle
 .sass-cache
