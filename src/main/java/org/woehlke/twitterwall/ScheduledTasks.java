@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
-import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
 
 /**
  * Created by tw on 10.06.17.
