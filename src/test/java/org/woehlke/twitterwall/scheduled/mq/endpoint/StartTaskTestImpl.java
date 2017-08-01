@@ -46,7 +46,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
 
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void updateTweetsTest() throws Exception {
@@ -58,7 +58,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void updateUserProfilesTest() throws Exception {
@@ -70,7 +70,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void updateUserProfilesFromMentionsTest() throws Exception {
@@ -82,7 +82,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() throws Exception {
@@ -94,7 +94,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void fetchUsersFromDefinedUserListTest() throws Exception {
@@ -107,7 +107,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
 
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void createImprintUserTest() throws Exception {
@@ -117,7 +117,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void createTestDataForUserTest() throws Exception {
@@ -129,7 +129,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     }
 
     //TODO: #199 https://github.com/phasenraum2010/twitterwall2/issues/199
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void createTestDataForTweetsTest() throws Exception {
