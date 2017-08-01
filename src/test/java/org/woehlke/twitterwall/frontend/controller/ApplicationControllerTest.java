@@ -79,4 +79,26 @@ public class ApplicationControllerTest {
         log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
+
+    @WithMockUser
+    @Commit
+    @Test
+    public void managementPageTest() throws Exception {
+        String msg ="managementPageTest: ";
+
+        MvcResult result = this.mockMvc.perform(get("/application/management"))
+                .andExpect(status().isOk())
+                .andExpect(view().name( "application/management"))
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
 }

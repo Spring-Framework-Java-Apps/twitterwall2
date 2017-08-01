@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,12 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.service.HashTagService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 01.07.17.
@@ -38,6 +44,9 @@ public class HashTagControllerTest {
 
     @Autowired
     private HashTagController controller;
+
+    @Autowired
+    private HashTagService hashTagService;
 
     @Autowired
     private PrepareDataTest prepareDataTest;
@@ -61,27 +70,13 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
-    @Commit
-    @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        for(long id: schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()){
-            log.info("fetchTweetsFromTwitterSearchTest: ID_TWITTER_TO_FETCH_FOR_TWEET_TEST: "+id);
-        }
-        //persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest(ID_TWITTER_TO_FETCH_FOR_TWEET_TEST);
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  persistDataFromTwitterTest.fetchTweetsFromTwitterSearchTest()");
-        log.info("------------------------------------");
-        Assert.assertTrue(true);
-    }
-
-
     //TODO: #192 https://github.com/phasenraum2010/twitterwall2/issues/192
     @Ignore
     @WithMockUser
     @Commit
     @Test
-    public void getAllTest()throws Exception {
+    public void getAllTest() throws Exception {
+        String msg ="getAllTest: ";
         MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/hashtag/all"))
@@ -91,23 +86,34 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
-    //TODO: #181 https://github.com/phasenraum2010/twitterwall2/issues/181
-    @Ignore
+    private HashTag findOneHashTag(){
+        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, 1);
+        Page<HashTag> hashTagPage = hashTagService.getAll(pageRequest);
+        if(hashTagPage.getContent().size()>0){
+            return hashTagPage.getContent().iterator().next();
+        } else {
+            return null;
+        }
+    }
+
+    //@Ignore
     @Commit
     @Test
-    public void hashTagFromTweetsAndUsersTest() throws Exception {
-        String hashtagText = "java";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/"+hashtagText))
+    public void findByIdTest() throws Exception {
+        String msg ="findByIdTest: ";
+        HashTag hashTag = findOneHashTag();
+        long id  = hashTag.getId();
+        MvcResult result = this.mockMvc.perform(get("/hashtag/"+id))
                 .andExpect(status().isOk())
-                .andExpect(view().name("hashtag/hashtagText"))
+                .andExpect(view().name("hashtag/id"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("latestTweets"))
                 .andExpect(model().attributeExists("hashTag"))
@@ -116,11 +122,38 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    //TODO: #181 https://github.com/phasenraum2010/twitterwall2/issues/181
+    //@Ignore
+    @Commit
+    @Test
+    public void hashTagFromTweetsAndUsersTest() throws Exception {
+        String msg ="hashTagFromTweetsAndUsersTest: ";
+        HashTag hashTag = findOneHashTag();
+        String hashtagText = hashTag.getText();
+        MvcResult result = this.mockMvc.perform(get("/hashtag/text/"+hashtagText))
+                .andExpect(status().isOk())
+                .andExpect(view().name("hashtag/id"))
+                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attributeExists("latestTweets"))
+                .andExpect(model().attributeExists("hashTag"))
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
@@ -129,6 +162,7 @@ public class HashTagControllerTest {
     @Commit
     @Test
     public void hashTagsOverview()  throws Exception {
+        String msg ="hashTagsOverview: ";
         MvcResult result = this.mockMvc.perform(get("/hashtag/overview"))
             .andExpect(status().isOk())
             .andExpect(view().name("hashtag/overview"))
@@ -139,11 +173,11 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
