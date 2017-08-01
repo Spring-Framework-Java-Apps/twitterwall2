@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -79,7 +79,7 @@ public class HashTagControllerTest {
         String msg ="getAllTest: ";
         MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/hashtag/all"))
+                .andExpect(view().name("hashtag/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
@@ -158,7 +158,8 @@ public class HashTagControllerTest {
     }
 
     //TODO: #195 https://github.com/phasenraum2010/twitterwall2/issues/195
-    @Ignore
+    //@Ignore
+    @WithAnonymousUser
     @Commit
     @Test
     public void hashTagsOverview()  throws Exception {
