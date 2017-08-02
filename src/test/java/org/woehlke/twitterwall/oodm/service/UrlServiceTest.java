@@ -15,9 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.UrlCache;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -70,8 +68,8 @@ public class UrlServiceTest {
             Url myMedia = myPage.getContent().iterator().next();
             String expectedUrl = myMedia.getUrl();
             Url myFoundMedia = urlService.findByUrl(expectedUrl);
-            String foundUrl = myMedia.getUrl();
-            Assert.assertEquals(msg, expectedUrl, myFoundMedia);
+            String foundUrl = myFoundMedia.getUrl();
+            Assert.assertEquals(msg, expectedUrl, foundUrl);
             log.debug(msg+" found: "+foundUrl);
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");

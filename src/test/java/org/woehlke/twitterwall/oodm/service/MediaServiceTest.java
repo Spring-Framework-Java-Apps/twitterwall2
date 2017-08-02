@@ -88,8 +88,8 @@ public class MediaServiceTest {
             Media myMedia = myPage.getContent().iterator().next();
             String expectedUrl = myMedia.getUrl();
             Media myFoundMedia = mediaService.findByUrl(expectedUrl);
-            String foundUrl = myMedia.getUrl();
-            Assert.assertEquals(msg, expectedUrl, myFoundMedia);
+            String foundUrl = myFoundMedia.getUrl();
+            Assert.assertEquals(msg, expectedUrl, foundUrl);
             log.debug(msg+" found: "+foundUrl);
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");

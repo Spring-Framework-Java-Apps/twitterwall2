@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
 
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
@@ -30,6 +31,21 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HashTagService hashTagService;
+
+    @Autowired
+    private MediaService mediaService;
+
+    @Autowired
+    private MentionService mentionService;
+
+    @Autowired
+    private UrlService urlService;
+
+    @Autowired
+    private TickerSymbolService tickerSymbolService;
 
     @Autowired
     private TwitterProperties twitterProperties;
@@ -129,69 +145,244 @@ public class UserServiceTest {
 
     @Commit
     @Test
-    public void getTweetingUsers() throws Exception {}
+    public void getTweetingUsers() throws Exception {
+        String msg = "getTweetingUsers: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getTweetingUsers(pageRequest);
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
 
 
     @Commit
     @Test
-    public void getAllDescriptions() throws Exception {}
+    public void getAllDescriptions() throws Exception {
+        String msg = "getTweetingUsers: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<String> foundDescriptions = userService.getAllDescriptions(pageRequest);
+        log.debug(msg+" foundUser: "+foundDescriptions.getTotalElements());
+    }
 
-
+    //TODO: #160 https://github.com/phasenraum2010/twitterwall2/issues/160
     @Commit
     @Test
     public void getUsersForHashTag() throws Exception {}
 
     @Commit
     @Test
-    public void getFriends() throws Exception {}
+    public void getFriends() throws Exception {
+        String msg = "getFriends: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getFriends(pageRequest);
+        for(User user : foundUser.getContent()){
+            Assert.assertTrue(user.getFriend());
+        }
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
 
 
     @Commit
     @Test
-    public void getNotYetFriendUsers() throws Exception {}
+    public void getNotYetFriendUsers() throws Exception {
+        String msg = "getNotYetFriendUsers: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getNotYetFriendUsers(pageRequest);
+        for(User user : foundUser.getContent()){
+            Assert.assertTrue(!user.getFriend());
+        }
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
 
 
     @Commit
     @Test
-    public void getFollower() throws Exception {}
+    public void getFollower() throws Exception {
+        String msg = "getFollower: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getFollower(pageRequest);
+        for(User user : foundUser.getContent()){
+            Assert.assertTrue(user.getFollower());
+        }
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
 
 
     @Commit
     @Test
-    public void getNotYetFollower() throws Exception {}
+    public void getNotYetFollower() throws Exception {
+        String msg = "getNotYetFollower: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getNotYetFollower(pageRequest);
+        for(User user : foundUser.getContent()){
+            Assert.assertTrue(!user.getFollower());
+        }
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
+
+
+    //TODO: add Assert
+    @Commit
+    @Test
+    public void getOnList() throws Exception {
+        String msg = "getOnList: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getOnList(pageRequest);
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
+
+
+    //TODO: add Assert
+    @Commit
+    @Test
+    public void getNotYetOnList() throws Exception {
+        String msg = "getNotYetOnList: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> foundUser = userService.getNotYetOnList(pageRequest);
+        log.debug(msg+" foundUser: "+foundUser.getTotalElements());
+    }
 
 
     @Commit
     @Test
-    public void getOnList() throws Exception {}
+    public void findAllUser2HashTag() throws Exception {
+        String msg = "findAllUser2HashTag: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Object2Entity> foundPage = userService.findAllUser2HashTag(pageRequest);
+        if(foundPage.getTotalElements()>0){
+            for(Object2Entity object2Entity:foundPage.getContent()){
+                long objectId = object2Entity.getObjectId();
+                String objectInfo = object2Entity.getObjectInfo();
+                long entityId = object2Entity.getEntityId();
+                String entityInfo = object2Entity.getObjectInfo();
+                User foundObject = userService.findById(objectId);
+                HashTag foundEntity = hashTagService.findById(entityId);
+                Assert.assertNotNull(msg,foundObject);
+                Assert.assertNotNull(msg,foundEntity);
+                Assert.assertNull(objectInfo);
+                Assert.assertNull(entityInfo);
+                Assert.assertTrue(msg,foundObject.getEntities().getHashTags().contains(foundEntity));
+            }
+        }
+    }
 
 
     @Commit
     @Test
-    public void getNotYetOnList() throws Exception {}
+    public void findAllUser2Media() throws Exception {
+        String msg = "findAllUser2Media: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Object2Entity> foundPage = userService.findAllUser2Media(pageRequest);
+        if(foundPage.getTotalElements()>0){
+            for(Object2Entity object2Entity:foundPage.getContent()){
+                long objectId = object2Entity.getObjectId();
+                String objectInfo = object2Entity.getObjectInfo();
+                long entityId = object2Entity.getEntityId();
+                String entityInfo = object2Entity.getObjectInfo();
+                User foundObject = userService.findById(objectId);
+                Media foundEntity = mediaService.findById(entityId);
+                Assert.assertNotNull(msg,foundObject);
+                Assert.assertNotNull(msg,foundEntity);
+                Assert.assertNull(objectInfo);
+                Assert.assertNull(entityInfo);
+                Assert.assertTrue(msg,foundObject.getEntities().getMedia().contains(foundEntity));
+            }
+        }
+    }
 
 
     @Commit
     @Test
-    public void findAllUser2HashTag() throws Exception {}
+    public void findAllUser2Mentiong() throws Exception {
+        String msg = "findAllUser2Mentiong: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Object2Entity> foundPage = userService.findAllUser2Mentiong(pageRequest);
+        if(foundPage.getTotalElements()>0){
+            for(Object2Entity object2Entity:foundPage.getContent()){
+                long objectId = object2Entity.getObjectId();
+                String objectInfo = object2Entity.getObjectInfo();
+                long entityId = object2Entity.getEntityId();
+                String entityInfo = object2Entity.getObjectInfo();
+                User foundObject = userService.findById(objectId);
+                Mention foundEntity = mentionService.findById(entityId);
+                Assert.assertNotNull(msg,foundObject);
+                Assert.assertNotNull(msg,foundEntity);
+                Assert.assertNull(objectInfo);
+                Assert.assertNull(entityInfo);
+                Assert.assertTrue(msg,foundObject.getEntities().getMentions().contains(foundEntity));
+            }
+        }
+    }
 
 
     @Commit
     @Test
-    public void findAllUser2Media() throws Exception {}
+    public void findAllUser2Url() throws Exception {
+        String msg = "findAllUser2Url: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Object2Entity> foundPage = userService.findAllUser2Url(pageRequest);
+        if(foundPage.getTotalElements()>0){
+            for(Object2Entity object2Entity:foundPage.getContent()){
+                long objectId = object2Entity.getObjectId();
+                String objectInfo = object2Entity.getObjectInfo();
+                long entityId = object2Entity.getEntityId();
+                String entityInfo = object2Entity.getObjectInfo();
+                User foundObject = userService.findById(objectId);
+                Url foundEntity = urlService.findById(entityId);
+                Assert.assertNotNull(msg,foundObject);
+                Assert.assertNotNull(msg,foundEntity);
+                Assert.assertNull(objectInfo);
+                Assert.assertNull(entityInfo);
+                Assert.assertTrue(msg,foundObject.getEntities().getUrls().contains(foundEntity));
+            }
+        }
+    }
 
 
     @Commit
     @Test
-    public void findAllUser2Mentiong() throws Exception {}
-
-
-    @Commit
-    @Test
-    public void findAllUser2Url() throws Exception {}
-
-
-    @Commit
-    @Test
-    public void findAllUser2TickerSymbol() throws Exception {}
+    public void findAllUser2TickerSymbol() throws Exception {
+        String msg = "findAllUser2TickerSymbol: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Object2Entity> foundPage = userService.findAllUser2TickerSymbol(pageRequest);
+        if(foundPage.getTotalElements()>0){
+            for(Object2Entity object2Entity:foundPage.getContent()){
+                long objectId = object2Entity.getObjectId();
+                String objectInfo = object2Entity.getObjectInfo();
+                long entityId = object2Entity.getEntityId();
+                String entityInfo = object2Entity.getObjectInfo();
+                User foundObject = userService.findById(objectId);
+                TickerSymbol foundEntity = tickerSymbolService.findById(entityId);
+                Assert.assertNotNull(msg,foundObject);
+                Assert.assertNotNull(msg,foundEntity);
+                Assert.assertNull(objectInfo);
+                Assert.assertNull(entityInfo);
+                Assert.assertTrue(msg,foundObject.getEntities().getTickerSymbols().contains(foundEntity));
+            }
+        }
+    }
 }
