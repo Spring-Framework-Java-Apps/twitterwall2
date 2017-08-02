@@ -2,7 +2,6 @@ package org.woehlke.twitterwall.oodm.service;
 
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
+import org.woehlke.twitterwall.oodm.entities.User;
 
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
@@ -44,6 +44,24 @@ public class UserServiceTest {
         Assert.assertNotNull(userService);
         Assert.assertNotNull(testdataProperties);
         Assert.assertNotNull(twitterProperties);
+    }
+
+    @Commit
+    @Test
+    public void fetchTestData() throws Exception {
+        String msg = "fetchTestData: ";
+        int page=1;
+        int size=1;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> myPage = userService.getAll(pageRequest);
+        if(myPage.getTotalElements()>0){
+            User myUser = myPage.getContent().iterator().next();
+            Assert.assertNotNull(msg,myUser);
+            Assert.assertNotNull(msg,myUser.getUniqueId());
+            log.debug(msg+" found: "+myUser.getUniqueId());
+        } else {
+            log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
     }
 
     @Commit
