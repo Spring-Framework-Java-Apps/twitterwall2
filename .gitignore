@@ -20,6 +20,7 @@ maven-build.log.txt
 maven-testing.log.txt
 spring-boot.log.txt
 maven-testing-site.log.txt
+test.log.txt
 docs2
 .bundle
 .sass-cache
