@@ -25,26 +25,13 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private final TaskHistoryRepository taskHistoryRepository;
 
-    private final TaskRepository taskRepository;
-
     @Autowired
-    public TaskHistoryServiceImpl(TaskHistoryRepository taskHistoryRepository, TaskRepository taskRepository) {
+    public TaskHistoryServiceImpl(TaskHistoryRepository taskHistoryRepository) {
         this.taskHistoryRepository = taskHistoryRepository;
-        this.taskRepository = taskRepository;
     }
 
     @Override
     public TaskHistory store(TaskHistory domainObject) {
-        return taskHistoryRepository.save(domainObject);
-    }
-
-    @Override
-    public TaskHistory create(TaskHistory domainObject) {
-        return taskHistoryRepository.save(domainObject);
-    }
-
-    @Override
-    public TaskHistory update(TaskHistory domainObject) {
         return taskHistoryRepository.save(domainObject);
     }
 

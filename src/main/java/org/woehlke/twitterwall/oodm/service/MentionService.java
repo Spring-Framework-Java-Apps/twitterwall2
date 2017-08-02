@@ -7,7 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.common.DomainObjectEntityService;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
-import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
 
 /**

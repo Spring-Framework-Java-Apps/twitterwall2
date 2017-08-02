@@ -71,10 +71,12 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
         return userRepository.findAllDescriptions(pageRequest);
     }
 
+    /*
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
         return userRepository.findAllTwitterIds(pageRequest);
     }
+    */
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {

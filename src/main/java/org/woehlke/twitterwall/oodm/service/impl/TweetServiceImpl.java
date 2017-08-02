@@ -44,10 +44,12 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByUser(user,pageRequest);
     }
 
+    /*
     @Override
     public Page<Long> findAllTwitterIds(Pageable pageRequest) {
         return tweetRepository.findAllTwitterIds(pageRequest);
     }
+    */
 
     @Override
     public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {

@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,27 +16,13 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.conf.DataSourceConfig;
-import org.woehlke.twitterwall.conf.TestConfig;
-import org.woehlke.twitterwall.conf.WebMvcConfig;
-import org.woehlke.twitterwall.conf.WebSecurityConfig;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(
-        classes={
-                Application.class,
-                DataSourceConfig.class,
-                WebMvcConfig.class,
-                WebSecurityConfig.class,
-                TestConfig.class
-        }
-)
-@DataJpaTest(showSql=false)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class UserServiceTest {
 
@@ -47,27 +32,20 @@ public class UserServiceTest {
     private UserService userService;
 
     @Autowired
-    private org.woehlke.twitterwall.test.UserServiceTestHelper userServiceTestHelper;
-
-    @Autowired
     private TwitterProperties twitterProperties;
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Ignore
     @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        String msg ="getAllDescriptionsTest";
-        log.info(msg+"------------------------------------------------");
-        //userServiceTest.createTestData();
-        Assert.assertTrue(true);
-        log.info(msg+"------------------------------------------------");
+    public void areDependenciesLoaded() throws Exception {
+        Assert.assertNotNull(userService);
+        Assert.assertNotNull(testdataProperties);
+        Assert.assertNotNull(twitterProperties);
     }
 
-    @Ignore
     @Commit
     @Test
     public void getAllDescriptionsTest() {
@@ -129,4 +107,73 @@ public class UserServiceTest {
             "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting",
             "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh",
     };
+
+
+    @Commit
+    @Test
+    public void getTweetingUsers() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getAllDescriptions() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getUsersForHashTag() throws Exception {}
+
+    @Commit
+    @Test
+    public void getFriends() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getNotYetFriendUsers() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getFollower() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getNotYetFollower() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getOnList() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void getNotYetOnList() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void findAllUser2HashTag() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void findAllUser2Media() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void findAllUser2Mentiong() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void findAllUser2Url() throws Exception {}
+
+
+    @Commit
+    @Test
+    public void findAllUser2TickerSymbol() throws Exception {}
 }
