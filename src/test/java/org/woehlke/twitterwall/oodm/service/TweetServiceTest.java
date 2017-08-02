@@ -57,37 +57,49 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
+    @Test
+    public void findByIdTwitter() throws Exception {
 
+    }
+
+    @Commit
     @Test
     public void findTweetsForHashTag() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findTweetsForUser() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findAllTweet2HashTag() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findAllTweet2Media() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findAllTweet2Mention() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findAllTweet2Url() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void findAllTweet2TickerSymbol() throws Exception {
 

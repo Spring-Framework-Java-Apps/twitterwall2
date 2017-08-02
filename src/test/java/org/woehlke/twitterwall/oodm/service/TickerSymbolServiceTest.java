@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 
 @RunWith(SpringRunner.class)
@@ -56,6 +55,12 @@ public class TickerSymbolServiceTest {
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");
         }
+    }
+
+    @Commit
+    @Test
+    public void findByUrl() throws Exception {
+
     }
 
 }

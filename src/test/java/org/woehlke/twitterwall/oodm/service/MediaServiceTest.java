@@ -56,4 +56,15 @@ public class MediaServiceTest {
         }
     }
 
+    @Commit
+    @Test
+    public void findByIdTwitter() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    public void findByUrl() throws Exception {
+
+    }
 }

@@ -57,6 +57,10 @@ public class UrlCacheServiceTest {
         }
     }
 
+    @Commit
+    @Test
+    public void findByUrl() throws Exception {
 
+    }
 
 }

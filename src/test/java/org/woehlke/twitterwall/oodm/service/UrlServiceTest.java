@@ -57,4 +57,10 @@ public class UrlServiceTest {
         }
     }
 
+    @Commit
+    @Test
+    public void findByUrl() throws Exception {
+
+    }
+
 }
