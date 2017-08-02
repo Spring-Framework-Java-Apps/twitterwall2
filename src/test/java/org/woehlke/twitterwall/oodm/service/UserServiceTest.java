@@ -231,7 +231,7 @@ public class UserServiceTest {
     }
 
 
-    //TODO: add Assert
+    //TODO: #219 https://github.com/phasenraum2010/twitterwall2/issues/219
     @Commit
     @Test
     public void getOnList() throws Exception {
@@ -244,7 +244,7 @@ public class UserServiceTest {
     }
 
 
-    //TODO: add Assert
+    //TODO: #219 https://github.com/phasenraum2010/twitterwall2/issues/219
     @Commit
     @Test
     public void getNotYetOnList() throws Exception {
