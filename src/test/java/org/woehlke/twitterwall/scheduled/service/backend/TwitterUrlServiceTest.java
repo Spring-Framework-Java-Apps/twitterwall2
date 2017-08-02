@@ -16,9 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.test.UrlServiceTest;
+import org.woehlke.twitterwall.test.UrlServiceTestHelper;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,7 +35,7 @@ public class TwitterUrlServiceTest {
     private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTest.class);
 
     @Autowired
-    private UrlServiceTest urlServiceTest;
+    private UrlServiceTestHelper urlServiceTest;
 
     @Autowired
     private TwitterUrlService twitterUrlService;
@@ -57,7 +59,19 @@ public class TwitterUrlServiceTest {
         String msg = "fetchUrlTest ";
         log.info("------------------------------------");
         log.info(msg);
-        Task task = new Task("", TaskType.NULL);
+
+        String descriptionTask = "Make it so, Scotty";
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        long taskId = 222L;
+
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+
+        Task task = new Task(descriptionTask,taskType,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+
+        //Task task = new Task("", TaskType.NULL);
         List<Url> testData = urlServiceTest.getTestData(task);
         for(Url exprected:testData){
                 log.info(msg+"expected: " + exprected.toString());

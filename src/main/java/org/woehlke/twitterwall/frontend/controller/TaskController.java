@@ -22,8 +22,8 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.mq.endoint.AsyncStartTask;
-import org.woehlke.twitterwall.scheduled.mq.endoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
 
 /**
  * Created by tw on 11.07.17.

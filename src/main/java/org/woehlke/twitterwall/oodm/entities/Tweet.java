@@ -450,7 +450,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     @Override
     public boolean isValid() {
-        return true;
+        return this.idTwitter != null;
     }
 
     @Override

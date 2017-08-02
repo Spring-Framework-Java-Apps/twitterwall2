@@ -18,8 +18,8 @@ info:
     groupId: @project.groupId@
     name: @project.name@
     version: @project.version@
-logging:
-  file: twitterwall.log
+#logging:
+#  file: twitterwall.log
 management:
   address: 127.0.0.1
   context-path: "/manage"
@@ -109,35 +109,74 @@ twitterwall:
     skipFortesting: false
     facade:
       idTwitterToFetchForTweetTest:
-        - 876329508009279488
-        - 876356335784394752
+        - 892553199974051840
+        - 892553162351104000
+        - 892553014896209920
+        - 892552353399934978
+        - 892552210428702721
+        - 892551293587292164
+        - 892550794662293504
+        - 892550756007419904
+        - 892549571653640197
+        - 892549439499493376
+        - 892548971725324292
+        - 892545231819862017
+        - 892544854055542785
+        - 892544476165660674
+        - 892544026913538048
+        - 892543813574578176
+        - 892517820147396608
+        - 892460788731977728
+        - 892411864394674177
+        - 892233432482193409
+        - 892057269130731526
+        - 892053994893213696
         - 876676270913880066
         - 876566077836337152
         - 876563676395962368
-        - 876514968933478400
-        - 876514568671023104
-        - 876513930478313472
-        - 876510758632386563
-        - 876496934676180992
+        - 876356335784394752
+        - 876329508009279488
       idTwitterToFetchForUserControllerTest:
         #t3c_berlin
-        - 876433563561938944
+        # - 876433563561938944
         #Codemonkey1988
-        - 876456051016597504
+        # - 876456051016597504
         #Walter_kran
-        - 876420491329892354
+        # - 876420491329892354
         #tobenschmidt
-        - 876425220147564544
+        #- 876425220147564544
         #Oliver1973
-        - 876819177746649088
+        #- 876819177746649088
         #wowa_TYPO3
-        - 876514968933478400
+        #- 876514968933478400
         #dirscherl17
-        - 876441863191920641
+        #- 876441863191920641
         #Markus306
-        - 876441015523192832
+        #- 876441015523192832
         #mattLefaux
-        - 876440419416109056
+        #- 876440419416109056
+        #protos1575
+        - 2330581648
+        #tobenschmidt
+        - 177242614
+        #sirdiego
+        - 16235243
+        #port80guru
+        - 18332907
+        #Markus306
+        - 14100660
+        #mrsharkwhite
+        - 349208705
+        #wowa_TYPO3
+        - 28753358
+        #t3c_berlin
+        - 245287738
+        #cpsitgmbh
+        - 135916714
+        #Cabanaramma
+        - 76700624
+        #TYPO3Ruhr
+        - 76901331
       screenNamesToFetchForUserControllerTest:
         - t3c_berlin
         - Codemonkey1988
@@ -148,4 +187,25 @@ twitterwall:
         - dirscherl17
         - Markus306
         - mattLefaux
+        - protos1575
+        - sirdiego
+        - port80guru
+        - mrsharkwhite
+        - cpsitgmbh
+        - Cabanaramma
+        - TYPO3Ruhr
+        - hypersistence
+        - vlad_mihalcea
+        - Java_EE
+        - JavaOOQ
+        - java
+        - AdamBien
+        - olivergierke
+        - JavaPerformance
+        - JavaMagazin
+        - jcon_conference
+        - JavaBot_
+        - JavaUnofficial
+        - Hibernate
+
 

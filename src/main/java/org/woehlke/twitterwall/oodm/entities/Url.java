@@ -10,6 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.net.MalformedURLException;
 
 /**
  * Created by tw on 10.06.17.
@@ -62,36 +63,20 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
-        if(url == null){
+        if(this.isValid()){
+            return url.compareTo(expanded) == 0;
+        } else {
             return false;
         }
-        if(expanded == null){
-            return false;
-        }
-        if(this.url.isEmpty()){
-            return false;
-        }
-        if(this.expanded.isEmpty()){
-            return false;
-        }
-        return url.compareTo(expanded) == 0;
     }
 
     @Transient
     public boolean isRawUrlsFromDescription() {
-        if(this.display == null){
+        if(this.isValid()){
+            return (this.display.compareTo(UNDEFINED)==0)&&(this.expanded.compareTo(UNDEFINED)==0);
+        } else {
             return false;
         }
-        if(this.expanded == null){
-            return false;
-        }
-        if(this.display.isEmpty()){
-            return false;
-        }
-        if(this.expanded.isEmpty()){
-            return false;
-        }
-        return (this.display.compareTo(UNDEFINED)==0)&&(this.expanded.compareTo(UNDEFINED)==0);
     }
 
     @Transient
@@ -115,8 +100,12 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         if(this.display.isEmpty()){
             return false;
         }
-        boolean isInvalid = this.isRawUrlsFromDescription()||this.isUrlAndExpandedTheSame();
-        return !isInvalid;
+        try {
+           java.net.URL url = new java.net.URL(this.url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
     }
 
     public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {

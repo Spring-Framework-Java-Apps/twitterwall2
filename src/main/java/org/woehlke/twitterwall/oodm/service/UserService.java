@@ -6,9 +6,7 @@ import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.service.common.DomainObjectWithEntitiesService;
-import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
-import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
 
 /**

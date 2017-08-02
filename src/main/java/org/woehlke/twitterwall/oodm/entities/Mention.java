@@ -63,7 +63,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     private User user;
 
     @NotNull
-    @Column(name = "id_twitte_of_user",nullable = false)
+    @Column(name = "id_twitter_of_user",nullable = false)
     private Long idTwitterOfUser = 0L;
 
     public Mention(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name) {
@@ -81,6 +81,46 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     private Mention() {
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString() +"_"+ screenName.toString();
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(screenName == null){
+            return false;
+        }
+        if(screenName.isEmpty()){
+            return false;
+        }
+        if(!this.hasValidScreenName()){
+            return false;
+        }
+        if(idTwitter == null){
+            return false;
+        }
+        return true;
+    }
+
+    @Transient
+    public boolean hasValidScreenName() {
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenName(String screenName) {
+        if(screenName==null){
+            return false;
+        }
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenName);
+        return m.matches();
     }
 
     @Transient
@@ -102,16 +142,12 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Transient
-    public boolean hasValidScreenName() {
-        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
-    }
-
-    public static boolean isValidScreenName(String screenName) {
-        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
-        Matcher m = p.matcher(screenName);
-        return m.matches();
+    public boolean isRawMentionFromUserDescription() {
+        if(this.isValid()) {
+            return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
+        } else {
+            return false;
+        }
     }
 
     public boolean hasUser() {
@@ -128,11 +164,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString() +"_"+ screenName.toString();
     }
 
     public String getScreenName() {
@@ -186,22 +217,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
             ", name='" + name + '\'' +
                 super.toString() +
             " }\n";
-    }
-
-    @Transient
-    public boolean isValid() {
-        if((screenName == null) ||(screenName.isEmpty())|| isRawMentionFromUserDescription()){
-            return false;
-        }
-        if(idTwitter <= 1L){
-            return false;
-        }
-        return true;
-    }
-
-    @Transient
-    public boolean isRawMentionFromUserDescription() {
-        return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
     }
 
     @Override

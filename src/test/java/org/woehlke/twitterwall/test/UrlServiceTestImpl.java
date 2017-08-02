@@ -15,7 +15,7 @@ import java.util.*;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-public class UrlServiceTestImpl implements UrlServiceTest {
+public class UrlServiceTestImpl implements UrlServiceTestHelper {
 
     @Autowired
     private BackendProperties backendProperties;
@@ -46,8 +46,10 @@ public class UrlServiceTestImpl implements UrlServiceTest {
         return testData;
     }
 
+    //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     private static Map<String, String> hosts = new HashMap<>();
 
+    //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     static {
         hosts.put("https://t.co/4tDiIJ74eR", "www.ecentral.de");
         hosts.put("https://t.co/n9LlZXFjTc", "www.davitec.de");
@@ -108,8 +110,10 @@ public class UrlServiceTestImpl implements UrlServiceTest {
         hosts.put("http://t.co/CudjEZGLVT", "sebastian.kreideweiss.info");
     }
 
+    //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     private static Map<String, String> urls = new HashMap<>();
 
+    //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     static {
         urls.put("https://t.co/4tDiIJ74eR", "http://www.ecentral.de/");
         urls.put("https://t.co/n9LlZXFjTc", "https://www.davitec.de/");
