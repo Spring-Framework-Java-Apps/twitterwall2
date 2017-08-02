@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
+import org.woehlke.twitterwall.oodm.entities.Media;
 import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 
@@ -60,7 +61,21 @@ public class TweetServiceTest {
     @Commit
     @Test
     public void findByIdTwitter() throws Exception {
-
+        String msg = "findByIdTwitter: ";
+        int page=1;
+        int size=1;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Tweet> myPage = tweetService.getAll(pageRequest);
+        if(myPage.getTotalElements()>0){
+            Tweet myMedia = myPage.getContent().iterator().next();
+            long expectedIdTwitter = myMedia.getIdTwitter();
+            Tweet myFoundMedia = tweetService.findByIdTwitter(expectedIdTwitter);
+            long foundIdTwitter = myFoundMedia.getIdTwitter();
+            Assert.assertEquals(msg, expectedIdTwitter,foundIdTwitter);
+            log.debug(msg+" found: "+myMedia.getUniqueId());
+        } else {
+            log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
     }
 
     @Commit

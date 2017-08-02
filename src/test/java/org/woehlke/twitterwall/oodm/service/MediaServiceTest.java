@@ -59,12 +59,40 @@ public class MediaServiceTest {
     @Commit
     @Test
     public void findByIdTwitter() throws Exception {
-
+        String msg = "findByIdTwitter: ";
+        int page=1;
+        int size=1;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Media> myPage = mediaService.getAll(pageRequest);
+        if(myPage.getTotalElements()>0){
+            Media myMedia = myPage.getContent().iterator().next();
+            long expectedIdTwitter = myMedia.getIdTwitter();
+            Media myFoundMedia = mediaService.findByIdTwitter(expectedIdTwitter);
+            long foundIdTwitter = myFoundMedia.getIdTwitter();
+            Assert.assertEquals(msg, expectedIdTwitter,foundIdTwitter);
+            log.debug(msg+" found: "+myMedia.getUniqueId());
+        } else {
+            log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
     }
 
     @Commit
     @Test
     public void findByUrl() throws Exception {
-
+        String msg = "findByUrl: ";
+        int page=1;
+        int size=1;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Media> myPage = mediaService.getAll(pageRequest);
+        if(myPage.getTotalElements()>0){
+            Media myMedia = myPage.getContent().iterator().next();
+            String expectedUrl = myMedia.getUrl();
+            Media myFoundMedia = mediaService.findByUrl(expectedUrl);
+            String foundUrl = myMedia.getUrl();
+            Assert.assertEquals(msg, expectedUrl, myFoundMedia);
+            log.debug(msg+" found: "+foundUrl);
+        } else {
+            log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
     }
 }
