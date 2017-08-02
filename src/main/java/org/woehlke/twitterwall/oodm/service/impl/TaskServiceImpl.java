@@ -71,11 +71,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task done(Task task,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("DONE ",task.getTaskStatus(),TaskStatus.FINISHED,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("DONE ",oldStatus,TaskStatus.FINISHED,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -83,11 +84,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task error(Task task,Exception e,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("error: "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("error: "+e.getMessage(),oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -95,11 +97,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task error(Task task, Exception e, String msg,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory(msg+", error: "+e.getMessage(),task.getTaskStatus(),TaskStatus.ERROR,now,task,countedEntities);
+        TaskHistory event = new TaskHistory(msg+", error: "+e.getMessage(),oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -107,11 +110,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task warn(Task task, Exception e,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("warn: "+e.getMessage(),task.getTaskStatus(),TaskStatus.WARN,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("warn: "+e.getMessage(),oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -119,11 +123,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task warn(Task task, Exception e, String msg,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("warn: "+msg+", "+e.getMessage(),task.getTaskStatus(),TaskStatus.WARN,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("warn: "+msg+", "+e.getMessage(),oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -131,10 +136,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task event(Task task, String msg,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("event: "+msg,task.getTaskStatus(),task.getTaskStatus(),now,task,countedEntities);
+        TaskHistory event = new TaskHistory("event: "+msg,task.getTaskStatus(),oldStatus,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -142,11 +148,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task warn(Task task, String msg,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("warn: "+msg,task.getTaskStatus(),TaskStatus.WARN,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("warn: "+msg,oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -154,11 +161,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task error(Task task, String msg,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("error: "+msg,task.getTaskStatus(),TaskStatus.ERROR,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("error: "+msg,oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -166,11 +174,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task start(Task task,CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.RUNNING);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("START",task.getTaskStatus(),TaskStatus.RUNNING,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("START",oldStatus,TaskStatus.RUNNING,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -178,11 +187,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task finalError(Task task, String msg, CountedEntities countedEntities) {
-        task.setTaskStatus(TaskStatus.ERROR);
+        TaskStatus oldStatus = task.getTaskStatus();
+        task.setTaskStatus(TaskStatus.FINAL_ERROR);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("FINAL ERROR: "+msg,task.getTaskStatus(),TaskStatus.ERROR,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("FINAL ERROR: "+msg,oldStatus,TaskStatus.FINAL_ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;
@@ -190,11 +200,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task done(String logMsg, Task task, CountedEntities countedEntities) {
+        TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);
         task.setTimeLastUpdate(new Date());
         task = taskRepository.save(task);
         Date now = new Date();
-        TaskHistory event = new TaskHistory("DONE "+logMsg,task.getTaskStatus(),TaskStatus.FINISHED,now,task,countedEntities);
+        TaskHistory event = new TaskHistory("DONE "+logMsg,oldStatus,TaskStatus.FINISHED,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
         log.debug(task.toString());
         return task;

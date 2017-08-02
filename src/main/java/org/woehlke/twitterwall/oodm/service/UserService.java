@@ -18,7 +18,7 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
 
     Page<String> getAllDescriptions(Pageable pageRequest);
 
-    Page<Long> getAllTwitterIds(Pageable pageRequest);
+    //Page<Long> getAllTwitterIds(Pageable pageRequest);
 
     Page<User> getUsersForHashTag(HashTag hashTag,Pageable pageRequest);
 

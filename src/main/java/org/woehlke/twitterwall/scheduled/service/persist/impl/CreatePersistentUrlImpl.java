@@ -72,7 +72,6 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                         Url newUrl = new Url(task, null, displayUrl, urlCache.getExpanded(), urlCache.getUrl());
                         log.debug(msg + " try to persist: " + newUrl.toString());
                         newUrl = urlRepository.save(newUrl);
-                        //TODO: delete ?
                         if ((!newUrl.isRawUrlsFromDescription()) && (!newUrl.isUrlAndExpandedTheSame())) {
                             urlCacheRepository.delete(urlCache);
                         }
