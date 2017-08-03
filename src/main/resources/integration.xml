@@ -82,12 +82,12 @@
 
     <int:router id="startTaskRouter" input-channel="startTaskChannel" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="updateTweetsChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES" channel="updateUsersChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES_FROM_MENTIONS" channel="updateUsersFromMentionsChannel"/>
-        <int:mapping value="FETCH_TWEETS_FROM_TWITTER_SEARCH" channel="fetchTweetsFromSearchChannel"/>
-        <int:mapping value="FETCH_USERS_FROM_DEFINED_USER_LIST" channel="fetchUsersFromListChannel"/>
-        <int:mapping value="CONTROLLER_GET_TESTDATA_USER" channel="createTestDataUsersChannel"/>
-        <int:mapping value="CONTROLLER_GET_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
+        <int:mapping value="UPDATE_USERS" channel="updateUsersChannel"/>
+        <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsChannel"/>
+        <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchChannel"/>
+        <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
     </int:router>
 

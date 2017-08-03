@@ -59,13 +59,17 @@ public class PrepareDataTestImpl implements PrepareDataTest {
             for (long idTwitter : schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest()) {
                 try {
                     org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
-                    loopId++;
-                    log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.storeOneTweet.storeOneTweet(tweet, task);
-                    log.info(msg + "--------------------------------------------------------------------");
-                    log.info(msg + persTweet.toString());
-                    log.info(msg + "--------------------------------------------------------------------");
-                    latest.add(persTweet);
+                    if(tweet!=null) {
+                        loopId++;
+                        log.info(msg + loopId);
+                        org.woehlke.twitterwall.oodm.entities.Tweet persTweet = this.storeOneTweet.storeOneTweet(tweet, task);
+                        if (persTweet != null) {
+                            log.info(msg + "--------------------------------------------------------------------");
+                            log.info(msg + persTweet.toString());
+                            log.info(msg + "--------------------------------------------------------------------");
+                            latest.add(persTweet);
+                        }
+                    }
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
                 } catch (NoResultException e) {
@@ -94,10 +98,14 @@ public class PrepareDataTestImpl implements PrepareDataTest {
             for (long idTwitter : schedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest()) {
                 try {
                     TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(idTwitter);
-                    loopId++;
-                    log.info(msg + loopId);
-                    org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
-                    user.add(persUser);
+                    if(twitterProfile != null){
+                        loopId++;
+                        log.info(msg + loopId);
+                        org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
+                        if(persUser != null){
+                            user.add(persUser);
+                        }
+                    }
                 } catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
                 } catch (NoResultException e) {
@@ -106,10 +114,14 @@ public class PrepareDataTestImpl implements PrepareDataTest {
             }
             try {
                 TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(frontendProperties.getImprintScreenName());
-                loopId++;
-                log.info(msg + loopId);
-                org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile,task);
-                user.add(persUser);
+                if(twitterProfile != null) {
+                    loopId++;
+                    log.info(msg + loopId);
+                    org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile, task);
+                    if(persUser != null) {
+                        user.add(persUser);
+                    }
+                }
             } catch (EmptyResultDataAccessException e) {
                 log.warn(msg + e.getMessage());
             } catch (NoResultException e) {

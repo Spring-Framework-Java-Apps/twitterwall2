@@ -9,7 +9,6 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.channel.SenderType;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UserFinisher;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserResultList;
@@ -44,7 +43,7 @@ public class UserFinisherImpl implements UserFinisher {
             break;
         }
         Task task = taskService.findById(taskId);
-        String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
+        String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by FIRE_AND_FORGET_SENDER";
         taskService.done(msgDone,task,countedEntities);
         log.info(msgDone);
     }

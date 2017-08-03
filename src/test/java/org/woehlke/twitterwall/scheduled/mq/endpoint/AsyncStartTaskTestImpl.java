@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -37,7 +38,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Test
     public void updateTweetsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqAsyncStartTask.updateTweets();
+        Task task = this.mqAsyncStartTask.updateTweets();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -49,7 +50,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Test
     public void updateUserProfilesTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqAsyncStartTask.updateUserProfiles();
+        Task task = this.mqAsyncStartTask.updateUserProfiles();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -61,7 +62,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Test
     public void updateUserProfilesFromMentionsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqAsyncStartTask.updateUserProfilesFromMentions();
+        Task task = this.mqAsyncStartTask.updateUserProfilesFromMentions();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -73,7 +74,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Test
     public void fetchTweetsFromTwitterSearchTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqAsyncStartTask.fetchTweetsFromTwitterSearch();
+        Task task = this.mqAsyncStartTask.fetchTweetsFromTwitterSearch();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -85,7 +86,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Test
     public void fetchUsersFromDefinedUserListTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqAsyncStartTask.fetchUsersFromDefinedUserList();
+        Task task = this.mqAsyncStartTask.fetchUsersFromDefinedUserList();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

@@ -14,7 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.channel.SenderType;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
@@ -61,7 +60,7 @@ public class StartTaskImpl implements StartTask {
     @Override
     public User createImprintUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
-        String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        String logMsg = "Start task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType,countedEntities);
@@ -81,12 +80,12 @@ public class StartTaskImpl implements StartTask {
             UserMessage msg = (UserMessage) o;
             long taskId = msg.getTaskMessage().getTaskId();
             task = taskService.findById(taskId);
-            logMsg = "Sucessfully finished task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+            logMsg = "Sucessfully finished task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
             taskService.done(logMsg, task, countedEntities);
             log.info(logMsg);
             return msg.getUser();
         } else {
-            logMsg = "Finished with Error: task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER+": Wrong type of returnedMessage";
+            logMsg = "Finished with Error: task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER: Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);
             log.error(logMsg);
             return null;
@@ -96,7 +95,7 @@ public class StartTaskImpl implements StartTask {
     @Override
     public List<User> createTestDataForUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
-        String logMsg = "Start task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        String logMsg = "Start task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType, countedEntities);
@@ -116,12 +115,12 @@ public class StartTaskImpl implements StartTask {
             UserResultList result = (UserResultList) o;
             long taskId = result.getTaskId();
             task = taskService.findById(taskId);
-            logMsg = "Sucessfully finished task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+            logMsg = "Sucessfully finished task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
             taskService.done(logMsg, task, countedEntities);
             log.info(logMsg);
             return result.getUserList();
         } else {
-            logMsg = "Finished with Error: task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER+": Wrong type of returnedMessage";
+            logMsg = "Finished with Error: task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER: Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);
             log.error(logMsg);
             return new ArrayList<>();
@@ -131,7 +130,7 @@ public class StartTaskImpl implements StartTask {
     @Override
     public List<Tweet> createTestDataForTweets() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
-        String logMsg = "Start task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        String logMsg = "Start task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, countedEntities);
@@ -151,12 +150,12 @@ public class StartTaskImpl implements StartTask {
             TweetResultList result = (TweetResultList) o;
             long taskId = result.getTaskId();
             task = taskService.findById(taskId);
-            logMsg = "Sucessfully finished task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+            logMsg = "Sucessfully finished task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
             taskService.done(logMsg, task, countedEntities);
             log.info(logMsg);
             return result.getTweetList();
         } else {
-            logMsg = "Finished with Error: task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER+": Wrong type of returnedMessage";
+            logMsg = "Finished with Error: task "+taskType+" via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER: Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);
             log.error(logMsg);
             return new ArrayList<>();
@@ -164,7 +163,7 @@ public class StartTaskImpl implements StartTask {
     }
 
     private Task sendAndReceiveTweet(TaskType taskType){
-        String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        String logMsg = "Start task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType,countedEntities);
@@ -184,10 +183,10 @@ public class StartTaskImpl implements StartTask {
             TweetResultList msg = (TweetResultList) o;
             long taskId = msg.getTaskId();
             task = taskService.findById(taskId);
-            logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+            logMsg = "Sucessfully finished task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
             taskService.done(logMsg,task,countedEntities);
         } else {
-            logMsg = "Finished with Error: task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER+": Wrong type of returnedMessage";
+            logMsg = "Finished with Error: task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER: Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);
             log.error(logMsg);
         }
@@ -195,7 +194,7 @@ public class StartTaskImpl implements StartTask {
     }
 
     private Task sendAndReceiveUser(TaskType taskType){
-        String logMsg = "Start task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+        String logMsg = "Start task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(logMsg, taskType,countedEntities);
@@ -215,11 +214,11 @@ public class StartTaskImpl implements StartTask {
             UserMessage msg = (UserMessage) o;
             long taskId = msg.getTaskMessage().getTaskId();
             task = taskService.findById(taskId);
-            logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
+            logMsg = "Sucessfully finished task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
             taskService.done(logMsg,task,countedEntities);
             log.info(logMsg);
         } else {
-            logMsg = "Finished with Error: task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER+": Wrong type of returnedMessage";
+            logMsg = "Finished with Error: task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER: Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);
             log.error(logMsg);
         }
