@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.CreateTestDataForUsers;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.CreateTestDataUsersSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -21,8 +21,8 @@ import java.util.List;
 
 import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
 
-@Component("mqCreateTestDataForUsers")
-public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
+@Component("mqCreateTestDataForUsersSplitter")
+public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplitter {
 
     private final SchedulerProperties schedulerProperties;
 
@@ -34,7 +34,7 @@ public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public CreateTestDataForUsersImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
+    public CreateTestDataUsersSplitterImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
         this.schedulerProperties = schedulerProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
@@ -51,18 +51,23 @@ public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
         List<String> userIdList = schedulerProperties.getFacade().getScreenNamesToFetchForUserControllerTest();
+        int loopId = 0;
+        int loopAll = userIdList.size();
         for (String screenName : userIdList) {
+            loopId++;
             User userPers = userService.findByScreenName(screenName);
             if(userPers==null){
-                userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName));
+                userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
             } else {
                 if(!userPers.getTwitterApiCaching().isCached(task.getTaskType(),ZWOELF_STUNDEN)) {
-                    userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName));
+                    userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
                 } else {
                     UserMessage msg = new UserMessage(msgIn,screenName,userPers);
                     Message<UserMessage> mqMessageOut =
                             MessageBuilder.withPayload(msg)
                                     .copyHeaders(incomingTaskMessage.getHeaders())
+                                    .setHeader("tw_lfd_nr",loopId)
+                                    .setHeader("tw_all",loopAll)
                                     .build();
                     userProfileList.add(mqMessageOut);
                 }
@@ -71,13 +76,15 @@ public class CreateTestDataForUsersImpl implements CreateTestDataForUsers {
         return userProfileList;
     }
 
-    private Message<UserMessage> getUserProfileFromTwitterApi(Message<TaskMessage> incomingTaskMessage, String screenName){
+    private Message<UserMessage> getUserProfileFromTwitterApi(Message<TaskMessage> incomingTaskMessage, String screenName,int loopId,int loopAll){
         TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
         TaskMessage msgIn = incomingTaskMessage.getPayload();
         UserMessage msg = new UserMessage(msgIn,userProfile);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(msg)
                         .copyHeaders(incomingTaskMessage.getHeaders())
+                        .setHeader("tw_lfd_nr",loopId)
+                        .setHeader("tw_all",loopAll)
                         .build();
         return mqMessageOut;
 

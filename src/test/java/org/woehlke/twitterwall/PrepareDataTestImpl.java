@@ -51,7 +51,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     public void getTestDataTweets(String msg){
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_TWEETS,countedEntities);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS,countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -87,7 +87,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     public void getTestDataUser(String msg){
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_USERS,countedEntities);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;

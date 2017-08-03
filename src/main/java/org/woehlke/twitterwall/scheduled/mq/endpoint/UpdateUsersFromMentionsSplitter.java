@@ -6,7 +6,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 import java.util.List;
 
-public interface UpdateUserProfiles {
+public interface UpdateUsersFromMentionsSplitter {
 
-    List<UserMessage> splitMessage(Message<TaskMessage> message);
+    List<Message<UserMessage>> splitMessage(Message<TaskMessage> message);
 }

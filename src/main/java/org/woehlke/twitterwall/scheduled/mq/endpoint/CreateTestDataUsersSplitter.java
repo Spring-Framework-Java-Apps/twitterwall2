@@ -6,7 +6,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 import java.util.List;
 
-public interface CreateTestDataForUsers {
+public interface CreateTestDataUsersSplitter {
 
     List<Message<UserMessage>> splitMessage(Message<TaskMessage> message);
 }

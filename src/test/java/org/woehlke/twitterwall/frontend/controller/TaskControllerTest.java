@@ -95,7 +95,7 @@ public class TaskControllerTest {
     public void getTaskByIdTest() throws Exception {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
-        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH,countedEntities);
+        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_SEARCH,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())

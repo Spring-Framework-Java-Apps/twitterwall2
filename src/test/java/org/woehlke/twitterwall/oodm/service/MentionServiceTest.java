@@ -75,7 +75,7 @@ public class MentionServiceTest {
     public void createProxyMention() throws Exception {
         String msg = "createProxyMention: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         Task task = taskService.create("MentionServiceTest."+msg,type,countedEntities);
         String mentionString = "ddhgcvdghvsdhg";
         Mention mention = new Mention(task,task, mentionString);

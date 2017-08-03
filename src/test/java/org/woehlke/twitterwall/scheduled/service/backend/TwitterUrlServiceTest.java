@@ -62,7 +62,7 @@ public class TwitterUrlServiceTest {
         log.info(msg);
 
         String descriptionTask = "Make it so, Scotty";
-        TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         long taskId = 222L;
 
         TaskStatus taskStatus = TaskStatus.READY;

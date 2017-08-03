@@ -1,15 +1,17 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
+import org.woehlke.twitterwall.oodm.entities.Task;
+
 public interface AsyncStartTask {
 
-    void updateTweets();
+    Task updateTweets();
 
-    void updateUserProfiles();
+    Task updateUserProfiles();
 
-    void updateUserProfilesFromMentions();
+    Task updateUserProfilesFromMentions();
 
-    void fetchTweetsFromTwitterSearch();
+    Task fetchTweetsFromTwitterSearch();
 
-    void fetchUsersFromDefinedUserList();
+    Task fetchUsersFromDefinedUserList();
 
 }

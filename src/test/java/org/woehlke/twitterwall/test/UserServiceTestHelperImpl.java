@@ -59,7 +59,7 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
     public User createUser(String screenName) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_USERS,countedEntities);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);

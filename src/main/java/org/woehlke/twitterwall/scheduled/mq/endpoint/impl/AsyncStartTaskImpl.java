@@ -21,48 +21,51 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
-    public void fetchTweetsFromTwitterSearch() {
-        TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
-        send(taskType);
+    public Task fetchTweetsFromTwitterSearch() {
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        return send(taskType);
     }
 
     @Override
-    public void updateTweets() {
+    public Task updateTweets() {
         TaskType taskType = TaskType.UPDATE_TWEETS;
-        send(taskType);
+        return send(taskType);
     }
 
     @Override
-    public void updateUserProfiles() {
-        TaskType taskType = TaskType.UPDATE_USER_PROFILES;
-        send(taskType);
+    public Task updateUserProfiles() {
+        TaskType taskType = TaskType.UPDATE_USERS;
+        return send(taskType);
     }
 
     @Override
-    public void updateUserProfilesFromMentions() {
-        TaskType taskType = TaskType.UPDATE_USER_PROFILES_FROM_MENTIONS;
-        send(taskType);
+    public Task updateUserProfilesFromMentions() {
+        TaskType taskType = TaskType.UPDATE_USERS_FROM_MENTIONS;
+        return send(taskType);
     }
 
     @Override
-    public void fetchUsersFromDefinedUserList() {
-        TaskType taskType = TaskType.FETCH_USERS_FROM_DEFINED_USER_LIST;
-        send(taskType);
+    public Task fetchUsersFromDefinedUserList() {
+        TaskType taskType = TaskType.FETCH_USERS_FROM_LIST;
+        return send(taskType);
     }
 
-    private void send(TaskType taskType){
+    private Task send(TaskType taskType){
         String msg = "START Task "+taskType+" via MQ by "+SenderType.FIRE_AND_FORGET_SENDER;
         log.info(msg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, taskType,countedEntities);
+        Task task = taskService.create(msg, taskType, countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
         Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
                 .setHeader("task_id", task.getId())
                 .setHeader("task_uid", task.getUniqueId())
                 .setHeader("task_type", task.getTaskType())
+                .setHeader("time_started", task.getTimeStarted().getTime())
+                .setHeader("send_type", "async")
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
         mqTemplate.send(executorChannelForAsyncStart, mqMessage);
+        return task;
     }
 
     @Autowired

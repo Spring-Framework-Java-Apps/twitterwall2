@@ -184,28 +184,28 @@ public class TaskInfo implements Serializable {
         if(task!=null) {
             TaskType useCase = task.getTaskType();
             switch (useCase) {
-                case FETCH_TWEETS_FROM_TWITTER_SEARCH:
+                case FETCH_TWEETS_FROM_SEARCH:
                     this.updatedByFetchTweetsFromTwitterSearch = true;
                     break;
                 case UPDATE_TWEETS:
                     this.updatedByUpdateTweets = true;
                     break;
-                case UPDATE_USER_PROFILES:
+                case UPDATE_USERS:
                     this.updatedByUpdateUserProfiles = true;
                     break;
-                case UPDATE_USER_PROFILES_FROM_MENTIONS:
+                case UPDATE_USERS_FROM_MENTIONS:
                     this.updatedByUpdateUserProfilesFromMentions = true;
                     break;
-                case FETCH_USERS_FROM_DEFINED_USER_LIST:
+                case FETCH_USERS_FROM_LIST:
                     this.updatedByFetchUsersFromDefinedUserList = true;
                     break;
                 case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
                     this.controllerAddUserForScreenName = true;
                     break;
-                case CONTROLLER_GET_TESTDATA_TWEETS:
+                case CONTROLLER_CREATE_TESTDATA_TWEETS:
                     this.controllerGetTestdataForTweets = true;
                     break;
-                case CONTROLLER_GET_TESTDATA_USER:
+                case CONTROLLER_CREATE_TESTDATA_USERS:
                     this.controllerGetTestdataForUsers = true;
                     break;
                 default:

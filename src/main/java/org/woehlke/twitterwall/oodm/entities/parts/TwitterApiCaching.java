@@ -43,25 +43,25 @@ public class TwitterApiCaching implements Serializable {
     public Boolean isCached(TaskType taskType, long timeToLive){
         Date lastApiCall = null;
         switch (taskType){
-            case FETCH_TWEETS_FROM_TWITTER_SEARCH:
+            case FETCH_TWEETS_FROM_SEARCH:
                 lastApiCall = fetchTweetsFromTwitterSearch;
                 break;
             case UPDATE_TWEETS:
                 lastApiCall = updateTweets;
                 break;
-            case UPDATE_USER_PROFILES:
+            case UPDATE_USERS:
                 lastApiCall = updateUserProfiles;
                 break;
-            case UPDATE_USER_PROFILES_FROM_MENTIONS:
+            case UPDATE_USERS_FROM_MENTIONS:
                 lastApiCall = updateUserProfilesFromMentions;
                 break;
-            case FETCH_USERS_FROM_DEFINED_USER_LIST:
+            case FETCH_USERS_FROM_LIST:
                 lastApiCall = fetchUsersFromDefinedUserList;
                 break;
-            case CONTROLLER_GET_TESTDATA_TWEETS:
+            case CONTROLLER_CREATE_TESTDATA_TWEETS:
                 lastApiCall = controllerGetTestdataTweets;
                 break;
-            case CONTROLLER_GET_TESTDATA_USER:
+            case CONTROLLER_CREATE_TESTDATA_USERS:
                 lastApiCall = controllerGetTestdataUser;
                 break;
             case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
@@ -83,25 +83,25 @@ public class TwitterApiCaching implements Serializable {
     public void store(TaskType taskType){
         Date lastApiCall = new Date();
         switch (taskType){
-            case FETCH_TWEETS_FROM_TWITTER_SEARCH:
+            case FETCH_TWEETS_FROM_SEARCH:
                 fetchTweetsFromTwitterSearch = lastApiCall;
                 break;
             case UPDATE_TWEETS:
                 updateTweets = lastApiCall;
                 break;
-            case UPDATE_USER_PROFILES:
+            case UPDATE_USERS:
                 updateUserProfiles = lastApiCall;
                 break;
-            case UPDATE_USER_PROFILES_FROM_MENTIONS:
+            case UPDATE_USERS_FROM_MENTIONS:
                 updateUserProfilesFromMentions = lastApiCall;
                 break;
-            case FETCH_USERS_FROM_DEFINED_USER_LIST:
+            case FETCH_USERS_FROM_LIST:
                 fetchUsersFromDefinedUserList = lastApiCall;
                 break;
-            case CONTROLLER_GET_TESTDATA_TWEETS:
+            case CONTROLLER_CREATE_TESTDATA_TWEETS:
                 controllerGetTestdataTweets = lastApiCall;
                 break;
-            case CONTROLLER_GET_TESTDATA_USER:
+            case CONTROLLER_CREATE_TESTDATA_USERS:
                 controllerGetTestdataUser = lastApiCall;
                 break;
             case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:

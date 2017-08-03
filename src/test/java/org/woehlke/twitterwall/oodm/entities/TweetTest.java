@@ -18,7 +18,7 @@ public class TweetTest implements DomainObjectMinimalTest  {
     @Override
     public void getUniqueIdTest() throws Exception {
         String descriptionTask = "start: ";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
@@ -43,7 +43,7 @@ public class TweetTest implements DomainObjectMinimalTest  {
         String msg = "isValidTest: ";
 
         String descriptionTask = "start: ";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
