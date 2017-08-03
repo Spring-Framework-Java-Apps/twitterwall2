@@ -3,7 +3,6 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
@@ -12,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+//import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScreenName;
 
@@ -59,14 +58,14 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
 
     private final StoreUserProfile storeUserProfile;
 
-    private final TaskService taskService;
+    //private final TaskService taskService;
 
     @Autowired
-    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile, TaskService taskService) {
+    public StoreUserProfileForScreenNameImpl(UserService userService, TwitterApiService twitterApiService, StoreUserProfile storeUserProfile/*, TaskService taskService*/) {
         this.userService = userService;
         this.twitterApiService = twitterApiService;
         this.storeUserProfile = storeUserProfile;
-        this.taskService = taskService;
+        //this.taskService = taskService;
     }
 
 }

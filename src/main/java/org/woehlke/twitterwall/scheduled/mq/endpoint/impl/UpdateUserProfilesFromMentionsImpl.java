@@ -11,13 +11,15 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateUserProfilesFromMentions;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
@@ -38,22 +40,25 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
 
     private final MentionService mentionService;
 
+    private final UserService userService;
+
     private final CountedEntitiesService countedEntitiesService;
 
-    public UpdateUserProfilesFromMentionsImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, CountedEntitiesService countedEntitiesService) {
+    public UpdateUserProfilesFromMentionsImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, UserService userService, CountedEntitiesService countedEntitiesService) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.mentionService = mentionService;
+        this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
     }
 
     @Override
-    public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
+    public List<UserMessage> splitMessage(Message<TaskMessage> message) {
         String msg ="splitMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        List<TwitterProfileMessage> userProfileList = new ArrayList<>();
+        List<UserMessage> userProfileList = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
@@ -68,11 +73,19 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             hasNext = allPersMentions.hasNext();
             for (Mention onePersMentions : allPersMentions) {
                 if (!onePersMentions.hasPersistentUser()) {
-                    lfdNr++;
-                    all++;
                     String screenName = onePersMentions.getScreenName();
-                    log.debug("### mentionService.getAll from DB ("+lfdNr+"): "+screenName);
-                    screenNames.add(screenName);
+                    User foundUser = userService.findByScreenName(screenName);
+                    if(foundUser == null) {
+                        lfdNr++;
+                        all++;
+                        log.debug("### mentionService.getAll from DB (" + lfdNr + "): " + screenName);
+                        screenNames.add(screenName);
+                    } else {
+                        onePersMentions.setUser(foundUser);
+                        onePersMentions.setIdTwitterOfUser(foundUser.getIdTwitter());
+                        onePersMentions = mentionService.store(onePersMentions,task);
+                        log.debug("### updated Mention with screenName = " + screenName);
+                    }
                 }
             }
             pageRequest = pageRequest.next();
@@ -83,7 +96,7 @@ public class UpdateUserProfilesFromMentionsImpl implements UpdateUserProfilesFro
             log.debug("### twitterApiService.getUserProfileForScreenName("+screenName+") from Twiiter API ("+lfdNr+" of "+all+")");
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             if(userProfile!=null) {
-                TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn, userProfile);
+                UserMessage userMsg = new UserMessage(msgIn, userProfile);
                 userProfileList.add(userMsg);
             }
             log.debug(msg+"### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);

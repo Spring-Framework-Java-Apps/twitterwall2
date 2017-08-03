@@ -2,6 +2,10 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+
+import java.util.Date;
 
 public class UrlTest implements DomainObjectMinimalTest  {
 
@@ -11,7 +15,15 @@ public class UrlTest implements DomainObjectMinimalTest  {
     public void getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
-        Task createdBy=null;
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+
+        Task createdBy=task;
         Task updatedBy=null;
         String urlUrl = "https://t.co/qCd5aTUWEr";
         String urlExpanded = "https://thomas-woehlke.blogspot.de/";
@@ -28,7 +40,15 @@ public class UrlTest implements DomainObjectMinimalTest  {
     public void isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
-        Task createdBy=null;
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+
+        Task createdBy=task;
         Task updatedBy=null;
         String urlUrl = "https://t.co/qCd5aTUWEr";
         String urlExpanded = "https://thomas-woehlke.blogspot.de/";

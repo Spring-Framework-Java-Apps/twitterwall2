@@ -2,13 +2,16 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
+import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -28,7 +31,17 @@ import java.util.regex.Pattern;
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
-        @Index(name="idx_userprofile_url", columnList="url")
+        @Index(name="idx_userprofile_url", columnList="url")/*,
+        @Index(name="idx_userprofile_fetch_tweets_from_twitter_search", columnList="fetch_tweets_from_twitter_search"),
+        @Index(name="idx_userprofile_update_tweets", columnList="update_tweets"),
+        @Index(name="idx_userprofile_update_user_profiles", columnList="update_user_profiles"),
+        @Index(name="idx_userprofile_update_user_profiles_from_mentions", columnList="update_user_profiles_from_mentions"),
+        @Index(name="idx_userprofile_fetch_users_from_defined_user_list", columnList="fetch_users_from_defined_user_list"),
+        @Index(name="idx_userprofile_controller_get_testdata_tweets", columnList="controller_get_testdata_tweets"),
+        @Index(name="idx_userprofile_controller_get_testdata_user", columnList="controller_get_testdata_user"),
+        @Index(name="idx_userprofile_controller_add_user_for_screen_name", columnList="controller_add_user_for_screen_name"),
+        @Index(name="idx_userprofile_controller_create_imprint_user", columnList="controller_create_imprint_user")
+        */
     }
 )
 @NamedQueries({
@@ -104,7 +117,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractDomainObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
+public class User extends AbstractDomainObject<User> implements DomainObjectWithUrl<User>,DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -227,6 +240,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column(length = 4096)
     private String profileBannerUrl;
 
+    @Valid
+    @NotNull
+    @Embedded
+    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
+
     @NotNull
     @Embedded
     @AssociationOverrides({
@@ -273,6 +291,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.description = description;
         this.location = location;
         this.createdDate = createdDate;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     private User() {
@@ -514,6 +537,14 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
 
     public void setFollowRequestSent(Boolean followRequestSent) {
         this.followRequestSent = followRequestSent;
+    }
+
+    public TwitterApiCaching getTwitterApiCaching() {
+        return twitterApiCaching;
+    }
+
+    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
+        this.twitterApiCaching = twitterApiCaching;
     }
 
     public Boolean getProtectedUser() {

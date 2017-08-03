@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 
 import java.util.Date;
 
@@ -23,7 +25,14 @@ public class UserTest implements DomainObjectMinimalTest {
         log.info(msg+"------------------------------------------------");
 
         String screenName = "port80guru";
-        Task task = null;
+
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
 
         User user1 = User.getDummyUserForScreenName(screenName,task);
 
@@ -63,7 +72,14 @@ public class UserTest implements DomainObjectMinimalTest {
         Long idTwitter2 = 5327635273276L;
 
         String screenName = "port80guru";
-        Task task = null;
+
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
 
         Assert.assertFalse(msg,User.isValidScreenName(invalidScreenName));
 

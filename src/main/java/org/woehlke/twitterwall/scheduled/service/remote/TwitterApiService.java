@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend;
+package org.woehlke.twitterwall.scheduled.service.remote;
 
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -12,13 +12,14 @@ public interface TwitterApiService {
 
     List<Tweet> findTweetsForSearchQuery();
 
-    Tweet findOneTweetById(long id);
+    Tweet findOneTweetById(long tweetTwitterId);
 
-    List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds);
+    //List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds);
 
     TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId);
 
     TwitterProfile getUserProfileForScreenName(String screenName);
 
     List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName);
+
 }

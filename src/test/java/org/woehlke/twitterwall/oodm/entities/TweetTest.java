@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 
 import java.util.Date;
 
@@ -15,8 +17,16 @@ public class TweetTest implements DomainObjectMinimalTest  {
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+
         String msg = "getUniqueIdTest: ";
-        Task createdBy = null;
+        Task createdBy = task;
         Task updatedBy = null;
         Long idTwitter = 57646546476L;
         String idStr = idTwitter.toString();
@@ -31,7 +41,16 @@ public class TweetTest implements DomainObjectMinimalTest  {
     @Override
     public void isValidTest() throws Exception {
         String msg = "isValidTest: ";
-        Task createdBy = null;
+
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+
+        Task createdBy = task;
         Task updatedBy = null;
         Long idTwitter = 57646546476L;
         String idStr = idTwitter.toString();

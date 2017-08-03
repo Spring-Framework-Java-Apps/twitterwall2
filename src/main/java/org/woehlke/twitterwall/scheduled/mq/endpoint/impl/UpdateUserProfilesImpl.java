@@ -14,17 +14,19 @@ import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateUserProfiles;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateUserProfiles")
@@ -52,7 +54,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
     }
 
     @Override
-    public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
+    public List<UserMessage> splitMessage(Message<TaskMessage> message) {
         String msg = "### mqUpdateUserProfiles.splitMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
@@ -60,6 +62,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
+        TaskType taskType = task.getTaskType();
         int loopId = 0;
         boolean hasNext=true;
         List<Long> worklistProfileTwitterIds = new ArrayList<>();
@@ -67,9 +70,11 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         while (hasNext) {
             Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
             for(User user:userProfileTwitterIds.getContent()){
-                loopId++;
-                log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());
-                worklistProfileTwitterIds.add(user.getIdTwitter());
+                if(!user.getTwitterApiCaching().isCached(taskType,ZWOELF_STUNDEN)){
+                    loopId++;
+                    log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());
+                    worklistProfileTwitterIds.add(user.getIdTwitter());
+                }
             }
             hasNext = userProfileTwitterIds.hasNext();
             pageRequest = pageRequest.next();
@@ -77,7 +82,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
         long number = worklistProfileTwitterIds.size();
         loopId = 0;
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        List<TwitterProfileMessage> userProfileList = new ArrayList<>();
+        List<UserMessage> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             String counter = " ( " + loopId + " from " + number + " ) ";
             log.debug(msg + counter);
@@ -90,7 +95,7 @@ public class UpdateUserProfilesImpl implements UpdateUserProfiles {
                 log.error(msg + "### ERROR: twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter,e);
             }
             if(userProfile != null){
-                TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,userProfile);
+                UserMessage userMsg = new UserMessage(msgIn,userProfile);
                 userProfileList.add(userMsg);
             }
             log.debug(msg + "### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);

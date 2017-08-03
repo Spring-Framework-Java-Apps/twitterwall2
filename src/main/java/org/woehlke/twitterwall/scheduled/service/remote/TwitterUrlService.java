@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend;
+package org.woehlke.twitterwall.scheduled.service.remote;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;

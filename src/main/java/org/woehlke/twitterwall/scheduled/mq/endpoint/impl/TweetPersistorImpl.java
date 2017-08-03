@@ -8,7 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.TweetPersistor;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweetPerform;
 
 @Component("mqTweetPersistor")
@@ -25,13 +25,18 @@ public class TweetPersistorImpl implements TweetPersistor {
     }
 
     @Override
-    public Message<TweetFromTwitter> persistTweet(Message<TweetFromTwitter> incomingUserMessage) {
-        TweetFromTwitter receivedMessage = incomingUserMessage.getPayload();
-        long id = receivedMessage.getTaskId();
-        Task task = taskService.findById(id);
-        Tweet tweet = storeOneTweetPerform.storeOneTweetPerform(receivedMessage.getTweet(),task);
-        TweetFromTwitter newTweetMsg = new TweetFromTwitter(id,tweet,receivedMessage.getTweetFromTwitter(),true,true);
-        Message<TweetFromTwitter> mqMessageOut = MessageBuilder.withPayload(newTweetMsg)
+    public Message<TweetMessage> persistTweet(Message<TweetMessage> incomingUserMessage) {
+        TweetMessage receivedMessage = incomingUserMessage.getPayload();
+        long taskId = receivedMessage.getTaskMessage().getTaskId();
+        Task task = taskService.findById(taskId);
+        TweetMessage newTweetMsg = null;
+        if(receivedMessage.isIgnoreTransformation()){
+            newTweetMsg = receivedMessage;
+        } else {
+            Tweet tweet = storeOneTweetPerform.storeOneTweetPerform(receivedMessage.getTweet(),task);
+            newTweetMsg = new TweetMessage(receivedMessage.getTaskMessage(),tweet,receivedMessage.getTweetFromTwitter());
+        }
+        Message<TweetMessage> mqMessageOut = MessageBuilder.withPayload(newTweetMsg)
             .copyHeaders(incomingUserMessage.getHeaders())
             .setHeader("persisted",Boolean.TRUE)
             .build();

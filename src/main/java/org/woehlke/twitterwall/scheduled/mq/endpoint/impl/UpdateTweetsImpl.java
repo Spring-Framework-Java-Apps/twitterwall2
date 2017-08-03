@@ -15,13 +15,14 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateTweets;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateTweets")
@@ -46,7 +47,7 @@ public class UpdateTweetsImpl implements UpdateTweets {
     }
 
     @Override
-    public List<TweetFromTwitter> splitMessage(Message<TaskMessage> message) {
+    public List<TweetMessage> splitMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = message.getPayload();
         long taskId = msgIn.getTaskId();
@@ -60,22 +61,24 @@ public class UpdateTweetsImpl implements UpdateTweets {
         while(hasNext) {
             Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
             for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
-                lfdNr++;
-                all++;
-                log.debug("### tweetService.findAllTwitterIds from DB ("+lfdNr+"): "+tweetTwitterId.getIdTwitter());
-                worklistTwitterIds.add(tweetTwitterId.getIdTwitter());
+                if(!tweetTwitterId.getTwitterApiCaching().isCached(task.getTaskType(),ZWOELF_STUNDEN)) {
+                    lfdNr++;
+                    all++;
+                    log.debug("### tweetService.findAllTwitterIds from DB (" + lfdNr + "): " + tweetTwitterId.getIdTwitter());
+                    worklistTwitterIds.add(tweetTwitterId.getIdTwitter());
+                }
             }
             hasNext = tweetTwitterIds.hasNext();
             pageRequest = pageRequest.next();
         }
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        List<TweetFromTwitter> tweets = new ArrayList<>();
+        List<TweetMessage> tweets = new ArrayList<>();
         lfdNr = 0;
         for(Long tweetTwitterId : worklistTwitterIds){
             lfdNr++;
             log.debug("### twitterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
-            TweetFromTwitter result = new TweetFromTwitter(task.getId(),foundTweetFromTwitter);
+            TweetMessage result = new TweetMessage(msgIn,foundTweetFromTwitter);
             tweets.add(result);
             log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
             try {

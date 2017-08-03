@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend.impl;
+package org.woehlke.twitterwall.scheduled.service.remote.impl;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.conf.properties.BackendProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

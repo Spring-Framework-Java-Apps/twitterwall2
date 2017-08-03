@@ -25,55 +25,55 @@
 
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
 
-    <int:channel id="startTaskChannel" >
+    <int:channel id="startTaskChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateTweetsChannel" >
+    <int:channel id="startUpdateTweetsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesChannel" >
+    <int:channel id="startUpdateUserProfilesChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsChannel" >
+    <int:channel id="startUpdateUserProfilesFromMentionsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTweetsFromTwitterSearchChannel" >
+    <int:channel id="startFetchTweetsFromTwitterSearchChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchUsersFromDefinedUserListChannel" >
+    <int:channel id="startFetchUsersFromDefinedUserListChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTestDataForUserChannel" >
+    <int:channel id="startFetchTestDataForUserChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTestDataForTweetsChannel" >
+    <int:channel id="startFetchTestDataForTweetsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchImprintUserChannel" >
+    <int:channel id="startFetchImprintUserChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
@@ -288,37 +288,37 @@
         <int:mapping value="FETCH_USERS_FROM_DEFINED_USER_LIST" channel="startFetchUsersFromDefinedUserListFireAndForgetChannel"/>
     </int:router>
 
-    <int:channel id="startUpdateTweetsFireAndForgetChannel" >
+    <int:channel id="startUpdateTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFireAndForgetChannel" >
+    <int:channel id="startUpdateUserProfilesFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTweetsFromTwitterSearchFireAndForgetChannel" >
+    <int:channel id="startFetchTweetsFromTwitterSearchFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsFireAndForgetChannel" >
+    <int:channel id="startUpdateUserProfilesFromMentionsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsChannelForWebController" >
+    <int:channel id="startUpdateUserProfilesFromMentionsChannelForWebController" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchUsersFromDefinedUserListFireAndForgetChannel" >
+    <int:channel id="startFetchUsersFromDefinedUserListFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>

@@ -10,8 +10,8 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.FetchUsersFromDefinedUserList;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
     }
 
     @Override
-    public List<TwitterProfileMessage> splitMessage(Message<TaskMessage> message) {
+    public List<UserMessage> splitMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        List<TwitterProfileMessage> userProfileList = new ArrayList<>();
+        List<UserMessage> userProfileList = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
@@ -50,7 +50,7 @@ public class FetchUsersFromDefinedUserListImpl implements FetchUsersFromDefinedU
         String fetchUsersList = schedulerProperties.getFetchUserList().getName();
         List<TwitterProfile> foundTwitterProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUsersList);
         for (TwitterProfile twitterProfile : foundTwitterProfiles) {
-            TwitterProfileMessage userMsg = new TwitterProfileMessage(msgIn,twitterProfile);
+            UserMessage userMsg = new UserMessage(msgIn,twitterProfile);
             userProfileList.add(userMsg);
         }
         return userProfileList;

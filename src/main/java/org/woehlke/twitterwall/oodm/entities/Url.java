@@ -7,8 +7,10 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
+import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.MalformedURLException;
 
@@ -23,7 +25,17 @@ import java.net.MalformedURLException;
     },
     indexes = {
         @Index(name="idx_url_expanded", columnList="expanded"),
-        @Index(name="idx_url_display", columnList="display")
+        @Index(name="idx_url_display", columnList="display")/*,
+        @Index(name="idx_url_fetch_tweets_from_twitter_search", columnList="fetch_tweets_from_twitter_search"),
+        @Index(name="idx_url_update_tweets", columnList="update_tweets"),
+        @Index(name="idx_url_update_user_profiles", columnList="update_user_profiles"),
+        @Index(name="idx_url_update_user_profiles_from_mentions", columnList="update_user_profiles_from_mentions"),
+        @Index(name="idx_url_fetch_users_from_defined_user_list", columnList="fetch_users_from_defined_user_list"),
+        @Index(name="idx_url_controller_get_testdata_tweets", columnList="controller_get_testdata_tweets"),
+        @Index(name="idx_url_controller_get_testdata_user", columnList="controller_get_testdata_user"),
+        @Index(name="idx_url_controller_add_user_for_screen_name", columnList="controller_add_user_for_screen_name"),
+        @Index(name="idx_url_ontroller_create_imprint_user", columnList="controller_create_imprint_user")
+        */
     }
 )
 @NamedQueries({
@@ -60,6 +72,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
+
+    @Valid
+    @NotNull
+    @Embedded
+    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -113,6 +130,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     public Url(Task createdBy, Task updatedBy,String url) {
@@ -120,6 +142,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
         this.url = url;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     private Url() {
@@ -164,6 +191,14 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public TwitterApiCaching getTwitterApiCaching() {
+        return twitterApiCaching;
+    }
+
+    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
+        this.twitterApiCaching = twitterApiCaching;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend.impl;
+package org.woehlke.twitterwall.scheduled.service.remote.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -49,16 +49,16 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
     @Override
-    public Tweet findOneTweetById(long id) {
-        String msg = MSG+"findOneTweetById: "+id;
+    public Tweet findOneTweetById(long tweetTwitterId) {
+        String msg = MSG + "findOneTweetById: " + tweetTwitterId;
         log.debug(msg);
         Tweet result;
         try {
-            result = getTwitterProxy().timelineOperations().getStatus(id);
-            log.debug(msg+" Id: "+result.getId());
+            result = getTwitterProxy().timelineOperations().getStatus(tweetTwitterId);
+            log.debug(msg + " Id: " + result.getId());
             msg += " result: ";
-            log.debug(msg+result);
-        } catch (Exception e){
+            log.debug(msg + result);
+        } catch(Exception e){
             result = null;
             log.error(msg + e.getMessage());
             e.printStackTrace();
@@ -66,6 +66,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         return result;
     }
 
+    /*
     @Override
     public List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds) {
         String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds+" : ";
@@ -82,6 +83,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         }
         return result;
     }
+    */
 
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
@@ -91,9 +93,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         try {
             result = getTwitterProxy().userOperations().getUserProfile(userProfileTwitterId);
             msg += " result: ";
-            log.debug(msg+" Id:         "+result.getId());
-            log.debug(msg+" ScreenName: "+result.getScreenName());
-            log.debug(msg+" Name:       "+result.getName());
+            log.debug(msg + " Id:         " + result.getId());
+            log.debug(msg + " ScreenName: " + result.getScreenName());
+            log.debug(msg + " Name:       " + result.getName());
         } catch (Exception e) {
             result = null;
             log.error(msg + e.getMessage());
@@ -127,7 +129,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<TwitterProfile> result;
         try {
             result = getTwitterProxy().listOperations().getListMembers(screenName, fetchUserListName);
-            log.debug(msg+" result.size: "+result.size());
+            log.debug(msg + " result.size: " + result.size());
         } catch (Exception e) {
             result = new ArrayList<>();
             log.debug(msg + e.getMessage());

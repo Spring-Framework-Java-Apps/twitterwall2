@@ -63,13 +63,13 @@ public class ScheduledTasks {
         this.startTask = startTask;
     }
 
-    private final static long EINE_MINUTE = 60 * 1000;
+    public final static long EINE_MINUTE = 60 * 1000;
 
-    private final static long FUENF_MINUTEN = 5 * EINE_MINUTE;
+    public final static long FUENF_MINUTEN = 5 * EINE_MINUTE;
 
-    private final static long EINE_STUNDE = 60 * EINE_MINUTE;
+    public final static long EINE_STUNDE = 60 * EINE_MINUTE;
 
-    private final static long ZWOELF_STUNDEN = 12 * EINE_STUNDE;
+    public final static long ZWOELF_STUNDEN = 12 * EINE_STUNDE;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = EINE_STUNDE;
 

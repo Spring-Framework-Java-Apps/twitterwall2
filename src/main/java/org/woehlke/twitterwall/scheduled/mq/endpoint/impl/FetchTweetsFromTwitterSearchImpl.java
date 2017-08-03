@@ -9,8 +9,8 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.FetchTweetsFromTwitterSearch;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 import java.util.ArrayList;
@@ -33,16 +33,16 @@ public class FetchTweetsFromTwitterSearchImpl implements FetchTweetsFromTwitterS
     }
 
     @Override
-    public List<TweetFromTwitter> splitMessage(Message<TaskMessage> message) {
+    public List<TweetMessage> splitMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        List<TweetFromTwitter> tweets = new ArrayList<>();
+        List<TweetMessage> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
         List<Tweet> twitterTweets = twitterApiService.findTweetsForSearchQuery();
         for (Tweet tweet: twitterTweets) {
-            TweetFromTwitter tweetMsg = new TweetFromTwitter(task.getId(),tweet);
+            TweetMessage tweetMsg = new TweetMessage(msgIn,tweet);
             tweets.add(tweetMsg);
         }
         return tweets;

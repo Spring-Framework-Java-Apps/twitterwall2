@@ -18,6 +18,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
 import org.woehlke.twitterwall.test.UrlServiceTestHelper;
 
 import java.util.Date;

@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.channel.SenderType;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.TweetFinisher;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
 import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
@@ -22,38 +22,30 @@ import java.util.List;
 public class TweetFinisherImpl implements TweetFinisher {
 
     @Override
-    public TweetResultList finish(Message<List<TweetFromTwitter>> incomingMessageList){
+    public TweetResultList finish(Message<List<TweetMessage>> incomingMessageList){
         List<Tweet> resultList = new ArrayList<>();
         long taskId = 0L;
-        for(TweetFromTwitter msg:incomingMessageList.getPayload()){
+        for(TweetMessage msg:incomingMessageList.getPayload()){
             resultList.add(msg.getTweet());
-            taskId = msg.getTaskId();
+            taskId = msg.getTaskMessage().getTaskId();
         }
         TweetResultList result = new TweetResultList(taskId,resultList);
-       return result;
-   }
+        return result;
+    }
 
     @Override
-    public void finishAsnyc(Message<List<TweetFromTwitter>> incomingMessageList) {
-        List<TweetFromTwitter> userMessageList = incomingMessageList.getPayload();
+    public void finishAsnyc(Message<List<TweetMessage>> incomingMessageList) {
+        List<TweetMessage> userMessageList = incomingMessageList.getPayload();
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        if(incomingMessageList.getHeaders().containsKey("task_id")){
-            long taskId = (Long) incomingMessageList.getHeaders().get( "task_id");
-            Task task = taskService.findById(taskId);
-            String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
-            taskService.done(msgDone,task,countedEntities);
-            log.info(msgDone);
-        } else {
-            if(userMessageList.size()>0) {
-                long taskId = userMessageList.get(0).getTaskId();
-                Task task = taskService.findById(taskId);
-                String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
-                taskService.done(task,countedEntities);
-                log.info(msgDone);
-            } else {
-                log.warn("finishAsnyc: No Tweets performed. via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER);
-            }
+        long taskId = 0L;
+        for(TweetMessage msg:incomingMessageList.getPayload()){
+            taskId = msg.getTaskMessage().getTaskId();
+            break;
         }
+        Task task = taskService.findById(taskId);
+        String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by "+ SenderType.FIRE_AND_FORGET_SENDER;
+        taskService.done(msgDone,task,countedEntities);
+        log.info(msgDone);
     }
 
     @Autowired

@@ -77,7 +77,7 @@ public class StartTaskImpl implements StartTask {
         countedEntities = countedEntitiesService.countAll();
         if( o instanceof UserMessage){
             UserMessage msg = (UserMessage) o;
-            long taskId = msg.getTaskId();
+            long taskId = msg.getTaskMessage().getTaskId();
             task = taskService.findById(taskId);
             logMsg = "Sucessfully finished task "+taskType+" via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
             taskService.done(logMsg, task, countedEntities);
@@ -202,7 +202,7 @@ public class StartTaskImpl implements StartTask {
         countedEntities = countedEntitiesService.countAll();
         if( o instanceof UserMessage){
             UserMessage msg = (UserMessage) o;
-            long taskId = msg.getTaskId();
+            long taskId = msg.getTaskMessage().getTaskId();
             task = taskService.findById(taskId);
             logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ SenderType.SEND_AND_WAIT_FOR_RESULT_SENDER;
             taskService.done(logMsg,task,countedEntities);

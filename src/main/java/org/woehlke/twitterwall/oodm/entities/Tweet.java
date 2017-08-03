@@ -6,8 +6,10 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
+import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -33,7 +35,17 @@ import static javax.persistence.FetchType.EAGER;
         @Index(name="idx_tweet_in_reply_to_user_id", columnList="in_reply_to_user_id"),
         @Index(name="idx_tweet_in_reply_to_screen_name", columnList="in_reply_to_screen_name"),
         @Index(name="idx_tweet_from_user_id", columnList="from_user_id"),
-        @Index(name="idx_tweet_id_str", columnList="id_str")
+        @Index(name="idx_tweet_id_str", columnList="id_str")/*,
+        @Index(name="idx_tweet_fetch_tweets_from_twitter_search", columnList="fetch_tweets_from_twitter_search"),
+        @Index(name="idx_tweet_update_tweets", columnList="update_tweets"),
+        @Index(name="idx_tweet_update_user_profiles", columnList="update_user_profiles"),
+        @Index(name="idx_tweet_update_user_profiles_from_mentions", columnList="update_user_profiles_from_mentions"),
+        @Index(name="idx_tweet_fetch_users_from_defined_user_list", columnList="fetch_users_from_defined_user_list"),
+        @Index(name="idx_tweet_controller_get_testdata_tweets", columnList="controller_get_testdata_tweets"),
+        @Index(name="idx_tweet_controller_get_testdata_user", columnList="controller_get_testdata_user"),
+        @Index(name="idx_tweet_controller_add_user_for_screen_name", columnList="controller_add_user_for_screen_name"),
+        @Index(name="idx_tweet_controller_create_imprint_user", columnList="controller_create_imprint_user")
+        */
     }
 )
 @NamedQueries({
@@ -142,6 +154,11 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     @Column(name="favorite_count")
     private Integer favoriteCount;
 
+    @Valid
+    @NotNull
+    @Embedded
+    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
+
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
@@ -188,6 +205,11 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
         this.idStr = idStr;
         this.text = text;
         this.createdAt = createdAt;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     public Tweet(Task createdBy, Task updatedBy, long idTwitter, String idStr, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
@@ -202,6 +224,11 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
         this.fromUserId = fromUserId;
         this.languageCode = languageCode;
         this.source = source;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     private Tweet() {
@@ -393,6 +420,14 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public TwitterApiCaching getTwitterApiCaching() {
+        return twitterApiCaching;
+    }
+
+    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
+        this.twitterApiCaching = twitterApiCaching;
     }
 
     private String toStringRetweetedStatus(){
