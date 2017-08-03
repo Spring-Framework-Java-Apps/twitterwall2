@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.RateLimitExceededException;
+import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -106,7 +107,9 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                             user.add(persUser);
                         }
                     }
-                } catch (EmptyResultDataAccessException e) {
+                } catch (ResourceNotFoundException ee){
+                    log.warn(msg + ee.getMessage());
+                }catch (EmptyResultDataAccessException e) {
                     log.warn(msg + e.getMessage());
                 } catch (NoResultException e) {
                     log.warn(msg + e.getMessage());
@@ -114,14 +117,16 @@ public class PrepareDataTestImpl implements PrepareDataTest {
             }
             try {
                 TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(frontendProperties.getImprintScreenName());
-                if(twitterProfile != null) {
+                if (twitterProfile != null) {
                     loopId++;
                     log.info(msg + loopId);
                     org.woehlke.twitterwall.oodm.entities.User persUser = this.storeUserProfile.storeUserProfile(twitterProfile, task);
-                    if(persUser != null) {
+                    if (persUser != null) {
                         user.add(persUser);
                     }
                 }
+            } catch (ResourceNotFoundException ee){
+                log.warn(msg + ee.getMessage());
             } catch (EmptyResultDataAccessException e) {
                 log.warn(msg + e.getMessage());
             } catch (NoResultException e) {
