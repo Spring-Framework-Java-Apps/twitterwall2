@@ -332,6 +332,10 @@ twitterwall:
             - "Webentwicklung, TYPO3, Online-Kommunikation und was mein Leben sonst noch so hergibt...."
             - "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting"
             - "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh"
-
+---
+spring:
+  profiles: testing
+  datasource:
+    url: ${DATABASE_URL_TEST}
 
 

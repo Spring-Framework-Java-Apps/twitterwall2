@@ -61,12 +61,7 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
                 }
             }
             if(domainObjectPersistent==null){
-                //try {
-                    domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
-                //} catch (Exception e){
-                //    log.debug(msg+ e.getMessage());
-                 //   //e.printStackTrace();
-               // }
+                domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
             }
             if (domainObjectPersistent != null) {
                 domainObject.setId(domainObjectPersistent.getId());
@@ -86,7 +81,6 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
             }
         } catch (Exception e)  {
             log.warn(msg,e.getMessage());
-            //e.printStackTrace();
         }
         return domainObjectResult;
     }
