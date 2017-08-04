@@ -89,17 +89,13 @@ public class MentionServiceTest {
     public void getAllWithoutPersistentUser() throws Exception {
         String msg = "getAllWithoutPersistentUser: ";
         int page=1;
-        int size=10;
+        int size=100;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Mention> pageMention =  mentionService.getAllWithoutPersistentUser(pageRequest);
         Assert.assertTrue(msg,pageMention.getTotalElements()>0);
-        if(pageMention.getTotalElements()>0){
-            for(Mention mention: pageMention.getContent()){
-                Assert.assertFalse(msg,mention.hasPersistentUser());
-                Assert.assertNotNull(msg,mention.getIdTwitterOfUser());
-            }
-        } else {
-            log.debug(msg+" found: mentionService.getAllWithoutPersistentUser() == 0");
+        for(Mention mention: pageMention.getContent()){
+            Assert.assertTrue(msg,mention.getIdTwitterOfUser()==0L);
+            Assert.assertFalse(msg,mention.hasPersistentUser());
         }
     }
 

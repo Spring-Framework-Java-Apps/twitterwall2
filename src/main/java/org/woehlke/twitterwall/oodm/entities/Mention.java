@@ -25,7 +25,7 @@ import static javax.persistence.FetchType.EAGER;
 @Table(
     name = "mention",
     uniqueConstraints = {
-        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
+        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name_unique", "id_twitter"})
     },
     indexes = {
         @Index(name = "idx_mention_name", columnList = "name")
@@ -34,7 +34,7 @@ import static javax.persistence.FetchType.EAGER;
 @NamedQueries({
     @NamedQuery(
         name="Mention.findByUniqueId",
-        query="select t from Mention t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+        query="select t from Mention t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
     )
 })
 @EntityListeners(MentionListener.class)
@@ -42,7 +42,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     private static final long serialVersionUID = 1L;
 
-    private static final long ID_TWITTER_UNDEFINED = -1L;
+    public static final long ID_TWITTER_UNDEFINED = -1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,6 +54,10 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @NotEmpty
     @Column(name = "screen_name", nullable = false)
     private String screenName = "";
+
+    @NotEmpty
+    @Column(name = "screen_name_unique", nullable = false)
+    private String screenNameUnique = "";
 
     @Column(name = "name",length=4096, nullable = false)
     private String name = "";
@@ -70,6 +74,9 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
         this.name = name;
     }
 
@@ -77,6 +84,9 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         super(createdBy,updatedBy);
         this.idTwitter = ID_TWITTER_UNDEFINED;
         this.screenName = mentionString;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
         this.name = mentionString;
     }
 
@@ -86,7 +96,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Transient
     @Override
     public String getUniqueId() {
-        return idTwitter.toString() +"_"+ screenName.toString();
+        return idTwitter.toString() +"_"+ screenNameUnique;
     }
 
     @Transient
@@ -99,6 +109,15 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
             return false;
         }
         if(!this.hasValidScreenName()){
+            return false;
+        }
+        if(screenNameUnique == null){
+            return false;
+        }
+        if(screenNameUnique.isEmpty()){
+            return false;
+        }
+        if(!this.hasValidScreenNameUnique()){
             return false;
         }
         if(idTwitter == null){
@@ -124,8 +143,27 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Transient
+    public boolean hasValidScreenNameUnique() {
+        if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
+            return false;
+        }
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenNameUnique(String screenNameUnique) {
+        if(screenNameUnique==null){
+            return false;
+        }
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    @Transient
     public Boolean isProxy(){
-        return idTwitter < 0;
+        return idTwitter == ID_TWITTER_UNDEFINED;
     }
 
     @Transient
@@ -158,20 +196,27 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         return serialVersionUID;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getScreenName() {
         return screenName;
     }
 
+    @Override
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
     }
 
     public String getName() {
@@ -206,6 +251,16 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     public void setIdTwitterOfUser(Long idTwitterOfUser) {
         this.idTwitterOfUser = idTwitterOfUser;
+    }
+
+    @Override
+    public String getScreenNameUnique() {
+        return screenNameUnique;
+    }
+
+    @Override
+    public void setScreenNameUnique(String screenNameUnique) {
+        this.screenNameUnique = screenNameUnique.toLowerCase();
     }
 
     @Override

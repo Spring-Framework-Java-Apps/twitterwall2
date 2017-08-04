@@ -21,19 +21,23 @@ public class MentionTest implements DomainObjectMinimalTest  {
         String screenName1 = "Google";
         String screenName2 = "Twitter";
         String screenName3 = "java";
-        String name = "Google";
+        String screenNameUnique1 = screenName1.toLowerCase();
+        String screenNameUnique2 = screenName2.toLowerCase();
+        String screenNameUnique3 = screenName3.toLowerCase();
+        String name1 = "Google";
+        String name2 = "Twitter";
         String name3 = "Java";
 
-        Mention mention1 = new Mention(createdBy,updatedBy,idTwitter1,screenName1,name);
-        String expectedUniqueId1 = idTwitter1.toString() +"_"+ screenName1.toString();
+        Mention mention1 = new Mention(createdBy,updatedBy,idTwitter1,screenName1,name1);
+        String expectedUniqueId1 = idTwitter1.toString() +"_"+ screenNameUnique1.toString();
         Assert.assertEquals(msg,expectedUniqueId1,mention1.getUniqueId());
 
         Mention mention2 = new Mention(createdBy,updatedBy,screenName2);
-        String expectedUniqueId2 = idTwitter2.toString() +"_"+ screenName2.toString();
+        String expectedUniqueId2 = idTwitter2.toString() +"_"+ screenNameUnique2.toString();
         Assert.assertEquals(msg,expectedUniqueId2,mention2.getUniqueId());
 
         Mention mention3 = new Mention(createdBy,updatedBy,idTwitter3,screenName3,name3);
-        String expectedUniqueId3 = idTwitter3.toString() +"_"+ screenName3.toString();
+        String expectedUniqueId3 = idTwitter3.toString() +"_"+ screenNameUnique3.toString();
         Assert.assertEquals(msg,expectedUniqueId3,mention3.getUniqueId());
     }
 
@@ -55,6 +59,10 @@ public class MentionTest implements DomainObjectMinimalTest  {
         String screenName2 = "Twitter";
         String screenName3 = "java";
         String screenName4 = null;
+        String screenNameUnique1 = screenName1.toLowerCase();
+        String screenNameUnique2 = screenName2.toLowerCase();
+        String screenNameUnique3 = screenName2.toLowerCase();
+        String screenNameUnique4 = null;
         String name = "Google";
         String name3 = "Java";
         String invalidScreenName = "3765726öäöäß%$dsffsdf";
@@ -63,6 +71,12 @@ public class MentionTest implements DomainObjectMinimalTest  {
         Assert.assertTrue(msg,Mention.isValidScreenName(screenName2));
         Assert.assertTrue(msg,Mention.isValidScreenName(screenName3));
         Assert.assertFalse(msg,Mention.isValidScreenName(screenName4));
+
+        Assert.assertTrue(msg,Mention.isValidScreenNameUnique(screenNameUnique1));
+        Assert.assertTrue(msg,Mention.isValidScreenNameUnique(screenNameUnique2));
+        Assert.assertTrue(msg,Mention.isValidScreenNameUnique(screenNameUnique3));
+        Assert.assertFalse(msg,Mention.isValidScreenNameUnique(screenNameUnique4));
+
         Assert.assertFalse(msg,Mention.isValidScreenName(invalidScreenName));
 
         Mention mention1 = new Mention(createdBy,updatedBy,idTwitter1,screenName1,name);

@@ -17,4 +17,7 @@ public interface MentionService extends DomainServiceWithScreenName<Mention>,Dom
     Mention createProxyMention(Mention mention, Task task);
 
     Page<Mention> getAllWithoutPersistentUser(Pageable pageRequest);
+
+    Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter);
+
 }

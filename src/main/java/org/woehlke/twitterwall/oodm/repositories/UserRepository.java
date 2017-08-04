@@ -19,6 +19,8 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
 
     User findByScreenName(String screenName);
 
+    User findByidTwitterAndScreenNameUnique(long idTwitter, String screenNameUnique);
+
     @Query(name="User.findTweetingUsers")
     Page<User> findTweetingUsers(Pageable pageRequest);
 

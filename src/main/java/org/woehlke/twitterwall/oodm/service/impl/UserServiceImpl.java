@@ -42,6 +42,11 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    public User findByidTwitterAndScreenNameUnique(long idTwitter, String screenNameUnique) {
+        return userRepository.findByidTwitterAndScreenNameUnique(idTwitter,screenNameUnique);
+    }
+
+    @Override
     public Page<User> getTweetingUsers(Pageable pageRequest) {
         return userRepository.findTweetingUsers(pageRequest);
     }

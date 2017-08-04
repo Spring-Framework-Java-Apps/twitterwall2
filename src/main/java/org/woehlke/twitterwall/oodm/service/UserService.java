@@ -14,6 +14,8 @@ import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
  */
 public interface UserService extends DomainObjectWithEntitiesService<User>,DomainServiceWithScreenName<User> {
 
+    User findByidTwitterAndScreenNameUnique(long idTwitter, String screenNameUnique);
+
     Page<User> getTweetingUsers(Pageable pageRequest);
 
     Page<String> getAllDescriptions(Pageable pageRequest);

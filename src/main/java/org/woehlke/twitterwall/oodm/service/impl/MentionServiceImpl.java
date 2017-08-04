@@ -49,26 +49,25 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
 
     @Override
     public Mention createProxyMention(Mention mention, Task task) {
-        long lowestIdTwitter = 0;
-        int page = 0;
-        int pageSize = 1;
-        Pageable pageRequest = new PageRequest(page, pageSize, Sort.Direction.ASC,"idTwitter");
-        Page<Mention> mentions = mentionRepository.findAll(pageRequest);
-        if(mentions.hasContent()){
-            lowestIdTwitter = mentions.getContent().iterator().next().getIdTwitter();
+        Mention foundPers = mentionRepository.findByScreenName(mention.getScreenName());
+        if(foundPers!=null){
+           return foundPers;
+        } else {
+            mention.setIdTwitter(Mention.ID_TWITTER_UNDEFINED);
+            mention.setCreatedBy(task);
+            mention = mentionRepository.save(mention);
+            return mention;
         }
-        lowestIdTwitter--;
-        mention.setIdTwitter(lowestIdTwitter);
-        mention.setCreatedBy(task);
-        task = this.taskRepository.save(task);
-        mention.setCreatedBy(task);
-        mention = mentionRepository.save(mention);
-        return mention;
     }
 
     @Override
     public Page<Mention> getAllWithoutPersistentUser(Pageable pageRequest) {
         return mentionRepository.findAllByUserNull(pageRequest);
+    }
+
+    @Override
+    public Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter) {
+        return mentionRepository.findByScreenNameAndIdTwitter(screenName, idTwitter);
     }
 
 }

@@ -70,9 +70,9 @@ public class TweetServiceTest {
             Tweet myTweet = myPage.getContent().iterator().next();
             Assert.assertNotNull(msg,myTweet);
             Assert.assertNotNull(msg,myTweet.getUniqueId());
-            log.debug(msg+" found: "+myTweet.getUniqueId());
+            log.info(msg+" found: "+myTweet.getUniqueId());
         } else {
-            log.debug(msg+" found: myPage.getTotalElements() == 0");
+            log.info(msg+" found: myPage.getTotalElements() == 0");
         }
     }
 
@@ -90,7 +90,7 @@ public class TweetServiceTest {
             Tweet myFoundMedia = tweetService.findByIdTwitter(expectedIdTwitter);
             long foundIdTwitter = myFoundMedia.getIdTwitter();
             Assert.assertEquals(msg, expectedIdTwitter,foundIdTwitter);
-            log.debug(msg+" found: "+myMedia.getUniqueId());
+            log.info(msg+" found: "+myMedia.getUniqueId());
         } else {
             log.error(msg+" found: myPage.getTotalElements() == 0");
         }
@@ -102,28 +102,37 @@ public class TweetServiceTest {
     @Test
     public void findTweetsForHashTag() throws Exception {
         String msg = "findTweetsForHashTag: ";
-        log.debug(msg);
+        log.info(msg);
     }
 
     //TODO: #216 https://github.com/phasenraum2010/twitterwall2/issues/216
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void findTweetsForUser() throws Exception {
         String msg = "findTweetsForUser: ";
         int page=1;
-        int size=10;
+        int size=100;
         Pageable pageRequest = new PageRequest(page,size);
+        log.info(msg + "STARTED TEST");
         Page<User> foundTweetingUsers = userService.getTweetingUsers(pageRequest);
+        long loopUser = 0L;
+        long loopTweet = 0L;
         for(User user : foundTweetingUsers.getContent()){
+            loopUser++;
+            Assert.assertTrue(msg,user.getTweeting());
             Page<Tweet> foundTweets = tweetService.findTweetsForUser(user,pageRequest);
-            Assert.assertTrue(foundTweets.getTotalElements()>0);
+            Assert.assertNotNull(msg,foundTweets);
+            //Assert.assertTrue(foundTweets.getTotalElements()>0);
             for(Tweet tweet : foundTweets.getContent()) {
-                Assert.assertNotNull(tweet.getUser());
-                Assert.assertEquals(tweet.getUser().getUniqueId(), user.getUniqueId());
+                loopTweet++;
+                Assert.assertNotNull(msg,tweet.getUser());
+                Assert.assertEquals(msg,tweet.getUser().getUniqueId(), user.getUniqueId());
+                log.info(msg);
             }
+            log.info(msg+" RUNNING TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
         }
-        log.debug(msg);
+        log.info(msg+" FINISHED TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
     }
 
     @Commit

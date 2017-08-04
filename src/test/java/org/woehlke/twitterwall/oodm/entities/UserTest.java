@@ -36,7 +36,7 @@ public class UserTest implements DomainObjectMinimalTest {
 
         User user1 = User.getDummyUserForScreenName(screenName,task);
 
-        String mygUniqueId1 = user1.getIdTwitter().toString();
+        String mygUniqueId1 = user1.getIdTwitter().toString()+"_"+user1.getScreenNameUnique();
 
         log.info(msg+" Expected: "+mygUniqueId1+" == Found: "+user1.getUniqueId());
 
@@ -51,7 +51,7 @@ public class UserTest implements DomainObjectMinimalTest {
         Date createdDate = new Date();
         User user2 = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
 
-        String mygUniqueId2 = Long.toString(idTwitter);
+        String mygUniqueId2 = Long.toString(idTwitter)+"_"+user2.getScreenNameUnique();
 
         log.info(msg+" Expected: "+mygUniqueId2+" == Found: "+user2.getUniqueId());
 

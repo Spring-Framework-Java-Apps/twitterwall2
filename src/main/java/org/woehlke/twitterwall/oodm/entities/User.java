@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 @Table(
     name = "userprofile",
     uniqueConstraints = {
-        @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name"}),
+        @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name_unique"}),
     },
     indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
 @NamedQueries({
         @NamedQuery(
             name = "User.findTweetingUsers",
-            query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
+            query = "select t from User as t where t.tweeting=true"
         ),
         @NamedQuery(
                 name = "User.findFollower",
@@ -91,7 +91,7 @@ import java.util.regex.Pattern;
         ),
         @NamedQuery(
             name="User.findByUniqueId",
-            query="select t from User as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+            query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
         )
 })
 @NamedNativeQueries({
@@ -132,6 +132,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @NotEmpty
     @Column(name="screen_name", nullable = false)
     private String screenName;
+
+    @NotEmpty
+    @Column(name = "screen_name_unique", nullable = false)
+    private String screenNameUnique = "";
 
     @NotNull
     @Column(nullable = false)
@@ -285,6 +289,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
+        this.screenNameUnique = screenName.toLowerCase();
         this.name = name;
         this.url = url;
         this.profileImageUrl = profileImageUrl;
@@ -313,13 +318,16 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         if(!this.hasValidScreenName()){
             return false;
         }
+        if(!this.hasValidScreenNameUnique()){
+            return false;
+        }
         return true;
     }
 
     @Transient
     @Override
     public String getUniqueId() {
-        return idTwitter.toString();
+        return idTwitter.toString() + "_" + this.screenNameUnique;
     }
 
     public final static String SCREEN_NAME_PATTERN = "\\w*";
@@ -334,6 +342,26 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     public boolean hasValidScreenName(){
         Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
         Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenNameUnique(String screenName){
+        String screenNameUnique = screenName.toLowerCase();
+        if(screenName.compareTo(screenNameUnique)!=0){
+            return false;
+        }
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    @Transient
+    public boolean hasValidScreenNameUnique(){
+        if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
+            return false;
+        }
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }
 
@@ -425,6 +453,17 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Override
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+        this.screenNameUnique = screenName.toLowerCase();
+    }
+
+    @Override
+    public String getScreenNameUnique() {
+        return screenNameUnique;
+    }
+
+    @Override
+    public void setScreenNameUnique(String screenNameUnique) {
+        this.screenNameUnique = screenNameUnique.toLowerCase();
     }
 
     public String getName() {
@@ -811,4 +850,5 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
         return result;
     }
+
 }

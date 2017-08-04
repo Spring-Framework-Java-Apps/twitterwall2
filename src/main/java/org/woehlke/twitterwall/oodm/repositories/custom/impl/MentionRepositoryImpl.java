@@ -24,7 +24,7 @@ public class MentionRepositoryImpl implements MentionRepositoryCustom {
         String name="Mention.findByUniqueId";
         TypedQuery<Mention> query = entityManager.createNamedQuery(name,Mention.class);
         query.setParameter("idTwitter",domainObject.getIdTwitter());
-        query.setParameter("screenName",domainObject.getScreenName());
+        query.setParameter("screenNameUnique",domainObject.getScreenNameUnique());
         List<Mention> resultList = query.getResultList();
         if(resultList.size()>0){
             return resultList.iterator().next();

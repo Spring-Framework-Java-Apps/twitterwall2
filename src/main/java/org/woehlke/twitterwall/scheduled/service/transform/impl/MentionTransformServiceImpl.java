@@ -35,7 +35,7 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
     @Override
     public Set<Mention> findByUser(TwitterProfile userSource,Task task) {
         String description = userSource.getDescription();
-        Set<Mention> mentionsTarget = findByUserDescription(description,task);
+        Set<Mention> mentionsTarget = super.findByUserDescription(description,task);
         return mentionsTarget;
     }
 }

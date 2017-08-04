@@ -63,14 +63,20 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             }
             for (Mention mention : entities.getMentions()) {
                 if (mention.isValid()) {
-                    Mention mentionPers = mentionService.store(mention, task);
-                    mentions.add(mentionPers);
-                }/* else if(mention.isRawMentionFromUserDescription()){
-                Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
-                if((mentionPers != null) && mentionPers.isValid()){
+                    Mention mentionPers = null;
+                    if (mention.isProxy()) {
+                        mentionPers = mentionService.findByScreenName(mention.getScreenName());
+                        if (mentionPers == null) {
+                            mentionPers = mentionService.store(mention, task);
+                        }
+                    } else {
+                        mentionPers = mentionService.findByScreenNameAndIdTwitter(mention.getScreenName(), mention.getIdTwitter());
+                        if (mentionPers == null) {
+                            mentionPers = mentionService.store(mention, task);
+                        }
+                    }
                     mentions.add(mentionPers);
                 }
-            }*/
             }
             for (Media medium : entities.getMedia()) {
                 if (medium.isValid()) {
