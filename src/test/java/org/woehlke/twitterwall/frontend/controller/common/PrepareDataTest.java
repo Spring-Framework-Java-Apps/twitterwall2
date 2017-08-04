@@ -1,4 +1,5 @@
-package org.woehlke.twitterwall;
+package org.woehlke.twitterwall.frontend.controller.common;
+
 
 public interface PrepareDataTest {
 

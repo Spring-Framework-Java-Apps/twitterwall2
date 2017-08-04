@@ -3,8 +3,10 @@ package org.woehlke.twitterwall.test;
 /**
  * Created by tw on 25.06.17.
  */
+@Deprecated
 public interface TestDataHelper {
 
+    @Deprecated
     String PROFILE_URLS[] = {
             "http://t.co/hIxL9WeoP1",
             "http://t.co/FGRp2dcyII",

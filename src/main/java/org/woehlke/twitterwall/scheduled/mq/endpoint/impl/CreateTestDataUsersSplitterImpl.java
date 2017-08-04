@@ -4,7 +4,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
@@ -24,7 +24,7 @@ import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
 @Component("mqCreateTestDataForUsersSplitter")
 public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplitter {
 
-    private final SchedulerProperties schedulerProperties;
+    private final TestdataProperties testdataProperties;
 
     private final TwitterApiService twitterApiService;
 
@@ -34,8 +34,8 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public CreateTestDataUsersSplitterImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
-        this.schedulerProperties = schedulerProperties;
+    public CreateTestDataUsersSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
+        this.testdataProperties = testdataProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
@@ -50,10 +50,10 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        List<String> userIdList = schedulerProperties.getFacade().getScreenNamesToFetchForUserControllerTest();
+        List<String> listScreenName = testdataProperties.getOodm().getEntities().getUser().getScreenName();
         int loopId = 0;
-        int loopAll = userIdList.size();
-        for (String screenName : userIdList) {
+        int loopAll = listScreenName.size();
+        for (String screenName : listScreenName) {
             loopId++;
             User userPers = userService.findByScreenName(screenName);
             if(userPers==null){

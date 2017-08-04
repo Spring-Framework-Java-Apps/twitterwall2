@@ -5,7 +5,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
@@ -24,7 +24,7 @@ import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
 @Component("mqCreateTestDataForTweetsSplitter")
 public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSplitter {
 
-    private final SchedulerProperties schedulerProperties;
+    private final TestdataProperties testdataProperties;
 
     private final TwitterApiService twitterApiService;
 
@@ -35,8 +35,8 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
     private final CountedEntitiesService countedEntitiesService;
 
     @Autowired
-    public CreateTestDataTweetsSplitterImpl(SchedulerProperties schedulerProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService) {
-        this.schedulerProperties = schedulerProperties;
+    public CreateTestDataTweetsSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService) {
+        this.testdataProperties = testdataProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.tweetService = tweetService;
@@ -51,7 +51,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        List<Long> userIdTwitterList = schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest();
+        List<Long> userIdTwitterList =  testdataProperties.getOodm().getEntities().getTweet().getIdTwitter();
         int loopId = 0;
         int loopAll = userIdTwitterList.size();
         for (long idTwitter : userIdTwitterList) {

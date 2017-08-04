@@ -13,6 +13,7 @@ import java.util.*;
 /**
  * Created by tw on 01.07.17.
  */
+@Deprecated
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTestHelper {

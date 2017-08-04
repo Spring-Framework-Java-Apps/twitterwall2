@@ -21,6 +21,7 @@ import org.woehlke.twitterwall.*;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 

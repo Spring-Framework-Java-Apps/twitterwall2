@@ -52,7 +52,7 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
-        if(schedulerProperties.getFetchUserList().getAllow()  && !schedulerProperties.getSkipFortesting()) {
+        if(schedulerProperties.getFetchUserListAllow()  && !schedulerProperties.getSkipFortesting()) {
             startTask.fetchUsersFromList();
         }
     }

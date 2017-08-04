@@ -20,6 +20,7 @@ public class BackendProperties {
     @Valid
     public Url url = new Url();
 
+    @Validated
     public static class Twitter {
 
         @NotNull
@@ -46,6 +47,7 @@ public class BackendProperties {
 
     }
 
+    @Validated
     public static class Url {
 
         @NotNull

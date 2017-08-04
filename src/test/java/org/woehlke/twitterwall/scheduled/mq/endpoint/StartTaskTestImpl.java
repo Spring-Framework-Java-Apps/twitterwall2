@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
@@ -25,7 +26,6 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
-@DataJpaTest(showSql=true)
 @Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTaskTest {
 
@@ -38,10 +38,10 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     private StartTask mqStartTask;
 
     @Autowired
-    private FrontendProperties frontendProperties;
+    private TestdataProperties testdataProperties;
 
     @Autowired
-    private SchedulerProperties schedulerProperties;
+    private FrontendProperties frontendProperties;
 
     @Commit
     @Test
@@ -106,7 +106,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     public void createTestDataUsersTest() throws Exception {
         List<User> userList = this.mqStartTask.createTestDataForUser();
         Assert.assertTrue("mqStartTask.createTestDataForUser() > 0 ",userList.size()>0);
-        int expectedSize = schedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest().size();
+        int expectedSize =  testdataProperties.getOodm().getEntities().getUser().getIdTwitter().size();
         String msg = "mqStartTask.createTestDataForUser() == "+expectedSize;
         Assert.assertTrue(msg,userList.size()==expectedSize);
     }
@@ -116,7 +116,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     public void createTestDataTweetsTest() throws Exception {
         List<Tweet> tweetList = this.mqStartTask.createTestDataForTweets();
         Assert.assertTrue("mqStartTask.createTestDataForTweets() > 0 ",tweetList.size()>0);
-        int expectedSize = schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest().size();
+        int expectedSize = testdataProperties.getOodm().getEntities().getTweet().getIdTwitter().size();
         String msg = "mqStartTask.createTestDataForTweets() == "+expectedSize;
         Assert.assertTrue(msg,tweetList.size()==expectedSize);
     }

@@ -5,10 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Validated
@@ -33,11 +30,11 @@ public class SchedulerProperties {
     @NotNull
     private Boolean skipFortesting;
 
-    @Valid
-    private FetchUserList fetchUserList = new FetchUserList();
+    @NotNull
+    private Boolean fetchUserListAllow;
 
-    @Valid
-    private Facade facade = new Facade();
+    @NotNull
+    private String fetchUserListName;
 
     public Boolean getAllowFetchTweetsFromTwitterSearch() {
         return allowFetchTweetsFromTwitterSearch;
@@ -87,77 +84,19 @@ public class SchedulerProperties {
         this.skipFortesting = skipFortesting;
     }
 
-    public static class FetchUserList {
-
-        @NotNull
-        private Boolean allow;
-
-        @NotNull
-        private String name;
-
-        public Boolean getAllow() {
-            return allow;
-        }
-
-        public void setAllow(Boolean allow) {
-            this.allow = allow;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
+    public Boolean getFetchUserListAllow() {
+        return fetchUserListAllow;
     }
 
-    public FetchUserList getFetchUserList() {
-        return fetchUserList;
+    public void setFetchUserListAllow(Boolean fetchUserListAllow) {
+        this.fetchUserListAllow = fetchUserListAllow;
     }
 
-    public void setFetchUserList(FetchUserList fetchUserList) {
-        this.fetchUserList = fetchUserList;
+    public String getFetchUserListName() {
+        return fetchUserListName;
     }
 
-    public static class Facade {
-
-        private List<Long> idTwitterToFetchForTweetTest = new ArrayList<Long>();
-
-        private List<Long> idTwitterToFetchForUserControllerTest = new ArrayList<Long>();
-
-        private List<String> screenNamesToFetchForUserControllerTest = new ArrayList<String>();
-
-        public List<Long> getIdTwitterToFetchForTweetTest() {
-            return idTwitterToFetchForTweetTest;
-        }
-
-        public void setIdTwitterToFetchForTweetTest(List<Long> idTwitterToFetchForTweetTest) {
-            this.idTwitterToFetchForTweetTest = idTwitterToFetchForTweetTest;
-        }
-
-        public List<Long> getIdTwitterToFetchForUserControllerTest() {
-            return idTwitterToFetchForUserControllerTest;
-        }
-
-        public void setIdTwitterToFetchForUserControllerTest(List<Long> idTwitterToFetchForUserControllerTest) {
-            this.idTwitterToFetchForUserControllerTest = idTwitterToFetchForUserControllerTest;
-        }
-
-        public List<String> getScreenNamesToFetchForUserControllerTest() {
-            return screenNamesToFetchForUserControllerTest;
-        }
-
-        public void setScreenNamesToFetchForUserControllerTest(List<String> screenNamesToFetchForUserControllerTest) {
-            this.screenNamesToFetchForUserControllerTest = screenNamesToFetchForUserControllerTest;
-        }
-    }
-
-    public Facade getFacade() {
-        return facade;
-    }
-
-    public void setFacade(Facade facade) {
-        this.facade = facade;
+    public void setFetchUserListName(String fetchUserListName) {
+        this.fetchUserListName = fetchUserListName;
     }
 }
