@@ -62,9 +62,9 @@ public class ImprintControllerTest {
     @Test
     public void fetchTweetsFromTwitterSearchTest() throws Exception  {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
+        log.info("fetchTweetsFromSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
         userServiceTestHelper.createUser(frontendProperties.getImprintScreenName());
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
+        log.info("fetchTweetsFromSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
         log.info("------------------------------------");
         Assert.assertTrue(true);
     }

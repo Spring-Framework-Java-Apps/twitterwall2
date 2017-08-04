@@ -28,7 +28,7 @@ import java.util.List;
 public class StartTaskImpl implements StartTask {
 
     @Override
-    public Task fetchTweetsFromTwitterSearch() {
+    public Task fetchTweetsFromSearch() {
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         return sendAndReceiveTweet(taskType);
     }
@@ -40,19 +40,19 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
-    public Task updateUserProfiles() {
+    public Task updateUsers() {
         TaskType taskType = TaskType.UPDATE_USERS;
         return sendAndReceiveUser(taskType);
     }
 
     @Override
-    public Task updateUserProfilesFromMentions() {
+    public Task updateUsersFromMentions() {
         TaskType taskType = TaskType.UPDATE_USERS_FROM_MENTIONS;
         return sendAndReceiveUser(taskType);
     }
 
     @Override
-    public Task fetchUsersFromDefinedUserList() {
+    public Task fetchUsersFromList() {
         TaskType taskType = TaskType.FETCH_USERS_FROM_LIST;
         return sendAndReceiveUser(taskType);
     }

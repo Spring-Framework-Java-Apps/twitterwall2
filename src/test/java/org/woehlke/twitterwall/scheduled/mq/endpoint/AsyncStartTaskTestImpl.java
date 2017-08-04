@@ -33,7 +33,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     private AsyncStartTask mqAsyncStartTask;
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void updateTweetsTest() throws Exception {
@@ -45,48 +45,48 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     }
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
-    @Ignore
+    //@Ignore
     @Commit
     @Test
-    public void updateUserProfilesTest() throws Exception {
+    public void updateUsersTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        Task task = this.mqAsyncStartTask.updateUserProfiles();
+        Task task = this.mqAsyncStartTask.updateUsers();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
-    @Ignore
+    //@Ignore
     @Commit
     @Test
-    public void updateUserProfilesFromMentionsTest() throws Exception {
+    public void updateUsersFromMentionsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        Task task = this.mqAsyncStartTask.updateUserProfilesFromMentions();
+        Task task = this.mqAsyncStartTask.updateUsersFromMentions();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
-    @Ignore
+    //@Ignore
     @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() throws Exception {
+    public void fetchTweetsFromSearchTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        Task task = this.mqAsyncStartTask.fetchTweetsFromTwitterSearch();
+        Task task = this.mqAsyncStartTask.fetchTweetsFromSearch();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
-    @Ignore
+    //@Ignore
     @Commit
     @Test
-    public void fetchUsersFromDefinedUserListTest() throws Exception {
+    public void fetchUsersFromListTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        Task task = this.mqAsyncStartTask.fetchUsersFromDefinedUserList();
+        Task task = this.mqAsyncStartTask.fetchUsersFromList();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

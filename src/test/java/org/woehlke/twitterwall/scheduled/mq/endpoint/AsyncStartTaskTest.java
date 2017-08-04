@@ -8,11 +8,11 @@ public interface AsyncStartTaskTest {
 
     void updateTweetsTest() throws Exception;
 
-    void updateUserProfilesTest() throws Exception;
+    void updateUsersTest() throws Exception;
 
-    void updateUserProfilesFromMentionsTest() throws Exception;
+    void updateUsersFromMentionsTest() throws Exception;
 
-    void fetchTweetsFromTwitterSearchTest() throws Exception;
+    void fetchTweetsFromSearchTest() throws Exception;
 
-    void fetchUsersFromDefinedUserListTest() throws Exception;
+    void fetchUsersFromListTest() throws Exception;
 }

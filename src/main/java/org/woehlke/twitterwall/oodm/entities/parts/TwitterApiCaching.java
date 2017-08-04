@@ -216,11 +216,11 @@ public class TwitterApiCaching implements Serializable {
     @Override
     public String toString() {
         return "TwitterApiCaching{" +
-                "fetchTweetsFromTwitterSearch=" + fetchTweetsFromTwitterSearch +
+                "fetchTweetsFromSearch=" + fetchTweetsFromTwitterSearch +
                 ", updateTweets=" + updateTweets +
-                ", updateUserProfiles=" + updateUserProfiles +
-                ", updateUserProfilesFromMentions=" + updateUserProfilesFromMentions +
-                ", fetchUsersFromDefinedUserList=" + fetchUsersFromDefinedUserList +
+                ", updateUsers=" + updateUserProfiles +
+                ", updateUsersFromMentions=" + updateUserProfilesFromMentions +
+                ", fetchUsersFromList=" + fetchUsersFromDefinedUserList +
                 ", controllerGetTestdataTweets=" + controllerGetTestdataTweets +
                 ", controllerGetTestdataUser=" + controllerGetTestdataUser +
                 ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +

@@ -20,7 +20,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
-    public Task fetchTweetsFromTwitterSearch() {
+    public Task fetchTweetsFromSearch() {
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         return send(taskType);
     }
@@ -32,19 +32,19 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
     }
 
     @Override
-    public Task updateUserProfiles() {
+    public Task updateUsers() {
         TaskType taskType = TaskType.UPDATE_USERS;
         return send(taskType);
     }
 
     @Override
-    public Task updateUserProfilesFromMentions() {
+    public Task updateUsersFromMentions() {
         TaskType taskType = TaskType.UPDATE_USERS_FROM_MENTIONS;
         return send(taskType);
     }
 
     @Override
-    public Task fetchUsersFromDefinedUserList() {
+    public Task fetchUsersFromList() {
         TaskType taskType = TaskType.FETCH_USERS_FROM_LIST;
         return send(taskType);
     }

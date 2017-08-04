@@ -6,12 +6,12 @@ public interface AsyncStartTask {
 
     Task updateTweets();
 
-    Task updateUserProfiles();
+    Task updateUsers();
 
-    Task updateUserProfilesFromMentions();
+    Task updateUsersFromMentions();
 
-    Task fetchTweetsFromTwitterSearch();
+    Task fetchTweetsFromSearch();
 
-    Task fetchUsersFromDefinedUserList();
+    Task fetchUsersFromList();
 
 }

@@ -56,6 +56,7 @@ public class TaskHistoryServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void store() throws Exception {}
 

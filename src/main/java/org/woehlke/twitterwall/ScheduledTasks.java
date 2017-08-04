@@ -21,7 +21,7 @@ public class ScheduledTasks {
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets From TwitterSearch ";
         if(schedulerProperties.getAllowUpdateTweets()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchTweetsFromTwitterSearch();
+            startTask.fetchTweetsFromSearch();
         }
     }
 
@@ -37,7 +37,7 @@ public class ScheduledTasks {
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
         if(schedulerProperties.getAllowUpdateUserProfiles()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUserProfiles();
+            startTask.updateUsers();
         }
     }
 
@@ -45,7 +45,7 @@ public class ScheduledTasks {
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
         if(schedulerProperties.getAllowUpdateUserProfilesFromMention() && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUserProfilesFromMentions();
+            startTask.updateUsersFromMentions();
         }
     }
 
@@ -53,7 +53,7 @@ public class ScheduledTasks {
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
         if(schedulerProperties.getFetchUserList().getAllow()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchUsersFromDefinedUserList();
+            startTask.fetchUsersFromList();
         }
     }
 

@@ -63,11 +63,13 @@ public class TaskServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findById() throws Exception {
 
     }
 
+    @Commit
     @Test
     public void create() throws Exception {
         String msg = "TaskServiceTest.create";
@@ -77,6 +79,7 @@ public class TaskServiceTest {
         Assert.assertEquals(createdTask.getTaskStatus(),TaskStatus.READY);
     }
 
+    @Commit
     @Test
     public void done() throws Exception {
         String msg = "TaskServiceTest.done";
@@ -90,6 +93,7 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.FINISHED,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void error() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -103,6 +107,7 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.ERROR,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void warn() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -116,6 +121,7 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.WARN,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void event() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -130,6 +136,7 @@ public class TaskServiceTest {
         Assert.assertEquals(oldStatus,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void start() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -143,6 +150,7 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.RUNNING,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void finalError() throws Exception {
         String msg = "TaskServiceTest.error";

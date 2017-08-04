@@ -100,7 +100,7 @@ public class MentionServiceTest {
     }
 
     //TODO: #215 https://github.com/phasenraum2010/twitterwall2/issues/215
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void findByIdTwitter() throws Exception {
@@ -120,7 +120,7 @@ public class MentionServiceTest {
     }
 
     //TODO: #215 https://github.com/phasenraum2010/twitterwall2/issues/215
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void findByScreenName() throws Exception {

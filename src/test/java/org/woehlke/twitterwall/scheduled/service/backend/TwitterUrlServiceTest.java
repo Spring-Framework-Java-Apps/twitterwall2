@@ -41,19 +41,7 @@ public class TwitterUrlServiceTest {
     @Autowired
     private TwitterUrlService twitterUrlService;
 
-    @Ignore
-    @Commit
-    @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START tweetApiServiceTest.waitForImport()");
-        //tweetServiceTest.waitForImport();
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  tweetApiServiceTest.waitForImport()");
-        Assert.assertTrue(true);
-        log.info("------------------------------------");
-    }
-
-    @Ignore
+    //@Ignore
     @Commit
     @Test
     public void fetchUrlTest(){
