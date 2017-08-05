@@ -4,7 +4,7 @@
 
     <groupId>org.woehlke.twitterwall</groupId>
     <artifactId>twitterwall2</artifactId>
-    <version>1.0.20-SNAPSHOT</version>
+    <version>1.0.21-SNAPSHOT</version>
     <name>twitterwall2</name>
 
     <description>Twitterwall with spring:boot for heroku</description>
