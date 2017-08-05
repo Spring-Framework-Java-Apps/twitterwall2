@@ -21,6 +21,8 @@ import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
 
+import java.util.Set;
+
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @RunWith(SpringRunner.class)
@@ -326,7 +328,7 @@ public class UserServiceTest {
 
 
     //@Commit
-    @Ignore
+    //@Ignore
     @Test
     public void findAllUser2Mentiong() throws Exception {
         String msg = "findAllUser2Mentiong: ";
@@ -334,21 +336,27 @@ public class UserServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Object2Entity> foundPage = userService.findAllUser2Mentiong(pageRequest);
-        if(foundPage.getTotalElements()>0){
-            for(Object2Entity object2Entity:foundPage.getContent()){
-                long objectId = object2Entity.getObjectId();
-                String objectInfo = object2Entity.getObjectInfo();
-                long entityId = object2Entity.getEntityId();
-                String entityInfo = object2Entity.getObjectInfo();
-                User userPers = userService.findById(objectId);
-                Mention mentionPers = mentionService.findById(entityId);
-                Assert.assertNotNull(msg,userPers);
-                Assert.assertNotNull(msg,mentionPers);
-                Assert.assertNull(objectInfo);
-                Assert.assertNull(entityInfo);
-                boolean ok = userPers.getEntities().getMentions().contains(mentionPers);
-                Assert.assertTrue(msg,ok);
-            }
+        for(Object2Entity object2Entity:foundPage.getContent()){
+            long objectId = object2Entity.getObjectId();
+            log.info(msg+" objectId: "+objectId);
+            String objectInfo = object2Entity.getObjectInfo();
+            log.info(msg+" objectInfo: "+objectInfo);
+            long entityId = object2Entity.getEntityId();
+            log.info(msg+" entityId: "+entityId);
+            String entityInfo = object2Entity.getObjectInfo();
+            log.info(msg+" entityInfo: "+entityInfo);
+            User userPers = userService.findById(objectId);
+            log.info(msg+" userPers: "+userPers);
+            Mention mentionPers = mentionService.findById(entityId);
+            log.info(msg+" mentionPers: "+mentionPers);
+            Assert.assertNotNull(msg+" userPers: ",userPers);
+            Assert.assertNotNull(msg+" mentionPers: ",mentionPers);
+            Assert.assertNull(msg+" objectInfo: " ,objectInfo);
+            Assert.assertNull(msg+" entityInfo: ",entityInfo);
+            Set<Mention> mentions = userPers.getEntities().getMentions();
+            Assert.assertTrue(msg,mentions.size()>0);
+            boolean ok = mentions.contains(mentionPers);
+            Assert.assertTrue(msg,ok);
         }
     }
 

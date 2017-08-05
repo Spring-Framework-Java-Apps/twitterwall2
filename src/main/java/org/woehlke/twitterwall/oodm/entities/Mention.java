@@ -280,22 +280,19 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Mention)) return false;
-        if (!super.equals(o)) return false;
 
         Mention mention = (Mention) o;
 
-        if (getId() != null ? !getId().equals(mention.getId()) : mention.getId() != null) return false;
-        if (getIdTwitter() != null ? !getIdTwitter().equals(mention.getIdTwitter()) : mention.getIdTwitter() != null)
-            return false;
-        return getScreenName() != null ? getScreenName().equals(mention.getScreenName()) : mention.getScreenName() == null;
+        if (id != null ? !id.equals(mention.id) : mention.id != null) return false;
+        if (idTwitter != null ? !idTwitter.equals(mention.idTwitter) : mention.idTwitter != null) return false;
+        return screenNameUnique != null ? screenNameUnique.equals(mention.screenNameUnique) : mention.screenNameUnique == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
-        result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
+        result = 31 * result + (screenNameUnique != null ? screenNameUnique.hashCode() : 0);
         return result;
     }
 }
