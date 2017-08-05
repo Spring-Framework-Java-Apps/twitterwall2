@@ -176,6 +176,7 @@ public class TweetServiceTest {
     }
 
     //@Commit
+    @Ignore
     @Test
     public void findAllTweet2Media() throws Exception {
         String msg = "findAllTweet2Media: ";
@@ -201,6 +202,7 @@ public class TweetServiceTest {
     }
 
     //@Commit
+    @Ignore
     @Test
     public void findAllTweet2Mention() throws Exception {
         String msg = "findAllTweet2Mention: ";
@@ -226,6 +228,7 @@ public class TweetServiceTest {
     }
 
     //@Commit
+    @Ignore
     @Test
     public void findAllTweet2Url() throws Exception {
         String msg = "findAllTweet2Url: ";
