@@ -296,6 +296,10 @@ public class Entities extends EntitiesFilter implements Serializable {
         return this.tickerSymbols.remove(tickerSymbol);
     }
 
+    public String getFormattedTextForMentionsForTweets(String formattedText){
+        return super.getFormattedTextForMentionsForTweets(this.mentions,formattedText);
+    }
+
     private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");

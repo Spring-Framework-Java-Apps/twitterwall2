@@ -58,10 +58,54 @@ public class EntitiesFilter {
                             " <a class=\"tweet-action tweet-profile2\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> "
                     };
 
+                    String USER_PROFILE_OUTPUT_UNDEFINED[] = {
+                            " <a class=\"tweet-action tweet-profile1\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2",
+                            " <a class=\"tweet-action tweet-profile2\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> "
+                    };
+
                     for (int i = 0; i < 2; i++) {
                         Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                         Matcher m = userPattern.matcher(formattedText);
-                        formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
+                        if(mention.isRawMentionFromUserDescription()){
+                            formattedText = m.replaceAll(USER_PROFILE_OUTPUT_UNDEFINED[i]);
+                        } else {
+                            formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
+                        }
+                    }
+                }
+            }
+        }
+        return formattedText;
+    }
+
+    protected String getFormattedTextForMentionsForTweets(Set<Mention> mentions, String formattedText) {
+        for (Mention mention : mentions) {
+            if(mention != null) {
+                if (mention.isProxy() && mention.hasUser() && (!mention.getScreenName().isEmpty())) {
+
+                    String USER_PROFILE_INPUT[] = {
+                        "@(" + mention.getScreenName() + ")(" + stopChar + ")",
+                        "@(" + mention.getScreenName() + ")$"
+                    };
+
+                    String USER_PROFILE_OUTPUT[] = {
+                        " <a class=\"tweet-action tweet-profile1\" href=\"/user/"+mention.getIdTwitterOfUser()+"\" target=\"_blank\">@" + mention.getScreenName() + "</a>$2",
+                        " <a class=\"tweet-action tweet-profile2\" href=\"/user/"+mention.getIdTwitterOfUser()+"\" target=\"_blank\">@" + mention.getScreenName() + "</a> "
+                    };
+
+                    String USER_PROFILE_OUTPUT_UNDEFINED[] = {
+                        " <a class=\"tweet-action tweet-profile1\" href=\"/user/"+mention.getIdTwitterOfUser()+"\" target=\"_blank\">@" + mention.getScreenName() + "</a>$2",
+                        " <a class=\"tweet-action tweet-profile2\" href=\"/user/"+mention.getIdTwitterOfUser()+"\" target=\"_blank\">@" + mention.getScreenName() + "</a> "
+                    };
+
+                    for (int i = 0; i < 2; i++) {
+                        Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
+                        Matcher m = userPattern.matcher(formattedText);
+                        if(mention.isRawMentionFromUserDescription()){
+                            formattedText = m.replaceAll(USER_PROFILE_OUTPUT_UNDEFINED[i]);
+                        } else {
+                            formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
+                        }
                     }
                 }
             }
@@ -344,10 +388,23 @@ public class EntitiesFilter {
                         " <a href=\"" + url.getExpanded() + "\" class=\"tw-url2\" target=\"_blank\">" + url.getDisplay() + "</a> "
                 };
 
+                String USER_PROFILE_OUTPUT_UNDEFINED[] = {
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-display1\" target=\"_blank\">" + url.getUrl() + "</a>$2",
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-display2\" target=\"_blank\">" + url.getUrl() + "</a> ",
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-expanded1\" target=\"_blank\">" + url.getUrl() + "</a>$2",
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-expanded2\" target=\"_blank\">" + url.getUrl() + "</a> ",
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-url1\" target=\"_blank\">" + url.getUrl() + "</a>$2",
+                        " <a href=\"" + url.getUrl() + "\" class=\"tw-url2\" target=\"_blank\">" + url.getUrl() + "</a> "
+                };
+
                 for (int i = 0; i < 6; i++) {
                     Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                     Matcher m = userPattern.matcher(formattedText);
-                    formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
+                    if(url.isRawUrlsFromDescription()){
+                        formattedText = m.replaceAll(USER_PROFILE_OUTPUT_UNDEFINED[i]);
+                    } else {
+                        formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
+                    }
                 }
             }
         }

@@ -239,7 +239,11 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     @Transient
     public String getFormattedText() {
-        return this.entities.getFormattedText(this.text);
+
+        String htmlText = this.entities.getFormattedText(this.text);
+
+        return this.entities.getFormattedTextForMentionsForTweets(htmlText);
+
     }
 
     public Long getId() {
