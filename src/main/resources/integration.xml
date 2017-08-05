@@ -286,6 +286,8 @@
         <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsFireAndForgetChannel"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchFireAndForgetChannel"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListFireAndForgetChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
     </int:router>
 
     <int:channel id="updateTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
@@ -318,6 +320,17 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="createTestDataUsersFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="createTestDataTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
 
 
     <int:chain id="updateTweetsFireAndForgetChain" input-channel="updateTweetsFireAndForgetChannel">
@@ -436,6 +449,54 @@
         <int:service-activator
                 id="fetchUsersFromListFireAndForgetFinisher"
                 ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
+    <int:chain id="createTestDataUsersFireAndForgetChain" input-channel="createTestDataUsersFireAndForgetChannel">
+        <int:splitter
+                id="createTestDataUsersFireAndForgetSplitter"
+                ref="mqCreateTestDataForUsersSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="createTestDataUsersFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
+    <int:chain id="createTestDataTweetsFireAndForgetChain" input-channel="createTestDataTweetsFireAndForgetChannel">
+        <int:splitter
+                id="createTestDataTweetsFireAndForgetSplitter"
+                ref="mqCreateTestDataForTweetsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="createTestDataTweetsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetFinisher"
+                ref="mqTweetFinisher"
                 method="finishAsnyc" />
     </int:chain>
 

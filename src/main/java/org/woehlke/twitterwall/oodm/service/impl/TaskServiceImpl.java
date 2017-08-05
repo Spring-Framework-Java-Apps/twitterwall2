@@ -23,7 +23,7 @@ import java.util.Date;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TaskServiceImpl implements TaskService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
@@ -54,6 +54,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task create(String msg,TaskType type,CountedEntities countedEntities) {
         String descriptionTask = "start: "+msg;
         TaskStatus taskStatus = TaskStatus.READY;
@@ -70,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task done(Task task,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);
@@ -83,6 +85,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task,Exception e,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -96,6 +99,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task, Exception e, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -109,6 +113,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, Exception e,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -122,6 +127,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, Exception e, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -135,6 +141,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task event(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTimeLastUpdate(new Date());
@@ -147,6 +154,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -160,6 +168,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -173,6 +182,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task start(Task task,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.RUNNING);
@@ -186,6 +196,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task finalError(Task task, String msg, CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINAL_ERROR);
@@ -199,6 +210,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task done(String logMsg, Task task, CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);

@@ -2,7 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="INFO" />
+    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.repositories" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />
@@ -10,11 +10,16 @@
     <logger name="org.woehlke.twitterwall.frontend.model" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller.common" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.scheduled.service.remote" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.scheduled.mq" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall" level="INFO" />
-    <root level="WARN"></root>
+    <logger name="org.woehlke.twitterwall" level="DEBUG" />
+    <logger name="org.apache.http" level="INFO" />
+    <logger name="org.apache.tomcat" level="INFO" />
+    <logger name="org.springframework.boot" level="WARN" />
+    <logger name="org.springframework.test" level="DEBUG" />
+    <logger name="org.hibernate" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall" level="DEBUG" />
+    <root level="INFO"></root>
 </configuration>

@@ -78,19 +78,16 @@ public class TaskController {
                 twitterProperties.getSearchQuery(),
                 Symbols.GET_TEST_DATA.toString()
         );
-        String msg = PATH+"/start/createTestData: ";
         if(frontendProperties.getContextTest()){
-
-            List<Tweet> latestTweets = mqStartTask.createTestDataForTweets();
-            List<User> users = mqStartTask.createTestDataForUser();
-
-            model.addAttribute("latestTweets", latestTweets);
-            model.addAttribute("users",users);
+            Task taskTweets = mqAsyncStartTask.createTestDataForTweets();
+            Task taskUsers =  mqAsyncStartTask.createTestDataForUser();
+            model.addAttribute("taskTweets", taskTweets);
+            model.addAttribute("taskUsers",taskUsers);
         } else {
-            model.addAttribute("latestTweets",null);
-            model.addAttribute("users",null);
+            model.addAttribute("taskTweets",null);
+            model.addAttribute("taskUsers",null);
         }
-        return PATH+"/start/createTestData";
+        return PATH+"/start/taskStarted";
     }
 
     @RequestMapping("/start/user/onlist/renew")

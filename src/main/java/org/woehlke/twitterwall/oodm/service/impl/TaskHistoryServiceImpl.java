@@ -11,14 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
-import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 
 /**
  * Created by tw on 11.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceImpl.class);
@@ -31,6 +30,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public TaskHistory store(TaskHistory domainObject) {
         return taskHistoryRepository.save(domainObject);
     }

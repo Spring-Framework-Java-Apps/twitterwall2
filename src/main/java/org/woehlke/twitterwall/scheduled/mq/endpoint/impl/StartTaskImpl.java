@@ -58,6 +58,18 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
+    public Task createTestDataForTweets() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task createTestDataForUser() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        return sendAndReceiveUser(taskType);
+    }
+
+    @Override
     public User createImprintUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
         String logMsg = "Start task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";
@@ -92,6 +104,7 @@ public class StartTaskImpl implements StartTask {
         }
     }
 
+    /*
     @Override
     public List<User> createTestDataForUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
@@ -161,6 +174,7 @@ public class StartTaskImpl implements StartTask {
             return new ArrayList<>();
         }
     }
+    */
 
     private Task sendAndReceiveTweet(TaskType taskType){
         String logMsg = "Start task "+taskType+"via MQ by SEND_AND_WAIT_FOR_RESULT_SENDER";

@@ -95,13 +95,13 @@ public class UserDescriptionTest {
             lfdNr++;
             log.info("description "+lfdNr+": "+description);
             for(HashTag hashTag:this.getHashTags(description,task)){
-                log.info("found hashTag: "+hashTag.toString());
+                log.info("found hashTag: "+hashTag.getUniqueId());
             }
             for(Url url:this.getUrls(description,task)){
-                log.info("found url: "+ url.toString());
+                log.info("found url: "+ url.getUniqueId());
             }
             for(Mention mention:this.getMentions(description,task)){
-                log.info("found mention: "+mention.toString());
+                log.info("found mention: "+mention.getUniqueId());
             }
         }
         log.info("++++++++++++++++++++");

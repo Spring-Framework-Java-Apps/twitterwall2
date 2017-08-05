@@ -49,6 +49,18 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task createTestDataForTweets() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task createTestDataForUser() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
         String msg = "START Task "+taskType+" via MQ by FIRE_AND_FORGET_SENDER";
         log.info(msg);

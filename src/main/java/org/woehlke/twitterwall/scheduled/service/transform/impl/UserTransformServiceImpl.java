@@ -86,7 +86,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource,task);
         log.debug(msg+" entities = "+entities.toString());
         userTarget.setEntities(entities);
-        log.debug(msg+" userTarget = "+userTarget.toString());
+        log.debug(msg+" userTarget = "+userTarget.getUniqueId());
         return userTarget;
     }
 

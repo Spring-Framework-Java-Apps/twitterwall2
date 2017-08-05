@@ -15,36 +15,36 @@ public class UrlListener {
 
   @PrePersist
   public void onPrePersist(Url domainObject) {
-    log.debug("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.getUniqueId());
   }
 
   @PreUpdate
   public void onPreUpdate(Url domainObject) {
-    log.debug("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.getUniqueId());
   }
 
   @PreRemove
   public void onPreRemove(Url domainObject) {
-    log.debug("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.getUniqueId());
   }
 
   @PostPersist
   public void onPostPersist(Url domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.getUniqueId());
   }
 
   @PostUpdate
   public void onPostUpdate(Url domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.getUniqueId());
   }
 
   @PostRemove
   public void onPostRemove(Url domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.getUniqueId());
   }
 
   @PostLoad
   public void onPostLoad(Url domainObject) {
-    log.debug("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.getUniqueId());
   }
 }

@@ -15,36 +15,36 @@ public class MediaListener {
 
   @PrePersist
   public void onPrePersist(Media domainObject) {
-    log.debug("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.getUniqueId());
   }
 
   @PreUpdate
   public void onPreUpdate(Media domainObject) {
-    log.debug("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.getUniqueId());
   }
 
   @PreRemove
   public void onPreRemove(Media domainObject) {
-    log.debug("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.getUniqueId());
   }
 
   @PostPersist
   public void onPostPersist(Media domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.getUniqueId());
   }
 
   @PostUpdate
   public void onPostUpdate(Media domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.getUniqueId());
   }
 
   @PostRemove
   public void onPostRemove(Media domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.getUniqueId());
   }
 
   @PostLoad
   public void onPostLoad(Media domainObject) {
-    log.debug("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.getUniqueId());
   }
 }

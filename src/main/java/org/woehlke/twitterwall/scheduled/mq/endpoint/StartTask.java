@@ -9,8 +9,8 @@ public interface StartTask extends AsyncStartTask {
 
     User createImprintUser();
 
-    List<User> createTestDataForUser();
+    //List<User> createTestDataForUser();
 
-    List<Tweet> createTestDataForTweets();
+    //List<Tweet> createTestDataForTweets();
 
 }
