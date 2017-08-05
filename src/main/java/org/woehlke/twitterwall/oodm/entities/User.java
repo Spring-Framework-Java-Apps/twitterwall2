@@ -26,22 +26,23 @@ import java.util.regex.Pattern;
     name = "userprofile",
     uniqueConstraints = {
         @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name_unique"}),
+        @UniqueConstraint(name="unique_userprofile_id_twitter",columnNames = {"id_twitter"}),
+        @UniqueConstraint(name="unique_userprofile_screen_name_unique",columnNames = {"screen_name_unique"}),
     },
     indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
-        @Index(name="idx_userprofile_url", columnList="url")/*,
-        @Index(name="idx_userprofile_fetch_tweets_from_twitter_search", columnList="fetch_tweets_from_twitter_search"),
-        @Index(name="idx_userprofile_update_tweets", columnList="update_tweets"),
-        @Index(name="idx_userprofile_update_user_profiles", columnList="update_user_profiles"),
-        @Index(name="idx_userprofile_update_user_profiles_from_mentions", columnList="update_user_profiles_from_mentions"),
-        @Index(name="idx_userprofile_fetch_users_from_defined_user_list", columnList="fetch_users_from_defined_user_list"),
-        @Index(name="idx_userprofile_controller_get_testdata_tweets", columnList="controller_get_testdata_tweets"),
-        @Index(name="idx_userprofile_controller_get_testdata_user", columnList="controller_get_testdata_user"),
-        @Index(name="idx_userprofile_controller_add_user_for_screen_name", columnList="controller_add_user_for_screen_name"),
-        @Index(name="idx_userprofile_controller_create_imprint_user", columnList="controller_create_imprint_user")
-        */
+        @Index(name="idx_userprofile_url", columnList="url"),
+        @Index(name="idx_userprofile_fetch_tweets_from_twitter_search", columnList="remote_api_cache_fetch_tweets_from_twitter_search"),
+        @Index(name="idx_userprofile_update_tweets", columnList="remote_api_cache_update_tweets"),
+        @Index(name="idx_userprofile_update_user_profiles", columnList="remote_api_cache_update_user_profiles"),
+        @Index(name="idx_userprofile_update_user_profiles_from_mentions", columnList="remote_api_cache_update_user_profiles_from_mentions"),
+        @Index(name="idx_userprofile_fetch_users_from_defined_user_list", columnList="remote_api_cache_fetch_users_from_defined_user_list"),
+        @Index(name="idx_userprofile_controller_get_testdata_tweets", columnList="remote_api_cache_controller_get_testdata_tweets"),
+        @Index(name="idx_userprofile_controller_get_testdata_user", columnList="remote_api_cache_controller_get_testdata_user"),
+        @Index(name="idx_userprofile_controller_add_user_for_screen_name", columnList="remote_api_cache_controller_add_user_for_screen_name"),
+        @Index(name="idx_userprofile_controller_create_imprint_user", columnList="remote_api_cache_controller_create_imprint_user")
     }
 )
 @NamedQueries({
@@ -332,7 +333,12 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
 
     public final static String SCREEN_NAME_PATTERN = "\\w*";
 
+    public final static String SCREEN_NAME_UNIQUE_PATTERN = "[a-z_0-9]*";
+
     public static boolean isValidScreenName(String screenName){
+        if(screenName==null){
+            return false;
+        }
         Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
         Matcher m = p.matcher(screenName);
         return m.matches();
@@ -345,12 +351,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         return m.matches();
     }
 
-    public static boolean isValidScreenNameUnique(String screenName){
-        String screenNameUnique = screenName.toLowerCase();
-        if(screenName.compareTo(screenNameUnique)!=0){
+    public static boolean isValidScreenNameUnique(String screenNameUnique){
+        if(screenNameUnique==null){
             return false;
         }
-        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_UNIQUE_PATTERN+"$");
         Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }
@@ -360,7 +365,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
             return false;
         }
-        Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_UNIQUE_PATTERN+"$");
         Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }

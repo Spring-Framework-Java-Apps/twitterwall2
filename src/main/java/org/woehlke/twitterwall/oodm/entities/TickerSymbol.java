@@ -19,7 +19,9 @@ import java.net.MalformedURLException;
 @Table(
     name = "tickersymbol",
     uniqueConstraints = {
-        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
+        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"}),
+        @UniqueConstraint(name="unique_tickersymbol_url", columnNames = {"url"}),
+        @UniqueConstraint(name="unique_tickersymbol_ticker_symbol", columnNames = {"ticker_symbol"})
     }
 )
 @NamedQueries({

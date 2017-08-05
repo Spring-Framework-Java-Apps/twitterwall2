@@ -25,10 +25,15 @@ import static javax.persistence.FetchType.EAGER;
 @Table(
     name = "mention",
     uniqueConstraints = {
-        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name_unique", "id_twitter"})
+        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name_unique", "id_twitter"}),
+        @UniqueConstraint(name = "unique_mention_screen_name_unique", columnNames = {"screen_name_unique"}),
+        @UniqueConstraint(name = "unique_id_twitter", columnNames = {"id_twitter"})
     },
     indexes = {
-        @Index(name = "idx_mention_name", columnList = "name")
+        @Index(name = "idx_mention_name", columnList = "name"),
+        @Index(name = "idx_mention_name", columnList = "screen_name"),
+        @Index(name = "idx_mention_fk_user", columnList = "fk_user"),
+        @Index(name = "idx_mention_id_twitter_of_user", columnList = "id_twitter_of_user")
     }
 )
 @NamedQueries({
@@ -147,7 +152,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
             return false;
         }
-        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_UNIQUE_PATTERN+ "$");
         Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }
@@ -156,7 +161,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         if(screenNameUnique==null){
             return false;
         }
-        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_UNIQUE_PATTERN + "$");
         Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }
