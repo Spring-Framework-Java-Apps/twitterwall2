@@ -148,6 +148,10 @@
     i.fa, span.map-icon, span.glyphicon  {
         margin-right: 0.25em;
     }
+
+    i.tw-verified {
+        color: #317eac;
+    }
 }
 
 
