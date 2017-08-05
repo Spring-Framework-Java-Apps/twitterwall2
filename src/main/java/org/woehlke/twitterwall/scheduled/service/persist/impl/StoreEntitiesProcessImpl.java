@@ -42,9 +42,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                         if (urlPers != null) {
                             urlPers.setDisplay(myUrl.getDisplay());
                             urlPers.setExpanded(myUrl.getExpanded());
-                            urlPers = urlService.store(urlPers, task);
+                            urlPers = urlService.update(urlPers, task);
                         } else {
-                            urlPers = urlService.store(myUrl, task);
+                            urlPers = urlService.create(myUrl, task);
                         }
                         urls.add(urlPers);
                     } else if (myUrl.isRawUrlsFromDescription()) {

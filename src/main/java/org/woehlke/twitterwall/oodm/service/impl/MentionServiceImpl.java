@@ -28,13 +28,10 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
 
     private final MentionRepository mentionRepository;
 
-    private final TaskRepository taskRepository;
-
     @Autowired
     public MentionServiceImpl(MentionRepository mentionRepository, TaskRepository taskRepository) {
         super(mentionRepository,taskRepository);
         this.mentionRepository = mentionRepository;
-        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -44,12 +41,13 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
 
     @Override
     public Mention findByScreenName(String screenName) {
-        return mentionRepository.findByScreenName(screenName);
+        String screenNameUnique = screenName.toLowerCase();
+        return mentionRepository.findByScreenNameUnique(screenNameUnique);
     }
 
     @Override
     public Mention createProxyMention(Mention mention, Task task) {
-        Mention foundPers = mentionRepository.findByScreenName(mention.getScreenName());
+        Mention foundPers = mentionRepository.findByScreenNameUnique(mention.getScreenNameUnique());
         if(foundPers!=null){
            return foundPers;
         } else {
@@ -67,7 +65,8 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
 
     @Override
     public Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter) {
-        return mentionRepository.findByScreenNameAndIdTwitter(screenName, idTwitter);
+        String screenNameUnique = screenName.toLowerCase();
+        return mentionRepository.findByScreenNameUniqueAndIdTwitter(screenNameUnique, idTwitter);
     }
 
 }

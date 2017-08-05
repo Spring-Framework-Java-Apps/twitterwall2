@@ -16,10 +16,10 @@ public interface MentionRepository extends DomainRepository<Mention>,MentionRepo
 
     Mention findByIdTwitter(long idTwitter);
 
-    Mention findByScreenName(String screenName);
+    Mention findByScreenNameUnique(String screenNameUnique);
 
     Page<Mention> findAllByUserNull(Pageable pageRequest);
 
-    Mention findByScreenNameAndIdTwitter(String screenName,Long idTwitter);
+    Mention findByScreenNameUniqueAndIdTwitter(String screenNameUnique,Long idTwitter);
 
 }

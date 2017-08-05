@@ -27,7 +27,6 @@ import static javax.persistence.FetchType.EAGER;
     uniqueConstraints = {
         @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name_unique", "id_twitter"}),
         @UniqueConstraint(name = "unique_mention_screen_name_unique", columnNames = {"screen_name_unique"}),
-        @UniqueConstraint(name = "unique_id_twitter", columnNames = {"id_twitter"})
     },
     indexes = {
         @Index(name = "idx_mention_name", columnList = "name"),

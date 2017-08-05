@@ -116,7 +116,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    @Ignore
+    //@Ignore
     @WithMockUser
     //@Commit
     @Test

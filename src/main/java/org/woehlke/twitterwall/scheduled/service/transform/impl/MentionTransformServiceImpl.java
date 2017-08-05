@@ -29,9 +29,9 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
     @Override
     public Mention transform(MentionEntity mention,Task task) {
         long idTwitter = mention.getId();
-        String screenName = mention.getScreenName();
+        String screenNameUnique = mention.getScreenName();
         String name = mention.getName();
-        Mention myMentionEntity = new Mention(task,null,idTwitter, screenName, name);
+        Mention myMentionEntity = new Mention(task,null,idTwitter, screenNameUnique, name);
         return myMentionEntity;
     }
 
