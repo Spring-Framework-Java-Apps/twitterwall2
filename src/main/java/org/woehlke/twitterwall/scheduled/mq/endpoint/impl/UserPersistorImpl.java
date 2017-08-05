@@ -35,7 +35,10 @@ public class UserPersistorImpl implements UserPersistor {
         } else {
             long taskId = receivedMessage.getTaskMessage().getTaskId();
             Task task = taskService.findById(taskId);
-            User user = storeUserProcess.storeUserProcess(receivedMessage.getUser(), task);
+
+            User user = receivedMessage.getUser();
+
+            User userPers = storeUserProcess.storeUserProcess(user, task);
             UserMessage mqMessageOut = new UserMessage(
                     receivedMessage.getTaskMessage(),
                     receivedMessage.getScreenName(),

@@ -118,7 +118,7 @@ public class TaskControllerTest {
 
     //@Ignore
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void createTestDataTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))

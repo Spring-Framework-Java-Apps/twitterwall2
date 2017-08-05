@@ -58,7 +58,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
             loopId++;
             org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = tweetService.findByIdTwitter(idTwitter);
             if(tweetPers == null){
-                tweets.add(getTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
+                tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
             } else {
                 if(tweetPers.getTwitterApiCaching().isCached(task.getTaskType(),ZWOELF_STUNDEN)) {
                     TweetMessage msg = new TweetMessage(msgIn,tweetPers);
@@ -70,14 +70,14 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
                                     .build();
                     tweets.add(mqMessageOut);
                 } else {
-                    tweets.add(getTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
+                    tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
                 }
             }
         }
         return tweets;
     }
 
-    private Message<TweetMessage> getTweetFromTwitter(long idTwitter, Task task, Message<TaskMessage> incomingTaskMessage,int loopId,int loopAll){
+    private Message<TweetMessage> fetchTweetFromTwitter(long idTwitter, Task task, Message<TaskMessage> incomingTaskMessage,int loopId,int loopAll){
         Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
         TweetMessage tweetMsg = new TweetMessage(incomingTaskMessage.getPayload(),tweet);
         Message<TweetMessage> mqMessageOut =

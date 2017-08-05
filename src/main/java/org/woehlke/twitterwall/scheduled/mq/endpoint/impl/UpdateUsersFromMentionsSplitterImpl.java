@@ -70,10 +70,10 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
         boolean hasNext=true;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         while (hasNext) {
-            Page<Mention> allPersMentions = mentionService.getAllWithoutPersistentUser(pageRequest);
+            Page<Mention> allPersMentions = mentionService.getAllWithoutUser(pageRequest);
             hasNext = allPersMentions.hasNext();
             for (Mention onePersMention : allPersMentions) {
-                if (!onePersMention.hasPersistentUser()) {
+                if (!onePersMention.hasUser()) {
                     String screenName = onePersMention.getScreenName();
                     User foundUser = userService.findByScreenName(screenName);
                     if(foundUser == null) {
@@ -82,9 +82,8 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                         log.debug("### mentionService.getAll from DB (" + lfdNr + "): " + screenName);
                         screenNames.add(screenName);
                     } else {
-                        onePersMention.setUser(foundUser);
                         onePersMention.setIdTwitterOfUser(foundUser.getIdTwitter());
-                        onePersMention = mentionService.store(onePersMention,task);
+                        onePersMention = mentionService.update(onePersMention,task);
                         log.debug("### updated Mention with screenName = " + screenName);
                     }
                 }

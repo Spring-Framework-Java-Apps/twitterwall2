@@ -58,7 +58,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Column(length=4096,nullable = false)
     private String display="";
 
-    @URL
+    //@URL
     @NotNull
     @Column(length=4096,nullable = false)
     private String expanded="";

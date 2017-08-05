@@ -18,7 +18,11 @@ public interface MentionRepository extends DomainRepository<Mention>,MentionRepo
 
     Mention findByScreenNameUnique(String screenNameUnique);
 
-    Page<Mention> findAllByUserNull(Pageable pageRequest);
+    @Query(
+            name="Mention.findAllWithoutUser",
+            countName = "Mention.countAllWithoutUser"
+    )
+    Page<Mention> findAllWithoutUser(Pageable pageRequest);
 
     Mention findByScreenNameUniqueAndIdTwitter(String screenNameUnique,Long idTwitter);
 

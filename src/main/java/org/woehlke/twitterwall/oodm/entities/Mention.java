@@ -13,11 +13,6 @@ import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
-
 /**
  * Created by tw on 10.06.17.
  */
@@ -31,7 +26,6 @@ import static javax.persistence.FetchType.EAGER;
     indexes = {
         @Index(name = "idx_mention_name", columnList = "name"),
         @Index(name = "idx_mention_name", columnList = "screen_name"),
-        @Index(name = "idx_mention_fk_user", columnList = "fk_user"),
         @Index(name = "idx_mention_id_twitter_of_user", columnList = "id_twitter_of_user")
     }
 )
@@ -39,6 +33,14 @@ import static javax.persistence.FetchType.EAGER;
     @NamedQuery(
         name="Mention.findByUniqueId",
         query="select t from Mention t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+    ),
+    @NamedQuery(
+        name="Mention.findAllWithoutUser",
+        query="select t from Mention t where t.idTwitterOfUser=0"
+    ),
+    @NamedQuery(
+        name="Mention.countAllWithoutUser",
+        query="select count(t) from Mention t where t.idTwitterOfUser=0"
     )
 })
 @EntityListeners(MentionListener.class)
@@ -65,10 +67,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     @Column(name = "name",length=4096, nullable = false)
     private String name = "";
-
-    @JoinColumn(name = "fk_user",nullable = true)
-    @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
-    private User user;
 
     @NotNull
     @Column(name = "id_twitter_of_user",nullable = false)
@@ -127,7 +125,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         if(idTwitter == null){
             return false;
         }
-        return true;
+        return (this.getScreenName().compareTo(this.getScreenNameUnique())==0) ;
     }
 
     @Transient
@@ -171,16 +169,8 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Transient
-    public boolean hasPersistentUser(){
-        boolean result = false;
-        User myUser = this.getUser();
-        if(myUser != null){
-            result =
-                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
-                    (idTwitterOfUser != null ) &&
-                    (myUser.getIdTwitter() == idTwitterOfUser);
-        }
-        return result;
+    public boolean hasUser() {
+        return idTwitterOfUser > 0L;
     }
 
     @Transient
@@ -190,10 +180,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         } else {
             return false;
         }
-    }
-
-    public boolean hasUser() {
-        return user != null;
     }
 
     public static long getSerialVersionUID() {
@@ -239,14 +225,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Override
     public void setIdTwitter(Long idTwitter) {
         this.idTwitter = idTwitter;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Long getIdTwitterOfUser() {

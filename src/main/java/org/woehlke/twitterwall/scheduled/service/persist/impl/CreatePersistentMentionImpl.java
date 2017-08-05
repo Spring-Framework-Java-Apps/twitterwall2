@@ -60,12 +60,10 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
                 Mention persMention = null;
                 Mention myFoundMention = mentionService.findByScreenName(screenName);
                 if (myFoundMention != null) {
-                    myFoundMention.setUser(foundUser);
                     myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.update(myFoundMention, task);
                     log.debug(msg + " updated: " + persMention.toString());
                 } else {
-                    mention.setUser(foundUser);
                     mention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.createProxyMention(mention, task);
                     log.debug(msg + " persisted: " + persMention.toString());

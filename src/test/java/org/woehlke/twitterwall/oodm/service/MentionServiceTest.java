@@ -11,10 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -85,15 +82,15 @@ public class MentionServiceTest {
     //@Commit
     @Test
     public void getAllWithoutPersistentUser() throws Exception {
-        String msg = "getAllWithoutPersistentUser: ";
+        String msg = "getAllWithoutUser: ";
         int page=1;
         int size=100;
         Pageable pageRequest = new PageRequest(page,size);
-        Page<Mention> pageMention =  mentionService.getAllWithoutPersistentUser(pageRequest);
+        Page<Mention> pageMention =  mentionService.getAllWithoutUser(pageRequest);
         Assert.assertTrue(msg,pageMention.getTotalElements()>0);
         for(Mention mention: pageMention.getContent()){
             Assert.assertTrue(msg,mention.getIdTwitterOfUser()==0L);
-            Assert.assertFalse(msg,mention.hasPersistentUser());
+            Assert.assertFalse(msg,mention.hasUser());
         }
     }
 
