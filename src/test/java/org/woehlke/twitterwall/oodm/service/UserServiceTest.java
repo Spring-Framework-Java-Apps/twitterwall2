@@ -155,6 +155,10 @@ public class UserServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getTweetingUsers(pageRequest);
+        for(User user:foundUser.getContent()){
+            Assert.assertTrue(msg,user.getTweeting());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
+        }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
@@ -167,6 +171,10 @@ public class UserServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<String> foundDescriptions = userService.getAllDescriptions(pageRequest);
+        for(String description:foundDescriptions){
+            Assert.assertNotNull(description);
+            log.debug(msg+" description: "+description);
+        }
         log.debug(msg+" foundUser: "+foundDescriptions.getTotalElements());
     }
 
@@ -199,6 +207,7 @@ public class UserServiceTest {
         Page<User> foundUser = userService.getFriends(pageRequest);
         for(User user : foundUser.getContent()){
             Assert.assertTrue(user.getFriend());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
@@ -213,7 +222,8 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetFriendUsers(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertTrue(!user.getFriend());
+            Assert.assertFalse(user.getFriend());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
@@ -229,6 +239,7 @@ public class UserServiceTest {
         Page<User> foundUser = userService.getFollower(pageRequest);
         for(User user : foundUser.getContent()){
             Assert.assertTrue(user.getFollower());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
@@ -243,7 +254,8 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetFollower(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertTrue(!user.getFollower());
+            Assert.assertFalse(user.getFollower());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
@@ -258,6 +270,10 @@ public class UserServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getOnList(pageRequest);
+        for(User user:foundUser.getContent()){
+            Assert.assertTrue(msg,user.getTaskInfo().getUpdatedByFetchUsersFromDefinedUserList());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
+        }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
@@ -271,6 +287,11 @@ public class UserServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetOnList(pageRequest);
+        for(User user:foundUser.getContent()){
+            Assert.assertTrue(msg,user.getTaskInfo().getUpdatedByFetchTweetsFromTwitterSearch());
+            Assert.assertFalse(msg,user.getTaskInfo().getUpdatedByFetchUsersFromDefinedUserList());
+            log.debug(msg+" foundUser: "+user.getUniqueId());
+        }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
@@ -296,6 +317,7 @@ public class UserServiceTest {
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getHashTags().contains(foundEntity));
+                log.debug(msg+" found User: "+foundObject.getUniqueId()+" found HashTag: "+foundEntity.getUniqueId());
             }
         }
     }
@@ -322,6 +344,7 @@ public class UserServiceTest {
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getMedia().contains(foundEntity));
+                log.debug(msg+" found User: "+foundObject.getUniqueId()+" found Media: "+foundEntity.getUniqueId());
             }
         }
     }
@@ -357,6 +380,7 @@ public class UserServiceTest {
             Assert.assertTrue(msg,mentions.size()>0);
             boolean ok = mentions.contains(mentionPers);
             Assert.assertTrue(msg,ok);
+            log.debug(msg+" found User: "+userPers.getUniqueId()+" found Mention: "+mentionPers.getUniqueId());
         }
     }
 
@@ -385,6 +409,7 @@ public class UserServiceTest {
             Assert.assertTrue(msg,urls.size()>0);
             boolean ok = urls.contains(foundEntity);
             Assert.assertTrue(msg,ok);
+            log.debug(msg+" found User: "+foundObject.getUniqueId()+" found Url: "+foundEntity.getUniqueId());
         }
     }
 
@@ -410,7 +435,25 @@ public class UserServiceTest {
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getTickerSymbols().contains(foundEntity));
+                log.debug(msg+" found User: "+foundObject.getUniqueId()+" found TickerSymbol: "+foundEntity.getUniqueId());
             }
+        }
+    }
+
+    @Test
+    public void findByidTwitterAndScreenNameUnique() throws Exception {
+        String msg = "findByidTwitterAndScreenNameUnique: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<User> allUsersPage = userService.getAll(pageRequest);
+        for(User expectedUser:allUsersPage.getContent()){
+            long idTwitter = expectedUser.getIdTwitter();
+            String screenNameUnique = expectedUser.getScreenNameUnique();
+            User foundUser = userService.findByidTwitterAndScreenNameUnique(idTwitter,screenNameUnique);
+            Assert.assertEquals(msg,expectedUser.getUniqueId(),foundUser.getUniqueId());
+            Assert.assertEquals(msg,idTwitter,foundUser.getIdTwitter().longValue());
+            Assert.assertEquals(msg,screenNameUnique,foundUser.getScreenNameUnique());
         }
     }
 }

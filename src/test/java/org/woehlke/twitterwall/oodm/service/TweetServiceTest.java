@@ -83,16 +83,17 @@ public class TweetServiceTest {
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
         int page=1;
-        int size=1;
+        int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Tweet> myPage = tweetService.getAll(pageRequest);
         if(myPage.getTotalElements()>0){
-            Tweet myMedia = myPage.getContent().iterator().next();
-            long expectedIdTwitter = myMedia.getIdTwitter();
-            Tweet myFoundMedia = tweetService.findByIdTwitter(expectedIdTwitter);
-            long foundIdTwitter = myFoundMedia.getIdTwitter();
-            Assert.assertEquals(msg, expectedIdTwitter,foundIdTwitter);
-            log.info(msg+" found: "+myMedia.getUniqueId());
+            for(Tweet tweet: myPage.getContent()){
+                long expectedIdTwitter = tweet.getIdTwitter();
+                Tweet myFoundTweet = tweetService.findByIdTwitter(expectedIdTwitter);
+                long foundIdTwitter = myFoundTweet.getIdTwitter();
+                Assert.assertEquals(msg, expectedIdTwitter,foundIdTwitter);
+                log.info(msg+" found: "+myFoundTweet.getUniqueId());
+            }
         } else {
             log.error(msg+" found: myPage.getTotalElements() == 0");
         }
@@ -104,7 +105,6 @@ public class TweetServiceTest {
     @Test
     public void findTweetsForHashTag() throws Exception {
         String msg = "findTweetsForHashTag: ";
-
         int page=1;
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
@@ -113,12 +113,10 @@ public class TweetServiceTest {
             log.debug(msg+" found HashTag: "+hashTag.getUniqueId());
             Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequest);
             for(Tweet tweet: tweets.getContent()){
-                log.debug(msg+" found Tweet: "+tweet.getUniqueId());
                 Assert.assertTrue(tweet.getEntities().getHashTags().contains(hashTag));
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found HashTag: "+hashTag.getUniqueId());
             }
         }
-
-
         log.info(msg);
     }
 
@@ -140,12 +138,11 @@ public class TweetServiceTest {
             Assert.assertTrue(msg,user.getTweeting());
             Page<Tweet> foundTweets = tweetService.findTweetsForUser(user,pageRequest);
             Assert.assertNotNull(msg,foundTweets);
-            //Assert.assertTrue(foundTweets.getTotalElements()>0);
             for(Tweet tweet : foundTweets.getContent()) {
                 loopTweet++;
                 Assert.assertNotNull(msg,tweet.getUser());
                 Assert.assertEquals(msg,tweet.getUser().getUniqueId(), user.getUniqueId());
-                log.info(msg);
+                log.info(msg+" tweet: "+tweet.getUniqueId()+" user: "+tweet.getUser().getUniqueId());
             }
             log.info(msg+" RUNNING TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
         }
@@ -173,6 +170,7 @@ public class TweetServiceTest {
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getHashTags().contains(foundEntity));
+                log.info(msg+" tweet: "+foundObject.getUniqueId()+" HashTag: "+foundEntity.getUniqueId());
             }
         }
     }
@@ -200,6 +198,7 @@ public class TweetServiceTest {
             Set<Media> media = foundObject.getEntities().getMedia();
             Assert.assertTrue(msg,media.size()>0);
             Assert.assertTrue(msg,media.contains(foundEntity));
+            log.info(msg+" tweet: "+foundObject.getUniqueId()+" Media: "+foundEntity.getUniqueId());
         }
     }
 
@@ -227,6 +226,7 @@ public class TweetServiceTest {
                 Set<Mention> mentions = foundObject.getEntities().getMentions();
                 Assert.assertTrue(msg,mentions.size() >0);
                 Assert.assertTrue(msg,mentions.contains(foundEntity));
+                log.info(msg+" tweet: "+foundObject.getUniqueId()+" Mention: "+foundEntity.getUniqueId());
             }
         }
     }
@@ -254,6 +254,7 @@ public class TweetServiceTest {
             Set<Url> urls = foundObject.getEntities().getUrls();
             Assert.assertTrue(msg,urls.size()>0);
             Assert.assertTrue(msg,urls.contains(foundEntity));
+            log.info(msg+" tweet: "+foundObject.getUniqueId()+" Url: "+foundEntity.getUniqueId());
         }
     }
 
@@ -278,6 +279,7 @@ public class TweetServiceTest {
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getTickerSymbols().contains(foundEntity));
+                log.info(msg+" tweet: "+foundObject.getUniqueId()+" TickerSymbol: "+foundEntity.getUniqueId());
             }
         }
     }
