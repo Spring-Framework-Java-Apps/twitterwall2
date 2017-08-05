@@ -124,6 +124,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         }
     }
 
+    @Override
+    public String getUniqueId() {
+        return url;
+    }
+
     public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
         super(createdBy,updatedBy);
         this.display = display;
@@ -161,11 +166,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return url;
     }
 
     public String getDisplay() {
@@ -215,19 +215,17 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Url)) return false;
-        if (!super.equals(o)) return false;
 
         Url url1 = (Url) o;
 
-        if (getId() != null ? !getId().equals(url1.getId()) : url1.getId() != null) return false;
-        return getUrl() != null ? getUrl().equals(url1.getUrl()) : url1.getUrl() == null;
+        if (id != null ? !id.equals(url1.id) : url1.id != null) return false;
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 }

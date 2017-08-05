@@ -362,29 +362,29 @@ public class UserServiceTest {
 
 
     //@Commit
-    @Ignore
+    //@Ignore
     @Test
     public void findAllUser2Url() throws Exception {
         String msg = "findAllUser2Url: ";
         int page=1;
-        int size=10;
+        int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Object2Entity> foundPage = userService.findAllUser2Url(pageRequest);
-        if(foundPage.getTotalElements()>0){
-            for(Object2Entity object2Entity:foundPage.getContent()){
-                long objectId = object2Entity.getObjectId();
-                String objectInfo = object2Entity.getObjectInfo();
-                long entityId = object2Entity.getEntityId();
-                String entityInfo = object2Entity.getObjectInfo();
-                User foundObject = userService.findById(objectId);
-                Url foundEntity = urlService.findById(entityId);
-                Assert.assertNotNull(msg,foundObject);
-                Assert.assertNotNull(msg,foundEntity);
-                Assert.assertNull(objectInfo);
-                Assert.assertNull(entityInfo);
-                boolean ok = foundObject.getEntities().getUrls().contains(foundEntity);
-                Assert.assertTrue(msg,ok);
-            }
+        for(Object2Entity object2Entity:foundPage.getContent()){
+            long objectId = object2Entity.getObjectId();
+            String objectInfo = object2Entity.getObjectInfo();
+            long entityId = object2Entity.getEntityId();
+            String entityInfo = object2Entity.getObjectInfo();
+            User foundObject = userService.findById(objectId);
+            Url foundEntity = urlService.findById(entityId);
+            Assert.assertNotNull(msg,foundObject);
+            Assert.assertNotNull(msg,foundEntity);
+            Assert.assertNull(msg,objectInfo);
+            Assert.assertNull(msg,entityInfo);
+            Set<Url> urls = foundObject.getEntities().getUrls();
+            Assert.assertTrue(msg,urls.size()>0);
+            boolean ok = urls.contains(foundEntity);
+            Assert.assertTrue(msg,ok);
         }
     }
 

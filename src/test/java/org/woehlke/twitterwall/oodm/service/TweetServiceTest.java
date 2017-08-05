@@ -19,6 +19,8 @@ import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
 
+import java.util.Set;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 //@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
@@ -176,7 +178,7 @@ public class TweetServiceTest {
     }
 
     //@Commit
-    @Ignore
+    //@Ignore
     @Test
     public void findAllTweet2Media() throws Exception {
         String msg = "findAllTweet2Media: ";
@@ -184,30 +186,30 @@ public class TweetServiceTest {
         int size=10;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Object2Entity> foundPage = tweetService.findAllTweet2Media(pageRequest);
-        if(foundPage.getTotalElements()>0){
-            for(Object2Entity object2Entity:foundPage.getContent()){
-                long objectId = object2Entity.getObjectId();
-                String objectInfo = object2Entity.getObjectInfo();
-                long entityId = object2Entity.getEntityId();
-                String entityInfo = object2Entity.getObjectInfo();
-                Tweet foundObject = tweetService.findById(objectId);
-                Media foundEntity = mediaService.findById(entityId);
-                Assert.assertNotNull(msg,foundObject);
-                Assert.assertNotNull(msg,foundEntity);
-                Assert.assertNull(objectInfo);
-                Assert.assertNull(entityInfo);
-                Assert.assertTrue(msg,foundObject.getEntities().getMedia().contains(foundEntity));
-            }
+        for(Object2Entity object2Entity:foundPage.getContent()){
+            long objectId = object2Entity.getObjectId();
+            String objectInfo = object2Entity.getObjectInfo();
+            long entityId = object2Entity.getEntityId();
+            String entityInfo = object2Entity.getObjectInfo();
+            Tweet foundObject = tweetService.findById(objectId);
+            Media foundEntity = mediaService.findById(entityId);
+            Assert.assertNotNull(msg,foundObject);
+            Assert.assertNotNull(msg,foundEntity);
+            Assert.assertNull(msg,objectInfo);
+            Assert.assertNull(msg,entityInfo);
+            Set<Media> media = foundObject.getEntities().getMedia();
+            Assert.assertTrue(msg,media.size()>0);
+            Assert.assertTrue(msg,media.contains(foundEntity));
         }
     }
 
     //@Commit
-    @Ignore
+    //@Ignore
     @Test
     public void findAllTweet2Mention() throws Exception {
         String msg = "findAllTweet2Mention: ";
         int page=1;
-        int size=10;
+        int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Object2Entity> foundPage = tweetService.findAllTweet2Mention(pageRequest);
         if(foundPage.getTotalElements()>0){
@@ -220,36 +222,38 @@ public class TweetServiceTest {
                 Mention foundEntity = mentionService.findById(entityId);
                 Assert.assertNotNull(msg,foundObject);
                 Assert.assertNotNull(msg,foundEntity);
-                Assert.assertNull(objectInfo);
-                Assert.assertNull(entityInfo);
-                Assert.assertTrue(msg,foundObject.getEntities().getMentions().contains(foundEntity));
+                Assert.assertNull(msg,objectInfo);
+                Assert.assertNull(msg,entityInfo);
+                Set<Mention> mentions = foundObject.getEntities().getMentions();
+                Assert.assertTrue(msg,mentions.size() >0);
+                Assert.assertTrue(msg,mentions.contains(foundEntity));
             }
         }
     }
 
     //@Commit
-    @Ignore
+    //@Ignore
     @Test
     public void findAllTweet2Url() throws Exception {
         String msg = "findAllTweet2Url: ";
         int page=1;
-        int size=10;
+        int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Object2Entity> foundPage = tweetService.findAllTweet2Url(pageRequest);
-        if(foundPage.getTotalElements()>0){
-            for(Object2Entity object2Entity:foundPage.getContent()){
-                long objectId = object2Entity.getObjectId();
-                String objectInfo = object2Entity.getObjectInfo();
-                long entityId = object2Entity.getEntityId();
-                String entityInfo = object2Entity.getObjectInfo();
-                Tweet foundObject = tweetService.findById(objectId);
-                Url foundEntity = urlService.findById(entityId);
-                Assert.assertNotNull(msg,foundObject);
-                Assert.assertNotNull(msg,foundEntity);
-                Assert.assertNull(objectInfo);
-                Assert.assertNull(entityInfo);
-                Assert.assertTrue(msg,foundObject.getEntities().getUrls().contains(foundEntity));
-            }
+        for(Object2Entity object2Entity:foundPage.getContent()){
+            long objectId = object2Entity.getObjectId();
+            String objectInfo = object2Entity.getObjectInfo();
+            long entityId = object2Entity.getEntityId();
+            String entityInfo = object2Entity.getObjectInfo();
+            Tweet foundObject = tweetService.findById(objectId);
+            Url foundEntity = urlService.findById(entityId);
+            Assert.assertNotNull(msg,foundObject);
+            Assert.assertNotNull(msg,foundEntity);
+            Assert.assertNull(msg,objectInfo);
+            Assert.assertNull(msg,entityInfo);
+            Set<Url> urls = foundObject.getEntities().getUrls();
+            Assert.assertTrue(msg,urls.size()>0);
+            Assert.assertTrue(msg,urls.contains(foundEntity));
         }
     }
 

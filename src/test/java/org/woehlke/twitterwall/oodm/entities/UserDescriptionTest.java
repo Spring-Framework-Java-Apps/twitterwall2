@@ -2,11 +2,19 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,10 +22,16 @@ import java.util.regex.Pattern;
 /**
  * Created by tw on 22.06.17.
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class UserDescriptionTest {
+
+    @Autowired
+    private TestdataProperties testdataProperties;
 
     private static final Logger log = LoggerFactory.getLogger(UserDescriptionTest.class);
 
+    /*
     private static String descriptions[] = {
             "Webentwickler @cron_eu, Stuttgart #T3Rookies #TYP",
             "Neos, Flow and TYPO3 development @portachtzig_ Berlin",
@@ -55,15 +69,27 @@ public class UserDescriptionTest {
             "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting",
             "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh",
     };
+    */
 
-    @Ignore
+    //@Ignore
     @Test
     public void printDescriptionsTest(){
-        Task task = null;
+
+        String descriptionTask = "Just another Task";
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = new Date();
+        Date timeFinished = null;
+
+        Task task = new Task(descriptionTask,taskType,taskStatus,timeStarted,timeLastUpdate,timeFinished);
         int lfdNr = 0;
+
+        List<String> descriptions = testdataProperties.getOodm().getEntities().getUser().getDescriptions();
+
         log.info("printDescriptionsTest");
         log.info("++++++++++++++++++++");
-        log.info("found "+descriptions.length+" descriptions");
+        log.info("found "+descriptions.size()+" descriptions");
         for(String description:descriptions){
             log.info("--------------------");
             lfdNr++;
