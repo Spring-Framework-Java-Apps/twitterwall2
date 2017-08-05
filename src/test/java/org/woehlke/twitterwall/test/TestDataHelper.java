@@ -6,6 +6,7 @@ package org.woehlke.twitterwall.test;
 @Deprecated
 public interface TestDataHelper {
 
+    /*
     @Deprecated
     String PROFILE_URLS[] = {
             "http://t.co/hIxL9WeoP1",
@@ -67,4 +68,5 @@ public interface TestDataHelper {
             "https://t.co/hMMJBGFFKR",
             "https://t.co/cbsEBiSW2E",
     };
+    */
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +27,14 @@ import java.util.Date;
  * Created by tw on 01.07.17.
  */
 @Deprecated
-@Service
+@Component
+//@Service
 //@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserServiceTestHelperImpl implements UserServiceTestHelper {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTestHelperImpl.class);
 
+    /*
     @Autowired
     private UserService userService;
 
@@ -49,7 +52,9 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
+    */
 
+    /*
     @Override
     public User createImprintUser(){
         return createUser(frontendProperties.getImprintScreenName());
@@ -108,5 +113,5 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
         User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
     }
-
+*/
 }

@@ -16,6 +16,8 @@ import org.woehlke.twitterwall.oodm.repositories.MentionRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 
+import java.util.List;
+
 
 /**
  * Created by tw on 12.06.17.
@@ -36,7 +38,16 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
 
     @Override
     public Mention findByIdTwitter(long idTwitter) {
-        return mentionRepository.findByIdTwitter(idTwitter);
+        if(idTwitter < 0L){
+            return null;
+        }
+        List<Mention> resultList = mentionRepository.findByIdTwitter(idTwitter);
+        for(Mention result:resultList){
+            if (result.getIdTwitter() >0L){
+                return result;
+            }
+        }
+        return null;
     }
 
     @Override

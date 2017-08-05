@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +15,15 @@ import java.util.*;
  * Created by tw on 01.07.17.
  */
 @Deprecated
-@Service
+@Component
+//@Service
 //@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTestHelper {
 
     //@Autowired
     //private BackendProperties backendProperties;
 
+    /*
     @Override
     //@Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public List<Url> getTestData(Task task) {
@@ -46,6 +49,7 @@ public class UrlServiceTestImpl implements UrlServiceTestHelper {
         }
         return testData;
     }
+    */
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     //private static Map<String, String> hosts = new HashMap<>();

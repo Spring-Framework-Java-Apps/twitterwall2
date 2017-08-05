@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.test.UserServiceTestHelper;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -42,14 +43,17 @@ public class ImprintControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private UserServiceTestHelper userServiceTestHelper;
+    //@Autowired
+    //private UserServiceTestHelper userServiceTestHelper;
 
-    @Autowired
-    private TwitterProperties twitterProperties;
+    //@Autowired
+    //private TwitterProperties twitterProperties;
 
     @Autowired
     private FrontendProperties frontendProperties;
+
+    @Autowired
+    private PrepareDataTest prepareDataTest;
 
     //@Commit
     @Test
@@ -63,7 +67,7 @@ public class ImprintControllerTest {
     public void fetchTweetsFromTwitterSearchTest() throws Exception  {
         log.info("------------------------------------");
         log.info("fetchTweetsFromSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
-        userServiceTestHelper.createUser(frontendProperties.getImprintScreenName());
+        prepareDataTest.createUser(frontendProperties.getImprintScreenName());
         log.info("fetchTweetsFromSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
         log.info("------------------------------------");
         Assert.assertTrue(true);

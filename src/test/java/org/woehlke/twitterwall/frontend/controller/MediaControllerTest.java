@@ -59,9 +59,9 @@ public class MediaControllerTest {
     @Test
     public void getAllTest() throws Exception {
         String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/mention/all"))
+        MvcResult result = this.mockMvc.perform(get("/media/all"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("mention/all"))
+                .andExpect(view().name("media/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();

@@ -101,16 +101,17 @@ public class MentionServiceTest {
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
         int page=1;
-        int size=1;
+        int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Mention> myPage = mentionService.getAll(pageRequest);
         Assert.assertTrue(msg,myPage.getTotalElements()>0);
-        if(myPage.getTotalElements()>0) {
-            Mention myMention = myPage.getContent().iterator().next();
+        for(Mention myMention:myPage.getContent()){
             long idTwitter = myMention.getIdTwitter();
-            Mention myFoundMention = mentionService.findByIdTwitter(idTwitter);
-            Assert.assertNotNull(myFoundMention);
-            Assert.assertEquals(msg,idTwitter,myFoundMention.getIdTwitter().longValue());
+            if(idTwitter > 0L) {
+                Mention myFoundMention = mentionService.findByIdTwitter(idTwitter);
+                Assert.assertNotNull(myFoundMention);
+                Assert.assertEquals(msg, idTwitter, myFoundMention.getIdTwitter().longValue());
+            }
         }
     }
 

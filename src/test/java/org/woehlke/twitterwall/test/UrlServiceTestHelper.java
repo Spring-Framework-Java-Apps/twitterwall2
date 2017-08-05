@@ -11,6 +11,8 @@ import java.util.List;
 @Deprecated
 public interface UrlServiceTestHelper {
 
+    /*
     @Deprecated
     List<Url> getTestData(Task task);
+    */
 }
