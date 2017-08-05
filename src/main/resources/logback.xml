@@ -19,7 +19,7 @@
     <logger name="org.apache.tomcat" level="INFO" />
     <logger name="org.springframework.boot" level="WARN" />
     <logger name="org.springframework.test" level="DEBUG" />
-    <logger name="org.hibernate" level="DEBUG" />
+    <logger name="org.hibernate" level="WARN" />
     <logger name="org.woehlke.twitterwall" level="DEBUG" />
     <root level="INFO"></root>
 </configuration>
