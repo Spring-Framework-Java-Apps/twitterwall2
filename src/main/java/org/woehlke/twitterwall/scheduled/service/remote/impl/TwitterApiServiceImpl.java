@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -36,19 +37,20 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         try {
             fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
         } catch (Exception e) {
-            fetchedTweets = new ArrayList<>();
             log.error(msg + e.getMessage());
-            e.printStackTrace();
-        }
-        msg += " result: ";
-        if(fetchedTweets.size()==0){
-            log.error(msg+" result.size: 0");
+            //e.printStackTrace();
             return new ArrayList<>();
-        } else {
-            log.debug(msg+" result.size: "+fetchedTweets.size());
-            return fetchedTweets;
         }
+
     }
 
     @Override
@@ -61,12 +63,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " Id: " + result.getId());
             msg += " result: ";
             log.debug(msg + result);
+            return result;
         } catch(Exception e){
-            result = null;
             log.error(msg + e.getMessage());
             e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
     /*
@@ -99,12 +101,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " Id:         " + result.getId());
             log.debug(msg + " ScreenName: " + result.getScreenName());
             log.debug(msg + " Name:       " + result.getName());
+            return result;
         } catch (Exception e) {
-            result = null;
             log.error(msg + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
     @Override
@@ -117,12 +119,15 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             msg += " result: ";
             log.debug(msg+" ScreenName: "+result.getScreenName());
             log.debug(msg+" Name:       "+result.getName());
+            return result;
+        } catch (ResourceNotFoundException e) {
+            log.debug(msg+"  User not found : "+screenName);
+            return null;
         } catch (Exception e) {
-            result = null;
             log.debug(msg + e.getMessage());
-            e.printStackTrace();
+            return null;
+            //e.printStackTrace();
         }
-        return result;
     }
 
     @Override
@@ -133,12 +138,13 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         try {
             result = getTwitterProxy().listOperations().getListMembers(screenName, fetchUserListName);
             log.debug(msg + " result.size: " + result.size());
+            return result;
         } catch (Exception e) {
             result = new ArrayList<>();
             log.debug(msg + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
+            return new ArrayList<>();
         }
-        return result;
     }
 
 
