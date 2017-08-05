@@ -124,8 +124,8 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "/task/start/taskStarted"))
-                .andExpect(model().attributeExists("latestTweets"))
-                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attributeExists("taskTweets"))
+                .andExpect(model().attributeExists("taskUsers"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -171,6 +171,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/tweets/search"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -192,6 +193,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "/task/start/renew"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -213,6 +215,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -234,6 +237,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -255,6 +259,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/users/mentions/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
