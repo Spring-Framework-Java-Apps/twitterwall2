@@ -76,6 +76,7 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
             myExtraData.append(", ");
             myExtraData.append(extraData.get(extraDatumKey));
         }
+        myExtraData.append(" ] ");
         myExtraData.append(",\n createdBy=" + this.toStringCreatedBy());
         myExtraData.append(",\n updatedBy=" + this.toStringUpdatedBy());
         myExtraData.append(",\n taskInfo=" + this.toStringTaskInfo());

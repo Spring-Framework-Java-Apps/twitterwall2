@@ -98,7 +98,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Transient
     @Override
     public String getUniqueId() {
-        return idTwitter.toString() +"_"+ screenNameUnique;
+        return "" + idTwitter +"_"+ screenNameUnique;
     }
 
     @Transient
@@ -125,7 +125,13 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         if(idTwitter == null){
             return false;
         }
-        return (this.getScreenName().compareTo(this.getScreenNameUnique())==0) ;
+        if(idTwitterOfUser < 0L){
+            return false;
+        }
+        if(this.getScreenName().toLowerCase().compareTo(this.getScreenNameUnique())!=0){
+            return false;
+        }
+        return true;
     }
 
     @Transient
@@ -245,6 +251,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.screenNameUnique = screenNameUnique.toLowerCase();
     }
 
+    /*
     @Override
     public String toString() {
         return "Mention{" +
@@ -254,6 +261,19 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
             ", name='" + name + '\'' +
                 super.toString() +
             " }\n";
+    }*/
+
+    @Override
+    public String toString() {
+        return "Mention{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", screenName='" + screenName + '\'' +
+                ", screenNameUnique='" + screenNameUnique + '\'' +
+                ", name='" + name + '\'' +
+                ", idTwitterOfUser=" + idTwitterOfUser +
+                super.toString() +
+                '}';
     }
 
     @Override
