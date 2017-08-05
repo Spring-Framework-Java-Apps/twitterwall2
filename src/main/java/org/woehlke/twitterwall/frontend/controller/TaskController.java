@@ -18,12 +18,15 @@ import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+
+import java.util.List;
 
 /**
  * Created by tw on 11.07.17.
@@ -77,8 +80,12 @@ public class TaskController {
         );
         String msg = PATH+"/start/createTestData: ";
         if(frontendProperties.getContextTest()){
-            model.addAttribute("latestTweets", mqStartTask.createTestDataForTweets());
-            model.addAttribute("users", mqStartTask.createTestDataForUser());
+
+            List<Tweet> latestTweets = mqStartTask.createTestDataForTweets();
+            List<User> users = mqStartTask.createTestDataForUser();
+
+            model.addAttribute("latestTweets", latestTweets);
+            model.addAttribute("users",users);
         } else {
             model.addAttribute("latestTweets",null);
             model.addAttribute("users",null);
