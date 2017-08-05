@@ -37,6 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleIllegalArgumentException(HttpServletRequest request, Exception ex) {
         log.warn("IllegalArgumentException occured :: URL=" + request.getRequestURL());
         log.warn(ex.getMessage());

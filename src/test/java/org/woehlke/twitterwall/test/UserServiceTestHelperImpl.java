@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
@@ -27,7 +27,7 @@ import java.util.Date;
  */
 @Deprecated
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserServiceTestHelperImpl implements UserServiceTestHelper {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTestHelperImpl.class);

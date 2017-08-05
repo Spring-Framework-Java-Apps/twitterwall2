@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
 @DataJpaTest(showSql=true)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements AsyncStartTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(AsyncStartTaskTestImpl.class);
@@ -34,7 +32,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void updateTweetsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
@@ -46,7 +44,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void updateUsersTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
@@ -58,7 +56,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void updateUsersFromMentionsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
@@ -70,7 +68,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void fetchTweetsFromSearchTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
@@ -82,7 +80,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
 
     //TODO: #200 https://github.com/phasenraum2010/twitterwall2/issues/200
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void fetchUsersFromListTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();

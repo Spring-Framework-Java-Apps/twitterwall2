@@ -24,7 +24,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class UserServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
@@ -54,7 +54,7 @@ public class UserServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(userService);
@@ -62,7 +62,7 @@ public class UserServiceTest {
         Assert.assertNotNull(twitterProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -80,7 +80,7 @@ public class UserServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void getAllDescriptionsTest() {
         String msg = "getAllDescriptionsTest";
@@ -104,6 +104,7 @@ public class UserServiceTest {
     }
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
+    /*
     private static String descriptions[] = {
             "Webentwickler @cron_eu, Stuttgart #T3Rookies #TYP",
             "Neos, Flow and TYPO3 development @portachtzig_ Berlin",
@@ -141,9 +142,9 @@ public class UserServiceTest {
             "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting",
             "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh",
     };
+    */
 
-
-    @Commit
+    //@Commit
     @Test
     public void getTweetingUsers() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -155,7 +156,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void getAllDescriptions() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -167,11 +168,25 @@ public class UserServiceTest {
     }
 
     //TODO: #160 https://github.com/phasenraum2010/twitterwall2/issues/160
-    @Commit
+    //@Commit
     @Test
-    public void getUsersForHashTag() throws Exception {}
+    public void getUsersForHashTag() throws Exception {
+        String msg = "getTweetingUsers: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<HashTag> hashTags = hashTagService.getAll(pageRequest);
+        for(HashTag hashTag:hashTags.getContent()){
+            log.debug(msg+" found HashTag: "+hashTag.getUniqueId());
+            Page<User> users = userService.getUsersForHashTag(hashTag,pageRequest);
+            for(User user: users.getContent()){
+                log.debug(msg+" found User: "+user.getUniqueId());
+                Assert.assertTrue(user.getEntities().getHashTags().contains(hashTag));
+            }
+        }
+    }
 
-    @Commit
+    //@Commit
     @Test
     public void getFriends() throws Exception {
         String msg = "getFriends: ";
@@ -186,7 +201,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
         String msg = "getNotYetFriendUsers: ";
@@ -201,7 +216,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void getFollower() throws Exception {
         String msg = "getFollower: ";
@@ -216,7 +231,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void getNotYetFollower() throws Exception {
         String msg = "getNotYetFollower: ";
@@ -232,7 +247,7 @@ public class UserServiceTest {
 
 
     //TODO: #219 https://github.com/phasenraum2010/twitterwall2/issues/219
-    @Commit
+    //@Commit
     @Test
     public void getOnList() throws Exception {
         String msg = "getOnList: ";
@@ -245,7 +260,7 @@ public class UserServiceTest {
 
 
     //TODO: #219 https://github.com/phasenraum2010/twitterwall2/issues/219
-    @Commit
+    //@Commit
     @Test
     public void getNotYetOnList() throws Exception {
         String msg = "getNotYetOnList: ";
@@ -257,7 +272,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void findAllUser2HashTag() throws Exception {
         String msg = "findAllUser2HashTag: ";
@@ -283,7 +298,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void findAllUser2Media() throws Exception {
         String msg = "findAllUser2Media: ";
@@ -309,7 +324,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void findAllUser2Mentiong() throws Exception {
         String msg = "findAllUser2Mentiong: ";
@@ -335,7 +350,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void findAllUser2Url() throws Exception {
         String msg = "findAllUser2Url: ";
@@ -361,7 +376,7 @@ public class UserServiceTest {
     }
 
 
-    @Commit
+    //@Commit
     @Test
     public void findAllUser2TickerSymbol() throws Exception {
         String msg = "findAllUser2TickerSymbol: ";

@@ -49,7 +49,7 @@ public class TwitterUrlServiceTest {
     @Autowired
     private TwitterUrlService twitterUrlService;
 
-    @Commit
+    //@Commit
     @Test
     public void fetchUrlTest(){
         String msg = "fetchUrlTest ";
@@ -78,7 +78,7 @@ public class TwitterUrlServiceTest {
         log.info("------------------------------------");
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTransientUrlsTest(){
         Map<String,String> urls = new HashMap<>();

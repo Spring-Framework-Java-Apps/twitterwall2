@@ -51,14 +51,14 @@ public class ImprintControllerTest {
     @Autowired
     private FrontendProperties frontendProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTweetsFromTwitterSearchTest() throws Exception  {
         log.info("------------------------------------");
@@ -70,7 +70,7 @@ public class ImprintControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void imprintTest1() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
@@ -79,7 +79,7 @@ public class ImprintControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))

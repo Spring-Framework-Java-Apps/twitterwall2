@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +16,10 @@ import java.util.Date;
 /**
  * Created by tw on 28.06.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TweetTransformServiceImpl implements TweetTransformService {
 
     private final UserTransformService userTransformService;

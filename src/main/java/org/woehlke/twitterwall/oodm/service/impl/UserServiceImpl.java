@@ -34,44 +34,52 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User findByScreenName(String screenName) {
         if (!User.isValidScreenName(screenName)) {
-            throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
+            return null;
         }
         return userRepository.findByScreenName(screenName);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User findByidTwitterAndScreenNameUnique(long idTwitter, String screenNameUnique) {
         return userRepository.findByidTwitterAndScreenNameUnique(idTwitter,screenNameUnique);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getTweetingUsers(Pageable pageRequest) {
         return userRepository.findTweetingUsers(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getNotYetFriendUsers(Pageable pageRequest) {
         return userRepository.findNotYetFriendUsers(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getNotYetOnList(Pageable pageRequest) {
         return userRepository.findNotYetOnList(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getOnList(Pageable pageRequest) {
         return userRepository.findOnList(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User findByIdTwitter(long idTwitter) {
         return userRepository.findByIdTwitter(idTwitter);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<String> getAllDescriptions(Pageable pageRequest) {
         return userRepository.findAllDescriptions(pageRequest);
     }
@@ -84,21 +92,25 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     */
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
         return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getFriends(Pageable pageRequest) {
         return userRepository.findFriendUsers(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getFollower(Pageable pageRequest) {
         return userRepository.findFollower(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<User> getNotYetFollower(Pageable pageRequest) {
         return userRepository.findNotYetFollower(pageRequest);
     }
@@ -109,21 +121,25 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllUser2Media(Pageable pageRequest) {
         return userRepository.findAllUser2Media(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllUser2Mentiong(Pageable pageRequest) {
         return userRepository.findAllUser2Mentiong(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllUser2Url(Pageable pageRequest) {
         return userRepository.findAllUser2Url(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest){
         return userRepository.findAllUser2TickerSymbol(pageRequest);
     }

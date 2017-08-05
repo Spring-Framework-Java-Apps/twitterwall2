@@ -38,14 +38,14 @@ public class CountedEntitiesControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -59,7 +59,7 @@ public class CountedEntitiesControllerTest {
 
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTweet2hashtag() throws Exception {
         String msg ="domainCountTweet2hashtag: ";
@@ -85,7 +85,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTweet2media() throws Exception {
         String msg ="domainCountTweet2media: ";
@@ -111,7 +111,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTweet2mention() throws Exception {
         String msg ="domainCountTweet2mention: ";
@@ -137,7 +137,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTweet2tickersymbol() throws Exception {
         String msg ="domainCountTweet2tickersymbol: ";
@@ -163,7 +163,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTweet2url() throws Exception {
         String msg ="domainCountTweet2url: ";
@@ -189,7 +189,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountUserprofile2hashtag() throws Exception {
         String msg ="domainCountUserprofile2hashtag: ";
@@ -215,7 +215,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountUserprofile2media() throws Exception {
         String msg ="domainCountUserprofile2media: ";
@@ -241,7 +241,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountUserprofile2mention() throws Exception {
         String msg ="domainCountUserprofile2mention: ";
@@ -267,7 +267,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountUserprofile2Tickersymbol() throws Exception {
         String msg ="domainCountUserprofile2Tickersymbol: ";
@@ -293,7 +293,7 @@ public class CountedEntitiesControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountUserprofile2Url() throws Exception {
         String msg ="domainCountUserprofile2Url: ";

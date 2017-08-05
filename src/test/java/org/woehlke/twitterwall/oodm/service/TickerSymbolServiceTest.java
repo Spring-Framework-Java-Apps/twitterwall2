@@ -20,7 +20,7 @@ import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class TickerSymbolServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);
@@ -32,14 +32,14 @@ public class TickerSymbolServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(tickerSymbolService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -57,7 +57,7 @@ public class TickerSymbolServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByUrl() throws Exception {
         String msg = "findByUrl: ";

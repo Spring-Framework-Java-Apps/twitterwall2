@@ -39,14 +39,14 @@ public class ApplicationControllerTest {
     @Autowired
     private PrepareDataTest prepareDataTest;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -56,7 +56,7 @@ public class ApplicationControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTest() throws Exception {
         String msg ="domainCountTest: ";
@@ -79,7 +79,7 @@ public class ApplicationControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void managementPageTest() throws Exception {
         String msg ="managementPageTest: ";

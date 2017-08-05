@@ -38,14 +38,14 @@ public class MediaControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -55,7 +55,7 @@ public class MediaControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getAllTest() throws Exception {
         String msg ="getAllTest: ";

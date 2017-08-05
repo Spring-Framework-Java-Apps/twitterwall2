@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 @Component("mqAsyncStartTask")
 public class AsyncStartTaskImpl implements AsyncStartTask {

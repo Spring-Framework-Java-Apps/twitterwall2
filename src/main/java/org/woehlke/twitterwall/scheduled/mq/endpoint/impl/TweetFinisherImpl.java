@@ -12,7 +12,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.TweetFinisher;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 import java.util.ArrayList;
 import java.util.List;

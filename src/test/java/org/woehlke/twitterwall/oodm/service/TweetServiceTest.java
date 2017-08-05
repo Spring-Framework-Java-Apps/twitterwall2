@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class TweetServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceTest.class);
@@ -51,14 +51,14 @@ public class TweetServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(tweetService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -76,7 +76,7 @@ public class TweetServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
@@ -98,16 +98,31 @@ public class TweetServiceTest {
 
 
     //TODO: #160 https://github.com/phasenraum2010/twitterwall2/issues/160
-    @Commit
+    //@Commit
     @Test
     public void findTweetsForHashTag() throws Exception {
         String msg = "findTweetsForHashTag: ";
+
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<HashTag> hashTags = hashTagService.getAll(pageRequest);
+        for(HashTag hashTag:hashTags.getContent()){
+            log.debug(msg+" found HashTag: "+hashTag.getUniqueId());
+            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequest);
+            for(Tweet tweet: tweets.getContent()){
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId());
+                Assert.assertTrue(tweet.getEntities().getHashTags().contains(hashTag));
+            }
+        }
+
+
         log.info(msg);
     }
 
     //TODO: #216 https://github.com/phasenraum2010/twitterwall2/issues/216
     //@Ignore
-    @Commit
+    //@Commit
     @Test
     public void findTweetsForUser() throws Exception {
         String msg = "findTweetsForUser: ";
@@ -135,7 +150,7 @@ public class TweetServiceTest {
         log.info(msg+" FINISHED TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findAllTweet2HashTag() throws Exception {
         String msg = "findAllTweet2HashTag: ";
@@ -160,7 +175,7 @@ public class TweetServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findAllTweet2Media() throws Exception {
         String msg = "findAllTweet2Media: ";
@@ -185,7 +200,7 @@ public class TweetServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findAllTweet2Mention() throws Exception {
         String msg = "findAllTweet2Mention: ";
@@ -210,7 +225,7 @@ public class TweetServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findAllTweet2Url() throws Exception {
         String msg = "findAllTweet2Url: ";
@@ -235,7 +250,7 @@ public class TweetServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findAllTweet2TickerSymbol() throws Exception {
         String msg = "findAllTweet2TickerSymbol: ";

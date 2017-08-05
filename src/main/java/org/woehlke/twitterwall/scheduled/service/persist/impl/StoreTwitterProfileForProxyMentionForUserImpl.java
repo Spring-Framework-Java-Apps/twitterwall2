@@ -14,7 +14,7 @@ import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreTwitterProfileForProxyMentionForUser;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
@@ -155,9 +155,9 @@ public class StoreTwitterProfileForProxyMentionForUserImpl implements StoreTwitt
 
     private final TickerSymbolService tickerSymbolService;
 
-    private final CreatePersistentUrl createPersistentUrl;
-
     private final CountedEntitiesService countedEntitiesService;
+
+    private final CreatePersistentUrl createPersistentUrl;
 
     public StoreTwitterProfileForProxyMentionForUserImpl(UserService userService, TwitterApiService twitterApiService, TaskService taskService, UserTransformService userTransformService, UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CountedEntitiesService countedEntitiesService) {
         this.userService = userService;
