@@ -3,25 +3,30 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
+//import org.woehlke.twitterwall.oodm.repositories.UrlCacheRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterUrlService;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.UrlCache;
+//import org.woehlke.twitterwall.oodm.entities.UrlCache;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+
 /**
  * Created by tw on 09.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentUrlImpl implements CreatePersistentUrl {
 
     @Override
@@ -33,30 +38,37 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
             } else {
                 log.debug(msg + " try to find ");
                 Url urlPers = urlRepository.findByUrl(url);
-                if (urlPers != null) {
-                    log.debug(msg + " found: " + urlPers);
-                    if (urlPers.isUrlAndExpandedTheSame()) {
-                        log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.toString());
-                        Url myTransientUrl = twitterUrlService.fetchTransientUrl(url, task);
-                        if (myTransientUrl == null) {
-                            log.debug(msg + "nothing found by fetchTransientUrl");
-                            return null;
-                        } else {
-                            urlPers.setExpanded(myTransientUrl.getExpanded());
-                            String displayUrl = myTransientUrl.getExpanded();
-                            try {
-                                URL newURL = new URL(myTransientUrl.getExpanded());
-                                displayUrl = newURL.getHost();
-                            } catch (MalformedURLException exe) {
-                                log.warn(exe.getMessage());
-                            }
-                            urlPers.setDisplay(displayUrl);
-                        }
-                    }
-                    urlPers.setUpdatedBy(task);
-                    urlPers = urlRepository.save(urlPers);
-                    return urlPers;
+                if (urlPers == null) {
+                    return twitterUrlService.fetchTransientUrl(url, task);
                 } else {
+                    log.debug(msg + " found: " + urlPers);
+                    if (urlPers.isUrlAndExpandedTheSame() || urlPers.isRawUrlsFromDescription()) {
+                        log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.toString());
+                        if (urlPers.getTwitterApiCaching().isCached(task.getTaskType(), ZWOELF_STUNDEN)) {
+                            return urlPers;
+                        } else {
+                            Url myTransientUrl = twitterUrlService.fetchTransientUrl(url, task);
+                            if (myTransientUrl == null) {
+                                log.debug(msg + "nothing found by fetchTransientUrl");
+                                return urlPers;
+                            } else {
+                                urlPers.setExpanded(myTransientUrl.getExpanded());
+                                try {
+                                    URL newURL = new URL(myTransientUrl.getExpanded());
+                                    urlPers.setDisplay(newURL.getHost());
+                                } catch (MalformedURLException exe) {
+                                    urlPers.setDisplay(myTransientUrl.getExpanded());
+                                    log.warn(exe.getMessage());
+                                }
+                                urlPers.setUpdatedBy(task);
+                                return urlRepository.save(urlPers);
+                            }
+                        }
+                    } else {
+                        return urlPers;
+                    }
+                }
+                /* else {
                     log.debug(msg + " not found ");
                     log.debug(msg + " try to find UrlCache");
                     UrlCache urlCache = urlCacheRepository.findByUrl(url);
@@ -108,26 +120,26 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                             return newUrl;
                         }
                     }
-                }
+                }*/
             }
         } catch (Exception e){
             log.error(msg,e.getMessage());
+            return null;
         }
-        return null;
     }
 
     private static final Logger log = LoggerFactory.getLogger(CreatePersistentUrlImpl.class);
 
     private final UrlRepository urlRepository;
 
-    private final UrlCacheRepository urlCacheRepository;
+    //private final UrlCacheRepository urlCacheRepository;
 
     private final TwitterUrlService twitterUrlService;
 
     @Autowired
-    public CreatePersistentUrlImpl(UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TwitterUrlService twitterUrlService) {
+    public CreatePersistentUrlImpl(UrlRepository urlRepository, /*UrlCacheRepository urlCacheRepository,*/ TwitterUrlService twitterUrlService) {
         this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
+        //this.urlCacheRepository = urlCacheRepository;
         this.twitterUrlService = twitterUrlService;
     }
 }

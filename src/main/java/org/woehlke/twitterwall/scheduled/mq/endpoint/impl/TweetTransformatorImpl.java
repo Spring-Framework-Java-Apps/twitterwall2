@@ -8,7 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.TweetTransformator;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetFromTwitter;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 
 @Component("mqTweetTransformator")
@@ -25,16 +25,26 @@ public class TweetTransformatorImpl implements TweetTransformator {
     }
 
     @Override
-    public Message<TweetFromTwitter> transformTweet(Message<TweetFromTwitter> mqMessageIn) {
-        TweetFromTwitter inComingTweetMessage = mqMessageIn.getPayload();
-        long taskId = inComingTweetMessage.getTaskId();
-        Task task = taskService.findById(taskId);
-        Tweet myTweet = tweetTransformService.transform(inComingTweetMessage.getTweetFromTwitter(),task);
-        boolean tansformed = true;
-        TweetFromTwitter retVal = new TweetFromTwitter(taskId,myTweet,inComingTweetMessage.getTweetFromTwitter(),tansformed);
-        Message<TweetFromTwitter> mqMessageOut = MessageBuilder.withPayload(retVal)
-            .copyHeaders(mqMessageIn.getHeaders())
-            .build();
-        return mqMessageOut;
+    public Message<TweetMessage> transformTweet(Message<TweetMessage> mqMessageIn) {
+        TweetMessage inComingTweetMessage = mqMessageIn.getPayload();
+        TweetMessage retVal = null;
+        if(inComingTweetMessage.isIgnoreTransformation()){
+            Message<TweetMessage> mqMessageOut = MessageBuilder.withPayload(inComingTweetMessage)
+                    .copyHeaders(mqMessageIn.getHeaders())
+                    .setHeader("transformed",Boolean.TRUE)
+                    .build();
+            return mqMessageOut;
+        } else {
+            long taskId = inComingTweetMessage.getTaskMessage().getTaskId();
+            Task task = taskService.findById(taskId);
+            Tweet myTweet = tweetTransformService.transform(inComingTweetMessage.getTweetFromTwitter(),task);
+            boolean tansformed = true;
+            retVal = new TweetMessage(inComingTweetMessage.getTaskMessage(),myTweet,inComingTweetMessage.getTweetFromTwitter());
+            Message<TweetMessage> mqMessageOut = MessageBuilder.withPayload(retVal)
+                    .copyHeaders(mqMessageIn.getHeaders())
+                    .setHeader("transformed",Boolean.TRUE)
+                    .build();
+            return mqMessageOut;
+        }
     }
 }

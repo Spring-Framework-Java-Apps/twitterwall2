@@ -8,4 +8,8 @@ public interface DomainObjectWithScreenName<T extends DomainObjectWithScreenName
     String getScreenName();
 
     void setScreenName(String screenName);
+
+    String getScreenNameUnique();
+
+    void setScreenNameUnique(String screenNameUnique);
 }

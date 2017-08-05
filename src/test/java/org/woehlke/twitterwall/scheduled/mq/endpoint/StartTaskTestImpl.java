@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,18 +14,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
-@DataJpaTest(showSql=true)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(StartTaskTestImpl.class);
@@ -38,12 +35,11 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     private StartTask mqStartTask;
 
     @Autowired
-    private FrontendProperties frontendProperties;
+    private TestdataProperties testdataProperties;
 
     @Autowired
-    private SchedulerProperties schedulerProperties;
+    private FrontendProperties frontendProperties;
 
-    @Commit
     @Test
     public void updateTweetsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
@@ -53,47 +49,42 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertTrue(ok);
     }
 
-    @Commit
     @Test
-    public void updateUserProfilesTest() throws Exception {
+    public void updateUsersTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.updateUserProfiles();
+        this.mqStartTask.updateUsers();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
-    @Commit
     @Test
-    public void updateUserProfilesFromMentionsTest() throws Exception {
+    public void updateUsersFromMentionsTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.updateUserProfilesFromMentions();
+        this.mqStartTask.updateUsersFromMentions();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
-    @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() throws Exception {
+    public void fetchTweetsFromSearchTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.fetchTweetsFromTwitterSearch();
+        this.mqStartTask.fetchTweetsFromSearch();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
-    @Commit
     @Test
-    public void fetchUsersFromDefinedUserListTest() throws Exception {
+    public void fetchUsersFromListTest() throws Exception {
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.fetchUsersFromDefinedUserList();
+        this.mqStartTask.fetchUsersFromList();
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
     }
 
-    @Commit
     @Test
     public void createImprintUserTest() throws Exception {
         User user = this.mqStartTask.createImprintUser();
@@ -101,22 +92,20 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertEquals(user.getScreenName(),screenName);
     }
 
-    @Commit
     @Test
-    public void createTestDataForUserTest() throws Exception {
+    public void createTestDataUsersTest() throws Exception {
         List<User> userList = this.mqStartTask.createTestDataForUser();
         Assert.assertTrue("mqStartTask.createTestDataForUser() > 0 ",userList.size()>0);
-        int expectedSize = schedulerProperties.getFacade().getIdTwitterToFetchForUserControllerTest().size();
+        int expectedSize =  testdataProperties.getOodm().getEntities().getUser().getIdTwitter().size();
         String msg = "mqStartTask.createTestDataForUser() == "+expectedSize;
         Assert.assertTrue(msg,userList.size()==expectedSize);
     }
 
-    @Commit
     @Test
-    public void createTestDataForTweetsTest() throws Exception {
+    public void createTestDataTweetsTest() throws Exception {
         List<Tweet> tweetList = this.mqStartTask.createTestDataForTweets();
         Assert.assertTrue("mqStartTask.createTestDataForTweets() > 0 ",tweetList.size()>0);
-        int expectedSize = schedulerProperties.getFacade().getIdTwitterToFetchForTweetTest().size();
+        int expectedSize = testdataProperties.getOodm().getEntities().getTweet().getIdTwitter().size();
         String msg = "mqStartTask.createTestDataForTweets() == "+expectedSize;
         Assert.assertTrue(msg,tweetList.size()==expectedSize);
     }

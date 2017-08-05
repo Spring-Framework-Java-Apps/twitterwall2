@@ -1,14 +1,15 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UserPersistor;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component("mqUserPersistor")
 public class UserPersistorImpl implements UserPersistor {
@@ -24,12 +25,30 @@ public class UserPersistorImpl implements UserPersistor {
     }
 
     @Override
-    public UserMessage persistUser(Message<UserMessage> incomingUserMessage) {
+    public Message<UserMessage> persistUser(Message<UserMessage> incomingUserMessage) {
         UserMessage receivedMessage = incomingUserMessage.getPayload();
-        long taskId = receivedMessage.getTwitterProfileMessage().getTaskMessage().getTaskId();
-        Task task = taskService.findById(taskId);
-        User user = storeUserProcess.storeUserProcess(receivedMessage.getUser(),task);
-        UserMessage userMessage = new UserMessage(user,taskId);
-        return userMessage;
+        if(receivedMessage.isIgnoreTransformation()) {
+            return MessageBuilder.withPayload(receivedMessage)
+                        .copyHeaders(incomingUserMessage.getHeaders())
+                        .setHeader("persisted",Boolean.TRUE)
+                        .build();
+        } else {
+            long taskId = receivedMessage.getTaskMessage().getTaskId();
+            Task task = taskService.findById(taskId);
+
+            User user = receivedMessage.getUser();
+
+            User userPers = storeUserProcess.storeUserProcess(user, task);
+            UserMessage mqMessageOut = new UserMessage(
+                    receivedMessage.getTaskMessage(),
+                    receivedMessage.getScreenName(),
+                    receivedMessage.getTwitterProfile(),
+                    user
+            );
+            return MessageBuilder.withPayload(mqMessageOut)
+                    .copyHeaders(incomingUserMessage.getHeaders())
+                    .setHeader("persisted",Boolean.TRUE)
+                    .build();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,12 +15,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.PrepareDataTest;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,14 +53,14 @@ public class TaskControllerTest {
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -69,7 +70,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
@@ -90,12 +91,12 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getTaskByIdTest() throws Exception {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
-        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH,countedEntities);
+        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_SEARCH,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
@@ -115,6 +116,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -138,7 +140,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getOnListRenewTest() throws Exception {
         String msg = "getOnListRenewTest: ";
@@ -162,7 +164,7 @@ public class TaskControllerTest {
     private final String PATH = "/task";
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
         String msg = "fetchTweetsFromTwitterSearchStartTaskTest: ";
@@ -183,7 +185,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void updateTweetsStartTaskTest() throws Exception {
         String msg = "updateTweetsStartTaskTest: ";
@@ -204,7 +206,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
         String msg = "fetchUsersFromDefinedUserListStartTaskTest: ";
@@ -225,7 +227,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void updateUserProfilesFromMentionsStartTaskTest() throws Exception {
         String msg = "updateUserProfilesFromMentionsStartTaskTest: ";
@@ -246,7 +248,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void updateUserProfilesStartTaskTest() throws Exception {
         String msg = "updateUserProfilesStartTaskTest: ";

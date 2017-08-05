@@ -7,8 +7,10 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
+import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.MalformedURLException;
 
@@ -23,7 +25,16 @@ import java.net.MalformedURLException;
     },
     indexes = {
         @Index(name="idx_url_expanded", columnList="expanded"),
-        @Index(name="idx_url_display", columnList="display")
+        @Index(name="idx_url_display", columnList="display"),
+        @Index(name="idx_url_fetch_tweets_from_twitter_search", columnList="remote_api_cache_fetch_tweets_from_twitter_search"),
+        @Index(name="idx_url_update_tweets", columnList="remote_api_cache_update_tweets"),
+        @Index(name="idx_url_update_user_profiles", columnList="remote_api_cache_update_user_profiles"),
+        @Index(name="idx_url_update_user_profiles_from_mentions", columnList="remote_api_cache_update_user_profiles_from_mentions"),
+        @Index(name="idx_url_fetch_users_from_defined_user_list", columnList="remote_api_cache_fetch_users_from_defined_user_list"),
+        @Index(name="idx_url_controller_get_testdata_tweets", columnList="remote_api_cache_controller_get_testdata_tweets"),
+        @Index(name="idx_url_controller_get_testdata_user", columnList="remote_api_cache_controller_get_testdata_user"),
+        @Index(name="idx_url_controller_add_user_for_screen_name", columnList="remote_api_cache_controller_add_user_for_screen_name"),
+        @Index(name="idx_url_ontroller_create_imprint_user", columnList="remote_api_cache_controller_create_imprint_user")
     }
 )
 @NamedQueries({
@@ -47,7 +58,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Column(length=4096,nullable = false)
     private String display="";
 
-    @URL
+    //@URL
     @NotNull
     @Column(length=4096,nullable = false)
     private String expanded="";
@@ -60,6 +71,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
+
+    @Valid
+    @NotNull
+    @Embedded
+    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -108,11 +124,21 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         }
     }
 
+    @Override
+    public String getUniqueId() {
+        return url;
+    }
+
     public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
         super(createdBy,updatedBy);
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     public Url(Task createdBy, Task updatedBy,String url) {
@@ -120,6 +146,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
         this.url = url;
+        if(updatedBy != null){
+            twitterApiCaching.store(updatedBy.getTaskType());
+        } else {
+            twitterApiCaching.store(createdBy.getTaskType());
+        }
     }
 
     private Url() {
@@ -135,11 +166,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return url;
     }
 
     public String getDisplay() {
@@ -166,6 +192,14 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.url = url;
     }
 
+    public TwitterApiCaching getTwitterApiCaching() {
+        return twitterApiCaching;
+    }
+
+    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
+        this.twitterApiCaching = twitterApiCaching;
+    }
+
     @Override
     public String toString() {
         return "Url{" +
@@ -181,19 +215,17 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Url)) return false;
-        if (!super.equals(o)) return false;
 
         Url url1 = (Url) o;
 
-        if (getId() != null ? !getId().equals(url1.getId()) : url1.getId() != null) return false;
-        return getUrl() != null ? getUrl().equals(url1.getUrl()) : url1.getUrl() == null;
+        if (id != null ? !id.equals(url1.id) : url1.id != null) return false;
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 }

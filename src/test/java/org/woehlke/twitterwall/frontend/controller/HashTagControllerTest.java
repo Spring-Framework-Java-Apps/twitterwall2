@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
@@ -51,17 +52,14 @@ public class HashTagControllerTest {
     @Autowired
     private PrepareDataTest prepareDataTest;
 
-    @Autowired
-    private SchedulerProperties schedulerProperties;
-
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData(){
         String msg = "setupTestData: ";
@@ -71,7 +69,7 @@ public class HashTagControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getAllTest() throws Exception {
         String msg ="getAllTest: ";
@@ -103,7 +101,7 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void findByIdTest() throws Exception {
         String msg ="findByIdTest: ";
@@ -129,7 +127,7 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {
         String msg ="hashTagFromTweetsAndUsersTest: ";
@@ -155,7 +153,7 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void hashTagsOverview()  throws Exception {
         String msg ="hashTagsOverview: ";

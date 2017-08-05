@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +14,10 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.service.backend.TwitterApiService;
+import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
@@ -26,12 +27,14 @@ import java.util.Date;
  * Created by tw on 01.07.17.
  */
 @Deprecated
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserServiceTestHelperImpl implements UserServiceTestHelper {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTestHelperImpl.class);
 
+    /*
     @Autowired
     private UserService userService;
 
@@ -49,7 +52,9 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
 
     @Autowired
     private CountedEntitiesService countedEntitiesService;
+    */
 
+    /*
     @Override
     public User createImprintUser(){
         return createUser(frontendProperties.getImprintScreenName());
@@ -59,7 +64,7 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
     public User createUser(String screenName) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
-        Task task = taskService.create(msg, TaskType.CONTROLLER_GET_TESTDATA_USER,countedEntities);
+        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_USERS,countedEntities);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);
@@ -108,5 +113,5 @@ public class UserServiceTestHelperImpl implements UserServiceTestHelper {
         User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
         return user;
     }
-
+*/
 }

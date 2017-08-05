@@ -20,7 +20,7 @@ public class TaskTest implements DomainObjectMinimalTest  {
         String msg = "getUniqueIdTest: ";
 
         String descriptionTask = "Make it so, Scotty";
-        TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         long taskId = 222L;
 
         TaskStatus taskStatus = TaskStatus.READY;
@@ -45,7 +45,7 @@ public class TaskTest implements DomainObjectMinimalTest  {
         String msg = "isValidTest: ";
 
         String descriptionTask = "Make it so, Scotty";
-        TaskType taskType = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
 
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();

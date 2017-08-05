@@ -8,7 +8,7 @@ public interface StartTaskTest extends AsyncStartTaskTest {
 
     void createImprintUserTest() throws Exception;
 
-    void createTestDataForUserTest() throws Exception;
+    void createTestDataUsersTest() throws Exception;
 
-    void createTestDataForTweetsTest() throws Exception;
+    void createTestDataTweetsTest() throws Exception;
 }

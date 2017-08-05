@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,10 @@ import java.util.Set;
 /**
  * Created by tw on 11.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
@@ -39,9 +42,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                         if (urlPers != null) {
                             urlPers.setDisplay(myUrl.getDisplay());
                             urlPers.setExpanded(myUrl.getExpanded());
-                            urlPers = urlService.store(urlPers, task);
+                            urlPers = urlService.update(urlPers, task);
                         } else {
-                            urlPers = urlService.store(myUrl, task);
+                            urlPers = urlService.create(myUrl, task);
                         }
                         urls.add(urlPers);
                     } else if (myUrl.isRawUrlsFromDescription()) {
@@ -63,14 +66,24 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             }
             for (Mention mention : entities.getMentions()) {
                 if (mention.isValid()) {
-                    Mention mentionPers = mentionService.store(mention, task);
-                    mentions.add(mentionPers);
-                }/* else if(mention.isRawMentionFromUserDescription()){
-                Mention mentionPers = createPersistentMention.getPersistentMentionAndUserFor(mention,task);
-                if((mentionPers != null) && mentionPers.isValid()){
-                    mentions.add(mentionPers);
+                    if (mention.isProxy()) {
+                        Mention mentionPers = mentionService.findByScreenName(mention.getScreenNameUnique());
+                        if (mentionPers == null) {
+                            mentionPers = mentionService.store(mention, task);
+                        } else {
+                            mentionPers = mentionService.store(mentionPers, task);
+                        }
+                        mentions.add(mentionPers);
+                    } else {
+                        Mention mentionPers = mentionService.findByScreenNameAndIdTwitter(mention.getScreenName(), mention.getIdTwitter());
+                        if (mentionPers == null) {
+                            mentionPers = mentionService.store(mention, task);
+                        } else {
+                            mentionPers = mentionService.store(mentionPers, task);
+                        }
+                        mentions.add(mentionPers);
+                    }
                 }
-            }*/
             }
             for (Media medium : entities.getMedia()) {
                 if (medium.isValid()) {

@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,9 @@ import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention
 /**
  * Created by tw on 14.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class CreatePersistentMentionImpl implements CreatePersistentMention {
 
     /**
@@ -58,12 +60,10 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
                 Mention persMention = null;
                 Mention myFoundMention = mentionService.findByScreenName(screenName);
                 if (myFoundMention != null) {
-                    myFoundMention.setUser(foundUser);
                     myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.update(myFoundMention, task);
                     log.debug(msg + " updated: " + persMention.toString());
                 } else {
-                    mention.setUser(foundUser);
                     mention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.createProxyMention(mention, task);
                     log.debug(msg + " persisted: " + persMention.toString());

@@ -8,9 +8,11 @@ import org.woehlke.twitterwall.oodm.entities.User;
 @Deprecated
 public interface UserServiceTestHelper {
 
+    /*
     @Deprecated
     User createImprintUser();
 
     @Deprecated
     User createUser(String username);
+    */
 }

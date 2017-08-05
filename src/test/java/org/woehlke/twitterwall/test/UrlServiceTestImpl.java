@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,25 +14,28 @@ import java.util.*;
 /**
  * Created by tw on 01.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Deprecated
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceTestImpl implements UrlServiceTestHelper {
 
-    @Autowired
-    private BackendProperties backendProperties;
+    //@Autowired
+    //private BackendProperties backendProperties;
 
+    /*
     @Override
-    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    //@Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public List<Url> getTestData(Task task) {
         Map<String, String> hostsTest = new HashMap<>();
         hostsTest.put("https://t.co/lQlse7u93G", "port80guru.tumblr.com");
         Map<String, String> urlsTest = new HashMap<>();
         urlsTest.put("https://t.co/lQlse7u93G", "https://port80guru.tumblr.com/");
 
-        if (backendProperties.getUrl().getFetchTestDataVerbose()) {
-            hostsTest = hosts;
-            urlsTest = urls;
-        }
+        //if (backendProperties.getUrl().getFetchTestDataVerbose()) {
+            //hostsTest = hosts;
+            //urlsTest = urls;
+        //}
         String urlSrc;
         String display;
         String expanded;
@@ -45,11 +49,13 @@ public class UrlServiceTestImpl implements UrlServiceTestHelper {
         }
         return testData;
     }
+    */
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
-    private static Map<String, String> hosts = new HashMap<>();
+    //private static Map<String, String> hosts = new HashMap<>();
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
+    /*
     static {
         hosts.put("https://t.co/4tDiIJ74eR", "www.ecentral.de");
         hosts.put("https://t.co/n9LlZXFjTc", "www.davitec.de");
@@ -109,11 +115,13 @@ public class UrlServiceTestImpl implements UrlServiceTestHelper {
         hosts.put("http://t.co/gnmbZ3HLPC", "www.pega-sus.de");
         hosts.put("http://t.co/CudjEZGLVT", "sebastian.kreideweiss.info");
     }
+    */
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
-    private static Map<String, String> urls = new HashMap<>();
+    //private static Map<String, String> urls = new HashMap<>();
 
     //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
+    /*
     static {
         urls.put("https://t.co/4tDiIJ74eR", "http://www.ecentral.de/");
         urls.put("https://t.co/n9LlZXFjTc", "https://www.davitec.de/");
@@ -173,4 +181,5 @@ public class UrlServiceTestImpl implements UrlServiceTestHelper {
         urls.put("http://t.co/gnmbZ3HLPC", "https://www.pega-sus.de/home.html");
         urls.put("http://t.co/CudjEZGLVT", "http://sebastian.kreideweiss.info/");
     }
+    */
 }

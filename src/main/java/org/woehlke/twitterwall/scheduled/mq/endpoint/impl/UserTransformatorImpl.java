@@ -9,7 +9,6 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UserTransformator;
-import org.woehlke.twitterwall.scheduled.mq.msg.TwitterProfileMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component("mqUserTransformator")
@@ -26,14 +25,30 @@ public class UserTransformatorImpl implements UserTransformator {
     }
 
     @Override
-    public Message<UserMessage> transformUser(Message<TwitterProfileMessage> mqMessageIn) {
-        TwitterProfileMessage receivedMessage = mqMessageIn.getPayload();
-        long id = receivedMessage.getTaskMessage().getTaskId();
-        Task task = taskService.findById(id);
-        User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
-        UserMessage outMsg = new UserMessage(receivedMessage,user);
-        Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
-            .build();
-        return mqMessageOut;
+    public Message<UserMessage> transformUser(Message<UserMessage> mqMessageIn) {
+        UserMessage receivedMessage = mqMessageIn.getPayload();
+        if(receivedMessage.isIgnoreTransformation()){
+            Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(receivedMessage)
+                    .copyHeaders(mqMessageIn.getHeaders())
+                    .setHeader("transformed",Boolean.TRUE)
+                    .build();
+            return mqMessageOut;
+        } else {
+            long id = receivedMessage.getTaskMessage().getTaskId();
+            Task task = taskService.findById(id);
+            User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
+            UserMessage outMsg = new UserMessage(
+                    receivedMessage.getTaskMessage(),
+                    receivedMessage.getScreenName(),
+                    receivedMessage.getTwitterProfile(),
+                    user
+            );
+            Message<UserMessage> mqMessageOut =
+                    MessageBuilder.withPayload(outMsg)
+                    .copyHeaders(mqMessageIn.getHeaders())
+                    .setHeader("transformed",Boolean.TRUE)
+                    .build();
+            return mqMessageOut;
+        }
     }
 }

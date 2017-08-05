@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.persist.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,8 @@ import org.woehlke.twitterwall.scheduled.service.persist.*;
 /**
  * Created by tw on 09.07.17.
  */
+
+//@Component
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
@@ -31,14 +34,14 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
                 retweetedStatus = this.storeOneTweetPerform(retweetedStatus, task);
                 tweet.setRetweetedStatus(retweetedStatus);
             }
-            /** User */
-            User user = tweet.getUser();
-            user = storeUserProcess.storeUserProcess(user, task);
-            tweet.setUser(user);
             /** Entities */
             Entities entities = tweet.getEntities();
             entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
             tweet.setEntities(entities);
+            /** User */
+            User user = tweet.getUser();
+            user = storeUserProcess.storeUserProcess(user, task);
+            tweet.setUser(user);
             /** Tweet itself */
             tweet = tweetService.store(tweet, task);
             log.debug(msg + "tweetService.store: " + tweet.toString());

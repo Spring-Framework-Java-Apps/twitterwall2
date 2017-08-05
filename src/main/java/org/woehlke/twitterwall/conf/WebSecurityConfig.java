@@ -18,20 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             .antMatchers(
-                    "/",
-                    "/tweet/all",
-                    "/user/*",
-                    "/user/screenName/*",
-                    "/user/list/tweets",
-                    "/hashtag/overview",
-                    "/hashtag/*",
-                    "/hashtag/text/*",
-                    "/imprint",
-                    "/css/*","/css/**",
-                    "/favicon/*","/favicon/**",
-                    "/js/*","/js/**",
-                    "/map-icons/*","/map-icons/**",
-                    "/webjars/*","/webjars/**"
+                frontendProperties.getWebSecurityConfigPublicPathsAsArray()
             ).permitAll()
             .anyRequest().authenticated()
             .and()

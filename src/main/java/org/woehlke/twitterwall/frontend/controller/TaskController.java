@@ -18,12 +18,15 @@ import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+
+import java.util.List;
 
 /**
  * Created by tw on 11.07.17.
@@ -77,8 +80,12 @@ public class TaskController {
         );
         String msg = PATH+"/start/createTestData: ";
         if(frontendProperties.getContextTest()){
-            model.addAttribute("latestTweets", mqStartTask.createTestDataForTweets());
-            model.addAttribute("users", mqStartTask.createTestDataForUser());
+
+            List<Tweet> latestTweets = mqStartTask.createTestDataForTweets();
+            List<User> users = mqStartTask.createTestDataForUser();
+
+            model.addAttribute("latestTweets", latestTweets);
+            model.addAttribute("users",users);
         } else {
             model.addAttribute("latestTweets",null);
             model.addAttribute("users",null);
@@ -93,9 +100,10 @@ public class TaskController {
     ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
-        log.info(msg+"START startTask.fetchUsersFromDefinedUserList: ");
-        mqAsyncStartTask.fetchUsersFromDefinedUserList();
-        log.info(msg+"DONE startTask.fetchUsersFromDefinedUserList: ");
+        log.info(msg+"START startTask.fetchUsersFromList: ");
+        Task task = mqAsyncStartTask.fetchUsersFromList();
+        model.addAttribute("task",task);
+        log.info(msg+"DONE startTask.fetchUsersFromList: ");
         log.info(msg+"START userService.findOnList(): ");
         Page<User> usersOnList = userService.getOnList(pageRequest);
         log.info(msg+"DONE userService.findOnList(): ");
@@ -113,7 +121,8 @@ public class TaskController {
         String subtitle = "/start/tweets/search";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.fetchTweetsFromTwitterSearch();
+        Task task = mqAsyncStartTask.fetchTweetsFromSearch();
+        model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
 
@@ -124,7 +133,8 @@ public class TaskController {
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.updateTweets();
+        Task task = mqAsyncStartTask.updateTweets();
+        model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
 
@@ -135,7 +145,8 @@ public class TaskController {
         String subtitle = "/start/users/list/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.fetchUsersFromDefinedUserList();
+        Task task = mqAsyncStartTask.fetchUsersFromList();
+        model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
 
@@ -146,7 +157,8 @@ public class TaskController {
         String subtitle = "/start/users/mentions/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.updateUserProfilesFromMentions();
+        Task task = mqAsyncStartTask.updateUsersFromMentions();
+        model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
 
@@ -157,7 +169,8 @@ public class TaskController {
         String subtitle = "/start/users/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        mqAsyncStartTask.updateUserProfiles();
+        Task task = mqAsyncStartTask.updateUsers();
+        model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
 

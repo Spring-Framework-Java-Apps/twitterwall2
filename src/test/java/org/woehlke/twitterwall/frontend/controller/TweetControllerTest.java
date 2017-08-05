@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.PrepareDataTest;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -52,14 +52,14 @@ public class TweetControllerTest {
     private PrepareDataTest prepareDataTest;
 
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -69,7 +69,7 @@ public class TweetControllerTest {
     }
 
     @WithAnonymousUser
-    @Commit
+    //@Commit
     @Test
     public void getLatestTweetsTest() throws Exception {
         String msg ="getLatestTweetsTest: ";
@@ -102,7 +102,7 @@ public class TweetControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getTweetById() throws Exception {
         String msg ="getLatestTweetsById: ";

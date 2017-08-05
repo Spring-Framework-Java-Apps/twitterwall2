@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,15 +14,17 @@ import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
 /**
  * Created by tw on 10.06.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets From TwitterSearch ";
         if(schedulerProperties.getAllowUpdateTweets()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchTweetsFromTwitterSearch();
+            startTask.fetchTweetsFromSearch();
         }
     }
 
@@ -37,7 +40,7 @@ public class ScheduledTasks {
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
         if(schedulerProperties.getAllowUpdateUserProfiles()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUserProfiles();
+            startTask.updateUsers();
         }
     }
 
@@ -45,15 +48,15 @@ public class ScheduledTasks {
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
         if(schedulerProperties.getAllowUpdateUserProfilesFromMention() && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUserProfilesFromMentions();
+            startTask.updateUsersFromMentions();
         }
     }
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
-        if(schedulerProperties.getFetchUserList().getAllow()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchUsersFromDefinedUserList();
+        if(schedulerProperties.getFetchUserListAllow()  && !schedulerProperties.getSkipFortesting()) {
+            startTask.fetchUsersFromList();
         }
     }
 
@@ -63,13 +66,13 @@ public class ScheduledTasks {
         this.startTask = startTask;
     }
 
-    private final static long EINE_MINUTE = 60 * 1000;
+    public final static long EINE_MINUTE = 60 * 1000;
 
-    private final static long FUENF_MINUTEN = 5 * EINE_MINUTE;
+    public final static long FUENF_MINUTEN = 5 * EINE_MINUTE;
 
-    private final static long EINE_STUNDE = 60 * EINE_MINUTE;
+    public final static long EINE_STUNDE = 60 * EINE_MINUTE;
 
-    private final static long ZWOELF_STUNDEN = 12 * EINE_STUNDE;
+    public final static long ZWOELF_STUNDEN = 12 * EINE_STUNDE;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = EINE_STUNDE;
 

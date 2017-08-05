@@ -28,7 +28,7 @@ public class LoginControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
@@ -37,7 +37,7 @@ public class LoginControllerTest {
 
 
     //TODO: #218 https://github.com/phasenraum2010/twitterwall2/issues/218
-    @Commit
+    //@Commit
     @Test
     public void login() throws Exception {
         boolean ok = true;

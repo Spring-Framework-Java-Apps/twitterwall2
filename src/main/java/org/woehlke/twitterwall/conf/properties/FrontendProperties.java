@@ -5,8 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Validated
@@ -43,22 +44,11 @@ public class FrontendProperties {
     @NotNull
     private String loginPassword;
 
-    @Valid
-    private Controller controller = new Controller();
+    @NotNull
+    private List<String> webSecurityConfigPublicPaths = new ArrayList<>();
 
-    public static class Controller {
-
-        @NotNull
-        private Boolean fetchUsersFromDefinedUserList;
-
-        public Boolean getFetchUsersFromDefinedUserList() {
-            return fetchUsersFromDefinedUserList;
-        }
-
-        public void setFetchUsersFromDefinedUserList(Boolean fetchUsersFromDefinedUserList) {
-            this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
-        }
-    }
+    @NotNull
+    private Boolean fetchUsersFromDefinedUserList;
 
     public String getIdGoogleAnalytics() {
         return idGoogleAnalytics;
@@ -116,14 +106,6 @@ public class FrontendProperties {
         this.contextTest = contextTest;
     }
 
-    public Controller getController() {
-        return controller;
-    }
-
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
     public Integer getPageSize() {
         return pageSize;
     }
@@ -146,5 +128,30 @@ public class FrontendProperties {
 
     public void setLoginPassword(String loginPassword) {
         this.loginPassword = loginPassword;
+    }
+
+    public String[] getWebSecurityConfigPublicPathsAsArray() {
+        int size = webSecurityConfigPublicPaths.size();
+        String[] myArray = new String[size];
+        for(int i=0; i<size; i++){
+            myArray[i] = webSecurityConfigPublicPaths.get(i);
+        }
+        return myArray;
+    }
+
+    public List<String> getWebSecurityConfigPublicPaths() {
+        return webSecurityConfigPublicPaths;
+    }
+
+    public void setWebSecurityConfigPublicPaths(List<String> webSecurityConfigPublicPaths) {
+        this.webSecurityConfigPublicPaths = webSecurityConfigPublicPaths;
+    }
+
+    public Boolean getFetchUsersFromDefinedUserList() {
+        return fetchUsersFromDefinedUserList;
+    }
+
+    public void setFetchUsersFromDefinedUserList(Boolean fetchUsersFromDefinedUserList) {
+        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
     }
 }

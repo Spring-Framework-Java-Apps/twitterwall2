@@ -35,11 +35,13 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest) {
         return tweetRepository.findByHashTag(hashtag.getText(),pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Tweet> findTweetsForUser(User user, Pageable pageRequest) {
         return tweetRepository.findByUser(user,pageRequest);
     }
@@ -52,31 +54,37 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     */
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {
         return tweetRepository.findAllTweet2HashTag(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllTweet2Media(Pageable pageRequest) {
         return tweetRepository.findAllTweet2Media(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllTweet2Mention(Pageable pageRequest) {
         return tweetRepository.findAllTweet2Mention(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllTweet2Url(Pageable pageRequest) {
         return tweetRepository.findAllTweet2Url(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest) {
         return tweetRepository.findAllTweet2TickerSymbol(pageRequest);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Tweet findByIdTwitter(long idTwitter) {
         return tweetRepository.findByIdTwitter(idTwitter);
     }

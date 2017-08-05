@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.PrepareDataTest;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,14 +39,14 @@ public class ApplicationControllerTest {
     @Autowired
     private PrepareDataTest prepareDataTest;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -56,7 +56,7 @@ public class ApplicationControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void domainCountTest() throws Exception {
         String msg ="domainCountTest: ";
@@ -79,7 +79,7 @@ public class ApplicationControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void managementPageTest() throws Exception {
         String msg ="managementPageTest: ";

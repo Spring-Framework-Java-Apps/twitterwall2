@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class TaskHistoryServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceTest.class);
@@ -31,14 +31,14 @@ public class TaskHistoryServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(taskHistoryService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -56,6 +56,7 @@ public class TaskHistoryServiceTest {
         }
     }
 
+    //@Commit
     @Test
     public void store() throws Exception {}
 

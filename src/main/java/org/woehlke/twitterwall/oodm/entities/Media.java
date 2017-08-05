@@ -220,6 +220,25 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         this.mediaType = mediaType;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Media)) return false;
+
+        Media media = (Media) o;
+
+        if (id != null ? !id.equals(media.id) : media.id != null) return false;
+        return idTwitter != null ? idTwitter.equals(media.idTwitter) : media.idTwitter == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Media{" +

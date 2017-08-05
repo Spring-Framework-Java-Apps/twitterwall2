@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.PrepareDataTest;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,14 +38,14 @@ public class MediaControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Commit
+    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
+    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -55,13 +55,13 @@ public class MediaControllerTest {
     }
 
     @WithMockUser
-    @Commit
+    //@Commit
     @Test
     public void getAllTest() throws Exception {
         String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/mention/all"))
+        MvcResult result = this.mockMvc.perform(get("/media/all"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("mention/all"))
+                .andExpect(view().name("media/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();

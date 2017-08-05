@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.HashTag;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class HashTagServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceTest.class);
@@ -32,14 +32,14 @@ public class HashTagServiceTest {
     private TestdataProperties testdataProperties;
 
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(hashTagService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -57,7 +57,7 @@ public class HashTagServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByText() throws Exception {
         String msg = "findByText: ";

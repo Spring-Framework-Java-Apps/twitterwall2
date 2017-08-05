@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.Media;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class MediaServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MediaServiceTest.class);
@@ -31,14 +31,14 @@ public class MediaServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(mediaService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -56,7 +56,7 @@ public class MediaServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
@@ -76,7 +76,7 @@ public class MediaServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByUrl() throws Exception {
         String msg = "findByUrl: ";

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 /**
  * Created by tw on 03.07.17.

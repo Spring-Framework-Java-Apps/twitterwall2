@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.Url;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class UrlServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(UrlCacheServiceTest.class);
@@ -31,14 +31,14 @@ public class UrlServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(urlService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -56,7 +56,7 @@ public class UrlServiceTest {
         }
     }
 
-    @Commit
+    //@Commit
     @Test
     public void findByUrl() throws Exception {
         String msg = "findByUrl: ";

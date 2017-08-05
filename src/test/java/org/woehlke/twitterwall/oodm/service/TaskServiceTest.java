@@ -19,11 +19,10 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.service.persist.CountedEntitiesService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class TaskServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);
@@ -38,14 +37,14 @@ public class TaskServiceTest {
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    @Commit
+    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(taskService);
         Assert.assertNotNull(testdataProperties);
     }
 
-    @Commit
+    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -63,24 +62,27 @@ public class TaskServiceTest {
         }
     }
 
+    //@Commit
     @Test
     public void findById() throws Exception {
 
     }
 
+    //@Commit
     @Test
     public void create() throws Exception {
         String msg = "TaskServiceTest.create";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(createdTask.getTaskStatus(),TaskStatus.READY);
     }
 
+    //@Commit
     @Test
     public void done() throws Exception {
         String msg = "TaskServiceTest.done";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
@@ -90,10 +92,11 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.FINISHED,createdTask.getTaskStatus());
     }
 
+    //@Commit
     @Test
     public void error() throws Exception {
         String msg = "TaskServiceTest.error";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
@@ -103,10 +106,11 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.ERROR,createdTask.getTaskStatus());
     }
 
+    //@Commit
     @Test
     public void warn() throws Exception {
         String msg = "TaskServiceTest.error";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
@@ -116,10 +120,11 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.WARN,createdTask.getTaskStatus());
     }
 
+    //@Commit
     @Test
     public void event() throws Exception {
         String msg = "TaskServiceTest.error";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         TaskStatus oldStatus = myTask.getTaskStatus();
@@ -130,10 +135,11 @@ public class TaskServiceTest {
         Assert.assertEquals(oldStatus,createdTask.getTaskStatus());
     }
 
+    //@Commit
     @Test
     public void start() throws Exception {
         String msg = "TaskServiceTest.error";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
@@ -143,10 +149,11 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.RUNNING,createdTask.getTaskStatus());
     }
 
+    //@Commit
     @Test
     public void finalError() throws Exception {
         String msg = "TaskServiceTest.error";
-        TaskType type = TaskType.FETCH_TWEETS_FROM_TWITTER_SEARCH;
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task myTask = taskService.create(msg,type,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
