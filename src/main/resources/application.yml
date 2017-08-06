@@ -124,6 +124,7 @@ twitterwall:
     fetchUserListAllow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
     fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
+    removeOldDataFromStorageAllow: ${TWITTERWALL_SCHEDULER_ALLOW_REMOVE_OLD_DATA_FROM_STORAGE}
     skipFortesting: false
   testdata:
     oodm:

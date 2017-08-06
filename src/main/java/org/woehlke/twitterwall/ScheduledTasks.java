@@ -60,6 +60,16 @@ public class ScheduledTasks {
         }
     }
 
+
+    @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_REMOVE_OLD_DATA_FROM_STORAGE)
+    public void removeOldDataFromStorage(){
+        String msg = "remove Old Data From Storage: ";
+        if(schedulerProperties.getRemoveOldDataFromStorageAllow()  && !schedulerProperties.getSkipFortesting()) {
+            Task task = asyncStartTask.removeOldDataFromStorage();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
     @Autowired
     public ScheduledTasks(SchedulerProperties schedulerProperties, AsyncStartTask mqAsyncStartTask) {
         this.schedulerProperties = schedulerProperties;
@@ -81,6 +91,8 @@ public class ScheduledTasks {
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION = EINE_STUNDE;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST = ZWOELF_STUNDEN;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_REMOVE_OLD_DATA_FROM_STORAGE = EINE_STUNDE;
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 

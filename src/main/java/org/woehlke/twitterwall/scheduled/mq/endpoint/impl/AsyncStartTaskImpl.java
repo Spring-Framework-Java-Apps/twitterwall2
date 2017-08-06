@@ -62,6 +62,12 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task removeOldDataFromStorage() {
+        TaskType taskType = TaskType.REMOVE_OLD_DATA_FROM_STORAGE;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
         SendType sendType = SendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+sendType;
