@@ -21,7 +21,9 @@
         <name>Thomas Woehlke</name>
         <url>https://twitter.com/ThomasWoehlke</url>
     </organization>
+
     <inceptionYear>2017</inceptionYear>
+
     <scm>
         <url>https://github.com/phasenraum2010/twitterwall2.git</url>
         <connection>scm:git:https://github.com/phasenraum2010/twitterwall2.git</connection>
@@ -33,12 +35,14 @@
         <system>GitHub</system>
         <url>https://github.com/phasenraum2010/twitterwall2/issues</url>
     </issueManagement>
+
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file://${project.basedir}/docs-site-deployed</url>
+            <url>file://${project.basedir}/target/site-deployed</url>
         </site>
     </distributionManagement>
+
     <developers>
         <developer>
             <name>Thomas Wöhlke</name>
@@ -46,10 +50,11 @@
             <url>https://github.com/phasenraum2010</url>
         </developer>
     </developers>
+
     <licenses>
         <license>
-            <name>GNU General Public License v2.0</name>
-            <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
 
