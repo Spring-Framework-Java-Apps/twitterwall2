@@ -31,14 +31,14 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     #initialSize: 5
-    max-total: 70
-    maxActive: 60
+    max-total: 20
+    maxActive: 20
     #maxIdle: 5
     #minIdle: 2
     platform: POSTGRESQL
     #removeAbandoned: true
     tomcat:
-      max-active: 60
+      max-active: 20
       #max-wait: 100000
       #test-on-borrow: true
     url: ${DATABASE_URL}
