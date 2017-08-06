@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
-import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged;
 import org.woehlke.twitterwall.oodm.repositories.HashTagRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
@@ -38,31 +37,28 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
     }
 
     /**
-     * @param pageRequestHashTagsTweets org.springframework.data.domain.Pageable
-     * @param pageRequestHashTagsUsers org.springframework.data.domain.Pageable
-     * @return org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged
+     * @param pageRequestTweets org.springframework.data.domain.Pageable
+     * @return HashTagCounted
      *
      * @see org.woehlke.twitterwall.oodm.entities.HashTag
      * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
-     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
-     * @see org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
-     * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
-     * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagOverview(Pageable, Pageable)
      */
-    @Override
-    public HashTagOverviewPaged getHashTagOverview(Pageable pageRequestHashTagsTweets, Pageable pageRequestHashTagsUsers) {
-        Page<HashTagCounted> hashTagsTweets = hashTagRepository.countAllTweet2HashTag(pageRequestHashTagsTweets);
-        Page<HashTagCounted> hashTagsUsers = hashTagRepository.countAllUser2HashTag(pageRequestHashTagsUsers);
-        return new HashTagOverviewPaged(hashTagsTweets,hashTagsUsers);
-    }
-
     @Override
     public Page<HashTagCounted> getHashTagsTweets(Pageable pageRequestTweets) {
         return hashTagRepository.countAllTweet2HashTag(pageRequestTweets);
     }
 
+    /**
+     * @param pageRequestUsers org.springframework.data.domain.Pageable
+     * @return HashTagCounted
+     *
+     * @see org.woehlke.twitterwall.oodm.entities.HashTag
+     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
+     * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
+     */
     @Override
     public Page<HashTagCounted> getHashTagsUsers(Pageable pageRequestUsers) {
         return hashTagRepository.countAllUser2HashTag(pageRequestUsers);

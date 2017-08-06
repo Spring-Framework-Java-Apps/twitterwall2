@@ -7,16 +7,14 @@ import java.io.Serializable;
 /**
  * Created by tw on 14.06.17.
  *
- * @author Thomas Woehlke <thomas@woehlke.org>
- *
  * @see org.woehlke.twitterwall.oodm.entities.HashTag
  * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
  * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
  * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
- * @see org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged
  * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
  * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
- * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagOverview(Pageable, Pageable)
+ * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsTweets(Pageable)
+ * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsUsers(Pageable)
  */
 public class HashTagCounted implements Serializable, Comparable<HashTagCounted> {
 

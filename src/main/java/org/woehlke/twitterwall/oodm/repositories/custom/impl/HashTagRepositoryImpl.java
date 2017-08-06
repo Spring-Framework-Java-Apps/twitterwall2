@@ -47,9 +47,6 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
     }
 
     /**
-     * @param pageRequest org.springframework.data.domain.Pageable
-     * @return org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted>
-     *
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
      */
     @Override
@@ -65,9 +62,6 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
     }
 
     /**
-     * @param pageRequest org.springframework.data.domain.Pageable
-     * @return org.springframework.data.domain.Page<org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted>
-     *
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
      */
     @Override
