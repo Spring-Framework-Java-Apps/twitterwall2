@@ -161,7 +161,7 @@ public class TaskControllerTest {
     private final String PATH = "/task";
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
         String msg = "fetchTweetsFromTwitterSearchStartTaskTest: ";
@@ -183,7 +183,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateTweetsStartTaskTest() throws Exception {
         String msg = "updateTweetsStartTaskTest: ";
@@ -205,7 +205,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
         String msg = "fetchUsersFromDefinedUserListStartTaskTest: ";
@@ -227,7 +227,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateUserProfilesFromMentionsStartTaskTest() throws Exception {
         String msg = "updateUserProfilesFromMentionsStartTaskTest: ";
@@ -249,7 +249,7 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateUserProfilesStartTaskTest() throws Exception {
         String msg = "updateUserProfilesStartTaskTest: ";
