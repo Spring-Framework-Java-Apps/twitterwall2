@@ -11,6 +11,7 @@ import org.woehlke.twitterwall.oodm.entities.listener.MediaListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.net.MalformedURLException;
 
 /**
  * Created by tw on 10.06.17.
@@ -101,6 +102,53 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         super();
     }
 
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString();
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.url == null){
+            return false;
+        }
+        if(this.expanded == null){
+            return false;
+        }
+        if(this.display == null){
+            return false;
+        }
+        if(this.url.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
+        if(this.display.isEmpty()){
+            return false;
+        }
+        if(this.mediaHttps == null){
+            return false;
+        }
+        if(this.mediaHttps.isEmpty()){
+            return false;
+        }
+        if(this.mediaHttp == null){
+            return false;
+        }
+        if(this.mediaHttp.isEmpty()){
+            return false;
+        }
+        try {
+            java.net.URL url = new java.net.URL(this.url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -112,11 +160,6 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -177,6 +220,25 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
         this.mediaType = mediaType;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Media)) return false;
+
+        Media media = (Media) o;
+
+        if (id != null ? !id.equals(media.id) : media.id != null) return false;
+        return idTwitter != null ? idTwitter.equals(media.idTwitter) : media.idTwitter == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Media{" +
@@ -191,11 +253,5 @@ public class Media extends AbstractDomainObject<Media> implements DomainObjectEn
                     super.toString() +
                 " }\n";
     }
-
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
 
 }

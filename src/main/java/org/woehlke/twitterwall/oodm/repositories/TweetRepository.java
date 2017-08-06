@@ -19,13 +19,13 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     Tweet findByIdTwitter(long idTwitter);
 
+    Page<Tweet> findByUser(User user, Pageable pageRequest);
+
     @Query(
         name="Tweet.getTweetsForHashTag",
         countName="Tweet.countTweetsForHashTag"
     )
     Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
-
-    Page<Tweet> findByUser(User user, Pageable pageRequest);
 
     @Query(name = "Tweet.findAllTwitterIds")
     Page<Long> findAllTwitterIds(Pageable pageRequest);

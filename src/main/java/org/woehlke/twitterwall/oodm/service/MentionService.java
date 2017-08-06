@@ -7,7 +7,6 @@ import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.service.common.DomainObjectEntityService;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithIdTwitter;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
-import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
 
 /**
@@ -17,5 +16,8 @@ public interface MentionService extends DomainServiceWithScreenName<Mention>,Dom
 
     Mention createProxyMention(Mention mention, Task task);
 
-    Page<Mention> getAllWithoutPersistentUser(Pageable pageRequest);
+    Page<Mention> getAllWithoutUser(Pageable pageRequest);
+
+    Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter);
+
 }

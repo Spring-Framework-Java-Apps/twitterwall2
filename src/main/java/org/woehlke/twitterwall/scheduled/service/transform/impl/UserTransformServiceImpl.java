@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,10 @@ import java.util.Date;
 /**
  * Created by tw on 28.06.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UserTransformServiceImpl implements UserTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(UserTransformServiceImpl.class);
@@ -83,7 +86,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource,task);
         log.debug(msg+" entities = "+entities.toString());
         userTarget.setEntities(entities);
-        log.debug(msg+" userTarget = "+userTarget.toString());
+        log.debug(msg+" userTarget = "+userTarget.getUniqueId());
         return userTarget;
     }
 

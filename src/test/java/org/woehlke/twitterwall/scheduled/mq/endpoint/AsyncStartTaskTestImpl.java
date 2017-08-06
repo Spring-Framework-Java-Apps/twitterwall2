@@ -1,0 +1,108 @@
+package org.woehlke.twitterwall.scheduled.mq.endpoint;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.woehlke.twitterwall.Application;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes={Application.class})
+public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements AsyncStartTaskTest {
+
+    private static final Logger log = LoggerFactory.getLogger(AsyncStartTaskTestImpl.class);
+
+    @Autowired
+    private CountedEntitiesService countedEntitiesService;
+
+    @Autowired
+    private AsyncStartTask mqAsyncStartTask;
+
+    @Test
+    public void updateTweetsTest() throws Exception {
+        String msg = "updateTweetsTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.updateTweets();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    public void updateUsersTest() throws Exception {
+        String msg = "updateUsersTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.updateUsers();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    public void updateUsersFromMentionsTest() throws Exception {
+        String msg = "updateUsersFromMentionsTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.updateUsersFromMentions();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    public void fetchTweetsFromSearchTest() throws Exception {
+        String msg = "fetchTweetsFromSearchTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.fetchTweetsFromSearch();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    public void fetchUsersFromListTest() throws Exception {
+        String msg = "fetchTweetsFromSearchTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.fetchUsersFromList();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+}

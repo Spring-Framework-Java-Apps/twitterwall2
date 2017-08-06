@@ -52,7 +52,7 @@ public class TweetController {
     }
 
     @RequestMapping("/{id}")
-    public String getLatestTweets(
+    public String getTweetById(
         @PathVariable("id") Tweet tweet, Model model
     ) {
         String title = "Tweet";

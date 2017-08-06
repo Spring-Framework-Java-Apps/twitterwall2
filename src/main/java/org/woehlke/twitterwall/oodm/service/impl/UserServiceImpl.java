@@ -20,7 +20,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
  * Created by tw on 11.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -36,9 +36,14 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public User findByScreenName(String screenName) {
         if (!User.isValidScreenName(screenName)) {
-            throw new IllegalArgumentException("User.isValidScreenName("+screenName+") = false" );
+            return null;
         }
         return userRepository.findByScreenName(screenName);
+    }
+
+    @Override
+    public User findByidTwitterAndScreenNameUnique(long idTwitter, String screenNameUnique) {
+        return userRepository.findByidTwitterAndScreenNameUnique(idTwitter,screenNameUnique);
     }
 
     @Override
@@ -71,10 +76,12 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
         return userRepository.findAllDescriptions(pageRequest);
     }
 
+    /*
     @Override
     public Page<Long> getAllTwitterIds(Pageable pageRequest) {
         return userRepository.findAllTwitterIds(pageRequest);
     }
+    */
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {

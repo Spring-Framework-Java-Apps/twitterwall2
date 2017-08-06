@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
  * Created by tw on 10.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
@@ -44,10 +44,12 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByUser(user,pageRequest);
     }
 
+    /*
     @Override
     public Page<Long> findAllTwitterIds(Pageable pageRequest) {
         return tweetRepository.findAllTwitterIds(pageRequest);
     }
+    */
 
     @Override
     public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {

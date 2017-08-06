@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         String name="User.findByUniqueId";
         TypedQuery<User> query = entityManager.createNamedQuery(name,User.class);
         query.setParameter("idTwitter",domainObject.getIdTwitter());
-        query.setParameter("screenName",domainObject.getScreenName());
+        query.setParameter("screenNameUnique",domainObject.getScreenNameUnique());
         List<User> resultList = query.getResultList();
         if(resultList.size()>0){
             return resultList.iterator().next();

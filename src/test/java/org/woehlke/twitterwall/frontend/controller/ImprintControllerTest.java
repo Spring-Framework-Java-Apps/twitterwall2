@@ -8,14 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.test.UserServiceTest;
+import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -42,33 +41,28 @@ public class ImprintControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserServiceTest userServiceTest;
-
-    @Autowired
-    private TwitterProperties twitterProperties;
-
-    @Autowired
     private FrontendProperties frontendProperties;
 
-    @Commit
+    @Autowired
+    private PrepareDataTest prepareDataTest;
+
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() {
+    public void prepareDataTest() throws Exception  {
         log.info("------------------------------------");
-        log.info("fetchTweetsFromTwitterSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
-        userServiceTest.createUser(frontendProperties.getImprintScreenName());
-        log.info("fetchTweetsFromTwitterSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
+        log.info("fetchTweetsFromSearchTest: START  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
+        prepareDataTest.createUser(frontendProperties.getImprintScreenName());
+        log.info("fetchTweetsFromSearchTest: DONE  userServiceTest.createUser("+ frontendProperties.getImprintScreenName()+")");
         log.info("------------------------------------");
         Assert.assertTrue(true);
     }
 
-    @Commit
+    @WithAnonymousUser
     @Test
     public void imprintTest1() throws Exception {
         this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
@@ -76,12 +70,12 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
-    @Commit
+    @WithAnonymousUser
     @Test
     public void imprintTest2() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/imprint"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "imprint"))
+                .andExpect(view().name( "imprint/imprint"))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeExists("page")).andReturn();
 

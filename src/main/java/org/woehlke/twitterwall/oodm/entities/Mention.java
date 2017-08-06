@@ -13,11 +13,6 @@ import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
-
 /**
  * Created by tw on 10.06.17.
  */
@@ -25,16 +20,27 @@ import static javax.persistence.FetchType.EAGER;
 @Table(
     name = "mention",
     uniqueConstraints = {
-        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name", "id_twitter"})
+        @UniqueConstraint(name = "unique_mention", columnNames = {"screen_name_unique", "id_twitter"}),
+        @UniqueConstraint(name = "unique_mention_screen_name_unique", columnNames = {"screen_name_unique"}),
     },
     indexes = {
-        @Index(name = "idx_mention_name", columnList = "name")
+        @Index(name = "idx_mention_name", columnList = "name"),
+        @Index(name = "idx_mention_name", columnList = "screen_name"),
+        @Index(name = "idx_mention_id_twitter_of_user", columnList = "id_twitter_of_user")
     }
 )
 @NamedQueries({
     @NamedQuery(
         name="Mention.findByUniqueId",
-        query="select t from Mention t where t.idTwitter=:idTwitter and t.screenName=:screenName"
+        query="select t from Mention t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+    ),
+    @NamedQuery(
+        name="Mention.findAllWithoutUser",
+        query="select t from Mention t where t.idTwitterOfUser=0"
+    ),
+    @NamedQuery(
+        name="Mention.countAllWithoutUser",
+        query="select count(t) from Mention t where t.idTwitterOfUser=0"
     )
 })
 @EntityListeners(MentionListener.class)
@@ -42,7 +48,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     private static final long serialVersionUID = 1L;
 
-    private static final long ID_TWITTER_UNDEFINED = -1L;
+    public static final long ID_TWITTER_UNDEFINED = -1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,21 +61,24 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Column(name = "screen_name", nullable = false)
     private String screenName = "";
 
+    @NotEmpty
+    @Column(name = "screen_name_unique", nullable = false)
+    private String screenNameUnique = "";
+
     @Column(name = "name",length=4096, nullable = false)
     private String name = "";
 
-    @JoinColumn(name = "fk_user",nullable = true)
-    @OneToOne(optional=true, fetch = EAGER, cascade = {DETACH, REFRESH, REMOVE})
-    private User user;
-
     @NotNull
-    @Column(name = "id_twitte_of_user",nullable = false)
+    @Column(name = "id_twitter_of_user",nullable = false)
     private Long idTwitterOfUser = 0L;
 
     public Mention(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name) {
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
         this.name = name;
     }
 
@@ -77,6 +86,9 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         super(createdBy,updatedBy);
         this.idTwitter = ID_TWITTER_UNDEFINED;
         this.screenName = mentionString;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
         this.name = mentionString;
     }
 
@@ -84,21 +96,42 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Transient
-    public Boolean isProxy(){
-        return idTwitter < 0;
+    @Override
+    public String getUniqueId() {
+        return "" + idTwitter +"_"+ screenNameUnique;
     }
 
     @Transient
-    public boolean hasPersistentUser(){
-        boolean result = false;
-        User myUser = this.getUser();
-        if(myUser != null){
-            result =
-                (myUser.getScreenName().compareTo(this.getScreenName())==0) &&
-                    (idTwitterOfUser != null ) &&
-                    (myUser.getIdTwitter() == idTwitterOfUser);
+    @Override
+    public boolean isValid() {
+        if(screenName == null){
+            return false;
         }
-        return result;
+        if(screenName.isEmpty()){
+            return false;
+        }
+        if(!this.hasValidScreenName()){
+            return false;
+        }
+        if(screenNameUnique == null){
+            return false;
+        }
+        if(screenNameUnique.isEmpty()){
+            return false;
+        }
+        if(!this.hasValidScreenNameUnique()){
+            return false;
+        }
+        if(idTwitter == null){
+            return false;
+        }
+        if(idTwitterOfUser < 0L){
+            return false;
+        }
+        if(this.getScreenName().toLowerCase().compareTo(this.getScreenNameUnique())!=0){
+            return false;
+        }
+        return true;
     }
 
     @Transient
@@ -109,38 +142,77 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     public static boolean isValidScreenName(String screenName) {
+        if(screenName==null){
+            return false;
+        }
         Pattern p = Pattern.compile("^" + User.SCREEN_NAME_PATTERN + "$");
         Matcher m = p.matcher(screenName);
         return m.matches();
     }
 
+    @Transient
+    public boolean hasValidScreenNameUnique() {
+        if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
+            return false;
+        }
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_UNIQUE_PATTERN+ "$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenNameUnique(String screenNameUnique) {
+        if(screenNameUnique==null){
+            return false;
+        }
+        Pattern p = Pattern.compile("^" + User.SCREEN_NAME_UNIQUE_PATTERN + "$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    @Transient
+    public Boolean isProxy(){
+        return idTwitter == ID_TWITTER_UNDEFINED;
+    }
+
+    @Transient
     public boolean hasUser() {
-        return user != null;
+        return idTwitterOfUser > 0L;
+    }
+
+    @Transient
+    public boolean isRawMentionFromUserDescription() {
+        if(this.isValid()) {
+            return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
+        } else {
+            return false;
+        }
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     @Override
-    public String getUniqueId() {
-        return idTwitter.toString() +"_"+ screenName.toString();
-    }
-
     public String getScreenName() {
         return screenName;
     }
 
+    @Override
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+        if(screenName!=null) {
+            this.screenNameUnique = screenName.toLowerCase();
+        }
     }
 
     public String getName() {
@@ -161,14 +233,6 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.idTwitter = idTwitter;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Long getIdTwitterOfUser() {
         return idTwitterOfUser;
     }
@@ -178,6 +242,17 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Override
+    public String getScreenNameUnique() {
+        return screenNameUnique;
+    }
+
+    @Override
+    public void setScreenNameUnique(String screenNameUnique) {
+        this.screenNameUnique = screenNameUnique.toLowerCase();
+    }
+
+    /*
+    @Override
     public String toString() {
         return "Mention{" +
             " id=" + id +
@@ -186,44 +261,38 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
             ", name='" + name + '\'' +
                 super.toString() +
             " }\n";
-    }
+    }*/
 
-    @Transient
-    public boolean isValid() {
-        if((screenName == null) ||(screenName.isEmpty())|| isRawMentionFromUserDescription()){
-            return false;
-        }
-        if(idTwitter <= 1L){
-            return false;
-        }
-        return true;
-    }
-
-    @Transient
-    public boolean isRawMentionFromUserDescription() {
-        return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
+    @Override
+    public String toString() {
+        return "Mention{" +
+                "id=" + id +
+                ", idTwitter=" + idTwitter +
+                ", screenName='" + screenName + '\'' +
+                ", screenNameUnique='" + screenNameUnique + '\'' +
+                ", name='" + name + '\'' +
+                ", idTwitterOfUser=" + idTwitterOfUser +
+                super.toString() +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Mention)) return false;
-        if (!super.equals(o)) return false;
 
         Mention mention = (Mention) o;
 
-        if (getId() != null ? !getId().equals(mention.getId()) : mention.getId() != null) return false;
-        if (getIdTwitter() != null ? !getIdTwitter().equals(mention.getIdTwitter()) : mention.getIdTwitter() != null)
-            return false;
-        return getScreenName() != null ? getScreenName().equals(mention.getScreenName()) : mention.getScreenName() == null;
+        if (id != null ? !id.equals(mention.id) : mention.id != null) return false;
+        if (idTwitter != null ? !idTwitter.equals(mention.idTwitter) : mention.idTwitter != null) return false;
+        return screenNameUnique != null ? screenNameUnique.equals(mention.screenNameUnique) : mention.screenNameUnique == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
-        result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
+        result = 31 * result + (screenNameUnique != null ? screenNameUnique.hashCode() : 0);
         return result;
     }
 }

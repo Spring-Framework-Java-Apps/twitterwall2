@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -68,6 +69,7 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     private Task task;
 
     //@NotNull
+    @Valid
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "countUser", column = @Column(name = "count_user",nullable=false)),
@@ -96,12 +98,15 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     private TaskHistory() {
     }
 
+    /*
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, CountedEntities countedEntities) {
         this.countedEntities = countedEntities;
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
+        this.timeEvent = new Date();
     }
+    */
 
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task, CountedEntities countedEntities) {
         this.countedEntities = countedEntities;
@@ -110,6 +115,37 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         this.taskStatusNow = taskStatusNow;
         this.timeEvent = timeEvent;
         this.task = task;
+        this.idTask = task.getId();
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.task == null){
+            return false;
+        }
+        if(this.task.getId() == null){
+            return false;
+        }
+        if(idTask == null){
+            return false;
+        }
+        if(idTask == 0L){
+            return false;
+        }
+        if(timeEvent == null){
+            return false;
+        }
+        if(timeEvent.after(new Date())){
+            return false;
+        }
+        return true;
     }
 
     public Long getId() {
@@ -118,11 +154,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
     public String getDescription() {
@@ -196,26 +227,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
             ", timeEvent=" + timeEvent +
             ", task.id=" + idTask +
             '}';
-    }
-
-    @Override
-    public boolean isValid() {
-        if(taskStatusBefore == null){
-            return false;
-        }
-        if(taskStatusNow == null){
-            return false;
-        }
-        if(timeEvent == null){
-            return false;
-        }
-        if((description == null)||(description.isEmpty())){
-            return false;
-        }
-        if(idTask == null){
-            return false;
-        }
-        return true;
     }
 
     @Override

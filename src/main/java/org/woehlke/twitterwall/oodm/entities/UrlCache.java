@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.listener.UrlCacheListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.net.MalformedURLException;
 
 
 /**
@@ -67,7 +68,43 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
-       return  url.compareTo(expanded) == 0;
+        if(this.isValid()){
+            return url.compareTo(expanded) == 0;
+        } else {
+            return false;
+        }
+    }
+
+    @Transient
+    public boolean isRawUrlsFromDescription() {
+        if(this.isValid()){
+            return (this.expanded.compareTo(UNDEFINED)==0);
+        } else {
+            return false;
+        }
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.url == null){
+            return false;
+        }
+        if(this.expanded == null){
+            return false;
+        }
+        if(this.url.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
+        try {
+            java.net.URL url = new java.net.URL(this.url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
     }
 
     public Long getId() {
@@ -109,11 +146,6 @@ public class UrlCache extends AbstractDomainObject<UrlCache> implements DomainOb
                 ", url='" + url + '\'' +
                     super.toString() +
                 "}\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

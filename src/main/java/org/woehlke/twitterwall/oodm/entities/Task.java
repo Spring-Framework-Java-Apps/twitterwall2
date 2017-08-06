@@ -2,19 +2,14 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by tw on 09.07.17.
@@ -28,7 +23,8 @@ import static javax.persistence.FetchType.EAGER;
     indexes = {
         @Index(name = "idx_task_time_finished", columnList = "time_finished"),
         @Index(name = "idx_task_task_status", columnList = "task_status"),
-        @Index(name = "idx_task_task_type", columnList = "task_type")
+        @Index(name = "idx_task_task_type", columnList = "task_type"),
+        @Index(name = "idx_task_send_type", columnList = "send_type"),
     }
 )
 @NamedQueries({
@@ -62,6 +58,11 @@ public class Task implements DomainObjectMinimal<Task> {
     private TaskStatus taskStatus = TaskStatus.READY;
 
     @NotNull
+    @Column(name="send_type",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SendType sendType = SendType.NULL;
+
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_started",nullable = false)
     private Date timeStarted = new Date();
@@ -78,18 +79,38 @@ public class Task implements DomainObjectMinimal<Task> {
     private Task() {
     }
 
-    public Task(String description,TaskType taskType) {
-        this.taskType = taskType;
-        this.description = description;
-    }
-
-    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, SendType sendType, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
         this.description = description;
         this.taskType = taskType;
         this.taskStatus = taskStatus;
+        this.sendType = sendType;
         this.timeStarted = timeStarted;
         this.timeLastUpdate = timeLastUpdate;
         this.timeFinished = timeFinished;
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return "" + taskType.name() +"_"+ timeStarted.getTime();
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(taskType == null){
+            return false;
+        }
+        if(taskType == TaskType.NULL){
+            return false;
+        }
+        if(timeStarted == null){
+            return false;
+        }
+        if(timeStarted.after(new Date())){
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -100,11 +121,6 @@ public class Task implements DomainObjectMinimal<Task> {
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return "" + taskType.name() +"_"+ timeStarted.getTime();
     }
 
     public TaskType getTaskType() {
@@ -139,6 +155,14 @@ public class Task implements DomainObjectMinimal<Task> {
         this.taskStatus = taskStatus;
     }
 
+    public SendType getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(SendType sendType) {
+        this.sendType = sendType;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -163,18 +187,15 @@ public class Task implements DomainObjectMinimal<Task> {
     @Override
     public String toString() {
         return "Task{" +
-            "id=" + id +
-            ", taskType=" + taskType +
-            ", taskStatus=" +taskStatus +
-            ", timeStarted=" + timeStarted +
-            ", timeLastUpdate=" + timeLastUpdate +
-            ", timeFinished=" + timeFinished +
-            '}';
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", taskType=" + taskType +
+                ", taskStatus=" + taskStatus +
+                ", sendType=" + sendType +
+                ", timeStarted=" + timeStarted +
+                ", timeLastUpdate=" + timeLastUpdate +
+                ", timeFinished=" + timeFinished +
+                '}';
     }
 
     @Override

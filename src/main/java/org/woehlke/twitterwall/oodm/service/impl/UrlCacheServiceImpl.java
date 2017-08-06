@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.service.UrlCacheService;
  * Created by tw on 23.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlCacheServiceImpl extends DomainServiceWithTaskImpl<UrlCache> implements UrlCacheService {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolServiceImpl.class);

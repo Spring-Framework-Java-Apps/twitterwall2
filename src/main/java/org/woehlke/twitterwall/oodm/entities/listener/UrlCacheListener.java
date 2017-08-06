@@ -15,36 +15,36 @@ public class UrlCacheListener {
 
   @PrePersist
   public void onPrePersist(UrlCache domainObject) {
-    log.debug("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.getUniqueId());
   }
 
   @PreUpdate
   public void onPreUpdate(UrlCache domainObject) {
-    log.debug("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.getUniqueId());
   }
 
   @PreRemove
   public void onPreRemove(UrlCache domainObject) {
-    log.debug("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.getUniqueId());
   }
 
   @PostPersist
   public void onPostPersist(UrlCache domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.getUniqueId());
   }
 
   @PostUpdate
   public void onPostUpdate(UrlCache domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.getUniqueId());
   }
 
   @PostRemove
   public void onPostRemove(UrlCache domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.getUniqueId());
   }
 
   @PostLoad
   public void onPostLoad(UrlCache domainObject) {
-    log.debug("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.getUniqueId());
   }
 }

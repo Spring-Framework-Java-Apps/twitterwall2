@@ -25,185 +25,254 @@
 
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
 
-    <int:channel id="startTaskChannel" >
+    <int:channel id="startTaskChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateTweetsChannel" >
+    <int:channel id="updateTweetsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger" />
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="updateUsersChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesChannel" >
+    <int:channel id="updateUsersFromMentionsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsChannel" >
+    <int:channel id="fetchTweetsFromSearchChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTweetsFromTwitterSearchChannel" >
+    <int:channel id="fetchUsersFromListChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchUsersFromDefinedUserListChannel" >
+    <int:channel id="createTestDataUsersChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTestDataForUserChannel" >
+    <int:channel id="createTestDataTweetsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTestDataForTweetsChannel" >
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="startFetchImprintUserChannel" >
+    <int:channel id="createImprintUserChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:router id="schedulerRouter" input-channel="startTaskChannel" expression="payload.taskType">
-        <int:mapping value="UPDATE_TWEETS" channel="startUpdateTweetsChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES" channel="startUpdateUserProfilesChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES_FROM_MENTIONS" channel="startUpdateUserProfilesFromMentionsChannel"/>
-        <int:mapping value="FETCH_TWEETS_FROM_TWITTER_SEARCH" channel="startFetchTweetsFromTwitterSearchChannel"/>
-        <int:mapping value="FETCH_USERS_FROM_DEFINED_USER_LIST" channel="startFetchUsersFromDefinedUserListChannel"/>
-        <int:mapping value="CONTROLLER_GET_TESTDATA_USER" channel="startFetchTestDataForUserChannel"/>
-        <int:mapping value="CONTROLLER_GET_TESTDATA_TWEETS" channel="startFetchTestDataForTweetsChannel"/>
-        <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="startFetchImprintUserChannel"/>
+    <int:router id="startTaskRouter" input-channel="startTaskChannel" expression="payload.taskType">
+        <int:mapping value="UPDATE_TWEETS" channel="updateTweetsChannel"/>
+        <int:mapping value="UPDATE_USERS" channel="updateUsersChannel"/>
+        <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsChannel"/>
+        <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchChannel"/>
+        <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
     </int:router>
 
-    <int:chain input-channel="startUpdateTweetsChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateTweets"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqTweetTransformator"
-                               method="transformTweet" />
-        <int:service-activator ref="mqTweetPersistor"
-                               method="persistTweet" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqTweetFinisher"
-                               method="finish" />
+    <int:chain id="updateTweetsChain" input-channel="updateTweetsChannel">
+        <int:splitter
+                id="updateTweetsSplitter"
+                ref="mqUpdateTweetsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="updateTweetsTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="updateTweetsPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="updateTweetsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateTweetsFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
     </int:chain>
 
 
-    <int:chain input-channel="startUpdateUserProfilesChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateUserProfiles"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finish" />
+    <int:chain id="updateUsersChain" input-channel="updateUsersChannel">
+        <int:splitter
+                id="updateUsersSplitter"
+                ref="mqUpdateUserSplitter"
+                method="splitMessage" />
+        <int:service-activator
+                id="updateUsersTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="updateUsersPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="updateUsersAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateUsersFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
     </int:chain>
 
 
-    <int:chain input-channel="startUpdateUserProfilesFromMentionsChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateUserProfilesFromMentions"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finish" />
+    <int:chain id="updateUsersFromMentionsChain" input-channel="updateUsersFromMentionsChannel">
+        <int:splitter
+                id="updateUsersFromMentionsSplitter"
+                ref="mqUpdateUserFromMentionsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="updateUsersFromMentionsTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="updateUsersFromMentionsPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="updateUsersFromMentionsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateUsersFromMentionsFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
     </int:chain>
 
 
-    <int:chain input-channel="startFetchTweetsFromTwitterSearchChannel">
-        <int:splitter id="splitter"
-                      ref="mqFetchTweetsFromTwitterSearch"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqTweetTransformator"
-                               method="transformTweet" />
-        <int:service-activator ref="mqTweetPersistor"
-                               method="persistTweet" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqTweetFinisher"
-                               method="finish" />
+    <int:chain id="fetchTweetsFromSearchChain" input-channel="fetchTweetsFromSearchChannel">
+        <int:splitter
+                id="fetchTweetsFromSearchSplitter"
+                ref="mqFetchTweetsFromTwitterSearchSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="fetchTweetsFromSearchTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="fetchTweetsFromSearchPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="fetchTweetsFromSearchAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchTweetsFromSearchFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
     </int:chain>
 
 
-    <int:chain input-channel="startFetchUsersFromDefinedUserListChannel">
-        <int:splitter id="splitter"
-                      ref="mqFetchUsersFromDefinedUserList"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finish" />
+    <int:chain id="fetchUsersFromListChain" input-channel="fetchUsersFromListChannel">
+        <int:splitter
+                id="fetchUsersFromListSplitter"
+                ref="mqFetchUserFromListSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="fetchUsersFromListTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchUsersFromListPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchUsersFromListAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchUsersFromListFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
     </int:chain>
 
-    <int:chain input-channel="startFetchTestDataForUserChannel">
-        <int:splitter id="splitter"
-                      ref="mqCreateTestDataForUsers"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finish" />
+    <int:chain id="createTestDataUsersChain" input-channel="createTestDataUsersChannel">
+        <int:splitter
+                id="createTestDataUsersSplitter"
+                ref="mqCreateTestDataForUsersSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataUsersTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="createTestDataUsersPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="createTestDataUsersAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataUsersFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
     </int:chain>
 
 
-    <int:chain input-channel="startFetchTestDataForTweetsChannel">
-        <int:splitter id="splitter"
-                      ref="mqCreateTestDataForTweets"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqTweetTransformator"
-                               method="transformTweet" />
-        <int:service-activator ref="mqTweetPersistor"
-                               method="persistTweet" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqTweetFinisher"
-                               method="finish" />
+    <int:chain id="createTestDataTweetsChain" input-channel="createTestDataTweetsChannel">
+        <int:splitter
+                id="createTestDataTweetsSplitter"
+                ref="mqCreateTestDataForTweetsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataTweetsTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="createTestDataTweetsPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="createTestDataTweetsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataTweetsFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
     </int:chain>
 
-    <int:chain input-channel="startFetchImprintUserChannel">
-        <int:service-activator ref="mqCreateImprintUser"
-                               method="createImprintUser" />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
+    <int:chain id="createImprintUserChain" input-channel="createImprintUserChannel">
+        <int:service-activator
+                id="createImprintUserCreator"
+                ref="mqCreateImprintUser"
+                method="createImprintUser" />
+        <int:service-activator
+                id="createImprintUserTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="createImprintUserPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
     </int:chain>
 
-    <int:channel id="startTaskFireAndForgetChannel">
+    <int:channel id="startTaskFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:dispatcher task-executor="myThreadPoolTaskExecutor"/>
     </int:channel>
 
@@ -211,124 +280,224 @@
           class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
     </bean>
 
-    <int:router id="controllerRouter" input-channel="startTaskFireAndForgetChannel" expression="payload.taskType">
-        <int:mapping value="UPDATE_TWEETS" channel="startUpdateTweetsFireAndForgetChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES" channel="startUpdateUserProfilesFireAndForgetChannel"/>
-        <int:mapping value="UPDATE_USER_PROFILES_FROM_MENTIONS" channel="startUpdateUserProfilesFromMentionsFireAndForgetChannel"/>
-        <int:mapping value="FETCH_TWEETS_FROM_TWITTER_SEARCH" channel="startFetchTweetsFromTwitterSearchFireAndForgetChannel"/>
-        <int:mapping value="FETCH_USERS_FROM_DEFINED_USER_LIST" channel="startFetchUsersFromDefinedUserListFireAndForgetChannel"/>
+    <int:router id="startTaskFireAndForgetRouter" input-channel="startTaskFireAndForgetChannel" expression="payload.taskType">
+        <int:mapping value="UPDATE_TWEETS" channel="updateTweetsFireAndForgetChannel"/>
+        <int:mapping value="UPDATE_USERS" channel="updateUsersFireAndForgetChannel"/>
+        <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsFireAndForgetChannel"/>
+        <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchFireAndForgetChannel"/>
+        <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListFireAndForgetChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
     </int:router>
 
-    <int:channel id="startUpdateTweetsFireAndForgetChannel" >
+    <int:channel id="updateTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFireAndForgetChannel" >
+    <int:channel id="updateUsersFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchTweetsFromTwitterSearchFireAndForgetChannel" >
+    <int:channel id="fetchTweetsFromSearchFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsFireAndForgetChannel" >
+    <int:channel id="updateUsersFromMentionsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startUpdateUserProfilesFromMentionsChannelForWebController" >
+    <int:channel id="fetchUsersFromListFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="startFetchUsersFromDefinedUserListFireAndForgetChannel" >
+    <int:channel id="createTestDataUsersFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="createTestDataTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-
-    <int:chain input-channel="startUpdateTweetsFireAndForgetChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateTweets"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqTweetTransformator"
-                               method="transformTweet" />
-        <int:service-activator ref="mqTweetPersistor"
-                               method="persistTweet" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqTweetFinisher"
-                               method="finishAsnyc" />
+    <int:chain id="updateTweetsFireAndForgetChain" input-channel="updateTweetsFireAndForgetChannel">
+        <int:splitter
+                id="updateTweetsFireAndForgetSplitter"
+                ref="mqUpdateTweetsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="updateTweetsFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="updateTweetsFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="updateTweetsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateTweetsFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
     </int:chain>
 
 
-    <int:chain input-channel="startUpdateUserProfilesFireAndForgetChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateUserProfiles"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finishAsnyc" />
+    <int:chain id="updateUserFireAndForgetChain" input-channel="updateUsersFireAndForgetChannel">
+        <int:splitter
+                id="updateUserFireAndForgetSplitter"
+                ref="mqUpdateUserSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="updateUserFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="updateUserFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="updateUserFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateUserFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
     </int:chain>
 
 
-    <int:chain input-channel="startUpdateUserProfilesFromMentionsFireAndForgetChannel">
-        <int:splitter id="splitter"
-                      ref="mqUpdateUserProfilesFromMentions"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finishAsnyc" />
+    <int:chain id="updateUsersFromMentionsFireAndForgetChain" input-channel="updateUsersFromMentionsFireAndForgetChannel">
+        <int:splitter
+                id="updateUsersFromMentionsFireAndForgetSplitter"
+                ref="mqUpdateUserFromMentionsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="updateUsersFromMentionsFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="updateUsersFromMentionsFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="updateUsersFromMentionsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="updateUsersFromMentionsFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
     </int:chain>
 
 
-    <int:chain input-channel="startFetchTweetsFromTwitterSearchFireAndForgetChannel">
-        <int:splitter id="splitter"
-                      ref="mqFetchTweetsFromTwitterSearch"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqTweetTransformator"
-                               method="transformTweet" />
-        <int:service-activator ref="mqTweetPersistor"
-                               method="persistTweet" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqTweetFinisher"
-                               method="finishAsnyc" />
+    <int:chain id="fetchTweetsFromSearchFireAndForgetChain" input-channel="fetchTweetsFromSearchFireAndForgetChannel">
+        <int:splitter
+                id="fetchTweetsFromSearchFireAndForgetSplitter"
+                ref="mqFetchTweetsFromTwitterSearchSplitter"
+                method="splitMessage" />
+        <int:service-activator
+                id="fetchTweetsFromSearchFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="fetchTweetsFromSearchFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="fetchTweetsFromSearchFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchTweetsFromSearchFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc"  />
     </int:chain>
 
 
-    <int:chain input-channel="startFetchUsersFromDefinedUserListFireAndForgetChannel">
-        <int:splitter id="splitter"
-                      ref="mqFetchUsersFromDefinedUserList"
-                      method="splitMessage"  />
-        <int:service-activator ref="mqUserTransformator"
-                               method="transformUser" />
-        <int:service-activator ref="mqUserPersistor"
-                               method="persistUser" />
-        <int:aggregator message-store="store"
-                        release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
-        <int:service-activator ref="mqUserFinisher"
-                               method="finishAsnyc" />
+    <int:chain id="fetchUsersFromListFireAndForgetChain" input-channel="fetchUsersFromListFireAndForgetChannel">
+        <int:splitter
+                id="fetchUsersFromListFireAndForgetSplitter"
+                ref="mqFetchUserFromListSplitter"
+                method="splitMessage" />
+        <int:service-activator
+                id="fetchUsersFromListFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchUsersFromListFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchUsersFromListFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchUsersFromListFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
+    <int:chain id="createTestDataUsersFireAndForgetChain" input-channel="createTestDataUsersFireAndForgetChannel">
+        <int:splitter
+                id="createTestDataUsersFireAndForgetSplitter"
+                ref="mqCreateTestDataForUsersSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="createTestDataUsersFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataUsersFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
+    <int:chain id="createTestDataTweetsFireAndForgetChain" input-channel="createTestDataTweetsFireAndForgetChannel">
+        <int:splitter
+                id="createTestDataTweetsFireAndForgetSplitter"
+                ref="mqCreateTestDataForTweetsSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="createTestDataTweetsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="createTestDataTweetsFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
     </int:chain>
 
 </beans>

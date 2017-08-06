@@ -4,13 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithTask;
 
-public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainServiceWithTask<T> {
+
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implements DomainServiceWithTask<T> {
 
     private static final Logger log = LoggerFactory.getLogger(DomainServiceWithTaskImpl.class);
 
@@ -39,6 +43,7 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public T store(T domainObject, Task task) {
         String msg = "store "+domainObject.getUniqueId()+" in Task "+task.getId()+" "+task.getTaskType()+" ";
         T domainObjectResult = null;
@@ -61,12 +66,7 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
                 }
             }
             if(domainObjectPersistent==null){
-                //try {
-                    domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
-                //} catch (Exception e){
-                //    log.debug(msg+ e.getMessage());
-                 //   //e.printStackTrace();
-               // }
+                domainObjectPersistent = domainRepository.findByUniqueId(domainObject);
             }
             if (domainObjectPersistent != null) {
                 domainObject.setId(domainObjectPersistent.getId());
@@ -86,18 +86,19 @@ public class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> implement
             }
         } catch (Exception e)  {
             log.warn(msg,e.getMessage());
-            //e.printStackTrace();
         }
         return domainObjectResult;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public T create(T domainObject, Task task) {
         domainObject.setCreatedBy(task);
         return domainRepository.save(domainObject);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public T update(T domainObject, Task task) {
         domainObject.setUpdatedBy(task);
         return domainRepository.save(domainObject);

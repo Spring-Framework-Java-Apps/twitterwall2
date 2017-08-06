@@ -18,8 +18,8 @@ info:
     groupId: @project.groupId@
     name: @project.name@
     version: @project.version@
-logging:
-  file: twitterwall.log
+#logging:
+#  file: twitterwall.log
 management:
   address: 127.0.0.1
   context-path: "/manage"
@@ -78,8 +78,7 @@ twitterwall:
       maxIdleTime: 120
   frontend:
     contextTest: ${TWITTERWALL_CONTEXT_TEST}
-    controller:
-      fetchUsersFromDefinedUserList: true
+    fetchUsersFromDefinedUserList: true
     idGoogleAnalytics: ${TWITTERWALL_GOOGLE_ANALYTICS_ID}
     imprintScreenName: ${TWITTERWALL_INFO_IMPRINT_SCREEN_NAME}
     imprintSubtitle: "www.natural-born-coder.de <br/> twitterwall-port80guru.herokuapp.com"
@@ -89,6 +88,26 @@ twitterwall:
     theme: ${TWITTERWALL_THEME}
     loginUsername: ${TWITTERWALL_LOGIN_USERNAME}
     loginPassword: ${TWITTERWALL_LOGIN_PASSWORD}
+    webSecurityConfigPublicPaths:
+      - "/"
+      - "/tweet/all"
+      - "/user/*"
+      - "/user/screenName/*"
+      - "/user/list/tweets"
+      - "/hashtag/overview"
+      - "/hashtag/*"
+      - "/hashtag/text/*"
+      - "/imprint"
+      - "/css/*"
+      - "/css/**"
+      - "/favicon/*"
+      - "/favicon/**"
+      - "/js/*"
+      - "/js/**"
+      - "/map-icons/*"
+      - "/map-icons/**"
+      - "/webjars/*"
+      - "/webjars/**"
   mq:
     starttask:
       time:
@@ -102,50 +121,221 @@ twitterwall:
     allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
     allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
     allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
-    fetchUserList:
-      allow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
-      name: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    fetchUserListAllow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
+    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
     skipFortesting: false
-    facade:
-      idTwitterToFetchForTweetTest:
-        - 876329508009279488
-        - 876356335784394752
-        - 876676270913880066
-        - 876566077836337152
-        - 876563676395962368
-        - 876514968933478400
-        - 876514568671023104
-        - 876513930478313472
-        - 876510758632386563
-        - 876496934676180992
-      idTwitterToFetchForUserControllerTest:
-        #t3c_berlin
-        - 876433563561938944
-        #Codemonkey1988
-        - 876456051016597504
-        #Walter_kran
-        - 876420491329892354
-        #tobenschmidt
-        - 876425220147564544
-        #Oliver1973
-        - 876819177746649088
-        #wowa_TYPO3
-        - 876514968933478400
-        #dirscherl17
-        - 876441863191920641
-        #Markus306
-        - 876441015523192832
-        #mattLefaux
-        - 876440419416109056
-      screenNamesToFetchForUserControllerTest:
-        - t3c_berlin
-        - Codemonkey1988
-        - Walter_kran
-        - tobenschmidt
-        - Oliver1973
-        - wowa_TYPO3
-        - dirscherl17
-        - Markus306
-        - mattLefaux
+  testdata:
+    oodm:
+      entities:
+        hashtag:
+        media:
+        mention:
+        task:
+        taskhistory:
+        tickersymbol:
+        tweet:
+          idTwitter:
+            - 892553199974051840
+            - 892553162351104000
+            - 892553014896209920
+            - 892552353399934978
+            - 892552210428702721
+            - 892551293587292164
+            - 892550794662293504
+            - 892550756007419904
+            - 892549571653640197
+            - 892549439499493376
+            - 892548971725324292
+            - 892545231819862017
+            - 892544854055542785
+            - 892544476165660674
+            - 892544026913538048
+            - 892543813574578176
+            - 892517820147396608
+            - 892460788731977728
+            - 892411864394674177
+            - 892233432482193409
+            - 892057269130731526
+            - 892053994893213696
+            - 876676270913880066
+            - 876566077836337152
+            - 876563676395962368
+            - 876356335784394752
+            - 876329508009279488
+        url:
+          url:
+            - "http://t.co/hIxL9WeoP1"
+            - "http://t.co/FGRp2dcyII"
+            - "https://t.co/t72OfGzzfd"
+            - "http://t.co/gnmbZ3HLPC"
+            - "http://t.co/5uLiz5mReg"
+            - "https://t.co/Lp00eOlYYK"
+            - "https://t.co/4g5pdzrWkM"
+            - "https://t.co/feV9khihK3"
+            - "https://t.co/Lq9HDdbM1S"
+            - "http://t.co/ZK8jQ2KEJD"
+            - "https://t.co/uzzouytYxh"
+            - "http://t.co/7ccMD0G00p"
+            - "http://t.co/mNdNHD0dLO"
+            - "https://t.co/lQlse7u93G"
+            - "https://t.co/f2vtNkiwTJ"
+            - "http://t.co/sgSySSyjol"
+            - "https://t.co/Fb3UEeVWWk"
+            - "https://t.co/n9LlZXFjTc"
+            - "http://t.co/a7oWdQhTin"
+            - "http://t.co/8EuxwYs0va"
+            - "http://t.co/75Hf3JV6JU"
+            - "https://t.co/qIDUMVN3WY"
+            - "https://t.co/kM9PIn3BgS"
+            - "https://t.co/46Dz7qCB8L"
+            - "http://t.co/RzkVNLQLx6"
+            - "http://t.co/nWxOAD6WNC"
+            - "http://t.co/9YEDGUjbqK"
+            - "https://t.co/lQlse7u93G"
+            - "https://t.co/4tDiIJ74eR"
+            - "https://t.co/xnOcVzUTkm"
+            - "https://t.co/Ycl7ZCbRsy"
+            - "https://t.co/N7Rq7beH8n"
+            - "https://t.co/okIuRGVRi1"
+            - "https://t.co/OP7oBmBA3T"
+            - "http://t.co/N0wDJifTl8"
+            - "https://t.co/NWnpbiSrFg"
+            - "http://t.co/yspEKRBcSw"
+            - "https://t.co/MuVYy9ahOi"
+            - "https://t.co/HQpP0PXtCY"
+            - "http://t.co/9P2qeHaGH7"
+            - "http://t.co/tjFrOTqr1l"
+            - "https://t.co/vFHaMjhQxK"
+            - "http://t.co/TC1JsRY0sY"
+            - "https://t.co/DWliJ3cEUT"
+            - "https://t.co/Yfcyk3aqh1"
+            - "https://t.co/5s5ggTRpIX"
+            - "https://t.co/z0lOKQCs0y"
+            - "https://t.co/gnmbZ3qaY4"
+            - "http://t.co/9Ct4HFvTSM"
+            - "http://t.co/gnmbZ3qaY4"
+            - "http://t.co/CudjEZGLVT"
+            - "http://t.co/imtLrCUAko"
+            - "https://t.co/RvKQvMMpzF"
+            - "https://t.co/7haKo3blhj"
+            - "http://t.co/MALJQIyYrt"
+            - "https://t.co/4HBxydWdIE"
+            - "https://t.co/hMMJBGFFKR"
+            - "https://t.co/cbsEBiSW2E"
+        urlcache:
+        user:
+          idTwitter:
+            #t3c_berlin
+            # - 876433563561938944
+            #Codemonkey1988
+            # - 876456051016597504
+            #Walter_kran
+            # - 876420491329892354
+            #tobenschmidt
+            #- 876425220147564544
+            #Oliver1973
+            #- 876819177746649088
+            #wowa_TYPO3
+            #- 876514968933478400
+            #dirscherl17
+            #- 876441863191920641
+            #Markus306
+            #- 876441015523192832
+            #mattLefaux
+            #- 876440419416109056
+            #protos1575
+            - 2330581648
+            #tobenschmidt
+            - 177242614
+            #sirdiego
+            - 16235243
+            #port80guru
+            - 18332907
+            #Markus306
+            - 14100660
+            #mrsharkwhite
+            - 349208705
+            #wowa_TYPO3
+            - 28753358
+            #t3c_berlin
+            - 245287738
+            #cpsitgmbh
+            - 135916714
+            #Cabanaramma
+            - 76700624
+            #TYPO3Ruhr
+            - 76901331
+          screenName:
+            - t3c_berlin
+            - Codemonkey1988
+            - Walter_kran
+            - tobenschmidt
+            - Oliver1973
+            - wowa_TYPO3
+            - dirscherl17
+            - Markus306
+            - mattLefaux
+            - protos1575
+            - sirdiego
+            - port80guru
+            - mrsharkwhite
+            - cpsitgmbh
+            - Cabanaramma
+            - TYPO3Ruhr
+            - hypersistence
+            - vlad_mihalcea
+            - Java_EE
+            - JavaOOQ
+            - java
+            - AdamBien
+            - olivergierke
+            - JavaPerformance
+            - JavaMagazin
+            - jcon_conference
+            - JavaBot_
+            - JavaUnofficial
+            - Hibernate
+          descriptions:
+            - "Webentwickler @cron_eu, Stuttgart #T3Rookies #TYPO3"
+            - "Neos, Flow and TYPO3 development @portachtzig_ Berlin"
+            - "16.–18. Juni 2017 | DAS TYPO3-Community-Event in Berlin | Bleibt auf dem Laufenden und folgt uns!"
+            - "Agentur für effiziente Kommunikation und E-Business"
+            - "Webentwickler"
+            - "Freelance Frontend developer and TYPO3 integrator. Passionate about punk and ska music. SEGA fanboy."
+            - "Webentwickler. Interessiert an Musik, Filmen und Technik"
+            - "Davitec ist Dienstleister für individuelle Softwareentwicklung und ermöglicht Unternehmen eine erfolgreiche digitale Transformation."
+            - "HSV, Musik, TYPO3"
+            - "Netzwerk von TYPO3-Anwendern in der Ruhrregion und darüber hinaus - monatliche Treffen, gegenseitige Unterstützung und Freude an der Arbeit mit dem CMS TYPO3"
+            - "#TYPO3 und #Magento Agentur aus Jena • TYPO3 Certified Developer • TYPO3 Silver Member • TYPO3 Specialist • Magento Certified Developer"
+            - "Age: 43; married; 1 son (Florian) and 1 daughter (Vanessa); Work @Mittwald CM Service"
+            - "Coding/consulting for @TYPO3, in PHP and Scala, Alumnus of @KITKarlsruhe, Linux user, occasionally doing non-IT stuff."
+            - "arndtteunissen ist eine strategische Marken- und Designagentur. Unsere wichtigste Kompetenz besteht in der Entwicklung von Corporate Identity Strategien."
+            - "Entwickler @slubdresden. Full-Stack bei @literaturport & @dichterlesen. #AngularJS & #TYPO3. #AvGeek! #hahohe"
+            - "TYPO3 Developer"
+            - "TYPO3 Dev, nerds host ;-) and technology addicted from Dresden Germany"
+            - "yow? (="
+            - "Father of two sons, Backend and mobile developer and loving  products..."
+            - "Webdeveloper bei https://t.co/1KJ6Sdx0jZ #TYPO3 / Youtube: https://t.co/rdYKUVG73s / Videotraining TYPO3 8 LTS: https://t.co/6EBbUNsV75"
+            - "Beratung | Design | Entwicklung | Redaktion | Schulungen | Betrieb"
+            - "Mama vom Großen und Kleinen | TYPO3 Active Contributer | Glücklich"
+            - "Online-Marketing-Berater und Google Partner"
+            - "Inhaber und Geschäftsführer bei sgalinski Internet Services (Impressum: https://t.co/Hy494B8JlP)"
+            - "Internet, Intranet, Extranet"
+            - "TYPO3 Entwickler, Rollenspieler und Mittelalter-Freak"
+            - "Wer nicht lebt, hat nichts zu befürchten."
+            - "TYPO3 Addict, Web-Developer @in2code_de, Münchner, My Blogs: bbq-jungle.de"
+            - "CEO TYPO3 GmbH"
+            - "Wir glauben an die Stärke von Bildern. Die Kraft eines Wortes. Und an Fortschritt durch Technologie."
+            - "Webdeveloper, UX and UI Expert, TYPO3-Developer"
+            - "Zu allem 'ne Meinung! Statements & Kommentare. Papa. Info- & Medienjunkie. fotobegeistert & reisefreudig & ein @schnittsteller"
+            - "Webentwicklung, TYPO3, Online-Kommunikation und was mein Leben sonst noch so hergibt...."
+            - "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting"
+            - "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh"
+---
+spring:
+  profiles: testing
+  datasource:
+    url: ${DATABASE_URL_TEST}
+
 
