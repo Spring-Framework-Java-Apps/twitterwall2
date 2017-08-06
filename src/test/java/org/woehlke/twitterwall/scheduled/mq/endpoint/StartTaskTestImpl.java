@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -98,6 +99,23 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    //TODO: #229 https://github.com/phasenraum2010/twitterwall2/issues/229
+    @Ignore
+    @Test
+    @Override
+    public void removeOldDataFromStorage() throws Exception {
+        String msg = "removeOldDataFromStorage: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.removeOldDataFromStorage();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
         Assert.assertTrue(ok);
         log.info(msg+"FINISHED TEST");
     }

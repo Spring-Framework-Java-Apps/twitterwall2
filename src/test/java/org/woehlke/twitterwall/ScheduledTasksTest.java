@@ -36,4 +36,9 @@ public class ScheduledTasksTest {
     public void fetchUsersFromDefinedUserList() throws Exception {
         scheduledTasks.fetchUsersFromDefinedUserList();
     }
+
+    @Test
+    public void removeOldDataFromStorage() throws Exception {
+        scheduledTasks.removeOldDataFromStorage();
+    }
 }

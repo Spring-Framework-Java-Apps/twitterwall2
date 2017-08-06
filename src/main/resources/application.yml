@@ -18,8 +18,8 @@ info:
     groupId: @project.groupId@
     name: @project.name@
     version: @project.version@
-#logging:
-#  file: twitterwall.log
+logging:
+  file: test/twitterwall.log.txt
 management:
   address: 127.0.0.1
   context-path: "/manage"
@@ -124,6 +124,7 @@ twitterwall:
     fetchUserListAllow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
     fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
+    removeOldDataFromStorageAllow: ${TWITTERWALL_SCHEDULER_ALLOW_REMOVE_OLD_DATA_FROM_STORAGE}
     skipFortesting: false
   testdata:
     oodm:
@@ -335,6 +336,11 @@ twitterwall:
 ---
 spring:
   profiles: testing
+  datasource:
+    url: ${DATABASE_URL_TEST}
+---
+spring:
+  profiles: travis
   datasource:
     url: ${DATABASE_URL_TEST}
 

@@ -19,7 +19,7 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
 
 @Component("mqCreateTestDataForTweetsSplitter")
 public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSplitter {
@@ -60,7 +60,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
             if(tweetPers == null){
                 tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
             } else {
-                if(tweetPers.getTwitterApiCaching().isCached(task.getTaskType(),ZWOELF_STUNDEN)) {
+                if(tweetPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     TweetMessage msg = new TweetMessage(msgIn,tweetPers);
                     Message<TweetMessage> mqMessageOut =
                             MessageBuilder.withPayload(msg)

@@ -13,7 +13,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
 
 /**
  * Created by tw on 09.07.17.
@@ -36,7 +36,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     log.debug(msg + " found: " + urlPers);
                     if (urlPers.isUrlAndExpandedTheSame() || urlPers.isRawUrlsFromDescription()) {
                         log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.getUniqueId());
-                        if (urlPers.getTwitterApiCaching().isCached(task.getTaskType(), ZWOELF_STUNDEN)) {
+                        if (urlPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                             return urlPers;
                         } else {
                             Url myTransientUrl = twitterUrlService.fetchTransientUrl(url, task);

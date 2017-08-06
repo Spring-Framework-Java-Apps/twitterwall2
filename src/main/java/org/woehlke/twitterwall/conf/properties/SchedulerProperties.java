@@ -36,6 +36,9 @@ public class SchedulerProperties {
     @NotNull
     private String fetchUserListName;
 
+    @NotNull
+    private Boolean removeOldDataFromStorageAllow;
+
     public Boolean getAllowFetchTweetsFromTwitterSearch() {
         return allowFetchTweetsFromTwitterSearch;
     }
@@ -98,5 +101,13 @@ public class SchedulerProperties {
 
     public void setFetchUserListName(String fetchUserListName) {
         this.fetchUserListName = fetchUserListName;
+    }
+
+    public Boolean getRemoveOldDataFromStorageAllow() {
+        return removeOldDataFromStorageAllow;
+    }
+
+    public void setRemoveOldDataFromStorageAllow(Boolean removeOldDataFromStorageAllow) {
+        this.removeOldDataFromStorageAllow = removeOldDataFromStorageAllow;
     }
 }

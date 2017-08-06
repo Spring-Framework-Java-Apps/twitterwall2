@@ -14,14 +14,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
     </parent>
 
     <organization>
         <name>Thomas Woehlke</name>
         <url>https://twitter.com/ThomasWoehlke</url>
     </organization>
+
     <inceptionYear>2017</inceptionYear>
+
     <scm>
         <url>https://github.com/phasenraum2010/twitterwall2.git</url>
         <connection>scm:git:https://github.com/phasenraum2010/twitterwall2.git</connection>
@@ -33,12 +35,14 @@
         <system>GitHub</system>
         <url>https://github.com/phasenraum2010/twitterwall2/issues</url>
     </issueManagement>
+
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file://${project.basedir}/docs2</url>
+            <url>file://${project.basedir}/target/site-deployed</url>
         </site>
     </distributionManagement>
+
     <developers>
         <developer>
             <name>Thomas Wöhlke</name>
@@ -46,10 +50,11 @@
             <url>https://github.com/phasenraum2010</url>
         </developer>
     </developers>
+
     <licenses>
         <license>
-            <name>GNU General Public License v2.0</name>
-            <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
 
@@ -88,16 +93,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mobile</artifactId>
         </dependency>
-        <!--
-        <dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -186,6 +181,11 @@
         <plugins>
 
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -202,8 +202,27 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>src-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- use copy-dependencies instead if you don't want to explode the sources -->
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+                            <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
                 <configuration>
                     <!--
                     <linksource>true</linksource>
@@ -213,17 +232,26 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>javadoc-javadoc-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <configuration>
+                            <!--
+                            <linksource>true</linksource>
+                            -->
+                            <maxmemory>2048m</maxmemory>
+                            <source>1.8</source>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                            <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <!-- Fuer Continous-Integration et al.: Auschecken von Subversion mittels
                 Maven. http://maven.apache.org/scm/ -->
             <plugin>
@@ -383,6 +411,7 @@
     </build>
 
     <profiles>
+
         <profile>
             <id>default</id>
             <activation>
@@ -402,6 +431,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>testing</id>
             <build>
@@ -420,6 +450,26 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>travis</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>travis</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
 

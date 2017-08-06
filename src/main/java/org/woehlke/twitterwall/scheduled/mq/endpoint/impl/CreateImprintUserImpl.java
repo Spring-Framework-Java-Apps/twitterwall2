@@ -13,7 +13,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
-import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
 
 @Component("mqCreateImprintUser")
 public class CreateImprintUserImpl implements CreateImprintUser {
@@ -39,7 +39,7 @@ public class CreateImprintUserImpl implements CreateImprintUser {
         User imprintUser = userService.findByScreenName(screenName);
         if(imprintUser==null){
             return this.getMessageOut(mqMessageIn);
-        } else if(imprintUser.getTwitterApiCaching().isCached(receivedMessage.getTaskType(),ZWOELF_STUNDEN)){
+        } else if(imprintUser.getTwitterApiCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)){
             UserMessage outMsg = new UserMessage(receivedMessage,screenName,imprintUser);
             Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
                     .setHeader("twitter_profile_id", imprintUser.getIdTwitter())

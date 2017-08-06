@@ -17,4 +17,6 @@ public interface AsyncStartTask {
     Task createTestDataForTweets();
 
     Task createTestDataForUser();
+
+    Task removeOldDataFromStorage();
 }

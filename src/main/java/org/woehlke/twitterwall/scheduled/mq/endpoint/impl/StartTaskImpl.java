@@ -63,6 +63,12 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
+    public Task removeOldDataFromStorage() {
+        TaskType taskType = TaskType.REMOVE_OLD_DATA_FROM_STORAGE;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
     public User createImprintUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
         SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;
