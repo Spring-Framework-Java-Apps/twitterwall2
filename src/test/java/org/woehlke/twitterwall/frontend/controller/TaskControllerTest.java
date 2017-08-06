@@ -121,7 +121,7 @@ public class TaskControllerTest {
     public void createTestDataTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "/task/start/taskStarted"))
+                .andExpect(view().name( "/task/start/createTestData"))
                 .andExpect(model().attributeExists("taskTweets"))
                 .andExpect(model().attributeExists("taskUsers"))
                 .andExpect(model().attributeExists("page"))
