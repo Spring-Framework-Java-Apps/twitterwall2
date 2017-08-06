@@ -14,8 +14,6 @@ public interface TwitterApiService {
 
     Tweet findOneTweetById(long tweetTwitterId);
 
-    //List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds);
-
     TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId);
 
     TwitterProfile getUserProfileForScreenName(String screenName);

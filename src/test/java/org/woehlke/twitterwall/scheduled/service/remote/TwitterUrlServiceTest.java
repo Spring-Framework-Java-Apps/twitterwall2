@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend;
+package org.woehlke.twitterwall.scheduled.service.remote;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,7 +23,6 @@ import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
-import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
 
 import java.io.IOException;
 import java.net.URI;

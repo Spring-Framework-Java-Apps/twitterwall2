@@ -13,12 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
-import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
@@ -52,14 +50,12 @@ public class HashTagControllerTest {
     @Autowired
     private PrepareDataTest prepareDataTest;
 
-    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    //@Commit
     @Test
     public void setupTestData(){
         String msg = "setupTestData: ";
@@ -69,7 +65,6 @@ public class HashTagControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getAllTest() throws Exception {
         String msg ="getAllTest: ";
@@ -101,7 +96,6 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    //@Commit
     @Test
     public void findByIdTest() throws Exception {
         String msg ="findByIdTest: ";
@@ -127,7 +121,6 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    //@Commit
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {
         String msg ="hashTagFromTweetsAndUsersTest: ";
@@ -153,7 +146,6 @@ public class HashTagControllerTest {
     }
 
     @WithAnonymousUser
-    //@Commit
     @Test
     public void hashTagsOverview()  throws Exception {
         String msg ="hashTagsOverview: ";

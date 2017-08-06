@@ -33,6 +33,7 @@ import java.util.List;
 /**
  * Created by tw on 13.07.17.
  */
+@Deprecated
 @Component
 public class PrepareDataTestImpl implements PrepareDataTest {
 

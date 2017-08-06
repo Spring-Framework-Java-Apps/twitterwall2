@@ -10,9 +10,6 @@ import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
@@ -25,8 +22,6 @@ import java.util.List;
  */
 
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class TwitterApiServiceImpl implements TwitterApiService {
 
 
@@ -47,7 +42,6 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             }
         } catch (Exception e) {
             log.error(msg + e.getMessage());
-            //e.printStackTrace();
             return new ArrayList<>();
         }
 
@@ -71,25 +65,6 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         }
     }
 
-    /*
-    @Override
-    public List<TwitterProfile> getUserProfilesForTwitterIds(long... userProfileTwitterIds) {
-        String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterIds+" : ";
-        log.debug(msg);
-        List<TwitterProfile> result;
-        try {
-            result = getTwitterProxy().userOperations().getUsers(userProfileTwitterIds);
-            msg += " result: ";
-            log.debug(msg+" size: "+result.size());
-        } catch (Exception e){
-            result = null;
-            log.error(msg + e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
-    }
-    */
-
     @Override
     public TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId) {
         String msg = MSG+"getUserProfileForTwitterId: "+userProfileTwitterId+" : ";
@@ -104,7 +79,6 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             return result;
         } catch (Exception e) {
             log.error(msg + e.getMessage());
-            //e.printStackTrace();
             return null;
         }
     }
@@ -126,7 +100,6 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         } catch (Exception e) {
             log.debug(msg + e.getMessage());
             return null;
-            //e.printStackTrace();
         }
     }
 
@@ -140,9 +113,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " result.size: " + result.size());
             return result;
         } catch (Exception e) {
-            result = new ArrayList<>();
             log.debug(msg + e.getMessage());
-            //e.printStackTrace();
             return new ArrayList<>();
         }
     }
