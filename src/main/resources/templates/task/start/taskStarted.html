@@ -11,7 +11,23 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Backend Task Started.</h3>
-                <div>
+                <div class="well">
+                    <ul>
+                        <li>
+                            <a href="/task/0" th:href="@{|/task/${task.id}|}">
+                                <i class="fa fa-check-square" aria-hidden="true"></i>
+                                <span th:text="${task.id}">id</span>
+                            </a>
+                        </li>
+                        <li th:if="${task.timeStarted}">timeStarted: <span th:text="${#dates.format(task.timeStarted,'HH:mm:ss (dd.MM.yyyy)')}">timeStarted</span></li>
+                        <li th:if="${task.timeLastUpdate}">timeLastUpdate: <span th:text="${#dates.format(task.timeLastUpdate,'HH:mm:ss (dd.MM.yyyy)')}">timeLastUpdate</span></li>
+                        <li th:if="${task.timeFinished}">timeFinished: <span th:text="${#dates.format(task.timeFinished,'HH:mm:ss (dd.MM.yyyy)')}">timeFinished</span></li>
+                        <li th:if="${task.taskType}">taskType: <span th:text="${task.taskType}">taskType</span></li>
+                        <li th:if="${task.taskStatus}">taskStatus: <span th:text="${task.taskStatus}">taskStatus</span></li>
+                        <li th:if="${task.sendType}">sendType: <span th:text="${task.sendType}">sendType</span></li>
+                    </ul>
+                </div>
+                <div class="well">
                     <a href="/task/all" th:href="@{/task/all}">
                         <i class="fa fa-check-square" aria-hidden="true"></i>
                         <span>Tasks</span>
