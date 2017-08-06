@@ -27,7 +27,7 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateUserSplitter")
@@ -72,7 +72,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
         while (hasNext) {
             Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
             for(User user:userProfileTwitterIds.getContent()){
-                if(!user.getTwitterApiCaching().isCached(taskType,ZWOELF_STUNDEN)){
+                if(!user.getTwitterApiCaching().isCached(taskType, TWELVE_HOURS)){
                     loopId++;
                     loopAll++;
                     log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());

@@ -186,6 +186,11 @@
         <plugins>
 
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -202,8 +207,27 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>src-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- use copy-dependencies instead if you don't want to explode the sources -->
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+                            <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
                 <configuration>
                     <!--
                     <linksource>true</linksource>
@@ -213,17 +237,26 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>javadoc-javadoc-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <configuration>
+                            <!--
+                            <linksource>true</linksource>
+                            -->
+                            <maxmemory>2048m</maxmemory>
+                            <source>1.8</source>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                            <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <!-- Fuer Continous-Integration et al.: Auschecken von Subversion mittels
                 Maven. http://maven.apache.org/scm/ -->
             <plugin>
@@ -383,6 +416,7 @@
     </build>
 
     <profiles>
+
         <profile>
             <id>default</id>
             <activation>
@@ -402,6 +436,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>testing</id>
             <build>

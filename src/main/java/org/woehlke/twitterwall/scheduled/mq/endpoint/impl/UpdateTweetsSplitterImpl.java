@@ -23,7 +23,7 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.ScheduledTasks.ZWOELF_STUNDEN;
+import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
 import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateTweetsSplitter")
@@ -62,7 +62,7 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
         while(hasNext) {
             Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
             for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
-                if(!tweetTwitterId.getTwitterApiCaching().isCached(task.getTaskType(),ZWOELF_STUNDEN)) {
+                if(!tweetTwitterId.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     lfdNr++;
                     all++;
                     log.debug("### tweetService.findAllTwitterIds from DB (" + lfdNr + "): " + tweetTwitterId.getIdTwitter());
