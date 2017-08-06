@@ -21,6 +21,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,14 +54,12 @@ public class TaskControllerTest {
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -70,7 +69,6 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
@@ -91,12 +89,13 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getTaskByIdTest() throws Exception {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
-        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_SEARCH,countedEntities);
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
+        Task task = taskService.create(msg,taskType,sendType,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
@@ -116,7 +115,6 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -140,7 +138,6 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getOnListRenewTest() throws Exception {
         String msg = "getOnListRenewTest: ";

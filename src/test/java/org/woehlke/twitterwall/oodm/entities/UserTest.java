@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.util.Date;
 
@@ -17,7 +18,6 @@ public class UserTest implements DomainObjectMinimalTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -28,11 +28,12 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String descriptionTask = "start: ";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus,sendType, timeStarted,timeLastUpdate,timeFinished);
 
         User user1 = User.getDummyUserForScreenName(screenName,task);
 
@@ -60,7 +61,6 @@ public class UserTest implements DomainObjectMinimalTest {
         log.info(msg+"------------------------------------------------");
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {
@@ -75,11 +75,12 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String descriptionTask = "start: ";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
 
         Assert.assertFalse(msg,User.isValidScreenName(invalidScreenName));
 

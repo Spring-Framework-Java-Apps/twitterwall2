@@ -10,11 +10,13 @@ public class TaskMessage implements Serializable {
     protected final long taskId;
     protected final TaskType taskType;
     protected final Date timeStarted;
+    protected final SendType sendType;
 
-    public TaskMessage(long taskId, TaskType taskType,Date timeStarted) {
+    public TaskMessage(long taskId, TaskType taskType, SendType sendType,Date timeStarted) {
         this.taskId = taskId;
         this.taskType = taskType;
-        this.timeStarted=timeStarted;
+        this.sendType = sendType;
+        this.timeStarted = timeStarted;
     }
 
     public long getTaskId() {
@@ -23,6 +25,10 @@ public class TaskMessage implements Serializable {
 
     public TaskType getTaskType() {
         return taskType;
+    }
+
+    public SendType getSendType() {
+        return sendType;
     }
 
     public Date getTimeStarted() {
@@ -36,25 +42,28 @@ public class TaskMessage implements Serializable {
 
         TaskMessage that = (TaskMessage) o;
 
-        if (getTaskId() != that.getTaskId()) return false;
-        if (getTaskType() != that.getTaskType()) return false;
-        return getTimeStarted() != null ? getTimeStarted().equals(that.getTimeStarted()) : that.getTimeStarted() == null;
+        if (taskId != that.taskId) return false;
+        if (taskType != that.taskType) return false;
+        if (timeStarted != null ? !timeStarted.equals(that.timeStarted) : that.timeStarted != null) return false;
+        return sendType == that.sendType;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getTaskId() ^ (getTaskId() >>> 32));
-        result = 31 * result + (getTaskType() != null ? getTaskType().hashCode() : 0);
-        result = 31 * result + (getTimeStarted() != null ? getTimeStarted().hashCode() : 0);
+        int result = (int) (taskId ^ (taskId >>> 32));
+        result = 31 * result + (taskType != null ? taskType.hashCode() : 0);
+        result = 31 * result + (timeStarted != null ? timeStarted.hashCode() : 0);
+        result = 31 * result + (sendType != null ? sendType.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "TaskMessage{" +
-            "taskId=" + taskId +
-            ", taskType=" + taskType +
-            ", timeStarted=" + timeStarted +
-            '}';
+                "taskId=" + taskId +
+                ", taskType=" + taskType +
+                ", timeStarted=" + timeStarted +
+                ", sendType=" + sendType +
+                '}';
     }
 }

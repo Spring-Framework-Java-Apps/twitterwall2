@@ -5,6 +5,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,8 @@ import java.util.Date;
     indexes = {
         @Index(name = "idx_task_time_finished", columnList = "time_finished"),
         @Index(name = "idx_task_task_status", columnList = "task_status"),
-        @Index(name = "idx_task_task_type", columnList = "task_type")
+        @Index(name = "idx_task_task_type", columnList = "task_type"),
+        @Index(name = "idx_task_send_type", columnList = "send_type"),
     }
 )
 @NamedQueries({
@@ -56,6 +58,11 @@ public class Task implements DomainObjectMinimal<Task> {
     private TaskStatus taskStatus = TaskStatus.READY;
 
     @NotNull
+    @Column(name="send_type",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SendType sendType = SendType.NULL;
+
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_started",nullable = false)
     private Date timeStarted = new Date();
@@ -72,17 +79,11 @@ public class Task implements DomainObjectMinimal<Task> {
     private Task() {
     }
 
-    /*
-    public Task(String description,TaskType taskType) {
-        this.taskType = taskType;
-        this.description = description;
-    }
-    */
-
-    public Task(String description, TaskType taskType, TaskStatus taskStatus, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, SendType sendType, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
         this.description = description;
         this.taskType = taskType;
         this.taskStatus = taskStatus;
+        this.sendType = sendType;
         this.timeStarted = timeStarted;
         this.timeLastUpdate = timeLastUpdate;
         this.timeFinished = timeFinished;
@@ -154,6 +155,14 @@ public class Task implements DomainObjectMinimal<Task> {
         this.taskStatus = taskStatus;
     }
 
+    public SendType getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(SendType sendType) {
+        this.sendType = sendType;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -178,13 +187,15 @@ public class Task implements DomainObjectMinimal<Task> {
     @Override
     public String toString() {
         return "Task{" +
-            "id=" + id +
-            ", taskType=" + taskType +
-            ", taskStatus=" +taskStatus +
-            ", timeStarted=" + timeStarted +
-            ", timeLastUpdate=" + timeLastUpdate +
-            ", timeFinished=" + timeFinished +
-            '}';
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", taskType=" + taskType +
+                ", taskStatus=" + taskStatus +
+                ", sendType=" + sendType +
+                ", timeStarted=" + timeStarted +
+                ", timeLastUpdate=" + timeLastUpdate +
+                ", timeFinished=" + timeFinished +
+                '}';
     }
 
     @Override

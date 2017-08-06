@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.util.Date;
 
@@ -55,13 +56,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public Task create(String msg,TaskType type,CountedEntities countedEntities) {
+    public Task create(String msg, TaskType type, SendType sendType, CountedEntities countedEntities) {
         String descriptionTask = "start: "+msg;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
         task = taskRepository.save(task);
         Date now = new Date();
         TaskHistory event = new TaskHistory("create: "+msg,TaskStatus.READY, TaskStatus.READY,now,task,countedEntities);

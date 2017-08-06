@@ -12,7 +12,6 @@ import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 /**
  * Created by tw on 10.06.17.
  */
-
 @Component
 public class ScheduledTasks {
 

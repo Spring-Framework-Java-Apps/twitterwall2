@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.util.Date;
 
@@ -14,7 +15,6 @@ public class TaskHistoryTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryTest.class);
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -22,12 +22,13 @@ public class TaskHistoryTest implements DomainObjectMinimalTest  {
 
         String descriptionTask = "Make it so, Scotty";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
         long taskId = 222L;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,taskType,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,taskType,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
         task.setId(taskId);
 
         String description = "Beam me up, Scotty";
@@ -46,7 +47,6 @@ public class TaskHistoryTest implements DomainObjectMinimalTest  {
         Assert.assertEquals(msg,myUniqueId,taskHistory.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {
@@ -54,12 +54,13 @@ public class TaskHistoryTest implements DomainObjectMinimalTest  {
 
         String descriptionTask = "Make it so, Scotty";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
         long taskId = 222L;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,taskType,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,taskType,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
         task.setId(taskId);
 
         String description = "Beam me up, Scotty";
