@@ -338,5 +338,10 @@ spring:
   profiles: testing
   datasource:
     url: ${DATABASE_URL_TEST}
+---
+spring:
+  profiles: travis
+    datasource:
+      url: ${DATABASE_URL_TEST}
 
 
