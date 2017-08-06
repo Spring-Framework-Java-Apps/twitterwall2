@@ -11,35 +11,37 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div th:if="${param.error}">
-                    <div class="alert alert-success" role="alert">
-                        <span>Invalid username and password.</span>
+                <div class="well">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-success" role="alert">
+                            <span>Invalid username and password.</span>
+                        </div>
                     </div>
+                    <div th:if="${param.logout}">
+                        <div class="alert alert-danger" role="alert">
+                            <span>You have been logged out.</span>
+                        </div>
+                    </div>
+                    <form th:action="@{/login}" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="username-input" class="col-sm-2 control-label">User Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="username" id="username-input" class="form-control" placeholder="User Name"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="username-input" class="col-sm-2 control-label">Password:</label>
+                            <div class="col-sm-10">
+                                <input type="password" name="password" id="password-input" class="form-control" placeholder="Password"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button class="btn btn-primary form-control">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div th:if="${param.logout}">
-                    <div class="alert alert-danger" role="alert">
-                        <span>You have been logged out.</span>
-                    </div>
-                </div>
-                <form th:action="@{/login}" method="post" class="form-horizontal">
-                    <div class="form-group">
-                        <label for="username-input" class="col-sm-2 control-label">User Name:</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="username" id="username-input" class="form-control" placeholder="User Name"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="username-input" class="col-sm-2 control-label">Password:</label>
-                        <div class="col-sm-10">
-                            <input type="password" name="password" id="password-input" class="form-control" placeholder="Password"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button class="btn btn-primary form-control">Sign In</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

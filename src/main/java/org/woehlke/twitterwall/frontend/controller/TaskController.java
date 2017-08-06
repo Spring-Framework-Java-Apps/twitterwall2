@@ -87,7 +87,7 @@ public class TaskController {
             model.addAttribute("taskTweets",null);
             model.addAttribute("taskUsers",null);
         }
-        return PATH+"/start/taskStarted";
+        return PATH+"/start/createTestData";
     }
 
     @RequestMapping("/start/user/onlist/renew")
