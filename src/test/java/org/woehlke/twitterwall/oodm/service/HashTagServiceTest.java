@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
+import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -72,5 +74,60 @@ public class HashTagServiceTest {
         Assert.assertEquals(myHashTag.getUniqueId(),myHashTagResult.getUniqueId());
         Assert.assertEquals(myHashTag.getUniqueId(),myHashTagResult.getUniqueId());
         log.debug(msg+" found: "+myHashTagResult.getText());
+    }
+
+    /**
+     *
+     * @throws Exception
+     *
+     * @see org.woehlke.twitterwall.oodm.entities.HashTag
+     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
+     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
+     * @see org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged
+     * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
+     * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
+     * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagOverview(Pageable, Pageable)
+     */
+    @Test
+    public void getHashTagOverview() throws Exception {
+        String msg = "getHashTagOverview: ";
+        int page=1;
+        int size=30;
+        Pageable pageRequestTweets = new PageRequest(page,size);
+        Pageable pageRequestUsers = new PageRequest(page,size);
+        HashTagOverviewPaged overview = hashTagService.getHashTagOverview(pageRequestTweets,pageRequestUsers);
+        Page<HashTagCounted> hashTagsTweets = overview.getHashTagsTweets();
+        Page<HashTagCounted> hashTagsUsers = overview.getHashTagsUsers();
+        for(HashTagCounted counted:hashTagsTweets){
+            log.info(msg+" hashTagsTweets: "+counted.getText());
+        }
+        for(HashTagCounted counted:hashTagsUsers){
+            log.info(msg+" hashTagsUsers: "+counted.getText());
+        }
+    }
+
+    @Test
+    public void getHashTagsTweets() throws Exception {
+        String msg = "getHashTagsTweets: ";
+        int page=1;
+        int size=30;
+        Pageable pageRequestTweets = new PageRequest(page,size);
+        Page<HashTagCounted> hashTagsTweets = hashTagService.getHashTagsTweets(pageRequestTweets);
+        for(HashTagCounted counted:hashTagsTweets){
+            log.info(msg+" hashTagsTweets: "+counted.getText());
+        }
+    }
+
+    @Test
+    public void getHashTagsUsers() throws Exception {
+        String msg = "getHashTagsUsers: ";
+        int page=1;
+        int size=30;
+        Pageable pageRequestUsers = new PageRequest(page,size);
+        Page<HashTagCounted> hashTagsUsers = hashTagService.getHashTagsUsers(pageRequestUsers);
+        for(HashTagCounted counted:hashTagsUsers){
+            log.info(msg+" hashTagsUsers: "+counted.getText());
+        }
     }
 }

@@ -13,6 +13,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -49,18 +50,31 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task createTestDataForTweets() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task createTestDataForUser() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
-        String msg = "START Task "+taskType+" via MQ by FIRE_AND_FORGET_SENDER";
+        SendType sendType = SendType.FIRE_AND_FORGET;
+        String msg = "START Task "+taskType+" via MQ by "+sendType;
         log.info(msg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, taskType, countedEntities);
-        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, task.getTimeStarted());
+        Task task = taskService.create(msg, taskType, sendType, countedEntities);
+        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, sendType, task.getTimeStarted());
         Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
                 .setHeader("task_id", task.getId())
                 .setHeader("task_uid", task.getUniqueId())
                 .setHeader("task_type", task.getTaskType())
                 .setHeader("time_started", task.getTimeStarted().getTime())
-                .setHeader("send_type", "async")
+                .setHeader("send_type", sendType)
                 .build();
         MessagingTemplate mqTemplate = new MessagingTemplate();
         mqTemplate.send(executorChannelForAsyncStart, mqMessage);

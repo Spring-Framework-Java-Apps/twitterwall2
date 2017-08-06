@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
+//import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.frontend.model.HashTagOverview;
+import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
+//import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverview;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+//import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
@@ -124,15 +126,22 @@ public class HashTagController {
     }
 
     @RequestMapping(path="/overview")
-    public String hashTagsOverview(Model model) {
+    public String hashTagsOverview(
+            @RequestParam(name= "pageTweet", defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
+            @RequestParam(name= "pageUser", defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
+            Model model) {
         String msg = "/hashtag/overview ";
         String title = "HashTags";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.HASHTAG.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        HashTagOverview overview = hashTagsOverviewHelper.getHashTagOverview();
-        model.addAttribute("hashTagsTweets", overview.getHashTagsTweets());
-        model.addAttribute("hashTagsUsers", overview.getHashTagsUsers());
+        int size= frontendProperties.getPageSize() * 2;
+        Pageable pageRequestTweets = new PageRequest(pageTweet,size);
+        Pageable pageRequestUsers = new PageRequest(pageUser,size);
+        Page<HashTagCounted> hashTagsTweets = hashTagService.getHashTagsTweets(pageRequestTweets);
+        Page<HashTagCounted> hashTagsUsers = hashTagService.getHashTagsUsers(pageRequestUsers);
+        model.addAttribute("hashTagsTweets", hashTagsTweets);
+        model.addAttribute("hashTagsUsers", hashTagsUsers);
         return "hashtag/overview";
     }
 
@@ -150,7 +159,7 @@ public class HashTagController {
 
     private final ControllerHelper controllerHelper;
 
-    private final HashTagsOverviewHelper hashTagsOverviewHelper;
+    //private final HashTagsOverviewHelper hashTagsOverviewHelper;
 
     @Autowired
     public HashTagController(
@@ -159,8 +168,8 @@ public class HashTagController {
             HashTagService hashTagService,
             TweetService tweetService,
             UserService userService,
-            ControllerHelper controllerHelper,
-            HashTagsOverviewHelper hashTagsOverviewHelper
+            ControllerHelper controllerHelper/*,
+            HashTagsOverviewHelper hashTagsOverviewHelper*/
     ) {
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
@@ -168,7 +177,7 @@ public class HashTagController {
         this.tweetService = tweetService;
         this.userService = userService;
         this.controllerHelper = controllerHelper;
-        this.hashTagsOverviewHelper = hashTagsOverviewHelper;
+        //this.hashTagsOverviewHelper = hashTagsOverviewHelper;
     }
 
 }

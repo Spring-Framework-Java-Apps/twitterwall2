@@ -5,26 +5,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 
 /**
  * Created by tw on 10.06.17.
  */
-
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class ScheduledTasks {
 
     @Scheduled(fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS)
     public void fetchTweetsFromTwitterSearch() {
         String msg = "fetch Tweets From TwitterSearch ";
         if(schedulerProperties.getAllowUpdateTweets()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchTweetsFromSearch();
+            Task task = asyncStartTask.fetchTweetsFromSearch();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -32,7 +28,8 @@ public class ScheduledTasks {
     public void updateTweets() {
         String msg = "update Tweets ";
         if(schedulerProperties.getAllowUpdateTweets() && !schedulerProperties.getSkipFortesting()){
-            startTask.updateTweets();
+            Task task = asyncStartTask.updateTweets();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -40,7 +37,8 @@ public class ScheduledTasks {
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
         if(schedulerProperties.getAllowUpdateUserProfiles()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUsers();
+            Task task = asyncStartTask.updateUsers();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -48,7 +46,8 @@ public class ScheduledTasks {
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
         if(schedulerProperties.getAllowUpdateUserProfilesFromMention() && !schedulerProperties.getSkipFortesting()) {
-            startTask.updateUsersFromMentions();
+            Task task = asyncStartTask.updateUsersFromMentions();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -56,19 +55,18 @@ public class ScheduledTasks {
     public void fetchUsersFromDefinedUserList(){
         String msg = "fetch Users from Defined User List ";
         if(schedulerProperties.getFetchUserListAllow()  && !schedulerProperties.getSkipFortesting()) {
-            startTask.fetchUsersFromList();
+            Task task = asyncStartTask.fetchUsersFromList();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
     @Autowired
-    public ScheduledTasks(SchedulerProperties schedulerProperties, StartTask startTask) {
+    public ScheduledTasks(SchedulerProperties schedulerProperties, AsyncStartTask mqAsyncStartTask) {
         this.schedulerProperties = schedulerProperties;
-        this.startTask = startTask;
+        this.asyncStartTask = mqAsyncStartTask;
     }
 
     public final static long EINE_MINUTE = 60 * 1000;
-
-    public final static long FUENF_MINUTEN = 5 * EINE_MINUTE;
 
     public final static long EINE_STUNDE = 60 * EINE_MINUTE;
 
@@ -88,5 +86,5 @@ public class ScheduledTasks {
 
     private final SchedulerProperties schedulerProperties;
 
-    private final StartTask startTask;
+    private final AsyncStartTask asyncStartTask;
 }

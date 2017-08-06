@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -16,10 +13,7 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfileForScre
 /**
  * Created by tw on 11.07.17.
  */
-
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserFromMentionImpl implements StoreUserFromMention {
 
     @Override
@@ -29,7 +23,7 @@ public class StoreUserFromMentionImpl implements StoreUserFromMention {
             for (Mention mention : user.getEntities().getMentions()) {
                 String screenName = mention.getScreenName();
                 User userFromMention = storeUserProfileForScreenName.storeUserProfileForScreenName(screenName, task);
-                log.debug(msg + " userFromScreenName: " + userFromMention.toString());
+                log.debug(msg + " userFromScreenName: " + userFromMention.getUniqueId());
             }
         } catch (Exception e){
             log.error(msg + e.getMessage());

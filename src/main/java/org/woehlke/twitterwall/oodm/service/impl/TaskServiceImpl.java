@@ -16,6 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.util.Date;
 
@@ -23,7 +24,7 @@ import java.util.Date;
  * Created by tw on 09.07.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TaskServiceImpl implements TaskService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
@@ -54,13 +55,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task create(String msg,TaskType type,CountedEntities countedEntities) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+    public Task create(String msg, TaskType type, SendType sendType, CountedEntities countedEntities) {
         String descriptionTask = "start: "+msg;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
         task = taskRepository.save(task);
         Date now = new Date();
         TaskHistory event = new TaskHistory("create: "+msg,TaskStatus.READY, TaskStatus.READY,now,task,countedEntities);
@@ -70,6 +72,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task done(Task task,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);
@@ -83,6 +86,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task,Exception e,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -96,6 +100,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task, Exception e, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -109,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, Exception e,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -122,6 +128,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, Exception e, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -135,6 +142,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task event(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTimeLastUpdate(new Date());
@@ -147,6 +155,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task warn(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.WARN);
@@ -160,6 +169,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task error(Task task, String msg,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.ERROR);
@@ -173,6 +183,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task start(Task task,CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.RUNNING);
@@ -186,6 +197,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task finalError(Task task, String msg, CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINAL_ERROR);
@@ -199,6 +211,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public Task done(String logMsg, Task task, CountedEntities countedEntities) {
         TaskStatus oldStatus = task.getTaskStatus();
         task.setTaskStatus(TaskStatus.FINISHED);

@@ -15,36 +15,36 @@ public class TaskListener {
 
     @PrePersist
     public void onPrePersist(Task domainObject) {
-        log.debug("try to Persist: "+domainObject.toString());
+        log.debug("try to Persist: "+domainObject.getUniqueId());
     }
 
     @PreUpdate
     public void onPreUpdate(Task domainObject) {
-        log.debug("try to Update: "+domainObject.toString());
+        log.debug("try to Update: "+domainObject.getUniqueId());
     }
 
     @PreRemove
     public void onPreRemove(Task domainObject) {
-        log.debug("try to Remove: "+domainObject.toString());
+        log.debug("try to Remove: "+domainObject.getUniqueId());
     }
 
     @PostPersist
     public void onPostPersist(Task domainObject) {
-        log.debug("Persisted: "+domainObject.toString());
+        log.debug("Persisted: "+domainObject.getUniqueId());
     }
 
     @PostUpdate
     public void onPostUpdate(Task domainObject) {
-        log.debug("Updated: "+domainObject.toString());
+        log.debug("Updated: "+domainObject.getUniqueId());
     }
 
     @PostRemove
     public void onPostRemove(Task domainObject) {
-        log.debug("Removed: "+domainObject.toString());
+        log.debug("Removed: "+domainObject.getUniqueId());
     }
 
     @PostLoad
     public void onPostLoad(Task domainObject) {
-        log.debug("loaded: "+domainObject.toString());
+        log.debug("loaded: "+domainObject.getUniqueId());
     }
 }

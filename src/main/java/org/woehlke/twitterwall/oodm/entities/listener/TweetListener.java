@@ -14,36 +14,36 @@ public class TweetListener  {
 
   @PrePersist
   public void onPrePersist(Tweet domainObject) {
-    log.debug("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.getUniqueId());
   }
 
   @PreUpdate
   public void onPreUpdate(Tweet domainObject) {
-    log.debug("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.getUniqueId());
   }
 
   @PreRemove
   public void onPreRemove(Tweet domainObject) {
-    log.debug("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.getUniqueId());
   }
 
   @PostPersist
   public void onPostPersist(Tweet domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.getUniqueId());
   }
 
   @PostUpdate
   public void onPostUpdate(Tweet domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.getUniqueId());
   }
 
   @PostRemove
   public void onPostRemove(Tweet domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.getUniqueId());
   }
 
   @PostLoad
   public void onPostLoad(Tweet domainObject) {
-    log.debug("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.getUniqueId());
   }
 }

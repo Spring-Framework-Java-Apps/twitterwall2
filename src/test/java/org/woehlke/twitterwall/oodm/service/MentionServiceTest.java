@@ -17,10 +17,10 @@ import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-//@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
 public class MentionServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceTest.class);
@@ -34,11 +34,9 @@ public class MentionServiceTest {
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    //TODO: #198 https://github.com/phasenraum2010/twitterwall2/issues/198
     @Autowired
     private TestdataProperties testdataProperties;
 
-    //@Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(mentionService);
@@ -46,7 +44,6 @@ public class MentionServiceTest {
         Assert.assertNotNull(countedEntitiesService);
     }
 
-    //@Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -65,13 +62,13 @@ public class MentionServiceTest {
         }
     }
 
-    //@Commit
     @Test
     public void createProxyMention() throws Exception {
         String msg = "createProxyMention: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        Task task = taskService.create("MentionServiceTest."+msg,type,countedEntities);
+        SendType sendType = SendType.NO_MQ;
+        Task task = taskService.create("MentionServiceTest."+msg,type,sendType,countedEntities);
         String mentionString = "ddhgcvdghvsdhg";
         Mention mention = new Mention(task,task, mentionString);
         Mention createdMention = mentionService.createProxyMention(mention,task);
@@ -79,7 +76,6 @@ public class MentionServiceTest {
         Assert.assertTrue(createdMention.isProxy());
     }
 
-    //@Commit
     @Test
     public void getAllWithoutPersistentUser() throws Exception {
         String msg = "getAllWithoutUser: ";
@@ -94,9 +90,6 @@ public class MentionServiceTest {
         }
     }
 
-    //TODO: #215 https://github.com/phasenraum2010/twitterwall2/issues/215
-    //@Ignore
-    //@Commit
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
@@ -115,9 +108,6 @@ public class MentionServiceTest {
         }
     }
 
-    //TODO: #215 https://github.com/phasenraum2010/twitterwall2/issues/215
-    //@Ignore
-    //@Commit
     @Test
     public void findByScreenName() throws Exception {
         String msg = "findByScreenName: ";

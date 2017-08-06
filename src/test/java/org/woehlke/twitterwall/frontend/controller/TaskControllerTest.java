@@ -21,6 +21,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,14 +54,12 @@ public class TaskControllerTest {
     @Autowired
     private CountedEntitiesService countedEntitiesService;
 
-    //@Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    //@Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -70,7 +69,6 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
@@ -91,12 +89,13 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getTaskByIdTest() throws Exception {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
-        Task task = taskService.create(msg, TaskType.FETCH_TWEETS_FROM_SEARCH,countedEntities);
+        TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
+        Task task = taskService.create(msg,taskType,sendType,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
@@ -116,7 +115,6 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    //@Ignore
     @WithMockUser
     @Commit
     @Test
@@ -124,8 +122,8 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "/task/start/createTestData"))
-                .andExpect(model().attributeExists("latestTweets"))
-                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attributeExists("taskTweets"))
+                .andExpect(model().attributeExists("taskUsers"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -140,7 +138,6 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
     @Test
     public void getOnListRenewTest() throws Exception {
         String msg = "getOnListRenewTest: ";
@@ -164,13 +161,14 @@ public class TaskControllerTest {
     private final String PATH = "/task";
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
         String msg = "fetchTweetsFromTwitterSearchStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/tweets/search"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -185,13 +183,14 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateTweetsStartTaskTest() throws Exception {
         String msg = "updateTweetsStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "/task/start/renew"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -206,13 +205,14 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
         String msg = "fetchUsersFromDefinedUserListStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -227,13 +227,14 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateUserProfilesFromMentionsStartTaskTest() throws Exception {
         String msg = "updateUserProfilesFromMentionsStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 
@@ -248,13 +249,14 @@ public class TaskControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void updateUserProfilesStartTaskTest() throws Exception {
         String msg = "updateUserProfilesStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/users/mentions/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
 

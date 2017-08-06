@@ -18,9 +18,9 @@ import org.woehlke.twitterwall.scheduled.service.persist.*;
  * Created by tw on 09.07.17.
  */
 
-//@Component
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
 
     /** Method because of recursive Method Call in this Method **/
@@ -44,7 +44,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             tweet.setUser(user);
             /** Tweet itself */
             tweet = tweetService.store(tweet, task);
-            log.debug(msg + "tweetService.store: " + tweet.toString());
+            log.debug(msg + "tweetService.store: " + tweet.getUniqueId());
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }

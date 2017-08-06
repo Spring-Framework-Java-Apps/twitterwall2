@@ -85,27 +85,27 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         Entities entitiesTarget = new Entities();
         for(UrlEntity urlEntity: listUrlEntity){
             Url url = urlTransformService.transform(urlEntity,task);
-            log.debug(msg+"transformed Url = "+url.toString());
+            log.debug(msg+"transformed Url = "+url.getUniqueId());
             entitiesTarget.addUrl(url);
         }
         for(HashTagEntity hashTagEntity:listHashTagEntity){
             HashTag hashTag = hashTagTransformService.transform(hashTagEntity,task);
-            log.debug(msg+"transformed HashTag = "+hashTag.toString());
+            log.debug(msg+"transformed HashTag = "+hashTag.getUniqueId());
             entitiesTarget.addHashTag(hashTag);
         }
         for(MentionEntity mentionEntity:listMentionEntity){
             Mention mention = mentionTransformService.transform(mentionEntity,task);
-            log.debug(msg+"transformed Mention = "+mention.toString());
+            log.debug(msg+"transformed Mention = "+mention.getUniqueId());
             entitiesTarget.addMention(mention);
         }
         for(MediaEntity medium :listMediaEntity){
             Media media = mediaTransformService.transform(medium,task);
-            log.debug(msg+"transformed Media = "+medium.toString());
+            log.debug(msg+"transformed Media = "+media.getUniqueId());
             entitiesTarget.addMedium(media);
         }
         for(TickerSymbolEntity tickerSymbolEntity:listTickerSymbolEntity) {
             TickerSymbol tickerSymbol = tickerSymbolTransformService.transform(tickerSymbolEntity,task);
-            log.debug(msg+"transformed TickerSymbol = "+tickerSymbol.toString());
+            log.debug(msg+"transformed TickerSymbol = "+tickerSymbol.getUniqueId());
             entitiesTarget.addTickerSymbol(tickerSymbol);
         }
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

@@ -8,19 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
-
-import java.util.List;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
@@ -35,78 +30,114 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
     private StartTask mqStartTask;
 
     @Autowired
-    private TestdataProperties testdataProperties;
-
-    @Autowired
     private FrontendProperties frontendProperties;
 
     @Test
     public void updateTweetsTest() throws Exception {
+        String msg = "updateTweetsTest: ";
+        log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.updateTweets();
+        Task task = this.mqStartTask.updateTweets();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void updateUsersTest() throws Exception {
+        String msg = "updateUsersTest: ";
+        log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.updateUsers();
+        Task task = this.mqStartTask.updateUsers();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void updateUsersFromMentionsTest() throws Exception {
+        String msg = "updateUsersFromMentionsTest: ";
+        log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.updateUsersFromMentions();
+        Task task = this.mqStartTask.updateUsersFromMentions();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void fetchTweetsFromSearchTest() throws Exception {
+        String msg = "fetchTweetsFromSearchTest: ";
+        log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.fetchTweetsFromSearch();
+        Task task = this.mqStartTask.fetchTweetsFromSearch();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void fetchUsersFromListTest() throws Exception {
+        String msg = "fetchUsersFromListTest: ";
+        log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
-        this.mqStartTask.fetchUsersFromList();
+        Task task = this.mqStartTask.fetchUsersFromList();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void createImprintUserTest() throws Exception {
+        String msg = "createImprintUserTest: ";
+        log.info(msg+"START TEST");
         User user = this.mqStartTask.createImprintUser();
+        log.info(msg+"created User = "+user.getUniqueId());
         String screenName = frontendProperties.getImprintScreenName();
         Assert.assertEquals(user.getScreenName(),screenName);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void createTestDataUsersTest() throws Exception {
-        List<User> userList = this.mqStartTask.createTestDataForUser();
-        Assert.assertTrue("mqStartTask.createTestDataForUser() > 0 ",userList.size()>0);
-        int expectedSize =  testdataProperties.getOodm().getEntities().getUser().getIdTwitter().size();
-        String msg = "mqStartTask.createTestDataForUser() == "+expectedSize;
-        Assert.assertTrue(msg,userList.size()==expectedSize);
+        String msg = "createTestDataUsersTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.createTestDataForUser();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 
     @Test
     public void createTestDataTweetsTest() throws Exception {
-        List<Tweet> tweetList = this.mqStartTask.createTestDataForTweets();
-        Assert.assertTrue("mqStartTask.createTestDataForTweets() > 0 ",tweetList.size()>0);
-        int expectedSize = testdataProperties.getOodm().getEntities().getTweet().getIdTwitter().size();
-        String msg = "mqStartTask.createTestDataForTweets() == "+expectedSize;
-        Assert.assertTrue(msg,tweetList.size()==expectedSize);
+        String msg = "createTestDataTweetsTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.createTestDataForTweets();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
     }
 }

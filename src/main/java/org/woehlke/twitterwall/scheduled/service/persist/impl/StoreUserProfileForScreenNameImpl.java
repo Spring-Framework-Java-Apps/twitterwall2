@@ -36,15 +36,15 @@ public class StoreUserProfileForScreenNameImpl implements StoreUserProfileForScr
                     try {
                         TwitterProfile twitterProfile = this.twitterApiService.getUserProfileForScreenName(screenName);
                         User userFromMention = storeUserProfile.storeUserProfile(twitterProfile, task);
-                        log.debug(msg + " userFromMention: " + userFromMention.toString());
+                        log.debug(msg + " userFromMention: " + userFromMention.getUniqueId());
                         return userFromMention;
                     } catch (RateLimitExceededException ex) {
-                        log.warn(msg + "" + task.toString(), ex);
+                        log.warn(msg + "" + task.getUniqueId(), ex);
                     }
                 }
                 return userPersForMention;
             } else {
-                log.warn(msg + " " + task.toString());
+                log.warn(msg + " " + task.getUniqueId());
                 return null;
             }
         } catch (Exception e){

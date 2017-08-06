@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.service.backend;
+package org.woehlke.twitterwall.scheduled.service.remote;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,7 +48,6 @@ public class TwitterUrlServiceTest {
     @Autowired
     private TwitterUrlService twitterUrlService;
 
-    //@Commit
     @Test
     public void fetchUrlTest(){
         String msg = "fetchUrlTest ";
@@ -58,6 +56,7 @@ public class TwitterUrlServiceTest {
 
         String descriptionTask = "Make it so, Scotty";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
         long taskId = 222L;
 
         TaskStatus taskStatus = TaskStatus.READY;
@@ -65,7 +64,7 @@ public class TwitterUrlServiceTest {
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
 
-        Task task = new Task(descriptionTask,taskType,taskStatus,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,taskType,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
 
         List<String> exprectedUrls = testdataProperties.getOodm().getEntities().getUrl().getUrl();
         for(String exprectedUrl:exprectedUrls){
@@ -78,7 +77,6 @@ public class TwitterUrlServiceTest {
         log.info("------------------------------------");
     }
 
-    //@Commit
     @Test
     public void fetchTransientUrlsTest(){
         Map<String,String> urls = new HashMap<>();

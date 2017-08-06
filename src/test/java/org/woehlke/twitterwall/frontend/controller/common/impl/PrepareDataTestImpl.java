@@ -8,9 +8,6 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
@@ -22,6 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -35,9 +33,8 @@ import java.util.List;
 /**
  * Created by tw on 13.07.17.
  */
+@Deprecated
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class PrepareDataTestImpl implements PrepareDataTest {
 
     private static final Logger log = LoggerFactory.getLogger(PrepareDataTestImpl.class);
@@ -57,8 +54,10 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public void getTestDataTweets(String msg){
+        SendType sendType = SendType.NO_MQ;
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS,countedEntities);
+        Task task = taskService.create(msg, taskType, sendType, countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -107,8 +106,10 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public void getTestDataUser(String msg){
+        SendType sendType = SendType.NO_MQ;
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_USERS,countedEntities);
+        Task task = taskService.create(msg, taskType,sendType,countedEntities);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
@@ -177,9 +178,11 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public User createUser(String screenName) {
+        SendType sendType = SendType.NO_MQ;
+        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
-        Task task = taskService.create(msg, TaskType.CONTROLLER_CREATE_TESTDATA_USERS,countedEntities);
+        Task task = taskService.create(msg, taskType, sendType, countedEntities);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);

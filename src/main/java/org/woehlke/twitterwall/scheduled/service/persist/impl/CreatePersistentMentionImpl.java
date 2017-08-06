@@ -62,11 +62,11 @@ public class CreatePersistentMentionImpl implements CreatePersistentMention {
                 if (myFoundMention != null) {
                     myFoundMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.update(myFoundMention, task);
-                    log.debug(msg + " updated: " + persMention.toString());
+                    log.debug(msg + " updated: " + persMention.getUniqueId());
                 } else {
                     mention.setIdTwitterOfUser(foundUser.getIdTwitter());
                     persMention = mentionService.createProxyMention(mention, task);
-                    log.debug(msg + " persisted: " + persMention.toString());
+                    log.debug(msg + " persisted: " + persMention.getUniqueId());
                 }
                 return persMention;
             } else {

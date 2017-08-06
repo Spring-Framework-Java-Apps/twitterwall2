@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements UrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
