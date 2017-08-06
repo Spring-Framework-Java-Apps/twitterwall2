@@ -9,7 +9,6 @@ public class MentionTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(MentionTest.class);
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -45,9 +44,7 @@ public class MentionTest implements DomainObjectMinimalTest  {
         Assert.assertEquals(msg,expectedUniqueId3,mention3.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
-    //@Override
     public void isValidTest() throws Exception {
         String msg = "isValidTest: ";
 

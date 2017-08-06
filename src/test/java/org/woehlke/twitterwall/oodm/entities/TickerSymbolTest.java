@@ -9,7 +9,6 @@ public class TickerSymbolTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolTest.class);
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -36,7 +35,6 @@ public class TickerSymbolTest implements DomainObjectMinimalTest  {
         Assert.assertEquals(msg,myUniqueId2,tickerSymbol2.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {

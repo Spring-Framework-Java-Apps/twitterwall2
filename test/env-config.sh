@@ -1,4 +1,4 @@
-#!/opt/local/bin/bash
+#!/bin/sh
 
 echo "------------------------------------------"
 export TWITTERWALL_CONTEXT_TEST=true

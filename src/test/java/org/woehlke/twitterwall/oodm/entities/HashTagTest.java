@@ -5,7 +5,6 @@ import org.junit.Test;
 
 public class HashTagTest implements DomainObjectMinimalTest {
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -20,7 +19,6 @@ public class HashTagTest implements DomainObjectMinimalTest {
         Assert.assertEquals(msg,text,hashTag.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {

@@ -79,6 +79,11 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="removeOldDataFromStorageChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
 
     <int:router id="startTaskRouter" input-channel="startTaskChannel" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="updateTweetsChannel"/>
@@ -89,6 +94,7 @@
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
+        <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageChannel"/>
     </int:router>
 
     <int:chain id="updateTweetsChain" input-channel="updateTweetsChannel">
@@ -272,6 +278,23 @@
                 method="persistUser" />
     </int:chain>
 
+    <int:chain id="removeOldDataFromStorageChain" input-channel="removeOldDataFromStorageChannel">
+        <int:splitter
+                id="removeOldDataFromStorageSplitter"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitMessage"  />
+        <int:aggregator
+                id="removeOldDataFromStorageAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="removeOldDataFromStorageFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+
+
     <int:channel id="startTaskFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:dispatcher task-executor="myThreadPoolTaskExecutor"/>
     </int:channel>
@@ -288,6 +311,7 @@
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
+        <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageFireAndForgetChannel"/>
     </int:router>
 
     <int:channel id="updateTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
@@ -327,6 +351,12 @@
     </int:channel>
 
     <int:channel id="createTestDataTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="removeOldDataFromStorageFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
@@ -496,6 +526,21 @@
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="createTestDataTweetsFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="removeOldDataFromStorageFireAndForgetChain" input-channel="removeOldDataFromStorageFireAndForgetChannel">
+        <int:splitter
+                id="removeOldDataFromStorageFireAndForgetSplitter"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitMessage"  />
+        <int:aggregator
+                id="removeOldDataFromStorageFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="removeOldDataFromStorageFireAndForgetFinisher"
                 ref="mqTweetFinisher"
                 method="finishAsnyc" />
     </int:chain>
