@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
     </parent>
 
     <organization>
@@ -36,7 +36,7 @@
     <distributionManagement>
         <site>
             <id>simpleworklist.shadowfax.fritz.box</id>
-            <url>file://${project.basedir}/docs2</url>
+            <url>file://${project.basedir}/docs-site-deployed</url>
         </site>
     </distributionManagement>
     <developers>

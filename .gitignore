@@ -22,6 +22,7 @@ spring-boot.log.txt
 maven-testing-site.log.txt
 test.log.txt
 docs2
+docs-site-deployed
 .bundle
 .sass-cache
 Gemfile.lock

@@ -341,7 +341,7 @@ spring:
 ---
 spring:
   profiles: travis
-    datasource:
-      url: ${DATABASE_URL_TEST}
+  datasource:
+    url: ${DATABASE_URL_TEST}
 
 
