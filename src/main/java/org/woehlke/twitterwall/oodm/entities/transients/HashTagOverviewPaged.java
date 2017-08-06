@@ -1,47 +1,42 @@
-package org.woehlke.twitterwall.frontend.model;
+package org.woehlke.twitterwall.oodm.entities.transients;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
- * Created by tw on 12.07.17.
+ * @author Thomas Woehlke <thomas@woehlke.org>
  */
-public class HashTagOverview implements Serializable {
+public class HashTagOverviewPaged {
 
-    private List<HashTagCounted> hashTagsTweets = new ArrayList<>();
-    private List<HashTagCounted> hashTagsUsers = new ArrayList<>();
+    private Page<HashTagCounted> hashTagsTweets;
+    private Page<HashTagCounted> hashTagsUsers;
 
-    public HashTagOverview(List<HashTagCounted> hashTagsTweets, List<HashTagCounted> hashTagsUsers) {
+    public HashTagOverviewPaged(Page<HashTagCounted> hashTagsTweets, Page<HashTagCounted> hashTagsUsers) {
         this.hashTagsTweets = hashTagsTweets;
         this.hashTagsUsers = hashTagsUsers;
     }
 
-    public HashTagOverview() {
-    }
-
-    public List<HashTagCounted> getHashTagsTweets() {
+    public Page<HashTagCounted> getHashTagsTweets() {
         return hashTagsTweets;
     }
 
-    public void setHashTagsTweets(List<HashTagCounted> hashTagsTweets) {
+    public void setHashTagsTweets(Page<HashTagCounted> hashTagsTweets) {
         this.hashTagsTweets = hashTagsTweets;
     }
 
-    public List<HashTagCounted> getHashTagsUsers() {
+    public Page<HashTagCounted> getHashTagsUsers() {
         return hashTagsUsers;
     }
 
-    public void setHashTagsUsers(List<HashTagCounted> hashTagsUsers) {
+    public void setHashTagsUsers(Page<HashTagCounted> hashTagsUsers) {
         this.hashTagsUsers = hashTagsUsers;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof HashTagOverview)) return false;
+        if (!(o instanceof HashTagOverviewPaged)) return false;
 
-        HashTagOverview that = (HashTagOverview) o;
+        HashTagOverviewPaged that = (HashTagOverviewPaged) o;
 
         if (hashTagsTweets != null ? !hashTagsTweets.equals(that.hashTagsTweets) : that.hashTagsTweets != null)
             return false;
@@ -57,7 +52,7 @@ public class HashTagOverview implements Serializable {
 
     @Override
     public String toString() {
-        return "HashTagOverview{" +
+        return "HashTagOverviewPaged{" +
                 "hashTagsTweets=" + hashTagsTweets +
                 ", hashTagsUsers=" + hashTagsUsers +
                 '}';
