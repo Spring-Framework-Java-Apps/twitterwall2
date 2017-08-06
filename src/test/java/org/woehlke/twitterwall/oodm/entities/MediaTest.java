@@ -5,7 +5,6 @@ import org.junit.Test;
 
 public class MediaTest implements DomainObjectMinimalTest  {
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -31,7 +30,6 @@ public class MediaTest implements DomainObjectMinimalTest  {
         Assert.assertEquals(msg,expectedUniqueId2,medium2.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {

@@ -5,7 +5,6 @@ import org.junit.Test;
 
 public class UrlCacheTest implements DomainObjectMinimalTest  {
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void getUniqueIdTest() throws Exception {
@@ -21,7 +20,6 @@ public class UrlCacheTest implements DomainObjectMinimalTest  {
         Assert.assertEquals(msg,urlUrl,url.getUniqueId());
     }
 
-    //TODO: #197 https://github.com/phasenraum2010/twitterwall2/issues/197
     @Test
     @Override
     public void isValidTest() throws Exception {

@@ -18,8 +18,8 @@ info:
     groupId: @project.groupId@
     name: @project.name@
     version: @project.version@
-#logging:
-#  file: twitterwall.log
+logging:
+  file: test/twitterwall.log.txt
 management:
   address: 127.0.0.1
   context-path: "/manage"

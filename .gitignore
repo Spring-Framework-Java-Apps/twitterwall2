@@ -12,7 +12,6 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 
 .idea
-*.iml
 twitterwall.log
 twitterwall.log*
 maven-build.log
@@ -21,6 +20,18 @@ maven-testing.log.txt
 spring-boot.log.txt
 maven-testing-site.log.txt
 test.log.txt
+
+test/twitterwall.log.txt
+test/twitterwall.log.txt*
+test/maven-build.log
+test/maven-build.log.txt
+test/maven-testing.log.txt
+test/spring-boot.log.txt
+test/maven-testing-site.log.txt
+test/test.log.txt
+
+.m2
+
 docs2
 docs-site-deployed
 .bundle
