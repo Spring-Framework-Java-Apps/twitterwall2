@@ -58,4 +58,14 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
         return new HashTagOverviewPaged(hashTagsTweets,hashTagsUsers);
     }
 
+    @Override
+    public Page<HashTagCounted> getHashTagsTweets(Pageable pageRequestTweets) {
+        return hashTagRepository.countAllTweet2HashTag(pageRequestTweets);
+    }
+
+    @Override
+    public Page<HashTagCounted> getHashTagsUsers(Pageable pageRequestUsers) {
+        return hashTagRepository.countAllUser2HashTag(pageRequestUsers);
+    }
+
 }

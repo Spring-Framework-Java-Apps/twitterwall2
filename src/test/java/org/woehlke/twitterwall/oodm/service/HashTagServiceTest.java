@@ -106,4 +106,28 @@ public class HashTagServiceTest {
             log.info(msg+" hashTagsUsers: "+counted.getText());
         }
     }
+
+    @Test
+    public void getHashTagsTweets() throws Exception {
+        String msg = "getHashTagsTweets: ";
+        int page=1;
+        int size=30;
+        Pageable pageRequestTweets = new PageRequest(page,size);
+        Page<HashTagCounted> hashTagsTweets = hashTagService.getHashTagsTweets(pageRequestTweets);
+        for(HashTagCounted counted:hashTagsTweets){
+            log.info(msg+" hashTagsTweets: "+counted.getText());
+        }
+    }
+
+    @Test
+    public void getHashTagsUsers() throws Exception {
+        String msg = "getHashTagsUsers: ";
+        int page=1;
+        int size=30;
+        Pageable pageRequestUsers = new PageRequest(page,size);
+        Page<HashTagCounted> hashTagsUsers = hashTagService.getHashTagsUsers(pageRequestUsers);
+        for(HashTagCounted counted:hashTagsUsers){
+            log.info(msg+" hashTagsUsers: "+counted.getText());
+        }
+    }
 }
