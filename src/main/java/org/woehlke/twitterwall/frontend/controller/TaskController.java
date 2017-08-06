@@ -173,7 +173,7 @@ public class TaskController {
 
     private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
-    private final String PATH = "/task";
+    private final String PATH = "task";
 
     private final UserService userService;
 
