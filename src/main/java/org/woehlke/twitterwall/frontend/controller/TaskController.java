@@ -189,9 +189,6 @@ public class TaskController {
 
     private final TwitterProperties twitterProperties;
 
-    private final StartTask mqStartTask;
-
-
     @Autowired
     public TaskController(
             UserService userService, TaskService taskService,
@@ -199,7 +196,7 @@ public class TaskController {
             FrontendProperties frontendProperties,
             ControllerHelper controllerHelper,
             AsyncStartTask mqAsyncStartTask,
-            TwitterProperties twitterProperties, StartTask mqStartTask) {
+            TwitterProperties twitterProperties) {
         this.userService = userService;
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
@@ -207,7 +204,6 @@ public class TaskController {
         this.controllerHelper = controllerHelper;
         this.mqAsyncStartTask = mqAsyncStartTask;
         this.twitterProperties = twitterProperties;
-        this.mqStartTask = mqStartTask;
     }
 
 }
