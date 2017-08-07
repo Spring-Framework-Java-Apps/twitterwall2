@@ -4,6 +4,8 @@ endpoints:
   endpoints:
     shutdown:
       enabled: true
+logging:
+  file: test/twitterwall.log.txt
 #hibernate:
   #dialect: org.hibernate.dialect.H2Dialect
 management:

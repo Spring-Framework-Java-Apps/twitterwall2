@@ -39,6 +39,18 @@ public class ApplicationController {
         return "application/management";
     }
 
+    @RequestMapping(path="/domain/delete/all")
+    public String domainDeleteAll(Model model) {
+        String msg = "/application/domain/delete/all: ";
+        String title = "Counted Entities";
+        String subtitle = twitterProperties.getSearchQuery();
+        String symbol = Symbols.DATABASE.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        CountedEntities countedEntities =this.countedEntitiesService.deleteAll();
+        model.addAttribute("countedEntities", countedEntities);
+        return "application/domain/count";
+    }
+
     private final CountedEntitiesService countedEntitiesService;
 
     private final ControllerHelper controllerHelper;

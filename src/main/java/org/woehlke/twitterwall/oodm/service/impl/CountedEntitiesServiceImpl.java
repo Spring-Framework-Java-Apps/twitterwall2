@@ -72,6 +72,13 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         return userRepository.count();
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+    public CountedEntities deleteAll() {
+        taskRepository.deleteAllDomainData();
+        return this.countAll();
+    }
+
     private static final Logger log = LoggerFactory.getLogger(CountedEntitiesServiceImpl.class);
 
     private final TweetRepository tweetRepository;
