@@ -22,42 +22,44 @@
         <div class="tw-urlcache-all">
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-striped">
-                        <thead th:include="layoutDataview :: tw-data-view-thead">
-                    </thead>
-                        <tbody>
-                            <tr th:each="myPageItem : ${myPageContent.getContent()}">
-                                <td>
-                                    <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
-                                </td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-md-2">display:</div>
-                                        <div class="col-md-10">
-                                            <span th:text="${myPageItem.display}">display</span>
+                    <div class="well">
+                        <table class="table table-striped">
+                            <thead th:include="layoutDataview :: tw-data-view-thead">
+                            </thead>
+                            <tbody>
+                                <tr th:each="myPageItem : ${myPageContent.getContent()}">
+                                    <td>
+                                        <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-2">display:</div>
+                                            <div class="col-md-10">
+                                                <span th:text="${myPageItem.display}">display</span>
+                                            </div>
+                                            <div class="col-md-2">expanded:</div>
+                                            <div class="col-md-10">
+                                                <a href="" th:href="@{|${myPageItem.expanded}|}" target="_blank">
+                                                    <span th:text="${myPageItem.expanded}">expanded</span>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-2">url:</div>
+                                            <div class="col-md-10">
+                                                <a href="" th:href="@{|${myPageItem.url}|}" target="_blank">
+                                                    <span th:text="${myPageItem.url}">url</span>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2">expanded:</div>
-                                        <div class="col-md-10">
-                                            <a href="" th:href="@{|${myPageItem.expanded}|}" target="_blank">
-                                                <span th:text="${myPageItem.expanded}">expanded</span>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-2">url:</div>
-                                        <div class="col-md-10">
-                                            <a href="" th:href="@{|${myPageItem.url}|}" target="_blank">
-                                                <span th:text="${myPageItem.url}">url</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span th:include="layoutDataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
-                        </tfoot>
-                    </table>
+                                    </td>
+                                    <td>
+                                        <span th:include="layoutDataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
