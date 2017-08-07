@@ -39,6 +39,9 @@ public class SchedulerProperties {
     @NotNull
     private Boolean removeOldDataFromStorageAllow;
 
+    @NotNull
+    private Boolean fetchFollowerAllow;
+
     public Boolean getAllowFetchTweetsFromTwitterSearch() {
         return allowFetchTweetsFromTwitterSearch;
     }
@@ -109,5 +112,13 @@ public class SchedulerProperties {
 
     public void setRemoveOldDataFromStorageAllow(Boolean removeOldDataFromStorageAllow) {
         this.removeOldDataFromStorageAllow = removeOldDataFromStorageAllow;
+    }
+
+    public void setFetchFollowerAllow(Boolean fetchFollowerAllow) {
+        this.fetchFollowerAllow = fetchFollowerAllow;
+    }
+
+    public Boolean getFetchFollowerAllow() {
+        return fetchFollowerAllow;
     }
 }

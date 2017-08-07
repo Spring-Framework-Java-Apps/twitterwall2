@@ -76,13 +76,6 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
         return userRepository.findAllDescriptions(pageRequest);
     }
 
-    /*
-    @Override
-    public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return userRepository.findAllTwitterIds(pageRequest);
-    }
-    */
-
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
         return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
@@ -126,6 +119,11 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest){
         return userRepository.findAllUser2TickerSymbol(pageRequest);
+    }
+
+    @Override
+    public boolean isByIdTwitter(long userIdTwitter) {
+        return ((userRepository.findByIdTwitter(userIdTwitter)) != null);
     }
 
 }

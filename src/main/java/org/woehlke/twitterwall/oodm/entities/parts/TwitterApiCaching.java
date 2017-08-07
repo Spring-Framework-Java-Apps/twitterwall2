@@ -39,6 +39,12 @@ public class TwitterApiCaching implements Serializable {
     @Column(name=COLUMN_PREFIX+"controller_create_imprint_user")
     private Date controllerCreateImprintUser;
 
+    @Column(name=COLUMN_PREFIX+"remove_old_data_from_storage")
+    private Date removeOldDataFromStorage;
+
+    @Column(name=COLUMN_PREFIX+"fetch_follower")
+    private Date fetchFollower;
+
     @Transient
     public Boolean isCached(TaskType taskType, long timeToLive){
         Date lastApiCall = null;
@@ -69,6 +75,12 @@ public class TwitterApiCaching implements Serializable {
                 break;
             case CONTROLLER_CREATE_IMPRINT_USER:
                 lastApiCall = controllerCreateImprintUser;
+                break;
+            case REMOVE_OLD_DATA_FROM_STORAGE:
+                lastApiCall = removeOldDataFromStorage;
+                break;
+            case FETCH_FOLLOWER:
+                lastApiCall = fetchFollower;
                 break;
             default: break;
         }
@@ -110,11 +122,17 @@ public class TwitterApiCaching implements Serializable {
             case CONTROLLER_CREATE_IMPRINT_USER:
                 controllerCreateImprintUser = lastApiCall;
                 break;
+            case REMOVE_OLD_DATA_FROM_STORAGE:
+                removeOldDataFromStorage = lastApiCall;
+                break;
+            case FETCH_FOLLOWER:
+                fetchFollower = lastApiCall;
+                break;
             default: break;
         }
     }
 
-    public TwitterApiCaching(Date fetchTweetsFromTwitterSearch, Date updateTweets, Date updateUserProfiles, Date updateUserProfilesFromMentions, Date fetchUsersFromDefinedUserList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser) {
+    public TwitterApiCaching(Date fetchTweetsFromTwitterSearch, Date updateTweets, Date updateUserProfiles, Date updateUserProfilesFromMentions, Date fetchUsersFromDefinedUserList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage,Date fetchFollower) {
         this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
         this.updateTweets = updateTweets;
         this.updateUserProfiles = updateUserProfiles;
@@ -124,6 +142,8 @@ public class TwitterApiCaching implements Serializable {
         this.controllerGetTestdataUser = controllerGetTestdataUser;
         this.controllerAddUserForScreenName = controllerAddUserForScreenName;
         this.controllerCreateImprintUser = controllerCreateImprintUser;
+        this.removeOldDataFromStorage = removeOldDataFromStorage;
+        this.fetchFollower = fetchFollower;
     }
 
     public TwitterApiCaching() {
@@ -136,6 +156,8 @@ public class TwitterApiCaching implements Serializable {
         this.controllerGetTestdataUser = null;
         this.controllerAddUserForScreenName = null;
         this.controllerCreateImprintUser = null;
+        this.removeOldDataFromStorage = null;
+        this.fetchFollower = null;
     }
 
     public Date getFetchTweetsFromTwitterSearch() {
@@ -174,6 +196,14 @@ public class TwitterApiCaching implements Serializable {
         return controllerCreateImprintUser;
     }
 
+    public Date getRemoveOldDataFromStorage() {
+        return removeOldDataFromStorage;
+    }
+
+    public Date getFetchFollower() {
+        return fetchFollower;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -196,7 +226,11 @@ public class TwitterApiCaching implements Serializable {
             return false;
         if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(that.controllerAddUserForScreenName) : that.controllerAddUserForScreenName != null)
             return false;
-        return controllerCreateImprintUser != null ? controllerCreateImprintUser.equals(that.controllerCreateImprintUser) : that.controllerCreateImprintUser == null;
+        if (controllerCreateImprintUser != null ? !controllerCreateImprintUser.equals(that.controllerCreateImprintUser) : that.controllerCreateImprintUser != null)
+            return false;
+        if (removeOldDataFromStorage != null ? !removeOldDataFromStorage.equals(that.removeOldDataFromStorage) : that.removeOldDataFromStorage != null)
+            return false;
+        return fetchFollower != null ? fetchFollower.equals(that.fetchFollower) : that.fetchFollower == null;
     }
 
     @Override
@@ -210,21 +244,25 @@ public class TwitterApiCaching implements Serializable {
         result = 31 * result + (controllerGetTestdataUser != null ? controllerGetTestdataUser.hashCode() : 0);
         result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
         result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
+        result = 31 * result + (removeOldDataFromStorage != null ? removeOldDataFromStorage.hashCode() : 0);
+        result = 31 * result + (fetchFollower != null ? fetchFollower.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "TwitterApiCaching{" +
-                "fetchTweetsFromSearch=" + fetchTweetsFromTwitterSearch +
+                "fetchTweetsFromTwitterSearch=" + fetchTweetsFromTwitterSearch +
                 ", updateTweets=" + updateTweets +
-                ", updateUsers=" + updateUserProfiles +
-                ", updateUsersFromMentions=" + updateUserProfilesFromMentions +
-                ", fetchUsersFromList=" + fetchUsersFromDefinedUserList +
+                ", updateUserProfiles=" + updateUserProfiles +
+                ", updateUserProfilesFromMentions=" + updateUserProfilesFromMentions +
+                ", fetchUsersFromDefinedUserList=" + fetchUsersFromDefinedUserList +
                 ", controllerGetTestdataTweets=" + controllerGetTestdataTweets +
                 ", controllerGetTestdataUser=" + controllerGetTestdataUser +
                 ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
                 ", controllerCreateImprintUser=" + controllerCreateImprintUser +
+                ", removeOldDataFromStorage=" + removeOldDataFromStorage +
+                ", fetchFollower=" + fetchFollower +
                 '}';
     }
 

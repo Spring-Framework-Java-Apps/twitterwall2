@@ -61,6 +61,12 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="fetchFollowerChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
     <int:channel id="createTestDataUsersChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
@@ -91,6 +97,7 @@
         <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsChannel"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchChannel"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListChannel"/>
+        <int:mapping value="FETCH_FOLLOWER" channel="fetchFollowerChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
@@ -216,25 +223,53 @@
                 method="finish" />
     </int:chain>
 
-    <int:chain id="createTestDataUsersChain" input-channel="createTestDataUsersChannel">
+
+    <int:chain id="fetchUsersFromListChain" input-channel="fetchUsersFromListChannel">
         <int:splitter
-                id="createTestDataUsersSplitter"
-                ref="mqCreateTestDataForUsersSplitter"
+                id="fetchUsersFromListSplitter"
+                ref="mqFetchUserFromListSplitter"
                 method="splitMessage"  />
         <int:service-activator
-                id="createTestDataUsersTransformator"
+                id="fetchUsersFromListTransformator"
                 ref="mqUserTransformator"
                 method="transformUser" />
         <int:service-activator
-                id="createTestDataUsersPersistor"
+                id="fetchUsersFromListPersistor"
                 ref="mqUserPersistor"
                 method="persistUser" />
         <int:aggregator
-                id="createTestDataUsersAggregator"
+                id="fetchUsersFromListAggregator"
                 message-store="store"
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
-                id="createTestDataUsersFinisher"
+                id="fetchUsersFromListFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="fetchFollowerChain" input-channel="fetchFollowerChannel">
+        <int:splitter
+                id="fetchFollowerSplitter"
+                ref="mqFetchFollowerSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="fetchFollowerUserCheckStorage"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="fetchFollowerTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchFollowerPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="cfetchFollowerAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchFollowerFinisher"
                 ref="mqUserFinisher"
                 method="finish" />
     </int:chain>
@@ -309,6 +344,7 @@
         <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsFireAndForgetChannel"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchFireAndForgetChannel"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListFireAndForgetChannel"/>
+        <int:mapping value="FETCH_FOLLOWER" channel="fetchFollowerFireAndForgeChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageFireAndForgetChannel"/>
@@ -339,6 +375,12 @@
     </int:channel>
 
     <int:channel id="fetchUsersFromListFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="fetchFollowerFireAndForgeChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
@@ -480,6 +522,34 @@
                 id="fetchUsersFromListFireAndForgetFinisher"
                 ref="mqUserFinisher"
                 method="finishAsnyc" />
+    </int:chain>
+
+
+    <int:chain id="fetchFollowerFireAndForgetChain" input-channel="fetchFollowerFireAndForgeChannel">
+        <int:splitter
+                id="fetchFollowerFireAndForgetSplitter"
+                ref="mqFetchFollowerSplitter"
+                method="splitMessage"  />
+        <int:service-activator
+                id="fetchFollowerFireAndForgetUserCheckStorage"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="fetchFollowerFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchFollowerFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="cfetchFollowerFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchFollowerFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
     </int:chain>
 
 

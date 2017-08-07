@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
@@ -37,6 +38,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.UPDATE_TWEETS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -53,6 +55,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.UPDATE_USERS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -69,6 +72,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.UPDATE_USERS_FROM_MENTIONS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -85,6 +89,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_TWEETS_FROM_SEARCH,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -101,8 +106,27 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_USERS_FROM_LIST,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void fetchFollowerTest() throws Exception {
+        String msg = "fetchFollowerTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqAsyncStartTask.fetchFollower();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_FOLLOWER,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
         Assert.assertTrue(ok);
         log.info(msg+"FINISHED TEST");
     }
@@ -111,8 +135,8 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
     @Ignore
     @Test
     @Override
-    public void removeOldDataFromStorage() throws Exception {
-        String msg = "removeOldDataFromStorage: ";
+    public void removeOldDataFromStorageTest() throws Exception {
+        String msg = "removeOldDataFromStorageTest: ";
         log.info(msg+"START TEST");
         CountedEntities beforeTest = countedEntitiesService.countAll();
         Task task = this.mqAsyncStartTask.removeOldDataFromStorage();
@@ -120,6 +144,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
+        Assert.assertEquals(TaskType.REMOVE_OLD_DATA_FROM_STORAGE,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
         Assert.assertTrue(ok);

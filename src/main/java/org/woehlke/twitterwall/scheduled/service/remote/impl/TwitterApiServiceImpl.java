@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.social.ResourceNotFoundException;
+import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -115,6 +116,21 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         } catch (Exception e) {
             log.debug(msg + e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public CursoredList<Long> findFollower() {
+        String msg = MSG+"findUsersFromDefinedList: ";
+        log.debug(msg);
+        CursoredList<Long> result;
+        try {
+            result = getTwitterProxy().friendOperations().getFollowerIds();
+            log.debug(msg + " result.size: " + result.size());
+            return result;
+        } catch (Exception e) {
+            log.debug(msg + e.getMessage());
+            return new CursoredList<>(new ArrayList<>(),0L,0L);
         }
     }
 

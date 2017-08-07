@@ -14,6 +14,8 @@ public interface AsyncStartTask {
 
     Task fetchUsersFromList();
 
+    Task fetchFollower();
+
     Task createTestDataForTweets();
 
     Task createTestDataForUser();

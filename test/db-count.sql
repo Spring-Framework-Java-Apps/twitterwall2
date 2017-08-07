@@ -8,7 +8,6 @@ select count(*) from tweet_mention;
 select count(*) from tweet_media;
 select count(*) from tweet_hashtag;
 select count(*) from tweet_url;
-select count(*) from url_cache;
 select count(*) from url;
 select count(*) from tickersymbol;
 select count(*) from mention;

@@ -147,6 +147,18 @@ public class TaskController {
         return PATH+"/start/taskStarted";
     }
 
+    @RequestMapping(path="/start/users/follower/fetch")
+    public String fetchFollowerStartTask(Model model){
+        String msg = "/start/users/follower/fetch";
+        String title = "Scheduled Task started";
+        String subtitle = "/start/users/follower/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.fetchFollower();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
     @RequestMapping(path="/start/users/mentions/update")
     public String updateUserProfilesFromMentionsStartTask(Model model){
         String msg = "/start/users/mentions/update";

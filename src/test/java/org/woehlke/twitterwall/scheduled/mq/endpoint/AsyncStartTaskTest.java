@@ -16,5 +16,7 @@ public interface AsyncStartTaskTest {
 
     void fetchUsersFromListTest() throws Exception;
 
-    void removeOldDataFromStorage()throws Exception;
+    void fetchFollowerTest() throws Exception;
+
+    void removeOldDataFromStorageTest()throws Exception;
 }

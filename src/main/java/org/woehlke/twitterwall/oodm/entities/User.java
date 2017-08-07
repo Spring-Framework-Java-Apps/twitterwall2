@@ -87,10 +87,6 @@ import java.util.regex.Pattern;
             query = "select t.description from User as t where t.description is not null"
         ),
         @NamedQuery(
-            name = "User.findAllTwitterIds",
-            query = "select t.idTwitter from User as t"
-        ),
-        @NamedQuery(
             name="User.findByUniqueId",
             query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
         )
@@ -304,7 +300,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         }
     }
 
-    private User() {
+    protected User() {
     }
 
     @Transient

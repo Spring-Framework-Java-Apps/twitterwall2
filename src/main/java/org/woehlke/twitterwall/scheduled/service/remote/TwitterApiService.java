@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.scheduled.service.remote;
 
+import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 
@@ -20,4 +21,5 @@ public interface TwitterApiService {
 
     List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName);
 
+    CursoredList<Long> findFollower();
 }

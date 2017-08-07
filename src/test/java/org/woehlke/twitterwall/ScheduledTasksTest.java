@@ -41,4 +41,9 @@ public class ScheduledTasksTest {
     public void removeOldDataFromStorage() throws Exception {
         scheduledTasks.removeOldDataFromStorage();
     }
+
+    @Test
+    public void fetchFollower() throws Exception {
+        scheduledTasks.fetchFollower();
+    }
 }

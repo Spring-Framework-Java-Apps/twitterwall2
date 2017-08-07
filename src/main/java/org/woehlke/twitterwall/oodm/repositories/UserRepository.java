@@ -45,9 +45,6 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     @Query(name="User.findAllDescriptions")
     Page<String> findAllDescriptions(Pageable pageRequest);
 
-    @Query(name="User.findAllTwitterIds")
-    Page<Long> findAllTwitterIds(Pageable pageRequest);
-
     @Query(
         name="User.getUsersForHashTag",
         countName = "User.countUsersForHashTag"

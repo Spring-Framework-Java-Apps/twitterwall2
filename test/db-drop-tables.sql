@@ -8,7 +8,6 @@ drop table tweet_mention;
 drop table tweet_media;
 drop table tweet_hashtag;
 drop table tweet_url;
-drop table url_cache;
 drop table url;
 drop table tickersymbol;
 drop table mention;
