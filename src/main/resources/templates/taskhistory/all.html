@@ -21,6 +21,12 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                <div class="well">
+                    <a href="/task/all" th:href="@{/task/all}">
+                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <span>Tasks</span>
+                    </a>
+                </div>
                 <table class="table table-striped">
                     <thead th:include="layoutDataview :: tw-data-view-thead">
                     </thead>
@@ -55,6 +61,12 @@
                     <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
                     </tfoot>
                 </table>
+                <div class="well">
+                    <a href="/task/all" th:href="@{/task/all}">
+                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <span>Tasks</span>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="row">
