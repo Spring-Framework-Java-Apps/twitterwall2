@@ -13,218 +13,258 @@
                 <h3>Count Entities:</h3>
                 <div class="tw-count-entities-overview well">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-twitter-square" aria-hidden="true"></i>
                             <a th:href="@{/tweet/all}">Tweets:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countTweets}">statusesCount</span>
+                            <span th:text="${countedEntities.countTweets}">countTweets</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-user-o" aria-hidden="true"></i><a th:href="@{/user/all}">User:</a></div>
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <a th:href="@{/user/all}">User:</a></div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countUser}">statusesCount</span>
+                            <span th:text="${countedEntities.countUser}">countUser</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-12"><hr/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <i class="fa fa-hashtag" aria-hidden="true"></i>
                             <a th:href="@{/hashtag/all}">HashTags:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countHashTags}">statusesCount</span>
+                            <span th:text="${countedEntities.countHashTags}">countHashTags</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-file-image-o" aria-hidden="true"></i>
                             <a th:href="@{/media/all}">Media:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countMedia}">statusesCount</span>
+                            <span th:text="${countedEntities.countMedia}">countMedia</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <a th:href="@{/mention/all}">Mention:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countMention}">statusesCount</span>
+                            <span th:text="${countedEntities.countMention}">countMention</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-leaf" aria-hidden="true"></i>
                             <a th:href="@{/tickersymbol/all}">TickerSymbol:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countTickerSymbol}">statusesCount</span>
+                            <span th:text="${countedEntities.countTickerSymbol}">countTickerSymbol</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-link" aria-hidden="true"></i>
                             <a th:href="@{/url/all}">Url:</a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countUrl}">statusesCount</span>
+                            <span th:text="${countedEntities.countUrl}">countUrl</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-external-link" aria-hidden="true"></i>
-                            <a th:href="@{/urlcache/all}">UrlCache:</a>
+                        <div class="col-md-12"><hr/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            <span>Tweet</span> -&gt;
+                            <a th:href="@{/application/countedEntities/tweet/hashtag}">
+                                <i class="fa fa-hashtag" aria-hidden="true"></i>
+                                <span>HashTag:</span>
+                            </a>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.countUrlCache}">statusesCount</span>
+                            <span th:text="${countedEntities.tweet2hashtag}">tweet2hashtag</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
+                            <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            <span>Tweet</span> -&gt;
+                            <a th:href="@{/application/countedEntities/tweet/media}">
+                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                <span>Media:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.tweet2media}">tweet2media</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            <span>Tweet</span> -&gt;
+                            <a th:href="@{/application/countedEntities/tweet/mention}">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                                <span>Mention:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.tweet2mention}">tweet2mention</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            <span>Tweet</span> -&gt;
+                            <a th:href="@{/application/countedEntities/tweet/tickersymbol}">
+                                <i class="fa fa-leaf" aria-hidden="true"></i>
+                                <span>TickerSymbol:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.tweet2tickersymbol}">tweet2tickersymbol</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            <span>Tweet</span> -&gt;
+                            <a th:href="@{/application/countedEntities/tweet/url}">
+                                <i class="fa fa-link" aria-hidden="true"></i>
+                                <span>Url:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.tweet2url}">tweet2url</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12"><hr/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User</span> -&gt;
+                            <a th:href="@{/application/countedEntities/user/hashtag}">
+                                <i class="fa fa-hashtag" aria-hidden="true"></i>
+                                <span>HashTag:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.userprofile2hashtag}">userprofile2hashtag</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User</span> -&gt;
+                            <a th:href="@{/application/countedEntities/user/media}">
+                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                <span>Media:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.userprofile2media}">userprofile2media</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User</span> -&gt;
+                            <a th:href="@{/application/countedEntities/user/mention}">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                                <span>Mention:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.userprofile2mention}">userprofile2mention</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User</span> -&gt;
+                            <a th:href="@{/application/countedEntities/user/tickersymbol}">
+                                <i class="fa fa-leaf" aria-hidden="true"></i>
+                                <span>TickerSymbol:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.userprofile2tickersymbol}">userprofile2tickersymbol</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User</span> -&gt;
+                            <a th:href="@{/application/countedEntities/user/url}">
+                                <i class="fa fa-link" aria-hidden="true"></i>
+                                <span>Url:</span>
+                            </a>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <span th:text="${countedEntities.userprofile2url}">userprofile2url</span>
+                        </div>
+                        <div class="col-md-7"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12"><hr/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
                             <a th:href="@{/task/all}">Task:</a>
                         </div>
                         <div class="col-md-1 text-right">
                             <span th:text="${countedEntities.countTask}">countTask</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                             <a th:href="@{/taskhistory/all}">TaskHistory:</a>
                         </div>
                         <div class="col-md-1 text-right">
                             <span th:text="${countedEntities.countTaskHistory}">countTaskHistory</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><hr/></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/tweet/hashtag}">Tweet -&gt; HashTag:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.tweet2hashtag}">tweet2hashtag</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/tweet/media}">Tweet -&gt; Media:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.tweet2media}">tweet2media</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/tweet/mention}">Tweet -&gt; Mention:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.tweet2mention}">tweet2mention</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/tweet/tickersymbol}">Tweet -&gt; TickerSymbol:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.tweet2tickersymbol}">tweet2tickersymbol</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/tweet/url}">Tweet -&gt; Url:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.tweet2url}">tweet2url</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/user/hashtag}">UserProfile -&gt; HashTag:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.userprofile2hashtag}">userprofile2hashtag</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/user/media}">UserProfile -&gt; Media:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.userprofile2media}">userprofile2media</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/user/mention}">UserProfile -&gt; Mention:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.userprofile2mention}">userprofile2mention</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/user/tickersymbol}">UserProfile -&gt; TickerSymbol:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.userprofile2tickersymbol}">userprofile2tickersymbol</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <a th:href="@{/application/countedEntities/user/url}">UserProfile -&gt; Url:</a>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span th:text="${countedEntities.userprofile2url}">userprofile2url</span>
-                        </div>
-                        <div class="col-md-8"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12"><hr/></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                        <div class="col-md-4">
+                            <i class="fa fa-database" aria-hidden="true"></i>
                             <span>Summe:</span>
                         </div>
                         <div class="col-md-1 text-right">
                             <span th:text="${countedEntities.totalNumberOfRows}">totalNumberOfRows</span>
                         </div>
-                        <div class="col-md-8"></div>
+                        <div class="col-md-7"></div>
                     </div>
                 </div>
             </div>

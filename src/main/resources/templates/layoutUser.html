@@ -11,165 +11,167 @@
     <div class="container">
         <div th:fragment="tw-one-user">
             <div class="row" th:if="${user != null}" >
-                <div class="col-md-12 tw-col-3-wrapper">
-                    <div class="tw-col-3-box-center">
-                        <div class="thumbnail tw-user" th:fragment="tw-user-thumbnail">
-                            <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
-                                 th:with="user=${user},userUrl=@{|https://twitter.com/${user.screenName}|}">
-                            </div>
-                            <div class="caption">
-                                <h2>
-                                    <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
-                                        <span th:text="${user.name}">name</span>
-                                    </a>
-                                </h2>
-                                <h3>
-                                    <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
-                                        <b>@<span th:text="${user.screenName}">screenName</span></b>
-                                        <small th:if="${user.verified}">
-                                        <i class="fa fa-check-circle tw-verified" aria-hidden="true"></i>
-                                        </small>
-                                    </a>
-                                </h3>
-                                <div>
-                                    <p th:if="${user.description != null}">
-                                        <span th:utext="${user.formattedDescription}">description</span>
-                                    </p>
-                                    <p th:if="${user.location != null}">
-                                        <span class="map-icon map-icon-postal-code"></span>
-                                        <span th:text="${user.location}">location</span>
-                                    </p>
-                                    <p th:if="${user.url != null}">
-                                        <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
-                                        <span th:utext="${user.formattedUrl}">url</span>
-                                    </p>
-                                    <p th:if="${user.createdDate}">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>Seit
-                                        <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span>
-                                    </p>
+                <div class="well">
+                    <div class="col-md-12 tw-col-3-wrapper">
+                        <div class="tw-col-3-box-center">
+                            <div class="thumbnail tw-user" th:fragment="tw-user-thumbnail">
+                                <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
+                                     th:with="user=${user},userUrl=@{|https://twitter.com/${user.screenName}|}">
                                 </div>
-                                <hr/>
-                                <div sec:authorize="isAuthenticated()">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <span>Follower:</span>
+                                <div class="caption">
+                                    <h2>
+                                        <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
+                                            <span th:text="${user.name}">name</span>
+                                        </a>
+                                    </h2>
+                                    <h3>
+                                        <a th:href="@{|https://twitter.com/${user.screenName}|}" target="_blank">
+                                            <b>@<span th:text="${user.screenName}">screenName</span></b>
+                                            <small th:if="${user.verified}">
+                                            <i class="fa fa-check-circle tw-verified" aria-hidden="true"></i>
+                                            </small>
+                                        </a>
+                                    </h3>
+                                    <div>
+                                        <p th:if="${user.description != null}">
+                                            <span th:utext="${user.formattedDescription}">description</span>
+                                        </p>
+                                        <p th:if="${user.location != null}">
+                                            <span class="map-icon map-icon-postal-code"></span>
+                                            <span th:text="${user.location}">location</span>
+                                        </p>
+                                        <p th:if="${user.url != null}">
+                                            <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                                            <span th:utext="${user.formattedUrl}">url</span>
+                                        </p>
+                                        <p th:if="${user.createdDate}">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>Seit
+                                            <span th:text="${#calendars.format(user.createdDate,'dd MMMM yyyy')}">createdDate</span>
+                                        </p>
+                                    </div>
+                                    <hr/>
+                                    <div sec:authorize="isAuthenticated()">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <span>Follower:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:if="${user.follower}">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                </span>
+                                                <span th:if="${!user.follower}">
+                                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:if="${user.follower}">
-                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span th:if="${!user.follower}">
-                                                <i class="fa fa-square-o" aria-hidden="true"></i>
-                                            </span>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <span>Friend:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:if="${user.friend}">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                </span>
+                                                <span th:if="${!user.friend}">
+                                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <span>Tweeting:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:if="${user.tweeting}">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                </span>
+                                                <span th:if="${!user.tweeting}">
+                                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <span>Protected:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:if="${user.protectedUser}">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                </span>
+                                                <span th:if="${!user.protectedUser}">
+                                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <span>Verified:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:if="${user.verified}">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                </span>
+                                                <span th:if="${!user.verified}">
+                                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <span>Friend:</span>
+                                    <hr sec:authorize="isAuthenticated()" />
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                <span>Tweets:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:text="${user.statusesCount}">statusesCount</span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:if="${user.friend}">
-                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span th:if="${!user.friend}">
-                                                <i class="fa fa-square-o" aria-hidden="true"></i>
-                                            </span>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                                <span>Folge ich:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:text="${user.friendsCount}">friendsCount</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <span>Tweeting:</span>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                                <span>Follower:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:text="${user.followersCount}">followersCount</span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:if="${user.tweeting}">
-                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span th:if="${!user.tweeting}">
-                                                <i class="fa fa-square-o" aria-hidden="true"></i>
-                                            </span>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                                <span>Gefällt mir:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:text="${user.favoritesCount}">favoritesCount</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <span>Protected:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:if="${user.protectedUser}">
-                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span th:if="${!user.protectedUser}">
-                                                <i class="fa fa-square-o" aria-hidden="true"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <span>Verified:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:if="${user.verified}">
-                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span th:if="${!user.verified}">
-                                                <i class="fa fa-square-o" aria-hidden="true"></i>
-                                            </span>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <i class="fa fa-list" aria-hidden="true"></i>
+                                                <span>Listen:</span>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span th:text="${user.listedCount}">listedCount</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <hr sec:authorize="isAuthenticated()" />
-                                <div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            <span>Tweets:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:text="${user.statusesCount}">statusesCount</span>
-                                        </div>
+                                    <hr/>
+                                    <div>
+                                        <a href="javascript:history.back()">
+                                            <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                            <span>zurück</span>
+                                        </a>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                                            <span>Folge ich:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:text="${user.friendsCount}">friendsCount</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <i class="fa fa-user-circle" aria-hidden="true"></i>
-                                            <span>Follower:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:text="${user.followersCount}">followersCount</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                            <span>Gefällt mir:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:text="${user.favoritesCount}">favoritesCount</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <i class="fa fa-list" aria-hidden="true"></i>
-                                            <span>Listen:</span>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <span th:text="${user.listedCount}">listedCount</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr/>
-                                <div>
-                                    <a href="javascript:history.back()">
-                                        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-                                        <span>zurück</span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
