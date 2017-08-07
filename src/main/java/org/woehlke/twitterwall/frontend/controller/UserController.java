@@ -42,7 +42,7 @@ public class UserController {
         );
         model.addAttribute("users", userService.getAll(pageRequest));
         String symbol = Symbols.USER_ALL.toString();
-        String title = "All Users";
+        String subtitle = "All Users";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/all";
     }
@@ -122,7 +122,7 @@ public class UserController {
         Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
         model.addAttribute("users", tweetingUsers);
         String symbol = Symbols.USER_TWEETS.toString();
-        String title = "With one or more Tweets";
+        String subtitle = "With one or more Tweets";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/allWithTweets";
     }
@@ -141,7 +141,7 @@ public class UserController {
         Page<User> users = userService.getNotYetFriendUsers(pageRequest);
         model.addAttribute("users", users);
         String symbol = Symbols.USER_NOT_YET_FRIENDS.toString();
-        String title = "Not Yet Friends";
+        String subtitle = "Not Yet Friends";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/friendsNotYet";
     }
@@ -160,8 +160,8 @@ public class UserController {
         Page<User> users = userService.getFriends(pageRequest);
         model.addAttribute("users", users);
         String symbol = Symbols.USER_FRIENDS.toString();
-        String title = "Friends";
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        String subtitle = "Friends";
+        model = controllerHelper.setupPage(model, title, subtitle,  symbol);
         return "user/list/friends";
     }
 
@@ -179,7 +179,7 @@ public class UserController {
         Page<User> users = userService.getFollower(pageRequest);
         model.addAttribute("users", users);
         String symbol = Symbols.USER_FOLLOWER.toString();
-        String title = "Follower";
+        String subtitle = "Follower";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/follower";
     }
@@ -198,7 +198,7 @@ public class UserController {
         Page<User> users = userService.getNotYetFollower(pageRequest);
         model.addAttribute("users", users);
         String symbol = Symbols.USER_FOLLOWER.toString();
-        String title = "Follower";
+        String subtitle = "Follower";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/followerNotYet";
     }
@@ -217,7 +217,7 @@ public class UserController {
         Page<User> usersOnList = userService.getOnList(pageRequest);
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
-        String title = "On List";
+        String subtitle = "On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/onlist";
     }
@@ -235,7 +235,7 @@ public class UserController {
         );
         model.addAttribute("users", userService.getNotYetOnList(pageRequest));
         String symbol = Symbols.USER_NOT_YET_ON_LIST.toString();
-        String title = "Not Yet On List";
+        String subtitle = "Not Yet On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/onlistNotYet";
     }
@@ -250,7 +250,7 @@ public class UserController {
 
     private final ControllerHelper controllerHelper;
 
-    private static String subtitle = "Users";
+    private static String title = "Users";
 
     @Autowired
     public UserController(
