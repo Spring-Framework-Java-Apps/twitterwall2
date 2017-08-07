@@ -39,3 +39,4 @@ docs-site-deployed
 Gemfile.lock
 _site
 *.gem
+todo.txt
