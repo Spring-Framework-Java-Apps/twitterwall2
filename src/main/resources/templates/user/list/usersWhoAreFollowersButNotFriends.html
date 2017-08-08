@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <span  class="tw-pager-arrow tw-pager-up" th:if="${users.hasPrevious()}">
-                        <a href="" th:href="@{|/user/list/usersWhoAreFollowersAndFriends?page=${users.previousPageable().pageNumber}|}">
+                        <a href="" th:href="@{|/user/list/usersWhoAreFollowersButNotFriends?page=${users.previousPageable().pageNumber}|}">
                             <span>
                             <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
                             </span>
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <span class="tw-pager-arrow tw-pager-down" th:if="${users.hasNext()}">
-                        <a href="" th:href="@{|/user/list/usersWhoAreFollowersAndFriends?page=${users.nextPageable().pageNumber}|}" >
+                        <a href="" th:href="@{|/user/list/usersWhoAreFollowersButNotFriends?page=${users.nextPageable().pageNumber}|}" >
                             <span>
                             <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                             </span>
