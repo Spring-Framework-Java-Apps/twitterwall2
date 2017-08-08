@@ -4,13 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.service.*;
-import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentMention;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 
@@ -22,8 +18,6 @@ import java.util.Set;
  */
 
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
@@ -125,17 +119,14 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     private final CreatePersistentUrl createPersistentUrl;
 
-    private final CreatePersistentMention createPersistentMention;
-
     @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl, CreatePersistentMention createPersistentMention) {
+    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
         this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
         this.tickerSymbolService = tickerSymbolService;
         this.createPersistentUrl = createPersistentUrl;
-        this.createPersistentMention = createPersistentMention;
     }
 
 }
