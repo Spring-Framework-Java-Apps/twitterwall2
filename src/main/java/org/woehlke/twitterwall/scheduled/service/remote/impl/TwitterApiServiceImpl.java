@@ -42,12 +42,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             }
         } catch (RateLimitExceededException e){
             log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
             return null;
         } catch (Exception e) {
             log.error(msg + e.getMessage());
             return new ArrayList<>();
         }
-
     }
 
     @Override
@@ -63,6 +63,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             return result;
         } catch (RateLimitExceededException e) {
             log.warn(msg + "  Rate Limit Exceeded ");
+            waitForApi();
             return null;
         } catch(Exception e){
             log.error(msg + e.getMessage());
@@ -85,6 +86,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             return result;
         } catch (RateLimitExceededException e) {
             log.warn(msg + "  Rate Limit Exceeded : ");
+            waitForApi();
             return null;
         } catch (ResourceNotFoundException e) {
             log.warn(msg+"  User not found : "+userProfileTwitterId);
@@ -108,6 +110,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             return result;
         } catch (RateLimitExceededException e){
             log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
             return null;
         } catch (ResourceNotFoundException e) {
             log.warn(msg+"  User not found : "+screenName);
@@ -160,6 +163,15 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         } catch (Exception e) {
             log.error(msg + e.getMessage());
             return new CursoredList<>(new ArrayList<>(),0L,0L);
+        }
+    }
+
+    private void waitForApi(){
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls() * 10;
+        log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
+        try {
+            Thread.sleep(millisToWaitBetweenTwoApiCalls);
+        } catch (InterruptedException e) {
         }
     }
 

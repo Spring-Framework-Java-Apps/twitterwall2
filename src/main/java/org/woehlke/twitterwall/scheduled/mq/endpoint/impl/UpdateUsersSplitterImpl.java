@@ -88,7 +88,6 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
         }
         long number = worklistProfileTwitterIds.size();
         loopId = 0;
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<Message<UserMessage>> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             String counter = " ( " + loopId + " from " + number + " ) ";
@@ -105,11 +104,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                 Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
                 userProfileList.add(mqMessageOut);
             }
-            log.debug(msg + "### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
-            try {
-                Thread.sleep(millisToWaitBetweenTwoApiCalls);
-            } catch (InterruptedException e) {
-            }
+            twitterwallMessageBuilder.waitForApi();
         }
         log.debug(msg+ " DONE");
         return userProfileList;

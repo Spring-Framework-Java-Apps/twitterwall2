@@ -1,10 +1,14 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.common.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
@@ -14,6 +18,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component
 public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder {
+
 
     @Override
     public Message<TweetMessage> buildTweetMessage(Message<TaskMessage> incomingTaskMessage, org.woehlke.twitterwall.oodm.entities.Tweet tweet, int loopId, int loopAll){
@@ -133,5 +138,22 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
         return mqMessageOut;
     }
 
+    @Override
+    public void waitForApi() {
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
+        log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
+        try {
+            Thread.sleep(millisToWaitBetweenTwoApiCalls);
+        } catch (InterruptedException e) {
+        }
+    }
 
+    @Autowired
+    public TwitterwallMessageBuilderImpl(TwitterProperties twitterProperties) {
+        this.twitterProperties = twitterProperties;
+    }
+
+    private final TwitterProperties twitterProperties;
+
+    private static final Logger log = LoggerFactory.getLogger(TwitterwallMessageBuilderImpl.class);
 }
