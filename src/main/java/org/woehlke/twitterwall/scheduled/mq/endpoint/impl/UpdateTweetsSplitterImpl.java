@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
@@ -76,7 +75,6 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
             hasNext = tweetTwitterIds.hasNext();
             pageRequest = pageRequest.next();
         }
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         lfdNr = 0;
         for(Long tweetTwitterId : worklistTwitterIds){

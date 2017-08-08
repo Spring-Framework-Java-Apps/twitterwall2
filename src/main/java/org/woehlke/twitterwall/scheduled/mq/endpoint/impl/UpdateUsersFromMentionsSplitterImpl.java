@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
@@ -88,13 +87,12 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                     } else {
                         onePersMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                         onePersMention = mentionService.update(onePersMention,task);
-                        log.debug("### updated Mention with screenName = " + screenName);
+                        log.debug("### updated Mention with screenName = " + onePersMention.getUniqueId());
                     }
                 }
             }
             pageRequest = pageRequest.next();
         }
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         lfdNr = 0;
         for(String screenName:screenNames){
             lfdNr++;

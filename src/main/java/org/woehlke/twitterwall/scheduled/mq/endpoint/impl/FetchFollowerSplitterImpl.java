@@ -1,7 +1,5 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.CursoredList;
