@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TwitterUrlServiceImpl implements TwitterUrlService {
 
-
     @Override
     public Url fetchTransientUrl(final String urlSource,Task task) {
         String msg = "fetchTransientUrl " + urlSource + " ";

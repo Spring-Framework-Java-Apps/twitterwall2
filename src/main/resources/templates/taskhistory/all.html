@@ -27,40 +27,42 @@
                         <span>Tasks</span>
                     </a>
                 </div>
-                <table class="table table-striped">
-                    <thead th:include="layoutDataview :: tw-data-view-thead">
-                    </thead>
-                    <tbody>
-                    <tr th:each="myPageItem : ${myPageContent}">
-                        <td>
-                            <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
-                        </td>
-                        <td>
-                            <div class="row">
-                                <div class="col-md-2">description:</div>
-                                <div class="col-md-10">
-                                    <span th:text="${myPageItem.description}">description</span>
+                <div class="well">
+                    <table class="table table-striped">
+                        <thead th:include="layoutDataview :: tw-data-view-thead">
+                        </thead>
+                        <tbody>
+                        <tr th:each="myPageItem : ${myPageContent}">
+                            <td>
+                                <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-2">description:</div>
+                                    <div class="col-md-10">
+                                        <span th:text="${myPageItem.description}">description</span>
+                                    </div>
+                                    <div class="col-md-2">taskStatusBefore:</div>
+                                    <div class="col-md-10">
+                                        <span th:text="${myPageItem.taskStatusBefore}">taskStatusBefore</span>
+                                    </div>
+                                    <div class="col-md-2">taskStatusNow:</div>
+                                    <div class="col-md-10">
+                                        <span th:text="${myPageItem.taskStatusNow}">taskStatusNow</span>
+                                    </div>
+                                    <div class="col-md-2">timeEvent:</div>
+                                    <div class="col-md-10">
+                                        <span th:text="${myPageItem.timeEvent}">timeEvent</span>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">taskStatusBefore:</div>
-                                <div class="col-md-10">
-                                    <span th:text="${myPageItem.taskStatusBefore}">taskStatusBefore</span>
-                                </div>
-                                <div class="col-md-2">taskStatusNow:</div>
-                                <div class="col-md-10">
-                                    <span th:text="${myPageItem.taskStatusNow}">taskStatusNow</span>
-                                </div>
-                                <div class="col-md-2">timeEvent:</div>
-                                <div class="col-md-10">
-                                    <span th:text="${myPageItem.timeEvent}">timeEvent</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                    <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
-                    </tfoot>
-                </table>
+                            </td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                        <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
+                        </tfoot>
+                    </table>
+                </div>
                 <div class="well">
                     <a href="/task/all" th:href="@{/task/all}">
                         <i class="fa fa-check-square" aria-hidden="true"></i>

@@ -8,10 +8,8 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
-import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -33,46 +31,37 @@ import java.util.regex.Pattern;
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
         @Index(name="idx_userprofile_description", columnList="description"),
         @Index(name="idx_userprofile_location", columnList="location"),
-        @Index(name="idx_userprofile_url", columnList="url"),
-        @Index(name="idx_userprofile_fetch_tweets_from_twitter_search", columnList="remote_api_cache_fetch_tweets_from_twitter_search"),
-        @Index(name="idx_userprofile_update_tweets", columnList="remote_api_cache_update_tweets"),
-        @Index(name="idx_userprofile_update_user_profiles", columnList="remote_api_cache_update_user_profiles"),
-        @Index(name="idx_userprofile_update_user_profiles_from_mentions", columnList="remote_api_cache_update_user_profiles_from_mentions"),
-        @Index(name="idx_userprofile_fetch_users_from_defined_user_list", columnList="remote_api_cache_fetch_users_from_defined_user_list"),
-        @Index(name="idx_userprofile_controller_get_testdata_tweets", columnList="remote_api_cache_controller_get_testdata_tweets"),
-        @Index(name="idx_userprofile_controller_get_testdata_user", columnList="remote_api_cache_controller_get_testdata_user"),
-        @Index(name="idx_userprofile_controller_add_user_for_screen_name", columnList="remote_api_cache_controller_add_user_for_screen_name"),
-        @Index(name="idx_userprofile_controller_create_imprint_user", columnList="remote_api_cache_controller_create_imprint_user")
+        @Index(name="idx_userprofile_url", columnList="url")
     }
 )
 @NamedQueries({
         @NamedQuery(
             name = "User.findTweetingUsers",
-            query = "select t from User as t where t.tweeting=true"
+            query = "select t from User as t where t.taskInfo.fetchTweetsFromSearch=true"
         ),
         @NamedQuery(
-                name = "User.findFollower",
-                query = "select t from User as t where t.follower=true"
+            name = "User.findFollower",
+            query = "select t from User as t where t.taskInfo.fetchFollower=true"
         ),
         @NamedQuery(
-                name = "User.findNotYetFollower",
-                query = "select t from User as t where t.follower=false"
+            name = "User.findNotYetFollower",
+            query = "select t from User as t where t.taskInfo.fetchFollower=false"
         ),
         @NamedQuery(
-                name = "User.findFriendUsers",
-                query = "select t from User as t where t.friend=true"
+            name = "User.findFriends",
+            query = "select t from User as t where t.taskInfo.fetchFriends=true"
         ),
         @NamedQuery(
-            name = "User.findNotYetFriendUsers",
-            query = "select t from User as t where t.friend=false"
+            name = "User.findNotYetFriends",
+            query = "select t from User as t where t.taskInfo.fetchFriends=false"
         ),
         @NamedQuery(
-                name = "User.findOnList",
-                query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
+            name = "User.findOnList",
+            query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
         ),
         @NamedQuery(
             name = "User.findNotYetOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
+            query = "select t from User as t where t.taskInfo.fetchUsersFromList=false and t.taskInfo.fetchTweetsFromSearch=true"
         ),
         @NamedQuery(
             name="User.getUsersForHashTag",
@@ -87,12 +76,20 @@ import java.util.regex.Pattern;
             query = "select t.description from User as t where t.description is not null"
         ),
         @NamedQuery(
-            name = "User.findAllTwitterIds",
-            query = "select t.idTwitter from User as t"
-        ),
-        @NamedQuery(
             name="User.findByUniqueId",
             query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFriendsButNotFollowers",
+            query="select t from User as t where t.taskInfo.fetchFollower=false and t.taskInfo.fetchFriends=true"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFollowersAndFriends",
+            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=true"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFollowersButNotFriends",
+            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
         )
 })
 @NamedNativeQueries({
@@ -239,16 +236,8 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column
     private Boolean friend;
 
-    @Column
-    private Boolean tweeting;
-
     @Column(length = 4096)
     private String profileBannerUrl;
-
-    @Valid
-    @NotNull
-    @Embedded
-    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
 
     @NotNull
     @Embedded
@@ -297,14 +286,9 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.description = description;
         this.location = location;
         this.createdDate = createdDate;
-        if(updatedBy != null){
-            twitterApiCaching.store(updatedBy.getTaskType());
-        } else {
-            twitterApiCaching.store(createdBy.getTaskType());
-        }
     }
 
-    private User() {
+    protected User() {
     }
 
     @Transient
@@ -417,6 +401,12 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         } else {
             return "hidden";
         }
+    }
+
+    @Transient
+    public boolean isTweeting(){
+        Boolean isTweeting = this.getTaskInfo().getFetchTweetsFromSearch();
+        if(isTweeting == null) {return false; } else { return isTweeting; }
     }
 
     public static User getDummyUserForScreenName(String screenName,Task task){
@@ -583,14 +573,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.followRequestSent = followRequestSent;
     }
 
-    public TwitterApiCaching getTwitterApiCaching() {
-        return twitterApiCaching;
-    }
-
-    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
-        this.twitterApiCaching = twitterApiCaching;
-    }
-
     public Boolean getProtectedUser() {
         if(protectedUser==null){
             return false;
@@ -736,10 +718,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFollower() {
-        if(follower==null){
+        if(this.getTaskInfo().getFetchFollower()==null){
             return false;
         } else {
-            return follower;
+            return this.getTaskInfo().getFetchFollower();
         }
     }
 
@@ -748,27 +730,15 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFriend() {
-        if(friend==null){
+        if(this.getTaskInfo().getFetchFriends()==null){
             return false;
         } else {
-            return friend;
+            return this.getTaskInfo().getFetchFriends();
         }
     }
 
     public void setFriend(Boolean friend) {
         this.friend = friend;
-    }
-
-    public Boolean getTweeting() {
-        if(tweeting==null){
-            return false;
-        } else {
-            return tweeting;
-        }
-    }
-
-    public void setTweeting(Boolean tweeting) {
-        this.tweeting = tweeting;
     }
 
     public String getProfileBannerUrl() {
@@ -826,7 +796,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                 ", showAllInlineMedia=" + showAllInlineMedia +
                 ", follower=" + follower +
                 ", friend=" + friend +
-                ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
                     super.toString() +
                 ",\n entities=" + this.entities.toString() +

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
@@ -15,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateTweetsSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -39,16 +39,19 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public UpdateTweetsSplitterImpl(TwitterProperties twitterProperties, TweetService tweetService, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
+    public UpdateTweetsSplitterImpl(TwitterProperties twitterProperties, TweetService tweetService, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.tweetService = tweetService;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
         long taskId = msgIn.getTaskId();
@@ -62,7 +65,7 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
         while(hasNext) {
             Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
             for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
-                if(!tweetTwitterId.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
+                if(!tweetTwitterId.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     lfdNr++;
                     all++;
                     log.debug("### tweetService.findAllTwitterIds from DB (" + lfdNr + "): " + tweetTwitterId.getIdTwitter());
@@ -72,7 +75,6 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
             hasNext = tweetTwitterIds.hasNext();
             pageRequest = pageRequest.next();
         }
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         lfdNr = 0;
         for(Long tweetTwitterId : worklistTwitterIds){
@@ -80,18 +82,9 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
             log.debug("### twitterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetMessage result = new TweetMessage(msgIn,foundTweetFromTwitter);
-            Message<TweetMessage> mqMessageOut =
-                    MessageBuilder.withPayload(result)
-                            .copyHeaders(incomingTaskMessage.getHeaders())
-                            .setHeader("tw_lfd_nr",lfdNr)
-                            .setHeader("tw_all",all)
-                            .build();
+            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage,foundTweetFromTwitter,lfdNr,all);
             tweets.add(mqMessageOut);
-            log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
-            try {
-                Thread.sleep(millisToWaitBetweenTwoApiCalls);
-            } catch (InterruptedException e) {
-            }
+            twitterwallMessageBuilder.waitForApi();
         }
         return tweets;
     }

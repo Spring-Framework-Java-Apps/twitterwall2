@@ -31,7 +31,6 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         long countMention = mentionRepository.count();
         long countTickerSymbol = tickerSymbolRepository.count();
         long countUrl = urlRepository.count();
-        long countUrlCache = urlCacheRepository.count();
         long countTask = taskRepository.count();
         long countTaskHistory = taskHistoryRepository.count();
 
@@ -41,7 +40,6 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setCountTickerSymbol(countTickerSymbol);
         c.setCountTweets(countTweets);
         c.setCountUrl(countUrl);
-        c.setCountUrlCache(countUrlCache);
         c.setCountUser(countUser);
         c.setCountTask(countTask);
         c.setCountTaskHistory(countTaskHistory);
@@ -93,8 +91,6 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final UrlRepository urlRepository;
 
-    private final UrlCacheRepository urlCacheRepository;
-
     private final TickerSymbolRepository tickerSymbolRepository;
 
     private final TaskRepository taskRepository;
@@ -102,14 +98,13 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
     private final TaskHistoryRepository taskHistoryRepository;
 
     @Autowired
-    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, UrlCacheRepository urlCacheRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
         this.tweetRepository = tweetRepository;
         this.userRepository = userRepository;
         this.mentionRepository = mentionRepository;
         this.mediaRepository = mediaRepository;
         this.hashTagRepository = hashTagRepository;
         this.urlRepository = urlRepository;
-        this.urlCacheRepository = urlCacheRepository;
         this.tickerSymbolRepository = tickerSymbolRepository;
         this.taskRepository = taskRepository;
         this.taskHistoryRepository = taskHistoryRepository;

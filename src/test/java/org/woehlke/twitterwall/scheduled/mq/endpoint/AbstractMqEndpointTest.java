@@ -12,7 +12,6 @@ public abstract class AbstractMqEndpointTest {
         boolean resultTweets = afterTest.getCountTweets()>=beforeTest.getCountTweets();
         boolean resultUser = afterTest.getCountUser()>=beforeTest.getCountUser();
         boolean resultUrl = afterTest.getCountUrl() >= beforeTest.getCountUrl();
-        boolean resultUrlCache = afterTest.getCountUrlCache()>= beforeTest.getCountUrlCache();
         boolean resultHashTags = afterTest.getCountHashTags()>=beforeTest.getCountHashTags();
         boolean resultMedia =  afterTest.getCountMedia()>=beforeTest.getCountMedia();
         boolean resultMention =  afterTest.getCountMention()  >=beforeTest.getCountMention();
@@ -23,13 +22,12 @@ public abstract class AbstractMqEndpointTest {
         Assert.assertTrue(resultTweets);
         Assert.assertTrue(resultUser);
         Assert.assertTrue(resultUrl);
-        Assert.assertTrue(resultUrlCache);
         Assert.assertTrue(resultHashTags);
         Assert.assertTrue(resultMedia);
         Assert.assertTrue(resultMention);
         Assert.assertTrue(resultTickerSymbol);
 
-        boolean result = resultTask && resultTaskHistory && resultTweets && resultUser && resultUrl && resultUrlCache && resultHashTags && resultHashTags && resultMedia && resultMention && resultTickerSymbol;
+        boolean result = resultTask && resultTaskHistory && resultTweets && resultUser && resultUrl && resultHashTags && resultHashTags && resultMedia && resultMention && resultTickerSymbol;
 
         return result;
     }
@@ -41,7 +39,6 @@ public abstract class AbstractMqEndpointTest {
         boolean resultTweets = afterTest.getCountTweets()<=beforeTest.getCountTweets();
         boolean resultUser = afterTest.getCountUser()<=beforeTest.getCountUser();
         boolean resultUrl = afterTest.getCountUrl() <= beforeTest.getCountUrl();
-        boolean resultUrlCache = afterTest.getCountUrlCache()<= beforeTest.getCountUrlCache();
         boolean resultHashTags = afterTest.getCountHashTags()<=beforeTest.getCountHashTags();
         boolean resultMedia =  afterTest.getCountMedia()<=beforeTest.getCountMedia();
         boolean resultMention =  afterTest.getCountMention()  <=beforeTest.getCountMention();
@@ -52,13 +49,12 @@ public abstract class AbstractMqEndpointTest {
         Assert.assertTrue(resultTweets);
         Assert.assertTrue(resultUser);
         Assert.assertTrue(resultUrl);
-        Assert.assertTrue(resultUrlCache);
         Assert.assertTrue(resultHashTags);
         Assert.assertTrue(resultMedia);
         Assert.assertTrue(resultMention);
         Assert.assertTrue(resultTickerSymbol);
 
-        boolean result = resultTask && resultTaskHistory && resultTweets && resultUser && resultUrl && resultUrlCache && resultHashTags && resultHashTags && resultMedia && resultMention && resultTickerSymbol;
+        boolean result = resultTask && resultTaskHistory && resultTweets && resultUser && resultUrl && resultHashTags && resultHashTags && resultMedia && resultMention && resultTickerSymbol;
 
         return result;
     }

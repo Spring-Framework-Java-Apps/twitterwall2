@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -14,6 +13,7 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.FindTweetsToRemoveSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 
@@ -29,15 +29,18 @@ public class FindTweetsToRemoveSplitterImpl implements FindTweetsToRemoveSplitte
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public FindTweetsToRemoveSplitterImpl(TweetService tweetService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public FindTweetsToRemoveSplitterImpl(TweetService tweetService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.tweetService = tweetService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> message) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
@@ -53,13 +56,7 @@ public class FindTweetsToRemoveSplitterImpl implements FindTweetsToRemoveSplitte
         int loopAll = tweetList.getContent().size();
         for (Tweet tweet: tweetList) {
             loopId++;
-            TweetMessage tweetMsg = new TweetMessage(msgIn,tweet);
-            Message<TweetMessage> mqMessageOut =
-                    MessageBuilder.withPayload(tweetMsg)
-                            .copyHeaders(message.getHeaders())
-                            .setHeader("tw_lfd_nr",loopId)
-                            .setHeader("tw_all",loopAll)
-                            .build();
+            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(message,tweet,loopId,loopAll);
             tweets.add(mqMessageOut);
         }
         return tweets;

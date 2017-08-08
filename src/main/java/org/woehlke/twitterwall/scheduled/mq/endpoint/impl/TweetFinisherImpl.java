@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -21,15 +22,19 @@ import java.util.List;
 public class TweetFinisherImpl implements TweetFinisher {
 
     @Override
-    public TweetResultList finish(Message<List<TweetMessage>> incomingMessageList){
+    public Message<TweetResultList> finish(Message<List<TweetMessage>> incomingMessageList){
         List<Tweet> resultList = new ArrayList<>();
         long taskId = 0L;
         for(TweetMessage msg:incomingMessageList.getPayload()){
-            resultList.add(msg.getTweet());
+            resultList.add( msg.getTweet());
             taskId = msg.getTaskMessage().getTaskId();
         }
         TweetResultList result = new TweetResultList(taskId,resultList);
-        return result;
+        Message<TweetResultList> mqMessageOut = MessageBuilder.withPayload(result)
+                .copyHeaders(incomingMessageList.getHeaders())
+                .setHeader("persisted",Boolean.TRUE)
+                .build();
+        return mqMessageOut;
     }
 
     @Override

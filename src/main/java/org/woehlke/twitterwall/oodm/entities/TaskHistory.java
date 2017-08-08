@@ -79,7 +79,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         @AttributeOverride(name = "countMention", column = @Column(name = "count_mention",nullable=false)),
         @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "count_tickersymbol",nullable=false)),
         @AttributeOverride(name = "countUrl", column = @Column(name = "count_url",nullable=false)),
-        @AttributeOverride(name = "countUrlCache", column = @Column(name = "count_urlcache",nullable=false)),
         @AttributeOverride(name = "countTask", column = @Column(name = "count_task",nullable=false)),
         @AttributeOverride(name = "countTaskHistory", column = @Column(name = "count_task_history",nullable=false)),
         @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "count_tweet2hashtag",nullable=false)),
@@ -95,18 +94,8 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     })
     private CountedEntities countedEntities = new CountedEntities();
 
-    private TaskHistory() {
+    protected TaskHistory() {
     }
-
-    /*
-    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, CountedEntities countedEntities) {
-        this.countedEntities = countedEntities;
-        this.description = description;
-        this.taskStatusBefore = taskStatusBefore;
-        this.taskStatusNow = taskStatusNow;
-        this.timeEvent = new Date();
-    }
-    */
 
     public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task, CountedEntities countedEntities) {
         this.countedEntities = countedEntities;

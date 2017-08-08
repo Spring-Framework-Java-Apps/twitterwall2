@@ -33,4 +33,14 @@ twitterwall:
       millisToWaitForFetchTweetsFromTwitterSearch: 6000000
   contextTest: true
   scheduler:
+    allowFetchTweetsFromTwitterSearch: true
+    allowUpdateTweets: true
+    allowUpdateUserProfiles: true
+    allowUpdateUserProfilesFromMention: true
+    fetchUserListAllow: true
+    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    herokuDbRowsLimit: false
+    removeOldDataFromStorageAllow: true
+    fetchFollowerAllow: true
+    fetchFriendsAllow: true
     skipFortesting: true

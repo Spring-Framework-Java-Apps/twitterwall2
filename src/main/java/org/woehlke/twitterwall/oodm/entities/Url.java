@@ -7,7 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
-import org.woehlke.twitterwall.oodm.entities.parts.TwitterApiCaching;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskBasedCaching;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -25,16 +25,7 @@ import java.net.MalformedURLException;
     },
     indexes = {
         @Index(name="idx_url_expanded", columnList="expanded"),
-        @Index(name="idx_url_display", columnList="display"),
-        @Index(name="idx_url_fetch_tweets_from_twitter_search", columnList="remote_api_cache_fetch_tweets_from_twitter_search"),
-        @Index(name="idx_url_update_tweets", columnList="remote_api_cache_update_tweets"),
-        @Index(name="idx_url_update_user_profiles", columnList="remote_api_cache_update_user_profiles"),
-        @Index(name="idx_url_update_user_profiles_from_mentions", columnList="remote_api_cache_update_user_profiles_from_mentions"),
-        @Index(name="idx_url_fetch_users_from_defined_user_list", columnList="remote_api_cache_fetch_users_from_defined_user_list"),
-        @Index(name="idx_url_controller_get_testdata_tweets", columnList="remote_api_cache_controller_get_testdata_tweets"),
-        @Index(name="idx_url_controller_get_testdata_user", columnList="remote_api_cache_controller_get_testdata_user"),
-        @Index(name="idx_url_controller_add_user_for_screen_name", columnList="remote_api_cache_controller_add_user_for_screen_name"),
-        @Index(name="idx_url_ontroller_create_imprint_user", columnList="remote_api_cache_controller_create_imprint_user")
+        @Index(name="idx_url_display", columnList="display")
     }
 )
 @NamedQueries({
@@ -58,7 +49,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Column(length=4096,nullable = false)
     private String display="";
 
-    //@URL
     @NotNull
     @Column(length=4096,nullable = false)
     private String expanded="";
@@ -75,7 +65,7 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @Valid
     @NotNull
     @Embedded
-    private TwitterApiCaching twitterApiCaching = new TwitterApiCaching();
+    private TaskBasedCaching taskBasedCaching = new TaskBasedCaching();
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -135,9 +125,9 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.expanded = expanded;
         this.url = url;
         if(updatedBy != null){
-            twitterApiCaching.store(updatedBy.getTaskType());
+            taskBasedCaching.store(updatedBy.getTaskType());
         } else {
-            twitterApiCaching.store(createdBy.getTaskType());
+            taskBasedCaching.store(createdBy.getTaskType());
         }
     }
 
@@ -147,13 +137,13 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.expanded = Url.UNDEFINED;
         this.url = url;
         if(updatedBy != null){
-            twitterApiCaching.store(updatedBy.getTaskType());
+            taskBasedCaching.store(updatedBy.getTaskType());
         } else {
-            twitterApiCaching.store(createdBy.getTaskType());
+            taskBasedCaching.store(createdBy.getTaskType());
         }
     }
 
-    private Url() {
+    protected Url() {
     }
 
     public static long getSerialVersionUID() {
@@ -192,12 +182,12 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.url = url;
     }
 
-    public TwitterApiCaching getTwitterApiCaching() {
-        return twitterApiCaching;
+    public TaskBasedCaching getTaskBasedCaching() {
+        return taskBasedCaching;
     }
 
-    public void setTwitterApiCaching(TwitterApiCaching twitterApiCaching) {
-        this.twitterApiCaching = twitterApiCaching;
+    public void setTaskBasedCaching(TaskBasedCaching taskBasedCaching) {
+        this.taskBasedCaching = taskBasedCaching;
     }
 
     @Override

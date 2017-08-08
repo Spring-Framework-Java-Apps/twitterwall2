@@ -18,7 +18,7 @@ import org.woehlke.twitterwall.oodm.entities.Url;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class UrlServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UrlCacheServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
 
     @Autowired
     private UrlService urlService;

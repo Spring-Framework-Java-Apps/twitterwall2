@@ -20,8 +20,6 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
 
     Page<String> getAllDescriptions(Pageable pageRequest);
 
-    //Page<Long> getAllTwitterIds(Pageable pageRequest);
-
     Page<User> getUsersForHashTag(HashTag hashTag,Pageable pageRequest);
 
     Page<User> getFriends(Pageable pageRequest);
@@ -36,6 +34,12 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
 
     Page<User> getNotYetOnList(Pageable pageRequest);
 
+    Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);
+
+    Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest);
+
+    Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest);
+
     Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest);
 
     Page<Object2Entity> findAllUser2Media(Pageable pageRequest);
@@ -46,4 +50,5 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
 
     Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest);
 
+    boolean isByIdTwitter(long userIdTwitter);
 }

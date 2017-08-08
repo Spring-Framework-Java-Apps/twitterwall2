@@ -72,7 +72,7 @@ public class TaskController {
     }
 
     @RequestMapping("/start/createTestData")
-    public String getTestData(Model model) {
+    public String createTTestData(Model model) {
         model = controllerHelper.setupPage(
                 model,"Test Data Tweets",
                 twitterProperties.getSearchQuery(),
@@ -97,7 +97,7 @@ public class TaskController {
     ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
-        log.info(msg+"START startTask.fetchUsersFromList: ");
+        log.info(msg+"START startTask.fetchUsersFromList");
         Task task = mqAsyncStartTask.fetchUsersFromList();
         model.addAttribute("task",task);
         log.info(msg+"DONE startTask.fetchUsersFromList: ");
@@ -114,7 +114,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/search")
     public String  fetchTweetsFromTwitterSearchStartTask(Model model) {
         String msg = "/start/tweets/search";
-        String title = "Scheduled Task started";
+        String title = "Scheduled Task started: fetch Tweets from Search";
         String subtitle = "/start/tweets/search";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
@@ -126,7 +126,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/update")
     public String updateTweetsStartTask(Model model) {
         String msg = "/start/tweets/fetch";
-        String title = "Scheduled Task started";
+        String title = "Scheduled Task started: update Tweets";
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
@@ -138,7 +138,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/list/fetch")
     public String fetchUsersFromDefinedUserListStartTask(Model model){
         String msg = "/start/users/list/fetch";
-        String title = "Scheduled Task started";
+        String title = "Scheduled Task started: fetch Users from List";
         String subtitle = "/start/users/list/fetch";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
@@ -147,10 +147,34 @@ public class TaskController {
         return PATH+"/start/taskStarted";
     }
 
+    @RequestMapping(path="/start/users/follower/fetch")
+    public String fetchFollowerStartTask(Model model){
+        String msg = "/start/users/follower/fetch";
+        String title = "Scheduled Task started: fetch Follower";
+        String subtitle = "/start/users/follower/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.fetchFollower();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/users/friends/fetch")
+    public String fetchFriendsStartTask(Model model){
+        String msg = "/start/users/friends/fetch";
+        String title = "Scheduled Task started: fetch Friends";
+        String subtitle = "/start/users/friends/fetch";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.fetchFriends();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
     @RequestMapping(path="/start/users/mentions/update")
     public String updateUserProfilesFromMentionsStartTask(Model model){
         String msg = "/start/users/mentions/update";
-        String title = "Scheduled Task started";
+        String title = "Scheduled Task started: update Users from Mentions";
         String subtitle = "/start/users/mentions/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
@@ -162,7 +186,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/update")
     public String updateUserProfilesStartTask(Model model) {
         String msg = "/start/users/update";
-        String title = "Scheduled Task started";
+        String title = "Scheduled Task started: update Users";
         String subtitle = "/start/users/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
@@ -189,9 +213,6 @@ public class TaskController {
 
     private final TwitterProperties twitterProperties;
 
-    private final StartTask mqStartTask;
-
-
     @Autowired
     public TaskController(
             UserService userService, TaskService taskService,
@@ -199,7 +220,7 @@ public class TaskController {
             FrontendProperties frontendProperties,
             ControllerHelper controllerHelper,
             AsyncStartTask mqAsyncStartTask,
-            TwitterProperties twitterProperties, StartTask mqStartTask) {
+            TwitterProperties twitterProperties) {
         this.userService = userService;
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
@@ -207,7 +228,6 @@ public class TaskController {
         this.controllerHelper = controllerHelper;
         this.mqAsyncStartTask = mqAsyncStartTask;
         this.twitterProperties = twitterProperties;
-        this.mqStartTask = mqStartTask;
     }
 
 }

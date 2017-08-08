@@ -115,14 +115,16 @@ twitterwall:
         updateUserProfiles:  43200000 # 12 Hours
         updateUserProfilesFromMentions: 3600000 # One Hour
   scheduler:
-    allowFetchTweetsFromTwitterSearch: ${TWITTERWALL_SCHEDULER_ALLOW_SEARCH}
-    allowUpdateTweets: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_TWEETS}
-    allowUpdateUserProfiles: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS}
-    allowUpdateUserProfilesFromMention: ${TWITTERWALL_SCHEDULER_ALLOW_UPDATE_USERS_FROM_MENTION}
-    fetchUserListAllow: ${TWITTERWALL_SCHEDULER_USER_LIST_ALLOW}
+    allowFetchTweetsFromTwitterSearch: true
+    fetchUserListAllow: true
     fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
-    herokuDbRowsLimit: ${TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT}
-    removeOldDataFromStorageAllow: ${TWITTERWALL_SCHEDULER_ALLOW_REMOVE_OLD_DATA_FROM_STORAGE}
+    allowUpdateUserProfilesFromMention: true
+    fetchFollowerAllow: false
+    fetchFriendsAllow: false
+    allowUpdateTweets: false
+    allowUpdateUserProfiles: false
+    herokuDbRowsLimit: false
+    removeOldDataFromStorageAllow: false
     skipFortesting: false
   testdata:
     oodm:

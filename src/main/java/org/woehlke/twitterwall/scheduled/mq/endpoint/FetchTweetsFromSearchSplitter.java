@@ -1,12 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
-import org.springframework.messaging.Message;
-import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TweetsSplitter;
 
-import java.util.List;
+public interface FetchTweetsFromSearchSplitter extends TweetsSplitter {
 
-public interface FetchTweetsFromSearchSplitter {
-
-    List<Message<TweetMessage>> splitMessage(Message<TaskMessage> message);
 }

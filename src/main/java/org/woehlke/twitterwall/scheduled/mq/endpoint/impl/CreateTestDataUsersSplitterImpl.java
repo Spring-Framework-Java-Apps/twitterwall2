@@ -1,6 +1,5 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.CreateTestDataUsersSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -34,20 +34,23 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public CreateTestDataUsersSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
+    public CreateTestDataUsersSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.testdataProperties = testdataProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<UserMessage>> userProfileList = new ArrayList<>();
-        TaskMessage msgIn = incomingTaskMessage.getPayload();
-        long id = msgIn.getTaskId();
+        TaskMessage incomingTaskMessagePayload = incomingTaskMessage.getPayload();
+        long id = incomingTaskMessagePayload.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
         List<String> listScreenName = testdataProperties.getOodm().getEntities().getUser().getScreenName();
@@ -55,38 +58,25 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
         int loopAll = listScreenName.size();
         for (String screenName : listScreenName) {
             loopId++;
+            boolean fetchFromTwitterApi=true;
             User userPers = userService.findByScreenName(screenName);
             if(userPers==null){
-                userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
+                fetchFromTwitterApi=true;
             } else {
-                if(!userPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
-                    userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
-                } else {
-                    UserMessage msg = new UserMessage(msgIn,screenName,userPers);
-                    Message<UserMessage> mqMessageOut =
-                            MessageBuilder.withPayload(msg)
-                                    .copyHeaders(incomingTaskMessage.getHeaders())
-                                    .setHeader("tw_lfd_nr",loopId)
-                                    .setHeader("tw_all",loopAll)
-                                    .build();
-                    userProfileList.add(mqMessageOut);
-                }
+                fetchFromTwitterApi=!userPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS);
             }
+            Message<UserMessage> outgoingMessage;
+            if(fetchFromTwitterApi){
+                TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
+                outgoingMessage = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
+                twitterwallMessageBuilder.waitForApi();
+            } else {
+                outgoingMessage = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userPers,loopId,loopAll);
+            }
+            userProfileList.add(outgoingMessage);
         }
         return userProfileList;
     }
 
-    private Message<UserMessage> getUserProfileFromTwitterApi(Message<TaskMessage> incomingTaskMessage, String screenName,int loopId,int loopAll){
-        TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
-        TaskMessage msgIn = incomingTaskMessage.getPayload();
-        UserMessage msg = new UserMessage(msgIn,userProfile);
-        Message<UserMessage> mqMessageOut =
-                MessageBuilder.withPayload(msg)
-                        .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("tw_lfd_nr",loopId)
-                        .setHeader("tw_all",loopAll)
-                        .build();
-        return mqMessageOut;
 
-    }
 }
