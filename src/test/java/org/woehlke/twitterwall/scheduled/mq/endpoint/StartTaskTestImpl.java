@@ -138,6 +138,23 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         log.info(msg+"FINISHED TEST");
     }
 
+    @Override
+    public void fetchFriendsTest() throws Exception {
+        String msg = "fetchFollowerTest: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.fetchFriends();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_FRIENDS,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
 
     //TODO: #229 https://github.com/phasenraum2010/twitterwall2/issues/229
     @Ignore

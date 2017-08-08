@@ -42,4 +42,5 @@ twitterwall:
     herokuDbRowsLimit: false
     removeOldDataFromStorageAllow: true
     fetchFollowerAllow: true
+    fetchFriendsAllow: true
     skipFortesting: true

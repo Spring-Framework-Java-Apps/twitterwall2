@@ -121,11 +121,26 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     @Override
     public CursoredList<Long> findFollower() {
-        String msg = MSG+"findUsersFromDefinedList: ";
+        String msg = MSG+"findFollower: ";
         log.debug(msg);
         CursoredList<Long> result;
         try {
             result = getTwitterProxy().friendOperations().getFollowerIds();
+            log.debug(msg + " result.size: " + result.size());
+            return result;
+        } catch (Exception e) {
+            log.debug(msg + e.getMessage());
+            return new CursoredList<>(new ArrayList<>(),0L,0L);
+        }
+    }
+
+    @Override
+    public CursoredList<Long> findFriends() {
+        String msg = MSG+"findFriendss: ";
+        log.debug(msg);
+        CursoredList<Long> result;
+        try {
+            result = getTwitterProxy().friendOperations().getFriendIds();
             log.debug(msg + " result.size: " + result.size());
             return result;
         } catch (Exception e) {

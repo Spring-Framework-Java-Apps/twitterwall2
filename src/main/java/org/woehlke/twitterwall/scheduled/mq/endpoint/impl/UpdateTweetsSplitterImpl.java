@@ -48,7 +48,7 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
         long taskId = msgIn.getTaskId();
@@ -62,7 +62,7 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
         while(hasNext) {
             Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
             for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
-                if(!tweetTwitterId.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
+                if(!tweetTwitterId.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     lfdNr++;
                     all++;
                     log.debug("### tweetService.findAllTwitterIds from DB (" + lfdNr + "): " + tweetTwitterId.getIdTwitter());

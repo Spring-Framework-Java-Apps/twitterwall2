@@ -206,6 +206,28 @@ public class TaskControllerTest {
     @WithMockUser
     @Commit
     @Test
+    public void fetchFriendsStartTask() throws Exception {
+    String msg = "fetchFriendsStartTask: ";
+    MvcResult result = this.mockMvc.perform(get("/task/start/users/friends/fetch"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( PATH+"/start/taskStarted"))
+            .andExpect(model().attributeExists("task"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    @Commit
+    @Test
     public void updateTweetsStartTaskTest() throws Exception {
         String msg = "updateTweetsStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))

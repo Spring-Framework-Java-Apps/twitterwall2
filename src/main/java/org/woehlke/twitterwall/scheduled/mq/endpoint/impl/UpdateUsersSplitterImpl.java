@@ -55,8 +55,8 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
-        String msg = "### mqUpdateUserProfiles.splitMessage: ";
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
+        String msg = "### mqUpdateUserProfiles.splitTweetMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
@@ -72,7 +72,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
         while (hasNext) {
             Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
             for(User user:userProfileTwitterIds.getContent()){
-                if(!user.getTwitterApiCaching().isCached(taskType, TWELVE_HOURS)){
+                if(!user.getTaskBasedCaching().isCached(taskType, TWELVE_HOURS)){
                     loopId++;
                     loopAll++;
                     log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());

@@ -30,10 +30,10 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     @Query(name="User.findNotYetFollower")
     Page<User> findNotYetFollower(Pageable pageRequest);
 
-    @Query(name="User.findFriendUsers")
+    @Query(name="User.findFriends")
     Page<User> findFriendUsers(Pageable pageRequest);
 
-    @Query(name="User.findNotYetFriendUsers")
+    @Query(name="User.findNotYetFriends")
     Page<User> findNotYetFriendUsers(Pageable pageRequest);
 
     @Query(name="User.findNotYetOnList")

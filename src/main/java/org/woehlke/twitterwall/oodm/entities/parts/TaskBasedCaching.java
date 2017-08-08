@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
 import org.springframework.validation.annotation.Validated;
+import org.woehlke.twitterwall.oodm.entities.Task;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,27 +11,27 @@ import java.util.Date;
 
 @Validated
 @Embeddable
-public class TwitterApiCaching implements Serializable {
+public class TaskBasedCaching implements Serializable {
 
-    @Column(name=COLUMN_PREFIX+"fetch_tweets_from_twitter_search")
-    private Date fetchTweetsFromTwitterSearch;
+    @Column(name=COLUMN_PREFIX+"fetch_tweets_from_search")
+    private Date fetchTweetsFromSearch;
 
     @Column(name=COLUMN_PREFIX+"update_tweets")
     private Date updateTweets;
 
-    @Column(name=COLUMN_PREFIX+"update_user_profiles")
-    private Date updateUserProfiles;
+    @Column(name=COLUMN_PREFIX+"update_users")
+    private Date updateUsers;
 
-    @Column(name=COLUMN_PREFIX+"update_user_profiles_from_mentions")
-    private Date updateUserProfilesFromMentions;
+    @Column(name=COLUMN_PREFIX+"update_users_from_mentions")
+    private Date updateUsersFromMentions;
 
-    @Column(name=COLUMN_PREFIX+"fetch_users_from_defined_user_list")
-    private Date fetchUsersFromDefinedUserList;
+    @Column(name=COLUMN_PREFIX+"fetch_users_from_list")
+    private Date fetchUsersFromList;
 
-    @Column(name=COLUMN_PREFIX+"controller_get_testdata_tweets")
+    @Column(name=COLUMN_PREFIX+"controller_create_testdata_tweets")
     private Date controllerGetTestdataTweets;
 
-    @Column(name=COLUMN_PREFIX+"controller_get_testdata_user")
+    @Column(name=COLUMN_PREFIX+"controller_create_testdata_users")
     private Date controllerGetTestdataUser;
 
     @Column(name=COLUMN_PREFIX+"controller_add_user_for_screen_name")
@@ -45,24 +46,27 @@ public class TwitterApiCaching implements Serializable {
     @Column(name=COLUMN_PREFIX+"fetch_follower")
     private Date fetchFollower;
 
+    @Column(name=COLUMN_PREFIX+"fetch_friends")
+    private Date fetchFriends;
+
     @Transient
     public Boolean isCached(TaskType taskType, long timeToLive){
         Date lastApiCall = null;
         switch (taskType){
             case FETCH_TWEETS_FROM_SEARCH:
-                lastApiCall = fetchTweetsFromTwitterSearch;
+                lastApiCall = fetchTweetsFromSearch;
                 break;
             case UPDATE_TWEETS:
                 lastApiCall = updateTweets;
                 break;
             case UPDATE_USERS:
-                lastApiCall = updateUserProfiles;
+                lastApiCall = updateUsers;
                 break;
             case UPDATE_USERS_FROM_MENTIONS:
-                lastApiCall = updateUserProfilesFromMentions;
+                lastApiCall = updateUsersFromMentions;
                 break;
             case FETCH_USERS_FROM_LIST:
-                lastApiCall = fetchUsersFromDefinedUserList;
+                lastApiCall = fetchUsersFromList;
                 break;
             case CONTROLLER_CREATE_TESTDATA_TWEETS:
                 lastApiCall = controllerGetTestdataTweets;
@@ -82,6 +86,9 @@ public class TwitterApiCaching implements Serializable {
             case FETCH_FOLLOWER:
                 lastApiCall = fetchFollower;
                 break;
+            case FETCH_FRIENDS:
+                lastApiCall = fetchFriends;
+                break;
             default: break;
         }
         if(lastApiCall == null){
@@ -92,52 +99,65 @@ public class TwitterApiCaching implements Serializable {
         return now < lastApiCallPlusTimeToLive;
     }
 
-    public void store(TaskType taskType){
-        Date lastApiCall = new Date();
-        switch (taskType){
-            case FETCH_TWEETS_FROM_SEARCH:
-                fetchTweetsFromTwitterSearch = lastApiCall;
-                break;
-            case UPDATE_TWEETS:
-                updateTweets = lastApiCall;
-                break;
-            case UPDATE_USERS:
-                updateUserProfiles = lastApiCall;
-                break;
-            case UPDATE_USERS_FROM_MENTIONS:
-                updateUserProfilesFromMentions = lastApiCall;
-                break;
-            case FETCH_USERS_FROM_LIST:
-                fetchUsersFromDefinedUserList = lastApiCall;
-                break;
-            case CONTROLLER_CREATE_TESTDATA_TWEETS:
-                controllerGetTestdataTweets = lastApiCall;
-                break;
-            case CONTROLLER_CREATE_TESTDATA_USERS:
-                controllerGetTestdataUser = lastApiCall;
-                break;
-            case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                controllerAddUserForScreenName = lastApiCall;
-                break;
-            case CONTROLLER_CREATE_IMPRINT_USER:
-                controllerCreateImprintUser = lastApiCall;
-                break;
-            case REMOVE_OLD_DATA_FROM_STORAGE:
-                removeOldDataFromStorage = lastApiCall;
-                break;
-            case FETCH_FOLLOWER:
-                fetchFollower = lastApiCall;
-                break;
-            default: break;
+    public void store(Task task) {
+        if (task != null) {
+            TaskType taskType = task.getTaskType();
+            store(taskType);
         }
     }
 
-    public TwitterApiCaching(Date fetchTweetsFromTwitterSearch, Date updateTweets, Date updateUserProfiles, Date updateUserProfilesFromMentions, Date fetchUsersFromDefinedUserList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage,Date fetchFollower) {
-        this.fetchTweetsFromTwitterSearch = fetchTweetsFromTwitterSearch;
+    public void store(TaskType taskType){
+        if(taskType != null) {
+            Date lastApiCall = new Date();
+            switch (taskType) {
+                case FETCH_TWEETS_FROM_SEARCH:
+                    fetchTweetsFromSearch = lastApiCall;
+                    break;
+                case UPDATE_TWEETS:
+                    updateTweets = lastApiCall;
+                    break;
+                case UPDATE_USERS:
+                    updateUsers = lastApiCall;
+                    break;
+                case UPDATE_USERS_FROM_MENTIONS:
+                    updateUsersFromMentions = lastApiCall;
+                    break;
+                case FETCH_USERS_FROM_LIST:
+                    fetchUsersFromList = lastApiCall;
+                    break;
+                case CONTROLLER_CREATE_TESTDATA_TWEETS:
+                    controllerGetTestdataTweets = lastApiCall;
+                    break;
+                case CONTROLLER_CREATE_TESTDATA_USERS:
+                    controllerGetTestdataUser = lastApiCall;
+                    break;
+                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
+                    controllerAddUserForScreenName = lastApiCall;
+                    break;
+                case CONTROLLER_CREATE_IMPRINT_USER:
+                    controllerCreateImprintUser = lastApiCall;
+                    break;
+                case REMOVE_OLD_DATA_FROM_STORAGE:
+                    removeOldDataFromStorage = lastApiCall;
+                    break;
+                case FETCH_FOLLOWER:
+                    fetchFollower = lastApiCall;
+                    break;
+                case FETCH_FRIENDS:
+                    fetchFriends = lastApiCall;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public TaskBasedCaching(Date fetchTweetsFromSearch, Date updateTweets, Date updateUsers, Date updateUsersFromMentions, Date fetchUsersFromList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage, Date fetchFollower) {
+        this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
-        this.updateUserProfiles = updateUserProfiles;
-        this.updateUserProfilesFromMentions = updateUserProfilesFromMentions;
-        this.fetchUsersFromDefinedUserList = fetchUsersFromDefinedUserList;
+        this.updateUsers = updateUsers;
+        this.updateUsersFromMentions = updateUsersFromMentions;
+        this.fetchUsersFromList = fetchUsersFromList;
         this.controllerGetTestdataTweets = controllerGetTestdataTweets;
         this.controllerGetTestdataUser = controllerGetTestdataUser;
         this.controllerAddUserForScreenName = controllerAddUserForScreenName;
@@ -146,12 +166,12 @@ public class TwitterApiCaching implements Serializable {
         this.fetchFollower = fetchFollower;
     }
 
-    public TwitterApiCaching() {
-        this.fetchTweetsFromTwitterSearch = null;
+    public TaskBasedCaching() {
+        this.fetchTweetsFromSearch = null;
         this.updateTweets = null;
-        this.updateUserProfiles = null;
-        this.updateUserProfilesFromMentions = null;
-        this.fetchUsersFromDefinedUserList = null;
+        this.updateUsers = null;
+        this.updateUsersFromMentions = null;
+        this.fetchUsersFromList = null;
         this.controllerGetTestdataTweets = null;
         this.controllerGetTestdataUser = null;
         this.controllerAddUserForScreenName = null;
@@ -160,24 +180,24 @@ public class TwitterApiCaching implements Serializable {
         this.fetchFollower = null;
     }
 
-    public Date getFetchTweetsFromTwitterSearch() {
-        return fetchTweetsFromTwitterSearch;
+    public Date getFetchTweetsFromSearch() {
+        return fetchTweetsFromSearch;
     }
 
     public Date getUpdateTweets() {
         return updateTweets;
     }
 
-    public Date getUpdateUserProfiles() {
-        return updateUserProfiles;
+    public Date getUpdateUsers() {
+        return updateUsers;
     }
 
-    public Date getUpdateUserProfilesFromMentions() {
-        return updateUserProfilesFromMentions;
+    public Date getUpdateUsersFromMentions() {
+        return updateUsersFromMentions;
     }
 
-    public Date getFetchUsersFromDefinedUserList() {
-        return fetchUsersFromDefinedUserList;
+    public Date getFetchUsersFromList() {
+        return fetchUsersFromList;
     }
 
     public Date getControllerGetTestdataTweets() {
@@ -207,18 +227,18 @@ public class TwitterApiCaching implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TwitterApiCaching)) return false;
+        if (!(o instanceof TaskBasedCaching)) return false;
 
-        TwitterApiCaching that = (TwitterApiCaching) o;
+        TaskBasedCaching that = (TaskBasedCaching) o;
 
-        if (fetchTweetsFromTwitterSearch != null ? !fetchTweetsFromTwitterSearch.equals(that.fetchTweetsFromTwitterSearch) : that.fetchTweetsFromTwitterSearch != null)
+        if (fetchTweetsFromSearch != null ? !fetchTweetsFromSearch.equals(that.fetchTweetsFromSearch) : that.fetchTweetsFromSearch != null)
             return false;
         if (updateTweets != null ? !updateTweets.equals(that.updateTweets) : that.updateTweets != null) return false;
-        if (updateUserProfiles != null ? !updateUserProfiles.equals(that.updateUserProfiles) : that.updateUserProfiles != null)
+        if (updateUsers != null ? !updateUsers.equals(that.updateUsers) : that.updateUsers != null)
             return false;
-        if (updateUserProfilesFromMentions != null ? !updateUserProfilesFromMentions.equals(that.updateUserProfilesFromMentions) : that.updateUserProfilesFromMentions != null)
+        if (updateUsersFromMentions != null ? !updateUsersFromMentions.equals(that.updateUsersFromMentions) : that.updateUsersFromMentions != null)
             return false;
-        if (fetchUsersFromDefinedUserList != null ? !fetchUsersFromDefinedUserList.equals(that.fetchUsersFromDefinedUserList) : that.fetchUsersFromDefinedUserList != null)
+        if (fetchUsersFromList != null ? !fetchUsersFromList.equals(that.fetchUsersFromList) : that.fetchUsersFromList != null)
             return false;
         if (controllerGetTestdataTweets != null ? !controllerGetTestdataTweets.equals(that.controllerGetTestdataTweets) : that.controllerGetTestdataTweets != null)
             return false;
@@ -235,11 +255,11 @@ public class TwitterApiCaching implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = fetchTweetsFromTwitterSearch != null ? fetchTweetsFromTwitterSearch.hashCode() : 0;
+        int result = fetchTweetsFromSearch != null ? fetchTweetsFromSearch.hashCode() : 0;
         result = 31 * result + (updateTweets != null ? updateTweets.hashCode() : 0);
-        result = 31 * result + (updateUserProfiles != null ? updateUserProfiles.hashCode() : 0);
-        result = 31 * result + (updateUserProfilesFromMentions != null ? updateUserProfilesFromMentions.hashCode() : 0);
-        result = 31 * result + (fetchUsersFromDefinedUserList != null ? fetchUsersFromDefinedUserList.hashCode() : 0);
+        result = 31 * result + (updateUsers != null ? updateUsers.hashCode() : 0);
+        result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
+        result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
         result = 31 * result + (controllerGetTestdataTweets != null ? controllerGetTestdataTweets.hashCode() : 0);
         result = 31 * result + (controllerGetTestdataUser != null ? controllerGetTestdataUser.hashCode() : 0);
         result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
@@ -252,11 +272,11 @@ public class TwitterApiCaching implements Serializable {
     @Override
     public String toString() {
         return "TwitterApiCaching{" +
-                "fetchTweetsFromTwitterSearch=" + fetchTweetsFromTwitterSearch +
+                "fetchTweetsFromTwitterSearch=" + fetchTweetsFromSearch +
                 ", updateTweets=" + updateTweets +
-                ", updateUserProfiles=" + updateUserProfiles +
-                ", updateUserProfilesFromMentions=" + updateUserProfilesFromMentions +
-                ", fetchUsersFromDefinedUserList=" + fetchUsersFromDefinedUserList +
+                ", updateUserProfiles=" + updateUsers +
+                ", updateUserProfilesFromMentions=" + updateUsersFromMentions +
+                ", fetchUsersFromDefinedUserList=" + fetchUsersFromList +
                 ", controllerGetTestdataTweets=" + controllerGetTestdataTweets +
                 ", controllerGetTestdataUser=" + controllerGetTestdataUser +
                 ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
@@ -266,5 +286,5 @@ public class TwitterApiCaching implements Serializable {
                 '}';
     }
 
-    private final static String COLUMN_PREFIX = "remote_api_cache_";
+    private final static String COLUMN_PREFIX = "cache_";
 }

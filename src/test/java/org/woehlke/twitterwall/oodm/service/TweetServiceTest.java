@@ -125,7 +125,7 @@ public class TweetServiceTest {
         long loopTweet = 0L;
         for(User user : foundTweetingUsers.getContent()){
             loopUser++;
-            Assert.assertTrue(msg,user.getTweeting());
+            Assert.assertTrue(msg,user.getTaskInfo().getFetchTweetsFromSearch());
             Page<Tweet> foundTweets = tweetService.findTweetsForUser(user,pageRequest);
             Assert.assertNotNull(msg,foundTweets);
             for(Tweet tweet : foundTweets.getContent()) {

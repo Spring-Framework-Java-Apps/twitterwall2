@@ -34,7 +34,7 @@ public class FetchTweetsFromSearchSplitterImpl implements FetchTweetsFromSearchS
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> message) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();

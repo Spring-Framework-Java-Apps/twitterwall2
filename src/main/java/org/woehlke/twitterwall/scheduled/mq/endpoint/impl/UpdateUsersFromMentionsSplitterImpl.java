@@ -55,8 +55,8 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
-        String msg ="splitMessage: ";
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
+        String msg ="splitTweetMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<UserMessage>>  userProfileList = new ArrayList<>();

@@ -43,7 +43,7 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<UserMessage>> userProfileList = new ArrayList<>();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
@@ -59,7 +59,7 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
             if(userPers==null){
                 userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
             } else {
-                if(!userPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
+                if(!userPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     userProfileList.add(getUserProfileFromTwitterApi(incomingTaskMessage,screenName,loopId,loopAll));
                 } else {
                     UserMessage msg = new UserMessage(msgIn,screenName,userPers);

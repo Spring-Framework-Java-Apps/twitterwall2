@@ -18,5 +18,7 @@ public interface AsyncStartTaskTest {
 
     void fetchFollowerTest() throws Exception;
 
+    void fetchFriendsTest() throws Exception;
+
     void removeOldDataFromStorageTest()throws Exception;
 }

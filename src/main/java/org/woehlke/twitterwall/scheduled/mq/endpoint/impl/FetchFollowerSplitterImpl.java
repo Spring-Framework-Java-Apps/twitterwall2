@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.CursoredList;
@@ -27,6 +28,7 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    @Autowired
     public FetchFollowerSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
@@ -34,7 +36,7 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<UserMessage>> userProfileList = new ArrayList<>();
         TaskMessage msgIn = incomingTaskMessage.getPayload();

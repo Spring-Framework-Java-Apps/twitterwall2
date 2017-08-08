@@ -67,6 +67,12 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="fetchFriendsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
     <int:channel id="createTestDataUsersChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
@@ -98,6 +104,7 @@
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchChannel"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListChannel"/>
         <int:mapping value="FETCH_FOLLOWER" channel="fetchFollowerChannel"/>
+        <int:mapping value="FETCH_FRIENDS" channel="fetchFriendsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
@@ -108,7 +115,7 @@
         <int:splitter
                 id="updateTweetsSplitter"
                 ref="mqUpdateTweetsSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:service-activator
                 id="updateTweetsTransformator"
                 ref="mqTweetTransformator"
@@ -132,7 +139,7 @@
         <int:splitter
                 id="updateUsersSplitter"
                 ref="mqUpdateUserSplitter"
-                method="splitMessage" />
+                method="splitUserMessage" />
         <int:service-activator
                 id="updateUsersTransformator"
                 ref="mqUserTransformator"
@@ -156,7 +163,7 @@
         <int:splitter
                 id="updateUsersFromMentionsSplitter"
                 ref="mqUpdateUserFromMentionsSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="updateUsersFromMentionsTransformator"
                 ref="mqUserTransformator"
@@ -180,7 +187,7 @@
         <int:splitter
                 id="fetchTweetsFromSearchSplitter"
                 ref="mqFetchTweetsFromTwitterSearchSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:service-activator
                 id="fetchTweetsFromSearchTransformator"
                 ref="mqTweetTransformator"
@@ -204,7 +211,7 @@
         <int:splitter
                 id="fetchUsersFromListSplitter"
                 ref="mqFetchUserFromListSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="fetchUsersFromListTransformator"
                 ref="mqUserTransformator"
@@ -228,7 +235,7 @@
         <int:splitter
                 id="fetchUsersFromListSplitter"
                 ref="mqFetchUserFromListSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="fetchUsersFromListTransformator"
                 ref="mqUserTransformator"
@@ -251,7 +258,7 @@
         <int:splitter
                 id="fetchFollowerSplitter"
                 ref="mqFetchFollowerSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="fetchFollowerUserCheckStorage"
                 ref="mqUserCheckStorage"
@@ -274,12 +281,38 @@
                 method="finish" />
     </int:chain>
 
+    <int:chain id="fetchFriendsChain" input-channel="fetchFriendsChannel">
+        <int:splitter
+                id="fetchFriendsSplitter"
+                ref="mqFetchFriendsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="fetchFriendsUserCheckStorage"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="fetchFriendsTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchFriendsPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchFriendsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchFriendsFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
 
     <int:chain id="createTestDataTweetsChain" input-channel="createTestDataTweetsChannel">
         <int:splitter
                 id="createTestDataTweetsSplitter"
                 ref="mqCreateTestDataForTweetsSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:service-activator
                 id="createTestDataTweetsTransformator"
                 ref="mqTweetTransformator"
@@ -317,7 +350,7 @@
         <int:splitter
                 id="removeOldDataFromStorageSplitter"
                 ref="mqFindTweetsToRemoveSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:aggregator
                 id="removeOldDataFromStorageAggregator"
                 message-store="store"
@@ -344,7 +377,8 @@
         <int:mapping value="UPDATE_USERS_FROM_MENTIONS" channel="updateUsersFromMentionsFireAndForgetChannel"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="fetchTweetsFromSearchFireAndForgetChannel"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="fetchUsersFromListFireAndForgetChannel"/>
-        <int:mapping value="FETCH_FOLLOWER" channel="fetchFollowerFireAndForgeChannel"/>
+        <int:mapping value="FETCH_FOLLOWER" channel="fetchFollowerFireAndForgetChannel"/>
+        <int:mapping value="FETCH_FRIENDS" channel="fetchFriendsFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageFireAndForgetChannel"/>
@@ -380,7 +414,7 @@
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="fetchFollowerFireAndForgeChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+    <int:channel id="fetchFollowerFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
@@ -409,7 +443,7 @@
         <int:splitter
                 id="updateTweetsFireAndForgetSplitter"
                 ref="mqUpdateTweetsSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:service-activator
                 id="updateTweetsFireAndForgetTransformator"
                 ref="mqTweetTransformator"
@@ -433,7 +467,7 @@
         <int:splitter
                 id="updateUserFireAndForgetSplitter"
                 ref="mqUpdateUserSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="updateUserFireAndForgetTransformator"
                 ref="mqUserTransformator"
@@ -457,7 +491,7 @@
         <int:splitter
                 id="updateUsersFromMentionsFireAndForgetSplitter"
                 ref="mqUpdateUserFromMentionsSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="updateUsersFromMentionsFireAndForgetTransformator"
                 ref="mqUserTransformator"
@@ -481,7 +515,7 @@
         <int:splitter
                 id="fetchTweetsFromSearchFireAndForgetSplitter"
                 ref="mqFetchTweetsFromTwitterSearchSplitter"
-                method="splitMessage" />
+                method="splitTweetMessage" />
         <int:service-activator
                 id="fetchTweetsFromSearchFireAndForgetTransformator"
                 ref="mqTweetTransformator"
@@ -505,7 +539,7 @@
         <int:splitter
                 id="fetchUsersFromListFireAndForgetSplitter"
                 ref="mqFetchUserFromListSplitter"
-                method="splitMessage" />
+                method="splitUserMessage" />
         <int:service-activator
                 id="fetchUsersFromListFireAndForgetTransformator"
                 ref="mqUserTransformator"
@@ -525,11 +559,11 @@
     </int:chain>
 
 
-    <int:chain id="fetchFollowerFireAndForgetChain" input-channel="fetchFollowerFireAndForgeChannel">
+    <int:chain id="fetchFollowerFireAndForgetChain" input-channel="fetchFollowerFireAndForgetChannel">
         <int:splitter
                 id="fetchFollowerFireAndForgetSplitter"
                 ref="mqFetchFollowerSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="fetchFollowerFireAndForgetUserCheckStorage"
                 ref="mqUserCheckStorage"
@@ -552,12 +586,38 @@
                 method="finish" />
     </int:chain>
 
+    <int:chain id="fetchFriendsFireAndForgetChain" input-channel="fetchFriendsFireAndForgetChannel">
+        <int:splitter
+                id="fetchFriendsFireAndForgetSplitter"
+                ref="mqFetchFriendsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="fetchFriendsFireAndForgetUserCheckStorage"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="fetchFriendsFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchFriendsFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchFriendsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchFriendsFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
 
     <int:chain id="createTestDataUsersFireAndForgetChain" input-channel="createTestDataUsersFireAndForgetChannel">
         <int:splitter
                 id="createTestDataUsersFireAndForgetSplitter"
                 ref="mqCreateTestDataForUsersSplitter"
-                method="splitMessage"  />
+                method="splitUserMessage"  />
         <int:service-activator
                 id="createTestDataUsersFireAndForgetTransformator"
                 ref="mqUserTransformator"
@@ -581,7 +641,7 @@
         <int:splitter
                 id="createTestDataTweetsFireAndForgetSplitter"
                 ref="mqCreateTestDataForTweetsSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:service-activator
                 id="createTestDataTweetsFireAndForgetTransformator"
                 ref="mqTweetTransformator"
@@ -604,7 +664,7 @@
         <int:splitter
                 id="removeOldDataFromStorageFireAndForgetSplitter"
                 ref="mqFindTweetsToRemoveSplitter"
-                method="splitMessage"  />
+                method="splitTweetMessage"  />
         <int:aggregator
                 id="removeOldDataFromStorageFireAndForgetAggregator"
                 message-store="store"

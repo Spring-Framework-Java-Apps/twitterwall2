@@ -44,7 +44,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
@@ -60,7 +60,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
             if(tweetPers == null){
                 tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
             } else {
-                if(tweetPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
+                if(tweetPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     TweetMessage msg = new TweetMessage(msgIn,tweetPers);
                     Message<TweetMessage> mqMessageOut =
                             MessageBuilder.withPayload(msg)

@@ -57,6 +57,12 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
+    public Task fetchFriends() {
+        TaskType taskType = TaskType.FETCH_FRIENDS;
+        return sendAndReceiveUser(taskType);
+    }
+
+    @Override
     public Task createTestDataForTweets() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
         return sendAndReceiveTweet(taskType);

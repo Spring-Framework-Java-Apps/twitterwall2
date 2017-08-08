@@ -33,7 +33,7 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(initialDelay= TEN_SECONDS *3, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST)
+    @Scheduled(initialDelay= TEN_SECONDS *3, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_FOLLOWER)
     public void fetchFollower(){
         String msg = "fetch Follower ";
         if(schedulerProperties.getFetchFollowerAllow()  && ! schedulerProperties.getSkipFortesting()) {
@@ -79,6 +79,15 @@ public class ScheduledTasks {
         }
     }
 
+    @Scheduled(initialDelay= TEN_SECONDS *8, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_FRIENDS)
+    public void fetchFriends(){
+        String msg = "fetch Friends ";
+        if(schedulerProperties.getFetchFriendsAllow() && !schedulerProperties.getSkipFortesting()) {
+            Task task = asyncStartTask.fetchFriends();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
     @Autowired
     public ScheduledTasks(SchedulerProperties schedulerProperties, AsyncStartTask mqAsyncStartTask) {
         this.schedulerProperties = schedulerProperties;
@@ -96,6 +105,10 @@ public class ScheduledTasks {
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS = ONE_HOUR;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_FOLLOWER = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_FRIENDS = TWELVE_HOURS;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS = TWELVE_HOURS;
 

@@ -57,6 +57,12 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
     }
 
     @Override
+    public Task fetchFriends() {
+        TaskType taskType = TaskType.FETCH_FRIENDS;
+        return send(taskType);
+    }
+
+    @Override
     public Task createTestDataForTweets() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
         return send(taskType);

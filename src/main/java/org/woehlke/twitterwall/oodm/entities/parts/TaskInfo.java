@@ -1,146 +1,179 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.Task;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * Created by tw on 10.07.17.
  */
+@Validated
 @Embeddable
 public class TaskInfo implements Serializable {
 
     @NotNull
-    @Column(nullable = false,name="scheduler_fetch_tweets_from_twitter_search")
-    private Boolean updatedByFetchTweetsFromTwitterSearch = false;
+    @Column(nullable = false,name="fetch_tweets_from_search")
+    private Boolean fetchTweetsFromSearch = false;
 
     @NotNull
-    @Column(nullable = false,name="scheduler_update_tweets")
-    private Boolean updatedByUpdateTweets  = false;
+    @Column(nullable = false,name="update_tweets")
+    private Boolean updateTweets = false;
 
     @NotNull
-    @Column(nullable = false,name="scheduler_update_users")
-    private Boolean updatedByUpdateUserProfiles  = false;
+    @Column(nullable = false,name="update_users")
+    private Boolean updatedUsers = false;
 
     @NotNull
-    @Column(nullable = false,name="scheduler_update_users_from_mentions")
-    private Boolean updatedByUpdateUserProfilesFromMentions  = false;
+    @Column(nullable = false,name="update_users_from_mentions")
+    private Boolean updateUsersFromMentions = false;
 
     @NotNull
-    @Column(nullable = false,name="scheduler_fetch_users_from_defined_user_list")
-    private Boolean updatedByFetchUsersFromDefinedUserList  = false;
+    @Column(nullable = false,name="fetch_users_from_list")
+    private Boolean fetchUsersFromList = false;
 
     @NotNull
     @Column(nullable = false,name="controller_add_user_for_screen_name")
     private Boolean controllerAddUserForScreenName = false;
 
     @NotNull
-    @Column(nullable = false,name="controller_get_testdata_for_tweets")
-    private Boolean controllerGetTestdataForTweets = false;
+    @Column(nullable = false,name="controller_create_testdata_tweets")
+    private Boolean controllerCreateTestdataTweets = false;
 
     @NotNull
-    @Column(nullable = false,name="controller_get_testdata_for_users")
-    private Boolean controllerGetTestdataForUsers = false;
+    @Column(nullable = false,name="controller_create_testdata_users")
+    private Boolean controllerCreateTestdataUsers = false;
 
-    public TaskInfo() {
+    @NotNull
+    @Column(nullable = false,name="controller_create_imprint_user")
+    private Boolean controllerCreateImprintUser = false;
+
+    @NotNull
+    @Column(nullable = false,name="remove_old_data_from_storage")
+    private Boolean removeOldDataFromStorage = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_follower")
+    private Boolean fetchFollower = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_friends")
+    private Boolean fetchFriends = false;
+
+    @Transient
+    public void setTaskInfoFromTask(Task task) {
+        if(task!=null) {
+            TaskType useCase = task.getTaskType();
+            switch (useCase) {
+                case FETCH_TWEETS_FROM_SEARCH:
+                    this.fetchTweetsFromSearch = true;
+                    break;
+                case UPDATE_TWEETS:
+                    this.updateTweets = true;
+                    break;
+                case UPDATE_USERS:
+                    this.updatedUsers = true;
+                    break;
+                case UPDATE_USERS_FROM_MENTIONS:
+                    this.updateUsersFromMentions = true;
+                    break;
+                case FETCH_USERS_FROM_LIST:
+                    this.fetchUsersFromList = true;
+                    break;
+                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
+                    this.controllerAddUserForScreenName = true;
+                    break;
+                case CONTROLLER_CREATE_TESTDATA_TWEETS:
+                    this.controllerCreateTestdataTweets = true;
+                    break;
+                case CONTROLLER_CREATE_TESTDATA_USERS:
+                    this.controllerCreateTestdataUsers = true;
+                    break;
+                case CONTROLLER_CREATE_IMPRINT_USER:
+                    controllerCreateImprintUser = true;
+                    break;
+                case REMOVE_OLD_DATA_FROM_STORAGE:
+                    removeOldDataFromStorage = true;
+                    break;
+                case FETCH_FOLLOWER:
+                    fetchFollower = true;
+                    break;
+                case FETCH_FRIENDS:
+                    fetchFriends = true;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
-    public TaskInfo(Boolean updatedByFetchTweetsFromTwitterSearch, Boolean updatedByUpdateTweets, Boolean updatedByUpdateUserProfiles, Boolean updatedByUpdateUserProfilesFromMentions, Boolean updatedByFetchUsersFromDefinedUserList, Boolean controllerAddUserForScreenName, Boolean controllerGetTestdataForTweets, Boolean controllerGetTestdataForUsers) {
-        this.updatedByFetchTweetsFromTwitterSearch = updatedByFetchTweetsFromTwitterSearch;
-        this.updatedByUpdateTweets = updatedByUpdateTweets;
-        this.updatedByUpdateUserProfiles = updatedByUpdateUserProfiles;
-        this.updatedByUpdateUserProfilesFromMentions = updatedByUpdateUserProfilesFromMentions;
-        this.updatedByFetchUsersFromDefinedUserList = updatedByFetchUsersFromDefinedUserList;
+    protected TaskInfo() {
+    }
+
+    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerAddUserForScreenName, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers,Boolean controllerCreateImprintUser,Boolean removeOldDataFromStorage,Boolean fetchFollower ) {
+        this.fetchTweetsFromSearch = fetchTweetsFromSearch;
+        this.updateTweets = updateTweets;
+        this.updatedUsers = updatedUsers;
+        this.updateUsersFromMentions = updateUsersFromMentions;
+        this.fetchUsersFromList = fetchUsersFromList;
         this.controllerAddUserForScreenName = controllerAddUserForScreenName;
-        this.controllerGetTestdataForTweets = controllerGetTestdataForTweets;
-        this.controllerGetTestdataForUsers = controllerGetTestdataForUsers;
+        this.controllerCreateTestdataTweets = controllerCreateTestdataTweets;
+        this.controllerCreateTestdataUsers = controllerCreateTestdataUsers;
+        this.controllerCreateImprintUser = controllerCreateImprintUser;
+        this.removeOldDataFromStorage = removeOldDataFromStorage;
+        this.fetchFollower = fetchFollower;
     }
 
-    public Boolean isUpdatedByFetchTweetsFromTwitterSearch() {
-        return updatedByFetchTweetsFromTwitterSearch;
+    public Boolean getFetchTweetsFromSearch() {
+        return fetchTweetsFromSearch;
     }
 
-    public void setUpdatedByFetchTweetsFromTwitterSearch(Boolean updatedByFetchTweetsFromTwitterSearch) {
-        this.updatedByFetchTweetsFromTwitterSearch |= updatedByFetchTweetsFromTwitterSearch;
+    public Boolean getUpdateTweets() {
+        return updateTweets;
     }
 
-    public Boolean isUpdatedByUpdateTweets() {
-        return updatedByUpdateTweets;
+    public Boolean getUpdatedUsers() {
+        return updatedUsers;
     }
 
-    public void setUpdatedByUpdateTweets(Boolean updatedByUpdateTweets) {
-        this.updatedByUpdateTweets |= updatedByUpdateTweets;
+    public Boolean getUpdateUsersFromMentions() {
+        return updateUsersFromMentions;
     }
 
-    public Boolean isUpdatedByUpdateUserProfiles() {
-        return updatedByUpdateUserProfiles;
-    }
-
-    public void setUpdatedByUpdateUserProfiles(Boolean updatedByUpdateUserProfiles) {
-        this.updatedByUpdateUserProfiles |= updatedByUpdateUserProfiles;
-    }
-
-    public Boolean isUpdatedByUpdateUserProfilesFromMentions() {
-        return updatedByUpdateUserProfilesFromMentions;
-    }
-
-    public void setUpdatedByUpdateUserProfilesFromMentions(Boolean updatedByUpdateUserProfilesFromMentions) {
-        this.updatedByUpdateUserProfilesFromMentions |= updatedByUpdateUserProfilesFromMentions;
-    }
-
-    public Boolean isUpdatedByFetchUsersFromDefinedUserList() {
-        return updatedByFetchUsersFromDefinedUserList;
-    }
-
-    public void setUpdatedByFetchUsersFromDefinedUserList(Boolean updatedByFetchUsersFromDefinedUserList) {
-        this.updatedByFetchUsersFromDefinedUserList |= updatedByFetchUsersFromDefinedUserList;
-    }
-
-    public Boolean getUpdatedByFetchTweetsFromTwitterSearch() {
-        return updatedByFetchTweetsFromTwitterSearch;
-    }
-
-    public Boolean getUpdatedByUpdateTweets() {
-        return updatedByUpdateTweets;
-    }
-
-    public Boolean getUpdatedByUpdateUserProfiles() {
-        return updatedByUpdateUserProfiles;
-    }
-
-    public Boolean getUpdatedByUpdateUserProfilesFromMentions() {
-        return updatedByUpdateUserProfilesFromMentions;
-    }
-
-    public Boolean getUpdatedByFetchUsersFromDefinedUserList() {
-        return updatedByFetchUsersFromDefinedUserList;
+    public Boolean getFetchUsersFromList() {
+        return fetchUsersFromList;
     }
 
     public Boolean getControllerAddUserForScreenName() {
         return controllerAddUserForScreenName;
     }
 
-    public void setControllerAddUserForScreenName(Boolean controllerAddUserForScreenName) {
-        this.controllerAddUserForScreenName |= controllerAddUserForScreenName;
+    public Boolean getControllerCreateTestdataTweets() {
+        return controllerCreateTestdataTweets;
     }
 
-    public Boolean getControllerGetTestdataForTweets() {
-        return controllerGetTestdataForTweets;
+    public Boolean getControllerCreateTestdataUsers() {
+        return controllerCreateTestdataUsers;
     }
 
-    public void setControllerGetTestdataForTweets(Boolean controllerGetTestdataForTweets) {
-        this.controllerGetTestdataForTweets |= controllerGetTestdataForTweets;
+    public Boolean getControllerCreateImprintUser() {
+        return controllerCreateImprintUser;
     }
 
-    public Boolean getControllerGetTestdataForUsers() {
-        return controllerGetTestdataForUsers;
+    public Boolean getRemoveOldDataFromStorage() {
+        return removeOldDataFromStorage;
     }
 
-    public void setControllerGetTestdataForUsers(Boolean controllerGetTestdataForUsers) {
-        this.controllerGetTestdataForUsers |= controllerGetTestdataForUsers;
+    public Boolean getFetchFollower() {
+        return fetchFollower;
+    }
+
+    public Boolean getFetchFriends() {
+        return fetchFriends;
     }
 
     @Override
@@ -150,84 +183,43 @@ public class TaskInfo implements Serializable {
 
         TaskInfo taskInfo = (TaskInfo) o;
 
-        if (getUpdatedByFetchTweetsFromTwitterSearch() != null ? !getUpdatedByFetchTweetsFromTwitterSearch().equals(taskInfo.getUpdatedByFetchTweetsFromTwitterSearch()) : taskInfo.getUpdatedByFetchTweetsFromTwitterSearch() != null)
+        if (fetchTweetsFromSearch != null ? !fetchTweetsFromSearch.equals(taskInfo.fetchTweetsFromSearch) : taskInfo.fetchTweetsFromSearch != null)
             return false;
-        if (getUpdatedByUpdateTweets() != null ? !getUpdatedByUpdateTweets().equals(taskInfo.getUpdatedByUpdateTweets()) : taskInfo.getUpdatedByUpdateTweets() != null)
+        if (updateTweets != null ? !updateTweets.equals(taskInfo.updateTweets) : taskInfo.updateTweets != null)
             return false;
-        if (getUpdatedByUpdateUserProfiles() != null ? !getUpdatedByUpdateUserProfiles().equals(taskInfo.getUpdatedByUpdateUserProfiles()) : taskInfo.getUpdatedByUpdateUserProfiles() != null)
+        if (updatedUsers != null ? !updatedUsers.equals(taskInfo.updatedUsers) : taskInfo.updatedUsers != null)
             return false;
-        if (getUpdatedByUpdateUserProfilesFromMentions() != null ? !getUpdatedByUpdateUserProfilesFromMentions().equals(taskInfo.getUpdatedByUpdateUserProfilesFromMentions()) : taskInfo.getUpdatedByUpdateUserProfilesFromMentions() != null)
+        if (updateUsersFromMentions != null ? !updateUsersFromMentions.equals(taskInfo.updateUsersFromMentions) : taskInfo.updateUsersFromMentions != null)
             return false;
-        if (getUpdatedByFetchUsersFromDefinedUserList() != null ? !getUpdatedByFetchUsersFromDefinedUserList().equals(taskInfo.getUpdatedByFetchUsersFromDefinedUserList()) : taskInfo.getUpdatedByFetchUsersFromDefinedUserList() != null)
+        if (fetchUsersFromList != null ? !fetchUsersFromList.equals(taskInfo.fetchUsersFromList) : taskInfo.fetchUsersFromList != null)
             return false;
-        if (getControllerAddUserForScreenName() != null ? !getControllerAddUserForScreenName().equals(taskInfo.getControllerAddUserForScreenName()) : taskInfo.getControllerAddUserForScreenName() != null)
+        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(taskInfo.controllerAddUserForScreenName) : taskInfo.controllerAddUserForScreenName != null)
             return false;
-        if (getControllerGetTestdataForTweets() != null ? !getControllerGetTestdataForTweets().equals(taskInfo.getControllerGetTestdataForTweets()) : taskInfo.getControllerGetTestdataForTweets() != null)
+        if (controllerCreateTestdataTweets != null ? !controllerCreateTestdataTweets.equals(taskInfo.controllerCreateTestdataTweets) : taskInfo.controllerCreateTestdataTweets != null)
             return false;
-        return getControllerGetTestdataForUsers() != null ? getControllerGetTestdataForUsers().equals(taskInfo.getControllerGetTestdataForUsers()) : taskInfo.getControllerGetTestdataForUsers() == null;
+        if (controllerCreateTestdataUsers != null ? !controllerCreateTestdataUsers.equals(taskInfo.controllerCreateTestdataUsers) : taskInfo.controllerCreateTestdataUsers != null)
+            return false;
+        if (controllerCreateImprintUser != null ? !controllerCreateImprintUser.equals(taskInfo.controllerCreateImprintUser) : taskInfo.controllerCreateImprintUser != null)
+            return false;
+        if (removeOldDataFromStorage != null ? !removeOldDataFromStorage.equals(taskInfo.removeOldDataFromStorage) : taskInfo.removeOldDataFromStorage != null)
+            return false;
+        return fetchFollower != null ? fetchFollower.equals(taskInfo.fetchFollower) : taskInfo.fetchFollower == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getUpdatedByFetchTweetsFromTwitterSearch() != null ? getUpdatedByFetchTweetsFromTwitterSearch().hashCode() : 0;
-        result = 31 * result + (getUpdatedByUpdateTweets() != null ? getUpdatedByUpdateTweets().hashCode() : 0);
-        result = 31 * result + (getUpdatedByUpdateUserProfiles() != null ? getUpdatedByUpdateUserProfiles().hashCode() : 0);
-        result = 31 * result + (getUpdatedByUpdateUserProfilesFromMentions() != null ? getUpdatedByUpdateUserProfilesFromMentions().hashCode() : 0);
-        result = 31 * result + (getUpdatedByFetchUsersFromDefinedUserList() != null ? getUpdatedByFetchUsersFromDefinedUserList().hashCode() : 0);
-        result = 31 * result + (getControllerAddUserForScreenName() != null ? getControllerAddUserForScreenName().hashCode() : 0);
-        result = 31 * result + (getControllerGetTestdataForTweets() != null ? getControllerGetTestdataForTweets().hashCode() : 0);
-        result = 31 * result + (getControllerGetTestdataForUsers() != null ? getControllerGetTestdataForUsers().hashCode() : 0);
+        int result = fetchTweetsFromSearch != null ? fetchTweetsFromSearch.hashCode() : 0;
+        result = 31 * result + (updateTweets != null ? updateTweets.hashCode() : 0);
+        result = 31 * result + (updatedUsers != null ? updatedUsers.hashCode() : 0);
+        result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
+        result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
+        result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
+        result = 31 * result + (controllerCreateTestdataTweets != null ? controllerCreateTestdataTweets.hashCode() : 0);
+        result = 31 * result + (controllerCreateTestdataUsers != null ? controllerCreateTestdataUsers.hashCode() : 0);
+        result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
+        result = 31 * result + (removeOldDataFromStorage != null ? removeOldDataFromStorage.hashCode() : 0);
+        result = 31 * result + (fetchFollower != null ? fetchFollower.hashCode() : 0);
         return result;
     }
-
-    public TaskInfo setTaskInfoFromTask(Task task) {
-        if(task!=null) {
-            TaskType useCase = task.getTaskType();
-            switch (useCase) {
-                case FETCH_TWEETS_FROM_SEARCH:
-                    this.updatedByFetchTweetsFromTwitterSearch = true;
-                    break;
-                case UPDATE_TWEETS:
-                    this.updatedByUpdateTweets = true;
-                    break;
-                case UPDATE_USERS:
-                    this.updatedByUpdateUserProfiles = true;
-                    break;
-                case UPDATE_USERS_FROM_MENTIONS:
-                    this.updatedByUpdateUserProfilesFromMentions = true;
-                    break;
-                case FETCH_USERS_FROM_LIST:
-                    this.updatedByFetchUsersFromDefinedUserList = true;
-                    break;
-                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                    this.controllerAddUserForScreenName = true;
-                    break;
-                case CONTROLLER_CREATE_TESTDATA_TWEETS:
-                    this.controllerGetTestdataForTweets = true;
-                    break;
-                case CONTROLLER_CREATE_TESTDATA_USERS:
-                    this.controllerGetTestdataForUsers = true;
-                    break;
-                default:
-                    break;
-            }
-        }
-        return this;
-    }
-
-/*
-    public void setTaskInfoFrom(TaskInfo taskInfoFrom) {
-
-        this.setUpdatedByFetchTweetsFromTwitterSearch(taskInfoFrom.getUpdatedByFetchTweetsFromTwitterSearch());
-        this.setUpdatedByUpdateTweets(taskInfoFrom.getUpdatedByUpdateTweets());
-        this.setUpdatedByUpdateUserProfiles(taskInfoFrom.getUpdatedByUpdateUserProfiles());
-        this.setUpdatedByUpdateUserProfilesFromMentions(taskInfoFrom.getUpdatedByUpdateUserProfilesFromMentions());
-        this.setUpdatedByFetchUsersFromDefinedUserList(taskInfoFrom.getUpdatedByFetchUsersFromDefinedUserList());
-
-        this.setControllerAddUserForScreenName(taskInfoFrom.getControllerAddUserForScreenName());
-        this.setControllerGetTestdataForTweets(taskInfoFrom.getControllerGetTestdataForTweets());
-        this.setControllerGetTestdataForUsers(taskInfoFrom.getControllerGetTestdataForUsers());
-    }
-    */
 
 }

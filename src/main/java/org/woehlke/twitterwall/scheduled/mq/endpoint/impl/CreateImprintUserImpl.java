@@ -39,7 +39,7 @@ public class CreateImprintUserImpl implements CreateImprintUser {
         User imprintUser = userService.findByScreenName(screenName);
         if(imprintUser==null){
             return this.getMessageOut(mqMessageIn);
-        } else if(imprintUser.getTwitterApiCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)){
+        } else if(imprintUser.getTaskBasedCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)){
             UserMessage outMsg = new UserMessage(receivedMessage,screenName,imprintUser);
             Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
                     .setHeader("twitter_profile_id", imprintUser.getIdTwitter())
