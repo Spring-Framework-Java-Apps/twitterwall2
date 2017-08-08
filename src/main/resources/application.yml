@@ -120,7 +120,7 @@ twitterwall:
     allowUpdateUserProfiles: true
     allowUpdateUserProfilesFromMention: true
     fetchUserListAllow: true
-    fetchUserListName: true
+    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: false
     removeOldDataFromStorageAllow: true
     fetchFollowerAllow: true
