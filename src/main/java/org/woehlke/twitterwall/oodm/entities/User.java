@@ -78,6 +78,18 @@ import java.util.regex.Pattern;
         @NamedQuery(
             name="User.findByUniqueId",
             query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFriendsButNotFollowers",
+            query="select t from User as t where t.taskInfo.fetchFollower=false and t.taskInfo.fetchFriends=true"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFollowersAndFriends",
+            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=true"
+        ),
+        @NamedQuery(
+            name="User.findUsersWhoAreFollowersButNotFriends",
+            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
         )
 })
 @NamedNativeQueries({

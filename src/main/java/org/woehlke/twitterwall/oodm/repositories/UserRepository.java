@@ -51,6 +51,15 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     )
     Page<User> findUsersForHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
+    @Query(name="User.findUsersWhoAreFriendsButNotFollowers")
+    Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);
+
+    @Query(name="User.findUsersWhoAreFollowersAndFriends")
+    Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest);
+
+    @Query(name="User.findUsersWhoAreFollowersButNotFriends")
+    Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest);
+
     @Query(name="User.countAllUser2HashTag",nativeQuery=true)
     long countAllUser2HashTag();
 

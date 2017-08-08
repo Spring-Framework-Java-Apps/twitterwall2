@@ -73,7 +73,6 @@ public class UserController {
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable String screenName, Model model
     ) {
-
         if (User.isValidScreenName(screenName)) {
             User user = userService.findByScreenName(screenName);
             if(user==null){
@@ -238,6 +237,60 @@ public class UserController {
         String subtitle = "Not Yet On List";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/onlistNotYet";
+    }
+
+    @RequestMapping("/list/usersWhoAreFollowersButNotFriends")
+    public String findUsersWhoAreFollowersButNotFriends(
+        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        model.addAttribute("users", userService.findUsersWhoAreFollowersButNotFriends(pageRequest));
+        String symbol = Symbols.USER_CONNECTIONS.toString();
+        String subtitle = "Users who are Followers but not Friends";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/usersWhoAreFollowersButNotFriends";
+    }
+
+    @RequestMapping("/list/usersWhoAreFollowersAndFriends")
+    public String findUsersWhoAreFollowersAndFriends(
+        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        model.addAttribute("users", userService.findUsersWhoAreFollowersAndFriends(pageRequest));
+        String symbol = Symbols.USER_CONNECTIONS.toString();
+        String subtitle = "Users who are Followers AND Friends";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/usersWhoAreFollowersAndFriends";
+    }
+
+    @RequestMapping("/list/usersWhoAreFriendsButNotFollowers")
+    public String findUsersWhoAreFriendsButNotFollowers(
+        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        Pageable pageRequest = new PageRequest(
+                page,
+                frontendProperties.getPageSize(),
+                Sort.Direction.ASC,
+                "screenName"
+        );
+        model.addAttribute("users", userService.findUsersWhoAreFriendsButNotFollowers(pageRequest));
+        String symbol = Symbols.USER_CONNECTIONS.toString();
+        String subtitle = "Users who are Friends but not Followers";
+        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        return "user/list/usersWhoAreFriendsButNotFollowers";
     }
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

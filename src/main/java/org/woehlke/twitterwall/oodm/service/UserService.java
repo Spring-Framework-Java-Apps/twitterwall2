@@ -34,6 +34,12 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
 
     Page<User> getNotYetOnList(Pageable pageRequest);
 
+    Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);
+
+    Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest);
+
+    Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest);
+
     Page<Object2Entity> findAllUser2HashTag(Pageable pageRequest);
 
     Page<Object2Entity> findAllUser2Media(Pageable pageRequest);

@@ -62,6 +62,21 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    public Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFriendsButNotFollowers(pageRequest);
+    }
+
+    @Override
+    public Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFollowersAndFriends(pageRequest);
+    }
+
+    @Override
+    public Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFollowersButNotFriends(pageRequest);
+    }
+
+    @Override
     public Page<User> getOnList(Pageable pageRequest) {
         return userRepository.findOnList(pageRequest);
     }
