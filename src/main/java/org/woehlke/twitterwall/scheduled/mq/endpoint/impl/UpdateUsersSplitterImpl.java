@@ -19,6 +19,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateUsersSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -45,13 +46,16 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
+    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
@@ -98,13 +102,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                 log.error(msg + "### ERROR: twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter,e);
             }
             if(userProfile != null){
-                UserMessage userMsg = new UserMessage(msgIn,userProfile);
-                Message<UserMessage> mqMessageOut =
-                        MessageBuilder.withPayload(userMsg)
-                                .copyHeaders(incomingTaskMessage.getHeaders())
-                                .setHeader("tw_lfd_nr",loopId)
-                                .setHeader("tw_all",loopAll)
-                                .build();
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
                 userProfileList.add(mqMessageOut);
             }
             log.debug(msg + "### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);

@@ -32,10 +32,11 @@ public class UserMessage implements Serializable {
         this.ignoreTransformation = ignoreTransformation;
     }
 
-    public UserMessage(TaskMessage taskMessage, long twitterProfileId, boolean ignoreTransformation, TwitterProfile twitterProfile){
+    @Deprecated
+    public UserMessage(TaskMessage taskMessage, TwitterProfile twitterProfile, boolean ignoreTransformation){
         this.taskMessage = taskMessage;
         this.screenName = twitterProfile.getScreenName();
-        this.twitterProfileId = twitterProfileId;
+        this.twitterProfileId = twitterProfile.getId();
         this.twitterProfile = twitterProfile;
         this.user = null;
         this.ignoreTransformation = ignoreTransformation;
@@ -50,49 +51,57 @@ public class UserMessage implements Serializable {
         this.ignoreTransformation = false;
     }
 
-    public UserMessage(TaskMessage taskMessage, String screenName, User user){
-        this.taskMessage = taskMessage;
-        this.screenName = screenName;
-        this.twitterProfile = null;
-        this.twitterProfileId = null;
-        this.user = user;
-        this.ignoreTransformation = true;
-    }
-
-    public UserMessage(TaskMessage taskMessage, String screenName, TwitterProfile twitterProfile) {
+    @Deprecated
+    public UserMessage(TaskMessage taskMessage, TwitterProfile twitterProfile, String screenName) {
         this.taskMessage = taskMessage;
         this.screenName = screenName;
         this.twitterProfile = twitterProfile;
-        this.twitterProfileId = null;
+        this.twitterProfileId = twitterProfile.getId();
         this.user = null;
         this.ignoreTransformation = false;
     }
 
-    public UserMessage(
-            TaskMessage taskMessage,
-            String screenName,
-            TwitterProfile twitterProfile,
-            User user
-    ) {
+    public UserMessage(TaskMessage taskMessage, User user){
         this.taskMessage = taskMessage;
-        this.screenName = screenName;
+        this.screenName = user.getScreenName();
+        this.twitterProfile = null;
+        this.twitterProfileId = user.getIdTwitter();
+        this.user = user;
+        this.ignoreTransformation = true;
+    }
+
+    public UserMessage(TaskMessage taskMessage, User user, boolean ignoreTransformation){
+        this.taskMessage = taskMessage;
+        this.screenName = user.getScreenName();
+        this.twitterProfile = null;
+        this.twitterProfileId = user.getIdTwitter();
+        this.user = user;
+        this.ignoreTransformation = ignoreTransformation;
+    }
+
+    public UserMessage(TaskMessage taskMessage, TwitterProfile twitterProfile, User user) {
+        //Assert.that(twitterProfile.getScreenName().compareTo(user.getScreenName())==0,"ScreenName must be the same on TwitterProfile and User");
+        //Assert.that(twitterProfile.getId() == user.getIdTwitter(),"twitterProfileId must be the same on TwitterProfile and User");
+        this.taskMessage = taskMessage;
+        this.screenName = twitterProfile.getScreenName();
         this.twitterProfile = twitterProfile;
-        this.twitterProfileId = null;
+        this.twitterProfileId = twitterProfile.getId();
         this.user = user;
         this.ignoreTransformation = false;
     }
 
     public UserMessage(
             TaskMessage taskMessage,
-            String screenName,
             TwitterProfile twitterProfile,
             User user,
             boolean ignoreTransformation
     ) {
+        //Assert.that(twitterProfile.getScreenName().compareTo(user.getScreenName())==0,"ScreenName must be the same on TwitterProfile and User");
+        //Assert.that(twitterProfile.getId() == user.getIdTwitter(),"twitterProfileId must be the same on TwitterProfile and User");
         this.taskMessage = taskMessage;
-        this.screenName = screenName;
+        this.screenName = twitterProfile.getScreenName();
         this.twitterProfile = twitterProfile;
-        this.twitterProfileId = null;
+        this.twitterProfileId = twitterProfile.getId();
         this.user = user;
         this.ignoreTransformation = ignoreTransformation;
     }

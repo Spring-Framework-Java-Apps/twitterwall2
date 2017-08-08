@@ -178,7 +178,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getFollower(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertTrue(user.getFollower());
+            Assert.assertTrue(user.getTaskInfo().getFetchFollower());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
@@ -192,7 +192,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetFollower(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertFalse(user.getFollower());
+            Assert.assertFalse(user.getTaskInfo().getFetchFollower());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());

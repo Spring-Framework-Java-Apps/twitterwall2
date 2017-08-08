@@ -18,6 +18,7 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateUsersFromMentionsSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -45,13 +46,16 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
 
     private final CountedEntitiesService countedEntitiesService;
 
-    public UpdateUsersFromMentionsSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, UserService userService, CountedEntitiesService countedEntitiesService) {
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
+    public UpdateUsersFromMentionsSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, MentionService mentionService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.mentionService = mentionService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
@@ -97,13 +101,7 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
             log.debug("### twitterApiService.getUserProfileForScreenName("+screenName+") from Twiiter API ("+lfdNr+" of "+all+")");
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             if(userProfile!=null) {
-                UserMessage userMsg = new UserMessage(msgIn, userProfile);
-                Message<UserMessage> mqMessageOut =
-                        MessageBuilder.withPayload(userMsg)
-                                .copyHeaders(incomingTaskMessage.getHeaders())
-                                .setHeader("tw_lfd_nr",lfdNr)
-                                .setHeader("tw_all",all)
-                                .build();
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,lfdNr,all);
                 userProfileList.add(mqMessageOut);
             }
             log.debug(msg+"### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);

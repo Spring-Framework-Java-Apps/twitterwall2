@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.CreateTestDataTweetsSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -34,13 +34,16 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public CreateTestDataTweetsSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService) {
+    public CreateTestDataTweetsSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.testdataProperties = testdataProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.tweetService = tweetService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
@@ -56,36 +59,25 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
         int loopAll = userIdTwitterList.size();
         for (long idTwitter : userIdTwitterList) {
             loopId++;
+            boolean fetchTweetFromApi = true;
             org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = tweetService.findByIdTwitter(idTwitter);
             if(tweetPers == null){
-                tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
+                fetchTweetFromApi = true;
             } else {
-                if(tweetPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
-                    TweetMessage msg = new TweetMessage(msgIn,tweetPers);
-                    Message<TweetMessage> mqMessageOut =
-                            MessageBuilder.withPayload(msg)
-                                    .copyHeaders(incomingTaskMessage.getHeaders())
-                                    .setHeader("tw_lfd_nr",loopId)
-                                    .setHeader("tw_all",loopAll)
-                                    .build();
-                    tweets.add(mqMessageOut);
-                } else {
-                    tweets.add(fetchTweetFromTwitter(idTwitter,task,incomingTaskMessage,loopId,loopAll));
-                }
+                fetchTweetFromApi = !tweetPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS);
             }
+            Message<TweetMessage> outgoingMessage = null;
+            if(fetchTweetFromApi) {
+                Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
+                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage, tweet, loopId, loopAll);
+
+            } else {
+                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage,tweetPers,loopId,loopAll);
+            }
+            tweets.add(outgoingMessage);
         }
         return tweets;
     }
 
-    private Message<TweetMessage> fetchTweetFromTwitter(long idTwitter, Task task, Message<TaskMessage> incomingTaskMessage,int loopId,int loopAll){
-        Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
-        TweetMessage tweetMsg = new TweetMessage(incomingTaskMessage.getPayload(),tweet);
-        Message<TweetMessage> mqMessageOut =
-                MessageBuilder.withPayload(tweetMsg)
-                        .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("tw_lfd_nr",loopId)
-                        .setHeader("tw_all",loopAll)
-                        .build();
-        return mqMessageOut;
-    }
+
 }

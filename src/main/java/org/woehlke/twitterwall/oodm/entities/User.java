@@ -391,6 +391,12 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         }
     }
 
+    @Transient
+    public boolean isTweeting(){
+        Boolean isTweeting = this.getTaskInfo().getFetchTweetsFromSearch();
+        if(isTweeting == null) {return false; } else { return isTweeting; }
+    }
+
     public static User getDummyUserForScreenName(String screenName,Task task){
         long idTwitter= new Date().getTime();
         String name="Exception Handler Dummy Username";
@@ -700,10 +706,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFollower() {
-        if(follower==null){
+        if(this.getTaskInfo().getFetchFollower()==null){
             return false;
         } else {
-            return follower;
+            return this.getTaskInfo().getFetchFollower();
         }
     }
 
@@ -712,10 +718,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFriend() {
-        if(friend==null){
+        if(this.getTaskInfo().getFetchFriends()==null){
             return false;
         } else {
-            return friend;
+            return this.getTaskInfo().getFetchFriends();
         }
     }
 

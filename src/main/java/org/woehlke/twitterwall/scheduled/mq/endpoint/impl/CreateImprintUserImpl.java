@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.CreateImprintUser;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -24,11 +25,14 @@ public class CreateImprintUserImpl implements CreateImprintUser {
 
     private final UserService userService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public CreateImprintUserImpl(TwitterApiService twitterApiService, FrontendProperties frontendProperties, UserService userService) {
+    public CreateImprintUserImpl(TwitterApiService twitterApiService, FrontendProperties frontendProperties, UserService userService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.frontendProperties = frontendProperties;
         this.userService = userService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
@@ -39,25 +43,20 @@ public class CreateImprintUserImpl implements CreateImprintUser {
         User imprintUser = userService.findByScreenName(screenName);
         if(imprintUser==null){
             return this.getMessageOut(mqMessageIn);
-        } else if(imprintUser.getTaskBasedCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)){
-            UserMessage outMsg = new UserMessage(receivedMessage,screenName,imprintUser);
-            Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
-                    .setHeader("twitter_profile_id", imprintUser.getIdTwitter())
-                    .build();
-            return mqMessageOut;
         } else {
-            return this.getMessageOut(mqMessageIn);
+            if (imprintUser.getTaskBasedCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)) {
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(mqMessageIn,imprintUser);
+                return mqMessageOut;
+            } else {
+                return this.getMessageOut(mqMessageIn);
+            }
         }
     }
 
     private Message<UserMessage> getMessageOut(Message<TaskMessage> mqMessageIn){
-        TaskMessage receivedMessage = mqMessageIn.getPayload();
         String screenName = frontendProperties.getImprintScreenName();
         TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-        UserMessage outMsg = new UserMessage(receivedMessage,screenName,twitterProfile);
-        Message<UserMessage> mqMessageOut = MessageBuilder.withPayload(outMsg).copyHeaders(mqMessageIn.getHeaders())
-                .setHeader("twitter_profile_id", twitterProfile.getId())
-                .build();
+        Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(mqMessageIn,twitterProfile);
         return mqMessageOut;
     }
 }

@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.FetchTweetsFromSearchSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -26,11 +27,14 @@ public class FetchTweetsFromSearchSplitterImpl implements FetchTweetsFromSearchS
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public FetchTweetsFromSearchSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public FetchTweetsFromSearchSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
@@ -46,13 +50,7 @@ public class FetchTweetsFromSearchSplitterImpl implements FetchTweetsFromSearchS
         int loopAll = twitterTweets.size();
         for (Tweet tweet: twitterTweets) {
             loopId++;
-            TweetMessage tweetMsg = new TweetMessage(msgIn,tweet);
-            Message<TweetMessage> mqMessageOut =
-                    MessageBuilder.withPayload(tweetMsg)
-                            .copyHeaders(message.getHeaders())
-                            .setHeader("tw_lfd_nr",loopId)
-                            .setHeader("tw_all",loopAll)
-                            .build();
+            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(message,tweet,loopId,loopAll);
             tweets.add(mqMessageOut);
         }
         return tweets;

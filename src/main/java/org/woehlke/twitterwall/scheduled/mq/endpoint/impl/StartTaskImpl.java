@@ -14,6 +14,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.*;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -122,14 +123,7 @@ public class StartTaskImpl implements StartTask {
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType,sendType,countedEntities);
-        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, sendType, task.getTimeStarted());
-        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
-                .setHeader("task_id", task.getId())
-                .setHeader("task_uid", task.getUniqueId())
-                .setHeader("task_type", task.getTaskType())
-                .setHeader("time_started", task.getTimeStarted().getTime())
-                .setHeader("send_type", sendType)
-                .build();
+        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
@@ -154,14 +148,7 @@ public class StartTaskImpl implements StartTask {
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(logMsg, taskType, sendType, countedEntities);
-        TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, sendType,task.getTimeStarted());
-        Message<TaskMessage> mqMessage = MessageBuilder.withPayload(taskMessage)
-                .setHeader("task_id", task.getId())
-                .setHeader("task_uid", task.getUniqueId())
-                .setHeader("task_type", task.getTaskType())
-                .setHeader("time_started", task.getTimeStarted().getTime())
-                .setHeader("send_type", sendType)
-                .build();
+        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
@@ -187,13 +174,16 @@ public class StartTaskImpl implements StartTask {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     private static final Logger log = LoggerFactory.getLogger(StartTaskImpl.class);
 
     @Autowired
-    public StartTaskImpl(MessageChannel startTaskChannel,TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public StartTaskImpl(MessageChannel startTaskChannel, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.startTaskChannel = startTaskChannel;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
 }
