@@ -583,7 +583,7 @@
         <int:service-activator
                 id="fetchFollowerFireAndForgetFinisher"
                 ref="mqUserFinisher"
-                method="finish" />
+                method="finishAsnyc" />
     </int:chain>
 
     <int:chain id="fetchFriendsFireAndForgetChain" input-channel="fetchFriendsFireAndForgetChannel">
@@ -610,7 +610,7 @@
         <int:service-activator
                 id="fetchFriendsFireAndForgetFinisher"
                 ref="mqUserFinisher"
-                method="finish" />
+                method="finishAsnyc" />
     </int:chain>
 
     <int:chain id="createTestDataUsersFireAndForgetChain" input-channel="createTestDataUsersFireAndForgetChannel">

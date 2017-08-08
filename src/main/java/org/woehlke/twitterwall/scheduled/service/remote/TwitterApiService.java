@@ -21,7 +21,7 @@ public interface TwitterApiService {
 
     List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName);
 
-    CursoredList<Long> findFollower();
+    CursoredList<Long> getFollowerIds();
 
-    CursoredList<Long> findFriends();
+    CursoredList<Long> getFriendIds();
 }

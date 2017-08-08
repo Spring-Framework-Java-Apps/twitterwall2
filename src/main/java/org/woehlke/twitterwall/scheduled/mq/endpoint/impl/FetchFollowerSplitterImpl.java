@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.stereotype.Component;
@@ -45,7 +44,7 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        CursoredList<Long> foundTwitterProfiles = twitterApiService.findFollower();
+        CursoredList<Long> foundTwitterProfiles = twitterApiService.getFollowerIds();
         int loopId = 0;
         int loopAll = foundTwitterProfiles.size();
         for (Long twitterProfileId : foundTwitterProfiles) {

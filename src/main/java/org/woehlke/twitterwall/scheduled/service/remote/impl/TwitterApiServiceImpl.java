@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
@@ -21,10 +22,8 @@ import java.util.List;
 /**
  * Created by tw on 19.06.17.
  */
-
 @Component
 public class TwitterApiServiceImpl implements TwitterApiService {
-
 
     @Override
     public List<Tweet> findTweetsForSearchQuery() {
@@ -41,6 +40,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 log.debug(msg+" result.size: "+fetchedTweets.size());
                 return fetchedTweets;
             }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            return null;
         } catch (Exception e) {
             log.error(msg + e.getMessage());
             return new ArrayList<>();
@@ -59,6 +61,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             msg += " result: ";
             log.debug(msg + result);
             return result;
+        } catch (RateLimitExceededException e) {
+            log.warn(msg + "  Rate Limit Exceeded ");
+            return null;
         } catch(Exception e){
             log.error(msg + e.getMessage());
             e.printStackTrace();
@@ -78,6 +83,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " ScreenName: " + result.getScreenName());
             log.debug(msg + " Name:       " + result.getName());
             return result;
+        } catch (RateLimitExceededException e) {
+            log.warn(msg + "  Rate Limit Exceeded : ");
+            return null;
+        } catch (ResourceNotFoundException e) {
+            log.warn(msg+"  User not found : "+userProfileTwitterId);
+            return null;
         } catch (Exception e) {
             log.error(msg + e.getMessage());
             return null;
@@ -90,16 +101,19 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         log.debug(msg);
         TwitterProfile result;
         try {
-            result= getTwitterProxy().userOperations().getUserProfile(screenName);
+            result = getTwitterProxy().userOperations().getUserProfile(screenName);
             msg += " result: ";
-            log.debug(msg+" ScreenName: "+result.getScreenName());
-            log.debug(msg+" Name:       "+result.getName());
+            log.debug(msg + " ScreenName: " + result.getScreenName());
+            log.debug(msg + " Name:       " + result.getName());
             return result;
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            return null;
         } catch (ResourceNotFoundException e) {
-            log.debug(msg+"  User not found : "+screenName);
+            log.warn(msg+"  User not found : "+screenName);
             return null;
         } catch (Exception e) {
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             return null;
         }
     }
@@ -114,14 +128,14 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " result.size: " + result.size());
             return result;
         } catch (Exception e) {
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             return new ArrayList<>();
         }
     }
 
     @Override
-    public CursoredList<Long> findFollower() {
-        String msg = MSG+"findFollower: ";
+    public CursoredList<Long> getFollowerIds() {
+        String msg = MSG+"getFollowerIds: ";
         log.debug(msg);
         CursoredList<Long> result;
         try {
@@ -129,13 +143,13 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " result.size: " + result.size());
             return result;
         } catch (Exception e) {
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             return new CursoredList<>(new ArrayList<>(),0L,0L);
         }
     }
 
     @Override
-    public CursoredList<Long> findFriends() {
+    public CursoredList<Long> getFriendIds() {
         String msg = MSG+"findFriendss: ";
         log.debug(msg);
         CursoredList<Long> result;
@@ -144,11 +158,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.debug(msg + " result.size: " + result.size());
             return result;
         } catch (Exception e) {
-            log.debug(msg + e.getMessage());
+            log.error(msg + e.getMessage());
             return new CursoredList<>(new ArrayList<>(),0L,0L);
         }
     }
-
 
     @Inject
     private Environment environment;
@@ -158,12 +171,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     private final TwitterProperties twitterProperties;
 
     private Twitter getTwitterProxy() {
-
         String consumerKey =  environment.getProperty("TWITTER_CONSUMER_KEY");
         String consumerSecret =   environment.getProperty("TWITTER_CONSUMER_SECRET");
         String accessToken =  environment.getProperty("TWITTER_ACCESS_TOKEN");
         String accessTokenSecret =  environment.getProperty("TWITTER_ACCESS_TOKEN_SECRET");
-
         Twitter twitterTemplate = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         return twitterTemplate;
     }
