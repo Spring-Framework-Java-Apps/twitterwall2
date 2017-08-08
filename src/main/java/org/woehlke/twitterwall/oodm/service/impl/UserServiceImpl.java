@@ -62,6 +62,21 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    public Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFriendsButNotFollowers(pageRequest);
+    }
+
+    @Override
+    public Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFollowersAndFriends(pageRequest);
+    }
+
+    @Override
+    public Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest) {
+        return userRepository.findUsersWhoAreFollowersButNotFriends(pageRequest);
+    }
+
+    @Override
     public Page<User> getOnList(Pageable pageRequest) {
         return userRepository.findOnList(pageRequest);
     }
@@ -75,13 +90,6 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     public Page<String> getAllDescriptions(Pageable pageRequest) {
         return userRepository.findAllDescriptions(pageRequest);
     }
-
-    /*
-    @Override
-    public Page<Long> getAllTwitterIds(Pageable pageRequest) {
-        return userRepository.findAllTwitterIds(pageRequest);
-    }
-    */
 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
@@ -126,6 +134,11 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest){
         return userRepository.findAllUser2TickerSymbol(pageRequest);
+    }
+
+    @Override
+    public boolean isByIdTwitter(long userIdTwitter) {
+        return ((userRepository.findByIdTwitter(userIdTwitter)) != null);
     }
 
 }

@@ -30,10 +30,10 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     @Query(name="User.findNotYetFollower")
     Page<User> findNotYetFollower(Pageable pageRequest);
 
-    @Query(name="User.findFriendUsers")
+    @Query(name="User.findFriends")
     Page<User> findFriendUsers(Pageable pageRequest);
 
-    @Query(name="User.findNotYetFriendUsers")
+    @Query(name="User.findNotYetFriends")
     Page<User> findNotYetFriendUsers(Pageable pageRequest);
 
     @Query(name="User.findNotYetOnList")
@@ -45,14 +45,20 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     @Query(name="User.findAllDescriptions")
     Page<String> findAllDescriptions(Pageable pageRequest);
 
-    @Query(name="User.findAllTwitterIds")
-    Page<Long> findAllTwitterIds(Pageable pageRequest);
-
     @Query(
         name="User.getUsersForHashTag",
         countName = "User.countUsersForHashTag"
     )
     Page<User> findUsersForHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
+
+    @Query(name="User.findUsersWhoAreFriendsButNotFollowers")
+    Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);
+
+    @Query(name="User.findUsersWhoAreFollowersAndFriends")
+    Page<User> findUsersWhoAreFollowersAndFriends(Pageable pageRequest);
+
+    @Query(name="User.findUsersWhoAreFollowersButNotFriends")
+    Page<User> findUsersWhoAreFollowersButNotFriends(Pageable pageRequest);
 
     @Query(name="User.countAllUser2HashTag",nativeQuery=true)
     long countAllUser2HashTag();

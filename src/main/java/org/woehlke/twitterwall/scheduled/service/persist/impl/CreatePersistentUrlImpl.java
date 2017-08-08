@@ -36,7 +36,7 @@ public class CreatePersistentUrlImpl implements CreatePersistentUrl {
                     log.debug(msg + " found: " + urlPers);
                     if (urlPers.isUrlAndExpandedTheSame() || urlPers.isRawUrlsFromDescription()) {
                         log.debug(msg + " urlPers.isUrlAndExpandedTheSame " + urlPers.getUniqueId());
-                        if (urlPers.getTwitterApiCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
+                        if (urlPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                             return urlPers;
                         } else {
                             Url myTransientUrl = twitterUrlService.fetchTransientUrl(url, task);

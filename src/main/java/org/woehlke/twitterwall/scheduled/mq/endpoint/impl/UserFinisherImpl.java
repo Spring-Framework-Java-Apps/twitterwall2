@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -21,7 +22,7 @@ import java.util.List;
 public class UserFinisherImpl implements UserFinisher {
 
     @Override
-    public UserResultList finish(Message<List<UserMessage>> incomingMessageList) {
+    public Message<UserResultList> finish(Message<List<UserMessage>> incomingMessageList) {
         long taskId = 0L;
         List<User> users = new ArrayList<>();
         List<UserMessage> userMessageList = incomingMessageList.getPayload();
@@ -30,7 +31,11 @@ public class UserFinisherImpl implements UserFinisher {
             users.add(msg.getUser());
         }
         UserResultList userResultList = new UserResultList(taskId,users);
-        return userResultList;
+        Message<UserResultList> mqMessageOut = MessageBuilder.withPayload(userResultList)
+                .copyHeaders(incomingMessageList.getHeaders())
+                .setHeader("persisted",Boolean.TRUE)
+                .build();
+        return mqMessageOut;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -73,7 +72,7 @@ public class TaskControllerTest {
     public void getAllTest()throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/all"))
             .andExpect(status().isOk())
-            .andExpect(view().name( "/task/all"))
+            .andExpect(view().name( "task/all"))
             .andExpect(model().attributeExists("tasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
@@ -99,7 +98,7 @@ public class TaskControllerTest {
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
-            .andExpect(view().name( "/task/id"))
+            .andExpect(view().name( "task/id"))
             .andExpect(model().attributeExists("task"))
             .andExpect(model().attributeExists("taskHistoryList"))
             .andExpect(model().attributeExists("page"))
@@ -121,7 +120,7 @@ public class TaskControllerTest {
     public void createTestDataTest() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "/task/start/createTestData"))
+                .andExpect(view().name( "task/start/createTestData"))
                 .andExpect(model().attributeExists("taskTweets"))
                 .andExpect(model().attributeExists("taskUsers"))
                 .andExpect(model().attributeExists("page"))
@@ -143,7 +142,7 @@ public class TaskControllerTest {
         String msg = "getOnListRenewTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "/task/start/renew"))
+                .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
@@ -158,7 +157,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
-    private final String PATH = "/task";
+    private final String PATH = "task";
 
     @WithMockUser
     @Commit
@@ -185,11 +184,55 @@ public class TaskControllerTest {
     @WithMockUser
     @Commit
     @Test
+    public void fetchFollowerStartTaskTest() throws Exception {
+        String msg = "fetchFollowerStartTaskTest: ";
+        MvcResult result = this.mockMvc.perform(get("/task/start/users/follower/fetch"))
+                .andExpect(status().isOk())
+                .andExpect(view().name( PATH+"/start/taskStarted"))
+                .andExpect(model().attributeExists("task"))
+                .andExpect(model().attributeExists("page"))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    @Commit
+    @Test
+    public void fetchFriendsStartTask() throws Exception {
+    String msg = "fetchFriendsStartTask: ";
+    MvcResult result = this.mockMvc.perform(get("/task/start/users/friends/fetch"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( PATH+"/start/taskStarted"))
+            .andExpect(model().attributeExists("task"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    @Commit
+    @Test
     public void updateTweetsStartTaskTest() throws Exception {
         String msg = "updateTweetsStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
                 .andExpect(status().isOk())
-                .andExpect(view().name( "/task/start/renew"))
+                .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();

@@ -1,12 +1,16 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
+
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * Created by tw on 03.07.17.
  */
+@Validated
 @Embeddable
 public class CountedEntities implements Serializable {
 
@@ -32,14 +36,10 @@ public class CountedEntities implements Serializable {
     private Long countUrl=0L;
 
     @NotNull
-    private Long countUrlCache=0L;
-
-    @NotNull
     private Long countTask=0L;
 
     @NotNull
     private Long countTaskHistory=0L;
-
 
     @NotNull
     private Long tweet2hashtag=0L;
@@ -74,6 +74,7 @@ public class CountedEntities implements Serializable {
     public CountedEntities() {
     }
 
+    @Transient
     public Long getTotalNumberOfRows(){
         return countUser +
         countTweets +
@@ -82,7 +83,6 @@ public class CountedEntities implements Serializable {
         countMention +
         countTickerSymbol +
         countUrl +
-        countUrlCache +
         countTask +
         countTaskHistory +
         tweet2hashtag +
@@ -151,14 +151,6 @@ public class CountedEntities implements Serializable {
 
     public void setCountUrl(Long countUrl) {
         this.countUrl = countUrl;
-    }
-
-    public Long getCountUrlCache() {
-        return countUrlCache;
-    }
-
-    public void setCountUrlCache(Long countUrlCache) {
-        this.countUrlCache = countUrlCache;
     }
 
     public Long getCountTask() {
@@ -267,7 +259,6 @@ public class CountedEntities implements Serializable {
             ", countMention=" + countMention +
             ", countTickerSymbol=" + countTickerSymbol +
             ", countUrl=" + countUrl +
-            ", countUrlCache=" + countUrlCache +
             ", countTask=" + countTask +
             ", countTaskHistory=" + countTaskHistory +
             ", tweet2hashtag=" + tweet2hashtag +
@@ -299,8 +290,6 @@ public class CountedEntities implements Serializable {
         if (countTickerSymbol != null ? !countTickerSymbol.equals(that.countTickerSymbol) : that.countTickerSymbol != null)
             return false;
         if (countUrl != null ? !countUrl.equals(that.countUrl) : that.countUrl != null) return false;
-        if (countUrlCache != null ? !countUrlCache.equals(that.countUrlCache) : that.countUrlCache != null)
-            return false;
         if (countTask != null ? !countTask.equals(that.countTask) : that.countTask != null) return false;
         if (countTaskHistory != null ? !countTaskHistory.equals(that.countTaskHistory) : that.countTaskHistory != null)
             return false;
@@ -332,7 +321,6 @@ public class CountedEntities implements Serializable {
         result = 31 * result + (countMention != null ? countMention.hashCode() : 0);
         result = 31 * result + (countTickerSymbol != null ? countTickerSymbol.hashCode() : 0);
         result = 31 * result + (countUrl != null ? countUrl.hashCode() : 0);
-        result = 31 * result + (countUrlCache != null ? countUrlCache.hashCode() : 0);
         result = 31 * result + (countTask != null ? countTask.hashCode() : 0);
         result = 31 * result + (countTaskHistory != null ? countTaskHistory.hashCode() : 0);
         result = 31 * result + (tweet2hashtag != null ? tweet2hashtag.hashCode() : 0);

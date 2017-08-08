@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TweetFinisher {
 
-    TweetResultList finish(Message<List<TweetMessage>> incomingMessageList);
+    Message<TweetResultList> finish(Message<List<TweetMessage>> incomingMessageList);
 
     void finishAsnyc(Message<List<TweetMessage>> incomingMessageList);
 }

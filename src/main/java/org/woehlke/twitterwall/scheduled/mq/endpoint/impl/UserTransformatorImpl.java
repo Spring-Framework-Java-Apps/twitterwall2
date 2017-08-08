@@ -39,7 +39,6 @@ public class UserTransformatorImpl implements UserTransformator {
             User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
             UserMessage outMsg = new UserMessage(
                     receivedMessage.getTaskMessage(),
-                    receivedMessage.getScreenName(),
                     receivedMessage.getTwitterProfile(),
                     user
             );

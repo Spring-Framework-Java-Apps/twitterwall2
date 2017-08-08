@@ -56,7 +56,6 @@ public class UserTransformServiceImpl implements UserTransformService {
         }
         Date createdDate = userSource.getCreatedDate();
         User userTarget = new User(task,null,idTwitter, screenName, name, url, profileImageUrl, description, location, createdDate);
-        userTarget.setTweeting(true);
         userTarget.setLanguage(userSource.getLanguage());
         userTarget.setStatusesCount(userSource.getStatusesCount());
         userTarget.setFriendsCount(userSource.getFriendsCount());
@@ -87,6 +86,11 @@ public class UserTransformServiceImpl implements UserTransformService {
         log.debug(msg+" entities = "+entities.toString());
         userTarget.setEntities(entities);
         log.debug(msg+" userTarget = "+userTarget.getUniqueId());
+
+        switch(task.getTaskType()){
+
+        }
+
         return userTarget;
     }
 

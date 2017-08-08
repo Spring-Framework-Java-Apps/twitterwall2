@@ -12,7 +12,8 @@
         <div class="tw-data-view">
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-striped">
+                    <div class="well">
+                        <table class="table table-striped">
                         <thead th:fragment="tw-data-view-thead">
                             <tr>
                                 <th>ID</th>
@@ -51,49 +52,76 @@
                                                     <span>Scheduler:</span>
                                                     <ul>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.updatedByFetchTweetsFromTwitterSearch}">
+                                                            <span th:if="${myPageItem.taskInfo.fetchTweetsFromSearch}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.updatedByFetchTweetsFromTwitterSearch}">
+                                                            <span th:if="${!myPageItem.taskInfo.fetchTweetsFromSearch}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>FetchTweetsFromTwitterSearch</b>
+                                                            <b>fetchTweetsFromSearch</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.updatedByUpdateTweets}">
+                                                            <span th:if="${myPageItem.taskInfo.updateTweets}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateTweets}">
+                                                            <span th:if="${!myPageItem.taskInfo.updateTweets}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>UpdateTweets</b>
+                                                            <b>updateTweets</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.updatedByUpdateUserProfiles}">
+                                                            <span th:if="${myPageItem.taskInfo.updatedUsers}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfiles}">
+                                                            <span th:if="${!myPageItem.taskInfo.updatedUsers}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>UpdateUserProfiles</b>
+                                                            <b>updatedUsers</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.updatedByUpdateUserProfilesFromMentions}">
+                                                            <span th:if="${myPageItem.taskInfo.updateUsersFromMentions}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.updatedByUpdateUserProfilesFromMentions}">
+                                                            <span th:if="${!myPageItem.taskInfo.updateUsersFromMentions}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>UpdateUserProfilesFromMentions</b>
+                                                            <b>updateUsersFromMentions</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.updatedByFetchUsersFromDefinedUserList}">
+                                                            <span th:if="${myPageItem.taskInfo.fetchUsersFromList}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.updatedByFetchUsersFromDefinedUserList}">
+                                                            <span th:if="${!myPageItem.taskInfo.fetchUsersFromList}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>FetchUsersFromDefinedUserList</b>
+                                                            <b>fetchUsersFromList</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.removeOldDataFromStorage}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.removeOldDataFromStorage}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>removeOldDataFromStorage</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.fetchFollower}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.fetchFollower}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>fetchFollower</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.fetchFriends}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.fetchFriends}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>fetchFriends</b>
                                                         </li>
                                                     </ul>
                                                 </li>
@@ -110,22 +138,31 @@
                                                             <b>AddUserForScreenName</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.controllerGetTestdataForTweets}">
+                                                            <span th:if="${myPageItem.taskInfo.controllerCreateImprintUser}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForTweets}">
+                                                            <span th:if="${!myPageItem.taskInfo.controllerCreateImprintUser}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>GetTestdataForTweets</b>
+                                                            <b>CreateImprintUser</b>
                                                         </li>
                                                         <li>
-                                                            <span th:if="${myPageItem.taskInfo.controllerGetTestdataForUsers}">
+                                                            <span th:if="${myPageItem.taskInfo.controllerCreateTestdataTweets}">
                                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <span th:if="${!myPageItem.taskInfo.controllerGetTestdataForUsers}">
+                                                            <span th:if="${!myPageItem.taskInfo.controllerCreateTestdataTweets}">
                                                                 <i class="fa fa-square-o" aria-hidden="true"></i>
                                                             </span>
-                                                            <b>GetTestdataForUsers</b>
+                                                            <b>CreateTestdataTweets</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.controllerCreateTestdataUsers}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.controllerCreateTestdataUsers}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>CreateTestdataUsers</b>
                                                         </li>
                                                     </ul>
                                                 </li>
@@ -169,6 +206,7 @@
                             </tr>
                         </tfoot>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>

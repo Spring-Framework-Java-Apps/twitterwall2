@@ -11,74 +11,37 @@
     <div class="container">
         <div th:fragment="tw-one-tweet">
             <div class="row">
-                <div class="col-md-12 tw-col-3-wrapper">
-                    <div class="tw-col-3-box-center">
-                        <div class="thumbnail tw-tweet" th:fragment="tw-one-tweet-thumbnail">
-                            <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
-                                 th:with="user=${tweet.user},userUrl=@{|/user/${tweet.user.id}|}">
-                            </div>
-                            <div class="caption">
-                                <h2>
-                                    <a href="" th:href="@{|/user/${tweet.user.id}|}">
-                                        <span th:text="${tweet.user.name}">Username</span>
-                                    </a>
-                                </h2>
-                                <h3>
-                                    <a href="" th:href="@{|/user/${tweet.user.id}|}">
-                                        <span>@<span th:text="${tweet.user.screenName}">screenName</span></span>
-                                    </a>
-                                </h3>
-                                <hr />
-                                <div th:if="${tweet.retweetedStatus} == null">
-                                    <p>
-                                        <span th:utext="${tweet.formattedText}">Text</span>
-                                    </p>
-                                    <hr/>
-                                    <p>
-                                        <i class="fa fa-retweet" aria-hidden="true"></i>
-                                        <span class="tw-right-space">
-                                            <span th:text="${tweet.retweetCount}">12</span>
-                                        </span>
-                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                        <span th:text="${tweet.favoriteCount}">23</span>
-                                    </p>
-                                    <p>
-                                        <span>
-                                            <a href="javascript:history.back()">
-                                                <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-                                                <span>zurück</span>
-                                            </a>
-                                        </span>
-                                    </p>
+                <div class="well">
+                    <div class="col-md-12 tw-col-3-wrapper">
+                        <div class="tw-col-3-box-center">
+                            <div class="thumbnail tw-tweet" th:fragment="tw-one-tweet-thumbnail">
+                                <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
+                                     th:with="user=${tweet.user},userUrl=@{|/user/${tweet.user.id}|}">
                                 </div>
-                            </div>
-                            <div th:if="${tweet.retweetedStatus} != null">
-                                <p>RT</p>
-                                <div class="thumbnail tw-tweet">
-                                    <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
-                                         th:with="user=${tweet.retweetedStatus.user},userUrl=@{|/user/${tweet.retweetedStatus.user.id}|}">
-                                    </div>
-                                    <div class="caption">
-                                        <h2>
-                                            <a href="" th:href="@{|/user/${tweet.retweetedStatus.user.id}|}">
-                                                <span th:text="${tweet.retweetedStatus.user.name}">Username</span>
-                                            </a>
-                                        </h2>
-                                        <h3>
-                                            <a href="" th:href="@{|/user/${tweet.retweetedStatus.user.id}|}">
-                                                <b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b>
-                                            </a>
-                                        </h3>
-                                        <hr/>
-                                        <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
+                                <div class="caption">
+                                    <h2>
+                                        <a href="" th:href="@{|/user/${tweet.user.id}|}">
+                                            <span th:text="${tweet.user.name}">Username</span>
+                                        </a>
+                                    </h2>
+                                    <h3>
+                                        <a href="" th:href="@{|/user/${tweet.user.id}|}">
+                                            <span>@<span th:text="${tweet.user.screenName}">screenName</span></span>
+                                        </a>
+                                    </h3>
+                                    <hr />
+                                    <div th:if="${tweet.retweetedStatus} == null">
+                                        <p>
+                                            <span th:utext="${tweet.formattedText}">Text</span>
+                                        </p>
                                         <hr/>
                                         <p>
                                             <i class="fa fa-retweet" aria-hidden="true"></i>
                                             <span class="tw-right-space">
-                                                <span th:text="${tweet.retweetedStatus.retweetCount}">12</span>
+                                                <span th:text="${tweet.retweetCount}">12</span>
                                             </span>
                                             <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                            <span th:text="${tweet.retweetedStatus.favoriteCount}">23</span>
+                                            <span th:text="${tweet.favoriteCount}">23</span>
                                         </p>
                                         <p>
                                             <span>
@@ -88,6 +51,45 @@
                                                 </a>
                                             </span>
                                         </p>
+                                    </div>
+                                </div>
+                                <div th:if="${tweet.retweetedStatus} != null">
+                                    <p>RT</p>
+                                    <div class="thumbnail tw-tweet">
+                                        <div th:include="layoutMain :: tw-user-thumbnail-profile-image"
+                                             th:with="user=${tweet.retweetedStatus.user},userUrl=@{|/user/${tweet.retweetedStatus.user.id}|}">
+                                        </div>
+                                        <div class="caption">
+                                            <h2>
+                                                <a href="" th:href="@{|/user/${tweet.retweetedStatus.user.id}|}">
+                                                    <span th:text="${tweet.retweetedStatus.user.name}">Username</span>
+                                                </a>
+                                            </h2>
+                                            <h3>
+                                                <a href="" th:href="@{|/user/${tweet.retweetedStatus.user.id}|}">
+                                                    <b>@<span th:text="${tweet.retweetedStatus.user.screenName}">fromUser</span></b>
+                                                </a>
+                                            </h3>
+                                            <hr/>
+                                            <p th:utext="${tweet.retweetedStatus.formattedText}">Text</p>
+                                            <hr/>
+                                            <p>
+                                                <i class="fa fa-retweet" aria-hidden="true"></i>
+                                                <span class="tw-right-space">
+                                                    <span th:text="${tweet.retweetedStatus.retweetCount}">12</span>
+                                                </span>
+                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                                <span th:text="${tweet.retweetedStatus.favoriteCount}">23</span>
+                                            </p>
+                                            <p>
+                                                <span>
+                                                    <a href="javascript:history.back()">
+                                                        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                                        <span>zurück</span>
+                                                    </a>
+                                                </span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

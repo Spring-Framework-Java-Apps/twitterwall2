@@ -105,7 +105,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getTweetingUsers(pageRequest);
         for(User user:foundUser.getContent()){
-            Assert.assertTrue(msg,user.getTweeting());
+            Assert.assertTrue(msg,user.getTaskInfo().getFetchTweetsFromSearch());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
@@ -178,7 +178,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getFollower(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertTrue(user.getFollower());
+            Assert.assertTrue(user.getTaskInfo().getFetchFollower());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
@@ -192,7 +192,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetFollower(pageRequest);
         for(User user : foundUser.getContent()){
-            Assert.assertFalse(user.getFollower());
+            Assert.assertFalse(user.getTaskInfo().getFetchFollower());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
@@ -206,7 +206,7 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getOnList(pageRequest);
         for(User user:foundUser.getContent()){
-            Assert.assertTrue(msg,user.getTaskInfo().getUpdatedByFetchUsersFromDefinedUserList());
+            Assert.assertTrue(msg,user.getTaskInfo().getFetchUsersFromList());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
@@ -220,8 +220,8 @@ public class UserServiceTest {
         Pageable pageRequest = new PageRequest(page,size);
         Page<User> foundUser = userService.getNotYetOnList(pageRequest);
         for(User user:foundUser.getContent()){
-            Assert.assertTrue(msg,user.getTaskInfo().getUpdatedByFetchTweetsFromTwitterSearch());
-            Assert.assertFalse(msg,user.getTaskInfo().getUpdatedByFetchUsersFromDefinedUserList());
+            Assert.assertTrue(msg,user.getTaskInfo().getFetchTweetsFromSearch());
+            Assert.assertFalse(msg,user.getTaskInfo().getFetchUsersFromList());
             log.debug(msg+" foundUser: "+user.getUniqueId());
         }
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());

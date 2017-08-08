@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -19,6 +18,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.UpdateUsersSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -45,18 +45,21 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService) {
+    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
-    public List<Message<UserMessage>> splitMessage(Message<TaskMessage> incomingTaskMessage) {
-        String msg = "### mqUpdateUserProfiles.splitMessage: ";
+    public List<Message<UserMessage>> splitUserMessage(Message<TaskMessage> incomingTaskMessage) {
+        String msg = "### mqUpdateUserProfiles.splitTweetMessage: ";
         log.debug(msg+ " START");
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskMessage msgIn = incomingTaskMessage.getPayload();
@@ -72,7 +75,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
         while (hasNext) {
             Page<User> userProfileTwitterIds = userService.getAll(pageRequest);
             for(User user:userProfileTwitterIds.getContent()){
-                if(!user.getTwitterApiCaching().isCached(taskType, TWELVE_HOURS)){
+                if(!user.getTaskBasedCaching().isCached(taskType, TWELVE_HOURS)){
                     loopId++;
                     loopAll++;
                     log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());
@@ -84,7 +87,6 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
         }
         long number = worklistProfileTwitterIds.size();
         loopId = 0;
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
         List<Message<UserMessage>> userProfileList = new ArrayList<>();
         for(Long userProfileTwitterId:worklistProfileTwitterIds){
             String counter = " ( " + loopId + " from " + number + " ) ";
@@ -98,20 +100,10 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                 log.error(msg + "### ERROR: twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter,e);
             }
             if(userProfile != null){
-                UserMessage userMsg = new UserMessage(msgIn,userProfile);
-                Message<UserMessage> mqMessageOut =
-                        MessageBuilder.withPayload(userMsg)
-                                .copyHeaders(incomingTaskMessage.getHeaders())
-                                .setHeader("tw_lfd_nr",loopId)
-                                .setHeader("tw_all",loopAll)
-                                .build();
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
                 userProfileList.add(mqMessageOut);
             }
-            log.debug(msg + "### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
-            try {
-                Thread.sleep(millisToWaitBetweenTwoApiCalls);
-            } catch (InterruptedException e) {
-            }
+            twitterwallMessageBuilder.waitForApi();
         }
         log.debug(msg+ " DONE");
         return userProfileList;

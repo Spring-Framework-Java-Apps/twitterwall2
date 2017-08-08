@@ -1,10 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +18,19 @@ import static javax.persistence.FetchType.EAGER;
 /**
  * Created by tw on 10.06.17.
  */
+@Validated
 @MappedSuperclass
 public abstract class AbstractDomainObject<T extends DomainObject> implements DomainObject<T> {
 
+    @Valid
     @NotNull
     @Embedded
     private TaskInfo taskInfo = new TaskInfo();
+
+    @Valid
+    @NotNull
+    @Embedded
+    private TaskBasedCaching taskBasedCaching = new TaskBasedCaching();
 
     @NotNull
     @JoinColumn(name = "fk_created_by_task", nullable = false)
@@ -35,11 +44,18 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
     @Transient
     private Map<String, Object> extraData = new HashMap<>();
 
+    @Transient
+    public Boolean isCached(TaskType taskType, long timeToLive){
+        return this.taskBasedCaching.isCached(taskType,timeToLive);
+    }
+
     protected AbstractDomainObject(Task createdBy, Task updatedBy) {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.taskInfo.setTaskInfoFromTask(createdBy);
         this.taskInfo.setTaskInfoFromTask(updatedBy);
+        this.taskBasedCaching.store(createdBy);
+        this.taskBasedCaching.store(updatedBy);
     }
 
     protected AbstractDomainObject() {
@@ -80,6 +96,7 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
         myExtraData.append(",\n createdBy=" + this.toStringCreatedBy());
         myExtraData.append(",\n updatedBy=" + this.toStringUpdatedBy());
         myExtraData.append(",\n taskInfo=" + this.toStringTaskInfo());
+        myExtraData.append(",\n twitterApiCaching=" + this.getTaskBasedCaching().toString());
         return myExtraData.toString();
     }
 
@@ -102,8 +119,17 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
         return createdBy;
     }
 
+    public TaskBasedCaching getTaskBasedCaching() {
+        return taskBasedCaching;
+    }
+
+    public void setTaskBasedCaching(TaskBasedCaching taskBasedCaching) {
+        this.taskBasedCaching = taskBasedCaching;
+    }
+
     public void setCreatedBy(Task createdBy) {
-        taskInfo.setTaskInfoFromTask(createdBy);
+        this.taskInfo.setTaskInfoFromTask(createdBy);
+        this.taskBasedCaching.store(createdBy.getTaskType());
         this.createdBy = createdBy;
     }
 
@@ -112,7 +138,8 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
     }
 
     public void setUpdatedBy(Task updatedBy) {
-        taskInfo.setTaskInfoFromTask(updatedBy);
+        this.taskInfo.setTaskInfoFromTask(updatedBy);
+        this.taskBasedCaching.store(updatedBy.getTaskType());
         this.updatedBy = updatedBy;
     }
 

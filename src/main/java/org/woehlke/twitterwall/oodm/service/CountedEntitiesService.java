@@ -12,4 +12,7 @@ public interface CountedEntitiesService {
     long countTweets();
 
     long countUsers();
+
+    CountedEntities deleteAll();
+
 }

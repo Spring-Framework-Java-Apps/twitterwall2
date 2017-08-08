@@ -1,7 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
@@ -9,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.FetchTweetsFromSearchSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
@@ -26,15 +26,18 @@ public class FetchTweetsFromSearchSplitterImpl implements FetchTweetsFromSearchS
 
     private final CountedEntitiesService countedEntitiesService;
 
+    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+
     @Autowired
-    public FetchTweetsFromSearchSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public FetchTweetsFromSearchSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
     }
 
     @Override
-    public List<Message<TweetMessage>> splitMessage(Message<TaskMessage> message) {
+    public List<Message<TweetMessage>> splitTweetMessage(Message<TaskMessage> message) {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         List<Message<TweetMessage>> tweets = new ArrayList<>();
         TaskMessage msgIn = message.getPayload();
@@ -46,13 +49,7 @@ public class FetchTweetsFromSearchSplitterImpl implements FetchTweetsFromSearchS
         int loopAll = twitterTweets.size();
         for (Tweet tweet: twitterTweets) {
             loopId++;
-            TweetMessage tweetMsg = new TweetMessage(msgIn,tweet);
-            Message<TweetMessage> mqMessageOut =
-                    MessageBuilder.withPayload(tweetMsg)
-                            .copyHeaders(message.getHeaders())
-                            .setHeader("tw_lfd_nr",loopId)
-                            .setHeader("tw_all",loopAll)
-                            .build();
+            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(message,tweet,loopId,loopAll);
             tweets.add(mqMessageOut);
         }
         return tweets;

@@ -41,7 +41,6 @@ public class UserPersistorImpl implements UserPersistor {
             User userPers = storeUserProcess.storeUserProcess(user, task);
             UserMessage mqMessageOut = new UserMessage(
                     receivedMessage.getTaskMessage(),
-                    receivedMessage.getScreenName(),
                     receivedMessage.getTwitterProfile(),
                     user
             );

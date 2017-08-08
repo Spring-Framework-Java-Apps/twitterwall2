@@ -8,7 +8,6 @@ delete from tweet_mention;
 delete from tweet_media;
 delete from tweet_hashtag;
 delete from tweet_url;
-delete from url_cache;
 delete from url;
 delete from tickersymbol;
 delete from mention;

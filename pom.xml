@@ -4,7 +4,7 @@
 
     <groupId>org.woehlke.twitterwall</groupId>
     <artifactId>twitterwall2</artifactId>
-    <version>1.0.24-SNAPSHOT</version>
+    <version>1.0.26-SNAPSHOT</version>
     <name>twitterwall2</name>
 
     <description>Twitterwall with spring:boot for heroku</description>
@@ -60,8 +60,11 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.scm.version>1.9.5</maven.scm.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <failsafe.skipAfterFailureCount>1</failsafe.skipAfterFailureCount>
+        <surefire.skipAfterFailureCount>1</surefire.skipAfterFailureCount>
     </properties>
 
     <dependencies>
@@ -172,6 +175,11 @@
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- end::tests[] -->
@@ -422,6 +430,14 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <skipTests>true</skipTests>
@@ -439,14 +455,27 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
-                        <systemPropertyVariables>
-                            <spring.profiles.active>testing</spring.profiles.active>
-                        </systemPropertyVariables>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>testing</spring.profiles.active>
+                                <failsafe.skipAfterFailureCount>1</failsafe.skipAfterFailureCount>
+                                <surefire.skipAfterFailureCount>1</surefire.skipAfterFailureCount>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
 
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>testing</spring.profiles.active>
+                                <failsafe.skipAfterFailureCount>1</failsafe.skipAfterFailureCount>
+                                <surefire.skipAfterFailureCount>1</surefire.skipAfterFailureCount>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -458,10 +487,24 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>travis</spring.profiles.active>
+                                <failsafe.skipAfterFailureCount>1</failsafe.skipAfterFailureCount>
+                                <surefire.skipAfterFailureCount>1</surefire.skipAfterFailureCount>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
                                 <spring.profiles.active>travis</spring.profiles.active>
+                                <failsafe.skipAfterFailureCount>1</failsafe.skipAfterFailureCount>
+                                <surefire.skipAfterFailureCount>1</surefire.skipAfterFailureCount>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
