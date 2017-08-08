@@ -42,8 +42,16 @@ public class ScheduledTasks {
         }
     }
 
+    @Scheduled(initialDelay= TEN_SECONDS *4, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_FRIENDS)
+    public void fetchFriends(){
+        String msg = "fetch Friends ";
+        if(schedulerProperties.getFetchFriendsAllow() && !schedulerProperties.getSkipFortesting()) {
+            Task task = asyncStartTask.fetchFriends();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
 
-    @Scheduled(initialDelay= TEN_SECONDS *4, fixedRate = FIXED_RATE_FOR_SCHEDULAR_REMOVE_OLD_DATA_FROM_STORAGE)
+    @Scheduled(initialDelay= TEN_SECONDS *5, fixedRate = FIXED_RATE_FOR_SCHEDULAR_REMOVE_OLD_DATA_FROM_STORAGE)
     public void removeOldDataFromStorage(){
         String msg = "remove Old Data From Storage: ";
         if(schedulerProperties.getRemoveOldDataFromStorageAllow()  && !schedulerProperties.getSkipFortesting()) {
@@ -52,7 +60,7 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(initialDelay= TEN_SECONDS *5, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
+    @Scheduled(initialDelay= TEN_SECONDS *6, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION)
     public void updateUserProfilesFromMentions(){
         String msg = "update User Profiles From Mentions";
         if(schedulerProperties.getAllowUpdateUserProfilesFromMention() && !schedulerProperties.getSkipFortesting()) {
@@ -61,7 +69,7 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(initialDelay= TEN_SECONDS *6, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
+    @Scheduled(initialDelay= TEN_SECONDS *7, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS)
     public void updateTweets() {
         String msg = "update Tweets ";
         if(schedulerProperties.getAllowUpdateTweets() && !schedulerProperties.getSkipFortesting()){
@@ -70,20 +78,11 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(initialDelay= TEN_SECONDS *7, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
+    @Scheduled(initialDelay= TEN_SECONDS *8, fixedRate = FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER)
     public void updateUserProfiles() {
         String msg = "update User Profiles ";
         if(schedulerProperties.getAllowUpdateUserProfiles()  && !schedulerProperties.getSkipFortesting()) {
             Task task = asyncStartTask.updateUsers();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
-        }
-    }
-
-    @Scheduled(initialDelay= TEN_SECONDS *8, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_FRIENDS)
-    public void fetchFriends(){
-        String msg = "fetch Friends ";
-        if(schedulerProperties.getFetchFriendsAllow() && !schedulerProperties.getSkipFortesting()) {
-            Task task = asyncStartTask.fetchFriends();
             log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
