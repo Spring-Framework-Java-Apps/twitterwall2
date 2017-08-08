@@ -114,7 +114,7 @@ public class TaskInfo implements Serializable {
     protected TaskInfo() {
     }
 
-    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerAddUserForScreenName, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers,Boolean controllerCreateImprintUser,Boolean removeOldDataFromStorage,Boolean fetchFollower ) {
+    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerAddUserForScreenName, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updatedUsers = updatedUsers;
@@ -126,6 +126,7 @@ public class TaskInfo implements Serializable {
         this.controllerCreateImprintUser = controllerCreateImprintUser;
         this.removeOldDataFromStorage = removeOldDataFromStorage;
         this.fetchFollower = fetchFollower;
+        this.fetchFriends = fetchFriends;
     }
 
     public Boolean getFetchTweetsFromSearch() {
@@ -203,7 +204,9 @@ public class TaskInfo implements Serializable {
             return false;
         if (removeOldDataFromStorage != null ? !removeOldDataFromStorage.equals(taskInfo.removeOldDataFromStorage) : taskInfo.removeOldDataFromStorage != null)
             return false;
-        return fetchFollower != null ? fetchFollower.equals(taskInfo.fetchFollower) : taskInfo.fetchFollower == null;
+        if (fetchFollower != null ? !fetchFollower.equals(taskInfo.fetchFollower) : taskInfo.fetchFollower != null)
+            return false;
+        return fetchFriends != null ? fetchFriends.equals(taskInfo.fetchFriends) : taskInfo.fetchFriends == null;
     }
 
     @Override
@@ -219,7 +222,25 @@ public class TaskInfo implements Serializable {
         result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
         result = 31 * result + (removeOldDataFromStorage != null ? removeOldDataFromStorage.hashCode() : 0);
         result = 31 * result + (fetchFollower != null ? fetchFollower.hashCode() : 0);
+        result = 31 * result + (fetchFriends != null ? fetchFriends.hashCode() : 0);
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "TaskInfo{" +
+                "fetchTweetsFromSearch=" + fetchTweetsFromSearch +
+                ", updateTweets=" + updateTweets +
+                ", updatedUsers=" + updatedUsers +
+                ", updateUsersFromMentions=" + updateUsersFromMentions +
+                ", fetchUsersFromList=" + fetchUsersFromList +
+                ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
+                ", controllerCreateTestdataTweets=" + controllerCreateTestdataTweets +
+                ", controllerCreateTestdataUsers=" + controllerCreateTestdataUsers +
+                ", controllerCreateImprintUser=" + controllerCreateImprintUser +
+                ", removeOldDataFromStorage=" + removeOldDataFromStorage +
+                ", fetchFollower=" + fetchFollower +
+                ", fetchFriends=" + fetchFriends +
+                '}';
+    }
 }

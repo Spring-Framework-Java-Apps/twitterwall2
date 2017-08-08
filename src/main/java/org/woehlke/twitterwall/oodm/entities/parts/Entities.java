@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.*;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import static javax.persistence.FetchType.EAGER;
 /**
  * Created by tw on 11.07.17.
  */
+@Validated
 @Embeddable
 public class Entities extends EntitiesFilter implements Serializable {
 

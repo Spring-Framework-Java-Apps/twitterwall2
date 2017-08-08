@@ -40,24 +40,24 @@ import java.util.regex.Pattern;
             query = "select t from User as t where t.taskInfo.fetchTweetsFromSearch=true"
         ),
         @NamedQuery(
-                name = "User.findFollower",
-                query = "select t from User as t where t.taskInfo.fetchFollower=true"
+            name = "User.findFollower",
+            query = "select t from User as t where t.taskInfo.fetchFollower=true"
         ),
         @NamedQuery(
-                name = "User.findNotYetFollower",
-                query = "select t from User as t where t.taskInfo.fetchFollower=false"
+            name = "User.findNotYetFollower",
+            query = "select t from User as t where t.taskInfo.fetchFollower=false"
         ),
         @NamedQuery(
-                name = "User.findFriends",
-                query = "select t from User as t where t.taskInfo.fetchFriends=true"
+            name = "User.findFriends",
+            query = "select t from User as t where t.taskInfo.fetchFriends=true"
         ),
         @NamedQuery(
             name = "User.findNotYetFriends",
             query = "select t from User as t where t.taskInfo.fetchFriends=false"
         ),
         @NamedQuery(
-                name = "User.findOnList",
-                query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
+            name = "User.findOnList",
+            query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
         ),
         @NamedQuery(
             name = "User.findNotYetOnList",

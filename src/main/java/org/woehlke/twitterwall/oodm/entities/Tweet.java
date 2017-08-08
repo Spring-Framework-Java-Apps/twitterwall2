@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -142,6 +143,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     @Column(name="favorite_count")
     private Integer favoriteCount;
 
+    @Valid
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
