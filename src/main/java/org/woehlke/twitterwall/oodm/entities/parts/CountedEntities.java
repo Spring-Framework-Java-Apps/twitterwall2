@@ -273,6 +273,7 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
             ", userprofile2mention=" + userprofile2mention +
             ", userprofile2tickersymbol=" + userprofile2tickersymbol +
             ", userprofile2url=" + userprofile2url +
+            ", getTotalNumberOfRows=" + getTotalNumberOfRows() +
             '}';
     }
 

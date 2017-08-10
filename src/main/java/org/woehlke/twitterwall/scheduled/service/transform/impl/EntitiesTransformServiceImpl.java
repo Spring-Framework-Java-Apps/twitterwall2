@@ -57,7 +57,8 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"description " + description);
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.debug(msg+entitiesTarget.toString());
+        log.debug(msg+entitiesTarget.getUniqueId());
+        log.trace(msg+entitiesTarget.toString());
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return entitiesTarget;
     }
@@ -106,7 +107,8 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"entitiesSource: "+entitiesSource.toString());
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.debug(msg+"entitiesTarget: "+entitiesTarget.toString());
+        log.debug(msg+"entitiesTarget: "+entitiesTarget.getUniqueId());
+        log.trace(msg+"entitiesTarget: "+entitiesTarget.toString());
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return entitiesTarget;
     }
