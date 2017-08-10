@@ -34,16 +34,16 @@ public class ControllerHelperImpl implements ControllerHelper {
         } else {
             page.setGoogleAnalyticScriptHtml("");
         }
-        log.info("--------------------------------------------------------------------");
-        log.info("setupPage = "+page.toString());
-        log.info("--------------------------------------------------------------------");
+        log.debug("--------------------------------------------------------------------");
+        log.debug("setupPage = "+page.toString());
+        log.debug("--------------------------------------------------------------------");
         return page;
     }
 
     public ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
+        log.debug("page: "+page.toString());
         mav.addObject("page", page);
         return mav;
     }
@@ -51,7 +51,7 @@ public class ControllerHelperImpl implements ControllerHelper {
     public Model setupPage(Model model, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
+        log.debug("page: "+page.toString());
         model.addAttribute("page", page);
         return model;
     }

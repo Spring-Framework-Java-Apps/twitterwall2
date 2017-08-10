@@ -100,8 +100,6 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
         return myExtraData.toString();
     }
 
-    public abstract String getUniqueId();
-
     @Override
     public int compareTo(T other) {
         return this.getUniqueId().compareTo(other.getUniqueId());
@@ -166,4 +164,5 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
             return taskInfo.toString();
         }
     }
+
 }

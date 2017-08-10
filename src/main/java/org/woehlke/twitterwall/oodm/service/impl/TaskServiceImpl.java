@@ -67,7 +67,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("create: "+msg,TaskStatus.READY, TaskStatus.READY,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -81,7 +82,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("DONE ",oldStatus,TaskStatus.FINISHED,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -95,7 +97,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("error: "+e.getMessage(),oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -109,7 +112,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory(msg+", error: "+e.getMessage(),oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -123,7 +127,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("warn: "+e.getMessage(),oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -137,7 +142,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("warn: "+msg+", "+e.getMessage(),oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -150,7 +156,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("event: "+msg,task.getTaskStatus(),oldStatus,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -164,7 +171,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("warn: "+msg,oldStatus,TaskStatus.WARN,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -178,7 +186,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("error: "+msg,oldStatus,TaskStatus.ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -192,7 +201,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("START",oldStatus,TaskStatus.RUNNING,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -206,7 +216,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("FINAL ERROR: "+msg,oldStatus,TaskStatus.FINAL_ERROR,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 
@@ -220,7 +231,8 @@ public class TaskServiceImpl implements TaskService {
         Date now = new Date();
         TaskHistory event = new TaskHistory("DONE "+logMsg,oldStatus,TaskStatus.FINISHED,now,task,countedEntities);
         event = taskHistoryRepository.save(event);
-        log.debug(task.toString());
+        log.debug(task.getUniqueId());
+        log.trace(task.toString());
         return task;
     }
 }

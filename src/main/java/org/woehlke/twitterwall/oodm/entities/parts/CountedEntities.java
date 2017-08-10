@@ -1,9 +1,11 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
 import org.springframework.validation.annotation.Validated;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithValidation;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -12,7 +14,7 @@ import java.io.Serializable;
  */
 @Validated
 @Embeddable
-public class CountedEntities implements Serializable {
+public class CountedEntities implements Serializable,DomainObjectWithValidation {
 
     @NotNull
     private Long countUser=0L;
@@ -337,4 +339,119 @@ public class CountedEntities implements Serializable {
     }
 
     private static final long serialVersionUID = 1L;
+
+    @AssertTrue
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(countUser == null){
+            return false;
+        }
+        if(countTweets == null){
+            return false;
+        }
+        if(countHashTags == null){
+            return false;
+        }
+        if(countMedia == null){
+            return false;
+        }
+        if(countMention == null){
+            return false;
+        }
+        if(countTickerSymbol == null){
+            return false;
+        }
+        if(countTaskHistory == null){
+            return false;
+        }
+        if(countTask == null){
+            return false;
+        }
+        if(tweet2hashtag == null){
+            return false;
+        }
+        if(tweet2media == null){
+            return false;
+        }
+        if(tweet2mention == null){
+            return false;
+        }
+        if(tweet2tickersymbol == null){
+            return false;
+        }
+        if(tweet2url == null){
+            return false;
+        }
+        if(userprofile2hashtag == null){
+            return false;
+        }
+        if(userprofile2media == null){
+            return false;
+        }
+        if(userprofile2mention == null){
+            return false;
+        }
+        if(userprofile2tickersymbol == null){
+            return false;
+        }
+        if(userprofile2url == null){
+            return false;
+        }
+        if(countUser < 0){
+            return false;
+        }
+        if(countTweets < 0){
+            return false;
+        }
+        if(countHashTags < 0){
+            return false;
+        }
+        if(countMedia < 0){
+            return false;
+        }
+        if(countMention < 0){
+            return false;
+        }
+        if(countTickerSymbol < 0){
+            return false;
+        }
+        if(countTaskHistory < 0){
+            return false;
+        }
+        if(countTask < 0){
+            return false;
+        }
+        if(tweet2hashtag < 0){
+            return false;
+        }
+        if(tweet2media  < 0){
+            return false;
+        }
+        if(tweet2mention < 0){
+            return false;
+        }
+        if(tweet2tickersymbol < 0){
+            return false;
+        }
+        if(tweet2url < 0){
+            return false;
+        }
+        if(userprofile2hashtag < 0){
+            return false;
+        }
+        if(userprofile2media < 0){
+            return false;
+        }
+        if(userprofile2mention < 0){
+            return false;
+        }
+        if(userprofile2tickersymbol < 0){
+            return false;
+        }
+        if(userprofile2url < 0){
+            return false;
+        }
+        return true;
+    }
 }

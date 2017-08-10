@@ -5,9 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.scheduled.service.transform.*;
@@ -19,8 +16,6 @@ import java.util.Set;
  * Created by tw on 11.07.17.
  */
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class EntitiesTransformServiceImpl implements EntitiesTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(EntitiesTransformServiceImpl.class);

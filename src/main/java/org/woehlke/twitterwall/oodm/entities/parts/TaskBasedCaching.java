@@ -99,6 +99,7 @@ public class TaskBasedCaching implements Serializable {
         return now < lastApiCallPlusTimeToLive;
     }
 
+    @Transient
     public void store(Task task) {
         if (task != null) {
             TaskType taskType = task.getTaskType();
@@ -106,6 +107,7 @@ public class TaskBasedCaching implements Serializable {
         }
     }
 
+    @Transient
     public void store(TaskType taskType){
         if(taskType != null) {
             Date lastApiCall = new Date();
@@ -287,4 +289,9 @@ public class TaskBasedCaching implements Serializable {
     }
 
     private final static String COLUMN_PREFIX = "cache_";
+
+    @Transient
+    public String getUniqueId() {
+        return toString();
+    }
 }

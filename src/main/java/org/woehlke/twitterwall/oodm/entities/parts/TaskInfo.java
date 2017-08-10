@@ -243,4 +243,9 @@ public class TaskInfo implements Serializable {
                 ", fetchFriends=" + fetchFriends +
                 '}';
     }
+
+    @Transient
+    public String getUniqueId() {
+        return toString();
+    }
 }

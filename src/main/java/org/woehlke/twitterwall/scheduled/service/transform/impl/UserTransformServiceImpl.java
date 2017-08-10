@@ -83,14 +83,10 @@ public class UserTransformServiceImpl implements UserTransformService {
         userTarget.setShowAllInlineMedia(userSource.showAllInlineMedia());
         userTarget.setProfileBannerUrl(userSource.getProfileBannerUrl());
         Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource,task);
-        log.debug(msg+" entities = "+entities.toString());
+        log.debug(msg+" entities = "+entities.getUniqueId());
         userTarget.setEntities(entities);
         log.debug(msg+" userTarget = "+userTarget.getUniqueId());
-
-        switch(task.getTaskType()){
-
-        }
-
+        log.trace(msg+" userTarget = "+userTarget.toString());
         return userTarget;
     }
 

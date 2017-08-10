@@ -5,9 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Url;
@@ -18,10 +15,7 @@ import java.util.*;
 /**
  * Created by tw on 28.06.17.
  */
-
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransformService {
 
     @Override

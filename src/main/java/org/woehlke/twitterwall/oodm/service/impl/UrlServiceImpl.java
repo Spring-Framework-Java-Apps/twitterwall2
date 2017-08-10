@@ -40,7 +40,8 @@ public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements Ur
         if(result == null){
             log.debug(name+"Url.findByUrl: url == null");
         } else {
-            log.debug(name+result.toString());
+            log.debug(name+result.getUniqueId());
+            log.trace(name+result.toString());
         }
         return result;
     }
