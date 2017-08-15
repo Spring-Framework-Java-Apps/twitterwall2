@@ -87,6 +87,60 @@ public class ScheduledTasks {
         }
     }
 
+    @Scheduled(initialDelay= TEN_SECONDS *9, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_HOME_TIMELINE)
+    public void getHomeTimeline() {
+        String msg = "get Home Timeline Tweets ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getHomeTimeline();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS *10, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_USER_TIMELINE)
+    public void getUserTimeline() {
+        String msg = " get User Timeline Tweets ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getUserTimeline();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS *11, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_MENTIONS)
+    public void getMentions() {
+        String msg = " get Mentions ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getMentions();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS *12, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_FAVORITES)
+    public void getFavorites() {
+        String msg = " get Favorites ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getFavorites();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS *13, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_RETWEETS_OF_ME)
+    public void getRetweetsOfMe() {
+        String msg = " get Retweets Of Me ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getRetweetsOfMe();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS *14, fixedRate = FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_USER_LISTS)
+    public void getLists() {
+        String msg = " get Lists ";
+        if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
+            Task task = asyncStartTask.getLists();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
     @Autowired
     public ScheduledTasks(SchedulerProperties schedulerProperties, AsyncStartTask mqAsyncStartTask) {
         this.schedulerProperties = schedulerProperties;
@@ -112,6 +166,18 @@ public class ScheduledTasks {
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_TWEETS = TWELVE_HOURS;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_UPDATE_USER_BY_MENTION = ONE_HOUR;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_USER_LISTS = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_FAVORITES = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_RETWEETS_OF_ME = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_MENTIONS = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_USER_TIMELINE = TWELVE_HOURS;
+
+    private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_TWEETS_HOME_TIMELINE = TWELVE_HOURS;
 
     private final static long FIXED_RATE_FOR_SCHEDULAR_FETCH_USER_LIST = TWELVE_HOURS;
 
