@@ -43,4 +43,10 @@ twitterwall:
     removeOldDataFromStorageAllow: true
     fetchFollowerAllow: true
     fetchFriendsAllow: true
+    allowGetHomeTimeline: true
+    allowGetUserTimeline: true
+    allowGetMentions: true
+    allowGetFavorites: true
+    allowGetRetweetsOfMe: true
+    allowGetLists: true
     skipFortesting: true

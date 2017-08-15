@@ -125,6 +125,12 @@ twitterwall:
     allowUpdateUserProfiles: false
     herokuDbRowsLimit: false
     removeOldDataFromStorageAllow: false
+    allowGetHomeTimeline: false
+    allowGetUserTimeline: false
+    allowGetMentions: false
+    allowGetFavorites: false
+    allowGetRetweetsOfMe: false
+    allowGetLists: false
     skipFortesting: false
   testdata:
     oodm:

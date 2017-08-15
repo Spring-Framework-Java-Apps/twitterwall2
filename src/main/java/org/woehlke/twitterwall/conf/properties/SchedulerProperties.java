@@ -45,6 +45,24 @@ public class SchedulerProperties {
     @NotNull
     private Boolean fetchFriendsAllow;
 
+    @NotNull
+    private Boolean allowGetHomeTimeline;
+
+    @NotNull
+    private Boolean allowGetUserTimeline;
+
+    @NotNull
+    private Boolean allowGetMentions;
+
+    @NotNull
+    private Boolean allowGetFavorites;
+
+    @NotNull
+    private Boolean allowGetRetweetsOfMe;
+
+    @NotNull
+    private Boolean allowGetLists;
+
     public Boolean getAllowFetchTweetsFromTwitterSearch() {
         return allowFetchTweetsFromTwitterSearch;
     }
@@ -131,5 +149,53 @@ public class SchedulerProperties {
 
     public Boolean getFetchFriendsAllow() {
         return fetchFriendsAllow;
+    }
+
+    public Boolean getAllowGetHomeTimeline() {
+        return allowGetHomeTimeline;
+    }
+
+    public void setAllowGetHomeTimeline(Boolean allowGetHomeTimeline) {
+        this.allowGetHomeTimeline = allowGetHomeTimeline;
+    }
+
+    public Boolean getAllowGetUserTimeline() {
+        return allowGetUserTimeline;
+    }
+
+    public void setAllowGetUserTimeline(Boolean allowGetUserTimeline) {
+        this.allowGetUserTimeline = allowGetUserTimeline;
+    }
+
+    public Boolean getAllowGetMentions() {
+        return allowGetMentions;
+    }
+
+    public void setAllowGetMentions(Boolean allowGetMentions) {
+        this.allowGetMentions = allowGetMentions;
+    }
+
+    public Boolean getAllowGetFavorites() {
+        return allowGetFavorites;
+    }
+
+    public void setAllowGetFavorites(Boolean allowGetFavorites) {
+        this.allowGetFavorites = allowGetFavorites;
+    }
+
+    public Boolean getAllowGetRetweetsOfMe() {
+        return allowGetRetweetsOfMe;
+    }
+
+    public void setAllowGetRetweetsOfMe(Boolean allowGetRetweetsOfMe) {
+        this.allowGetRetweetsOfMe = allowGetRetweetsOfMe;
+    }
+
+    public Boolean getAllowGetLists() {
+        return allowGetLists;
+    }
+
+    public void setAllowGetLists(Boolean allowGetLists) {
+        this.allowGetLists = allowGetLists;
     }
 }
