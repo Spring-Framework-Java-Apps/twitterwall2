@@ -80,6 +80,42 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task getHomeTimeline() {
+        TaskType taskType = TaskType.FETCH_HOME_TIMELINE;
+        return send(taskType);
+    }
+
+    @Override
+    public Task getUserTimeline() {
+        TaskType taskType = TaskType.FETCH_USER_TIMELINE;
+        return send(taskType);
+    }
+
+    @Override
+    public Task getMentions() {
+        TaskType taskType = TaskType.FETCH_MENTIONS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task getFavorites() {
+        TaskType taskType = TaskType.FETCH_MENTIONS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task getRetweetsOfMe() {
+        TaskType taskType = TaskType.FETCH_RETWEETS_OF_ME;
+        return send(taskType);
+    }
+
+    @Override
+    public Task getLists() {
+        TaskType taskType = TaskType.FETCH_LISTS;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
         SendType sendType = SendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+sendType;

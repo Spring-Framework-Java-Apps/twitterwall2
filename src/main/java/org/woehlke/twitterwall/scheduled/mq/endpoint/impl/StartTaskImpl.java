@@ -82,6 +82,67 @@ public class StartTaskImpl implements StartTask {
     }
 
     @Override
+    public Task getHomeTimeline() {
+        TaskType taskType = TaskType.FETCH_HOME_TIMELINE;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task getUserTimeline() {
+        TaskType taskType = TaskType.FETCH_USER_TIMELINE;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task getMentions() {
+        TaskType taskType = TaskType.FETCH_MENTIONS;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task getFavorites() {
+        TaskType taskType = TaskType.FETCH_FAVORITES;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task getRetweetsOfMe() {
+        TaskType taskType = TaskType.FETCH_RETWEETS_OF_ME;
+        return sendAndReceiveTweet(taskType);
+    }
+
+    @Override
+    public Task getLists() {
+        TaskType taskType = TaskType.FETCH_LISTS;
+        return sendAndReceiveUserList(taskType);
+    }
+
+    private Task sendAndReceiveUserList(TaskType taskType){
+        SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;
+        String logMsg = "Start task "+taskType+"via MQ by "+sendType;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create("Start via MQ by Scheduler ", taskType,sendType,countedEntities);
+        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
+        Object o = returnedMessage.getPayload();
+        countedEntities = countedEntitiesService.countAll();
+        if( o instanceof TweetResultList){
+            TweetResultList msg = (TweetResultList) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            logMsg = "Sucessfully finished task "+taskType+"via MQ by "+sendType;
+            taskService.done(logMsg,task,countedEntities);
+        } else {
+            logMsg = "Finished with Error: task "+taskType+"via MQ by "+sendType+": Wrong type of returnedMessage";
+            taskService.finalError(task,logMsg,countedEntities);
+            log.error(logMsg);
+        }
+        return task;
+    }
+
+    @Override
     public User createImprintUser() {
         TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
         SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;

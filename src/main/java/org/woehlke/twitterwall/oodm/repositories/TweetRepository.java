@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
@@ -44,4 +43,22 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     @Query(name="Tweet.countAllUser2Url",nativeQuery=true)
     long countAllUser2Url();
+
+    @Query(name="Tweet.getHomeTimeline",nativeQuery=true)
+    Page<Tweet> getHomeTimeline(Pageable pageRequest);
+
+    @Query(name="Tweet.getUserTimeline",nativeQuery=true)
+    Page<Tweet> getUserTimeline(Pageable pageRequest);
+
+    @Query(name="Tweet.getMentions",nativeQuery=true)
+    Page<Tweet> getMentions(Pageable pageRequest);
+
+    @Query(name="Tweet.getFavorites",nativeQuery=true)
+    Page<Tweet> getFavorites(Pageable pageRequest);
+
+    @Query(name="Tweet.getRetweetsOfMe",nativeQuery=true)
+    Page<Tweet> getRetweetsOfMe(Pageable pageRequest);
+
+
+
 }

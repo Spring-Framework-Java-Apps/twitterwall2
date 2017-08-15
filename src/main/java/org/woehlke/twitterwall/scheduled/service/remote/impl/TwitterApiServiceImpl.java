@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
-import org.springframework.social.twitter.api.CursoredList;
-import org.springframework.social.twitter.api.Tweet;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.*;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
@@ -69,6 +66,156 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             log.error(msg + e.getMessage());
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public List<Tweet> getHomeTimeline() {
+        String msg = MSG+"getHomeTimeline: ";
+        log.debug(msg);
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().timelineOperations().getHomeTimeline();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Tweet> getUserTimeline() {
+        String msg = MSG+"getUserTimeline: ";
+        log.debug(msg);
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().timelineOperations().getUserTimeline();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Tweet> getMentions() {
+        String msg = MSG+"getMentions: ";
+        log.debug(msg);
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().timelineOperations().getMentions();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Tweet> getFavorites() {
+        String msg = MSG+"getMentions: ";
+        log.debug(msg);
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().timelineOperations().getFavorites();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Tweet> getRetweetsOfMe(){
+        String msg = MSG+"getMentions: ";
+        log.debug(msg);
+        List<Tweet> fetchedTweets;
+        try {
+            fetchedTweets = getTwitterProxy().timelineOperations().getRetweetsOfMe();
+            msg += " result: ";
+            if(fetchedTweets.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedTweets.size());
+                return fetchedTweets;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<UserList> getLists(){
+        String msg = MSG+"getMentions: ";
+        log.debug(msg);
+        List<UserList> fetchedUserLists;
+        try {
+            fetchedUserLists = getTwitterProxy().listOperations().getLists();
+            msg += " result: ";
+            if(fetchedUserLists.size()==0){
+                log.error(msg+" result.size: 0");
+                return new ArrayList<>();
+            } else {
+                log.debug(msg+" result.size: "+fetchedUserLists.size());
+                return fetchedUserLists;
+            }
+        } catch (RateLimitExceededException e){
+            log.warn(msg+"  Rate Limit Exceeded : ");
+            waitForApi();
+            return null;
+        } catch (Exception e) {
+            log.error(msg + e.getMessage());
+            return new ArrayList<>();
         }
     }
 

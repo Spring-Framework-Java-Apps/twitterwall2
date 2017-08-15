@@ -66,6 +66,126 @@ public class TweetController {
         return "tweet/id";
     }
 
+    @RequestMapping("/timeline/home")
+    public String getHomeTimeline(
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        String title = "Tweets";
+        model = controllerHelper.setupPage(
+            model,
+            title,
+            "Home Timneline",
+            Symbols.HOME_TIMELINE_TWEETS.toString()
+        );
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
+        Page<Tweet> latest = tweetService.getHomeTimeline(pageRequest);
+        model.addAttribute("latestTweets", latest);
+        return "tweet/all";
+    }
+
+    @RequestMapping("/timeline/user")
+    public String getUserTimeline(
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        String title = "Tweets";
+        model = controllerHelper.setupPage(
+            model,
+            title,
+            "User Timeline",
+            Symbols.USER_TIMELINE_TWEETS.toString()
+        );
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
+        Page<Tweet> latest = tweetService.getUserTimeline(pageRequest);
+        model.addAttribute("latestTweets", latest);
+        return "tweet/all";
+    }
+
+    @RequestMapping("/mentions")
+    public String getMentions(
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        String title = "Tweets";
+        model = controllerHelper.setupPage(
+            model,
+            title,
+            "Mentions",
+            Symbols.MENTIONS_TWEETS.toString()
+        );
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
+        Page<Tweet> latest = tweetService.getMentions(pageRequest);
+        model.addAttribute("latestTweets", latest);
+        return "tweet/all";
+    }
+
+    @RequestMapping("/favorites")
+    public String getFavorites(
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        String title = "Tweets";
+        model = controllerHelper.setupPage(
+            model,
+            title,
+            "Favorites",
+            Symbols.FAVORITES_TWEETS.toString()
+        );
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
+        Page<Tweet> latest = tweetService.getFavorites(pageRequest);
+        model.addAttribute("latestTweets", latest);
+        return "tweet/all";
+    }
+
+    @RequestMapping("/retweets")
+    public String getRetweetsOfMe(
+        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ){
+        String title = "Tweets";
+        model = controllerHelper.setupPage(
+            model,
+            title,
+            "Retweets Of Me",
+            Symbols.RETWEETS_OF_ME_FAVORITES_TWEETS.toString()
+        );
+        String sortByColumn = "createdAt";
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.DESC,
+            sortByColumn
+        );
+        Page<Tweet> latest = tweetService.getRetweetsOfMe(pageRequest);
+        model.addAttribute("latestTweets", latest);
+        return "tweet/all";
+    }
+
     private static final Logger log = LoggerFactory.getLogger(TweetController.class);
 
     private final TweetService tweetService;

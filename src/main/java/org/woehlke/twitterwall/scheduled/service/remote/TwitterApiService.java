@@ -3,6 +3,7 @@ package org.woehlke.twitterwall.scheduled.service.remote;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.UserList;
 
 import java.util.List;
 
@@ -15,6 +16,16 @@ public interface TwitterApiService {
 
     Tweet findOneTweetById(long tweetTwitterId);
 
+    List<Tweet> getHomeTimeline();
+
+    List<Tweet> getUserTimeline();
+
+    List<Tweet> getMentions();
+
+    List<Tweet> getFavorites();
+
+    List<Tweet> getRetweetsOfMe();
+
     TwitterProfile getUserProfileForTwitterId(long userProfileTwitterId);
 
     TwitterProfile getUserProfileForScreenName(String screenName);
@@ -24,4 +35,6 @@ public interface TwitterApiService {
     CursoredList<Long> getFollowerIds();
 
     CursoredList<Long> getFriendIds();
+
+    List<UserList> getLists();
 }

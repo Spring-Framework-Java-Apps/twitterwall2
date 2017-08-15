@@ -44,13 +44,6 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByUser(user,pageRequest);
     }
 
-    /*
-    @Override
-    public Page<Long> findAllTwitterIds(Pageable pageRequest) {
-        return tweetRepository.findAllTwitterIds(pageRequest);
-    }
-    */
-
     @Override
     public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {
         return tweetRepository.findAllTweet2HashTag(pageRequest);
@@ -74,6 +67,31 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     @Override
     public Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest) {
         return tweetRepository.findAllTweet2TickerSymbol(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getHomeTimeline(Pageable pageRequest) {
+        return tweetRepository.getHomeTimeline(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getUserTimeline(Pageable pageRequest) {
+        return tweetRepository.getUserTimeline(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getMentions(Pageable pageRequest) {
+        return tweetRepository.getMentions(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getFavorites(Pageable pageRequest) {
+        return tweetRepository.getFavorites(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getRetweetsOfMe(Pageable pageRequest) {
+        return tweetRepository.getRetweetsOfMe(pageRequest);
     }
 
     @Override

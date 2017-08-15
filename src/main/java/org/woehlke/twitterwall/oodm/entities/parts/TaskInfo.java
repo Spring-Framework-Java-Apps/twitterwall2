@@ -64,6 +64,30 @@ public class TaskInfo implements Serializable {
     @Column(nullable = false,name="fetch_friends")
     private Boolean fetchFriends = false;
 
+    @NotNull
+    @Column(nullable = false,name="fetch_home_timeline")
+    private Boolean getHomeTimeline  = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_user_timeline")
+    private Boolean getUserTimeline = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_mentions")
+    private Boolean getMentions = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_favorites")
+    private Boolean getFavorites = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_retweets_of_me")
+    private Boolean getRetweetsOfMe = false;
+
+    @NotNull
+    @Column(nullable = false,name="fetch_lists")
+    private Boolean getLists = false;
+
     @Transient
     public void setTaskInfoFromTask(Task task) {
         if(task!=null) {
@@ -104,6 +128,24 @@ public class TaskInfo implements Serializable {
                     break;
                 case FETCH_FRIENDS:
                     fetchFriends = true;
+                    break;
+                case FETCH_HOME_TIMELINE:
+                    getHomeTimeline = true;
+                    break;
+                case FETCH_USER_TIMELINE:
+                    getUserTimeline = true;
+                    break;
+                case FETCH_MENTIONS:
+                    getMentions = true;
+                    break;
+                case FETCH_FAVORITES:
+                    getFavorites = true;
+                    break;
+                case FETCH_RETWEETS_OF_ME:
+                    getRetweetsOfMe = true;
+                    break;
+                case FETCH_LISTS:
+                    getLists = true;
                     break;
                 default:
                     break;
@@ -177,6 +219,30 @@ public class TaskInfo implements Serializable {
         return fetchFriends;
     }
 
+    public Boolean getGetHomeTimeline() {
+        return getHomeTimeline;
+    }
+
+    public Boolean getGetUserTimeline() {
+        return getUserTimeline;
+    }
+
+    public Boolean getGetMentions() {
+        return getMentions;
+    }
+
+    public Boolean getGetFavorites() {
+        return getFavorites;
+    }
+
+    public Boolean getGetRetweetsOfMe() {
+        return getRetweetsOfMe;
+    }
+
+    public Boolean getGetLists() {
+        return getLists;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -184,64 +250,88 @@ public class TaskInfo implements Serializable {
 
         TaskInfo taskInfo = (TaskInfo) o;
 
-        if (fetchTweetsFromSearch != null ? !fetchTweetsFromSearch.equals(taskInfo.fetchTweetsFromSearch) : taskInfo.fetchTweetsFromSearch != null)
+        if (getFetchTweetsFromSearch() != null ? !getFetchTweetsFromSearch().equals(taskInfo.getFetchTweetsFromSearch()) : taskInfo.getFetchTweetsFromSearch() != null)
             return false;
-        if (updateTweets != null ? !updateTweets.equals(taskInfo.updateTweets) : taskInfo.updateTweets != null)
+        if (getUpdateTweets() != null ? !getUpdateTweets().equals(taskInfo.getUpdateTweets()) : taskInfo.getUpdateTweets() != null)
             return false;
-        if (updatedUsers != null ? !updatedUsers.equals(taskInfo.updatedUsers) : taskInfo.updatedUsers != null)
+        if (getUpdatedUsers() != null ? !getUpdatedUsers().equals(taskInfo.getUpdatedUsers()) : taskInfo.getUpdatedUsers() != null)
             return false;
-        if (updateUsersFromMentions != null ? !updateUsersFromMentions.equals(taskInfo.updateUsersFromMentions) : taskInfo.updateUsersFromMentions != null)
+        if (getUpdateUsersFromMentions() != null ? !getUpdateUsersFromMentions().equals(taskInfo.getUpdateUsersFromMentions()) : taskInfo.getUpdateUsersFromMentions() != null)
             return false;
-        if (fetchUsersFromList != null ? !fetchUsersFromList.equals(taskInfo.fetchUsersFromList) : taskInfo.fetchUsersFromList != null)
+        if (getFetchUsersFromList() != null ? !getFetchUsersFromList().equals(taskInfo.getFetchUsersFromList()) : taskInfo.getFetchUsersFromList() != null)
             return false;
-        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(taskInfo.controllerAddUserForScreenName) : taskInfo.controllerAddUserForScreenName != null)
+        if (getControllerAddUserForScreenName() != null ? !getControllerAddUserForScreenName().equals(taskInfo.getControllerAddUserForScreenName()) : taskInfo.getControllerAddUserForScreenName() != null)
             return false;
-        if (controllerCreateTestdataTweets != null ? !controllerCreateTestdataTweets.equals(taskInfo.controllerCreateTestdataTweets) : taskInfo.controllerCreateTestdataTweets != null)
+        if (getControllerCreateTestdataTweets() != null ? !getControllerCreateTestdataTweets().equals(taskInfo.getControllerCreateTestdataTweets()) : taskInfo.getControllerCreateTestdataTweets() != null)
             return false;
-        if (controllerCreateTestdataUsers != null ? !controllerCreateTestdataUsers.equals(taskInfo.controllerCreateTestdataUsers) : taskInfo.controllerCreateTestdataUsers != null)
+        if (getControllerCreateTestdataUsers() != null ? !getControllerCreateTestdataUsers().equals(taskInfo.getControllerCreateTestdataUsers()) : taskInfo.getControllerCreateTestdataUsers() != null)
             return false;
-        if (controllerCreateImprintUser != null ? !controllerCreateImprintUser.equals(taskInfo.controllerCreateImprintUser) : taskInfo.controllerCreateImprintUser != null)
+        if (getControllerCreateImprintUser() != null ? !getControllerCreateImprintUser().equals(taskInfo.getControllerCreateImprintUser()) : taskInfo.getControllerCreateImprintUser() != null)
             return false;
-        if (removeOldDataFromStorage != null ? !removeOldDataFromStorage.equals(taskInfo.removeOldDataFromStorage) : taskInfo.removeOldDataFromStorage != null)
+        if (getRemoveOldDataFromStorage() != null ? !getRemoveOldDataFromStorage().equals(taskInfo.getRemoveOldDataFromStorage()) : taskInfo.getRemoveOldDataFromStorage() != null)
             return false;
-        if (fetchFollower != null ? !fetchFollower.equals(taskInfo.fetchFollower) : taskInfo.fetchFollower != null)
+        if (getFetchFollower() != null ? !getFetchFollower().equals(taskInfo.getFetchFollower()) : taskInfo.getFetchFollower() != null)
             return false;
-        return fetchFriends != null ? fetchFriends.equals(taskInfo.fetchFriends) : taskInfo.fetchFriends == null;
+        if (getFetchFriends() != null ? !getFetchFriends().equals(taskInfo.getFetchFriends()) : taskInfo.getFetchFriends() != null)
+            return false;
+        if (getGetHomeTimeline() != null ? !getGetHomeTimeline().equals(taskInfo.getGetHomeTimeline()) : taskInfo.getGetHomeTimeline() != null)
+            return false;
+        if (getGetUserTimeline() != null ? !getGetUserTimeline().equals(taskInfo.getGetUserTimeline()) : taskInfo.getGetUserTimeline() != null)
+            return false;
+        if (getGetMentions() != null ? !getGetMentions().equals(taskInfo.getGetMentions()) : taskInfo.getGetMentions() != null)
+            return false;
+        if (getGetFavorites() != null ? !getGetFavorites().equals(taskInfo.getGetFavorites()) : taskInfo.getGetFavorites() != null)
+            return false;
+        if (getGetRetweetsOfMe() != null ? !getGetRetweetsOfMe().equals(taskInfo.getGetRetweetsOfMe()) : taskInfo.getGetRetweetsOfMe() != null)
+            return false;
+        return getGetLists() != null ? getGetLists().equals(taskInfo.getGetLists()) : taskInfo.getGetLists() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = fetchTweetsFromSearch != null ? fetchTweetsFromSearch.hashCode() : 0;
-        result = 31 * result + (updateTweets != null ? updateTweets.hashCode() : 0);
-        result = 31 * result + (updatedUsers != null ? updatedUsers.hashCode() : 0);
-        result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
-        result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
-        result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
-        result = 31 * result + (controllerCreateTestdataTweets != null ? controllerCreateTestdataTweets.hashCode() : 0);
-        result = 31 * result + (controllerCreateTestdataUsers != null ? controllerCreateTestdataUsers.hashCode() : 0);
-        result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
-        result = 31 * result + (removeOldDataFromStorage != null ? removeOldDataFromStorage.hashCode() : 0);
-        result = 31 * result + (fetchFollower != null ? fetchFollower.hashCode() : 0);
-        result = 31 * result + (fetchFriends != null ? fetchFriends.hashCode() : 0);
+        int result = getFetchTweetsFromSearch() != null ? getFetchTweetsFromSearch().hashCode() : 0;
+        result = 31 * result + (getUpdateTweets() != null ? getUpdateTweets().hashCode() : 0);
+        result = 31 * result + (getUpdatedUsers() != null ? getUpdatedUsers().hashCode() : 0);
+        result = 31 * result + (getUpdateUsersFromMentions() != null ? getUpdateUsersFromMentions().hashCode() : 0);
+        result = 31 * result + (getFetchUsersFromList() != null ? getFetchUsersFromList().hashCode() : 0);
+        result = 31 * result + (getControllerAddUserForScreenName() != null ? getControllerAddUserForScreenName().hashCode() : 0);
+        result = 31 * result + (getControllerCreateTestdataTweets() != null ? getControllerCreateTestdataTweets().hashCode() : 0);
+        result = 31 * result + (getControllerCreateTestdataUsers() != null ? getControllerCreateTestdataUsers().hashCode() : 0);
+        result = 31 * result + (getControllerCreateImprintUser() != null ? getControllerCreateImprintUser().hashCode() : 0);
+        result = 31 * result + (getRemoveOldDataFromStorage() != null ? getRemoveOldDataFromStorage().hashCode() : 0);
+        result = 31 * result + (getFetchFollower() != null ? getFetchFollower().hashCode() : 0);
+        result = 31 * result + (getFetchFriends() != null ? getFetchFriends().hashCode() : 0);
+        result = 31 * result + (getGetHomeTimeline() != null ? getGetHomeTimeline().hashCode() : 0);
+        result = 31 * result + (getGetUserTimeline() != null ? getGetUserTimeline().hashCode() : 0);
+        result = 31 * result + (getGetMentions() != null ? getGetMentions().hashCode() : 0);
+        result = 31 * result + (getGetFavorites() != null ? getGetFavorites().hashCode() : 0);
+        result = 31 * result + (getGetRetweetsOfMe() != null ? getGetRetweetsOfMe().hashCode() : 0);
+        result = 31 * result + (getGetLists() != null ? getGetLists().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "TaskInfo{" +
-                "fetchTweetsFromSearch=" + fetchTweetsFromSearch +
-                ", updateTweets=" + updateTweets +
-                ", updatedUsers=" + updatedUsers +
-                ", updateUsersFromMentions=" + updateUsersFromMentions +
-                ", fetchUsersFromList=" + fetchUsersFromList +
-                ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
-                ", controllerCreateTestdataTweets=" + controllerCreateTestdataTweets +
-                ", controllerCreateTestdataUsers=" + controllerCreateTestdataUsers +
-                ", controllerCreateImprintUser=" + controllerCreateImprintUser +
-                ", removeOldDataFromStorage=" + removeOldDataFromStorage +
-                ", fetchFollower=" + fetchFollower +
-                ", fetchFriends=" + fetchFriends +
-                '}';
+            "fetchTweetsFromSearch=" + fetchTweetsFromSearch +
+            ", updateTweets=" + updateTweets +
+            ", updatedUsers=" + updatedUsers +
+            ", updateUsersFromMentions=" + updateUsersFromMentions +
+            ", fetchUsersFromList=" + fetchUsersFromList +
+            ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
+            ", controllerCreateTestdataTweets=" + controllerCreateTestdataTweets +
+            ", controllerCreateTestdataUsers=" + controllerCreateTestdataUsers +
+            ", controllerCreateImprintUser=" + controllerCreateImprintUser +
+            ", removeOldDataFromStorage=" + removeOldDataFromStorage +
+            ", fetchFollower=" + fetchFollower +
+            ", fetchFriends=" + fetchFriends +
+            ", getHomeTimeline=" + getHomeTimeline +
+            ", getUserTimeline=" + getUserTimeline +
+            ", getMentions=" + getMentions +
+            ", getFavorites=" + getFavorites +
+            ", getRetweetsOfMe=" + getRetweetsOfMe +
+            ", getLists=" + getLists +
+            '}';
     }
 
     @Transient
