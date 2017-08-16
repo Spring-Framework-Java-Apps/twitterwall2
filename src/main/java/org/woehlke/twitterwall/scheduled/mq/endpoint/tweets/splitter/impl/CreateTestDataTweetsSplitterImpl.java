@@ -69,8 +69,8 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
             Message<TweetMessage> outgoingMessage = null;
             if(fetchTweetFromApi) {
                 Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
-                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage, tweet, loopId, loopAll);
                 twitterwallMessageBuilder.waitForApi();
+                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage, tweet, loopId, loopAll);
             } else {
                 outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage,tweetPers,loopId,loopAll);
             }
