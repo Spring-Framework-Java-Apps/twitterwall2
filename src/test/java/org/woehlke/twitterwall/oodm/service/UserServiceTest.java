@@ -23,7 +23,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UserServiceTest {
+public class UserServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
 
@@ -53,9 +53,11 @@ public class UserServiceTest {
 
     @Test
     public void areDependenciesLoaded() throws Exception {
+        String msg = "areDependenciesLoaded: ";
         Assert.assertNotNull(userService);
         Assert.assertNotNull(testdataProperties);
         Assert.assertNotNull(twitterProperties);
+        log.debug(msg+" YES ");
     }
 
     @Test
@@ -375,5 +377,29 @@ public class UserServiceTest {
             Assert.assertEquals(msg,idTwitter,foundUser.getIdTwitter().longValue());
             Assert.assertEquals(msg,screenNameUnique,foundUser.getScreenNameUnique());
         }
+    }
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
     }
 }

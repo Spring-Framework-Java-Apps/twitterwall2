@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MentionServiceTest {
+public class MentionServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceTest.class);
 
@@ -124,5 +124,30 @@ public class MentionServiceTest {
             String foundScreenName =myFoundMention.getScreenName();
             Assert.assertEquals(msg,expectedScreenName,foundScreenName);
         }
+    }
+
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
     }
 }

@@ -99,4 +99,8 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByIdTwitter(idTwitter);
     }
 
+    @Override
+    public Tweet findByUniqueId(Tweet domainExampleObject) {
+        return tweetRepository.findByUniqueId(domainExampleObject);
+    }
 }

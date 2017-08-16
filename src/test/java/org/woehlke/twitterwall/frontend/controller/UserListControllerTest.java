@@ -1,5 +1,6 @@
 package org.woehlke.twitterwall.frontend.controller;
 
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
+import org.woehlke.twitterwall.oodm.service.UserListService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,18 +25,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TaskHistoryControllerTest {
+public class UserListControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskHistoryControllerTest.class);
 
-    @Autowired
-    private TaskHistoryController controller;
-
-    @Autowired
-    private PrepareDataTest prepareDataTest;
+    private static final Logger log = LoggerFactory.getLogger(UserListControllerTest.class);
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserListController controller;
+
+    @Autowired
+    private UserListService userListService;
+
 
     //@Commit
     @Test
@@ -44,27 +47,17 @@ public class TaskHistoryControllerTest {
         assertThat(controller).isNotNull();
     }
 
-    //@Commit
-    @Test
-    public void setupTestData() throws Exception {
-        String msg = "setupTestData: ";
-        prepareDataTest.getTestDataTweets(msg);
-        prepareDataTest.getTestDataUser(msg);
-        Assert.assertTrue(true);
-    }
-
     @WithMockUser
     //@Commit
     @Test
     public void getAllTest() throws Exception {
         String msg = "getAllTest: ";
-
-        MvcResult result = this.mockMvc.perform(get("/taskhistory/all"))
-                .andExpect(status().isOk())
-                .andExpect(view().name( "taskhistory/all"))
-                .andExpect(model().attributeExists("myPageContent"))
-                .andExpect(model().attributeExists("page"))
-                .andReturn();
+        MvcResult result = this.mockMvc.perform(get("/userlist/all"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("userlist/all"))
+            .andExpect(model().attributeExists("userlists"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
 
         String content = result.getResponse().getContentAsString();
 
@@ -76,6 +69,13 @@ public class TaskHistoryControllerTest {
         Assert.assertTrue(true);
     }
 
+    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getUserListForIdTest() throws Exception {
+        Assert.assertTrue(true);
+    }
 
 
 }

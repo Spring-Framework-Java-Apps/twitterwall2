@@ -1,8 +1,6 @@
 package org.woehlke.twitterwall.oodm.repositories.custom.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.woehlke.twitterwall.oodm.entities.UserList;

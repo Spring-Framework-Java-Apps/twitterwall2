@@ -50,6 +50,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task findByUniqueId(Task domainExampleObject) {
+        return taskRepository.findByUniqueId(domainExampleObject);
+    }
+
+    @Override
     public Task findById(long id) {
         return taskRepository.findOne(id);
     }

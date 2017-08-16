@@ -46,4 +46,8 @@ public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements Ur
         return result;
     }
 
+    @Override
+    public Url findByUniqueId(Url domainExampleObject) {
+        return urlRepository.findByUniqueId(domainExampleObject);
+    }
 }

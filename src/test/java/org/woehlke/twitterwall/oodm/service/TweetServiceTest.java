@@ -19,7 +19,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TweetServiceTest {
+public class TweetServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceTest.class);
 
@@ -266,4 +266,27 @@ public class TweetServiceTest {
         }
     }
 
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
 }

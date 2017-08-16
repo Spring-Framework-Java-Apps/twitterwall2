@@ -35,7 +35,7 @@ public class UserListController {
             Sort.Direction.ASC,
             "screenName"
         );
-        model.addAttribute("users", userListService.getAll(pageRequest));
+        model.addAttribute("userlists", userListService.getAll(pageRequest));
         String symbol = Symbols.USER_ALL.toString();
         String subtitle = "All Users";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
@@ -43,7 +43,7 @@ public class UserListController {
     }
 
     @RequestMapping("/{id}")
-    public String getUserForId(
+    public String getUserListForId(
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") UserList userList, Model model
     ) {

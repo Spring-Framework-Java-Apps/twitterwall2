@@ -10,6 +10,8 @@ import java.util.List;
 
 @Component("mqListsSplitter")
 public class ListsSplitterImpl implements ListsSplitter {
+
+    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public List<Message<UserListMessage>> splitUserListMessage(Message<TaskMessage> incomingTaskMessage) {
         return null;

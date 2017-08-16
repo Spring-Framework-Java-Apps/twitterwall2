@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.TaskHistory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TaskHistoryServiceTest {
+public class TaskHistoryServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceTest.class);
 
@@ -51,5 +51,30 @@ public class TaskHistoryServiceTest {
 
     @Test
     public void store() throws Exception {}
+
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
 
 }

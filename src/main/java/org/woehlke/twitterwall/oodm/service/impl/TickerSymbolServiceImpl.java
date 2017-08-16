@@ -34,4 +34,8 @@ public class TickerSymbolServiceImpl extends DomainServiceWithTaskImpl<TickerSym
         return tickerSymbolRepository.findByUrl(url);
     }
 
+    @Override
+    public TickerSymbol findByUniqueId(TickerSymbol domainExampleObject) {
+        return tickerSymbolRepository.findByUniqueId(domainExampleObject);
+    }
 }

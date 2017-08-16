@@ -64,4 +64,8 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
         return hashTagRepository.countAllUser2HashTag(pageRequestUsers);
     }
 
+    @Override
+    public HashTag findByUniqueId(HashTag domainExampleObject) {
+        return hashTagRepository.findByUniqueId(domainExampleObject);
+    }
 }

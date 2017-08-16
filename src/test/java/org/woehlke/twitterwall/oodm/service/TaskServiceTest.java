@@ -20,7 +20,8 @@ import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TaskServiceTest {
+public class TaskServiceTest implements DomainObjectMinimalServiceTest {
+
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);
 
@@ -151,4 +152,28 @@ public class TaskServiceTest {
         Assert.assertEquals(TaskStatus.FINAL_ERROR,createdTask.getTaskStatus());
     }
 
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
 }

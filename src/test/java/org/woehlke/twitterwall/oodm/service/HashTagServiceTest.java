@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class HashTagServiceTest {
+public class HashTagServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceTest.class);
 
@@ -26,7 +26,6 @@ public class HashTagServiceTest {
 
     @Autowired
     private TestdataProperties testdataProperties;
-
 
     @Test
     public void areDependenciesLoaded() throws Exception {
@@ -108,4 +107,29 @@ public class HashTagServiceTest {
             log.info(msg+" hashTagsUsers: "+counted.getText());
         }
     }
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
+
 }

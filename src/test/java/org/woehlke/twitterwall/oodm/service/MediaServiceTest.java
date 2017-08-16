@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.Media;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MediaServiceTest {
+public class MediaServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MediaServiceTest.class);
 
@@ -85,5 +85,29 @@ public class MediaServiceTest {
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");
         }
+    }
+
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
     }
 }

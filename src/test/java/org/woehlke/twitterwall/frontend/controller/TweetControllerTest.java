@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -114,6 +113,121 @@ public class TweetControllerTest {
                 .andExpect(model().attributeExists("tweet"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getHomeTimeline() throws Exception {
+        String msg ="getHomeTimeline: ";
+
+        MvcResult result = this.mockMvc.perform(get("/tweet/timeline/home"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "tweet/all"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getUserTimeline() throws Exception {
+        String msg ="getUserTimeline: ";
+
+        MvcResult result = this.mockMvc.perform(get("/tweet/timeline/user"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "tweet/all"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getMentions() throws Exception {
+        String msg ="getMentions: ";
+
+        MvcResult result = this.mockMvc.perform(get("/tweet/mentions"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "tweet/all"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getFavorites() throws Exception {
+        String msg ="getFavorites: ";
+
+        MvcResult result = this.mockMvc.perform(get("/tweet/favorites"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "tweet/all"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
+
+    @WithMockUser
+    //@Commit
+    @Test
+    public void getRetweetsOfMe() throws Exception {
+        String msg ="getRetweetsOfMe: ";
+
+        MvcResult result = this.mockMvc.perform(get("/tweet/retweets"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "tweet/all"))
+            .andExpect(model().attributeExists("latestTweets"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
 
         String content = result.getResponse().getContentAsString();
 

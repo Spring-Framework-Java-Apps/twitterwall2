@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.Url;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UrlServiceTest {
+public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithUrlTest {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
 
@@ -68,4 +68,27 @@ public class UrlServiceTest {
         }
     }
 
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
 }

@@ -79,4 +79,8 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
         return mentionRepository.findByScreenNameUniqueAndIdTwitter(screenNameUnique, idTwitter);
     }
 
+    @Override
+    public Mention findByUniqueId(Mention domainExampleObject) {
+        return mentionRepository.findByUniqueId(domainExampleObject);
+    }
 }

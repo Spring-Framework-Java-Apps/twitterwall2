@@ -10,11 +10,14 @@ import java.util.List;
 
 @Component("mqListFinisher")
 public class ListFinisherImpl implements ListFinisher {
+
+    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public Message<UserListResultList> finish(Message<List<UserListMessage>> incomingMessageList) {
         return null;
     }
 
+    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public void finishAsnyc(Message<List<UserListMessage>> incomingMessageList) {
 

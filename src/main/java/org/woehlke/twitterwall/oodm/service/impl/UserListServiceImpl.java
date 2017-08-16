@@ -35,4 +35,8 @@ public class UserListServiceImpl extends DomainServiceWithTaskImpl<UserList> imp
         return domainRepository.findByIdTwitter(idTwitter);
     }
 
+    @Override
+    public UserList findByUniqueId(UserList domainExampleObject) {
+        return domainRepository.findByUniqueId(domainExampleObject);
+    }
 }

@@ -7,6 +7,8 @@ import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
 
 @Component("mqListsTransformator")
 public class ListsTransformatorImpl implements ListsTransformator {
+
+    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public Message<UserListMessage> transformList(Message<UserListMessage> incomingMessage) {
         return null;

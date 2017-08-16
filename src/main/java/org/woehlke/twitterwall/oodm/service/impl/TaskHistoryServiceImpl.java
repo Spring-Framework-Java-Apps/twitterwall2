@@ -46,6 +46,11 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
+    public TaskHistory findByUniqueId(TaskHistory domainExampleObject) {
+        return taskHistoryRepository.findByUniqueId(domainExampleObject);
+    }
+
+    @Override
     public Page<TaskHistory> findByTask(Task oneTask,Pageable pageRequest) {
         return taskHistoryRepository.findByTask(oneTask,pageRequest);
     }
@@ -54,4 +59,6 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     public TaskHistory findById(long id) {
         return taskHistoryRepository.findOne(id);
     }
+
+
 }
