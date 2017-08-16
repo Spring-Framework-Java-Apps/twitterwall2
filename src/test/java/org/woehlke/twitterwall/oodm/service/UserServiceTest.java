@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
@@ -60,6 +61,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" YES ");
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -77,6 +79,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void getAllDescriptionsTest() {
         String msg = "getAllDescriptionsTest";
@@ -99,6 +102,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.info(msg+"------------------------------------------------");
     }
 
+    @Commit
     @Test
     public void getTweetingUsers() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -113,6 +117,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getAllDescriptions() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -127,6 +132,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundDescriptions.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getUsersForHashTag() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -144,6 +150,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void getFriends() throws Exception {
         String msg = "getFriends: ";
@@ -158,6 +165,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
         String msg = "getNotYetFriendUsers: ";
@@ -172,6 +180,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getFollower() throws Exception {
         String msg = "getFollower: ";
@@ -186,6 +195,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetFollower() throws Exception {
         String msg = "getNotYetFollower: ";
@@ -200,6 +210,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getOnList() throws Exception {
         String msg = "getOnList: ";
@@ -214,6 +225,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetOnList() throws Exception {
         String msg = "getNotYetOnList: ";
@@ -229,6 +241,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void findAllUser2HashTag() throws Exception {
         String msg = "findAllUser2HashTag: ";
@@ -254,6 +267,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Media() throws Exception {
         String msg = "findAllUser2Media: ";
@@ -279,6 +293,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Mentiong() throws Exception {
         String msg = "findAllUser2Mentiong: ";
@@ -311,6 +326,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Url() throws Exception {
         String msg = "findAllUser2Url: ";
@@ -337,6 +353,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2TickerSymbol() throws Exception {
         String msg = "findAllUser2TickerSymbol: ";
@@ -362,6 +379,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     public void findByidTwitterAndScreenNameUnique() throws Exception {
         String msg = "findByidTwitterAndScreenNameUnique: ";
@@ -379,42 +397,49 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         }
     }
 
+    @Commit
     @Test
     @Override
     public void findById() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void getAll() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void count() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void findByUniqueId() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void store() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void create() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void update() throws Exception {

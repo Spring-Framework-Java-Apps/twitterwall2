@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -40,6 +41,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertNotNull(testdataProperties);
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -57,6 +59,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void create() throws Exception {
         String msg = "TaskServiceTest.create";
@@ -67,6 +70,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(createdTask.getTaskStatus(),TaskStatus.READY);
     }
 
+    @Commit
     @Test
     public void done() throws Exception {
         String msg = "TaskServiceTest.done";
@@ -81,6 +85,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(TaskStatus.FINISHED,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void error() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -95,6 +100,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(TaskStatus.ERROR,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void warn() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -109,6 +115,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(TaskStatus.WARN,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void event() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -124,6 +131,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(oldStatus,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void start() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -138,6 +146,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
         Assert.assertEquals(TaskStatus.RUNNING,createdTask.getTaskStatus());
     }
 
+    @Commit
     @Test
     public void finalError() throws Exception {
         String msg = "TaskServiceTest.error";
@@ -153,24 +162,28 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     }
 
 
+    @Commit
     @Test
     @Override
     public void findById() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void getAll() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void count() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void findByUniqueId() throws Exception {

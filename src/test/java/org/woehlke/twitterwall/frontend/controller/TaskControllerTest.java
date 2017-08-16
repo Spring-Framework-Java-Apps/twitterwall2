@@ -59,6 +59,7 @@ public class TaskControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    @Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -67,6 +68,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithMockUser
     @Test
     public void getAllTest()throws Exception {
@@ -87,6 +89,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithMockUser
     @Test
     public void getTaskByIdTest() throws Exception {
@@ -136,6 +139,7 @@ public class TaskControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithMockUser
     @Test
     public void getOnListRenewTest() throws Exception {

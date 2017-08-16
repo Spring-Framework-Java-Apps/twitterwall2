@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -25,48 +26,56 @@ public class UserListServiceTest implements DomainObjectMinimalServiceTest,Domai
         log.debug(msg+" YES ");
     }
 
+    @Commit
     @Test
     @Override
     public void fetchTestData() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void findById() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void getAll() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void count() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void findByUniqueId() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void store() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void create() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void update() throws Exception {

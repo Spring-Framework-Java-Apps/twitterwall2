@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Url;
@@ -32,6 +33,7 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
         Assert.assertNotNull(testdataProperties);
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -49,6 +51,7 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
         }
     }
 
+    @Commit
     @Test
     public void findByUrl() throws Exception {
         String msg = "findByUrl: ";
@@ -68,42 +71,49 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
         }
     }
 
+    @Commit
     @Test
     @Override
     public void findById() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void getAll() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void count() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void findByUniqueId() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void store() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void create() throws Exception {
 
     }
 
+    @Commit
     @Test
     @Override
     public void update() throws Exception {
