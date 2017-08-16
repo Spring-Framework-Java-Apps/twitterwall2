@@ -19,7 +19,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
+public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest ,DomainServiceWithIdTwitterTest{
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceTest.class);
 

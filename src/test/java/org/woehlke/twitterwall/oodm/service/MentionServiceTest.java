@@ -21,7 +21,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MentionServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
+public class MentionServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithScreenNameTest,DomainServiceWithIdTwitterTest {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceTest.class);
 

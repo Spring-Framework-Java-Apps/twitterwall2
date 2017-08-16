@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.Media;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MediaServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
+public class MediaServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithIdTwitterTest,DomainServiceWithUrlTest {
 
     private static final Logger log = LoggerFactory.getLogger(MediaServiceTest.class);
 

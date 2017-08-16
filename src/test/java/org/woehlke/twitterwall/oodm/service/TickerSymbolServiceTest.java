@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TickerSymbolServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
+public class TickerSymbolServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithUrlTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);
 
