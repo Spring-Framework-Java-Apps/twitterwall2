@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TickerSymbolServiceTest implements DomainObjectMinimalServiceTest {
+public class TickerSymbolServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);
 
@@ -92,6 +92,24 @@ public class TickerSymbolServiceTest implements DomainObjectMinimalServiceTest {
     @Test
     @Override
     public void findByUniqueId() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void update() throws Exception {
 
     }
 }

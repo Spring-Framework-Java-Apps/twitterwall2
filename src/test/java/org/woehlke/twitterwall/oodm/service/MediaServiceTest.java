@@ -16,7 +16,7 @@ import org.woehlke.twitterwall.oodm.entities.Media;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MediaServiceTest implements DomainObjectMinimalServiceTest {
+public class MediaServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(MediaServiceTest.class);
 
@@ -108,6 +108,24 @@ public class MediaServiceTest implements DomainObjectMinimalServiceTest {
     @Test
     @Override
     public void findByUniqueId() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void update() throws Exception {
 
     }
 }

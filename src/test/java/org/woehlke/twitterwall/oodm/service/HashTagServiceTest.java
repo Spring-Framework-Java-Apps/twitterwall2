@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class HashTagServiceTest implements DomainObjectMinimalServiceTest {
+public class HashTagServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceTest.class);
 
@@ -132,4 +132,21 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest {
 
     }
 
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void update() throws Exception {
+
+    }
 }

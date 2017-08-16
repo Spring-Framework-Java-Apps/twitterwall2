@@ -23,7 +23,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UserServiceTest implements DomainObjectMinimalServiceTest {
+public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
 
@@ -400,6 +400,24 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest {
     @Test
     @Override
     public void findByUniqueId() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void update() throws Exception {
 
     }
 }

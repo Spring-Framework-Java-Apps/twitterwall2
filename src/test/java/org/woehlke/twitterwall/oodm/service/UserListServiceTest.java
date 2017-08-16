@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UserListServiceTest implements DomainObjectMinimalServiceTest {
+public class UserListServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest  {
 
     private static final Logger log = LoggerFactory.getLogger(UserListServiceTest.class);
 
@@ -52,6 +52,24 @@ public class UserListServiceTest implements DomainObjectMinimalServiceTest {
     @Test
     @Override
     public void findByUniqueId() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Test
+    @Override
+    public void update() throws Exception {
 
     }
 }
