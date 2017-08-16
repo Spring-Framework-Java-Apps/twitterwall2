@@ -97,6 +97,44 @@
         </int:interceptors>
     </int:channel>
 
+
+    <int:channel id="getHomeTimelineChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getUserTimelineChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getMentionsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getFavoritesChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getRetweetsOfMeChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getListsChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
     <int:router id="startTaskRouter" input-channel="startTaskChannel" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="updateTweetsChannel"/>
         <int:mapping value="UPDATE_USERS" channel="updateUsersChannel"/>
@@ -109,7 +147,153 @@
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsChannel"/>
         <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserChannel"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageChannel"/>
+        <int:mapping value="FETCH_HOME_TIMELINE" channel="getHomeTimelineChannel"/>
+        <int:mapping value="FETCH_USER_TIMELINE" channel="getUserTimelineChannel"/>
+        <int:mapping value="FETCH_MENTIONS" channel="getMentionsChannel"/>
+        <int:mapping value="FETCH_FAVORITES" channel="getFavoritesChannel"/>
+        <int:mapping value="FETCH_RETWEETS_OF_ME" channel="getRetweetsOfMeChannel"/>
+        <int:mapping value="FETCH_LISTS" channel="getListsChannel"/>
     </int:router>
+
+
+    <int:chain id="getHomeTimelineChain" input-channel="getHomeTimelineChannel">
+        <int:splitter
+                id="getHomeTimelineSplitter"
+                ref="mqHomeTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getHomeTimelineTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getHomeTimelinePersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getHomeTimelineAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getHomeTimelineFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="getUserTimelineChain" input-channel="getUserTimelineChannel">
+        <int:splitter
+                id="getUserTimelineSplitter"
+                ref="mqUserTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getUserTimelineTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getUserTimelinePersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getUserTimelineAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getUserTimelineFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="getMentionsChain" input-channel="getMentionsChannel">
+        <int:splitter
+                id="getMentionsSplitter"
+                ref="mqMentionsSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getMentionsTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getMentionsPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getMentionsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getMentionsFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="getFavoritesChain" input-channel="getFavoritesChannel">
+        <int:splitter
+                id="getFavoritesSplitter"
+                ref="mqFavoritesSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getFavoritesTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getFavoritesPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getFavoritesAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getFavoritesFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="getRetweetsOfMeChain" input-channel="getRetweetsOfMeChannel">
+        <int:splitter
+                id="getRetweetsOfMeSplitter"
+                ref="mqRetweetsOfMeSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getRetweetsOfMeTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getRetweetsOfMePersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getRetweetsOfMeAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getRetweetsOfMeFinisher"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+    <int:chain id="getListsChain" input-channel="getListsChannel">
+        <int:splitter
+                id="getListsSplitter"
+                ref="mqListsSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getListsTransformator"
+                ref="mqListsTransformator"
+                method="transformList" />
+        <int:service-activator
+                id="getListsPersistor"
+                ref="mqListsPersistor"
+                method="persistList" />
+        <int:aggregator
+                id="getListsAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getListsFinisher"
+                ref="mqListsFinisher"
+                method="finish" />
+    </int:chain>
+
 
     <int:chain id="updateTweetsChain" input-channel="updateTweetsChannel">
         <int:splitter
@@ -382,7 +566,52 @@
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageFireAndForgetChannel"/>
+        <int:mapping value="FETCH_HOME_TIMELINE" channel="getHomeTimelineFireAndForgetChannel"/>
+        <int:mapping value="FETCH_USER_TIMELINE" channel="getUserTimelineFireAndForgetChannel"/>
+        <int:mapping value="FETCH_MENTIONS" channel="getMentionsFireAndForgetChannel"/>
+        <int:mapping value="FETCH_FAVORITES" channel="getFavoritesFireAndForgetChannel"/>
+        <int:mapping value="FETCH_RETWEETS_OF_ME" channel="getRetweetsOfMeFireAndForgetChannel"/>
+        <int:mapping value="FETCH_LISTS" channel="getListsFireAndForgetChannel"/>
     </int:router>
+
+
+    <int:channel id="getHomeTimelineFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getUserTimelineFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getMentionsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getFavoritesFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getRetweetsOfMeFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="getListsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
 
     <int:channel id="updateTweetsFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
         <int:interceptors>
@@ -437,6 +666,146 @@
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
+
+    <int:chain id="getHomeTimelineFireAndForgetChain" input-channel="getHomeTimelineFireAndForgetChannel">
+        <int:splitter
+                id="getHomeTimelineFireAndForgetSplitter"
+                ref="mqHomeTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getHomeTimelineFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getHomeTimelineFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getHomeTimelineFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getHomeTimelineFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="getUserTimelineFireAndForgetChain" input-channel="getUserTimelineFireAndForgetChannel">
+        <int:splitter
+                id="getUserTimelineFireAndForgetplitter"
+                ref="mqUserTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getUserTimelineFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getUserTimelineFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getUserTimelineFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getUserTimelineFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="getMentionsFireAndForgetChain" input-channel="getMentionsFireAndForgetChannel">
+        <int:splitter
+                id="getMentionsFireAndForgetSplitter"
+                ref="mqMentionsSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getMentionsFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getMentionsFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getMentionsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getMentionsFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="getFavoritesFireAndForgetChain" input-channel="getFavoritesFireAndForgetChannel">
+        <int:splitter
+                id="getFavoritesFireAndForgetSplitter"
+                ref="mqFavoritesSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getFavoritesFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getFavoritesFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getFavoritesFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getFavoritesFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="getRetweetsOfMeFireAndForgetChain" input-channel="getRetweetsOfMeFireAndForgetChannel">
+        <int:splitter
+                id="getRetweetsOfMeFireAndForgetSplitter"
+                ref="mqRetweetsOfMeSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="getRetweetsOfMeFireAndForgetTransformator"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="getRetweetsOfMeFireAndForgetPersistor"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="getRetweetsOfMeFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getRetweetsOfMeFireAndForgetFinisher"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="getListsFireAndForgetChain" input-channel="getListsFireAndForgetChannel">
+        <int:splitter
+                id="getListsFireAndForgetSplitter"
+                ref="mqListsSplitter"
+                method="splitListMessage"  />
+        <int:service-activator
+                id="getListsFireAndForgetTransformator"
+                ref="mqListsTransformator"
+                method="transformList" />
+        <int:service-activator
+                id="getListsFireAndForgetPersistor"
+                ref="mqListsPersistor"
+                method="persistList" />
+        <int:aggregator
+                id="getListsFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="getListsFireAndForgetFinisher"
+                ref="mqListFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
 
 
     <int:chain id="updateTweetsFireAndForgetChain" input-channel="updateTweetsFireAndForgetChannel">

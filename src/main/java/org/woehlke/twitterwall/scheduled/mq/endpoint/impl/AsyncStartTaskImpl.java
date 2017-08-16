@@ -100,7 +100,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
     public Task getFavorites() {
-        TaskType taskType = TaskType.FETCH_MENTIONS;
+        TaskType taskType = TaskType.FETCH_FAVORITES;
         return send(taskType);
     }
 
