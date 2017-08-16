@@ -138,6 +138,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         log.info(msg+"FINISHED TEST");
     }
 
+    @Test
     @Override
     public void fetchFriendsTest() throws Exception {
         String msg = "fetchFollowerTest: ";
@@ -170,6 +171,114 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
         Assert.assertEquals(TaskType.REMOVE_OLD_DATA_FROM_STORAGE,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getHomeTimeline() throws Exception {
+        String msg = "getHomeTimeline: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getHomeTimeline();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_HOME_TIMELINE,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getUserTimeline() throws Exception {
+        String msg = "getUserTimeline: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getUserTimeline();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_USER_TIMELINE,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getMentions() throws Exception {
+        String msg = "getMentions: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getMentions();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_MENTIONS,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getFavorites() throws Exception {
+        String msg = "getFavorites: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getFavorites();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_FAVORITES,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getRetweetsOfMe() throws Exception {
+        String msg = "getRetweetsOfMe: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getRetweetsOfMe();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_RETWEETS_OF_ME,task.getTaskType());
+        CountedEntities afterTest = countedEntitiesService.countAll();
+        boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
+        Assert.assertTrue(ok);
+        log.info(msg+"FINISHED TEST");
+    }
+
+    @Test
+    @Override
+    public void getLists() throws Exception {
+        String msg = "getLists: ";
+        log.info(msg+"START TEST");
+        CountedEntities beforeTest = countedEntitiesService.countAll();
+        Task task = this.mqStartTask.getLists();
+        log.info(msg+"created Task = "+task.getUniqueId());
+        Assert.assertNotNull(task);
+        Assert.assertNotNull(task.getUniqueId());
+        Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
+        Assert.assertEquals(TaskType.FETCH_LISTS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntitiesReduced(beforeTest,afterTest);
         Assert.assertTrue(ok);

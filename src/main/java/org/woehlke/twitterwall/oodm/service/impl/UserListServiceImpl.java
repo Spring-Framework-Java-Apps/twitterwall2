@@ -3,8 +3,6 @@ package org.woehlke.twitterwall.oodm.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,7 @@ import org.woehlke.twitterwall.oodm.service.UserListService;
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserListServiceImpl extends DomainServiceWithTaskImpl<UserList> implements UserListService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UserListServiceImpl.class);
 
     private final UserListRepository domainRepository;
 

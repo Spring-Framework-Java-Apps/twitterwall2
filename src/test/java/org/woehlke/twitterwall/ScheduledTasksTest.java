@@ -46,4 +46,34 @@ public class ScheduledTasksTest {
     public void fetchFollower() throws Exception {
         scheduledTasks.fetchFollower();
     }
+
+    @Test
+    public void getHomeTimeline() throws Exception {
+        scheduledTasks.getHomeTimeline();
+    }
+
+    @Test
+    public void getUserTimeline() throws Exception {
+        scheduledTasks.getUserTimeline();
+    }
+
+    @Test
+    public void getMentions() throws Exception {
+        scheduledTasks.getMentions();
+    }
+
+    @Test
+    public void getFavorites() throws Exception {
+        scheduledTasks.getFavorites();
+    }
+
+    @Test
+    public void getRetweetsOfMe() throws Exception {
+        scheduledTasks.getRetweetsOfMe();
+    }
+
+    @Test
+    public void getLists() throws Exception {
+        scheduledTasks.getLists();
+    }
 }

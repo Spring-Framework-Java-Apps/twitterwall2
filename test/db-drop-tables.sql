@@ -15,6 +15,7 @@ drop table media;
 drop table hashtag;
 drop table tweet;
 drop table userprofile;
+drop table userlist;
 drop table task_history;
 drop table task;
 drop sequence hibernate_sequence;

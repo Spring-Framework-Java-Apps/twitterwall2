@@ -274,15 +274,15 @@
     <int:chain id="getListsChain" input-channel="getListsChannel">
         <int:splitter
                 id="getListsSplitter"
-                ref="mqListsSplitter"
+                ref="mqUserListsSplitter"
                 method="splitUserListMessage"  />
         <int:service-activator
                 id="getListsTransformator"
-                ref="mqListsTransformator"
+                ref="mqUserListTransformator"
                 method="transformList" />
         <int:service-activator
                 id="getListsPersistor"
-                ref="mqListsPersistor"
+                ref="mqUserListPersistor"
                 method="persistList" />
         <int:aggregator
                 id="getListsAggregator"
@@ -290,7 +290,7 @@
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="getListsFinisher"
-                ref="mqListFinisher"
+                ref="mqUserListsFinisher"
                 method="finish" />
     </int:chain>
 
@@ -785,15 +785,15 @@
     <int:chain id="getListsFireAndForgetChain" input-channel="getListsFireAndForgetChannel">
         <int:splitter
                 id="getListsFireAndForgetSplitter"
-                ref="mqListsSplitter"
+                ref="mqUserListsSplitter"
                 method="splitUserListMessage"  />
         <int:service-activator
                 id="getListsFireAndForgetTransformator"
-                ref="mqListsTransformator"
+                ref="mqUserListTransformator"
                 method="transformList" />
         <int:service-activator
                 id="getListsFireAndForgetPersistor"
-                ref="mqListsPersistor"
+                ref="mqUserListPersistor"
                 method="persistList" />
         <int:aggregator
                 id="getListsFireAndForgetAggregator"
@@ -801,7 +801,7 @@
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="getListsFireAndForgetFinisher"
-                ref="mqListFinisher"
+                ref="mqUserListsFinisher"
                 method="finishAsnyc" />
     </int:chain>
 

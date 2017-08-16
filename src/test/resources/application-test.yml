@@ -6,8 +6,6 @@ endpoints:
       enabled: true
 logging:
   file: test/twitterwall.log.txt
-#hibernate:
-  #dialect: org.hibernate.dialect.H2Dialect
 management:
   security:
     enabled: true
@@ -15,17 +13,7 @@ spring:
   application:
     admin:
       enabled: true
-  datasource:
-    #driverClassName: org.h2.Driver
-    #platform: H2
-    #url: jdbc:h2:mem:test
-    url: ${DATABASE_URL_TEST}
   jpa:
-    #hibernate:
-    #  ddl-auto: create-drop
-    #properties:
-    #  hibernate:
-    #   dialect: org.hibernate.dialect.H2Dialect
     show-sql: true
 twitterwall:
   backend:

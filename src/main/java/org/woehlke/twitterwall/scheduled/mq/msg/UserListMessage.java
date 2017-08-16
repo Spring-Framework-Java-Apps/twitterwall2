@@ -25,6 +25,20 @@ public class UserListMessage implements Serializable {
         this.idTwitter = idTwitter;
     }
 
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter) {
+        this.taskMessage = taskMessage;
+        this.userListTwitter = userListTwitter;
+        this.userList = null;
+        this.idTwitter = userListTwitter.getId();
+    }
+
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.entities.UserList userListOut) {
+        this.taskMessage = taskMessage;
+        this.userListTwitter = userListTwitter;
+        this.userList = userListOut;
+        this.idTwitter = userListTwitter.getId();
+    }
+
     public TaskMessage getTaskMessage() {
         return taskMessage;
     }

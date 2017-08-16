@@ -20,5 +20,17 @@ public interface AsyncStartTaskTest {
 
     void fetchFriendsTest() throws Exception;
 
-    void removeOldDataFromStorageTest()throws Exception;
+    void removeOldDataFromStorageTest() throws Exception;
+
+    void getHomeTimeline() throws Exception;
+
+    void getUserTimeline() throws Exception;
+
+    void getMentions() throws Exception;
+
+    void getFavorites() throws Exception;
+
+    void getRetweetsOfMe() throws Exception;
+
+    void getLists() throws Exception;
 }

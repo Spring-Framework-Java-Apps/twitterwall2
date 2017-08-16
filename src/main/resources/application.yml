@@ -230,7 +230,6 @@ twitterwall:
             - "https://t.co/4HBxydWdIE"
             - "https://t.co/hMMJBGFFKR"
             - "https://t.co/cbsEBiSW2E"
-        urlcache:
         user:
           idTwitter:
             #t3c_berlin
