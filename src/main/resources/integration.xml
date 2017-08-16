@@ -275,7 +275,7 @@
         <int:splitter
                 id="getListsSplitter"
                 ref="mqListsSplitter"
-                method="splitTweetMessage"  />
+                method="splitUserListMessage"  />
         <int:service-activator
                 id="getListsTransformator"
                 ref="mqListsTransformator"
@@ -290,7 +290,7 @@
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="getListsFinisher"
-                ref="mqListsFinisher"
+                ref="mqListFinisher"
                 method="finish" />
     </int:chain>
 
@@ -786,7 +786,7 @@
         <int:splitter
                 id="getListsFireAndForgetSplitter"
                 ref="mqListsSplitter"
-                method="splitListMessage"  />
+                method="splitUserListMessage"  />
         <int:service-activator
                 id="getListsFireAndForgetTransformator"
                 ref="mqListsTransformator"
