@@ -55,7 +55,7 @@ public class UserListControllerTest {
         MvcResult result = this.mockMvc.perform(get("/userlist/all"))
             .andExpect(status().isOk())
             .andExpect(view().name("userlist/all"))
-            .andExpect(model().attributeExists("userlists"))
+            .andExpect(model().attributeExists("myPageContent"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 

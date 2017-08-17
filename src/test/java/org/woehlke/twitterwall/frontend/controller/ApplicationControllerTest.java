@@ -58,29 +58,6 @@ public class ApplicationControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTest() throws Exception {
-        String msg ="domainCountTest: ";
-
-        MvcResult result = this.mockMvc.perform(get("/application/domain/count"))
-                .andExpect(status().isOk())
-                .andExpect(view().name( "application/domain/count"))
-                .andExpect(model().attributeExists("countedEntities"))
-                .andExpect(model().attributeExists("page"))
-                .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        Assert.assertTrue(true);
-    }
-
-    @WithMockUser
-    @Commit
-    @Test
     public void managementPageTest() throws Exception {
         String msg ="managementPageTest: ";
 
