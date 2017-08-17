@@ -77,6 +77,11 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     @Column(name="subscriber_count", nullable = false)
     private Integer subscriberCount;
 
+    @Transient
+    public String getListOwnersScreenName(){
+        String myuriPath = uriPath;
+        return myuriPath.split("/")[1];
+    }
 
     public UserList(Task createdBy, Task updatedBy, long idTwitter, String name, String fullName, String uriPath, String description, String slug, boolean isPublic, boolean isFollowing, int memberCount, int subscriberCount) {
         super(createdBy, updatedBy);

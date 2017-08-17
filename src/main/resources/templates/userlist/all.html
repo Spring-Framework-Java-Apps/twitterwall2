@@ -33,44 +33,44 @@
                                 </td>
                                 <td>
                                     <div class="row">
-                                        <div class="col-md-2">idTwitter:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">idTwitter:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.idTwitter}">idTwitter</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">name:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">name:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.name}">name</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">fullName:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">fullName:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.fullName}">fullName</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">uriPath:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">uriPath:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.uriPath}">uriPath</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">description:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">description:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.description}">description</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">slug:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">slug:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.slug}">slug</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">isPublic:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">isPublic:</div>
+                                        <div class="col-md-9">
                                             <span th:if="${myPageItem.public}">
                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                             </span>
@@ -80,8 +80,8 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">isFollowing:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">isFollowing:</div>
+                                        <div class="col-md-9">
                                             <span th:if="${myPageItem.following}">
                                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                             </span>
@@ -91,15 +91,23 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">memberCount:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">memberCount:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.memberCount}">memberCount</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">subscriberCount:</div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">subscriberCount:</div>
+                                        <div class="col-md-9">
                                             <span th:text="${myPageItem.subscriberCount}">subscriberCount</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">listOwnersScreenName:</div>
+                                        <div class="col-md-9">
+                                            <a href="" th:href="@{|/user/screenName/${myPageItem.getListOwnersScreenName()}|}">
+                                            <span>@</span><span th:text="${myPageItem.getListOwnersScreenName()}">listOwnersScreenName</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </td>
