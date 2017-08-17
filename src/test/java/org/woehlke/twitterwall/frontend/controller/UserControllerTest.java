@@ -63,14 +63,14 @@ public class UserControllerTest {
     @Autowired
     private PrepareDataTest prepareDataTest;
 
-    //@Commit
+    @Commit
     @Test
     public void controllerIsPresentTest(){
         log.info("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
-    //@Commit
+    @Commit
     @Test
     public void setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -80,7 +80,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getAllTest() throws Exception {
         String msg = "getAllTest: ";
@@ -112,7 +112,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getUserForIdTest() throws Exception {
         String msg = "getUserForIdTest: ";
@@ -137,7 +137,7 @@ public class UserControllerTest {
     }
 
     @WithAnonymousUser
-    //@Commit
+    @Commit
     @Test
     public void getUserForScreeNameTest() throws Exception {
         String msg = "getUserForScreeNameTest: ";
@@ -161,7 +161,7 @@ public class UserControllerTest {
     }
 
     @WithAnonymousUser
-    //@Commit
+    @Commit
     @Test
     public void getTweetingUsersTest() throws Exception {
         String msg = "getTweetingUsersTest: ";
@@ -183,7 +183,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getNotYetFriendUsersTest() throws Exception {
         String msg = "getNotYetFriendUsersTest: ";
@@ -205,7 +205,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getFriendUsersTest() throws Exception {
         String msg = "getFriendUsersTest: ";
@@ -229,7 +229,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getFollowerTest() throws Exception {
         String msg = "getFollowerTest: ";
@@ -253,7 +253,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getNotYetFollowerTest() throws Exception {
         String msg = "getNotYetFollowerTest: ";
@@ -276,7 +276,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getOnListTest() throws Exception {
         String msg = "getOnListTest: ";
@@ -298,7 +298,7 @@ public class UserControllerTest {
     }
 
     @WithMockUser
-    //@Commit
+    @Commit
     @Test
     public void getNotYetOnListTest() throws Exception {
         String msg = "getNotYetOnListTest: ";

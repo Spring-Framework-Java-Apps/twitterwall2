@@ -116,8 +116,8 @@ twitterwall:
         updateUserProfilesFromMentions: 3600000 # One Hour
   scheduler:
     allowFetchTweetsFromTwitterSearch: true
-    fetchUserListAllow: true
-    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    fetchUsersFromDefinedUserListAllow: true
+    fetchUsersFromDefinedUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     allowUpdateUserProfilesFromMention: true
     fetchFollowerAllow: false
     fetchFriendsAllow: false
@@ -125,6 +125,12 @@ twitterwall:
     allowUpdateUserProfiles: false
     herokuDbRowsLimit: false
     removeOldDataFromStorageAllow: false
+    allowGetHomeTimeline: false
+    allowGetUserTimeline: false
+    allowGetMentions: false
+    allowGetFavorites: false
+    allowGetRetweetsOfMe: false
+    allowGetLists: false
     skipFortesting: false
   testdata:
     oodm:
@@ -224,7 +230,6 @@ twitterwall:
             - "https://t.co/4HBxydWdIE"
             - "https://t.co/hMMJBGFFKR"
             - "https://t.co/cbsEBiSW2E"
-        urlcache:
         user:
           idTwitter:
             #t3c_berlin
@@ -342,6 +347,15 @@ spring:
 spring:
   profiles: travis
   datasource:
-    url: ${DATABASE_URL_TEST}
-
-
+    driverClassName: org.h2.Driver
+    platform: H2
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+       dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect

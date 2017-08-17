@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
@@ -17,7 +18,7 @@ import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class HashTagServiceTest {
+public class HashTagServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceTest.class);
 
@@ -27,13 +28,13 @@ public class HashTagServiceTest {
     @Autowired
     private TestdataProperties testdataProperties;
 
-
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(hashTagService);
         Assert.assertNotNull(testdataProperties);
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -51,6 +52,7 @@ public class HashTagServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findByText() throws Exception {
         String msg = "findByText: ";
@@ -76,6 +78,7 @@ public class HashTagServiceTest {
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
      * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsTweets(Pageable)
      */
+    @Commit
     @Test
     public void getHashTagsTweets() throws Exception {
         String msg = "getHashTagsTweets: ";
@@ -97,6 +100,7 @@ public class HashTagServiceTest {
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
      * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsUsers(Pageable)
      */
+    @Commit
     @Test
     public void getHashTagsUsers() throws Exception {
         String msg = "getHashTagsUsers: ";
@@ -107,5 +111,54 @@ public class HashTagServiceTest {
         for(HashTagCounted counted:hashTagsUsers){
             log.info(msg+" hashTagsUsers: "+counted.getText());
         }
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void update() throws Exception {
+
     }
 }

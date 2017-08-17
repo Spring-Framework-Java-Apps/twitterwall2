@@ -18,15 +18,12 @@ import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.TaskHistory;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
 
-import java.util.List;
 
 /**
  * Created by tw on 11.07.17.
@@ -125,12 +122,24 @@ public class TaskController {
 
     @RequestMapping(path="/start/tweets/update")
     public String updateTweetsStartTask(Model model) {
-        String msg = "/start/tweets/fetch";
+        String msg = "/start/tweets/update";
         String title = "Scheduled Task started: update Tweets";
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.updateTweets();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/users/update")
+    public String updateUsersStartTask(Model model) {
+        String msg = "/start/users/update";
+        String title = "Scheduled Task started: update Users";
+        String subtitle = "/start/users/update";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.updateUsers();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -183,17 +192,78 @@ public class TaskController {
         return PATH+"/start/taskStarted";
     }
 
-    @RequestMapping(path="/start/users/update")
-    public String updateUserProfilesStartTask(Model model) {
-        String msg = "/start/users/update";
-        String title = "Scheduled Task started: update Users";
-        String subtitle = "/start/users/update";
+    @RequestMapping(path="/start/tweets/timeline/home")
+    public String getHomeTimeline(Model model) {
+        String msg = "/start/tweets/timeline/home";
+        String title = "Scheduled Task started: getHomeTimeline";
+        String subtitle = "/start/tweets/timeline/home";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.updateUsers();
+        Task task = mqAsyncStartTask.getHomeTimeline();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
+
+    @RequestMapping(path="/start/tweets/timeline/user")
+    public String getUserTimeline(Model model) {
+        String msg = "/start/tweets/timeline/user";
+        String title = "Scheduled Task started: getUserTimeline";
+        String subtitle = "/start/tweets/timeline/user";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.getUserTimeline();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/tweets/mentions")
+    public String getMentions(Model model) {
+        String msg = "/start/tweets/mentions";
+        String title = "Scheduled Task started: getMentions";
+        String subtitle = "/start/tweets/mentions";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.getMentions();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/tweets/favorites")
+    public String getFavorites(Model model) {
+        String msg = "/start/tweets/favorites";
+        String title = "Scheduled Task started: getFavorites";
+        String subtitle = "/start/tweets/favorites";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.getFavorites();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/tweets/myretweets")
+    public String getRetweetsOfMe(Model model) {
+        String msg = "/start/tweets/myretweets";
+        String title = "Scheduled Task started: getRetweetsOfMe";
+        String subtitle = "/start/tweets/myretweets";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.getRetweetsOfMe();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/userlists")
+    public String getLists(Model model) {
+        String msg = "/start/userlists";
+        String title = "Scheduled Task started: getLists";
+        String subtitle = "/start/userlists";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.getLists();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
 
     private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 

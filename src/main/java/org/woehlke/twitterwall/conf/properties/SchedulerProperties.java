@@ -31,10 +31,10 @@ public class SchedulerProperties {
     private Boolean skipFortesting;
 
     @NotNull
-    private Boolean fetchUserListAllow;
+    private Boolean fetchUsersFromDefinedUserListAllow;
 
     @NotNull
-    private String fetchUserListName;
+    private String fetchUsersFromDefinedUserListName;
 
     @NotNull
     private Boolean removeOldDataFromStorageAllow;
@@ -44,6 +44,24 @@ public class SchedulerProperties {
 
     @NotNull
     private Boolean fetchFriendsAllow;
+
+    @NotNull
+    private Boolean allowGetHomeTimeline;
+
+    @NotNull
+    private Boolean allowGetUserTimeline;
+
+    @NotNull
+    private Boolean allowGetMentions;
+
+    @NotNull
+    private Boolean allowGetFavorites;
+
+    @NotNull
+    private Boolean allowGetRetweetsOfMe;
+
+    @NotNull
+    private Boolean allowGetLists;
 
     public Boolean getAllowFetchTweetsFromTwitterSearch() {
         return allowFetchTweetsFromTwitterSearch;
@@ -93,20 +111,20 @@ public class SchedulerProperties {
         this.skipFortesting = skipFortesting;
     }
 
-    public Boolean getFetchUserListAllow() {
-        return fetchUserListAllow;
+    public Boolean getFetchUsersFromDefinedUserListAllow() {
+        return fetchUsersFromDefinedUserListAllow;
     }
 
-    public void setFetchUserListAllow(Boolean fetchUserListAllow) {
-        this.fetchUserListAllow = fetchUserListAllow;
+    public void setFetchUsersFromDefinedUserListAllow(Boolean fetchUsersFromDefinedUserListAllow) {
+        this.fetchUsersFromDefinedUserListAllow = fetchUsersFromDefinedUserListAllow;
     }
 
-    public String getFetchUserListName() {
-        return fetchUserListName;
+    public String getFetchUsersFromDefinedUserListName() {
+        return fetchUsersFromDefinedUserListName;
     }
 
-    public void setFetchUserListName(String fetchUserListName) {
-        this.fetchUserListName = fetchUserListName;
+    public void setFetchUsersFromDefinedUserListName(String fetchUsersFromDefinedUserListName) {
+        this.fetchUsersFromDefinedUserListName = fetchUsersFromDefinedUserListName;
     }
 
     public Boolean getRemoveOldDataFromStorageAllow() {
@@ -131,5 +149,53 @@ public class SchedulerProperties {
 
     public Boolean getFetchFriendsAllow() {
         return fetchFriendsAllow;
+    }
+
+    public Boolean getAllowGetHomeTimeline() {
+        return allowGetHomeTimeline;
+    }
+
+    public void setAllowGetHomeTimeline(Boolean allowGetHomeTimeline) {
+        this.allowGetHomeTimeline = allowGetHomeTimeline;
+    }
+
+    public Boolean getAllowGetUserTimeline() {
+        return allowGetUserTimeline;
+    }
+
+    public void setAllowGetUserTimeline(Boolean allowGetUserTimeline) {
+        this.allowGetUserTimeline = allowGetUserTimeline;
+    }
+
+    public Boolean getAllowGetMentions() {
+        return allowGetMentions;
+    }
+
+    public void setAllowGetMentions(Boolean allowGetMentions) {
+        this.allowGetMentions = allowGetMentions;
+    }
+
+    public Boolean getAllowGetFavorites() {
+        return allowGetFavorites;
+    }
+
+    public void setAllowGetFavorites(Boolean allowGetFavorites) {
+        this.allowGetFavorites = allowGetFavorites;
+    }
+
+    public Boolean getAllowGetRetweetsOfMe() {
+        return allowGetRetweetsOfMe;
+    }
+
+    public void setAllowGetRetweetsOfMe(Boolean allowGetRetweetsOfMe) {
+        this.allowGetRetweetsOfMe = allowGetRetweetsOfMe;
+    }
+
+    public Boolean getAllowGetLists() {
+        return allowGetLists;
+    }
+
+    public void setAllowGetLists(Boolean allowGetLists) {
+        this.allowGetLists = allowGetLists;
     }
 }

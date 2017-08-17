@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
 
+
 public interface AsyncStartTask {
 
     Task updateTweets();
@@ -23,4 +24,18 @@ public interface AsyncStartTask {
     Task createTestDataForUser();
 
     Task removeOldDataFromStorage();
+
+    Task getHomeTimeline();
+
+    Task getUserTimeline();
+
+    Task getMentions();
+
+    Task getFavorites();
+
+    Task getRetweetsOfMe();
+
+    Task getLists();
+
+    Task createImprintUserAsync();
 }

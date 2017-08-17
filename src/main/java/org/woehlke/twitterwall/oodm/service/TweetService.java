@@ -20,8 +20,6 @@ public interface TweetService extends DomainObjectWithEntitiesService<Tweet>,Dom
 
     Page<Tweet> findTweetsForUser(User user, Pageable pageRequest);
 
-    //Page<Long> findAllTwitterIds(Pageable pageRequest);
-
     Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest);
 
     Page<Object2Entity> findAllTweet2Media(Pageable pageRequest);
@@ -31,5 +29,15 @@ public interface TweetService extends DomainObjectWithEntitiesService<Tweet>,Dom
     Page<Object2Entity> findAllTweet2Url(Pageable pageRequest);
 
     Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest);
+
+    Page<Tweet> getHomeTimeline(Pageable pageRequest);
+
+    Page<Tweet> getUserTimeline(Pageable pageRequest);
+
+    Page<Tweet> getMentions(Pageable pageRequest);
+
+    Page<Tweet> getFavorites(Pageable pageRequest);
+
+    Page<Tweet> getRetweetsOfMe(Pageable pageRequest);
 
 }

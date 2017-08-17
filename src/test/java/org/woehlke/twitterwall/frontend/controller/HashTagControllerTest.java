@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -56,6 +57,7 @@ public class HashTagControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    @Commit
     @Test
     public void setupTestData(){
         String msg = "setupTestData: ";
@@ -64,6 +66,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithMockUser
     @Test
     public void getAllTest() throws Exception {
@@ -95,6 +98,7 @@ public class HashTagControllerTest {
         }
     }
 
+    @Commit
     @WithAnonymousUser
     @Test
     public void findByIdTest() throws Exception {
@@ -120,6 +124,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithAnonymousUser
     @Test
     public void hashTagFromTweetsAndUsersTest() throws Exception {
@@ -145,6 +150,7 @@ public class HashTagControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithAnonymousUser
     @Test
     public void hashTagsOverview()  throws Exception {

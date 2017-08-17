@@ -26,6 +26,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
         long countUser = userRepository.count();
         long countTweets = tweetRepository.count();
+        long countUserLists = userListRepository.count();
         long countHashTags = hashTagRepository.count();
         long countMedia = mediaRepository.count();
         long countMention = mentionRepository.count();
@@ -36,6 +37,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
         c.setCountHashTags(countHashTags);
         c.setCountMedia(countMedia);
+        c.setCountUserLists(countUserLists);
         c.setCountMention(countMention);
         c.setCountTickerSymbol(countTickerSymbol);
         c.setCountTweets(countTweets);
@@ -97,8 +99,10 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
 
     private final TaskHistoryRepository taskHistoryRepository;
 
+    private final UserListRepository userListRepository;
+
     @Autowired
-    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository) {
+    public CountedEntitiesServiceImpl(TweetRepository tweetRepository, UserRepository userRepository, MentionRepository mentionRepository, MediaRepository mediaRepository, HashTagRepository hashTagRepository, UrlRepository urlRepository, TickerSymbolRepository tickerSymbolRepository, TaskRepository taskRepository, TaskHistoryRepository taskHistoryRepository, UserListRepository userListRepository) {
         this.tweetRepository = tweetRepository;
         this.userRepository = userRepository;
         this.mentionRepository = mentionRepository;
@@ -108,6 +112,7 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         this.tickerSymbolRepository = tickerSymbolRepository;
         this.taskRepository = taskRepository;
         this.taskHistoryRepository = taskHistoryRepository;
+        this.userListRepository = userListRepository;
     }
 
 }

@@ -74,6 +74,7 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     @AttributeOverrides({
         @AttributeOverride(name = "countUser", column = @Column(name = "count_user",nullable=false)),
         @AttributeOverride(name = "countTweets", column = @Column(name = "count_tweets",nullable=false)),
+        @AttributeOverride(name = "countUserLists", column = @Column(name = "count_userlists",nullable=false)),
         @AttributeOverride(name = "countHashTags", column = @Column(name = "count_hashtags",nullable=false)),
         @AttributeOverride(name = "countMedia", column = @Column(name = "count_media",nullable=false)),
         @AttributeOverride(name = "countMention", column = @Column(name = "count_mention",nullable=false)),

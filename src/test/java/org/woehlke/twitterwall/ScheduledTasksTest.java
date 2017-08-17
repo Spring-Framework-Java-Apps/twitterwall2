@@ -13,6 +13,12 @@ public class ScheduledTasksTest {
     @Autowired
     private ScheduledTasks scheduledTasks;
 
+    @Test
+    public void createImprintUserAsync() throws Exception {
+        scheduledTasks.createImprintUserAsync();
+    }
+
+    @Test
     public void fetchTweetsFromTwitterSearch() throws Exception {
         scheduledTasks.fetchTweetsFromTwitterSearch();
     }
@@ -45,5 +51,35 @@ public class ScheduledTasksTest {
     @Test
     public void fetchFollower() throws Exception {
         scheduledTasks.fetchFollower();
+    }
+
+    @Test
+    public void getHomeTimeline() throws Exception {
+        scheduledTasks.getHomeTimeline();
+    }
+
+    @Test
+    public void getUserTimeline() throws Exception {
+        scheduledTasks.getUserTimeline();
+    }
+
+    @Test
+    public void getMentions() throws Exception {
+        scheduledTasks.getMentions();
+    }
+
+    @Test
+    public void getFavorites() throws Exception {
+        scheduledTasks.getFavorites();
+    }
+
+    @Test
+    public void getRetweetsOfMe() throws Exception {
+        scheduledTasks.getRetweetsOfMe();
+    }
+
+    @Test
+    public void getLists() throws Exception {
+        scheduledTasks.getLists();
     }
 }

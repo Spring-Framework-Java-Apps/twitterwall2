@@ -53,6 +53,26 @@ import static javax.persistence.FetchType.EAGER;
     @NamedQuery(
         name="Tweet.findByUniqueId",
         query="select t from Tweet t where t.idTwitter=:idTwitter"
+    ),
+    @NamedQuery(
+        name="Tweet.getHomeTimeline",
+        query="select t from Tweet t where t.taskInfo.getHomeTimeline=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getUserTimeline",
+        query="select t from Tweet t where t.taskInfo.getUserTimeline=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getMentions",
+        query="select t from Tweet t where t.taskInfo.getMentions=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getFavorites",
+        query="select t from Tweet t where t.taskInfo.getFavorites=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getRetweetsOfMe",
+        query="select t from Tweet t where t.taskInfo.getRetweetsOfMe=true"
     )
 })
 @NamedNativeQueries({

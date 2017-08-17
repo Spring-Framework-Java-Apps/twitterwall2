@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.*;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class TweetServiceTest {
+public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest ,DomainServiceWithIdTwitterTest{
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceTest.class);
 
@@ -53,6 +54,7 @@ public class TweetServiceTest {
         Assert.assertNotNull(testdataProperties);
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -73,6 +75,7 @@ public class TweetServiceTest {
         log.info(msg+"FINISHED TEST");
     }
 
+    @Commit
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
@@ -95,6 +98,7 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findTweetsForHashTag() throws Exception {
         String msg = "findTweetsForHashTag: ";
@@ -113,6 +117,7 @@ public class TweetServiceTest {
         log.info(msg);
     }
 
+    @Commit
     @Test
     public void findTweetsForUser() throws Exception {
         String msg = "findTweetsForUser: ";
@@ -139,6 +144,7 @@ public class TweetServiceTest {
         log.info(msg+" FINISHED TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
     }
 
+    @Commit
     @Test
     public void findAllTweet2HashTag() throws Exception {
         String msg = "findAllTweet2HashTag: ";
@@ -164,6 +170,7 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllTweet2Media() throws Exception {
         String msg = "findAllTweet2Media: ";
@@ -189,6 +196,7 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllTweet2Mention() throws Exception {
         String msg = "findAllTweet2Mention: ";
@@ -216,6 +224,7 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllTweet2Url() throws Exception {
         String msg = "findAllTweet2Url: ";
@@ -241,6 +250,7 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllTweet2TickerSymbol() throws Exception {
         String msg = "findAllTweet2TickerSymbol: ";
@@ -266,4 +276,52 @@ public class TweetServiceTest {
         }
     }
 
+    @Commit
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void update() throws Exception {
+
+    }
 }

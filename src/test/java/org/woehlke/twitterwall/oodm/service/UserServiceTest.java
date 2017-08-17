@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
@@ -23,7 +24,7 @@ import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelpe
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UserServiceTest {
+public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
 
@@ -53,11 +54,14 @@ public class UserServiceTest {
 
     @Test
     public void areDependenciesLoaded() throws Exception {
+        String msg = "areDependenciesLoaded: ";
         Assert.assertNotNull(userService);
         Assert.assertNotNull(testdataProperties);
         Assert.assertNotNull(twitterProperties);
+        log.debug(msg+" YES ");
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -75,6 +79,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void getAllDescriptionsTest() {
         String msg = "getAllDescriptionsTest";
@@ -97,6 +102,7 @@ public class UserServiceTest {
         log.info(msg+"------------------------------------------------");
     }
 
+    @Commit
     @Test
     public void getTweetingUsers() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -111,6 +117,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getAllDescriptions() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -125,6 +132,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundDescriptions.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getUsersForHashTag() throws Exception {
         String msg = "getTweetingUsers: ";
@@ -142,6 +150,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void getFriends() throws Exception {
         String msg = "getFriends: ";
@@ -156,6 +165,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetFriendUsers() throws Exception {
         String msg = "getNotYetFriendUsers: ";
@@ -170,6 +180,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getFollower() throws Exception {
         String msg = "getFollower: ";
@@ -184,6 +195,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetFollower() throws Exception {
         String msg = "getNotYetFollower: ";
@@ -198,6 +210,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getOnList() throws Exception {
         String msg = "getOnList: ";
@@ -212,6 +225,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void getNotYetOnList() throws Exception {
         String msg = "getNotYetOnList: ";
@@ -227,6 +241,7 @@ public class UserServiceTest {
         log.debug(msg+" foundUser: "+foundUser.getTotalElements());
     }
 
+    @Commit
     @Test
     public void findAllUser2HashTag() throws Exception {
         String msg = "findAllUser2HashTag: ";
@@ -252,6 +267,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Media() throws Exception {
         String msg = "findAllUser2Media: ";
@@ -277,6 +293,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Mentiong() throws Exception {
         String msg = "findAllUser2Mentiong: ";
@@ -309,6 +326,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2Url() throws Exception {
         String msg = "findAllUser2Url: ";
@@ -335,6 +353,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findAllUser2TickerSymbol() throws Exception {
         String msg = "findAllUser2TickerSymbol: ";
@@ -360,6 +379,7 @@ public class UserServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findByidTwitterAndScreenNameUnique() throws Exception {
         String msg = "findByidTwitterAndScreenNameUnique: ";
@@ -375,5 +395,54 @@ public class UserServiceTest {
             Assert.assertEquals(msg,idTwitter,foundUser.getIdTwitter().longValue());
             Assert.assertEquals(msg,screenNameUnique,foundUser.getScreenNameUnique());
         }
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void update() throws Exception {
+
     }
 }

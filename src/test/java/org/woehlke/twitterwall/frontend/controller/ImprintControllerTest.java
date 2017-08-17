@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -52,6 +53,7 @@ public class ImprintControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    @Commit
     @Test
     public void prepareDataTest() throws Exception  {
         log.info("------------------------------------");
@@ -62,6 +64,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithAnonymousUser
     @Test
     public void imprintTest1() throws Exception {
@@ -70,6 +73,7 @@ public class ImprintControllerTest {
         Assert.assertTrue(true);
     }
 
+    @Commit
     @WithAnonymousUser
     @Test
     public void imprintTest2() throws Exception {

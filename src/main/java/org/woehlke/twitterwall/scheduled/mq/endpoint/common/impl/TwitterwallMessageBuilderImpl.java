@@ -7,6 +7,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.UserList;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -14,6 +15,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 @Component
@@ -62,8 +64,8 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("tw_lfd_nr",loopId)
-                        .setHeader("tw_all",loopAll)
+                        .setHeader("loop_id",loopId)
+                        .setHeader("loop_all",loopAll)
                         .build();
         return mqMessageOut;
     }
@@ -107,6 +109,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<UserMessage> incomingMessage, TwitterProfile twitterProfile, boolean ignoreTransformation) {
+        if(twitterProfile == null){
+            log.error("buildUserMessage: TwitterProfile twitterProfile == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload().getTaskMessage(),twitterProfile,ignoreTransformation);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -118,6 +123,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<TaskMessage> incomingMessage, TwitterProfile twitterProfile) {
+        if(twitterProfile == null){
+            log.error("buildUserMessage: TwitterProfile twitterProfile == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload(),twitterProfile);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -129,6 +137,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<TaskMessage> incomingMessage, User imprintUser) {
+        if(imprintUser == null){
+            log.error("buildUserMessage: User imprintUser == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload(), imprintUser);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -139,13 +150,15 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
     }
 
     @Override
-    public void waitForApi() {
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
-        try {
-            Thread.sleep(millisToWaitBetweenTwoApiCalls);
-        } catch (InterruptedException e) {
-        }
+    public Message<UserListMessage> buildUserListMessage(Message<TaskMessage> incomingTaskMessage, UserList userList, int loopId, int loopAll) {
+        UserListMessage outputPayload = new UserListMessage(incomingTaskMessage.getPayload(),userList);
+        Message<UserListMessage> mqMessageOut =
+                MessageBuilder.withPayload(outputPayload)
+                        .copyHeaders(incomingTaskMessage.getHeaders())
+                        .setHeader("loop_id",loopId)
+                        .setHeader("loop_all",loopAll)
+                        .build();
+        return mqMessageOut;
     }
 
     @Autowired

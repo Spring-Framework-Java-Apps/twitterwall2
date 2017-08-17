@@ -11,4 +11,5 @@ public interface StartTaskTest extends AsyncStartTaskTest {
     void createTestDataUsersTest() throws Exception;
 
     void createTestDataTweetsTest() throws Exception;
+
 }

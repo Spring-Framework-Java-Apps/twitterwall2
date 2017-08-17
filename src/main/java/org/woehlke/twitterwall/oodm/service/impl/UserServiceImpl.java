@@ -141,4 +141,8 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
         return ((userRepository.findByIdTwitter(userIdTwitter)) != null);
     }
 
+    @Override
+    public User findByUniqueId(User domainExampleObject) {
+        return userRepository.findByUniqueId(domainExampleObject);
+    }
 }

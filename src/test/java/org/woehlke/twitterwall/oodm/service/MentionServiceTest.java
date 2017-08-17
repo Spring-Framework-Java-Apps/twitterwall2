@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -21,7 +22,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MentionServiceTest {
+public class MentionServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithScreenNameTest,DomainServiceWithIdTwitterTest {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceTest.class);
 
@@ -44,6 +45,7 @@ public class MentionServiceTest {
         Assert.assertNotNull(countedEntitiesService);
     }
 
+    @Commit
     @Test
     public void fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
@@ -62,6 +64,7 @@ public class MentionServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void createProxyMention() throws Exception {
         String msg = "createProxyMention: ";
@@ -76,6 +79,7 @@ public class MentionServiceTest {
         Assert.assertTrue(createdMention.isProxy());
     }
 
+    @Commit
     @Test
     public void getAllWithoutPersistentUser() throws Exception {
         String msg = "getAllWithoutUser: ";
@@ -90,6 +94,7 @@ public class MentionServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
@@ -108,6 +113,7 @@ public class MentionServiceTest {
         }
     }
 
+    @Commit
     @Test
     public void findByScreenName() throws Exception {
         String msg = "findByScreenName: ";
@@ -124,5 +130,55 @@ public class MentionServiceTest {
             String foundScreenName =myFoundMention.getScreenName();
             Assert.assertEquals(msg,expectedScreenName,foundScreenName);
         }
+    }
+
+
+    @Commit
+    @Test
+    @Override
+    public void findById() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void getAll() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void count() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void findByUniqueId() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void store() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void create() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    @Override
+    public void update() throws Exception {
+
     }
 }

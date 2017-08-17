@@ -6,8 +6,6 @@ endpoints:
       enabled: true
 logging:
   file: test/twitterwall.log.txt
-#hibernate:
-  #dialect: org.hibernate.dialect.H2Dialect
 management:
   security:
     enabled: true
@@ -15,17 +13,7 @@ spring:
   application:
     admin:
       enabled: true
-  datasource:
-    #driverClassName: org.h2.Driver
-    #platform: H2
-    #url: jdbc:h2:mem:test
-    url: ${DATABASE_URL_TEST}
   jpa:
-    #hibernate:
-    #  ddl-auto: create-drop
-    #properties:
-    #  hibernate:
-    #   dialect: org.hibernate.dialect.H2Dialect
     show-sql: true
 twitterwall:
   backend:
@@ -37,10 +25,16 @@ twitterwall:
     allowUpdateTweets: true
     allowUpdateUserProfiles: true
     allowUpdateUserProfilesFromMention: true
-    fetchUserListAllow: true
-    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    fetchUsersFromDefinedUserListAllow: true
+    fetchUsersFromDefinedUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     herokuDbRowsLimit: false
     removeOldDataFromStorageAllow: true
     fetchFollowerAllow: true
     fetchFriendsAllow: true
+    allowGetHomeTimeline: true
+    allowGetUserTimeline: true
+    allowGetMentions: true
+    allowGetFavorites: true
+    allowGetRetweetsOfMe: true
+    allowGetLists: true
     skipFortesting: true

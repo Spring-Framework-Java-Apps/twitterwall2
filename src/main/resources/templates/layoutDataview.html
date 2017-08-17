@@ -123,6 +123,60 @@
                                                             </span>
                                                             <b>fetchFriends</b>
                                                         </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getHomeTimeline}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getHomeTimeline}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getHomeTimeline</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getUserTimeline}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getUserTimeline}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getUserTimeline</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getMentions}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getMentions}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getMentions</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getFavorites}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getFavorites}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getFavorites</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getRetweetsOfMe}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getRetweetsOfMe}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getRetweetsOfMe</b>
+                                                        </li>
+                                                        <li>
+                                                            <span th:if="${myPageItem.taskInfo.getLists}">
+                                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span th:if="${!myPageItem.taskInfo.getLists}">
+                                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                                            </span>
+                                                            <b>getLists</b>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                                 <li>

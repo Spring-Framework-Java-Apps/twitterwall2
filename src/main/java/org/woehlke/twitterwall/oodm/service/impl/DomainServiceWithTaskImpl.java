@@ -61,7 +61,9 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
                         domainObjectPersistent = null;
                         log.error(msg+"Something strange happened!");
                         log.debug(msg+"tried to persist: " + domainObject.getUniqueId());
+                        log.debug(msg+"tried to persist: " + domainObject.toString());
                         log.debug(msg+"found: " + domainObjectPersistent.getUniqueId());
+                        log.debug(msg+"found: " + domainObjectPersistent.toString());
                     }
                 }
             }
@@ -75,17 +77,21 @@ public abstract class DomainServiceWithTaskImpl<T extends DomainObjectWithTask> 
                 domainObject.setUpdatedBy(task);
                 storedObject = domainRepository.save(domainObject);
                 domainObjectResult = storedObject;
-                log.debug(msg+"merged: " + domainObjectResult.toString());
+                log.debug(msg+"merged: " + domainObjectResult.getUniqueId());
+                log.trace(msg+"merged: " + domainObjectResult.toString());
             } else {
                 domainObject.setCreatedBy(task);
                 domainObject.setUpdatedBy(task);
                 log.debug("try to persist: " + domainObject.getUniqueId());
+                log.trace("try to persist: " + domainObject.toString());
                 storedObject = domainRepository.save(domainObject);
                 domainObjectResult = storedObject;
                 log.debug("persisted: " + domainObjectResult.getUniqueId());
+                log.trace("persisted: " + domainObjectResult.toString());
             }
         } catch (Exception e)  {
-            log.warn(msg+domainObject.toString(),e);
+            log.warn(msg+domainObject.getUniqueId(),e);
+            log.debug(msg+domainObject.toString(),e);
         }
         return domainObjectResult;
     }

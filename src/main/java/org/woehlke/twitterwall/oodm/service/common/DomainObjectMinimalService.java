@@ -11,4 +11,6 @@ public interface DomainObjectMinimalService<T extends DomainObjectMinimal> {
     Page<T> getAll(Pageable pageRequest);
 
     long count();
+
+    T findByUniqueId(T domainExampleObject);
 }

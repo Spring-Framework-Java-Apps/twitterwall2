@@ -49,6 +49,24 @@ public class TaskBasedCaching implements Serializable {
     @Column(name=COLUMN_PREFIX+"fetch_friends")
     private Date fetchFriends;
 
+    @Column(name=COLUMN_PREFIX+"fetch_home_timeline")
+    private Date getHomeTimeline;
+
+    @Column(name=COLUMN_PREFIX+"fetch_user_timeline")
+    private Date getUserTimeline;
+
+    @Column(name=COLUMN_PREFIX+"fetch_mentions")
+    private Date getMentions;
+
+    @Column(name=COLUMN_PREFIX+"fetch_favorites")
+    private Date getFavorites;
+
+    @Column(name=COLUMN_PREFIX+"fetch_retweets_of_me")
+    private Date getRetweetsOfMe;
+
+    @Column(name=COLUMN_PREFIX+"fetch_lists")
+    private Date getLists;
+
     @Transient
     public Boolean isCached(TaskType taskType, long timeToLive){
         Date lastApiCall = null;
@@ -89,6 +107,24 @@ public class TaskBasedCaching implements Serializable {
             case FETCH_FRIENDS:
                 lastApiCall = fetchFriends;
                 break;
+            case FETCH_HOME_TIMELINE:
+                lastApiCall = getHomeTimeline;
+                break;
+            case FETCH_USER_TIMELINE:
+                lastApiCall = getUserTimeline;
+                break;
+            case FETCH_MENTIONS:
+                lastApiCall = getMentions;
+                break;
+            case FETCH_FAVORITES:
+                lastApiCall = getFavorites;
+                break;
+            case FETCH_RETWEETS_OF_ME:
+                lastApiCall = getRetweetsOfMe;
+                break;
+            case FETCH_LISTS:
+                lastApiCall = getLists;
+                break;
             default: break;
         }
         if(lastApiCall == null){
@@ -99,6 +135,7 @@ public class TaskBasedCaching implements Serializable {
         return now < lastApiCallPlusTimeToLive;
     }
 
+    @Transient
     public void store(Task task) {
         if (task != null) {
             TaskType taskType = task.getTaskType();
@@ -106,6 +143,7 @@ public class TaskBasedCaching implements Serializable {
         }
     }
 
+    @Transient
     public void store(TaskType taskType){
         if(taskType != null) {
             Date lastApiCall = new Date();
@@ -146,13 +184,30 @@ public class TaskBasedCaching implements Serializable {
                 case FETCH_FRIENDS:
                     fetchFriends = lastApiCall;
                     break;
+                case FETCH_HOME_TIMELINE:
+                    getHomeTimeline = lastApiCall;
+                    break;
+                case FETCH_USER_TIMELINE:
+                    getUserTimeline = lastApiCall;
+                    break;
+                case FETCH_MENTIONS:
+                    getMentions = lastApiCall;
+                    break;
+                case FETCH_FAVORITES:
+                    getFavorites = lastApiCall;
+                    break;
+                case FETCH_RETWEETS_OF_ME:
+                    getRetweetsOfMe = lastApiCall;
+                    break;
+                case FETCH_LISTS:
+                    getLists = lastApiCall;
                 default:
                     break;
             }
         }
     }
 
-    public TaskBasedCaching(Date fetchTweetsFromSearch, Date updateTweets, Date updateUsers, Date updateUsersFromMentions, Date fetchUsersFromList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage, Date fetchFollower) {
+    public TaskBasedCaching(Date fetchTweetsFromSearch, Date updateTweets, Date updateUsers, Date updateUsersFromMentions, Date fetchUsersFromList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage, Date fetchFollower, Date fetchFriends, Date getHomeTimeline, Date getUserTimeline, Date getMentions, Date getFavorites, Date getRetweetsOfMe, Date getLists) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updateUsers = updateUsers;
@@ -164,6 +219,13 @@ public class TaskBasedCaching implements Serializable {
         this.controllerCreateImprintUser = controllerCreateImprintUser;
         this.removeOldDataFromStorage = removeOldDataFromStorage;
         this.fetchFollower = fetchFollower;
+        this.fetchFriends = fetchFriends;
+        this.getHomeTimeline = getHomeTimeline;
+        this.getUserTimeline = getUserTimeline;
+        this.getMentions = getMentions;
+        this.getFavorites = getFavorites;
+        this.getRetweetsOfMe = getRetweetsOfMe;
+        this.getLists = getLists;
     }
 
     public TaskBasedCaching() {
@@ -178,6 +240,12 @@ public class TaskBasedCaching implements Serializable {
         this.controllerCreateImprintUser = null;
         this.removeOldDataFromStorage = null;
         this.fetchFollower = null;
+        this.getHomeTimeline = null;
+        this.getUserTimeline = null;
+        this.getMentions = null;
+        this.getFavorites = null;
+        this.getRetweetsOfMe = null;
+        this.getLists = null;
     }
 
     public Date getFetchTweetsFromSearch() {
@@ -224,6 +292,34 @@ public class TaskBasedCaching implements Serializable {
         return fetchFollower;
     }
 
+    public Date getFetchFriends() {
+        return fetchFriends;
+    }
+
+    public Date getGetHomeTimeline() {
+        return getHomeTimeline;
+    }
+
+    public Date getGetUserTimeline() {
+        return getUserTimeline;
+    }
+
+    public Date getGetMentions() {
+        return getMentions;
+    }
+
+    public Date getGetFavorites() {
+        return getFavorites;
+    }
+
+    public Date getGetRetweetsOfMe() {
+        return getRetweetsOfMe;
+    }
+
+    public Date getGetLists() {
+        return getLists;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -231,60 +327,94 @@ public class TaskBasedCaching implements Serializable {
 
         TaskBasedCaching that = (TaskBasedCaching) o;
 
-        if (fetchTweetsFromSearch != null ? !fetchTweetsFromSearch.equals(that.fetchTweetsFromSearch) : that.fetchTweetsFromSearch != null)
+        if (getFetchTweetsFromSearch() != null ? !getFetchTweetsFromSearch().equals(that.getFetchTweetsFromSearch()) : that.getFetchTweetsFromSearch() != null)
             return false;
-        if (updateTweets != null ? !updateTweets.equals(that.updateTweets) : that.updateTweets != null) return false;
-        if (updateUsers != null ? !updateUsers.equals(that.updateUsers) : that.updateUsers != null)
+        if (getUpdateTweets() != null ? !getUpdateTweets().equals(that.getUpdateTweets()) : that.getUpdateTweets() != null)
             return false;
-        if (updateUsersFromMentions != null ? !updateUsersFromMentions.equals(that.updateUsersFromMentions) : that.updateUsersFromMentions != null)
+        if (getUpdateUsers() != null ? !getUpdateUsers().equals(that.getUpdateUsers()) : that.getUpdateUsers() != null)
             return false;
-        if (fetchUsersFromList != null ? !fetchUsersFromList.equals(that.fetchUsersFromList) : that.fetchUsersFromList != null)
+        if (getUpdateUsersFromMentions() != null ? !getUpdateUsersFromMentions().equals(that.getUpdateUsersFromMentions()) : that.getUpdateUsersFromMentions() != null)
             return false;
-        if (controllerGetTestdataTweets != null ? !controllerGetTestdataTweets.equals(that.controllerGetTestdataTweets) : that.controllerGetTestdataTweets != null)
+        if (getFetchUsersFromList() != null ? !getFetchUsersFromList().equals(that.getFetchUsersFromList()) : that.getFetchUsersFromList() != null)
             return false;
-        if (controllerGetTestdataUser != null ? !controllerGetTestdataUser.equals(that.controllerGetTestdataUser) : that.controllerGetTestdataUser != null)
+        if (getControllerGetTestdataTweets() != null ? !getControllerGetTestdataTweets().equals(that.getControllerGetTestdataTweets()) : that.getControllerGetTestdataTweets() != null)
             return false;
-        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(that.controllerAddUserForScreenName) : that.controllerAddUserForScreenName != null)
+        if (getControllerGetTestdataUser() != null ? !getControllerGetTestdataUser().equals(that.getControllerGetTestdataUser()) : that.getControllerGetTestdataUser() != null)
             return false;
-        if (controllerCreateImprintUser != null ? !controllerCreateImprintUser.equals(that.controllerCreateImprintUser) : that.controllerCreateImprintUser != null)
+        if (getControllerAddUserForScreenName() != null ? !getControllerAddUserForScreenName().equals(that.getControllerAddUserForScreenName()) : that.getControllerAddUserForScreenName() != null)
             return false;
-        if (removeOldDataFromStorage != null ? !removeOldDataFromStorage.equals(that.removeOldDataFromStorage) : that.removeOldDataFromStorage != null)
+        if (getControllerCreateImprintUser() != null ? !getControllerCreateImprintUser().equals(that.getControllerCreateImprintUser()) : that.getControllerCreateImprintUser() != null)
             return false;
-        return fetchFollower != null ? fetchFollower.equals(that.fetchFollower) : that.fetchFollower == null;
+        if (getRemoveOldDataFromStorage() != null ? !getRemoveOldDataFromStorage().equals(that.getRemoveOldDataFromStorage()) : that.getRemoveOldDataFromStorage() != null)
+            return false;
+        if (getFetchFollower() != null ? !getFetchFollower().equals(that.getFetchFollower()) : that.getFetchFollower() != null)
+            return false;
+        if (getFetchFriends() != null ? !getFetchFriends().equals(that.getFetchFriends()) : that.getFetchFriends() != null)
+            return false;
+        if (getGetHomeTimeline() != null ? !getGetHomeTimeline().equals(that.getGetHomeTimeline()) : that.getGetHomeTimeline() != null)
+            return false;
+        if (getGetUserTimeline() != null ? !getGetUserTimeline().equals(that.getGetUserTimeline()) : that.getGetUserTimeline() != null)
+            return false;
+        if (getGetMentions() != null ? !getGetMentions().equals(that.getGetMentions()) : that.getGetMentions() != null)
+            return false;
+        if (getGetFavorites() != null ? !getGetFavorites().equals(that.getGetFavorites()) : that.getGetFavorites() != null)
+            return false;
+        if (getGetRetweetsOfMe() != null ? !getGetRetweetsOfMe().equals(that.getGetRetweetsOfMe()) : that.getGetRetweetsOfMe() != null)
+            return false;
+        return getGetLists() != null ? getGetLists().equals(that.getGetLists()) : that.getGetLists() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = fetchTweetsFromSearch != null ? fetchTweetsFromSearch.hashCode() : 0;
-        result = 31 * result + (updateTweets != null ? updateTweets.hashCode() : 0);
-        result = 31 * result + (updateUsers != null ? updateUsers.hashCode() : 0);
-        result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
-        result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
-        result = 31 * result + (controllerGetTestdataTweets != null ? controllerGetTestdataTweets.hashCode() : 0);
-        result = 31 * result + (controllerGetTestdataUser != null ? controllerGetTestdataUser.hashCode() : 0);
-        result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
-        result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
-        result = 31 * result + (removeOldDataFromStorage != null ? removeOldDataFromStorage.hashCode() : 0);
-        result = 31 * result + (fetchFollower != null ? fetchFollower.hashCode() : 0);
+        int result = getFetchTweetsFromSearch() != null ? getFetchTweetsFromSearch().hashCode() : 0;
+        result = 31 * result + (getUpdateTweets() != null ? getUpdateTweets().hashCode() : 0);
+        result = 31 * result + (getUpdateUsers() != null ? getUpdateUsers().hashCode() : 0);
+        result = 31 * result + (getUpdateUsersFromMentions() != null ? getUpdateUsersFromMentions().hashCode() : 0);
+        result = 31 * result + (getFetchUsersFromList() != null ? getFetchUsersFromList().hashCode() : 0);
+        result = 31 * result + (getControllerGetTestdataTweets() != null ? getControllerGetTestdataTweets().hashCode() : 0);
+        result = 31 * result + (getControllerGetTestdataUser() != null ? getControllerGetTestdataUser().hashCode() : 0);
+        result = 31 * result + (getControllerAddUserForScreenName() != null ? getControllerAddUserForScreenName().hashCode() : 0);
+        result = 31 * result + (getControllerCreateImprintUser() != null ? getControllerCreateImprintUser().hashCode() : 0);
+        result = 31 * result + (getRemoveOldDataFromStorage() != null ? getRemoveOldDataFromStorage().hashCode() : 0);
+        result = 31 * result + (getFetchFollower() != null ? getFetchFollower().hashCode() : 0);
+        result = 31 * result + (getFetchFriends() != null ? getFetchFriends().hashCode() : 0);
+        result = 31 * result + (getGetHomeTimeline() != null ? getGetHomeTimeline().hashCode() : 0);
+        result = 31 * result + (getGetUserTimeline() != null ? getGetUserTimeline().hashCode() : 0);
+        result = 31 * result + (getGetMentions() != null ? getGetMentions().hashCode() : 0);
+        result = 31 * result + (getGetFavorites() != null ? getGetFavorites().hashCode() : 0);
+        result = 31 * result + (getGetRetweetsOfMe() != null ? getGetRetweetsOfMe().hashCode() : 0);
+        result = 31 * result + (getGetLists() != null ? getGetLists().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "TwitterApiCaching{" +
-                "fetchTweetsFromTwitterSearch=" + fetchTweetsFromSearch +
-                ", updateTweets=" + updateTweets +
-                ", updateUserProfiles=" + updateUsers +
-                ", updateUserProfilesFromMentions=" + updateUsersFromMentions +
-                ", fetchUsersFromDefinedUserList=" + fetchUsersFromList +
-                ", controllerGetTestdataTweets=" + controllerGetTestdataTweets +
-                ", controllerGetTestdataUser=" + controllerGetTestdataUser +
-                ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
-                ", controllerCreateImprintUser=" + controllerCreateImprintUser +
-                ", removeOldDataFromStorage=" + removeOldDataFromStorage +
-                ", fetchFollower=" + fetchFollower +
-                '}';
+        return "TaskBasedCaching{" +
+            "fetchTweetsFromSearch=" + fetchTweetsFromSearch +
+            ", updateTweets=" + updateTweets +
+            ", updateUsers=" + updateUsers +
+            ", updateUsersFromMentions=" + updateUsersFromMentions +
+            ", fetchUsersFromList=" + fetchUsersFromList +
+            ", controllerGetTestdataTweets=" + controllerGetTestdataTweets +
+            ", controllerGetTestdataUser=" + controllerGetTestdataUser +
+            ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
+            ", controllerCreateImprintUser=" + controllerCreateImprintUser +
+            ", removeOldDataFromStorage=" + removeOldDataFromStorage +
+            ", fetchFollower=" + fetchFollower +
+            ", fetchFriends=" + fetchFriends +
+            ", getHomeTimeline=" + getHomeTimeline +
+            ", getUserTimeline=" + getUserTimeline +
+            ", getMentions=" + getMentions +
+            ", getFavorites=" + getFavorites +
+            ", getRetweetsOfMe=" + getRetweetsOfMe +
+            ", getLists=" + getLists +
+            '}';
     }
 
     private final static String COLUMN_PREFIX = "cache_";
+
+    @Transient
+    public String getUniqueId() {
+        return toString();
+    }
 }

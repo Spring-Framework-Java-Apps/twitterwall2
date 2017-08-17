@@ -9,9 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.transients.Object2Entity;
 import org.woehlke.twitterwall.oodm.service.*;
 
@@ -26,6 +28,30 @@ import java.util.List;
 public class CountedEntitiesController {
 
     private final static String PATH="application/countedEntities";
+
+    @RequestMapping(path="/domain/count")
+    public String domainCount(Model model) {
+        String msg = "/application/domain/count: ";
+        String title = "Counted Entities";
+        String subtitle = twitterProperties.getSearchQuery();
+        String symbol = Symbols.DATABASE.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        CountedEntities countedEntities =this.countedEntitiesService.countAll();
+        model.addAttribute("countedEntities", countedEntities);
+        return "application/domain/count";
+    }
+
+    @RequestMapping(path="/domain/delete/all")
+    public String domainDeleteAll(Model model) {
+        String msg = "/application/domain/delete/all: ";
+        String title = "Counted Entities";
+        String subtitle = twitterProperties.getSearchQuery();
+        String symbol = Symbols.DATABASE.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        CountedEntities countedEntities =this.countedEntitiesService.deleteAll();
+        model.addAttribute("countedEntities", countedEntities);
+        return "application/domain/count";
+    }
 
     @RequestMapping(path="/tweet/hashtag")
     public String domainCountTweet2hashtag(
@@ -292,18 +318,22 @@ public class CountedEntitiesController {
 
     private final UrlService urlService;
 
+    private final CountedEntitiesService countedEntitiesService;
+
+    private final TwitterProperties twitterProperties;
+
     @Autowired
     public CountedEntitiesController(
-            FrontendProperties frontendProperties,
-            ControllerHelper controllerHelper,
-            TweetService tweetService,
-            UserService userService,
-            HashTagService hashTagService,
-            MediaService mediaService,
-            MentionService mentionService,
-            TickerSymbolService tickerSymbolService,
-            UrlService urlService
-    ) {
+        FrontendProperties frontendProperties,
+        ControllerHelper controllerHelper,
+        TweetService tweetService,
+        UserService userService,
+        HashTagService hashTagService,
+        MediaService mediaService,
+        MentionService mentionService,
+        TickerSymbolService tickerSymbolService,
+        UrlService urlService,
+        CountedEntitiesService countedEntitiesService, TwitterProperties twitterProperties) {
         this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
         this.tweetService = tweetService;
@@ -313,5 +343,7 @@ public class CountedEntitiesController {
         this.mentionService = mentionService;
         this.tickerSymbolService = tickerSymbolService;
         this.urlService = urlService;
+        this.countedEntitiesService = countedEntitiesService;
+        this.twitterProperties = twitterProperties;
     }
 }
