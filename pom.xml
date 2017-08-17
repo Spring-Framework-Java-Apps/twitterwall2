@@ -4,7 +4,7 @@
 
     <groupId>org.woehlke.twitterwall</groupId>
     <artifactId>twitterwall2</artifactId>
-    <version>1.0.26-SNAPSHOT</version>
+    <version>1.0.27-SNAPSHOT</version>
     <name>twitterwall2</name>
 
     <description>Twitterwall with spring:boot for heroku</description>
@@ -15,7 +15,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <organization>
