@@ -565,6 +565,7 @@
         <int:mapping value="FETCH_FRIENDS" channel="fetchFriendsFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_USERS" channel="createTestDataUsersFireAndForgetChannel"/>
         <int:mapping value="CONTROLLER_CREATE_TESTDATA_TWEETS" channel="createTestDataTweetsFireAndForgetChannel"/>
+        <int:mapping value="CONTROLLER_CREATE_IMPRINT_USER" channel="createImprintUserFireAndForgetChannel"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="removeOldDataFromStorageFireAndForgetChannel"/>
         <int:mapping value="FETCH_HOME_TIMELINE" channel="getHomeTimelineFireAndForgetChannel"/>
         <int:mapping value="FETCH_USER_TIMELINE" channel="getUserTimelineFireAndForgetChannel"/>
@@ -666,6 +667,31 @@
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
+
+    <int:channel id="createImprintUserFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:chain id="createImprintUserFireAndForgetChain" input-channel="createImprintUserFireAndForgetChannel">
+        <int:service-activator
+            id="createImprintUserFireAndForgetCreator"
+            ref="mqCreateImprintUser"
+            method="createImprintUser" />
+        <int:service-activator
+            id="createImprintUserFireAndForgetTransformator"
+            ref="mqUserTransformator"
+            method="transformUser" />
+        <int:service-activator
+            id="createImprintUserFireAndForgetPersistor"
+            ref="mqUserPersistor"
+            method="persistUser" />
+        <int:service-activator
+            id="createImprintUserFireAndForgetFinisher"
+            ref="mqUserFinisher"
+            method="finishOneUserAsnyc" />
+    </int:chain>
 
     <int:chain id="getHomeTimelineFireAndForgetChain" input-channel="getHomeTimelineFireAndForgetChannel">
         <int:splitter

@@ -40,7 +40,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -59,10 +59,11 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 log.debug(msg + " Id: " + result.getId());
                 msg += " result: ";
                 log.debug(msg + result);
+                waitForApi();
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 e.printStackTrace();
@@ -89,7 +90,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -108,6 +109,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
                     log.error(msg + " result.size: 0");
+                    //TODO: Why?
                     return new ArrayList<>();
                 } else {
                     log.debug(msg + " result.size: " + fetchedTweets.size());
@@ -115,7 +117,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -141,7 +143,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -167,7 +169,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -193,7 +195,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -219,7 +221,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -239,10 +241,11 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 log.debug(msg + " Id:         " + result.getId());
                 log.debug(msg + " ScreenName: " + result.getScreenName());
                 log.debug(msg + " Name:       " + result.getName());
+                waitForApi();
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (ResourceNotFoundException e) {
                 log.warn(msg + "  User not found : " + userProfileTwitterId);
                 return null;
@@ -264,10 +267,11 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 msg += " result: ";
                 log.debug(msg + " ScreenName: " + result.getScreenName());
                 log.debug(msg + " Name:       " + result.getName());
+                waitForApi();
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (ResourceNotFoundException e) {
                 log.warn(msg + "  User not found : " + screenName);
                 return null;
@@ -279,18 +283,18 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
     @Override
-    public List<TwitterProfile> findUsersFromDefinedList(String screenName,String fetchUserListName) {
-        String msg = MSG+"findUsersFromDefinedList: "+fetchUserListName+" ";
+    public List<TwitterProfile> findUsersFromDefinedList(String screenNameOfTheListOwner,String listSlug) {
+        String msg = MSG+"findUsersFromDefinedList: listSlug = "+listSlug+" ";
         log.debug(msg);
         List<TwitterProfile> result;
         while(true) {
             try {
-                result = getTwitterProxy().listOperations().getListMembers(screenName, fetchUserListName);
+                result = getTwitterProxy().listOperations().getListMembers(screenNameOfTheListOwner, listSlug);
                 log.debug(msg + " result.size: " + result.size());
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -310,7 +314,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new CursoredList<>(new ArrayList<>(), 0L, 0L);
@@ -330,7 +334,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
-                waitForApi();
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new CursoredList<>(new ArrayList<>(), 0L, 0L);
@@ -339,7 +343,17 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
     private void waitForApi(){
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls() * 10;
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
+        log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
+        try {
+            Thread.sleep(millisToWaitBetweenTwoApiCalls);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    private void waitLongerForApi(){
+        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
+        millisToWaitBetweenTwoApiCalls *= 10;
         log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
         try {
             Thread.sleep(millisToWaitBetweenTwoApiCalls);

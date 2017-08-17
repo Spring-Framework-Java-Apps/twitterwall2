@@ -11,4 +11,6 @@ public interface UserFinisher {
     Message<UserResultList> finish(Message<List<UserMessage>> incomingMessageList);
 
     void finishAsnyc(Message<List<UserMessage>> incomingMessageList);
+
+    void finishOneUserAsnyc(Message<UserMessage> incomingMessage);
 }

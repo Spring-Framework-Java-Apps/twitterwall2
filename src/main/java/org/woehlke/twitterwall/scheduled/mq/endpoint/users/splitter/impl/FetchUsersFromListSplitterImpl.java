@@ -51,7 +51,7 @@ public class FetchUsersFromListSplitterImpl implements FetchUsersFromListSplitte
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
         String imprintScreenName = frontendProperties.getImprintScreenName();
-        String fetchUsersList = schedulerProperties.getFetchUserListName();
+        String fetchUsersList = schedulerProperties.getFetchUsersFromDefinedUserListName();
         List<TwitterProfile> foundTwitterProfiles = twitterApiService.findUsersFromDefinedList(imprintScreenName,fetchUsersList);
         int loopId = 0;
         int loopAll = foundTwitterProfiles.size();

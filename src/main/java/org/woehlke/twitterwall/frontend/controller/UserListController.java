@@ -34,10 +34,10 @@ public class UserListController {
             page,
             frontendProperties.getPageSize(),
             Sort.Direction.ASC,
-            "screenName"
+            "slug"
         );
         Page<UserList> userlists = userListService.getAll(pageRequest);
-        model.addAttribute("userlists", userlists);
+        model.addAttribute("myPageContent", userlists);
         String symbol = Symbols.USER_ALL.toString();
         String subtitle = "All Users";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);

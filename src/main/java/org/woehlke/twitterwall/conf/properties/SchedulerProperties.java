@@ -31,10 +31,10 @@ public class SchedulerProperties {
     private Boolean skipFortesting;
 
     @NotNull
-    private Boolean fetchUserListAllow;
+    private Boolean fetchUsersFromDefinedUserListAllow;
 
     @NotNull
-    private String fetchUserListName;
+    private String fetchUsersFromDefinedUserListName;
 
     @NotNull
     private Boolean removeOldDataFromStorageAllow;
@@ -111,20 +111,20 @@ public class SchedulerProperties {
         this.skipFortesting = skipFortesting;
     }
 
-    public Boolean getFetchUserListAllow() {
-        return fetchUserListAllow;
+    public Boolean getFetchUsersFromDefinedUserListAllow() {
+        return fetchUsersFromDefinedUserListAllow;
     }
 
-    public void setFetchUserListAllow(Boolean fetchUserListAllow) {
-        this.fetchUserListAllow = fetchUserListAllow;
+    public void setFetchUsersFromDefinedUserListAllow(Boolean fetchUsersFromDefinedUserListAllow) {
+        this.fetchUsersFromDefinedUserListAllow = fetchUsersFromDefinedUserListAllow;
     }
 
-    public String getFetchUserListName() {
-        return fetchUserListName;
+    public String getFetchUsersFromDefinedUserListName() {
+        return fetchUsersFromDefinedUserListName;
     }
 
-    public void setFetchUserListName(String fetchUserListName) {
-        this.fetchUserListName = fetchUserListName;
+    public void setFetchUsersFromDefinedUserListName(String fetchUsersFromDefinedUserListName) {
+        this.fetchUsersFromDefinedUserListName = fetchUsersFromDefinedUserListName;
     }
 
     public Boolean getRemoveOldDataFromStorageAllow() {

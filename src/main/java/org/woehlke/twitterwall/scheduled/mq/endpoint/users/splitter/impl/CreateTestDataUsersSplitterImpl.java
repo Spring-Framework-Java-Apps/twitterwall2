@@ -69,7 +69,6 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
             if(fetchFromTwitterApi){
                 TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
                 outgoingMessage = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
-                twitterwallMessageBuilder.waitForApi();
             } else {
                 outgoingMessage = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userPers,loopId,loopAll);
             }

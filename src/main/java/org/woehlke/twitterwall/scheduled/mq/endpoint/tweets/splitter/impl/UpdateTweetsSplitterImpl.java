@@ -84,7 +84,6 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
             TweetMessage result = new TweetMessage(msgIn,foundTweetFromTwitter);
             Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage,foundTweetFromTwitter,lfdNr,all);
             tweets.add(mqMessageOut);
-            twitterwallMessageBuilder.waitForApi();
         }
         return tweets;
     }

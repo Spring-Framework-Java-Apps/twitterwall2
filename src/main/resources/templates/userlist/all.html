@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" >
+</header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
+                    <a href="" th:href="@{|/userlist/all?page=${myPageContent.previousPageable().pageNumber}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="tw-urlcache-all">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well">
+                        <table class="table table-striped">
+                            <thead th:include="layoutDataview :: tw-data-view-thead">
+                            </thead>
+                            <tbody>
+                            <tr th:each="myPageItem : ${myPageContent.getContent()}">
+                                <td>
+                                    <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-2">idTwitter:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.idTwitter}">idTwitter</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">name:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.name}">name</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">fullName:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.fullName}">fullName</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">uriPath:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.uriPath}">uriPath</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">description:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.description}">description</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">slug:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.slug}">slug</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">isPublic:</div>
+                                        <div class="col-md-10">
+                                            <span th:if="${myPageItem.public}">
+                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                            </span>
+                                            <span th:if="${!myPageItem.public}">
+                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">isFollowing:</div>
+                                        <div class="col-md-10">
+                                            <span th:if="${myPageItem.following}">
+                                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                            </span>
+                                            <span th:if="${!myPageItem.following}">
+                                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">memberCount:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.memberCount}">memberCount</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">subscriberCount:</div>
+                                        <div class="col-md-10">
+                                            <span th:text="${myPageItem.subscriberCount}">subscriberCount</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:include="layoutDataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
+                    <a href="" th:href="@{|/userlist/all?page=${myPageContent.nextPageable().pageNumber}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+
+</footer>
+</body>
+</html>

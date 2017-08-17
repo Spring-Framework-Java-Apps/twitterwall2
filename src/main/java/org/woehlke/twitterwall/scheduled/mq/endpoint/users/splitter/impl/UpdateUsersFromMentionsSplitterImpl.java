@@ -102,7 +102,6 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                 Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,lfdNr,all);
                 userProfileList.add(mqMessageOut);
             }
-            twitterwallMessageBuilder.waitForApi();
         }
         return userProfileList;
     }

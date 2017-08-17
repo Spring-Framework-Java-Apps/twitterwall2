@@ -64,8 +64,8 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("tw_lfd_nr",loopId)
-                        .setHeader("tw_all",loopAll)
+                        .setHeader("loop_id",loopId)
+                        .setHeader("loop_all",loopAll)
                         .build();
         return mqMessageOut;
     }
@@ -109,6 +109,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<UserMessage> incomingMessage, TwitterProfile twitterProfile, boolean ignoreTransformation) {
+        if(twitterProfile == null){
+            log.error("buildUserMessage: TwitterProfile twitterProfile == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload().getTaskMessage(),twitterProfile,ignoreTransformation);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -120,6 +123,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<TaskMessage> incomingMessage, TwitterProfile twitterProfile) {
+        if(twitterProfile == null){
+            log.error("buildUserMessage: TwitterProfile twitterProfile == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload(),twitterProfile);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -131,6 +137,9 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
 
     @Override
     public Message<UserMessage> buildUserMessage(Message<TaskMessage> incomingMessage, User imprintUser) {
+        if(imprintUser == null){
+            log.error("buildUserMessage: User imprintUser == null -  bust must not be null");
+        }
         UserMessage outputPayload = new UserMessage(incomingMessage.getPayload(), imprintUser);
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
@@ -138,16 +147,6 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
                     .setHeader("twitter_profile_id", imprintUser.getIdTwitter())
                     .build();
         return mqMessageOut;
-    }
-
-    @Override
-    public void waitForApi() {
-        int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
-        try {
-            Thread.sleep(millisToWaitBetweenTwoApiCalls);
-        } catch (InterruptedException e) {
-        }
     }
 
     @Override

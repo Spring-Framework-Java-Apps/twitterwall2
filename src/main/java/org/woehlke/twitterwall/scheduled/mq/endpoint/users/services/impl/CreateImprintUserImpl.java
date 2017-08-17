@@ -56,7 +56,6 @@ public class CreateImprintUserImpl implements CreateImprintUser {
         String screenName = frontendProperties.getImprintScreenName();
         TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
         Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(mqMessageIn,twitterProfile);
-        twitterwallMessageBuilder.waitForApi();
         return mqMessageOut;
     }
 }

@@ -13,6 +13,12 @@ public class ScheduledTasksTest {
     @Autowired
     private ScheduledTasks scheduledTasks;
 
+    @Test
+    public void createImprintUserAsync() throws Exception {
+        scheduledTasks.createImprintUserAsync();
+    }
+
+    @Test
     public void fetchTweetsFromTwitterSearch() throws Exception {
         scheduledTasks.fetchTweetsFromTwitterSearch();
     }

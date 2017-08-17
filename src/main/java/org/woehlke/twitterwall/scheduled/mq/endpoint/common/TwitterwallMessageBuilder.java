@@ -33,7 +33,5 @@ public interface TwitterwallMessageBuilder {
 
     Message<UserMessage> buildUserMessage(Message<TaskMessage> mqMessageIn, User imprintUser);
 
-    void waitForApi();
-
     Message<UserListMessage> buildUserListMessage(Message<TaskMessage> incomingTaskMessage, UserList userList, int loopId, int loopAll);
 }

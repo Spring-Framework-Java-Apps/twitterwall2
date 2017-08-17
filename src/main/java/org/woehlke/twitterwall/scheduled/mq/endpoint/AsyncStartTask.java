@@ -36,4 +36,6 @@ public interface AsyncStartTask {
     Task getRetweetsOfMe();
 
     Task getLists();
+
+    Task createImprintUserAsync();
 }

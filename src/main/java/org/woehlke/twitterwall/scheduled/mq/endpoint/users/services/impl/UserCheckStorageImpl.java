@@ -35,10 +35,15 @@ public class UserCheckStorageImpl implements UserCheckStorage {
             Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingMessage,isInStorage);
             return mqMessageOut;
         } else {
-            boolean ignoreTransformation = false;
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForTwitterId(userIdTwitter);
-            Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingMessage, twitterProfile, ignoreTransformation);
-            return mqMessageOut;
+            if(twitterProfile == null){
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingMessage,isInStorage);
+                return mqMessageOut;
+            } else {
+                boolean ignoreTransformation = false;
+                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingMessage, twitterProfile, ignoreTransformation);
+                return mqMessageOut;
+            }
         }
     }
 }

@@ -40,7 +40,6 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
     @Override
     public void deleteAllDomainData() {
-
         String SQL_DELETE_ALL_ROWS[] = {
             "delete from userprofile_url",
             "delete from userprofile_mention",
@@ -59,10 +58,10 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
             "delete from hashtag",
             "delete from tweet",
             "delete from userprofile",
+            "delete from userlist",
             "delete from task_history",
             "delete from task"
         };
-
         for(String SQL : SQL_DELETE_ALL_ROWS){
             jdbcTemplate.execute(SQL);
         }

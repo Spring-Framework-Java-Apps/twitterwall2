@@ -32,7 +32,6 @@ public class UserMessage implements Serializable {
         this.ignoreTransformation = ignoreTransformation;
     }
 
-    @Deprecated
     public UserMessage(TaskMessage taskMessage, TwitterProfile twitterProfile, boolean ignoreTransformation){
         this.taskMessage = taskMessage;
         this.screenName = twitterProfile.getScreenName();

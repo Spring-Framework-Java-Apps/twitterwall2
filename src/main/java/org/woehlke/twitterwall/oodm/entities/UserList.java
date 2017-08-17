@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.listener.UserListListener;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(
@@ -36,7 +37,7 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty
+    @NotNull
     @Column(name="id_twitter", nullable = false)
     private Long idTwitter;
 
@@ -52,7 +53,7 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     @Column(name="uri_path", nullable = false)
     private String uriPath;
 
-    @NotEmpty
+    @NotNull
     @Column(name="description", nullable = false)
     private String description;
 
@@ -60,19 +61,19 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     @Column(name="slug", nullable = false)
     private String slug;
 
-    @NotEmpty
+    @NotNull
     @Column(name="is_public", nullable = false)
     private Boolean isPublic;
 
-    @NotEmpty
+    @NotNull
     @Column(name="is_following", nullable = false)
     private Boolean isFollowing;
 
-    @NotEmpty
+    @NotNull
     @Column(name="member_count", nullable = false)
     private Integer memberCount;
 
-    @NotEmpty
+    @NotNull
     @Column(name="subscriber_count", nullable = false)
     private Integer subscriberCount;
 
@@ -83,12 +84,16 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         this.name = name;
         this.fullName = fullName;
         this.uriPath = uriPath;
-        this.description = description;
         this.slug = slug;
         this.isPublic = isPublic;
         this.isFollowing = isFollowing;
         this.memberCount = memberCount;
         this.subscriberCount = subscriberCount;
+        if(description==null){
+            this.description = "";
+        } else {
+            this.description = description;
+        }
     }
 
     protected UserList() {

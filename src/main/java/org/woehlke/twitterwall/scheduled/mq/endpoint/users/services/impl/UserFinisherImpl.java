@@ -53,6 +53,16 @@ public class UserFinisherImpl implements UserFinisher {
         log.info(msgDone);
     }
 
+    @Override
+    public void finishOneUserAsnyc(Message<UserMessage> incomingMessage) {
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        long taskId = incomingMessage.getPayload().getTaskMessage().getTaskId();
+        Task task = taskService.findById(taskId);
+        String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by FIRE_AND_FORGET_SENDER";
+        taskService.done(msgDone,task,countedEntities);
+        log.info(msgDone);
+    }
+
     @Autowired
     public UserFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {
         this.taskService = taskService;

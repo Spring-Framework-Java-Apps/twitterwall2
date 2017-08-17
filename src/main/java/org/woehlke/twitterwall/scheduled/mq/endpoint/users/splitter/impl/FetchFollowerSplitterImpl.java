@@ -52,7 +52,6 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
             Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,twitterProfileId,loopId,loopAll);
             userProfileList.add(mqMessageOut);
         }
-        twitterwallMessageBuilder.waitForApi();
         return userProfileList;
     }
 }

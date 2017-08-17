@@ -116,6 +116,12 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task createImprintUserAsync() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
         SendType sendType = SendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+sendType;

@@ -103,7 +103,6 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                 Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
                 userProfileList.add(mqMessageOut);
             }
-            twitterwallMessageBuilder.waitForApi();
         }
         log.debug(msg+ " DONE");
         return userProfileList;

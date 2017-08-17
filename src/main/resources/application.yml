@@ -116,8 +116,8 @@ twitterwall:
         updateUserProfilesFromMentions: 3600000 # One Hour
   scheduler:
     allowFetchTweetsFromTwitterSearch: true
-    fetchUserListAllow: true
-    fetchUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
+    fetchUsersFromDefinedUserListAllow: true
+    fetchUsersFromDefinedUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}
     allowUpdateUserProfilesFromMention: true
     fetchFollowerAllow: false
     fetchFriendsAllow: false

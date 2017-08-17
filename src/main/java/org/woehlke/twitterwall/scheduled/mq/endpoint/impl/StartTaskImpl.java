@@ -117,6 +117,12 @@ public class StartTaskImpl implements StartTask {
         return sendAndReceiveUserList(taskType);
     }
 
+    @Override
+    public Task createImprintUserAsync() {
+        TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
+        return sendAndReceiveUser(taskType);
+    }
+
     private Task sendAndReceiveUserList(TaskType taskType){
         SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+sendType;
