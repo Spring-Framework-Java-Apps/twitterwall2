@@ -35,62 +35,62 @@ import java.util.regex.Pattern;
     }
 )
 @NamedQueries({
-        @NamedQuery(
-            name = "User.findTweetingUsers",
-            query = "select t from User as t where t.taskInfo.fetchTweetsFromSearch=true"
-        ),
-        @NamedQuery(
-            name = "User.findFollower",
-            query = "select t from User as t where t.taskInfo.fetchFollower=true"
-        ),
-        @NamedQuery(
-            name = "User.findNotYetFollower",
-            query = "select t from User as t where t.taskInfo.fetchFollower=false"
-        ),
-        @NamedQuery(
-            name = "User.findFriends",
-            query = "select t from User as t where t.taskInfo.fetchFriends=true"
-        ),
-        @NamedQuery(
-            name = "User.findNotYetFriends",
-            query = "select t from User as t where t.taskInfo.fetchFriends=false"
-        ),
-        @NamedQuery(
-            name = "User.findOnList",
-            query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
-        ),
-        @NamedQuery(
-            name = "User.findNotYetOnList",
-            query = "select t from User as t where t.taskInfo.fetchUsersFromList=false and t.taskInfo.fetchTweetsFromSearch=true"
-        ),
-        @NamedQuery(
-            name="User.getUsersForHashTag",
-            query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-        ),
-        @NamedQuery(
-            name="User.countUsersForHashTag",
-            query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-        ),
-        @NamedQuery(
-            name = "User.findAllDescriptions",
-            query = "select t.description from User as t where t.description is not null"
-        ),
-        @NamedQuery(
-            name="User.findByUniqueId",
-            query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
-        ),
-        @NamedQuery(
-            name="User.findUsersWhoAreFriendsButNotFollowers",
-            query="select t from User as t where t.taskInfo.fetchFollower=false and t.taskInfo.fetchFriends=true"
-        ),
-        @NamedQuery(
-            name="User.findUsersWhoAreFollowersAndFriends",
-            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=true"
-        ),
-        @NamedQuery(
-            name="User.findUsersWhoAreFollowersButNotFriends",
-            query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
-        )
+    @NamedQuery(
+        name = "User.findTweetingUsers",
+        query = "select t from User as t where t.taskInfo.fetchTweetsFromSearch=true"
+    ),
+    @NamedQuery(
+        name = "User.findFollower",
+        query = "select t from User as t where t.taskInfo.fetchFollower=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetFollower",
+        query = "select t from User as t where t.taskInfo.fetchFollower=false"
+    ),
+    @NamedQuery(
+        name = "User.findFriends",
+        query = "select t from User as t where t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetFriends",
+        query = "select t from User as t where t.taskInfo.fetchFriends=false"
+    ),
+    @NamedQuery(
+        name = "User.findOnList",
+        query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetOnList",
+        query = "select t from User as t where t.taskInfo.fetchUsersFromList=false and t.taskInfo.fetchTweetsFromSearch=true"
+    ),
+    @NamedQuery(
+        name="User.getUsersForHashTag",
+        query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="User.countUsersForHashTag",
+        query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name = "User.findAllDescriptions",
+        query = "select t.description from User as t where t.description is not null"
+    ),
+    @NamedQuery(
+        name="User.findByUniqueId",
+        query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFriendsButNotFollowers",
+        query="select t from User as t where t.taskInfo.fetchFollower=false and t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFollowersAndFriends",
+        query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFollowersButNotFriends",
+        query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
+    )
 })
 @NamedNativeQueries({
     @NamedNativeQuery(

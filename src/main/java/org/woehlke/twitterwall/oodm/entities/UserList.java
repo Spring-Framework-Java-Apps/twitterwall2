@@ -21,6 +21,12 @@ import javax.persistence.*;
         @Index(name="idx_userprofile_slug", columnList="slug")
     }
 )
+@NamedQueries({
+    @NamedQuery(
+        name = "UserList.findByUniqueId",
+        query = "select t from UserList as t where t.idTwitter=:idTwitter"
+    )
+})
 @EntityListeners(UserListListener.class)
 public class UserList extends AbstractDomainObject<UserList> implements DomainObjectWithTask<UserList>,DomainObjectWithIdTwitter<UserList> {
 
