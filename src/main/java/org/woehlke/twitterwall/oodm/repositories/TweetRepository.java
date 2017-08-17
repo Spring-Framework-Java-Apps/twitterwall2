@@ -18,13 +18,13 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     Tweet findByIdTwitter(long idTwitter);
 
+    Page<Tweet> findByUser(User user, Pageable pageRequest);
+
     @Query(
         name="Tweet.getTweetsForHashTag",
         countName="Tweet.countTweetsForHashTag"
     )
     Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
-
-    Page<Tweet> findByUser(User user, Pageable pageRequest);
 
     @Query(name = "Tweet.findAllTwitterIds")
     Page<Long> findAllTwitterIds(Pageable pageRequest);
@@ -43,5 +43,22 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     @Query(name="Tweet.countAllUser2Url",nativeQuery=true)
     long countAllUser2Url();
+
+    @Query(name="Tweet.getHomeTimeline",nativeQuery=true)
+    Page<Tweet> getHomeTimeline(Pageable pageRequest);
+
+    @Query(name="Tweet.getUserTimeline",nativeQuery=true)
+    Page<Tweet> getUserTimeline(Pageable pageRequest);
+
+    @Query(name="Tweet.getMentions",nativeQuery=true)
+    Page<Tweet> getMentions(Pageable pageRequest);
+
+    @Query(name="Tweet.getFavorites",nativeQuery=true)
+    Page<Tweet> getFavorites(Pageable pageRequest);
+
+    @Query(name="Tweet.getRetweetsOfMe",nativeQuery=true)
+    Page<Tweet> getRetweetsOfMe(Pageable pageRequest);
+
+
 
 }

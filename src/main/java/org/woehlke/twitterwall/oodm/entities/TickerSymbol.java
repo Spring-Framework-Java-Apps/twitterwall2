@@ -3,12 +3,14 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.URL;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.TickerSymbolListener;
 
 import javax.persistence.*;
+import java.net.MalformedURLException;
 
 /**
  * Created by tw on 10.06.17.
@@ -17,7 +19,9 @@ import javax.persistence.*;
 @Table(
     name = "tickersymbol",
     uniqueConstraints = {
-        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"})
+        @UniqueConstraint(name="unique_tickersymbol", columnNames = {"url","ticker_symbol"}),
+        @UniqueConstraint(name="unique_tickersymbol_url", columnNames = {"url"}),
+        @UniqueConstraint(name="unique_tickersymbol_ticker_symbol", columnNames = {"ticker_symbol"})
     }
 )
 @NamedQueries({
@@ -27,7 +31,7 @@ import javax.persistence.*;
     )
 })
 @EntityListeners(TickerSymbolListener.class)
-public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
+public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements DomainObjectEntity<TickerSymbol>,DomainObjectWithUrl<TickerSymbol>,DomainObjectWithTask<TickerSymbol> {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,6 +64,34 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
     private TickerSymbol() {
     }
 
+    @Override
+    public String getUniqueId() {
+        return "" + url  +"_"+  tickerSymbol;
+    }
+
+    @Override
+    public boolean isValid() {
+        if(url==null){
+            return false;
+        }
+        if(url.isEmpty()){
+            return false;
+        }
+        if(tickerSymbol==null){
+            return false;
+        }
+        if(tickerSymbol.isEmpty()){
+            return false;
+        }
+        try {
+            java.net.URL url = new java.net.URL(this.url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -90,10 +122,6 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
         this.id = id;
     }
 
-    @Override
-    public String getUniqueId() {
-        return "" + url  +"_"+  tickerSymbol;
-    }
 
     @Override
     public String toString() {
@@ -103,11 +131,6 @@ public class TickerSymbol extends AbstractDomainObject<TickerSymbol> implements 
                 ", url='" + url + '\'' +
                     super.toString() +
                 "\n}";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

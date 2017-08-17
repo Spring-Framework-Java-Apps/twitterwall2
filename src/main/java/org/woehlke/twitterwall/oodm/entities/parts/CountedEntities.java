@@ -1,20 +1,29 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithValidation;
+
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * Created by tw on 03.07.17.
  */
+@Validated
 @Embeddable
-public class CountedEntities implements Serializable {
+public class CountedEntities implements Serializable,DomainObjectWithValidation {
 
     @NotNull
     private Long countUser=0L;
 
     @NotNull
     private Long countTweets=0L;
+
+    @NotNull
+    private Long countUserLists=0L;
 
     @NotNull
     private Long countHashTags=0L;
@@ -32,14 +41,10 @@ public class CountedEntities implements Serializable {
     private Long countUrl=0L;
 
     @NotNull
-    private Long countUrlCache=0L;
-
-    @NotNull
     private Long countTask=0L;
 
     @NotNull
     private Long countTaskHistory=0L;
-
 
     @NotNull
     private Long tweet2hashtag=0L;
@@ -74,15 +79,16 @@ public class CountedEntities implements Serializable {
     public CountedEntities() {
     }
 
+    @Transient
     public Long getTotalNumberOfRows(){
         return countUser +
         countTweets +
+        countUserLists +
         countHashTags +
         countMedia +
         countMention +
         countTickerSymbol +
         countUrl +
-        countUrlCache +
         countTask +
         countTaskHistory +
         tweet2hashtag +
@@ -111,6 +117,14 @@ public class CountedEntities implements Serializable {
 
     public void setCountTweets(Long countTweets) {
         this.countTweets = countTweets;
+    }
+
+    public Long getCountUserLists() {
+        return countUserLists;
+    }
+
+    public void setCountUserLists(Long countUserLists) {
+        this.countUserLists = countUserLists;
     }
 
     public Long getCountHashTags() {
@@ -151,14 +165,6 @@ public class CountedEntities implements Serializable {
 
     public void setCountUrl(Long countUrl) {
         this.countUrl = countUrl;
-    }
-
-    public Long getCountUrlCache() {
-        return countUrlCache;
-    }
-
-    public void setCountUrlCache(Long countUrlCache) {
-        this.countUrlCache = countUrlCache;
     }
 
     public Long getCountTask() {
@@ -262,12 +268,12 @@ public class CountedEntities implements Serializable {
         return "CountedEntities{" +
             "countUser=" + countUser +
             ", countTweets=" + countTweets +
+            ", countUserLists=" + countUserLists +
             ", countHashTags=" + countHashTags +
             ", countMedia=" + countMedia +
             ", countMention=" + countMention +
             ", countTickerSymbol=" + countTickerSymbol +
             ", countUrl=" + countUrl +
-            ", countUrlCache=" + countUrlCache +
             ", countTask=" + countTask +
             ", countTaskHistory=" + countTaskHistory +
             ", tweet2hashtag=" + tweet2hashtag +
@@ -290,63 +296,189 @@ public class CountedEntities implements Serializable {
 
         CountedEntities that = (CountedEntities) o;
 
-        if (countUser != null ? !countUser.equals(that.countUser) : that.countUser != null) return false;
-        if (countTweets != null ? !countTweets.equals(that.countTweets) : that.countTweets != null) return false;
-        if (countHashTags != null ? !countHashTags.equals(that.countHashTags) : that.countHashTags != null)
+        if (getCountUser() != null ? !getCountUser().equals(that.getCountUser()) : that.getCountUser() != null)
             return false;
-        if (countMedia != null ? !countMedia.equals(that.countMedia) : that.countMedia != null) return false;
-        if (countMention != null ? !countMention.equals(that.countMention) : that.countMention != null) return false;
-        if (countTickerSymbol != null ? !countTickerSymbol.equals(that.countTickerSymbol) : that.countTickerSymbol != null)
+        if (getCountTweets() != null ? !getCountTweets().equals(that.getCountTweets()) : that.getCountTweets() != null)
             return false;
-        if (countUrl != null ? !countUrl.equals(that.countUrl) : that.countUrl != null) return false;
-        if (countUrlCache != null ? !countUrlCache.equals(that.countUrlCache) : that.countUrlCache != null)
+        if (getCountUserLists() != null ? !getCountUserLists().equals(that.getCountUserLists()) : that.getCountUserLists() != null)
             return false;
-        if (countTask != null ? !countTask.equals(that.countTask) : that.countTask != null) return false;
-        if (countTaskHistory != null ? !countTaskHistory.equals(that.countTaskHistory) : that.countTaskHistory != null)
+        if (getCountHashTags() != null ? !getCountHashTags().equals(that.getCountHashTags()) : that.getCountHashTags() != null)
             return false;
-        if (tweet2hashtag != null ? !tweet2hashtag.equals(that.tweet2hashtag) : that.tweet2hashtag != null)
+        if (getCountMedia() != null ? !getCountMedia().equals(that.getCountMedia()) : that.getCountMedia() != null)
             return false;
-        if (tweet2media != null ? !tweet2media.equals(that.tweet2media) : that.tweet2media != null) return false;
-        if (tweet2mention != null ? !tweet2mention.equals(that.tweet2mention) : that.tweet2mention != null)
+        if (getCountMention() != null ? !getCountMention().equals(that.getCountMention()) : that.getCountMention() != null)
             return false;
-        if (tweet2tickersymbol != null ? !tweet2tickersymbol.equals(that.tweet2tickersymbol) : that.tweet2tickersymbol != null)
+        if (getCountTickerSymbol() != null ? !getCountTickerSymbol().equals(that.getCountTickerSymbol()) : that.getCountTickerSymbol() != null)
             return false;
-        if (tweet2url != null ? !tweet2url.equals(that.tweet2url) : that.tweet2url != null) return false;
-        if (userprofile2hashtag != null ? !userprofile2hashtag.equals(that.userprofile2hashtag) : that.userprofile2hashtag != null)
+        if (getCountUrl() != null ? !getCountUrl().equals(that.getCountUrl()) : that.getCountUrl() != null)
             return false;
-        if (userprofile2media != null ? !userprofile2media.equals(that.userprofile2media) : that.userprofile2media != null)
+        if (getCountTask() != null ? !getCountTask().equals(that.getCountTask()) : that.getCountTask() != null)
             return false;
-        if (userprofile2mention != null ? !userprofile2mention.equals(that.userprofile2mention) : that.userprofile2mention != null)
+        if (getCountTaskHistory() != null ? !getCountTaskHistory().equals(that.getCountTaskHistory()) : that.getCountTaskHistory() != null)
             return false;
-        if (userprofile2tickersymbol != null ? !userprofile2tickersymbol.equals(that.userprofile2tickersymbol) : that.userprofile2tickersymbol != null)
+        if (getTweet2hashtag() != null ? !getTweet2hashtag().equals(that.getTweet2hashtag()) : that.getTweet2hashtag() != null)
             return false;
-        return userprofile2url != null ? userprofile2url.equals(that.userprofile2url) : that.userprofile2url == null;
+        if (getTweet2media() != null ? !getTweet2media().equals(that.getTweet2media()) : that.getTweet2media() != null)
+            return false;
+        if (getTweet2mention() != null ? !getTweet2mention().equals(that.getTweet2mention()) : that.getTweet2mention() != null)
+            return false;
+        if (getTweet2tickersymbol() != null ? !getTweet2tickersymbol().equals(that.getTweet2tickersymbol()) : that.getTweet2tickersymbol() != null)
+            return false;
+        if (getTweet2url() != null ? !getTweet2url().equals(that.getTweet2url()) : that.getTweet2url() != null)
+            return false;
+        if (getUserprofile2hashtag() != null ? !getUserprofile2hashtag().equals(that.getUserprofile2hashtag()) : that.getUserprofile2hashtag() != null)
+            return false;
+        if (getUserprofile2media() != null ? !getUserprofile2media().equals(that.getUserprofile2media()) : that.getUserprofile2media() != null)
+            return false;
+        if (getUserprofile2mention() != null ? !getUserprofile2mention().equals(that.getUserprofile2mention()) : that.getUserprofile2mention() != null)
+            return false;
+        if (getUserprofile2tickersymbol() != null ? !getUserprofile2tickersymbol().equals(that.getUserprofile2tickersymbol()) : that.getUserprofile2tickersymbol() != null)
+            return false;
+        return getUserprofile2url() != null ? getUserprofile2url().equals(that.getUserprofile2url()) : that.getUserprofile2url() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = countUser != null ? countUser.hashCode() : 0;
-        result = 31 * result + (countTweets != null ? countTweets.hashCode() : 0);
-        result = 31 * result + (countHashTags != null ? countHashTags.hashCode() : 0);
-        result = 31 * result + (countMedia != null ? countMedia.hashCode() : 0);
-        result = 31 * result + (countMention != null ? countMention.hashCode() : 0);
-        result = 31 * result + (countTickerSymbol != null ? countTickerSymbol.hashCode() : 0);
-        result = 31 * result + (countUrl != null ? countUrl.hashCode() : 0);
-        result = 31 * result + (countUrlCache != null ? countUrlCache.hashCode() : 0);
-        result = 31 * result + (countTask != null ? countTask.hashCode() : 0);
-        result = 31 * result + (countTaskHistory != null ? countTaskHistory.hashCode() : 0);
-        result = 31 * result + (tweet2hashtag != null ? tweet2hashtag.hashCode() : 0);
-        result = 31 * result + (tweet2media != null ? tweet2media.hashCode() : 0);
-        result = 31 * result + (tweet2mention != null ? tweet2mention.hashCode() : 0);
-        result = 31 * result + (tweet2tickersymbol != null ? tweet2tickersymbol.hashCode() : 0);
-        result = 31 * result + (tweet2url != null ? tweet2url.hashCode() : 0);
-        result = 31 * result + (userprofile2hashtag != null ? userprofile2hashtag.hashCode() : 0);
-        result = 31 * result + (userprofile2media != null ? userprofile2media.hashCode() : 0);
-        result = 31 * result + (userprofile2mention != null ? userprofile2mention.hashCode() : 0);
-        result = 31 * result + (userprofile2tickersymbol != null ? userprofile2tickersymbol.hashCode() : 0);
-        result = 31 * result + (userprofile2url != null ? userprofile2url.hashCode() : 0);
+        int result = getCountUser() != null ? getCountUser().hashCode() : 0;
+        result = 31 * result + (getCountTweets() != null ? getCountTweets().hashCode() : 0);
+        result = 31 * result + (getCountUserLists() != null ? getCountUserLists().hashCode() : 0);
+        result = 31 * result + (getCountHashTags() != null ? getCountHashTags().hashCode() : 0);
+        result = 31 * result + (getCountMedia() != null ? getCountMedia().hashCode() : 0);
+        result = 31 * result + (getCountMention() != null ? getCountMention().hashCode() : 0);
+        result = 31 * result + (getCountTickerSymbol() != null ? getCountTickerSymbol().hashCode() : 0);
+        result = 31 * result + (getCountUrl() != null ? getCountUrl().hashCode() : 0);
+        result = 31 * result + (getCountTask() != null ? getCountTask().hashCode() : 0);
+        result = 31 * result + (getCountTaskHistory() != null ? getCountTaskHistory().hashCode() : 0);
+        result = 31 * result + (getTweet2hashtag() != null ? getTweet2hashtag().hashCode() : 0);
+        result = 31 * result + (getTweet2media() != null ? getTweet2media().hashCode() : 0);
+        result = 31 * result + (getTweet2mention() != null ? getTweet2mention().hashCode() : 0);
+        result = 31 * result + (getTweet2tickersymbol() != null ? getTweet2tickersymbol().hashCode() : 0);
+        result = 31 * result + (getTweet2url() != null ? getTweet2url().hashCode() : 0);
+        result = 31 * result + (getUserprofile2hashtag() != null ? getUserprofile2hashtag().hashCode() : 0);
+        result = 31 * result + (getUserprofile2media() != null ? getUserprofile2media().hashCode() : 0);
+        result = 31 * result + (getUserprofile2mention() != null ? getUserprofile2mention().hashCode() : 0);
+        result = 31 * result + (getUserprofile2tickersymbol() != null ? getUserprofile2tickersymbol().hashCode() : 0);
+        result = 31 * result + (getUserprofile2url() != null ? getUserprofile2url().hashCode() : 0);
         return result;
     }
 
     private static final long serialVersionUID = 1L;
+
+    @AssertTrue
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(countUser == null){
+            return false;
+        }
+        if(countTweets == null){
+            return false;
+        }
+        if(countUserLists == null){
+            return false;
+        }
+        if(countHashTags == null){
+            return false;
+        }
+        if(countMedia == null){
+            return false;
+        }
+        if(countMention == null){
+            return false;
+        }
+        if(countTickerSymbol == null){
+            return false;
+        }
+        if(countTaskHistory == null){
+            return false;
+        }
+        if(countTask == null){
+            return false;
+        }
+        if(tweet2hashtag == null){
+            return false;
+        }
+        if(tweet2media == null){
+            return false;
+        }
+        if(tweet2mention == null){
+            return false;
+        }
+        if(tweet2tickersymbol == null){
+            return false;
+        }
+        if(tweet2url == null){
+            return false;
+        }
+        if(userprofile2hashtag == null){
+            return false;
+        }
+        if(userprofile2media == null){
+            return false;
+        }
+        if(userprofile2mention == null){
+            return false;
+        }
+        if(userprofile2tickersymbol == null){
+            return false;
+        }
+        if(userprofile2url == null){
+            return false;
+        }
+        if(countUser < 0){
+            return false;
+        }
+        if(countTweets < 0){
+            return false;
+        }
+        if(countHashTags < 0){
+            return false;
+        }
+        if(countMedia < 0){
+            return false;
+        }
+        if(countMention < 0){
+            return false;
+        }
+        if(countTickerSymbol < 0){
+            return false;
+        }
+        if(countTaskHistory < 0){
+            return false;
+        }
+        if(countTask < 0){
+            return false;
+        }
+        if(tweet2hashtag < 0){
+            return false;
+        }
+        if(tweet2media  < 0){
+            return false;
+        }
+        if(tweet2mention < 0){
+            return false;
+        }
+        if(tweet2tickersymbol < 0){
+            return false;
+        }
+        if(tweet2url < 0){
+            return false;
+        }
+        if(userprofile2hashtag < 0){
+            return false;
+        }
+        if(userprofile2media < 0){
+            return false;
+        }
+        if(userprofile2mention < 0){
+            return false;
+        }
+        if(userprofile2tickersymbol < 0){
+            return false;
+        }
+        if(userprofile2url < 0){
+            return false;
+        }
+        return true;
+    }
 }

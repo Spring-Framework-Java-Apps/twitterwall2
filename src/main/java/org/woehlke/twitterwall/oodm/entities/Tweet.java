@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.TweetListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -52,6 +53,26 @@ import static javax.persistence.FetchType.EAGER;
     @NamedQuery(
         name="Tweet.findByUniqueId",
         query="select t from Tweet t where t.idTwitter=:idTwitter"
+    ),
+    @NamedQuery(
+        name="Tweet.getHomeTimeline",
+        query="select t from Tweet t where t.taskInfo.getHomeTimeline=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getUserTimeline",
+        query="select t from Tweet t where t.taskInfo.getUserTimeline=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getMentions",
+        query="select t from Tweet t where t.taskInfo.getMentions=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getFavorites",
+        query="select t from Tweet t where t.taskInfo.getFavorites=true"
+    ),
+    @NamedQuery(
+        name="Tweet.getRetweetsOfMe",
+        query="select t from Tweet t where t.taskInfo.getRetweetsOfMe=true"
     )
 })
 @NamedNativeQueries({
@@ -142,6 +163,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
     @Column(name="favorite_count")
     private Integer favoriteCount;
 
+    @Valid
     @Embedded
     @AssociationOverrides({
         @AssociationOverride(
@@ -204,7 +226,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
         this.source = source;
     }
 
-    private Tweet() {
+    protected Tweet() {
     }
 
     public void removeAllEntities(){
@@ -213,7 +235,11 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     @Transient
     public String getFormattedText() {
-        return this.entities.getFormattedText(this.text);
+
+        String htmlText = this.entities.getFormattedText(this.text);
+
+        return this.entities.getFormattedTextForMentionsForTweets(htmlText);
+
     }
 
     public Long getId() {
@@ -450,7 +476,7 @@ public class Tweet extends AbstractDomainObject<Tweet> implements DomainObjectWi
 
     @Override
     public boolean isValid() {
-        return true;
+        return this.idTwitter != null;
     }
 
     @Override

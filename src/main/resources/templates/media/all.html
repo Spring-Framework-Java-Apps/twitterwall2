@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
-</header>
-<section>
+<header th:include="layoutMain :: tw-header" ></header>
+<main class="page-content">
     <div class="container">
-        <div th:include="dataview :: tw-data-view-above" th:with="myEntity='media'"></div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-striped">
-                    <thead th:include="dataview :: tw-data-view-thead">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${myPageContent.hasPrevious()}">
+                    <a href="" th:href="@{|/media/all?page=${myPageContent.previousPageable().pageNumber}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <table class="table table-striped">
+                    <thead th:include="layoutDataview :: tw-data-view-thead">
                     </thead>
                     <tbody>
                         <tr th:each="myPageItem : ${myPageContent}">
                             <td>
-                                <span th:include="dataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                                <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
                             </td>
                             <td>
                                 <div class="row">
@@ -57,19 +66,34 @@
                                 </div>
                             </td>
                             <td>
-                                <span th:include="dataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
+                                <span th:include="layoutDataview :: tw-data-view-common-fields" th:with="myPageItem=${myPageItem}"></span>
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot th:include="dataview :: tw-data-view-tfoot">
+                    <tfoot th:include="layoutDataview :: tw-data-view-tfoot">
                     </tfoot>
                 </table>
+                </div>
             </div>
         </div>
-        <div th:include="dataview :: tw-data-view-below" th:with="myEntity='media'"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${myPageContent.hasNext()}">
+                    <a href="" th:href="@{|/media/all?page=${myPageContent.nextPageable().pageNumber}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
     </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
 </section>
-<footer th:include="layout :: footer" >
+
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

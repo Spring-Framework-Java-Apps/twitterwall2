@@ -2,13 +2,17 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskBasedCaching;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.net.MalformedURLException;
 
 /**
  * Created by tw on 10.06.17.
@@ -31,7 +35,7 @@ import javax.validation.constraints.NotNull;
     )
 })
 @EntityListeners(UrlListener.class)
-public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
+public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity<Url>,DomainObjectWithUrl<Url>,DomainObjectWithTask<Url> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +49,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
     @Column(length=4096,nullable = false)
     private String display="";
 
-    @URL
     @NotNull
     @Column(length=4096,nullable = false)
     private String expanded="";
@@ -59,9 +62,61 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
     @Column(nullable = false,length=4096)
     private String url;
 
+    @Valid
+    @NotNull
+    @Embedded
+    private TaskBasedCaching taskBasedCaching = new TaskBasedCaching();
+
     @Transient
     public boolean isUrlAndExpandedTheSame(){
-        return url.compareTo(expanded) == 0;
+        if(this.isValid()){
+            return url.compareTo(expanded) == 0;
+        } else {
+            return false;
+        }
+    }
+
+    @Transient
+    public boolean isRawUrlsFromDescription() {
+        if(this.isValid()){
+            return (this.display.compareTo(UNDEFINED)==0)&&(this.expanded.compareTo(UNDEFINED)==0);
+        } else {
+            return false;
+        }
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.url == null){
+            return false;
+        }
+        if(this.expanded == null){
+            return false;
+        }
+        if(this.display == null){
+            return false;
+        }
+        if(this.url.isEmpty()){
+            return false;
+        }
+        if(this.expanded.isEmpty()){
+            return false;
+        }
+        if(this.display.isEmpty()){
+            return false;
+        }
+        try {
+           java.net.URL url = new java.net.URL(this.url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String getUniqueId() {
+        return url;
     }
 
     public Url(Task createdBy, Task updatedBy,String display, String expanded, String url) {
@@ -69,6 +124,11 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
         this.display = display;
         this.expanded = expanded;
         this.url = url;
+        if(updatedBy != null){
+            taskBasedCaching.store(updatedBy.getTaskType());
+        } else {
+            taskBasedCaching.store(createdBy.getTaskType());
+        }
     }
 
     public Url(Task createdBy, Task updatedBy,String url) {
@@ -76,9 +136,14 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
         this.url = url;
+        if(updatedBy != null){
+            taskBasedCaching.store(updatedBy.getTaskType());
+        } else {
+            taskBasedCaching.store(createdBy.getTaskType());
+        }
     }
 
-    private Url() {
+    protected Url() {
     }
 
     public static long getSerialVersionUID() {
@@ -91,11 +156,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return url;
     }
 
     public String getDisplay() {
@@ -122,6 +182,14 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
         this.url = url;
     }
 
+    public TaskBasedCaching getTaskBasedCaching() {
+        return taskBasedCaching;
+    }
+
+    public void setTaskBasedCaching(TaskBasedCaching taskBasedCaching) {
+        this.taskBasedCaching = taskBasedCaching;
+    }
+
     @Override
     public String toString() {
         return "Url{" +
@@ -134,32 +202,20 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectWithUr
     }
 
     @Override
-    public boolean isValid() {
-        boolean isInvalid = (this.url == null)||(this.url.isEmpty()||isRawUrlsFromDescription())||(this.url.compareTo(this.expanded)==0);
-        return !isInvalid;
-    }
-
-    public boolean isRawUrlsFromDescription() {
-        return (this.getDisplay().compareTo(UNDEFINED)==0)&&(this.getExpanded().compareTo(UNDEFINED)==0);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Url)) return false;
-        if (!super.equals(o)) return false;
 
         Url url1 = (Url) o;
 
-        if (getId() != null ? !getId().equals(url1.getId()) : url1.getId() != null) return false;
-        return getUrl() != null ? getUrl().equals(url1.getUrl()) : url1.getUrl() == null;
+        if (id != null ? !id.equals(url1.id) : url1.id != null) return false;
+        return url != null ? url.equals(url1.url) : url1.url == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 }

@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.oodm.service.MediaService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class MediaServiceImpl extends DomainServiceWithTaskImpl<Media> implements MediaService {
 
     private static final Logger log = LoggerFactory.getLogger(MediaServiceImpl.class);
@@ -36,5 +36,10 @@ public class MediaServiceImpl extends DomainServiceWithTaskImpl<Media> implement
     @Override
     public Media findByUrl(String url) {
         return mediaRepository.findByUrl(url);
+    }
+
+    @Override
+    public Media findByUniqueId(Media domainExampleObject) {
+        return mediaRepository.findByUniqueId(domainExampleObject);
     }
 }

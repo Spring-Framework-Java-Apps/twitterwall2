@@ -1,50 +1,152 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:spring="http://www.springframework.org/hashTags">
-<head  th:include="layout :: tw-head">
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
 </head>
 <body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
-<header th:include="layout :: tw-header" >
+<header th:include="layoutMain :: tw-header" >
 </header>
-<section>
+<main class="page-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
                 <h2>Welcome to Application Management.</h2>
-
                 <h3>Your Options:</h3>
-
                 <div id="tw-application-management">
                     <div class="list-group">
-                        <a class="list-group-item" href="/application/domain/count" th:href="@{/application/domain/count}"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Count Entities</a>
-
+                        <a class="list-group-item" href="/application/countedEntities/domain/count" th:href="@{/application/countedEntities/domain/count}">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                            <span>Count Entities</span>
+                        </a>
                         <hr class="divider" role="separator"  />
-                        <a class="list-group-item" href="/user/all" th:href="@{/user/all}"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;List All Users</a>
-                        <a class="list-group-item" href="/user/notyetfriends" th:href="@{/user/notyetfriends}"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are Not Yet Friends</a>
-                        <a class="list-group-item" href="/user/onlist" th:href="@{/user/onlist}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are On List</a>
-                        <a class="list-group-item" href="/user/notyetonlist" th:href="@{/user/notyetonlist}"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;&nbsp;List Users, who are Not Yet On List</a>
-                        <a class="list-group-item" href="/test/user/onlist/renew" th:href="@{/test/user/onlist/renew}"><i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;&nbsp;Update List of Users On List</a>
-
+                        <a class="list-group-item" href="/application/countedEntities/domain/delete/all" th:href="@{/application/countedEntities/domain/delete/all}">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                            <span>Delete All Entities</span>
+                        </a>
                         <hr class="divider" role="separator" />
-                        <a class="list-group-item" href="/task/all" th:href="@{/task/all}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;List Tasks</a>
-                        <a class="list-group-item" href="/test/getTestData" th:href="@{/test/getTestData}"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: Create Test Data</a>
-                        <a class="list-group-item" href="/task/scheduled/tweets/fetch" th:href="@{/task/scheduled/tweets/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: fetchTweetsFromTwitterSearch</a>
-                        <a class="list-group-item" href="/task/scheduled/tweets/update" th:href="@{/task/scheduled/tweets/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: updateTweets</a>
-                        <a class="list-group-item" href="/task/scheduled/users/list/fetch" th:href="@{/task/scheduled/users/list/fetch}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: fetchUsersFromDefinedUserList</a>
-                        <a class="list-group-item" href="/task/scheduled/users/mentions/update" th:href="@{/task/scheduled/users/mentions/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: updateUserProfilesFromMentions</a>
-                        <a class="list-group-item" href="/task/scheduled/users/update" th:href="@{/task/scheduled/users/update}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;Start Task: updateUserProfiles</a>
+                        <a class="list-group-item" href="/task/all" th:href="@{/task/all}">
+                            <i class="fa fa-check-square" aria-hidden="true"></i>
+                            <span>List Tasks</span>
+                        </a>
+                        <hr class="divider" role="separator"  />
+                        <a class="list-group-item" href="/task/start/tweets/search" th:href="@{/task/start/tweets/search}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: fetch Tweets from Twitter Search</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/follower/fetch" th:href="@{/task/start/users/follower/fetch}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: fetch Follower</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/friends/fetch" th:href="@{/task/start/users/friends/fetch}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: fetch Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/list/fetch" th:href="@{/task/start/users/list/fetch}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: fetch Users from Defined User List</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/user/onlist/renew" th:href="@{/task/start/user/onlist/renew}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: Update List of Users on Defined User List</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/mentions/update" th:href="@{/task/start/users/mentions/update}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: update Users from Mentions</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/createTestData" th:href="@{/task/start/createTestData}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: Create Test Data</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/tweets/update" th:href="@{/task/start/tweets/update}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: update Tweets</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/users/update" th:href="@{/task/start/users/update}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: update Users</span>
+                        </a>
+                        <hr class="divider" role="separator"  />
+                        <a class="list-group-item" href="/task/start/tweets/timeline/home" th:href="@{/task/start/tweets/timeline/home}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getHomeTimeline</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/tweets/timeline/user" th:href="@{/task/start/tweets/timeline/user}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getUserTimeline</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/tweets/mentions" th:href="@{/task/start/tweets/mentions}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getMentions</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/tweets/favorites" th:href="@{/task/start/tweets/favorites}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getFavorites</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/tweets/myretweets" th:href="@{/task/start/tweets/myretweets}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getRetweetsOfMe</span>
+                        </a>
+                        <a class="list-group-item" href="/task/start/userlists" th:href="@{/task/start/userlists}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Task: getLists</span>
+                        </a>
+                        <hr class="divider" role="separator"  />
+                        <a class="list-group-item" href="/user/list/tweets" th:href="@{/user/list/tweets}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users with Tweets</span>
+                        </a>
+                        <hr class="divider" role="separator" />
+                        <a class="list-group-item" href="/user/all" th:href="@{/user/all}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List All Users</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/follower" th:href="@{/user/list/follower}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are Follower</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/notyetfollower" th:href="@{/user/list/notyetfollower}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are Not Yet Follower</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/friends" th:href="@{/user/list/friends}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/usersWhoAreFollowersButNotFriends" th:href="@{/user/list/usersWhoAreFollowersButNotFriends}">
+                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                            <span>Users, who are Followers but not Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/usersWhoAreFriendsButNotFollowers" th:href="@{/user/list/usersWhoAreFriendsButNotFollowers}">
+                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                            <span>Users, who are Friends but not Followers</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/usersWhoAreFollowersAndFriends" th:href="@{/user/list/usersWhoAreFollowersAndFriends}">
+                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                            <span>Users, who are Followers and Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/notyetfriends" th:href="@{/user/list/notyetfriends}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are Not Yet Friends</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/onlist" th:href="@{/user/list/onlist}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are On Defined User List</span>
+                        </a>
+                        <a class="list-group-item" href="/user/list/notyetonlist" th:href="@{/user/list/notyetonlist}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>List Users, who are Not Yet on Defined User List</span>
+                        </a>
                     </div>
                 </div>
-                <span th:if="${page.historyBack}">
-                        <a href="javascript:history.back()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;zurück</a>
-                </span>
             </div>
         </div>
     </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
 </section>
-<footer th:include="layout :: footer" >
+
+<footer th:include="layoutMain :: footer" >
 
 </footer>
 </body>

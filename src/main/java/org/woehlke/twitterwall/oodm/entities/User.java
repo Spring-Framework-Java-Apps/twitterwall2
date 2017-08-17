@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -22,7 +23,9 @@ import java.util.regex.Pattern;
 @Table(
     name = "userprofile",
     uniqueConstraints = {
-        @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name"}),
+        @UniqueConstraint(name="unique_userprofile",columnNames = {"id_twitter","screen_name_unique"}),
+        @UniqueConstraint(name="unique_userprofile_id_twitter",columnNames = {"id_twitter"}),
+        @UniqueConstraint(name="unique_userprofile_screen_name_unique",columnNames = {"screen_name_unique"}),
     },
     indexes = {
         @Index(name="idx_userprofile_created_date", columnList="created_date"),
@@ -32,42 +35,62 @@ import java.util.regex.Pattern;
     }
 )
 @NamedQueries({
-        @NamedQuery(
-            name = "User.findTweetingUsers",
-            query = "select t from User as t where t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
-        ),
-        @NamedQuery(
-            name = "User.findNotYetFriendUsers",
-            query = "select t from User as t where t.following=false"
-        ),
-        @NamedQuery(
-            name = "User.findNotYetOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=false and t.taskInfo.updatedByFetchTweetsFromTwitterSearch=true"
-        ),
-        @NamedQuery(
-            name = "User.findOnList",
-            query = "select t from User as t where t.taskInfo.updatedByFetchUsersFromDefinedUserList=true"
-        ),
-        @NamedQuery(
-            name="User.getUsersForHashTag",
-            query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-        ),
-        @NamedQuery(
-            name="User.countUsersForHashTag",
-            query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
-        ),
-        @NamedQuery(
-            name = "User.findAllDescriptions",
-            query = "select t.description from User as t where t.description is not null"
-        ),
-        @NamedQuery(
-            name = "User.findAllTwitterIds",
-            query = "select t.idTwitter from User as t"
-        ),
-        @NamedQuery(
-            name="User.findByUniqueId",
-            query="select t from User as t where t.idTwitter=:idTwitter and t.screenName=:screenName"
-        )
+    @NamedQuery(
+        name = "User.findTweetingUsers",
+        query = "select t from User as t where t.taskInfo.fetchTweetsFromSearch=true"
+    ),
+    @NamedQuery(
+        name = "User.findFollower",
+        query = "select t from User as t where t.taskInfo.fetchFollower=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetFollower",
+        query = "select t from User as t where t.taskInfo.fetchFollower=false"
+    ),
+    @NamedQuery(
+        name = "User.findFriends",
+        query = "select t from User as t where t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetFriends",
+        query = "select t from User as t where t.taskInfo.fetchFriends=false"
+    ),
+    @NamedQuery(
+        name = "User.findOnList",
+        query = "select t from User as t where t.taskInfo.fetchUsersFromList=true"
+    ),
+    @NamedQuery(
+        name = "User.findNotYetOnList",
+        query = "select t from User as t where t.taskInfo.fetchUsersFromList=false and t.taskInfo.fetchTweetsFromSearch=true"
+    ),
+    @NamedQuery(
+        name="User.getUsersForHashTag",
+        query="select t from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name="User.countUsersForHashTag",
+        query="select count(t) from User as t join t.entities.hashTags hashTag WHERE hashTag.text=:hashtagText"
+    ),
+    @NamedQuery(
+        name = "User.findAllDescriptions",
+        query = "select t.description from User as t where t.description is not null"
+    ),
+    @NamedQuery(
+        name="User.findByUniqueId",
+        query="select t from User as t where t.idTwitter=:idTwitter and t.screenNameUnique=:screenNameUnique"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFriendsButNotFollowers",
+        query="select t from User as t where t.taskInfo.fetchFollower=false and t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFollowersAndFriends",
+        query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=true"
+    ),
+    @NamedQuery(
+        name="User.findUsersWhoAreFollowersButNotFriends",
+        query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
+    )
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
@@ -92,7 +115,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(UserListener.class)
-public class User extends AbstractDomainObject<User> implements DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
+public class User extends AbstractDomainObject<User> implements DomainObjectWithUrl<User>,DomainObjectWithEntities<User>,DomainObjectWithScreenName<User>,DomainObjectWithTask<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -107,6 +130,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @NotEmpty
     @Column(name="screen_name", nullable = false)
     private String screenName;
+
+    @NotEmpty
+    @Column(name = "screen_name_unique", nullable = false)
+    private String screenNameUnique = "";
 
     @NotNull
     @Column(nullable = false)
@@ -153,7 +180,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     private Boolean followRequestSent;
 
     @Column
-    private Boolean isProtected;
+    private Boolean protectedUser;
 
     @Column
     private Boolean notificationsEnabled;
@@ -209,9 +236,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Column
     private Boolean friend;
 
-    @Column
-    private Boolean tweeting;
-
     @Column(length = 4096)
     private String profileBannerUrl;
 
@@ -255,6 +279,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
         this.screenName = screenName;
+        this.screenNameUnique = screenName.toLowerCase();
         this.name = name;
         this.url = url;
         this.profileImageUrl = profileImageUrl;
@@ -263,12 +288,41 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.createdDate = createdDate;
     }
 
-    private User() {
+    protected User() {
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.idTwitter == null){
+            return false;
+        }
+        if(this.screenName == null){
+            return false;
+        }
+        if(!this.hasValidScreenName()){
+            return false;
+        }
+        if(!this.hasValidScreenNameUnique()){
+            return false;
+        }
+        return true;
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return idTwitter.toString() + "_" + this.screenNameUnique;
     }
 
     public final static String SCREEN_NAME_PATTERN = "\\w*";
 
+    public final static String SCREEN_NAME_UNIQUE_PATTERN = "[a-z_0-9]*";
+
     public static boolean isValidScreenName(String screenName){
+        if(screenName==null){
+            return false;
+        }
         Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
         Matcher m = p.matcher(screenName);
         return m.matches();
@@ -278,6 +332,25 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     public boolean hasValidScreenName(){
         Pattern p = Pattern.compile("^"+SCREEN_NAME_PATTERN+"$");
         Matcher m = p.matcher(screenName);
+        return m.matches();
+    }
+
+    public static boolean isValidScreenNameUnique(String screenNameUnique){
+        if(screenNameUnique==null){
+            return false;
+        }
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_UNIQUE_PATTERN+"$");
+        Matcher m = p.matcher(screenNameUnique);
+        return m.matches();
+    }
+
+    @Transient
+    public boolean hasValidScreenNameUnique(){
+        if(screenNameUnique.compareTo(screenName.toLowerCase())!=0){
+            return false;
+        }
+        Pattern p = Pattern.compile("^"+SCREEN_NAME_UNIQUE_PATTERN+"$");
+        Matcher m = p.matcher(screenNameUnique);
         return m.matches();
     }
 
@@ -309,8 +382,8 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     @Transient
-    public String getCssBackgroundImage(){
-        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
+    public String getCssProfileBannerUrl(){
+        if((profileBannerUrl != null) && (!profileBannerUrl.isEmpty())){
             return "img-responsive my-background";
         } else {
             return "hidden";
@@ -318,12 +391,34 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     @Transient
-    public String getCssProfileBannerUrl(){
-        String style ="img-circle my-profile-image";
-        if(useBackgroundImage && (backgroundImageUrl != null) && (!backgroundImageUrl.isEmpty())){
-            style += " my-profile-image-with-bg";
+    public String getCssProfileImageUrl(){
+        if((profileImageUrl != null) && (!profileImageUrl.isEmpty())){
+            String style ="img-circle my-profile-image";
+            if((profileBannerUrl != null) && (!profileBannerUrl.isEmpty())) {
+                style += " my-profile-image-with-bg";
+            }
+            return style;
+        } else {
+            return "hidden";
         }
-        return style;
+    }
+
+    @Transient
+    public boolean isTweeting(){
+        Boolean isTweeting = this.getTaskInfo().getFetchTweetsFromSearch();
+        if(isTweeting == null) {return false; } else { return isTweeting; }
+    }
+
+    public static User getDummyUserForScreenName(String screenName,Task task){
+        long idTwitter= new Date().getTime();
+        String name="Exception Handler Dummy Username";
+        String url="https://github.com/phasenraum2010/twitterwall2";
+        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
+        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
+        String location="Berlin, Germany";
+        Date createdDate = new Date();
+        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+        return user;
     }
 
     @Override
@@ -334,11 +429,6 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return idTwitter.toString();
     }
 
     @Override
@@ -358,6 +448,17 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @Override
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+        this.screenNameUnique = screenName.toLowerCase();
+    }
+
+    @Override
+    public String getScreenNameUnique() {
+        return screenNameUnique;
+    }
+
+    @Override
+    public void setScreenNameUnique(String screenNameUnique) {
+        this.screenNameUnique = screenNameUnique.toLowerCase();
     }
 
     public String getName() {
@@ -472,12 +573,16 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         this.followRequestSent = followRequestSent;
     }
 
-    public Boolean getProtected() {
-        return isProtected;
+    public Boolean getProtectedUser() {
+        if(protectedUser==null){
+            return false;
+        } else {
+            return protectedUser;
+        }
     }
 
-    public void setProtected(Boolean aProtected) {
-        isProtected = aProtected;
+    public void setProtectedUser(Boolean protectedUser) {
+        this.protectedUser = protectedUser;
     }
 
     public Boolean getNotificationsEnabled() {
@@ -489,7 +594,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getVerified() {
-        return verified;
+        if(verified==null){
+            return false;
+        } else {
+            return verified;
+        }
     }
 
     public void setVerified(Boolean verified) {
@@ -609,7 +718,11 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFollower() {
-        return follower;
+        if(this.getTaskInfo().getFetchFollower()==null){
+            return false;
+        } else {
+            return this.getTaskInfo().getFetchFollower();
+        }
     }
 
     public void setFollower(Boolean follower) {
@@ -617,19 +730,15 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     }
 
     public Boolean getFriend() {
-        return friend;
+        if(this.getTaskInfo().getFetchFriends()==null){
+            return false;
+        } else {
+            return this.getTaskInfo().getFetchFriends();
+        }
     }
 
     public void setFriend(Boolean friend) {
         this.friend = friend;
-    }
-
-    public Boolean getTweeting() {
-        return tweeting;
-    }
-
-    public void setTweeting(Boolean tweeting) {
-        this.tweeting = tweeting;
     }
 
     public String getProfileBannerUrl() {
@@ -668,7 +777,7 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                 ", listedCount=" + listedCount +
                 ", following=" + following +
                 ", followRequestSent=" + followRequestSent +
-                ", isProtected=" + isProtected +
+                ", protectedUser=" + protectedUser +
                 ", notificationsEnabled=" + notificationsEnabled +
                 ", verified=" + verified +
                 ", geoEnabled=" + geoEnabled +
@@ -687,28 +796,10 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
                 ", showAllInlineMedia=" + showAllInlineMedia +
                 ", follower=" + follower +
                 ", friend=" + friend +
-                ", tweeting=" + tweeting +
                 ", profileBannerUrl='" + profileBannerUrl + '\'' +
                     super.toString() +
                 ",\n entities=" + this.entities.toString() +
                 "\n}";
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    public static User getDummyUserForScreenName(String screenName,Task task){
-        long idTwitter= new Date().getTime();
-        String name="Exception Handler Dummy Username";
-        String url="https://github.com/phasenraum2010/twitterwall2";
-        String profileImageUrl="https://avatars2.githubusercontent.com/u/303766?v=3&s=460";
-        String description="Exception Handler Dummy Description with some #HashTag an URL like https://thomas-woehlke.blogspot.de/ and an @Mention.";
-        String location="Berlin, Germany";
-        Date createdDate = new Date();
-        User user = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
-        return user;
     }
 
     @Override
@@ -733,4 +824,5 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
         return result;
     }
+
 }

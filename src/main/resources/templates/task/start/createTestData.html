@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" >
+</header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Backend Task Started.</h3>
+                <div class="well" th:if="${taskTweets}">
+                    <ul>
+                        <li>
+                            <a href="/task/0" th:href="@{|/task/${taskTweets.id}|}">
+                                <i class="fa fa-check-square" aria-hidden="true"></i>
+                                <span th:text="${taskTweets.id}">id</span>
+                            </a>
+                        </li>
+                        <li th:if="${taskTweets.timeStarted}">timeStarted: <span th:text="${#dates.format(taskTweets.timeStarted,'HH:mm:ss (dd.MM.yyyy)')}">timeStarted</span></li>
+                        <li th:if="${taskTweets.timeLastUpdate}">timeLastUpdate: <span th:text="${#dates.format(taskTweets.timeLastUpdate,'HH:mm:ss (dd.MM.yyyy)')}">timeLastUpdate</span></li>
+                        <li th:if="${taskTweets.timeFinished}">timeFinished: <span th:text="${#dates.format(taskTweets.timeFinished,'HH:mm:ss (dd.MM.yyyy)')}">timeFinished</span></li>
+                        <li th:if="${taskTweets.taskType}">taskType: <span th:text="${taskTweets.taskType}">taskType</span></li>
+                        <li th:if="${taskTweets.taskStatus}">taskStatus: <span th:text="${taskTweets.taskStatus}">taskStatus</span></li>
+                        <li th:if="${taskTweets.sendType}">sendType: <span th:text="${taskTweets.sendType}">sendType</span></li>
+                    </ul>
+                </div>
+                <div class="well" th:if="${taskUsers}">
+                    <ul>
+                        <li>
+                            <a href="/task/0" th:href="@{|/task/${taskUsers.id}|}">
+                                <i class="fa fa-check-square" aria-hidden="true"></i>
+                                <span th:text="${taskUsers.id}">id</span>
+                            </a>
+                        </li>
+                        <li th:if="${taskUsers.timeStarted}">timeStarted: <span th:text="${#dates.format(taskUsers.timeStarted,'HH:mm:ss (dd.MM.yyyy)')}">timeStarted</span></li>
+                        <li th:if="${taskUsers.timeLastUpdate}">timeLastUpdate: <span th:text="${#dates.format(taskUsers.timeLastUpdate,'HH:mm:ss (dd.MM.yyyy)')}">timeLastUpdate</span></li>
+                        <li th:if="${taskUsers.timeFinished}">timeFinished: <span th:text="${#dates.format(taskUsers.timeFinished,'HH:mm:ss (dd.MM.yyyy)')}">timeFinished</span></li>
+                        <li th:if="${taskUsers.taskType}">taskType: <span th:text="${taskUsers.taskType}">taskType</span></li>
+                        <li th:if="${taskUsers.taskStatus}">taskStatus: <span th:text="${taskUsers.taskStatus}">taskStatus</span></li>
+                        <li th:if="${taskUsers.sendType}">sendType: <span th:text="${taskUsers.sendType}">sendType</span></li>
+                    </ul>
+                </div>
+                <div class="well">
+                    <a href="/task/all" th:href="@{/task/all}">
+                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <span>Tasks</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+
+</footer>
+</body>
+</html>

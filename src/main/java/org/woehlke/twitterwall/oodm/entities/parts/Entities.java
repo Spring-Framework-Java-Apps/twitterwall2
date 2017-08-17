@@ -1,8 +1,12 @@
 package org.woehlke.twitterwall.oodm.entities.parts;
 
+import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUniqueId;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithValidation;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -16,8 +20,9 @@ import static javax.persistence.FetchType.EAGER;
 /**
  * Created by tw on 11.07.17.
  */
+@Validated
 @Embeddable
-public class Entities extends EntitiesFilter implements Serializable {
+public class Entities extends EntitiesFilter implements Serializable,DomainObjectWithValidation,DomainObjectWithUniqueId {
 
     @NotNull
     @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
@@ -296,6 +301,10 @@ public class Entities extends EntitiesFilter implements Serializable {
         return this.tickerSymbols.remove(tickerSymbol);
     }
 
+    public String getFormattedTextForMentionsForTweets(String formattedText){
+        return super.getFormattedTextForMentionsForTweets(this.mentions,formattedText);
+    }
+
     private String toStringUrls(){
         StringBuffer myUrls = new StringBuffer();
         myUrls.append("[ ");
@@ -382,9 +391,96 @@ public class Entities extends EntitiesFilter implements Serializable {
             "\n}";
     }
 
+
+
+    private String getUniqueIdUrls(){
+        StringBuffer myUrls = new StringBuffer();
+        myUrls.append("[ ");
+        for (Url url : urls) {
+            if(url != null) {
+                myUrls.append(url.getUniqueId());
+                myUrls.append(", ");
+            } else {
+                myUrls.append(", null");
+            }
+        }
+        myUrls.append(" ]");
+        return myUrls.toString();
+    }
+
+    private String getUniqueIdHashTags(){
+        StringBuffer myTags = new StringBuffer();
+        myTags.append("[ ");
+        for (HashTag tag : hashTags) {
+            if(tag != null){
+                myTags.append(tag.getUniqueId());
+                myTags.append(", ");
+            } else {
+                myTags.append(", null");
+            }
+        }
+        myTags.append(" ]");
+        return myTags.toString();
+    }
+
+    private String getUniqueIdMentions(){
+        StringBuffer myMentions = new StringBuffer();
+        myMentions.append("[ ");
+        for (Mention mention : mentions) {
+            if(mention != null){
+                myMentions.append(mention.getUniqueId());
+                myMentions.append(", ");
+            } else {
+                myMentions.append(", null");
+            }
+        }
+        myMentions.append(" ]");
+        return myMentions.toString();
+    }
+
+    private String getUniqueIdMedia(){
+        StringBuffer myMedia = new StringBuffer();
+        myMedia.append("[ ");
+        for (Media medium : media) {
+            if(medium != null){
+                myMedia.append(medium.getUniqueId());
+                myMedia.append(", ");
+            } else {
+                myMedia.append(", null");
+            }
+        }
+        myMedia.append(" ]");
+        return myMedia.toString();
+    }
+
+    private String getUniqueIdTickerSymbols(){
+        StringBuffer myTickerSymbols = new StringBuffer();
+        myTickerSymbols.append("[ ");
+        for (TickerSymbol tickerSymbol : tickerSymbols) {
+            if(tickerSymbol != null){
+                myTickerSymbols.append(tickerSymbol.getUniqueId());
+                myTickerSymbols.append(", ");
+            } else {
+                myTickerSymbols.append(", null");
+            }
+        }
+        myTickerSymbols.append(" ]");
+        return myTickerSymbols.toString();
+    }
+
+    public String getUniqueId(){
+        return "Entities{" +
+                ",\n urls=" + getUniqueIdUrls() +
+                ",\n hashTags=" + getUniqueIdHashTags() +
+                ",\n mentions=" + getUniqueIdMentions() +
+                ",\n media=" +getUniqueIdMedia() +
+                ",\n tickerSymbols=" +getUniqueIdTickerSymbols() +
+                "\n}";
+    }
+
     public String getFormattedText(String formattedText ) {
 
-        formattedText = getFormattedTextForUserProfiles(formattedText);
+        //formattedText = getFormattedTextForUserProfiles(formattedText);
 
         Set<HashTag> tags = this.getHashTags();
         formattedText = getFormattedTextForHashTags(tags,formattedText);
@@ -395,7 +491,7 @@ public class Entities extends EntitiesFilter implements Serializable {
         Set<Url> urls = this.getUrls();
         formattedText = getFormattedTextForUrls(urls, formattedText);
 
-        formattedText = getFormattedTextForUrls( formattedText );
+        //formattedText = getFormattedTextForUrls( formattedText );
 
         Set<Mention> mentions = this.getMentions();
         formattedText = super.getFormattedTextForMentions(mentions, formattedText);
@@ -432,5 +528,26 @@ public class Entities extends EntitiesFilter implements Serializable {
         result = 31 * result + (getMedia() != null ? getMedia().hashCode() : 0);
         result = 31 * result + (getTickerSymbols() != null ? getTickerSymbols().hashCode() : 0);
         return result;
+    }
+
+    @AssertTrue
+    @Override
+    public boolean isValid() {
+        if(urls == null){
+            return false;
+        }
+        if(hashTags == null){
+            return false;
+        }
+        if(mentions == null){
+            return false;
+        }
+        if(media == null){
+           return false;
+        }
+        if(tickerSymbols == null){
+            return false;
+        }
+        return true;
     }
 }

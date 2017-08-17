@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" >
+</header>
+<main class="page-content">
+    <div class="container">
+        <div th:fragment="tw-tweet-list">
+            <div class="row">
+                <div>
+                    <div class="col-md-12 tw-col-4-wrapper">
+                        <div class="tw-col-4-box tw-tweet-list" th:each="tweet : ${latestTweets}">
+                            <div class="thumbnail tw-tweet"
+                                 th:include="layoutTweet :: tw-one-tweet-thumbnail"
+                                 th:with="tweet=${tweet}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:include="layoutMain :: footer" >
+
+</footer>
+</body>
+</html>

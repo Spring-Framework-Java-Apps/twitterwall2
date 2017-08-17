@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.oodm.service.UrlService;
  * Created by tw on 12.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements UrlService {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceImpl.class);
@@ -32,11 +32,22 @@ public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements Ur
     public Url findByUrl(String url) {
         String name = "findByUrl "+url+" ";
         if(url == null){
-            throw new IllegalArgumentException("Url.findByUrl: url == null");
+            log.debug(name+"Url.findByUrl: url == null");
+            return null;
+            //throw new IllegalArgumentException("Url.findByUrl: url == null");
         }
         Url result = urlRepository.findByUrl(url);
-        log.debug(name+result.toString());
+        if(result == null){
+            log.debug(name+"Url.findByUrl: url == null");
+        } else {
+            log.debug(name+result.getUniqueId());
+            log.trace(name+result.toString());
+        }
         return result;
     }
 
+    @Override
+    public Url findByUniqueId(Url domainExampleObject) {
+        return urlRepository.findByUniqueId(domainExampleObject);
+    }
 }

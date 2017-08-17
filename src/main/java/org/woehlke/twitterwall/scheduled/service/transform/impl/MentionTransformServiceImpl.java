@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.MentionEntity;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Mention;
@@ -17,8 +15,7 @@ import java.util.Set;
 /**
  * Created by tw on 28.06.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Component
 public class MentionTransformServiceImpl extends EntitiesFilter implements MentionTransformService {
 
     private static final Logger log = LoggerFactory.getLogger(MentionTransformServiceImpl.class);
@@ -26,16 +23,16 @@ public class MentionTransformServiceImpl extends EntitiesFilter implements Menti
     @Override
     public Mention transform(MentionEntity mention,Task task) {
         long idTwitter = mention.getId();
-        String screenName = mention.getScreenName();
+        String screenNameUnique = mention.getScreenName();
         String name = mention.getName();
-        Mention myMentionEntity = new Mention(task,null,idTwitter, screenName, name);
+        Mention myMentionEntity = new Mention(task,null,idTwitter, screenNameUnique, name);
         return myMentionEntity;
     }
 
     @Override
     public Set<Mention> findByUser(TwitterProfile userSource,Task task) {
         String description = userSource.getDescription();
-        Set<Mention> mentionsTarget = findByUserDescription(description,task);
+        Set<Mention> mentionsTarget = super.findByUserDescription(description,task);
         return mentionsTarget;
     }
 }

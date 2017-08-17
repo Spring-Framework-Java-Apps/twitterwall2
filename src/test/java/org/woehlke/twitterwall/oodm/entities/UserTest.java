@@ -1,120 +1,101 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.Application;
-import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.test.UserServiceTest;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
-import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import java.util.Date;
 
 
 /**
  * Created by tw on 22.06.17.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class})
-@DataJpaTest(showSql=false)
-@Transactional(propagation= Propagation.REQUIRES_NEW,readOnly=false)
-public class UserTest {
+public class UserTest implements DomainObjectMinimalTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserServiceTest userServiceTest;
-
-    @Autowired
-    private TwitterProperties twitterProperties;
-
-    @Ignore
-    @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchTest() {
-        String msg ="getAllDescriptionsTest";
+    @Override
+    public void getUniqueIdTest() throws Exception {
+        String msg = "getUniqueIdTest: ";
         log.info(msg+"------------------------------------------------");
-        //userServiceTest.createTestData();
-        Assert.assertTrue(true);
+
+        String screenName = "port80guru";
+
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,sendType, timeStarted,timeLastUpdate,timeFinished);
+
+        User user1 = User.getDummyUserForScreenName(screenName,task);
+
+        String mygUniqueId1 = user1.getIdTwitter().toString()+"_"+user1.getScreenNameUnique();
+
+        log.info(msg+" Expected: "+mygUniqueId1+" == Found: "+user1.getUniqueId());
+
+        Assert.assertEquals(msg,mygUniqueId1,user1.getUniqueId());
+
+        long idTwitter= new Date().getTime();
+        String name="Java";
+        String url="https://t.co/qQ19mq2e6G";
+        String profileImageUrl="https://pbs.twimg.com/profile_images/426420605945004032/K85ZWV2F_400x400.png";
+        String description="This is the official Twitter channel for Java and the source for Java news from the Java community. Managed by Yolande Poirier @ypoirier";
+        String location="Worldwide";
+        Date createdDate = new Date();
+        User user2 = new User(task,null,idTwitter,screenName, name, url, profileImageUrl, description, location, createdDate);
+
+        String mygUniqueId2 = Long.toString(idTwitter)+"_"+user2.getScreenNameUnique();
+
+        log.info(msg+" Expected: "+mygUniqueId2+" == Found: "+user2.getUniqueId());
+
+        Assert.assertEquals(msg,mygUniqueId2,user2.getUniqueId());
+
         log.info(msg+"------------------------------------------------");
     }
 
-    @Ignore
-    @Commit
     @Test
-    public void getAllDescriptionsTest() {
-        String msg = "getAllDescriptionsTest";
+    @Override
+    public void isValidTest() throws Exception {
+        String msg = "isValidTest: ";
         log.info(msg+"------------------------------------------------");
-        boolean hasNext;
-        Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
-        do {
-            Page<String> descriptions = userService.getAllDescriptions(pageRequest);
-            hasNext = descriptions.hasNext();
-            long totalNumber = descriptions.getTotalElements();
-            int number = descriptions.getNumber();
-            log.info(msg+"found "+number+" descriptions (total: "+totalNumber+")");
-            for(String description:descriptions){
-                log.info(msg+"description: "+description);
-            }
-            pageRequest = pageRequest.next();
-        } while (hasNext);
-        String message = "userService.findAllDescriptions(); ";
-        Assert.assertTrue(message,true);
+
+        String invalidScreenName = "3765726öäöäß%$dsffsdf";
+        Long idTwitter1 = null;
+        Long idTwitter2 = 5327635273276L;
+
+        String screenName = "port80guru";
+
+        String descriptionTask = "start: ";
+        TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
+        SendType sendType = SendType.NO_MQ;
+        TaskStatus taskStatus = TaskStatus.READY;
+        Date timeStarted = new Date();
+        Date timeLastUpdate = timeStarted;
+        Date timeFinished = null;
+        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
+
+        Assert.assertFalse(msg,User.isValidScreenName(invalidScreenName));
+
+        User user = User.getDummyUserForScreenName(screenName,task);
+        Assert.assertTrue(msg,user.isValid());
+
+        user.setIdTwitter(idTwitter1);
+        Assert.assertFalse(msg,user.isValid());
+
+        user.setIdTwitter(idTwitter2);
+        Assert.assertTrue(msg,user.isValid());
+
+        user.setScreenName(invalidScreenName);
+        Assert.assertFalse(msg,user.isValid());
+
         log.info(msg+"------------------------------------------------");
     }
-
-    private static String descriptions[] = {
-            "Webentwickler @cron_eu, Stuttgart #T3Rookies #TYP",
-            "Neos, Flow and TYPO3 development @portachtzig_ Berlin",
-            "16.–18. Juni 2017 | DAS TYPO3-Community-Event in Berlin | Bleibt auf dem Laufenden und folgt uns!",
-            "Agentur für effiziente Kommunikation und E-Business",
-            "Webentwickler",
-            "Freelance Frontend developer and TYPO3 integrator. Passionate about punk and ska music. SEGA fanboy.",
-            "Webentwickler. Interessiert an Musik, Filmen und Technik",
-            "Davitec ist Dienstleister für individuelle Softwareentwicklung und ermöglicht Unternehmen eine erfolgreiche digitale Transformation.",
-            "HSV, Musik, TYPO3",
-            "Netzwerk von TYPO3-Anwendern in der Ruhrregion und darüber hinaus - monatliche Treffen, gegenseitige Unterstützung und Freude an der Arbeit mit dem CMS TYPO3",
-            "#TYPO3 und #Magento Agentur aus Jena • TYPO3 Certified Developer • TYPO3 Silver Member • TYPO3 Specialist • Magento Certified Developer",
-            "Age: 43; married; 1 son (Florian) and 1 daughter (Vanessa); Work @Mittwald CM Service",
-            "Coding/consulting for @TYPO3, in PHP and Scala, Alumnus of @KITKarlsruhe, Linux user, occasionally doing non-IT stuff.",
-            "arndtteunissen ist eine strategische Marken- und Designagentur. Unsere wichtigste Kompetenz besteht in der Entwicklung von Corporate Identity Strategien.",
-            "Entwickler @slubdresden. Full-Stack bei @literaturport & @dichterlesen. #AngularJS & #TYPO3. #AvGeek! #hahohe",
-            "TYPO3 Developer",
-            "TYPO3 Dev, nerds host ;-) and technology addicted from Dresden Germany",
-            "yow? (=",
-            "Father of two sons, Backend and mobile developer and loving  products...",
-            "Webdeveloper bei https://t.co/1KJ6Sdx0jZ #TYPO3 / Youtube: https://t.co/rdYKUVG73s / Videotraining TYPO3 8 LTS: https://t.co/6EBbUNsV75",
-            "Beratung | Design | Entwicklung | Redaktion | Schulungen | Betrieb",
-            "Mama vom Großen und Kleinen | TYPO3 Active Contributer | Glücklich",
-            "Online-Marketing-Berater und Google Partner",
-            "Inhaber und Geschäftsführer bei sgalinski Internet Services (Impressum: https://t.co/Hy494B8JlP)",
-            "Internet, Intranet, Extranet",
-            "TYPO3 Entwickler, Rollenspieler und Mittelalter-Freak",
-            "Wer nicht lebt, hat nichts zu befürchten.",
-            "TYPO3 Addict, Web-Developer @in2code_de, Münchner, My Blogs: bbq-jungle.de",
-            "CEO TYPO3 GmbH",
-            "Wir glauben an die Stärke von Bildern. Die Kraft eines Wortes. Und an Fortschritt durch Technologie.",
-            "Webdeveloper, UX and UI Expert, TYPO3-Developer",
-            "Zu allem 'ne Meinung! Statements & Kommentare. Papa. Info- & Medienjunkie. fotobegeistert & reisefreudig & ein @schnittsteller",
-            "Webentwicklung, TYPO3, Online-Kommunikation und was mein Leben sonst noch so hergibt....",
-            "Member of TYPO3 Expert Advisory Board, TYPO3 Marketing Team, Magento | web design | content management | secure hosting",
-            "#TYPO3 #SCRUM #RE #OKR; Independent Consultant, Trainer, Agile Coach; TYPO3 Expert Advisory Board & Head of TYPO3 Education; https://t.co/E6qwHNXcAh",
-    };
-
 }

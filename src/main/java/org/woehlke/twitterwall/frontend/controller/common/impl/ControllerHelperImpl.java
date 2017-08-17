@@ -3,63 +3,47 @@ package org.woehlke.twitterwall.frontend.controller.common.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
+import org.woehlke.twitterwall.conf.properties.TwitterProperties;
+import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.model.Page;
 
 /**
  * Created by tw on 18.07.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Component
 public class ControllerHelperImpl implements ControllerHelper {
-
-    public void logEnv(){
-        log.info("--------------------------------------------------------------------");
-        log.info("twitter.searchQuery = "+  twitterProperties.getSearchQuery());
-        log.info("twitterwall.frontend.menuAppName = "+ twitterwallFrontendProperties.getMenuAppName());
-        log.info("twitterwall.frontend.infoWebpage = "+ twitterwallFrontendProperties.getInfoWebpage());
-        log.info("twitterwall.frontend.theme = "+ twitterwallFrontendProperties.getTheme());
-        log.info("twitterwall.frontend.contextTest = "+ twitterwallFrontendProperties.getContextTest());
-        log.info("twitterwall.frontend.imprintScreenName = "+ twitterwallFrontendProperties.getImprintScreenName());
-        log.info("twitterwall.frontend.idGoogleAnalytics = "+ twitterwallFrontendProperties.getIdGoogleAnalytics());
-        log.info("--------------------------------------------------------------------");
-    }
 
     private Page setupPage(Page page, String title, String subtitle, String symbol)  {
         page.setTitle(title);
         page.setSubtitle(subtitle);
         page.setSymbol(symbol);
-        page.setMenuAppName(twitterwallFrontendProperties.getMenuAppName());
+        page.setMenuAppName(frontendProperties.getMenuAppName());
         page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
-        page.setInfoWebpage(twitterwallFrontendProperties.getInfoWebpage());
-        page.setTheme(twitterwallFrontendProperties.getTheme());
-        page.setContextTest(twitterwallFrontendProperties.getContextTest());
+        page.setInfoWebpage(frontendProperties.getInfoWebpage());
+        page.setTheme(frontendProperties.getTheme());
+        page.setContextTest(frontendProperties.getContextTest());
         page.setHistoryBack(true);
-        if(!twitterwallFrontendProperties.getIdGoogleAnalytics().isEmpty()){
+        if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
             String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
-            html = html.replace("###GOOGLE_ANALYTICS_ID###", twitterwallFrontendProperties.getIdGoogleAnalytics());
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
             page.setGoogleAnalyticScriptHtml(html);
         } else {
             page.setGoogleAnalyticScriptHtml("");
         }
-        logEnv();
-        log.info("--------------------------------------------------------------------");
-        log.info("setupPage = "+page.toString());
-        log.info("--------------------------------------------------------------------");
+        log.debug("--------------------------------------------------------------------");
+        log.debug("setupPage = "+page.toString());
+        log.debug("--------------------------------------------------------------------");
         return page;
     }
 
     public ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
+        log.debug("page: "+page.toString());
         mav.addObject("page", page);
         return mav;
     }
@@ -67,20 +51,14 @@ public class ControllerHelperImpl implements ControllerHelper {
     public Model setupPage(Model model, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.info("page: "+page.toString());
+        log.debug("page: "+page.toString());
         model.addAttribute("page", page);
         return model;
     }
 
-    @Autowired
-    public ControllerHelperImpl(TwitterwallFrontendProperties twitterwallFrontendProperties, TwitterProperties twitterProperties) {
-        this.twitterwallFrontendProperties = twitterwallFrontendProperties;
-        this.twitterProperties = twitterProperties;
-    }
-
     private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
 
-    private final TwitterwallFrontendProperties twitterwallFrontendProperties;
+    private final FrontendProperties frontendProperties;
 
     private final TwitterProperties twitterProperties;
 
@@ -93,4 +71,14 @@ public class ControllerHelperImpl implements ControllerHelper {
             "        ga('create', '###GOOGLE_ANALYTICS_ID###', 'auto');\n" +
             "        ga('send', 'pageview');\n" +
             "    </script>";
+
+
+    @Autowired
+    public ControllerHelperImpl(
+            FrontendProperties frontendProperties,
+            TwitterProperties twitterProperties
+    ) {
+        this.frontendProperties = frontendProperties;
+        this.twitterProperties = twitterProperties;
+    }
 }

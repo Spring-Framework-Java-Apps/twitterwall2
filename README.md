@@ -3,7 +3,7 @@
 + Twitterwall with [spring:boot]( https://projects.spring.io/spring-boot/ ) for [heroku]( https://heroku.com )
 + More Info: https://phasenraum2010.github.io/twitterwall2/
 
-## Development
+## Development 
 
 ### Repository:
 - Get Source Code: git clone https://github.com/phasenraum2010/twitterwall2.git
@@ -44,6 +44,8 @@
   - export TWITTERWALL_INFO_IMPRINT_SCREEN_NAME=port80guru
   - export TWITTERWALL_GOOGLE_ANALYTICS_ID=TWITTERWALL_GOOGLE_ANALYTICS_ID
   - export TWITTERWALL_SCHEDULER_USER_LIST_NAME=test-typo3-hibernate-java
+  - export TWITTERWALL_LOGIN_USERNAME=admin
+  - export TWITTERWALL_LOGIN_PASSWORD=password
   
 - run with: mvn clean spring-boot:run
 
@@ -114,9 +116,11 @@ If you _really really_ like it and want to support the author, I will be glad to
 
 &copy; 2017 Thomas Wöhlke
 
-Licensed under the GNU General Public License Version 2.0
+Licensed under the Apache License, Version 2.0
 
-http://www.gnu.org/licenses/old-licenses/gpl-2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+
 
 
 

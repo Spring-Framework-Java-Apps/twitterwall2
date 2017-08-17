@@ -13,10 +13,6 @@ public interface TaskHistoryService extends DomainObjectMinimalService<TaskHisto
 
     TaskHistory store(TaskHistory domainObject);
 
-    TaskHistory create(TaskHistory domainObject);
-
-    TaskHistory update(TaskHistory domainObject);
-
     Page<TaskHistory> findByTask(Task oneTask, Pageable pageRequest);
 
     TaskHistory findById(long id);

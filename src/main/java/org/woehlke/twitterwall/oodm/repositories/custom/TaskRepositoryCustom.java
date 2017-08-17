@@ -6,4 +6,7 @@ import org.woehlke.twitterwall.oodm.repositories.common.DomainObjectMinimalRepos
 public interface TaskRepositoryCustom extends DomainObjectMinimalRepository<Task> {
 
     Task findByUniqueId(Task domainObject);
+
+    void deleteAllDomainData();
+
 }

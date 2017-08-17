@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head  th:include="layout :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layout :: tw-header" ></header>
+<main class="page-content">
+    <div class="container">
+        <div th:fragment="tw-user-list">
+            <div>
+                <div>
+                    <div class="col-md-12 tw-col-4-wrapper">
+                        <div class="tw-col-4-box tw-user-list" th:each="user : ${users}">
+                            <div class="thumbnail tw-user"
+                                 th:include="layoutUser :: tw-user-thumbnail"
+                                 th:with="user=${user}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:include="layout :: footer" >
+</footer>
+</body>
+</html>

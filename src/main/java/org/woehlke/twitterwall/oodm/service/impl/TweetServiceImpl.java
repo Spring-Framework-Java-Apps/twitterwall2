@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
 import org.woehlke.twitterwall.oodm.service.TweetService;
@@ -20,7 +21,7 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
  * Created by tw on 10.06.17.
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implements TweetService {
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceImpl.class);
@@ -44,8 +45,53 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     }
 
     @Override
-    public Page<Long> findAllTwitterIds(Pageable pageRequest) {
-        return tweetRepository.findAllTwitterIds(pageRequest);
+    public Page<Object2Entity> findAllTweet2HashTag(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2HashTag(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Media(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Media(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Mention(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Mention(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2Url(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2Url(pageRequest);
+    }
+
+    @Override
+    public Page<Object2Entity> findAllTweet2TickerSymbol(Pageable pageRequest) {
+        return tweetRepository.findAllTweet2TickerSymbol(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getHomeTimeline(Pageable pageRequest) {
+        return tweetRepository.getHomeTimeline(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getUserTimeline(Pageable pageRequest) {
+        return tweetRepository.getUserTimeline(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getMentions(Pageable pageRequest) {
+        return tweetRepository.getMentions(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getFavorites(Pageable pageRequest) {
+        return tweetRepository.getFavorites(pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> getRetweetsOfMe(Pageable pageRequest) {
+        return tweetRepository.getRetweetsOfMe(pageRequest);
     }
 
     @Override
@@ -53,4 +99,8 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
         return tweetRepository.findByIdTwitter(idTwitter);
     }
 
+    @Override
+    public Tweet findByUniqueId(Tweet domainExampleObject) {
+        return tweetRepository.findByUniqueId(domainExampleObject);
+    }
 }

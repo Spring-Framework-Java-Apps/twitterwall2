@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.Url;
@@ -17,8 +15,7 @@ import java.util.*;
 /**
  * Created by tw on 28.06.17.
  */
-@Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Component
 public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransformService {
 
     @Override
@@ -32,7 +29,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
 
     @Override
     public Set<Url> getUrlsFor(TwitterProfile userSource,Task task) {
-        Set<Url> urlsTarget = new LinkedHashSet<Url>();
+        Set<Url> urlsTarget = new LinkedHashSet<>();
         Map<String, Object> extraData = userSource.getExtraData();
         if(extraData.containsKey("status")){
             Object o = extraData.get("status");

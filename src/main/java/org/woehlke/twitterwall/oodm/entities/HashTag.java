@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import org.woehlke.twitterwall.oodm.entities.common.DomainObjectEntity;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
     )
 })
 @EntityListeners(HashTagListener.class)
-public class HashTag extends AbstractDomainObject<HashTag> implements DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
+public class HashTag extends AbstractDomainObject<HashTag> implements DomainObjectEntity<HashTag>, DomainObject<HashTag>,DomainObjectWithTask<HashTag> {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,6 +64,22 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
         return m.matches();
     }
 
+    @Transient
+    @Override
+    public boolean isValid() {
+        if((text == null)||(text.isEmpty())){
+            return false;
+        } else {
+            return this.hasValidText();
+        }
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return text;
+    }
+
     public Long getId() {
         return id;
     }
@@ -70,12 +87,6 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
     public void setId(Long id) {
         this.id = id;
     }
-
-    @Override
-    public String getUniqueId() {
-        return text;
-    }
-
 
     public String getText() {
         return this.text;
@@ -96,14 +107,6 @@ public class HashTag extends AbstractDomainObject<HashTag> implements DomainObje
                 ", text='" + text + '\'' +
                     super.toString() +
                 " }\n";
-    }
-
-    @Override
-    public boolean isValid() {
-        if((text == null)||(text.isEmpty())){
-            return false;
-        }
-        return true;
     }
 
     @Override

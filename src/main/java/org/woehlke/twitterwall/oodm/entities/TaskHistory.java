@@ -2,10 +2,12 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
+import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -66,21 +68,74 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     @JoinColumn(name="task_id")
     private Task task;
 
-    private TaskHistory() {
+    //@NotNull
+    @Valid
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "countUser", column = @Column(name = "count_user",nullable=false)),
+        @AttributeOverride(name = "countTweets", column = @Column(name = "count_tweets",nullable=false)),
+        @AttributeOverride(name = "countUserLists", column = @Column(name = "count_userlists",nullable=false)),
+        @AttributeOverride(name = "countHashTags", column = @Column(name = "count_hashtags",nullable=false)),
+        @AttributeOverride(name = "countMedia", column = @Column(name = "count_media",nullable=false)),
+        @AttributeOverride(name = "countMention", column = @Column(name = "count_mention",nullable=false)),
+        @AttributeOverride(name = "countTickerSymbol", column = @Column(name = "count_tickersymbol",nullable=false)),
+        @AttributeOverride(name = "countUrl", column = @Column(name = "count_url",nullable=false)),
+        @AttributeOverride(name = "countTask", column = @Column(name = "count_task",nullable=false)),
+        @AttributeOverride(name = "countTaskHistory", column = @Column(name = "count_task_history",nullable=false)),
+        @AttributeOverride(name = "tweet2hashtag", column = @Column(name = "count_tweet2hashtag",nullable=false)),
+        @AttributeOverride(name = "tweet2media", column = @Column(name = "count_tweet2media",nullable=false)),
+        @AttributeOverride(name = "tweet2mention", column = @Column(name = "count_tweet2mention",nullable=false)),
+        @AttributeOverride(name = "tweet2tickersymbol", column = @Column(name = "count_tweet2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "tweet2url", column = @Column(name = "count_tweet2url",nullable=false)),
+        @AttributeOverride(name = "userprofile2hashtag", column = @Column(name = "count_userprofile2hashtag",nullable=false)),
+        @AttributeOverride(name = "userprofile2media", column = @Column(name = "count_userprofile2media",nullable=false)),
+        @AttributeOverride(name = "userprofile2mention", column = @Column(name = "count_userprofile2mention",nullable=false)),
+        @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "count_userprofile2tickersymbol",nullable=false)),
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "count_userprofile2url",nullable=false))
+    })
+    private CountedEntities countedEntities = new CountedEntities();
+
+    protected TaskHistory() {
     }
 
-    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow) {
-        this.description = description;
-        this.taskStatusBefore = taskStatusBefore;
-        this.taskStatusNow = taskStatusNow;
-    }
-
-    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task) {
+    public TaskHistory(String description, TaskStatus taskStatusBefore, TaskStatus taskStatusNow, Date timeEvent, Task task, CountedEntities countedEntities) {
+        this.countedEntities = countedEntities;
         this.description = description;
         this.taskStatusBefore = taskStatusBefore;
         this.taskStatusNow = taskStatusNow;
         this.timeEvent = timeEvent;
         this.task = task;
+        this.idTask = task.getId();
+    }
+
+    @Transient
+    @Override
+    public String getUniqueId() {
+        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
+    }
+
+    @Transient
+    @Override
+    public boolean isValid() {
+        if(this.task == null){
+            return false;
+        }
+        if(this.task.getId() == null){
+            return false;
+        }
+        if(idTask == null){
+            return false;
+        }
+        if(idTask == 0L){
+            return false;
+        }
+        if(timeEvent == null){
+            return false;
+        }
+        if(timeEvent.after(new Date())){
+            return false;
+        }
+        return true;
     }
 
     public Long getId() {
@@ -89,11 +144,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return "" + task.getId().toString()  +"_"+  timeEvent.getTime() ;
     }
 
     public String getDescription() {
@@ -144,6 +194,14 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         this.idTask = idTask;
     }
 
+    public CountedEntities getCountedEntities() {
+        return countedEntities;
+    }
+
+    public void setCountedEntities(CountedEntities countedEntities) {
+        this.countedEntities = countedEntities;
+    }
+
     @Override
     public int compareTo(TaskHistory other) {
         return getUniqueId().compareTo(other.getUniqueId());
@@ -159,26 +217,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
             ", timeEvent=" + timeEvent +
             ", task.id=" + idTask +
             '}';
-    }
-
-    @Override
-    public boolean isValid() {
-        if(taskStatusBefore == null){
-            return false;
-        }
-        if(taskStatusNow == null){
-            return false;
-        }
-        if(timeEvent == null){
-            return false;
-        }
-        if((description == null)||(description.isEmpty())){
-            return false;
-        }
-        if(idTask == null){
-            return false;
-        }
-        return true;
     }
 
     @Override

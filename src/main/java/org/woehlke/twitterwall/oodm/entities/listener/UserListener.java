@@ -15,36 +15,43 @@ public class UserListener {
 
   @PrePersist
   public void onPrePersist(User domainObject) {
-    log.debug("try to Persist: "+domainObject.toString());
+    log.debug("try to Persist: "+domainObject.getUniqueId());
+    log.trace("try to Persist: "+domainObject.toString());
   }
 
   @PreUpdate
   public void onPreUpdate(User domainObject) {
-    log.debug("try to Update: "+domainObject.toString());
+    log.debug("try to Update: "+domainObject.getUniqueId());
+    log.trace("try to Update: "+domainObject.toString());
   }
 
   @PreRemove
   public void onPreRemove(User domainObject) {
-    log.debug("try to Remove: "+domainObject.toString());
+    log.debug("try to Remove: "+domainObject.getUniqueId());
+    log.trace("try to Remove: "+domainObject.toString());
   }
 
   @PostPersist
   public void onPostPersist(User domainObject) {
-    log.debug("Persisted: "+domainObject.toString());
+    log.debug("Persisted: "+domainObject.getUniqueId());
+    log.trace("Persisted: "+domainObject.toString());
   }
 
   @PostUpdate
   public void onPostUpdate(User domainObject) {
-    log.debug("Updated: "+domainObject.toString());
+    log.debug("Updated: "+domainObject.getUniqueId());
+    log.trace("Updated: "+domainObject.toString());
   }
 
   @PostRemove
   public void onPostRemove(User domainObject) {
-    log.debug("Removed: "+domainObject.toString());
+    log.debug("Removed: "+domainObject.getUniqueId());
+    log.trace("Removed: "+domainObject.toString());
   }
 
   @PostLoad
   public void onPostLoad(User domainObject) {
-    log.debug("loaded: "+domainObject.toString());
+    log.debug("loaded: "+domainObject.getUniqueId());
+    log.trace("loaded: "+domainObject.toString());
   }
 }

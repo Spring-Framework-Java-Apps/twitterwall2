@@ -4,11 +4,10 @@ package org.woehlke.twitterwall;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.woehlke.twitterwall.conf.TwitterProperties;
-import org.woehlke.twitterwall.conf.TwitterwallBackendProperties;
-import org.woehlke.twitterwall.conf.TwitterwallFrontendProperties;
-import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
+import org.woehlke.twitterwall.conf.properties.*;
 
 
 /**
@@ -17,11 +16,14 @@ import org.woehlke.twitterwall.conf.TwitterwallSchedulerProperties;
 @EnableScheduling
 @SpringBootApplication
 @EnableConfigurationProperties({
-    TwitterwallBackendProperties.class,
-    TwitterwallFrontendProperties.class,
-    TwitterwallSchedulerProperties.class,
-    TwitterProperties.class
+    BackendProperties.class,
+    FrontendProperties.class,
+    SchedulerProperties.class,
+    TwitterProperties.class,
+    TestdataProperties.class
 })
+@EnableSpringDataWebSupport
+@ImportResource("classpath:integration.xml")
 public class Application {
 
     public static void main(String[] args) {

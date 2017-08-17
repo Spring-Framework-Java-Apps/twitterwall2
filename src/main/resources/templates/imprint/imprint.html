@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" >
+</header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <span>Dieses ist ein privates und nicht kommerzielles Angebot von:</span>
+                </p>
+                <div class="tw-col-3-wrapper">
+                    <div class="tw-col-3-box-center">
+                        <div class="thumbnail tw-user"
+                             th:include="layoutUser :: tw-user-thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+
+</footer>
+</body>
+</html>
