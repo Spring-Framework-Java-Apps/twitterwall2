@@ -80,6 +80,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                     loopAll++;
                     log.debug(msg+ "### userService.getAllTwitterIds: ("+loopId+")  "+user.getIdTwitter());
                     worklistProfileTwitterIds.add(user.getIdTwitter());
+                    user = userService.store(user,task);
                 }
             }
             hasNext = userProfileTwitterIds.hasNext();

@@ -38,4 +38,8 @@ public interface AsyncStartTask {
     Task getLists();
 
     Task createImprintUserAsync();
+
+    Task fetchUserlistOwners();
+
+    Task startGarbageCollection();
 }

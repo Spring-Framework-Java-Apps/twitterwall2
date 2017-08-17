@@ -122,6 +122,17 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         return send(taskType);
     }
 
+    @Override
+    public Task fetchUserlistOwners() {
+        TaskType taskType = TaskType.FETCH_USERLIST_OWNERS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task startGarbageCollection() {
+        return null;
+    }
+
     private Task send(TaskType taskType){
         SendType sendType = SendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+sendType;

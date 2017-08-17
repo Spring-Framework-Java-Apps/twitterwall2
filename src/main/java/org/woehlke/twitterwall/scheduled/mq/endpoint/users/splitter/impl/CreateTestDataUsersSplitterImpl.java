@@ -64,6 +64,7 @@ public class CreateTestDataUsersSplitterImpl implements CreateTestDataUsersSplit
                 fetchFromTwitterApi=true;
             } else {
                 fetchFromTwitterApi=!userPers.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS);
+                userPers = userService.store(userPers,task);
             }
             Message<UserMessage> outgoingMessage;
             if(fetchFromTwitterApi){

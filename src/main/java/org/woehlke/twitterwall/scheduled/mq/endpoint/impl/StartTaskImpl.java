@@ -123,6 +123,17 @@ public class StartTaskImpl implements StartTask {
         return sendAndReceiveUser(taskType);
     }
 
+    @Override
+    public Task fetchUserlistOwners() {
+        TaskType taskType = TaskType.FETCH_USERLIST_OWNERS;
+        return sendAndReceiveUser(taskType);
+    }
+
+    @Override
+    public Task startGarbageCollection() {
+        return null;
+    }
+
     private Task sendAndReceiveUserList(TaskType taskType){
         SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+sendType;

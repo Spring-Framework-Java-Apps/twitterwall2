@@ -24,6 +24,9 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by tw on 11.07.17.
@@ -259,9 +262,13 @@ public class TaskController {
         String subtitle = "/start/userlists";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getLists();
-        model.addAttribute("task",task);
-        return PATH+"/start/taskStarted";
+        List<Task> listOfTasks = new ArrayList<>();
+        Task task1 = mqAsyncStartTask.getLists();
+        listOfTasks.add(task1);
+        Task task2 = mqAsyncStartTask.fetchUserlistOwners();
+        listOfTasks.add(task2);
+        model.addAttribute("listOfTasks",listOfTasks);
+        return PATH+"/start/tasksStarted";
     }
 
 

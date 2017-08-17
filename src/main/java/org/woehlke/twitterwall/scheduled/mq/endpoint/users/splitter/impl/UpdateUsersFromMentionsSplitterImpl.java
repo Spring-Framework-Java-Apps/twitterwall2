@@ -85,6 +85,7 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                         log.debug("### mentionService.getAll from DB (" + lfdNr + "): " + screenName);
                         screenNames.add(screenName);
                     } else {
+                        foundUser = userService.store(foundUser,task);
                         onePersMention.setIdTwitterOfUser(foundUser.getIdTwitter());
                         onePersMention = mentionService.update(onePersMention,task);
                         log.debug("### updated Mention with screenName = " + onePersMention.getUniqueId());

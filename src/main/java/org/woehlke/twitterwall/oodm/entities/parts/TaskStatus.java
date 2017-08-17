@@ -11,5 +11,6 @@ public enum TaskStatus {
     ERROR,
     FINAL_ERROR,
     WARN,
+    STOPPED_BY_TIMEOUT,
     NULL
 }

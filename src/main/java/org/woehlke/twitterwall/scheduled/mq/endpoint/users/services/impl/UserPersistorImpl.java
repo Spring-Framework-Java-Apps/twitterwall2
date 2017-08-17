@@ -42,7 +42,7 @@ public class UserPersistorImpl implements UserPersistor {
             UserMessage mqMessageOut = new UserMessage(
                     receivedMessage.getTaskMessage(),
                     receivedMessage.getTwitterProfile(),
-                    user
+                    userPers
             );
             return MessageBuilder.withPayload(mqMessageOut)
                     .copyHeaders(incomingUserMessage.getHeaders())

@@ -134,6 +134,12 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="fetchUserlistOwnersChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
 
     <int:router id="startTaskRouter" input-channel="startTaskChannel" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="updateTweetsChannel"/>
@@ -153,8 +159,32 @@
         <int:mapping value="FETCH_FAVORITES" channel="getFavoritesChannel"/>
         <int:mapping value="FETCH_RETWEETS_OF_ME" channel="getRetweetsOfMeChannel"/>
         <int:mapping value="FETCH_LISTS" channel="getListsChannel"/>
+        <int:mapping value="FETCH_USERLIST_OWNERS" channel="fetchUserlistOwnersChannel"/>
     </int:router>
 
+
+    <int:chain id="fetchUserlistOwnersChain" input-channel="fetchUserlistOwnersChannel">
+        <int:splitter
+                id="fetchUserlistOwnersSplitter"
+                ref="mqFetchUserlistOwnersSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="fetchUserlistOwnersTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchUserlistOwnersPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchUserlistOwnersAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchUserlistOwnersFinisher"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
 
     <int:chain id="getHomeTimelineChain" input-channel="getHomeTimelineChannel">
         <int:splitter
@@ -573,6 +603,7 @@
         <int:mapping value="FETCH_FAVORITES" channel="getFavoritesFireAndForgetChannel"/>
         <int:mapping value="FETCH_RETWEETS_OF_ME" channel="getRetweetsOfMeFireAndForgetChannel"/>
         <int:mapping value="FETCH_LISTS" channel="getListsFireAndForgetChannel"/>
+        <int:mapping value="FETCH_USERLIST_OWNERS" channel="fetchUserlistOwnersFireAndForgetChannel"/>
     </int:router>
 
 
@@ -673,6 +704,38 @@
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
+
+    <int:channel id="fetchUserlistOwnersFireAndForgetChannel" datatype="org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="fetchUserlistOwnersFireAndForgetChain" input-channel="fetchUserlistOwnersFireAndForgetChannel">
+        <int:splitter
+                id="fetchUserlistOwnersFireAndForgetSplitter"
+                ref="mqFetchUserlistOwnersSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="fetchUserlistOwnersFireAndForgetTransformator"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="fetchUserlistOwnersFireAndForgetPersistor"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="fetchUserlistOwnersFireAndForgetAggregator"
+                message-store="store"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="fetchUserlistOwnersFireAndForgetFinisher"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+
 
     <int:chain id="createImprintUserFireAndForgetChain" input-channel="createImprintUserFireAndForgetChannel">
         <int:service-activator

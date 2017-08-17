@@ -93,6 +93,8 @@ public class ScheduledTasks {
         if((schedulerProperties.getAllowGetLists())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = asyncStartTask.getLists();
             log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            task = asyncStartTask.fetchUserlistOwners();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
