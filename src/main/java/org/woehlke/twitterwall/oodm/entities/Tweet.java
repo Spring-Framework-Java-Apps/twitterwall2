@@ -1,6 +1,8 @@
 package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
@@ -73,6 +75,22 @@ import static javax.persistence.FetchType.EAGER;
     @NamedQuery(
         name="Tweet.getRetweetsOfMe",
         query="select t from Tweet t where t.taskInfo.getRetweetsOfMe=true"
+    ),
+    @NamedQuery(
+        name="Tweet.findTweetsForMedia",
+        query="select t from Tweet t join t.entities.media media where media=:media"
+    ),
+    @NamedQuery(
+        name="Tweet.findTweetsForMention",
+        query="select t from Tweet t join t.entities.mentions mention where mention=:mention"
+    ),
+    @NamedQuery(
+        name="Tweet.findTweetsForUrl",
+        query="select t from Tweet t join t.entities.urls url where url=:url"
+    ),
+    @NamedQuery(
+        name="Tweet.findTweetsForTickerSymbol",
+        query="select t from Tweet t join t.entities.tickerSymbols tickerSymbol where tickerSymbol=:tickerSymbol"
     )
 })
 @NamedNativeQueries({

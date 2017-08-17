@@ -20,6 +20,8 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * Created by tw on 12.06.17.
  */
@@ -52,20 +54,24 @@ public class UserController {
         @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") User user, Model model
     ) {
-        Pageable pageRequest = new PageRequest(
-            page,
-            frontendProperties.getPageSize(),
-            Sort.Direction.DESC,
-            "createdAt"
-        );
-        Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
-        String symbol = Symbols.PROFILE.toString();
-        String title = "@" + user.getScreenName();
-        String subtitle = user.getName();
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        model.addAttribute("user", user);
-        model.addAttribute("latestTweets",latestTweets);
-        return "user/id";
+        if(user == null){
+            throw new EntityNotFoundException();
+        } else {
+            Pageable pageRequest = new PageRequest(
+                    page,
+                    frontendProperties.getPageSize(),
+                    Sort.Direction.DESC,
+                    "createdAt"
+            );
+            Page<Tweet> latestTweets = tweetService.findTweetsForUser(user,pageRequest);
+            String symbol = Symbols.USER_PROFILE.toString();
+            String title = "@" + user.getScreenName();
+            String subtitle = user.getName();
+            model = controllerHelper.setupPage(model, title, subtitle, symbol);
+            model.addAttribute("user", user);
+            model.addAttribute("latestTweets",latestTweets);
+            return "user/id";
+        }
     }
 
     @RequestMapping("/screenName/{screenName}")
@@ -76,13 +82,13 @@ public class UserController {
         if (User.isValidScreenName(screenName)) {
             User user = userService.findByScreenName(screenName);
             if(user==null){
-                String symbol = Symbols.PROFILE.toString();
+                String symbol = Symbols.USER_PROFILE.toString();
                 String title = "404";
                 String subtitle = "404: no user found for  @"+screenName;
                 model = controllerHelper.setupPage(model, title, subtitle, symbol);
                 return "user/id";
             } else {
-                String symbol = Symbols.PROFILE.toString();
+                String symbol = Symbols.USER_PROFILE.toString();
                 String title = "@" + user.getScreenName();
                 String subtitle = user.getName();
                 model = controllerHelper.setupPage(model, title, subtitle, symbol);
@@ -99,7 +105,7 @@ public class UserController {
                 return "user/id";
             }
         } else {
-            String symbol = Symbols.PROFILE.toString();
+            String symbol = Symbols.USER_PROFILE.toString();
             String title = "400";
             String subtitle = "400: screenName not valid: for  /user/screenName/"+screenName;
             model = controllerHelper.setupPage(model, title, subtitle, symbol);
@@ -120,7 +126,7 @@ public class UserController {
         );
         Page<User> tweetingUsers = userService.getTweetingUsers(pageRequest);
         model.addAttribute("users", tweetingUsers);
-        String symbol = Symbols.USER_TWEETS.toString();
+        String symbol = Symbols.USER_TWEETING.toString();
         String subtitle = "With one or more Tweets";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
         return "user/list/allWithTweets";

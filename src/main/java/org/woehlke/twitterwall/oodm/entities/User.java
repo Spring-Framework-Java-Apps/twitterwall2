@@ -90,6 +90,22 @@ import java.util.regex.Pattern;
     @NamedQuery(
         name="User.findUsersWhoAreFollowersButNotFriends",
         query="select t from User as t where t.taskInfo.fetchFollower=true and t.taskInfo.fetchFriends=false"
+    ),
+    @NamedQuery(
+        name="User.getUsersForMedia",
+        query="select t from User t join t.entities.media media where media=:media"
+    ),
+    @NamedQuery(
+        name="User.getUsersForMention",
+        query="select t from User t join t.entities.mentions mention where mention=:mention"
+    ),
+    @NamedQuery(
+        name="User.getUsersForUrl",
+        query="select t from User t join t.entities.urls url where url=:url"
+    ),
+    @NamedQuery(
+        name="User.getUsersForTickerSymbol",
+        query="select t from User t join t.entities.tickerSymbols tickerSymbol where tickerSymbol=:tickerSymbol"
     )
 })
 @NamedNativeQueries({

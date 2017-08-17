@@ -55,7 +55,7 @@ public class UserListController {
             Sort.Direction.DESC,
             "createdAt"
         );
-        String symbol = Symbols.PROFILE.toString();
+        String symbol = Symbols.USER_PROFILE.toString();
         String title = userList.getFullName();
         String subtitle = userList.getDescription();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);

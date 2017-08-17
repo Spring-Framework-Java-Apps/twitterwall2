@@ -24,6 +24,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,16 +60,20 @@ public class TaskController {
     public String getTaskById(
         @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") Task task, Model model) {
-        String msg = "/task/ "+task.getId();
-        String title = "Task "+task.getUniqueId();
-        String subtitle = "List of TasksHistory for Task";
-        String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
-        Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
-        Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
-        model.addAttribute("task",task);
-        model.addAttribute("taskHistoryList",taskHistoryList);
-        return PATH+"/id";
+        if(task == null){
+            throw new EntityNotFoundException();
+        } else {
+            String msg = "/task/ "+task.getId();
+            String title = "Task "+task.getUniqueId();
+            String subtitle = "List of TasksHistory for Task";
+            String symbol = Symbols.TASK.toString();
+            model = controllerHelper.setupPage(model,title,subtitle,symbol);
+            Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
+            Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
+            model.addAttribute("task",task);
+            model.addAttribute("taskHistoryList",taskHistoryList);
+            return PATH+"/id";
+        }
     }
 
     @RequestMapping("/start/createTestData")

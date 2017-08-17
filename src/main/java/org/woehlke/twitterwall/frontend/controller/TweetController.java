@@ -19,6 +19,8 @@ import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
+import javax.persistence.EntityNotFoundException;
+
 
 /**
  * Created by tw on 10.06.17.
@@ -55,15 +57,19 @@ public class TweetController {
     public String getTweetById(
         @PathVariable("id") Tweet tweet, Model model
     ) {
-        String title = "Tweet";
-        model = controllerHelper.setupPage(
-            model,
-            title,
-            twitterProperties.getSearchQuery(),
-            Symbols.HOME.toString()
-        );
-        model.addAttribute("tweet", tweet);
-        return "tweet/id";
+        if(tweet == null){
+            throw new EntityNotFoundException();
+        } else {
+            String title = "Tweet";
+            model = controllerHelper.setupPage(
+                    model,
+                    title,
+                    twitterProperties.getSearchQuery(),
+                    Symbols.HOME.toString()
+            );
+            model.addAttribute("tweet", tweet);
+            return "tweet/id";
+        }
     }
 
     @RequestMapping("/timeline/home")
@@ -76,7 +82,7 @@ public class TweetController {
             model,
             title,
             "Home Timneline",
-            Symbols.HOME_TIMELINE_TWEETS.toString()
+            Symbols.TWEETS_HOME_TIMELINE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -100,7 +106,7 @@ public class TweetController {
             model,
             title,
             "User Timeline",
-            Symbols.USER_TIMELINE_TWEETS.toString()
+            Symbols.TWEETS_USER_TIMELINE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -124,7 +130,7 @@ public class TweetController {
             model,
             title,
             "Mentions",
-            Symbols.MENTIONS_TWEETS.toString()
+            Symbols.TWEETS_MENTIONS.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -148,7 +154,7 @@ public class TweetController {
             model,
             title,
             "Favorites",
-            Symbols.FAVORITES_TWEETS.toString()
+            Symbols.TWEETS_FAVORITES.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -172,7 +178,7 @@ public class TweetController {
             model,
             title,
             "Retweets Of Me",
-            Symbols.RETWEETS_OF_ME_FAVORITES_TWEETS.toString()
+            Symbols.TWEETS_RETWEETS_OF_ME.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(

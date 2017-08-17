@@ -101,8 +101,8 @@ public class HashTagControllerTest {
     @Commit
     @WithAnonymousUser
     @Test
-    public void findByIdTest() throws Exception {
-        String msg ="findByIdTest: ";
+    public void findHashTagById() throws Exception {
+        String msg ="findHashTagById: ";
         HashTag hashTag = findOneHashTag();
         long id  = hashTag.getId();
         MvcResult result = this.mockMvc.perform(get("/hashtag/"+id))

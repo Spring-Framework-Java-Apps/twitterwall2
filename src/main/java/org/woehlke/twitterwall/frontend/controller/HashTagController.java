@@ -27,6 +27,7 @@ import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,30 +62,34 @@ public class HashTagController {
     }
 
     @RequestMapping(path="/{id}")
-    public String findById(
+    public String findHashTagById(
             @PathVariable("id") HashTag hashTag,
             @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
             @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
             Model model
     ) {
-        String msg = "/hashtag/" + hashTag.getId()+ " ";
-        String msg2 = msg + " parameter IS valid - START ";
-        log.debug(msg2);
-        Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
-        Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
-        String subtitle = "Tweets und User für HashTag";
-        String title = hashTag.getText();
-        String symbol = Symbols.HASHTAG.toString();
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        model.addAttribute("hashTag",hashTag);
-        log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
-        Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
-        model.addAttribute("latestTweets", tweets);
-        log.debug(msg+" try to: userService.getUsersForHashTag: ");
-        Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
-        model.addAttribute("users", users);
-        log.debug(msg + " READY - DONE");
-        return "hashtag/id";
+        if(hashTag == null){
+            throw new EntityNotFoundException();
+        } else {
+            String msg = "/hashtag/" + hashTag.getId()+ " ";
+            String msg2 = msg + " parameter IS valid - START ";
+            log.debug(msg2);
+            Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
+            String subtitle = "Tweets und User für HashTag";
+            String title = hashTag.getText();
+            String symbol = Symbols.HASHTAG.toString();
+            model = controllerHelper.setupPage(model, title, subtitle, symbol);
+            model.addAttribute("hashTag",hashTag);
+            log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
+            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
+            model.addAttribute("latestTweets", tweets);
+            log.debug(msg+" try to: userService.getUsersForHashTag: ");
+            Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
+            model.addAttribute("users", users);
+            log.debug(msg + " READY - DONE");
+            return "hashtag/id";
+        }
     }
 
     @RequestMapping(path="/text/{text}")
@@ -159,8 +164,6 @@ public class HashTagController {
 
     private final ControllerHelper controllerHelper;
 
-    //private final HashTagsOverviewHelper hashTagsOverviewHelper;
-
     @Autowired
     public HashTagController(
             FrontendProperties frontendProperties,
@@ -168,8 +171,7 @@ public class HashTagController {
             HashTagService hashTagService,
             TweetService tweetService,
             UserService userService,
-            ControllerHelper controllerHelper/*,
-            HashTagsOverviewHelper hashTagsOverviewHelper*/
+            ControllerHelper controllerHelper
     ) {
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
@@ -177,7 +179,6 @@ public class HashTagController {
         this.tweetService = tweetService;
         this.userService = userService;
         this.controllerHelper = controllerHelper;
-        //this.hashTagsOverviewHelper = hashTagsOverviewHelper;
     }
 
 }

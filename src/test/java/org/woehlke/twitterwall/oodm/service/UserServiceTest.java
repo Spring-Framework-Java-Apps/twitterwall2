@@ -152,6 +152,78 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
 
     @Commit
     @Test
+    public void getUsersForMedia() throws Exception {
+        String msg = "getUsersForMedia: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Media> mediaPage = mediaService.getAll(pageRequest);
+        for(Media media:mediaPage.getContent()){
+            log.debug(msg+" found Media: "+media.getUniqueId());
+            Page<User> users = userService.getUsersForMedia(media,pageRequest);
+            for(User user: users.getContent()){
+                log.debug(msg+" found Media: "+user.getUniqueId());
+                Assert.assertTrue(user.getEntities().getMedia().contains(media));
+            }
+        }
+    }
+
+    @Commit
+    @Test
+    public void getUsersForMention() throws Exception {
+        String msg = "getUsersForMention: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Mention> mentionPage = mentionService.getAll(pageRequest);
+        for(Mention mention:mentionPage.getContent()){
+            log.debug(msg+" found Mention: "+mention.getUniqueId());
+            Page<User> users = userService.getUsersForMention(mention,pageRequest);
+            for(User user: users.getContent()){
+                log.debug(msg+" found Mention: "+user.getUniqueId());
+                Assert.assertTrue(user.getEntities().getMentions().contains(mention));
+            }
+        }
+    }
+
+    @Commit
+    @Test
+    public void getUsersForUrl() throws Exception {
+        String msg = "getUsersForUrl: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Url> urlPage = urlService.getAll(pageRequest);
+        for(Url url:urlPage.getContent()){
+            log.debug(msg+" found Url: "+url.getUniqueId());
+            Page<User> users = userService.getUsersForUrl(url,pageRequest);
+            for(User user: users.getContent()){
+                log.debug(msg+" found User: "+user.getUniqueId());
+                Assert.assertTrue(user.getEntities().getUrls().contains(url));
+            }
+        }
+    }
+
+    @Commit
+    @Test
+    public void getUsersForTickerSymbol() throws Exception {
+        String msg = "getUsersForTickerSymbol: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<TickerSymbol> tickerSymbolPage = tickerSymbolService.getAll(pageRequest);
+        for(TickerSymbol tickerSymbol:tickerSymbolPage.getContent()){
+            log.debug(msg+" found TickerSymbol: "+tickerSymbol.getUniqueId());
+            Page<User> users = userService.getUsersForTickerSymbol(tickerSymbol,pageRequest);
+            for(User user: users.getContent()){
+                log.debug(msg+" found User: "+user.getUniqueId());
+                Assert.assertTrue(user.getEntities().getTickerSymbols().contains(tickerSymbol));
+            }
+        }
+    }
+
+    @Commit
+    @Test
     public void getFriends() throws Exception {
         String msg = "getFriends: ";
         int page=1;

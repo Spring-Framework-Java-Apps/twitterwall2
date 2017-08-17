@@ -1,5 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,13 +9,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.MentionService;
+import org.woehlke.twitterwall.oodm.service.TweetService;
+import org.woehlke.twitterwall.oodm.service.UserService;
+
+import javax.persistence.EntityNotFoundException;
+
+import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 16.07.17.
@@ -41,9 +52,42 @@ public class MentionController {
         return "mention/all";
     }
 
+    @RequestMapping(path="/{id}")
+    public String getMentionById(
+            @PathVariable("id") Mention mention,
+            @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
+            @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
+            Model model) {
+        if(mention == null){
+            throw new EntityNotFoundException();
+        } else {
+            String msg = "/mention/ "+mention.getId();
+            String title = "Mention "+mention.getUniqueId();
+            String subtitle = "List of User and Tweets for one Mention";
+            String symbol = Symbols.MENTION.toString();
+            model = controllerHelper.setupPage(model,title,subtitle,symbol);
+            Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
+            log.debug(msg+" try to: tweetService.findTweetsForMedia: ");
+            Page<Tweet> tweets = tweetService.findTweetsForMention(mention,pageRequestTweet);
+            model.addAttribute("latestTweets", tweets);
+            log.debug(msg+" try to: userService.getUsersForMedia: ");
+            Page<User> users = userService.getUsersForMention(mention,pageRequestUser);
+            model.addAttribute("users", users);
+            model.addAttribute("mention", mention);
+            return "media/id";
+        }
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(MentionController.class);
+
     private final FrontendProperties frontendProperties;
 
     private final MentionService mentionService;
+
+    private final UserService userService;
+
+    private final TweetService tweetService;
 
     private final ControllerHelper controllerHelper;
 
@@ -51,9 +95,11 @@ public class MentionController {
     public MentionController(
             FrontendProperties frontendProperties,
             MentionService mentionService,
-            ControllerHelper controllerHelper) {
+            UserService userService, TweetService tweetService, ControllerHelper controllerHelper) {
         this.frontendProperties = frontendProperties;
         this.mentionService = mentionService;
+        this.userService = userService;
+        this.tweetService = tweetService;
         this.controllerHelper = controllerHelper;
     }
 

@@ -8,9 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.TweetRepository;
@@ -37,6 +35,26 @@ public class TweetServiceImpl extends DomainServiceWithTaskImpl<Tweet> implement
     @Override
     public Page<Tweet> findTweetsForHashTag(HashTag hashtag, Pageable pageRequest) {
         return tweetRepository.findByHashTag(hashtag.getText(),pageRequest);
+    }
+
+    @Override
+    public Page<Tweet> findTweetsForMedia(Media media, Pageable pageRequestTweet) {
+        return tweetRepository.findTweetsForMedia(media,pageRequestTweet);
+    }
+
+    @Override
+    public Page<Tweet> findTweetsForMention(Mention mention, Pageable pageRequestTweet) {
+        return tweetRepository.findTweetsForMention(mention,pageRequestTweet);
+    }
+
+    @Override
+    public Page<Tweet> findTweetsForUrl(Url url, Pageable pageRequestTweet) {
+        return tweetRepository.findTweetsForUrl(url, pageRequestTweet);
+    }
+
+    @Override
+    public Page<Tweet> findTweetsForTickerSymbol(TickerSymbol tickerSymbol, Pageable pageRequestTweet) {
+        return tweetRepository.findTweetsForTickerSymbol(tickerSymbol,pageRequestTweet);
     }
 
     @Override

@@ -119,6 +119,82 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
 
     @Commit
     @Test
+    public void findTweetsForMedia() throws Exception {
+        String msg = "findTweetsForMedia: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Media> mediaList = mediaService.getAll(pageRequest);
+        for(Media media:mediaList.getContent()){
+            log.debug(msg+" found Media: "+media.getUniqueId());
+            Page<Tweet> tweets = tweetService.findTweetsForMedia(media,pageRequest);
+            for(Tweet tweet: tweets.getContent()){
+                Assert.assertTrue(tweet.getEntities().getMedia().contains(media));
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Media: "+media.getUniqueId());
+            }
+        }
+        log.info(msg);
+    }
+
+    @Commit
+    @Test
+    public void findTweetsForMention() throws Exception {
+        String msg = "findTweetsForMention: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Mention> mentionList = mentionService.getAll(pageRequest);
+        for(Mention mention:mentionList.getContent()){
+            log.debug(msg+" found Mention: "+mention.getUniqueId());
+            Page<Tweet> tweets = tweetService.findTweetsForMention(mention,pageRequest);
+            for(Tweet tweet: tweets.getContent()){
+                Assert.assertTrue(tweet.getEntities().getMentions().contains(mention));
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Mention: "+mention.getUniqueId());
+            }
+        }
+        log.info(msg);
+    }
+
+    @Commit
+    @Test
+    public void findTweetsForUrl() throws Exception {
+        String msg = "findTweetsForUrl: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<Url> urlPage = urlService.getAll(pageRequest);
+        for(Url url:urlPage.getContent()){
+            log.debug(msg+" found Url: "+url.getUniqueId());
+            Page<Tweet> tweets = tweetService.findTweetsForUrl(url,pageRequest);
+            for(Tweet tweet: tweets.getContent()){
+                Assert.assertTrue(tweet.getEntities().getUrls().contains(url));
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Url: "+url.getUniqueId());
+            }
+        }
+        log.info(msg);
+    }
+
+    @Commit
+    @Test
+    public void findTweetsForTickerSymbol() throws Exception {
+        String msg = "findTweetsForTickerSymbol: ";
+        int page=1;
+        int size=10;
+        Pageable pageRequest = new PageRequest(page,size);
+        Page<TickerSymbol> tickerSymbolPage = tickerSymbolService.getAll(pageRequest);
+        for(TickerSymbol tickerSymbol:tickerSymbolPage.getContent()){
+            log.debug(msg+" found TickerSymbol: "+tickerSymbol.getUniqueId());
+            Page<Tweet> tweets = tweetService.findTweetsForTickerSymbol(tickerSymbol,pageRequest);
+            for(Tweet tweet: tweets.getContent()){
+                Assert.assertTrue(tweet.getEntities().getTickerSymbols().contains(tickerSymbol));
+                log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found TickerSymbol: "+tickerSymbol.getUniqueId());
+            }
+        }
+        log.info(msg);
+    }
+
+    @Commit
+    @Test
     public void findTweetsForUser() throws Exception {
         String msg = "findTweetsForUser: ";
         int page=1;

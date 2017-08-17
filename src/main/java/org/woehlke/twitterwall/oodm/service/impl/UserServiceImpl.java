@@ -8,8 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
@@ -94,6 +93,26 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public Page<User> getUsersForHashTag(HashTag hashTag, Pageable pageRequest) {
         return userRepository.findUsersForHashTag(hashTag.getText(),pageRequest);
+    }
+
+    @Override
+    public Page<User> getUsersForMedia(Media media, Pageable pageRequestUser) {
+        return userRepository.getUsersForMedia(media, pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForMention(Mention mention, Pageable pageRequestUser) {
+        return userRepository.getUsersForMention(mention, pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForUrl(Url url, Pageable pageRequestUser) {
+        return userRepository.getUsersForUrl(url,pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForTickerSymbol(TickerSymbol tickerSymbol, Pageable pageRequestUser) {
+        return userRepository.getUsersForTickerSymbol(tickerSymbol,pageRequestUser);
     }
 
     @Override
