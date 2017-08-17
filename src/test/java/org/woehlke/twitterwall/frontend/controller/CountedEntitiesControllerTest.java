@@ -57,6 +57,28 @@ public class CountedEntitiesControllerTest {
     private final static String URL_PATH = "/application/countedEntities";
     private final static String TEMPLATE_PATH = "application/countedEntities";
 
+    @WithMockUser
+    @Commit
+    @Test
+    public void domainCountTest() throws Exception {
+        String msg ="domainCountTest: ";
+
+        MvcResult result = this.mockMvc.perform(get("/application/countedEntities/domain/count"))
+            .andExpect(status().isOk())
+            .andExpect(view().name( "application/domain/count"))
+            .andExpect(model().attributeExists("countedEntities"))
+            .andExpect(model().attributeExists("page"))
+            .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        log.info(msg+content);
+        log.info(msg+"#######################################");
+        log.info(msg+"#######################################");
+        Assert.assertTrue(true);
+    }
 
     @WithMockUser
     @Commit
