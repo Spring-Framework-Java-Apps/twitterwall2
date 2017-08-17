@@ -122,12 +122,24 @@ public class TaskController {
 
     @RequestMapping(path="/start/tweets/update")
     public String updateTweetsStartTask(Model model) {
-        String msg = "/start/tweets/fetch";
+        String msg = "/start/tweets/update";
         String title = "Scheduled Task started: update Tweets";
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.updateTweets();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
+    }
+
+    @RequestMapping(path="/start/users/update")
+    public String updateUsersStartTask(Model model) {
+        String msg = "/start/users/update";
+        String title = "Scheduled Task started: update Users";
+        String subtitle = "/start/users/update";
+        String symbol = Symbols.TASK.toString();
+        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        Task task = mqAsyncStartTask.updateUsers();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
