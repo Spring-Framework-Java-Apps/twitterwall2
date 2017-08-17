@@ -32,12 +32,14 @@
                             </td>
                             <td>
                                 <div class="row">
-                                    <div class="col-md-2">tickerSymbol:</div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-3">tickerSymbol:</div>
+                                    <div class="col-md-9">
                                         <span th:text="${myPageItem.tickerSymbol}">tickerSymbol</span>
                                     </div>
-                                    <div class="col-md-2">url:</div>
-                                    <div class="col-md-10">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">url:</div>
+                                    <div class="col-md-9">
                                         <a href="" th:href="@{|${myPageItem.url}|}" target="_blank">
                                             <span th:text="${myPageItem.url}">url</span>
                                         </a>

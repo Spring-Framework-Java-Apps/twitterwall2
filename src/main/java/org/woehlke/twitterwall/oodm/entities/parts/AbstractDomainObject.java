@@ -33,11 +33,19 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
     private TaskBasedCaching taskBasedCaching = new TaskBasedCaching();
 
     @NotNull
-    @JoinColumn(name = "fk_created_by_task", nullable = false)
+    @JoinColumn(
+        name = "fk_created_by_task",
+        foreignKey=@ForeignKey(name="fkey_fk_created_by_task"),
+        nullable = false
+    )
     @ManyToOne(cascade = {REFRESH, DETACH}, fetch = EAGER, optional = false)
     private Task createdBy;
 
-    @JoinColumn(name = "fk_updated_by_task", nullable = true)
+    @JoinColumn(
+        name = "fk_updated_by_task",
+        foreignKey=@ForeignKey(name="fkey_fk_updated_by_task"),
+        nullable = true
+    )
     @ManyToOne(cascade = {REFRESH, DETACH}, fetch = EAGER, optional = true)
     private Task updatedBy;
 

@@ -32,12 +32,14 @@
                         </td>
                         <td>
                             <div class="row">
-                                <div class="col-md-2">idTwitter:</div>
-                                <div class="col-md-10">
+                                <div class="col-md-3">idTwitter:</div>
+                                <div class="col-md-9">
                                     <span th:text="${myPageItem.idTwitter}">idTwitter</span>
                                 </div>
-                                <div class="col-md-2">screenName:</div>
-                                <div class="col-md-10">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">screenName:</div>
+                                <div class="col-md-9">
                                     <span th:if="${myPageItem.idTwitter &lt; 0}">
                                         <a href="" th:href="@{|https://twitter.com/${myPageItem.screenName}|}">
                                             <span th:text="${myPageItem.screenName}">screenName</span>
@@ -49,16 +51,20 @@
                                         </a>
                                     </span>
                                 </div>
-                                <div class="col-md-2">has User:</div>
-                                <div class="col-md-10">
-                                    <span th:if="${myPageItem.hasPersistentUser()}">
-                                        <a href="" th:href="@{|/user/${myPageItem.user.screenName}|}">
-                                            <span th:text="${myPageItem.user.screenName}">user.screenName</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">has User:</div>
+                                <div class="col-md-9">
+                                    <span th:if="${myPageItem.hasUser()}">
+                                        <a href="" th:href="@{|/user/${myPageItem.idTwitter}|}">
+                                            <span th:text="${myPageItem.screenName}">myPageItem.screenName</span>
                                         </a>
                                     </span>
                                 </div>
-                                <div class="col-md-2">idTwitterOfUser:</div>
-                                <div class="col-md-10">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">idTwitterOfUser:</div>
+                                <div class="col-md-9">
                                     <span th:text="${myPageItem.idTwitterOfUser}">idTwitterOfUser</span>
                                 </div>
                             </div>

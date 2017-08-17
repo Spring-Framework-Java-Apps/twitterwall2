@@ -25,23 +25,38 @@ import static javax.persistence.FetchType.EAGER;
 public class Entities extends EntitiesFilter implements Serializable,DomainObjectWithValidation,DomainObjectWithUniqueId {
 
     @NotNull
-    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = EAGER
+    )
     private Set<Url> urls = new LinkedHashSet<Url>();
 
     @NotNull
-    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = EAGER
+    )
     private Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
 
     @NotNull
-    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = EAGER
+    )
     private Set<Mention> mentions = new LinkedHashSet<Mention>();
 
     @NotNull
-    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = EAGER
+    )
     private Set<Media> media = new LinkedHashSet<Media>();
 
     @NotNull
-    @ManyToMany(cascade = { DETACH, REFRESH, REMOVE }, fetch = EAGER)
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = EAGER
+    )
     private Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
 
     public Entities(Set<Url> urls, Set<HashTag> hashTags, Set<Mention> mentions, Set<Media> media, Set<TickerSymbol> tickerSymbols) {
