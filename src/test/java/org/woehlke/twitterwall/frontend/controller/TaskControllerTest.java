@@ -434,7 +434,7 @@ public class TaskControllerTest {
         String msg = "updateUserProfilesStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/userlists"))
             .andExpect(status().isOk())
-            .andExpect(view().name( PATH+"/start/taskStarted"))
+            .andExpect(view().name( PATH+"/start/tasksStarted"))
             .andExpect(model().attributeExists("task"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
