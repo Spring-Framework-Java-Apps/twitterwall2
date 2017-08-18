@@ -52,7 +52,7 @@
                 </button>
                 <span class="active">
                     <a class="navbar-brand" href="/">
-                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                        <i class="fa fa-play-circle" aria-hidden="true"></i>
                         <small th:text="${page.menuAppName}">AppName</small>
                     </a>
                 </span>
@@ -62,14 +62,14 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown" sec:authorize="isAuthenticated()" >
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-check-square" aria-hidden="true"></i>
-                            <span>Tasks</span>
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Management</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="/application/management" th:href="@{/application/management}">
-                                    <i class="fa fa-database" aria-hidden="true"></i>
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
                                     <span>Management</span>
                                 </a>
                             </li>
@@ -82,19 +82,41 @@
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
+                                <a href="/application/countedEntities/domain/delete/all" th:href="@{/application/countedEntities/domain/delete/all}">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    <span>Delete All Entities</span>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="/application/countedEntities/domain/count" th:href="@{/application/countedEntities/domain/count}">
+                                    <i class="fa fa-database" aria-hidden="true"></i>
+                                    <span>Count Entities</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" sec:authorize="isAuthenticated()" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            <span>Start Tasks</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
                                 <a href="/task/start/tweets/search" th:href="@{/task/start/tweets/search}">
                                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                                     <span>Start Task: fetch Tweets from Twitter Search</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/task/start/users/follower/fetch" th:href="@{/task//start/users/follower/fetch}">
+                                <a href="/task/start/users/follower/fetch" th:href="@{/task/start/users/follower/fetch}">
                                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                                     <span>Start Task: fetch Follower</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/task//start/users/friends/fetch" th:href="@{/task//start/users/friends/fetch}">
+                                <a href="/task/start/users/friends/fetch" th:href="@{/task/start/users/friends/fetch}">
                                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                                     <span>Start Task: fetch Friends</span>
                                 </a>
@@ -173,33 +195,19 @@
                                     <span>Start Task: getLists</span>
                                 </a>
                             </li>
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <a href="/application/countedEntities/domain/delete/all" th:href="@{/application/countedEntities/domain/delete/all}">
-                                    <i class="fa fa-database" aria-hidden="true"></i>
-                                    Delete All Entities
-                                </a>
-                            </li>
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <a href="/application/countedEntities/domain/count" th:href="@{/application/countedEntities/domain/count}">
-                                    <i class="fa fa-database" aria-hidden="true"></i>
-                                    Count Entities
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <li class="dropdown" sec:authorize="isAuthenticated()" >
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Users</span>
+                            <span>List Users</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="/user/list/tweets" th:href="@{/user/list/tweets}">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users with Tweets</span>
+                                    <span>Tweeting Users</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -213,58 +221,58 @@
                             <li>
                                 <a href="/user/list/follower" th:href="@{/user/list/follower}">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, Follower</span>
+                                    <span>Follower</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetfollower" th:href="@{/user/list/notyetfollower}">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, Not Yet Follower</span>
+                                    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                                    <span>Not Yet Follower</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="/user/list/friends" th:href="@{/user/list/friends}">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, Friends</span>
+                                    <span>Friends</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetfriends" th:href="@{/user/list/notyetfriends}">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, Not Yet Friends</span>
+                                    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                                    <span>Not Yet Friends</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="/user/list/usersWhoAreFollowersButNotFriends" th:href="@{/user/list/usersWhoAreFollowersButNotFriends}">
                                     <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                                    <span>Users, who are Followers but not Friends</span>
+                                    <span>Followers but not Friends</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/usersWhoAreFriendsButNotFollowers" th:href="@{/user/list/usersWhoAreFriendsButNotFollowers}">
                                     <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                                    <span>Users, who are Friends but not Followers</span>
+                                    <span>Friends but not Followers</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/usersWhoAreFollowersAndFriends" th:href="@{/user/list/usersWhoAreFollowersAndFriends}">
                                     <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                                    <span>Users, who are Followers and Friends</span>
+                                    <span>Followers and Friends</span>
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="/user/list/onlist" th:href="@{/user/list/onlist}">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, on Defined User List</span>
+                                    <span>On User List</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/user/list/notyetonlist" th:href="@{/user/list/notyetonlist}">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>Users, Not Yet on Defined User List</span>
+                                    <span>Not Yet on User List</span>
                                 </a>
                             </li>
                         </ul>

@@ -39,7 +39,7 @@ public class TweetController {
             model,
             title,
             twitterProperties.getSearchQuery(),
-            Symbols.HOME.toString()
+            Symbols.STARTPAGE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(

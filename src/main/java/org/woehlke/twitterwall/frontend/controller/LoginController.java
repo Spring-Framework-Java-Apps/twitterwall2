@@ -15,7 +15,7 @@ public class LoginController {
     @RequestMapping("/login")
     public String login(Model model) {
         log.info("-----------------------------------------");
-        String symbol = Symbols.LEAF.toString();
+        String symbol = Symbols.LOGIN.toString();
         String title = "Login";
         String subtitle = "Enter your Credentials";
         model = controllerHelper.setupPage(model, title, subtitle, symbol);

@@ -66,7 +66,7 @@ public class TickerSymbolController {
             String msg = "/tickersymbol/ "+tickerSymbol.getId();
             String title = "TickerSymbol "+tickerSymbol.getUniqueId();
             String subtitle = "List of User and Tweets for one TickerSymbol";
-            String symbol = Symbols.MENTION.toString();
+            String symbol = Symbols.TICKER_SYMBOL.toString();
             model = controllerHelper.setupPage(model,title,subtitle,symbol);
             Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
             Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());

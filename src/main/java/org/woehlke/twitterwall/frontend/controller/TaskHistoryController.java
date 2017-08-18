@@ -30,7 +30,7 @@ public class TaskHistoryController {
     ){
         String subtitle = "all";
         String title = "TaskHistory";
-        String symbol = Symbols.DATABASE.toString();
+        String symbol = Symbols.TASK_HISTORY.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(
                 page,

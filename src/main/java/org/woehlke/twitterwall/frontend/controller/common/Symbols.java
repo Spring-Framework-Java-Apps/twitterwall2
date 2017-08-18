@@ -33,10 +33,14 @@ public enum Symbols {
     USER_PROFILE("<i class=\"fa fa-users\" aria-hidden=\"true\"></i>"),
     IMPRINT("<i class=\"fa fa-university\" aria-hidden=\"true\"></i>"),
     HOME("<span class=\"glyphicon glyphicon-home\" aria-hidden=\"true\"></span>"),
+    STARTPAGE("<i class=\"fa fa-play-circle\" aria-hidden=\"true\"></i>"),
     GET_TEST_DATA("<i class=\"fa fa-cubes\" aria-hidden=\"true\"></i>\n"),
     EXCEPTION("<i class=\"fa fa-bolt\" aria-hidden=\"true\"></i>"),
     LEAF("<i class=\"fa fa-leaf\" aria-hidden=\"true\"></i>"),
-    DATABASE("<i class=\"fa fa-database\" aria-hidden=\"true\"></i>");
+    DATABASE("<i class=\"fa fa-database\" aria-hidden=\"true\"></i>"),
+    MANAGEMENT("<i class=\"fa fa-cog\" aria-hidden=\"true\"></i>"),
+    DELETE_ALL("<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>"),
+    LOGIN("<i class=\"fa fa-sign-in\" aria-hidden=\"true\"></i>");
 
 
     Symbols(String html){
