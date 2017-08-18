@@ -435,7 +435,7 @@ public class TaskControllerTest {
         MvcResult result = this.mockMvc.perform(get("/task/start/userlists"))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/tasksStarted"))
-            .andExpect(model().attributeExists("task"))
+            .andExpect(model().attributeExists("listOfTasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 
