@@ -26,16 +26,16 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
     Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
     @Query(name = "Tweet.findTweetsForMedia")
-    Page<Tweet> findTweetsForMedia(Media media, Pageable pageRequestTweet);
+    Page<Tweet> findTweetsForMedia(@Param("media") Media media, Pageable pageRequestTweet);
 
     @Query(name = "Tweet.findTweetsForMention")
-    Page<Tweet> findTweetsForMention(Mention mention, Pageable pageRequestTweet);
+    Page<Tweet> findTweetsForMention(@Param("mention") Mention mention, Pageable pageRequestTweet);
 
     @Query(name = "Tweet.findTweetsForUrl")
-    Page<Tweet> findTweetsForUrl(Url url, Pageable pageRequestTweet);
+    Page<Tweet> findTweetsForUrl(@Param("url") Url url, Pageable pageRequestTweet);
 
     @Query(name = "Tweet.findTweetsForTickerSymbol")
-    Page<Tweet> findTweetsForTickerSymbol(TickerSymbol tickerSymbol, Pageable pageRequestTweet);
+    Page<Tweet> findTweetsForTickerSymbol(@Param("tickerSymbol") TickerSymbol tickerSymbol, Pageable pageRequestTweet);
 
     @Query(name = "Tweet.findAllTwitterIds")
     Page<Long> findAllTwitterIds(Pageable pageRequest);

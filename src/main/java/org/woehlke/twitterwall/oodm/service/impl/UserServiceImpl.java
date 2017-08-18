@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,6 +14,9 @@ import org.woehlke.twitterwall.oodm.entities.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -158,6 +162,14 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public boolean isByIdTwitter(long userIdTwitter) {
         return ((userRepository.findByIdTwitter(userIdTwitter)) != null);
+    }
+
+    @Override
+    public Page<User> findUsersForUserList(UserList userList, Pageable pageRequest) {
+        List<User> userPageContent = new ArrayList<>();
+        long totalSize = 0L;
+        Page<User> page = new PageImpl<User>(userPageContent,pageRequest,totalSize);
+        return page;
     }
 
     @Override

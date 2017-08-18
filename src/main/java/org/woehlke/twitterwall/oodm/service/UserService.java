@@ -58,4 +58,6 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
     Page<Object2Entity> findAllUser2TickerSymbol(Pageable pageRequest);
 
     boolean isByIdTwitter(long userIdTwitter);
+
+    Page<User> findUsersForUserList(UserList userList, Pageable pageRequest);
 }

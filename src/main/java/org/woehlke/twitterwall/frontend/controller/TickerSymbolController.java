@@ -77,7 +77,7 @@ public class TickerSymbolController {
             Page<User> users = userService.getUsersForTickerSymbol(tickerSymbol,pageRequestUser);
             model.addAttribute("users", users);
             model.addAttribute("tickerSymbol", tickerSymbol);
-            return "media/id";
+            return "tickersymbol/id";
         }
     }
 

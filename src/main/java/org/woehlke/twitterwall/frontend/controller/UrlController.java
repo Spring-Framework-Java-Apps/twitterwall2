@@ -75,7 +75,7 @@ public class UrlController {
             Page<User> users = userService.getUsersForUrl(url,pageRequestUser);
             model.addAttribute("users", users);
             model.addAttribute("url", url);
-            return "media/id";
+            return "url/id";
         }
     }
 

@@ -31,7 +31,7 @@
                             <span>
                                 <span class="tw-vector">
                                     <i class="fa fa-database" aria-hidden="true"></i>
-                                    <a href="" th:href="@{|/mention/${myPageItem.id}|}>
+                                    <a href="" th:href="@{|/mention/${myPageItem.id}|}">
                                         <span th:text="${myPageItem.id}">id</span>
                                     </a>
                                 </span>
@@ -49,11 +49,13 @@
                                 <div class="col-md-9">
                                     <span th:if="${myPageItem.idTwitter &lt; 0}">
                                         <a href="" th:href="@{|https://twitter.com/${myPageItem.screenName}|}">
+                                            <span>@</span>
                                             <span th:text="${myPageItem.screenName}">screenName</span>
                                         </a>
                                     </span>
                                     <span th:if="${myPageItem.idTwitter &gt; 0}">
                                         <a href="" th:href="@{|/user/${myPageItem.screenName}|}">
+                                            <span>@</span>
                                             <span th:text="${myPageItem.screenName}">screenName</span>
                                         </a>
                                     </span>
@@ -64,6 +66,7 @@
                                 <div class="col-md-9">
                                     <span th:if="${myPageItem.hasUser()}">
                                         <a href="" th:href="@{|/user/${myPageItem.idTwitter}|}">
+                                            <span>@</span>
                                             <span th:text="${myPageItem.screenName}">myPageItem.screenName</span>
                                         </a>
                                     </span>

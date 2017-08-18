@@ -52,16 +52,16 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
     Page<User> findUsersForHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
 
     @Query(name="User.getUsersForMedia")
-    Page<User> getUsersForMedia(Media media, Pageable pageRequestUser);
+    Page<User> getUsersForMedia(@Param("media") Media media, Pageable pageRequestUser);
 
     @Query(name="User.getUsersForMention")
-    Page<User> getUsersForMention(Mention mention, Pageable pageRequestUser);
+    Page<User> getUsersForMention(@Param("mention") Mention mention, Pageable pageRequestUser);
 
     @Query(name="User.getUsersForUrl")
-    Page<User> getUsersForUrl(Url url, Pageable pageRequestUser);
+    Page<User> getUsersForUrl(@Param("url") Url url, Pageable pageRequestUser);
 
     @Query(name="User.getUsersForTickerSymbol")
-    Page<User> getUsersForTickerSymbol(TickerSymbol tickerSymbol, Pageable pageRequestUser);
+    Page<User> getUsersForTickerSymbol(@Param("tickerSymbol") TickerSymbol tickerSymbol, Pageable pageRequestUser);
 
     @Query(name="User.findUsersWhoAreFriendsButNotFollowers")
     Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);

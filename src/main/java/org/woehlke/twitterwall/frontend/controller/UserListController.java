@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
+import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.UserList;
 import org.woehlke.twitterwall.oodm.service.UserListService;
+import org.woehlke.twitterwall.oodm.service.UserService;
 
 @Controller
 @RequestMapping("/userlist")
@@ -59,6 +61,8 @@ public class UserListController {
         String title = userList.getFullName();
         String subtitle = userList.getDescription();
         model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        Page<User> userPage = userService.findUsersForUserList(userList,pageRequest);
+        model.addAttribute("users", userPage);
         model.addAttribute("userList", userList);
         return "userlist/id";
     }
@@ -67,6 +71,8 @@ public class UserListController {
 
     private final UserListService userListService;
 
+    private final UserService userService;
+
     private final FrontendProperties frontendProperties;
 
     private final ControllerHelper controllerHelper;
@@ -74,8 +80,9 @@ public class UserListController {
     private static String title = "User List";
 
     @Autowired
-    public UserListController(UserListService userListService, FrontendProperties frontendProperties, ControllerHelper controllerHelper) {
+    public UserListController(UserListService userListService, UserService userService, FrontendProperties frontendProperties, ControllerHelper controllerHelper) {
         this.userListService = userListService;
+        this.userService = userService;
         this.frontendProperties = frontendProperties;
         this.controllerHelper = controllerHelper;
     }

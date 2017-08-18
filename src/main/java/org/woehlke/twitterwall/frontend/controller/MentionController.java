@@ -75,7 +75,7 @@ public class MentionController {
             Page<User> users = userService.getUsersForMention(mention,pageRequestUser);
             model.addAttribute("users", users);
             model.addAttribute("mention", mention);
-            return "media/id";
+            return "mention/id";
         }
     }
 

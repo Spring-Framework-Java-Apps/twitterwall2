@@ -9,6 +9,35 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h3>Url</h3>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-3">display:</div>
+                        <div class="col-md-9">
+                            <span th:text="${url.display}">display</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">expanded:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${url.expanded}|}" target="_blank">
+                                <span th:text="${url.expanded}">expanded</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">url:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${url.url}|}" target="_blank">
+                                <span th:text="${url.url}">url</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <h3>Tweets with the Url <span th:text="${url.url}">Url</span></h3>
                 <hr/>
             </div>

@@ -9,7 +9,58 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3>Tweets with the Mention <span th:text="${media.screenName}">Mention</span></h3>
+                <div class="well">
+                    <h3>Media</h3>
+                    <div class="row">
+                        <div class="col-md-3">idTwitter:</div>
+                        <div class="col-md-9">
+                            <span th:text="${media.idTwitter}">idTwitter</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">mediaHttps:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${media.mediaHttps}|}" target="_blank">
+                                <span th:text="${media.mediaHttps}">mediaHttps</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">mediaHttps:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${media.url}|}" target="_blank">
+                                <span th:text="${media.url}">url</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">display:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${media.display}|}" target="_blank">
+                                <span th:text="${media.display}">display</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">expanded:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|${media.expanded}|}" target="_blank">
+                                <span th:text="${media.expanded}">expanded</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">mediaType:</div>
+                        <div class="col-md-9">
+                            <span th:text="${media.mediaType}">mediaType</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Tweets with the Media <span th:text="${media.url}">Media</span></h3>
                 <hr/>
             </div>
         </div>
@@ -38,7 +89,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Users with the Mention <span th:text="${media.screenName}">Mention</span></h3>
+                <h3>Users with the Media <span th:text="${media.url}">Media</span></h3>
                 <hr/>
             </div>
         </div>

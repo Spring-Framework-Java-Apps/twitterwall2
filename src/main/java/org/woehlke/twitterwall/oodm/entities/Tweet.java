@@ -78,7 +78,7 @@ import static javax.persistence.FetchType.EAGER;
     ),
     @NamedQuery(
         name="Tweet.findTweetsForMedia",
-        query="select t from Tweet t join t.entities.media media where media=:media"
+        query="select t from Tweet t join t.entities.media medium where medium=:media"
     ),
     @NamedQuery(
         name="Tweet.findTweetsForMention",

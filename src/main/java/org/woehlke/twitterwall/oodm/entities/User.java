@@ -93,7 +93,7 @@ import java.util.regex.Pattern;
     ),
     @NamedQuery(
         name="User.getUsersForMedia",
-        query="select t from User t join t.entities.media media where media=:media"
+        query="select t from User t join t.entities.media medium where medium=:media"
     ),
     @NamedQuery(
         name="User.getUsersForMention",
