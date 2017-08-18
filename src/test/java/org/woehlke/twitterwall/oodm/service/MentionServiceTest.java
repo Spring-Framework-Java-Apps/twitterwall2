@@ -181,4 +181,22 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     public void update() throws Exception {
 
     }
+
+    @Commit
+    @Test
+    public void findByUserId() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    public void findAllByScreenName() throws Exception {
+
+    }
+
+    @Commit
+    @Test
+    public void findByIdTwitterOfUser() throws Exception {
+
+    }
 }

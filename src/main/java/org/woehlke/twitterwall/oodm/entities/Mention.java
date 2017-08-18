@@ -25,8 +25,9 @@ import java.util.regex.Pattern;
     },
     indexes = {
         @Index(name = "idx_mention_name", columnList = "name"),
-        @Index(name = "idx_mention_name", columnList = "screen_name"),
-        @Index(name = "idx_mention_id_twitter_of_user", columnList = "id_twitter_of_user")
+        @Index(name = "idx_mention_screen_name", columnList = "screen_name"),
+        @Index(name = "idx_mention_id_twitter_of_user", columnList = "id_twitter_of_user"),
+        @Index(name = "idx_mention_fk_user", columnList = "fk_user")
     }
 )
 @NamedQueries({
@@ -41,6 +42,30 @@ import java.util.regex.Pattern;
     @NamedQuery(
         name="Mention.countAllWithoutUser",
         query="select count(t) from Mention t where t.idTwitterOfUser=0"
+    ),
+    @NamedQuery(
+        name="Mention.findByUserId",
+        query="select t from Mention t where t.idOfUser=:idOfUser order by t.screenName"
+    ),
+    @NamedQuery(
+        name="Mention.countByUserId",
+        query="select count(t) from Mention t where t.idOfUser=:idOfUser"
+    ),
+    @NamedQuery(
+        name="Mention.findByScreenNameUnique",
+        query="select t from Mention t where t.screenNameUnique=:screenNameUnique order by t.screenName"
+    ),
+    @NamedQuery(
+        name="Mention.countByScreenNameUnique",
+        query="select count(t) from Mention t where t.screenNameUnique=:screenNameUnique"
+    ),
+    @NamedQuery(
+        name="Mention.findByIdTwitterOfUser",
+        query="select t from Mention t where t.idTwitterOfUser=:idTwitterOfUser order by t.screenName"
+    ),
+    @NamedQuery(
+        name="Mention.countByIdTwitterOfUser",
+        query="select count(t) from Mention t where t.idTwitterOfUser=:idTwitterOfUser"
     )
 })
 @EntityListeners(MentionListener.class)
@@ -72,6 +97,10 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Column(name = "id_twitter_of_user",nullable = false)
     private Long idTwitterOfUser = 0L;
 
+    @NotNull
+    @Column(name = "fk_user",nullable = false)
+    private Long idOfUser = 0L;
+
     public Mention(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name) {
         super(createdBy,updatedBy);
         this.idTwitter = idTwitter;
@@ -98,7 +127,14 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Transient
     @Override
     public String getUniqueId() {
-        return "" + idTwitter +"_"+ screenNameUnique;
+
+        boolean undefined = (idTwitter == ID_TWITTER_UNDEFINED);
+
+        String uniqueIdUndefined = "HAS_NO_USER_YET_" + id;
+
+        String uniqueIdHasUser = "" + idTwitter +"_"+ screenNameUnique;
+
+        return undefined ? uniqueIdUndefined : uniqueIdHasUser;
     }
 
     @Transient
@@ -180,7 +216,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     }
 
     @Transient
-    public boolean isRawMentionFromUserDescription() {
+    public boolean isNotFetchedFromTwitter() {
         if(this.isValid()) {
             return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
         } else {
@@ -251,6 +287,14 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.screenNameUnique = screenNameUnique.toLowerCase();
     }
 
+    public Long getIdOfUser() {
+        return idOfUser;
+    }
+
+    public void setIdOfUser(Long idOfUser) {
+        this.idOfUser = idOfUser;
+    }
+
     /*
     @Override
     public String toString() {
@@ -272,6 +316,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
                 ", screenNameUnique='" + screenNameUnique + '\'' +
                 ", name='" + name + '\'' +
                 ", idTwitterOfUser=" + idTwitterOfUser +
+                ", idOfUser=" + idOfUser +
                 super.toString() +
                 '}';
     }

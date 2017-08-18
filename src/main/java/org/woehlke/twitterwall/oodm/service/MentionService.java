@@ -20,4 +20,9 @@ public interface MentionService extends DomainServiceWithScreenName<Mention>,Dom
 
     Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter);
 
+    Page<Mention> findByUserId(long idOfUser, Pageable pageRequest);
+
+    Page<Mention> findAllByScreenName(String screenName, Pageable pageRequest);
+
+    Page<Mention> findByIdTwitterOfUser(long idOfUser, Pageable pageRequest);
 }

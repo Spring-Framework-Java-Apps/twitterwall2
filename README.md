@@ -1,29 +1,34 @@
-# [Twitterwall2]( https://github.com/phasenraum2010/twitterwall2 )
+# [Twitterwall2](https://github.com/phasenraum2010/twitterwall2)
 
-+ Twitterwall with [spring:boot]( https://projects.spring.io/spring-boot/ ) for [heroku]( https://heroku.com )
-+ More Info: https://phasenraum2010.github.io/twitterwall2/
++ Twitterwall with [spring:boot](https://projects.spring.io/spring-boot/) for [heroku](https://heroku.com)
++ More Info: [https://phasenraum2010.github.io/twitterwall2/](https://phasenraum2010.github.io/twitterwall2/)
 
 ## Development 
 
-### Repository:
-- Get Source Code: git clone https://github.com/phasenraum2010/twitterwall2.git
-- Project: https://github.com/phasenraum2010/twitterwall2/projects/1
-- Issues: https://github.com/phasenraum2010/twitterwall2/issues
+### Repository
+- Get Source Code: git clone [https://github.com/phasenraum2010/twitterwall2.git](https://github.com/phasenraum2010/twitterwall2.git)
+- Project: [https://github.com/phasenraum2010/twitterwall2/projects/1](https://github.com/phasenraum2010/twitterwall2/projects/1)
+- Issues: [https://github.com/phasenraum2010/twitterwall2/issues](https://github.com/phasenraum2010/twitterwall2/issues)
 
 ### heroku CLI
 - heroku login
 - heroku pg:psql --app {app-name}
 - heroku logs -t --app {app-name}
+- more: 
+  - [https://devcenter.heroku.com/categories/command-line](https://devcenter.heroku.com/categories/command-line)
+  - [https://devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
 
-### Setup Testing on Localhost
-- Get Credentials from your Twitter-Account: [Refer to "Manage your Apps" on Twitter's dev pages](https://dev.twitter.com/apps)
-- Edit your .profile with the Credentials from your Twitter-Account
+
+### Setup Test and Development on Localhost
+- **Get Credentials from your Twitter-Account:** 
+  - [Refer to "Manage your Apps" on Twitter's dev pages](https://dev.twitter.com/apps)
+- **Edit your .profile with the Credentials from your Twitter-Account**
   - export DATABASE_URL=jdbc:postgresql://localhost:5432/postgres?user=postgres
   - export TWITTER_CONSUMER_KEY={Credentials from your Twitter-Account}
   - export TWITTER_CONSUMER_SECRET={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN={Credentials from your Twitter-Account}
   - export TWITTER_ACCESS_TOKEN_SECRET={Credentials from your Twitter-Account}
-- Edit app behaviour
+- **Edit app behaviour**
   - export TWITTERWALL_SHOW_USERS_MENU=true
   - export TWITTERWALL_CONTEXT_TEST=true
   - export TWITTER_PAGE_SIZE=500
@@ -36,7 +41,7 @@
   - export TWITTERWALL_SCHEDULER_ALLOW_SEARCH=true
   - export TWITTERWALL_SCHEDULER_HEROKU_DB_LIMIT=false
   - export TWITTERWALL_SCHEDULER_USER_LIST_ALLOW=true
-- Edit Use Case 
+- **Edit Tasks / Use Cases** 
   - export TWITTER_SEARCH_TERM=#hibernate OR #java OR #TYPO3
   - export TWITTERWALL_INFO_WEBPAGE=https://github.com/phasenraum2010/twitterwall2
   - export TWITTERWALL_THEME=typo3
@@ -47,7 +52,7 @@
   - export TWITTERWALL_LOGIN_USERNAME=admin
   - export TWITTERWALL_LOGIN_PASSWORD=password
   
-- run with: mvn clean spring-boot:run
+- run with: **mvn clean spring-boot:run**
 
 ## Contribute
 
@@ -84,12 +89,12 @@ If you _really really_ like it and want to support the author, I will be glad to
 [av-site]: https://twitter.com/ThomasWoehlke
 [donate]: https://www.paypal.me/ThomasWoehlke
 
-### Author:  
+### Author  
 
 **Thomas Wöhlke**
-+ Twitter: https://twitter.com/ThomasWoehlke
-+ Github: https://github.com/phasenraum2010
-+ Blog: https://thomas-woehlke.blogspot.de
++ Twitter: [https://twitter.com/ThomasWoehlke](https://twitter.com/ThomasWoehlke)
++ Github: [https://github.com/phasenraum2010](https://github.com/phasenraum2010)
++ Blog: [https://thomas-woehlke.blogspot.de](https://thomas-woehlke.blogspot.de)
 
 ### Acknowledgements
 
@@ -99,13 +104,14 @@ If you _really really_ like it and want to support the author, I will be glad to
 + More icons by [fontawesome][fontawesome].
 + Twitterwall Backend is made with [Java][java] and [Spring-Boot][spring-boot].
 + Database [PostgreSQL][postgresql] and jdbc by [PostgreSQL-JDBC][postgresql-jdbc].
-+ Running on Cloud-Service [Heroku][heroku].
++ Running on Cloud-Service [Heroku][heroku] with [Heroku PostegreSQL][postgresql-heroku].
 
 [java]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [fontawesome]: http://fontawesome.io/icons/
 [postgresql-jdbc]: https://jdbc.postgresql.org/
 [postgresql]: https://www.postgresql.org/
-[heroku]: https://heroku.com
+[heroku]: https://heroku.com/
+[postgresql-heroku]: https://devcenter.heroku.com/categories/heroku-postgres/
 [spring-boot]: https://projects.spring.io/spring-boot/
 [bootstrap]: http://getbootstrap.com/
 [glyphicons]: http://glyphicons.com/
@@ -116,9 +122,12 @@ If you _really really_ like it and want to support the author, I will be glad to
 
 &copy; 2017 Thomas Wöhlke
 
-Licensed under the Apache License, Version 2.0
+Licensed under the **Apache License, Version 2.0**
 
-http://www.apache.org/licenses/LICENSE-2.0
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Except where otherwise noted, Documentation of this work is licensed under 
+[Creative Commons CC BY-ND 3.0](http://creativecommons.org/licenses/by-nd/3.0/)
 
 
 

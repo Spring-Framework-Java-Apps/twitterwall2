@@ -80,6 +80,22 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
     }
 
     @Override
+    public Page<Mention> findByUserId(long idOfUser, Pageable pageRequest) {
+        return mentionRepository.findByUserId(idOfUser,pageRequest);
+    }
+
+    @Override
+    public Page<Mention> findAllByScreenName(String screenName, Pageable pageRequest) {
+        String screenNameUnique = screenName.toLowerCase();
+        return mentionRepository.findAllByScreenNameUnique(screenNameUnique,pageRequest);
+    }
+
+    @Override
+    public Page<Mention> findByIdTwitterOfUser(long idOfUser, Pageable pageRequest) {
+        return mentionRepository.findByIdTwitterOfUser(idOfUser,pageRequest);
+    }
+
+    @Override
     public Mention findByUniqueId(Mention domainExampleObject) {
         return mentionRepository.findByUniqueId(domainExampleObject);
     }

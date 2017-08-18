@@ -66,7 +66,7 @@ public class EntitiesFilter {
                     for (int i = 0; i < 2; i++) {
                         Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                         Matcher m = userPattern.matcher(formattedText);
-                        if(mention.isRawMentionFromUserDescription()){
+                        if(mention.isNotFetchedFromTwitter()){
                             formattedText = m.replaceAll(USER_PROFILE_OUTPUT_UNDEFINED[i]);
                         } else {
                             formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
@@ -101,7 +101,7 @@ public class EntitiesFilter {
                     for (int i = 0; i < 2; i++) {
                         Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                         Matcher m = userPattern.matcher(formattedText);
-                        if(mention.isRawMentionFromUserDescription()){
+                        if(mention.isNotFetchedFromTwitter()){
                             formattedText = m.replaceAll(USER_PROFILE_OUTPUT_UNDEFINED[i]);
                         } else {
                             formattedText = m.replaceAll(USER_PROFILE_OUTPUT[i]);
