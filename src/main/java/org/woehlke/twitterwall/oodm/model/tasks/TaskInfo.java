@@ -29,6 +29,10 @@ public class TaskInfo implements Serializable {
     private Boolean updatedUsers = false;
 
     @NotNull
+    @Column(nullable = false,name="update_urls")
+    private Boolean updatedUrls = false;
+
+    @NotNull
     @Column(nullable = false,name="update_users_from_mentions")
     private Boolean updateUsersFromMentions = false;
 
@@ -109,6 +113,9 @@ public class TaskInfo implements Serializable {
                 case UPDATE_MENTIONS_FOR_USERS:
                     this.updateUsersFromMentions = true;
                     break;
+                case UPDATE_URLS:
+                    this.updatedUrls = true;
+                    break;
                 case FETCH_USERS_FROM_LIST:
                     this.fetchUsersFromList = true;
                     break;
@@ -163,7 +170,7 @@ public class TaskInfo implements Serializable {
     public TaskInfo() {
     }
 
-    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners) {
+    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners, Boolean updatedUrls) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updatedUsers = updatedUsers;
@@ -176,6 +183,7 @@ public class TaskInfo implements Serializable {
         this.fetchFollower = fetchFollower;
         this.fetchFriends = fetchFriends;
         this.fetchUserlistOwners = fetchUserlistOwners;
+        this.updatedUrls = updatedUrls;
     }
 
     public Boolean getFetchTweetsFromSearch() {
@@ -254,6 +262,10 @@ public class TaskInfo implements Serializable {
         return startGarbageCollection;
     }
 
+    public Boolean getUpdatedUrls() {
+        return updatedUrls;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -266,6 +278,8 @@ public class TaskInfo implements Serializable {
         if (updateTweets != null ? !updateTweets.equals(taskInfo.updateTweets) : taskInfo.updateTweets != null)
             return false;
         if (updatedUsers != null ? !updatedUsers.equals(taskInfo.updatedUsers) : taskInfo.updatedUsers != null)
+            return false;
+        if (updatedUrls != null ? !updatedUrls.equals(taskInfo.updatedUrls) : taskInfo.updatedUrls != null)
             return false;
         if (updateUsersFromMentions != null ? !updateUsersFromMentions.equals(taskInfo.updateUsersFromMentions) : taskInfo.updateUsersFromMentions != null)
             return false;
@@ -304,6 +318,7 @@ public class TaskInfo implements Serializable {
         int result = fetchTweetsFromSearch != null ? fetchTweetsFromSearch.hashCode() : 0;
         result = 31 * result + (updateTweets != null ? updateTweets.hashCode() : 0);
         result = 31 * result + (updatedUsers != null ? updatedUsers.hashCode() : 0);
+        result = 31 * result + (updatedUrls != null ? updatedUrls.hashCode() : 0);
         result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
         result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
         result = 31 * result + (controllerCreateTestdataTweets != null ? controllerCreateTestdataTweets.hashCode() : 0);
@@ -329,6 +344,7 @@ public class TaskInfo implements Serializable {
                 "fetchTweetsFromSearch=" + fetchTweetsFromSearch +
                 ", updateTweets=" + updateTweets +
                 ", updatedUsers=" + updatedUsers +
+                ", updatedUrls=" + updatedUrls +
                 ", updateUsersFromMentions=" + updateUsersFromMentions +
                 ", fetchUsersFromList=" + fetchUsersFromList +
                 ", controllerCreateTestdataTweets=" + controllerCreateTestdataTweets +
