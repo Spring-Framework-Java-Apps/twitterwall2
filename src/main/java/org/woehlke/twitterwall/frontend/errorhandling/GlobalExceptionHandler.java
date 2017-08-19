@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.frontend.common.ControllerHelper;
 
 import javax.persistence.EntityNotFoundException;

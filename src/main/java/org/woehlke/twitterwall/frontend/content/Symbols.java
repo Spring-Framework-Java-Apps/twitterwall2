@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.common;
+package org.woehlke.twitterwall.frontend.content;
 
 /**
  * Created by tw on 01.07.17.

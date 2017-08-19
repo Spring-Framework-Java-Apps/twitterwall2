@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.model;
+package org.woehlke.twitterwall.frontend.content;
 
 import java.io.Serializable;
 
@@ -81,7 +81,7 @@ public class Page implements Serializable {
     public void setHistoryBack(boolean historyBack) {
         this.historyBack = historyBack;
     }
-    
+
     public String getTheme() {
         return theme;
     }

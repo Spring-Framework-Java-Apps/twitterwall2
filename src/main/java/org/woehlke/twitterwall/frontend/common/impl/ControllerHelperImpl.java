@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.common.ControllerHelper;
-import org.woehlke.twitterwall.frontend.model.Page;
+import org.woehlke.twitterwall.frontend.content.Page;
 
 /**
  * Created by tw on 18.07.17.

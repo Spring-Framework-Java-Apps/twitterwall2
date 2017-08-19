@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.common.ControllerHelper;
-import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.oodm.model.Tweet;
 import org.woehlke.twitterwall.oodm.model.Url;
 import org.woehlke.twitterwall.oodm.model.User;
