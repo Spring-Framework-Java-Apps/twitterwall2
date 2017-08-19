@@ -10,10 +10,10 @@
     <logger name="org.woehlke.twitterwall.frontend.model" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller.common" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.remote" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.mq" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.remote" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.persist" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.transform" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.mq" level="DEBUG" />
     <logger name="org.woehlke.twitterwall" level="DEBUG" />
     <logger name="org.apache.http" level="INFO" />
     <logger name="org.apache.tomcat" level="INFO" />

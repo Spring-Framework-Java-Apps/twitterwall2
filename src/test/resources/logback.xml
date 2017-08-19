@@ -13,10 +13,10 @@
     <logger name="org.woehlke.twitterwall.frontend.application" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.exceptions.remote" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.exceptions.common" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.backend" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.facade" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.backend" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.facade" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.persist" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.transform" level="DEBUG" />
     <logger name="org.springframework.boot" level="WARN" />
     <logger name="org.springframework.test" level="DEBUG" />
     <logger name="org.hibernate" level="DEBUG" />

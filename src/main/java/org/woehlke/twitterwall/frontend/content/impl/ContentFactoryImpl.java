@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.configuration.properties.TwitterProperties;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Page;
 

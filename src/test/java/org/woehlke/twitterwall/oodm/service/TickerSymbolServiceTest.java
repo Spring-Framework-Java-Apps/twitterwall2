@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
+import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.model.TickerSymbol;
 
 @RunWith(SpringRunner.class)

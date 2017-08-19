@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
+import org.woehlke.twitterwall.configuration.properties.SchedulerProperties;
 import org.woehlke.twitterwall.oodm.model.Task;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.AsyncStartTask;
+import org.woehlke.twitterwall.backend.mq.endpoint.tasks.AsyncStartTask;
 
 /**
  * Created by tw on 10.06.17.

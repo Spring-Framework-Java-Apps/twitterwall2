@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
+import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.model.entities.Entities;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;

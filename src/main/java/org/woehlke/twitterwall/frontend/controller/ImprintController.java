@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.oodm.model.User;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.StartTask;
+import org.woehlke.twitterwall.backend.mq.endpoint.tasks.StartTask;
 
 
 /**
