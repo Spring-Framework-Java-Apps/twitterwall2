@@ -18,6 +18,20 @@ public class MentionMessage implements Serializable {
     private final long idOfUser;
     private final long mentionId;
 
+    private final boolean ignoreNextSteps;
+
+
+    public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, boolean ignoreNextSteps) {
+        this.taskMessage = taskMessage;
+        this.screenName = screenName;
+        this.mentionId = mentionId;
+        this.twitterProfile = null;
+        this.user = null;
+        this.idTwitterOfUser = Mention.HAS_NO_USER;
+        this.idOfUser = Mention.HAS_NO_USER;
+        this.ignoreNextSteps = ignoreNextSteps;
+    }
+
     public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName) {
         this.taskMessage = taskMessage;
         this.screenName = screenName;
@@ -26,6 +40,7 @@ public class MentionMessage implements Serializable {
         this.user = null;
         this.idTwitterOfUser = Mention.HAS_NO_USER;
         this.idOfUser = Mention.HAS_NO_USER;
+        this.ignoreNextSteps = false;
     }
 
     public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile userFromTwitter) {
@@ -36,6 +51,7 @@ public class MentionMessage implements Serializable {
         this.user = null;
         this.idTwitterOfUser = Mention.HAS_NO_USER;
         this.idOfUser = Mention.HAS_NO_USER;
+        this.ignoreNextSteps = false;
     }
 
     public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile twitterProfile, User user) {
@@ -46,6 +62,7 @@ public class MentionMessage implements Serializable {
         this.user = user;
         this.idTwitterOfUser = Mention.HAS_NO_USER;
         this.idOfUser = Mention.HAS_NO_USER;
+        this.ignoreNextSteps = false;
     }
 
     public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile twitterProfile, User user, long idOfUser, long idTwitterOfUser) {
@@ -56,6 +73,7 @@ public class MentionMessage implements Serializable {
         this.user = user;
         this.idTwitterOfUser = idTwitterOfUser;
         this.idOfUser = idOfUser;
+        this.ignoreNextSteps = false;
     }
 
     public TaskMessage getTaskMessage() {
@@ -86,6 +104,10 @@ public class MentionMessage implements Serializable {
         return user;
     }
 
+    public boolean isIgnoreNextSteps() {
+        return ignoreNextSteps;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,6 +118,7 @@ public class MentionMessage implements Serializable {
         if (idTwitterOfUser != that.idTwitterOfUser) return false;
         if (idOfUser != that.idOfUser) return false;
         if (mentionId != that.mentionId) return false;
+        if (ignoreNextSteps != that.ignoreNextSteps) return false;
         if (taskMessage != null ? !taskMessage.equals(that.taskMessage) : that.taskMessage != null) return false;
         if (screenName != null ? !screenName.equals(that.screenName) : that.screenName != null) return false;
         if (twitterProfile != null ? !twitterProfile.equals(that.twitterProfile) : that.twitterProfile != null)
@@ -112,6 +135,7 @@ public class MentionMessage implements Serializable {
         result = 31 * result + (int) (idTwitterOfUser ^ (idTwitterOfUser >>> 32));
         result = 31 * result + (int) (idOfUser ^ (idOfUser >>> 32));
         result = 31 * result + (int) (mentionId ^ (mentionId >>> 32));
+        result = 31 * result + (ignoreNextSteps ? 1 : 0);
         return result;
     }
 
@@ -125,6 +149,7 @@ public class MentionMessage implements Serializable {
                 ", idTwitterOfUser=" + idTwitterOfUser +
                 ", idOfUser=" + idOfUser +
                 ", mentionId=" + mentionId +
+                ", ignoreNextSteps=" + ignoreNextSteps +
                 '}';
     }
 }

@@ -18,11 +18,8 @@ public class UserforMentionPersistorImpl implements UserforMentionPersistor {
     @Override
     public Message<MentionMessage> persistUserforMention(Message<MentionMessage> incomingMessage) {
         MentionMessage receivedMessage = incomingMessage.getPayload();
-        if(receivedMessage.getTwitterProfile()==null) {
-            return MessageBuilder.withPayload(receivedMessage)
-                    .copyHeaders(incomingMessage.getHeaders())
-                    .setHeader("persisted",Boolean.TRUE)
-                    .build();
+        if(receivedMessage.isIgnoreNextSteps()) {
+            return mentionMessageBuilder.buildMentionMessage(incomingMessage);
         } else {
             long taskId = receivedMessage.getTaskMessage().getTaskId();
             Task task = taskService.findById(taskId);

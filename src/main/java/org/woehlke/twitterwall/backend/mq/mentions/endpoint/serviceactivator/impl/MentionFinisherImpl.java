@@ -36,7 +36,9 @@ public class MentionFinisherImpl implements MentionFinisher {
         List<MentionMessage> mentionMessageList = incomingMessageList.getPayload();
         for(MentionMessage msg :mentionMessageList){
             taskId = msg.getTaskMessage().getTaskId();
-            mentionIds.add(msg.getMentionId());
+            if(!msg.isIgnoreNextSteps()){
+                mentionIds.add(msg.getMentionId());
+            }
         }
         MentionResultList userResultList = new MentionResultList(taskId,mentionIds);
         Message<MentionResultList> mqMessageOut = MessageBuilder.withPayload(userResultList)

@@ -30,18 +30,34 @@ public class MentionMessageBuilderImpl implements MentionMessageBuilder {
 
     @Override
     public Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage, TwitterProfile userFromTwitter) {
-        MentionMessage outputPayload = new MentionMessage(
-                incomingMessage.getPayload().getTaskMessage(),
-                incomingMessage.getPayload().getMentionId(),
-                incomingMessage.getPayload().getScreenName(),
-                userFromTwitter
-        );
-        Message<MentionMessage> mqMessageOut =
-                MessageBuilder.withPayload(outputPayload)
-                        .copyHeaders(incomingMessage.getHeaders())
-                        .setHeader("twitter_profile_id", userFromTwitter.getId())
-                        .build();
-        return mqMessageOut;
+        if(userFromTwitter == null){
+            boolean ignoreNextSteps = true;
+            MentionMessage outputPayload = new MentionMessage(
+                    incomingMessage.getPayload().getTaskMessage(),
+                    incomingMessage.getPayload().getMentionId(),
+                    incomingMessage.getPayload().getScreenName(),
+                    ignoreNextSteps
+            );
+            Message<MentionMessage> mqMessageOut =
+                    MessageBuilder.withPayload(outputPayload)
+                            .copyHeaders(incomingMessage.getHeaders())
+                            .setHeader("twitter_profile_id", userFromTwitter.getId())
+                            .build();
+            return mqMessageOut;
+        } else {
+            MentionMessage outputPayload = new MentionMessage(
+                    incomingMessage.getPayload().getTaskMessage(),
+                    incomingMessage.getPayload().getMentionId(),
+                    incomingMessage.getPayload().getScreenName(),
+                    userFromTwitter
+            );
+            Message<MentionMessage> mqMessageOut =
+                    MessageBuilder.withPayload(outputPayload)
+                            .copyHeaders(incomingMessage.getHeaders())
+                            .setHeader("twitter_profile_id", userFromTwitter.getId())
+                            .build();
+            return mqMessageOut;
+        }
     }
 
     @Override
@@ -78,6 +94,15 @@ public class MentionMessageBuilderImpl implements MentionMessageBuilder {
                 MessageBuilder.withPayload(outMsg)
                         .copyHeaders(incomingMessage.getHeaders())
                         .setHeader("transformed",Boolean.TRUE)
+                        .build();
+        return mqMessageOut;
+    }
+
+    @Override
+    public Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage) {
+        Message<MentionMessage> mqMessageOut =
+                MessageBuilder.withPayload(incomingMessage.getPayload())
+                        .copyHeaders(incomingMessage.getHeaders())
                         .build();
         return mqMessageOut;
     }

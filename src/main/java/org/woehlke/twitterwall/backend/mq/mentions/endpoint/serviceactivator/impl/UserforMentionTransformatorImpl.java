@@ -17,11 +17,16 @@ public class UserforMentionTransformatorImpl implements UserforMentionTransforma
     @Override
     public Message<MentionMessage> transformUserforMention(Message<MentionMessage> incomingMessage) {
         MentionMessage receivedMessage = incomingMessage.getPayload();
-        long id = receivedMessage.getTaskMessage().getTaskId();
-        Task task = taskService.findById(id);
-        User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
-        Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage,user);
-        return mqMessageOut;
+        if(receivedMessage.isIgnoreNextSteps()){
+            Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage);
+            return mqMessageOut;
+        } else {
+            long id = receivedMessage.getTaskMessage().getTaskId();
+            Task task = taskService.findById(id);
+            User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
+            Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage,user);
+            return mqMessageOut;
+        }
     }
 
     private final UserTransformService userTransformService;

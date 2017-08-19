@@ -16,4 +16,6 @@ public interface MentionMessageBuilder {
 
     Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage, Mention mention);
 
+    Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage);
+
 }
