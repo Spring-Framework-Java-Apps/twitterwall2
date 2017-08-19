@@ -119,7 +119,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/search")
     public String  fetchTweetsFromTwitterSearchStartTask(Model model) {
         String msg = "/start/tweets/search";
-        String title = "Scheduled Task started: fetch Tweets from Search";
+        String title = "Cronjob Task started: fetch Tweets from Search";
         String subtitle = "/start/tweets/search";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -131,7 +131,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/update")
     public String updateTweetsStartTask(Model model) {
         String msg = "/start/tweets/update";
-        String title = "Scheduled Task started: update Tweets";
+        String title = "Cronjob Task started: update Tweets";
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -143,7 +143,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/update")
     public String updateUsersStartTask(Model model) {
         String msg = "/start/users/update";
-        String title = "Scheduled Task started: update Users";
+        String title = "Cronjob Task started: update Users";
         String subtitle = "/start/users/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -155,7 +155,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/list/fetch")
     public String fetchUsersFromDefinedUserListStartTask(Model model){
         String msg = "/start/users/list/fetch";
-        String title = "Scheduled Task started: fetch Users from List";
+        String title = "Cronjob Task started: fetch Users from List";
         String subtitle = "/start/users/list/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -167,7 +167,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/follower/fetch")
     public String fetchFollowerStartTask(Model model){
         String msg = "/start/users/follower/fetch";
-        String title = "Scheduled Task started: fetch Follower";
+        String title = "Cronjob Task started: fetch Follower";
         String subtitle = "/start/users/follower/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -179,7 +179,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/friends/fetch")
     public String fetchFriendsStartTask(Model model){
         String msg = "/start/users/friends/fetch";
-        String title = "Scheduled Task started: fetch Friends";
+        String title = "Cronjob Task started: fetch Friends";
         String subtitle = "/start/users/friends/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -191,7 +191,7 @@ public class TaskController {
     @RequestMapping(path="/start/users/mentions/update")
     public String updateUserProfilesFromMentionsStartTask(Model model){
         String msg = "/start/users/mentions/update";
-        String title = "Scheduled Task started: update Users from Mentions";
+        String title = "Cronjob Task started: update Users from Mentions";
         String subtitle = "/start/users/mentions/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -203,7 +203,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/timeline/home")
     public String getHomeTimeline(Model model) {
         String msg = "/start/tweets/timeline/home";
-        String title = "Scheduled Task started: getHomeTimeline";
+        String title = "Cronjob Task started: getHomeTimeline";
         String subtitle = "/start/tweets/timeline/home";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -215,7 +215,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/timeline/user")
     public String getUserTimeline(Model model) {
         String msg = "/start/tweets/timeline/user";
-        String title = "Scheduled Task started: getUserTimeline";
+        String title = "Cronjob Task started: getUserTimeline";
         String subtitle = "/start/tweets/timeline/user";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -227,7 +227,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/mentions")
     public String getMentions(Model model) {
         String msg = "/start/tweets/mentions";
-        String title = "Scheduled Task started: getMentions";
+        String title = "Cronjob Task started: getMentions";
         String subtitle = "/start/tweets/mentions";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -239,7 +239,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/favorites")
     public String getFavorites(Model model) {
         String msg = "/start/tweets/favorites";
-        String title = "Scheduled Task started: getFavorites";
+        String title = "Cronjob Task started: getFavorites";
         String subtitle = "/start/tweets/favorites";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -251,7 +251,7 @@ public class TaskController {
     @RequestMapping(path="/start/tweets/myretweets")
     public String getRetweetsOfMe(Model model) {
         String msg = "/start/tweets/myretweets";
-        String title = "Scheduled Task started: getRetweetsOfMe";
+        String title = "Cronjob Task started: getRetweetsOfMe";
         String subtitle = "/start/tweets/myretweets";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -263,7 +263,7 @@ public class TaskController {
     @RequestMapping(path="/start/userlists")
     public String getLists(Model model) {
         String msg = "/start/userlists";
-        String title = "Scheduled Task started: getLists";
+        String title = "Cronjob Task started: getLists";
         String subtitle = "/start/userlists";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
@@ -274,6 +274,18 @@ public class TaskController {
         listOfTasks.add(task2);
         model.addAttribute("listOfTasks",listOfTasks);
         return PATH+"/start/tasksStarted";
+    }
+
+    @RequestMapping(path="/start/url/update")
+    public String startUpdateUrls(Model model) {
+        String msg = "/start/url/update";
+        String title = "Cronjob Task started: UpdateUrls";
+        String subtitle = "/start/url/update";
+        String symbol = Symbols.TASK.toString();
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
+        Task task = mqTaskStartFireAndForget.startUpdateUrls();
+        model.addAttribute("task",task);
+        return PATH+"/start/taskStarted";
     }
 
 
