@@ -106,7 +106,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
     }
 
     @Override
-    public Entities updateEntitiesForUserProcess(User user, Entities entities, Task task) {
+    public Entities updateEntitiesForUserProcess(User user, Task task) {
         long userId = user.getId();
         long userIdTwitter = user.getIdTwitter();
         Set<Mention> newMentions = new HashSet<>();
@@ -117,9 +117,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             mention = mentionService.store(mention,task);
             newMentions.add(mention);
         }
+        Entities entities = user.getEntities();
+        entities.removeAllMentions();
         entities.addAllMentions(newMentions);
-        user.setEntities(entities);
-        user = userService.store(user,task);
         return entities;
     }
 

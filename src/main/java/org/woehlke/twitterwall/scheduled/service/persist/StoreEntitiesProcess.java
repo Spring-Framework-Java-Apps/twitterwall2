@@ -12,5 +12,5 @@ public interface StoreEntitiesProcess {
 
     Entities storeEntitiesProcessForTweet(Tweet tweet, Entities entities, Task task);
 
-    Entities updateEntitiesForUserProcess(User user, Entities entities, Task task);
+    Entities updateEntitiesForUserProcess(User user, Task task);
 }

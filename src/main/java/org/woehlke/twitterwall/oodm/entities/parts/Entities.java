@@ -317,7 +317,7 @@ public class Entities extends EntitiesFilter implements Serializable,DomainObjec
     }
 
     public String getFormattedTextForMentionsForTweets(String formattedText){
-        return super.getFormattedTextForMentionsForTweets(this.mentions,formattedText);
+        return super.getFormattedTextForMentions(this.mentions,formattedText);
     }
 
     private String toStringUrls(){
