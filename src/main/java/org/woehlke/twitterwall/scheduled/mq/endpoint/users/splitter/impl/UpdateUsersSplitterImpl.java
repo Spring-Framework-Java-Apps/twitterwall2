@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
-import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateUserSplitter")
 public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {

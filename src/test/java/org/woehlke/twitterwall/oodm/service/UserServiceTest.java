@@ -20,7 +20,7 @@ import org.woehlke.twitterwall.oodm.model.transients.Object2Entity;
 
 import java.util.Set;
 
-import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)

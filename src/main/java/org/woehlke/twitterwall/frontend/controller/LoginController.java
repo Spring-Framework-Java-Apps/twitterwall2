@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Symbols;
 
 @Controller
@@ -18,19 +18,19 @@ public class LoginController {
         String symbol = Symbols.LOGIN.toString();
         String title = "Login";
         String subtitle = "Enter your Credentials";
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
         log.info("-----------------------------------------");
         return "login/login";
     }
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     @Autowired
     public LoginController(
-        ControllerHelper controllerHelper
+        ContentFactory contentFactory
     ) {
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
     }
 }

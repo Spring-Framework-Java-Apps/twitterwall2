@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.oodm.model.Tweet;
 import org.woehlke.twitterwall.oodm.model.Url;
@@ -24,7 +24,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
 
-import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 16.07.17.
@@ -35,12 +35,12 @@ public class UrlController {
 
 
     @RequestMapping(path="/all")
-    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page, Model model){
+    public String getAll(@RequestParam(name= "page" ,defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page, Model model){
         String subtitle = "all";
         String title = "Url";
         String sortByColumn = "url";
         String symbol = Symbols.DATABASE.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(
             page,
             frontendProperties.getPageSize(),
@@ -65,7 +65,7 @@ public class UrlController {
             String title = "Url "+url.getUniqueId();
             String subtitle = "List of User and Tweets for one Url";
             String symbol = Symbols.MENTION.toString();
-            model = controllerHelper.setupPage(model,title,subtitle,symbol);
+            model = contentFactory.setupPage(model,title,subtitle,symbol);
             Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
             Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
             log.debug(msg+" try to: tweetService.findTweetsForMedia: ");
@@ -89,19 +89,19 @@ public class UrlController {
 
     private final TweetService tweetService;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     @Autowired
     public UrlController(
             FrontendProperties frontendProperties,
             UrlService urlService,
-            UserService userService, TweetService tweetService, ControllerHelper controllerHelper
+            UserService userService, TweetService tweetService, ContentFactory contentFactory
     ) {
         this.frontendProperties = frontendProperties;
         this.urlService = urlService;
         this.userService = userService;
         this.tweetService = tweetService;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
     }
 
 }

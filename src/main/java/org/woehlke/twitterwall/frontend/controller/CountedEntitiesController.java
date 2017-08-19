@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.oodm.model.*;
 import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.model.transients.Object2Entity;
@@ -35,7 +35,7 @@ public class CountedEntitiesController {
         String title = "Counted Entities";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         CountedEntities countedEntities =this.countedEntitiesService.countAll();
         model.addAttribute("countedEntities", countedEntities);
         return "application/domain/count";
@@ -47,7 +47,7 @@ public class CountedEntitiesController {
         String title = "Counted Entities";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         CountedEntities countedEntities =this.countedEntitiesService.deleteAll();
         model.addAttribute("countedEntities", countedEntities);
         return "application/domain/count";
@@ -55,7 +55,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/hashtag")
     public String domainCountTweet2hashtag(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ) {
         String title = "Tweet -&gt; HashTag";
@@ -79,7 +79,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/media")
     public String domainCountTweet2media(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ) {
         String title = "Tweet -&gt; Media";
@@ -103,7 +103,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/mention")
     public String domainCountTweet2mention(
-            @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page" ,defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "Tweet -&gt; Mention";
@@ -127,7 +127,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/tickersymbol")
     public String domainCountTweet2tickersymbol(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "Tweet -&gt; TickerSymbol";
@@ -151,7 +151,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/tweet/url")
     public String domainCountTweet2url(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "Tweet -&gt; Url";
@@ -175,7 +175,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/hashtag")
     public String domainCountUserprofile2hashtag(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "UserProfile -&gt; HashTag";
@@ -199,7 +199,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/media")
     public String domainCountUserprofile2media(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "UserProfile -&gt; Media";
@@ -223,7 +223,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/mention")
     public String domainCountUserprofile2mention(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "UserProfile -&gt; Mention";
@@ -247,7 +247,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/tickersymbol")
     public String domainCountUserprofile2Tickersymbol(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "UserProfile -&gt; TickerSymbol";
@@ -271,7 +271,7 @@ public class CountedEntitiesController {
 
     @RequestMapping(path="/user/url")
     public String domainCountUserprofile2Url(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "UserProfile -&gt; Url";
@@ -296,13 +296,13 @@ public class CountedEntitiesController {
     private void setUpThisPage(String title,Model model){
         String subtitle = "Counted Entities";
         String symbol = Symbols.DATABASE.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
     }
 
 
     private final FrontendProperties frontendProperties;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private final TweetService tweetService;
 
@@ -325,7 +325,7 @@ public class CountedEntitiesController {
     @Autowired
     public CountedEntitiesController(
         FrontendProperties frontendProperties,
-        ControllerHelper controllerHelper,
+        ContentFactory contentFactory,
         TweetService tweetService,
         UserService userService,
         HashTagService hashTagService,
@@ -335,7 +335,7 @@ public class CountedEntitiesController {
         UrlService urlService,
         CountedEntitiesService countedEntitiesService, TwitterProperties twitterProperties) {
         this.frontendProperties = frontendProperties;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
         this.tweetService = tweetService;
         this.userService = userService;
         this.hashTagService = hashTagService;

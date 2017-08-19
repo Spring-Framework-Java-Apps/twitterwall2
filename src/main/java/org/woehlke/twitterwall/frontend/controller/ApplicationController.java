@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 
 /**
  * Created by tw on 03.07.17.
@@ -21,19 +21,19 @@ public class ApplicationController {
         String title = "Application Management";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.DATABASE.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         return "application/management";
     }
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private final TwitterProperties twitterProperties;
 
     @Autowired
     public ApplicationController(
-            ControllerHelper controllerHelper,
+            ContentFactory contentFactory,
             TwitterProperties twitterProperties) {
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
         this.twitterProperties = twitterProperties;
     }
 

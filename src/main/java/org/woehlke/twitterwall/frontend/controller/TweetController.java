@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.oodm.model.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 
@@ -31,11 +31,11 @@ public class TweetController {
 
     @RequestMapping("/all")
     public String getLatestTweets(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             twitterProperties.getSearchQuery(),
@@ -61,7 +61,7 @@ public class TweetController {
             throw new EntityNotFoundException();
         } else {
             String title = "Tweet";
-            model = controllerHelper.setupPage(
+            model = contentFactory.setupPage(
                     model,
                     title,
                     twitterProperties.getSearchQuery(),
@@ -74,11 +74,11 @@ public class TweetController {
 
     @RequestMapping("/timeline/home")
     public String getHomeTimeline(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Home Timneline",
@@ -98,11 +98,11 @@ public class TweetController {
 
     @RequestMapping("/timeline/user")
     public String getUserTimeline(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "User Timeline",
@@ -122,11 +122,11 @@ public class TweetController {
 
     @RequestMapping("/mentions")
     public String getMentions(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Mentions",
@@ -146,11 +146,11 @@ public class TweetController {
 
     @RequestMapping("/favorites")
     public String getFavorites(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Favorites",
@@ -170,11 +170,11 @@ public class TweetController {
 
     @RequestMapping("/retweets")
     public String getRetweetsOfMe(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Retweets Of Me",
@@ -196,7 +196,7 @@ public class TweetController {
 
     private final TweetService tweetService;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private final FrontendProperties frontendProperties;
 
@@ -205,12 +205,12 @@ public class TweetController {
     @Autowired
     public TweetController(
             TweetService tweetService,
-            ControllerHelper controllerHelper,
+            ContentFactory contentFactory,
             FrontendProperties frontendProperties,
             TwitterProperties twitterProperties
     ) {
         this.tweetService = tweetService;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
     }

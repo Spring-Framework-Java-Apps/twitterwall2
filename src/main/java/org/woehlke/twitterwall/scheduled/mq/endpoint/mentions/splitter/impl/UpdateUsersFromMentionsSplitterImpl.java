@@ -24,7 +24,7 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateUserFromMentionsSplitter")
 public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMentionsSplitter {

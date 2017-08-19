@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.TaskHistory;
 import org.woehlke.twitterwall.oodm.model.User;
@@ -38,14 +38,14 @@ public class TaskController {
 
     @RequestMapping(path="/all")
     public String getAll(
-            @RequestParam(name= "page",defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page",defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String msg = "/task/all: ";
         String title = "Tasks";
         String subtitle = "List aller Tasks";
         String symbol = Symbols.TASKS_ALL.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(
                 page, frontendProperties.getPageSize(),
                 Sort.Direction.DESC,
@@ -58,7 +58,7 @@ public class TaskController {
 
     @RequestMapping(path="/{id}")
     public String getTaskById(
-        @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page" ,defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") Task task, Model model) {
         if(task == null){
             throw new EntityNotFoundException();
@@ -67,7 +67,7 @@ public class TaskController {
             String title = "Task "+task.getUniqueId();
             String subtitle = "List of TasksHistory for Task";
             String symbol = Symbols.TASK.toString();
-            model = controllerHelper.setupPage(model,title,subtitle,symbol);
+            model = contentFactory.setupPage(model,title,subtitle,symbol);
             Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
             Page<TaskHistory> taskHistoryList = taskHistoryService.findByTask(task,pageRequest);
             model.addAttribute("task",task);
@@ -78,7 +78,7 @@ public class TaskController {
 
     @RequestMapping("/start/createTestData")
     public String createTTestData(Model model) {
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
                 model,"Test Data Tweets",
                 twitterProperties.getSearchQuery(),
                 Symbols.GET_TEST_DATA.toString()
@@ -97,7 +97,7 @@ public class TaskController {
 
     @RequestMapping("/start/user/onlist/renew")
     public String getOnListRenew(
-            @RequestParam(name= "page" ,defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page" ,defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
@@ -112,7 +112,7 @@ public class TaskController {
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";
-        model = controllerHelper.setupPage(model, title, "Users", symbol);
+        model = contentFactory.setupPage(model, title, "Users", symbol);
         return PATH+"/start/renew";
     }
 
@@ -122,7 +122,7 @@ public class TaskController {
         String title = "Scheduled Task started: fetch Tweets from Search";
         String subtitle = "/start/tweets/search";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.fetchTweetsFromSearch();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -134,7 +134,7 @@ public class TaskController {
         String title = "Scheduled Task started: update Tweets";
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.updateTweets();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -146,7 +146,7 @@ public class TaskController {
         String title = "Scheduled Task started: update Users";
         String subtitle = "/start/users/update";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.updateUsers();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -158,7 +158,7 @@ public class TaskController {
         String title = "Scheduled Task started: fetch Users from List";
         String subtitle = "/start/users/list/fetch";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.fetchUsersFromList();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -170,7 +170,7 @@ public class TaskController {
         String title = "Scheduled Task started: fetch Follower";
         String subtitle = "/start/users/follower/fetch";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.fetchFollower();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -182,7 +182,7 @@ public class TaskController {
         String title = "Scheduled Task started: fetch Friends";
         String subtitle = "/start/users/friends/fetch";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.fetchFriends();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -194,7 +194,7 @@ public class TaskController {
         String title = "Scheduled Task started: update Users from Mentions";
         String subtitle = "/start/users/mentions/update";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.updateUsersFromMentions();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -206,7 +206,7 @@ public class TaskController {
         String title = "Scheduled Task started: getHomeTimeline";
         String subtitle = "/start/tweets/timeline/home";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.getHomeTimeline();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -218,7 +218,7 @@ public class TaskController {
         String title = "Scheduled Task started: getUserTimeline";
         String subtitle = "/start/tweets/timeline/user";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.getUserTimeline();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -230,7 +230,7 @@ public class TaskController {
         String title = "Scheduled Task started: getMentions";
         String subtitle = "/start/tweets/mentions";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.getMentions();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -242,7 +242,7 @@ public class TaskController {
         String title = "Scheduled Task started: getFavorites";
         String subtitle = "/start/tweets/favorites";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.getFavorites();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -254,7 +254,7 @@ public class TaskController {
         String title = "Scheduled Task started: getRetweetsOfMe";
         String subtitle = "/start/tweets/myretweets";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Task task = mqAsyncStartTask.getRetweetsOfMe();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
@@ -266,7 +266,7 @@ public class TaskController {
         String title = "Scheduled Task started: getLists";
         String subtitle = "/start/userlists";
         String symbol = Symbols.TASK.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         List<Task> listOfTasks = new ArrayList<>();
         Task task1 = mqAsyncStartTask.getLists();
         listOfTasks.add(task1);
@@ -289,7 +289,7 @@ public class TaskController {
 
     private final FrontendProperties frontendProperties;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private final AsyncStartTask mqAsyncStartTask;
 
@@ -300,14 +300,14 @@ public class TaskController {
             UserService userService, TaskService taskService,
             TaskHistoryService taskHistoryService,
             FrontendProperties frontendProperties,
-            ControllerHelper controllerHelper,
+            ContentFactory contentFactory,
             AsyncStartTask mqAsyncStartTask,
             TwitterProperties twitterProperties) {
         this.userService = userService;
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
         this.frontendProperties = frontendProperties;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
         this.mqAsyncStartTask = mqAsyncStartTask;
         this.twitterProperties = twitterProperties;
     }

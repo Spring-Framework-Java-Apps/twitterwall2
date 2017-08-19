@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.frontend.content.Symbols;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         String symbol = Symbols.EXCEPTION.toString();
         String title = "Exception";
         String subtitle = throwable.getMessage();
-        mav = controllerHelper.setupPage(mav, title, subtitle, symbol);
+        mav = contentFactory.setupPage(mav, title, subtitle, symbol);
         mav.addObject("exception", throwable);
         mav.addObject("url", request.getRequestURL());
         mav.setViewName("exceptionhandler/persistentObjectNotFound");
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
         String symbol = Symbols.EXCEPTION.toString();
         String title = "Exception";
         String subtitle = ex.getMessage();
-        mav = controllerHelper.setupPage(mav, title, subtitle, symbol);
+        mav = contentFactory.setupPage(mav, title, subtitle, symbol);
         mav.addObject("exception", ex);
         mav.addObject("url", request.getRequestURL());
         mav.setViewName("exceptionhandler/persistentObjectNotFound");
@@ -67,11 +67,11 @@ public class GlobalExceptionHandler {
     }
 
     @Autowired
-    public GlobalExceptionHandler(ControllerHelper controllerHelper) {
-        this.controllerHelper = controllerHelper;
+    public GlobalExceptionHandler(ContentFactory contentFactory) {
+        this.contentFactory = contentFactory;
     }
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

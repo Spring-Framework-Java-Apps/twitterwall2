@@ -28,7 +28,7 @@ import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 @Component("mqFetchUserlistOwnersSplitter")
 public class FetchUserlistOwnersSplitterImpl implements FetchUserlistOwnersSplitter {

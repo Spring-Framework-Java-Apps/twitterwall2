@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.common.impl;
+package org.woehlke.twitterwall.frontend.content.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Page;
 
 /**
  * Created by tw on 18.07.17.
  */
 @Component
-public class ControllerHelperImpl implements ControllerHelper {
+public class ContentFactoryImpl implements ContentFactory {
 
     private Page setupPage(Page page, String title, String subtitle, String symbol)  {
         page.setTitle(title);
@@ -56,7 +56,7 @@ public class ControllerHelperImpl implements ControllerHelper {
         return model;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(ControllerHelperImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ContentFactoryImpl.class);
 
     private final FrontendProperties frontendProperties;
 
@@ -74,7 +74,7 @@ public class ControllerHelperImpl implements ControllerHelper {
 
 
     @Autowired
-    public ControllerHelperImpl(
+    public ContentFactoryImpl(
             FrontendProperties frontendProperties,
             TwitterProperties twitterProperties
     ) {

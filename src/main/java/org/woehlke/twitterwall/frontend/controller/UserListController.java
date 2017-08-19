@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.oodm.model.UserList;
@@ -29,7 +29,7 @@ public class UserListController {
 
     @RequestMapping("/all")
     public String getAll(
-        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ) {
         Pageable pageRequest = new PageRequest(
@@ -42,13 +42,13 @@ public class UserListController {
         model.addAttribute("myPageContent", userlists);
         String symbol = Symbols.USER_ALL.toString();
         String subtitle = "All Users";
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
         return "userlist/all";
     }
 
     @RequestMapping("/{id}")
     public String getUserListForId(
-        @RequestParam(name= "page", defaultValue=""+ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         @PathVariable("id") UserList userList, Model model
     ) {
         Pageable pageRequest = new PageRequest(
@@ -60,7 +60,7 @@ public class UserListController {
         String symbol = Symbols.USER_PROFILE.toString();
         String title = userList.getFullName();
         String subtitle = userList.getDescription();
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
         Page<User> userPage = userService.findUsersForUserList(userList,pageRequest);
         model.addAttribute("users", userPage);
         model.addAttribute("userList", userList);
@@ -75,15 +75,15 @@ public class UserListController {
 
     private final FrontendProperties frontendProperties;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private static String title = "User List";
 
     @Autowired
-    public UserListController(UserListService userListService, UserService userService, FrontendProperties frontendProperties, ControllerHelper controllerHelper) {
+    public UserListController(UserListService userListService, UserService userService, FrontendProperties frontendProperties, ContentFactory contentFactory) {
         this.userListService = userListService;
         this.userService = userService;
         this.frontendProperties = frontendProperties;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
     }
 }
