@@ -10,13 +10,11 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UserList;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
+import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
-import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.*;
 
 @Component
 public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder {
@@ -158,6 +156,17 @@ public class TwitterwallMessageBuilderImpl implements TwitterwallMessageBuilder 
                         .setHeader("loop_id",loopId)
                         .setHeader("loop_all",loopAll)
                         .build();
+        return mqMessageOut;
+    }
+
+    @Override
+    public Message<MentionMessage> buildMentionMessage(Message<TaskMessage> incomingTaskMessage, Mention onePersMention) {
+        MentionMessage outputPayload = new MentionMessage(incomingTaskMessage.getPayload(),onePersMention.getId(),onePersMention.getScreenName());
+        Message<MentionMessage> mqMessageOut =
+            MessageBuilder.withPayload(outputPayload)
+                .copyHeaders(incomingTaskMessage.getHeaders())
+                .setHeader("mention_id", onePersMention.getId())
+                .build();
         return mqMessageOut;
     }
 

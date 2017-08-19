@@ -38,11 +38,11 @@ import java.util.regex.Pattern;
     ),
     @NamedQuery(
         name="Mention.findAllWithoutUser",
-        query="select t from Mention t where t.idTwitterOfUser=0"
+        query="select t from Mention t where t.idTwitterOfUser=Mention.HAS_NO_USER or t.idOfUser=Mention.HAS_NO_USER"
     ),
     @NamedQuery(
         name="Mention.countAllWithoutUser",
-        query="select count(t) from Mention t where t.idTwitterOfUser=0"
+        query="select count(t) from Mention t where t.idTwitterOfUser=Mention.HAS_NO_USER or t.idOfUser=Mention.HAS_NO_USER"
     ),
     @NamedQuery(
         name="Mention.findByUserId",
@@ -76,6 +76,8 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     public static final long ID_TWITTER_UNDEFINED = -1L;
 
+    public static final long HAS_NO_USER = 0L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
@@ -96,11 +98,11 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     @NotNull
     @Column(name = "id_twitter_of_user",nullable = false)
-    private Long idTwitterOfUser = 0L;
+    private Long idTwitterOfUser = HAS_NO_USER;
 
     @NotNull
     @Column(name = "fk_user",nullable = false)
-    private Long idOfUser = 0L;
+    private Long idOfUser = HAS_NO_USER;
 
     @NotNull
     @Column(name="mention_status",nullable = false)
@@ -358,6 +360,8 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         mention.setScreenName(screenName);
         mention.setName(name);
         mention.setMentionStatus(MentionStatus.FETCHED_FROM_TWITTER);
+        mention.setIdOfUser(Mention.HAS_NO_USER);
+        mention.setIdTwitterOfUser(Mention.HAS_NO_USER);
         return mention;
     }
 
@@ -368,6 +372,8 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         mention.setName(screenName);
         mention.setMentionStatus(MentionStatus.CREATED_BY_TEXT);
         mention.setIdTwitteToUndefined();
+        mention.setIdOfUser(Mention.HAS_NO_USER);
+        mention.setIdTwitterOfUser(Mention.HAS_NO_USER);
         return mention;
     }
 }

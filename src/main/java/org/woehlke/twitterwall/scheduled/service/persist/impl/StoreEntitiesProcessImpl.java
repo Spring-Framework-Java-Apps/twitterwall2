@@ -22,7 +22,39 @@ import java.util.Set;
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
-    public Entities storeEntitiesProcessForTweet(Tweet tweet, Entities entities, Task task) {
+    public Entities storeEntitiesProcessForTweet(Tweet tweet, Task task) {
+        Entities entities = tweet.getEntities();
+        entities = storeEntitiesProcess(entities,task);
+        return entities;
+    }
+
+    @Override
+    public Entities storeEntitiesProcessForUser(User user, Task task) {
+        Entities entities =  user.getEntities();
+        entities = storeEntitiesProcess(entities,task);
+        return entities;
+    }
+
+    @Override
+    public Entities updateEntitiesForUserProcess(User user, Task task) {
+        long userId = user.getId();
+        long userIdTwitter = user.getIdTwitter();
+        Set<Mention> newMentions = new HashSet<>();
+        Set<Mention> mentions = user.getEntities().getMentions();
+        for(Mention mention:mentions){
+            mention.setIdTwitterOfUser(userIdTwitter);
+            mention.setIdOfUser(userId);
+            mention = mentionService.store(mention,task);
+            newMentions.add(mention);
+        }
+        Entities entities = user.getEntities();
+        entities.removeAllMentions();
+        entities.addAllMentions(newMentions);
+        return entities;
+    }
+
+
+    private Entities storeEntitiesProcess(Entities entities, Task task) {
         String msg = "storeEntitiesProcessForTweet "+task.getUniqueId()+" : ";
         try {
             Set<Url> urls = new LinkedHashSet<>();
@@ -102,24 +134,6 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }
-        return entities;
-    }
-
-    @Override
-    public Entities updateEntitiesForUserProcess(User user, Task task) {
-        long userId = user.getId();
-        long userIdTwitter = user.getIdTwitter();
-        Set<Mention> newMentions = new HashSet<>();
-        Set<Mention> mentions = user.getEntities().getMentions();
-        for(Mention mention:mentions){
-            mention.setIdTwitterOfUser(userIdTwitter);
-            mention.setIdOfUser(userId);
-            mention = mentionService.store(mention,task);
-            newMentions.add(mention);
-        }
-        Entities entities = user.getEntities();
-        entities.removeAllMentions();
-        entities.addAllMentions(newMentions);
         return entities;
     }
 

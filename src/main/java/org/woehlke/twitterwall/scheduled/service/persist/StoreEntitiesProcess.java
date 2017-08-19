@@ -10,7 +10,9 @@ import org.woehlke.twitterwall.oodm.entities.Task;
  */
 public interface StoreEntitiesProcess {
 
-    Entities storeEntitiesProcessForTweet(Tweet tweet, Entities entities, Task task);
+    Entities storeEntitiesProcessForTweet(Tweet tweet, Task task);
+
+    Entities storeEntitiesProcessForUser(User user, Task task);
 
     Entities updateEntitiesForUserProcess(User user, Task task);
 }

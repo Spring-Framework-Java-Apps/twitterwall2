@@ -380,11 +380,11 @@
                 method="splitUserMessage"  />
         <int:service-activator
                 id="updateUsersFromMentionsTransformator"
-                ref="mqUserTransformator"
+                ref="mqUserforMentionTransformator"
                 method="transformUser" />
         <int:service-activator
                 id="updateUsersFromMentionsPersistor"
-                ref="mqUserPersistor"
+                ref="mqUserforMentionPersistor"
                 method="persistUser" />
         <int:aggregator
                 id="updateUsersFromMentionsAggregator"
@@ -392,7 +392,7 @@
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="updateUsersFromMentionsFinisher"
-                ref="mqUserFinisher"
+                ref="mqMentionFinisher"
                 method="finish" />
     </int:chain>
 
@@ -947,25 +947,25 @@
 
     <int:chain id="updateUsersFromMentionsFireAndForgetChain" input-channel="updateUsersFromMentionsFireAndForgetChannel">
         <int:splitter
-                id="updateUsersFromMentionsFireAndForgetSplitter"
-                ref="mqUpdateUserFromMentionsSplitter"
-                method="splitUserMessage"  />
+            id="updateUsersFromMentionsFireAndForgetSplitter"
+            ref="mqUpdateUserFromMentionsSplitter"
+            method="splitUserMessage"  />
         <int:service-activator
-                id="updateUsersFromMentionsFireAndForgetTransformator"
-                ref="mqUserTransformator"
-                method="transformUser" />
+            id="updateUsersFromMentionsFireAndForgetTransformator"
+            ref="mqUserforMentionTransformator"
+            method="transformUser" />
         <int:service-activator
-                id="updateUsersFromMentionsFireAndForgetPersistor"
-                ref="mqUserPersistor"
-                method="persistUser" />
+            id="updateUsersFromMentionsFireAndForgetPersistor"
+            ref="mqUserforMentionPersistor"
+            method="persistUser" />
         <int:aggregator
-                id="updateUsersFromMentionsFireAndForgetAggregator"
-                message-store="store"
-                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+            id="updateUsersFromMentionsFireAndForgetAggregator"
+            message-store="store"
+            release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
-                id="updateUsersFromMentionsFireAndForgetFinisher"
-                ref="mqUserFinisher"
-                method="finishAsnyc" />
+            id="updateUsersFromMentionsFireAndForgetFinisher"
+            ref="mqMentionFinisher"
+            method="finishAsnyc" />
     </int:chain>
 
 
