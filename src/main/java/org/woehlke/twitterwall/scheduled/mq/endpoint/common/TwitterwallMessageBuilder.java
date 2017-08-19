@@ -33,5 +33,12 @@ public interface TwitterwallMessageBuilder {
 
     Message<UserListMessage> buildUserListMessage(Message<TaskMessage> incomingTaskMessage, UserList userList, int loopId, int loopAll);
 
-    Message<MentionMessage> buildMentionMessage(Message<TaskMessage> incomingTaskMessage, Mention onePersMention);
+    Message<MentionMessage> buildMentionMessageForTask(Message<TaskMessage> incomingTaskMessage, Mention onePersMention);
+
+    Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage, TwitterProfile userFromTwitter);
+
+    Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage, User user);
+
+    Message<MentionMessage> buildMentionMessage(Message<MentionMessage> incomingMessage, Mention mention);
+
 }

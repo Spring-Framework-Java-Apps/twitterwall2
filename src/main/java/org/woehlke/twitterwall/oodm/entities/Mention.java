@@ -38,11 +38,11 @@ import java.util.regex.Pattern;
     ),
     @NamedQuery(
         name="Mention.findAllWithoutUser",
-        query="select t from Mention t where t.idTwitterOfUser=Mention.HAS_NO_USER or t.idOfUser=Mention.HAS_NO_USER"
+        query="select t from Mention t where t.idTwitterOfUser=0L or t.idOfUser=0L"
     ),
     @NamedQuery(
         name="Mention.countAllWithoutUser",
-        query="select count(t) from Mention t where t.idTwitterOfUser=Mention.HAS_NO_USER or t.idOfUser=Mention.HAS_NO_USER"
+        query="select count(t) from Mention t where t.idTwitterOfUser=0L or t.idOfUser=0L"
     ),
     @NamedQuery(
         name="Mention.findByUserId",

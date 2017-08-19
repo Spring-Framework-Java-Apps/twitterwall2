@@ -379,13 +379,21 @@
                 ref="mqUpdateUserFromMentionsSplitter"
                 method="splitUserMessage"  />
         <int:service-activator
+                id="updateUsersFromMentionsLoader"
+                ref="mqUserforMentionLoader"
+                method="fetchUserforMentionfromTwitter" />
+        <int:service-activator
                 id="updateUsersFromMentionsTransformator"
                 ref="mqUserforMentionTransformator"
-                method="transformUser" />
+                method="transformUserforMention" />
         <int:service-activator
                 id="updateUsersFromMentionsPersistor"
                 ref="mqUserforMentionPersistor"
-                method="persistUser" />
+                method="persistUserforMention" />
+        <int:service-activator
+                id="updateMentionWithUserFireAndForgetPersistor"
+                ref="mqUpdateMentionWithUser"
+                method="updateMentionWithUser" />
         <int:aggregator
                 id="updateUsersFromMentionsAggregator"
                 message-store="store"
@@ -951,13 +959,21 @@
             ref="mqUpdateUserFromMentionsSplitter"
             method="splitUserMessage"  />
         <int:service-activator
+            id="updateUsersFromMentionsFireAndForgetLoader"
+            ref="mqUserforMentionLoader"
+            method="fetchUserforMentionfromTwitter" />
+        <int:service-activator
             id="updateUsersFromMentionsFireAndForgetTransformator"
             ref="mqUserforMentionTransformator"
-            method="transformUser" />
+            method="transformUserforMention" />
         <int:service-activator
             id="updateUsersFromMentionsFireAndForgetPersistor"
             ref="mqUserforMentionPersistor"
-            method="persistUser" />
+            method="persistUserforMention" />
+        <int:service-activator
+            id="updateMentionWithUserFireAndForgetPersistor"
+            ref="mqUpdateMentionWithUser"
+            method="updateMentionWithUser" />
         <int:aggregator
             id="updateUsersFromMentionsFireAndForgetAggregator"
             message-store="store"

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter;
+package org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter;
 
 
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.MentionSplitter;

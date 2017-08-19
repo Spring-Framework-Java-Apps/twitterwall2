@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.msg;
 
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.entities.User;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ public class MentionMessage implements Serializable {
     private final TaskMessage taskMessage;
     private final String screenName;
     private final TwitterProfile twitterProfile;
+    private final User user;
 
     private final long idTwitterOfUser;
     private final long idOfUser;
@@ -20,8 +22,39 @@ public class MentionMessage implements Serializable {
         this.screenName = screenName;
         this.mentionId = mentionId;
         this.twitterProfile = null;
+        this.user = null;
         this.idTwitterOfUser = Mention.HAS_NO_USER;
         this.idOfUser = Mention.HAS_NO_USER;
+    }
+
+    public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile userFromTwitter) {
+        this.taskMessage = taskMessage;
+        this.screenName = screenName;
+        this.mentionId = mentionId;
+        this.twitterProfile = userFromTwitter;
+        this.user = null;
+        this.idTwitterOfUser = Mention.HAS_NO_USER;
+        this.idOfUser = Mention.HAS_NO_USER;
+    }
+
+    public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile twitterProfile, User user) {
+        this.taskMessage = taskMessage;
+        this.screenName = screenName;
+        this.mentionId = mentionId;
+        this.twitterProfile = twitterProfile;
+        this.user = user;
+        this.idTwitterOfUser = Mention.HAS_NO_USER;
+        this.idOfUser = Mention.HAS_NO_USER;
+    }
+
+    public MentionMessage(TaskMessage taskMessage, long mentionId, String screenName, TwitterProfile twitterProfile, User user, long idOfUser, long idTwitterOfUser) {
+        this.taskMessage = taskMessage;
+        this.screenName = screenName;
+        this.mentionId = mentionId;
+        this.twitterProfile = twitterProfile;
+        this.user = user;
+        this.idTwitterOfUser = idTwitterOfUser;
+        this.idOfUser = idOfUser;
     }
 
     public TaskMessage getTaskMessage() {
@@ -48,6 +81,10 @@ public class MentionMessage implements Serializable {
         return mentionId;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,36 +92,38 @@ public class MentionMessage implements Serializable {
 
         MentionMessage that = (MentionMessage) o;
 
-        if (getIdTwitterOfUser() != that.getIdTwitterOfUser()) return false;
-        if (getIdOfUser() != that.getIdOfUser()) return false;
-        if (getMentionId() != that.getMentionId()) return false;
-        if (getTaskMessage() != null ? !getTaskMessage().equals(that.getTaskMessage()) : that.getTaskMessage() != null)
+        if (idTwitterOfUser != that.idTwitterOfUser) return false;
+        if (idOfUser != that.idOfUser) return false;
+        if (mentionId != that.mentionId) return false;
+        if (taskMessage != null ? !taskMessage.equals(that.taskMessage) : that.taskMessage != null) return false;
+        if (screenName != null ? !screenName.equals(that.screenName) : that.screenName != null) return false;
+        if (twitterProfile != null ? !twitterProfile.equals(that.twitterProfile) : that.twitterProfile != null)
             return false;
-        if (getScreenName() != null ? !getScreenName().equals(that.getScreenName()) : that.getScreenName() != null)
-            return false;
-        return getTwitterProfile() != null ? getTwitterProfile().equals(that.getTwitterProfile()) : that.getTwitterProfile() == null;
+        return user != null ? user.equals(that.user) : that.user == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getTaskMessage() != null ? getTaskMessage().hashCode() : 0;
-        result = 31 * result + (getScreenName() != null ? getScreenName().hashCode() : 0);
-        result = 31 * result + (getTwitterProfile() != null ? getTwitterProfile().hashCode() : 0);
-        result = 31 * result + (int) (getIdTwitterOfUser() ^ (getIdTwitterOfUser() >>> 32));
-        result = 31 * result + (int) (getIdOfUser() ^ (getIdOfUser() >>> 32));
-        result = 31 * result + (int) (getMentionId() ^ (getMentionId() >>> 32));
+        int result = taskMessage != null ? taskMessage.hashCode() : 0;
+        result = 31 * result + (screenName != null ? screenName.hashCode() : 0);
+        result = 31 * result + (twitterProfile != null ? twitterProfile.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (int) (idTwitterOfUser ^ (idTwitterOfUser >>> 32));
+        result = 31 * result + (int) (idOfUser ^ (idOfUser >>> 32));
+        result = 31 * result + (int) (mentionId ^ (mentionId >>> 32));
         return result;
     }
 
     @Override
     public String toString() {
         return "MentionMessage{" +
-            "taskMessage=" + taskMessage +
-            ", screenName='" + screenName + '\'' +
-            ", twitterProfile=" + twitterProfile +
-            ", idTwitterOfUser=" + idTwitterOfUser +
-            ", idOfUser=" + idOfUser +
-            ", mentionId=" + mentionId +
-            '}';
+                "taskMessage=" + taskMessage +
+                ", screenName='" + screenName + '\'' +
+                ", twitterProfile=" + twitterProfile +
+                ", user=" + user +
+                ", idTwitterOfUser=" + idTwitterOfUser +
+                ", idOfUser=" + idOfUser +
+                ", mentionId=" + mentionId +
+                '}';
     }
 }

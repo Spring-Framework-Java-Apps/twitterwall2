@@ -29,8 +29,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
                 tweet.setRetweetedStatus(retweetedStatus);
             }
             /** Entities */
-            Entities entities = tweet.getEntities();
-            entities = storeEntitiesProcess.storeEntitiesProcessForTweet(tweet, entities, task);
+            Entities entities = storeEntitiesProcess.storeEntitiesProcessForTweet(tweet, task);
             tweet.setEntities(entities);
             /** User */
             User user = tweet.getUser();

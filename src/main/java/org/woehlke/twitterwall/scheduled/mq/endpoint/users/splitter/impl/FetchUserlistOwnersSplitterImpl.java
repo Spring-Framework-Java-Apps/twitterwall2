@@ -19,6 +19,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserListService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.impl.UpdateUsersFromMentionsSplitterImpl;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.FetchUserlistOwnersSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.impl;
+package org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.UpdateUsersFromMentionsSplitter;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.UpdateUsersFromMentionsSplitter;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
@@ -79,7 +79,7 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                     if(foundUser == null) {
                         loopId++;
                         screenNames.add(screenName);
-                        Message<MentionMessage> mqMessageOut = twitterwallMessageBuilder.buildMentionMessage(incomingTaskMessage,onePersMention);
+                        Message<MentionMessage> mqMessageOut = twitterwallMessageBuilder.buildMentionMessageForTask(incomingTaskMessage,onePersMention);
                         resultList.add(mqMessageOut);
                     } else {
                         foundUser = userService.store(foundUser,task);

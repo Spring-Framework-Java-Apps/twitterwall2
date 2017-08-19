@@ -15,7 +15,6 @@ import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 /**
  * Created by tw on 09.07.17.
  */
-
 @Component
 public class StoreUserProcessImpl implements StoreUserProcess {
 
@@ -26,6 +25,8 @@ public class StoreUserProcessImpl implements StoreUserProcess {
             Entities entities = storeEntitiesProcess.storeEntitiesProcessForUser(user, task);
             user.setEntities(entities);
             user = userService.store(user, task);
+            entities = storeEntitiesProcess.updateEntitiesForUserProcess(user, task);
+            user.setEntities(entities);
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }
