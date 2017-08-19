@@ -23,7 +23,6 @@ import java.util.List;
 @Component("mqUserListsFinisher")
 public class ListFinisherImpl implements ListFinisher {
 
-    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public Message<UserListResultList> finish(Message<List<UserListMessage>> incomingMessageList) {
         List<UserList> resultList = new ArrayList<>();
@@ -40,7 +39,6 @@ public class ListFinisherImpl implements ListFinisher {
         return mqMessageOut;
     }
 
-    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public void finishAsnyc(Message<List<UserListMessage>> incomingMessageList) {
         CountedEntities countedEntities = countedEntitiesService.countAll();

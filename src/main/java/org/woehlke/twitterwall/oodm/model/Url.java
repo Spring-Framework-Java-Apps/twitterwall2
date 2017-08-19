@@ -30,6 +30,14 @@ import java.net.MalformedURLException;
     @NamedQuery(
         name="Url.findByUniqueId",
         query="select t from Url t where t.url=:url"
+    ),
+    @NamedQuery(
+        name="Url.findRawUrlsFromDescription",
+        query="select t from Url t where t.expanded='UNDEFINED'"
+    ),
+    @NamedQuery(
+        name="Url.findUrlAndExpandedTheSame",
+        query="select t from Url t where t.expanded=t.url"
     )
 })
 @EntityListeners(UrlListener.class)

@@ -8,19 +8,19 @@ import java.util.List;
 public class UrlResultList implements Serializable {
 
     private final long taskId;
-    private final List<Url> userList;
+    private final List<Long> urlIdList;
 
-    public UrlResultList(long taskId, List<Url> userList) {
+    public UrlResultList(long taskId, List<Long> urlIdList) {
         this.taskId = taskId;
-        this.userList = userList;
+        this.urlIdList = urlIdList;
     }
 
     public long getTaskId() {
         return taskId;
     }
 
-    public List<Url> getUserList() {
-        return userList;
+    public List<Long> getUrlIdList() {
+        return urlIdList;
     }
 
     @Override
@@ -31,13 +31,13 @@ public class UrlResultList implements Serializable {
         UrlResultList that = (UrlResultList) o;
 
         if (taskId != that.taskId) return false;
-        return userList != null ? userList.equals(that.userList) : that.userList == null;
+        return urlIdList != null ? urlIdList.equals(that.urlIdList) : that.urlIdList == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (taskId ^ (taskId >>> 32));
-        result = 31 * result + (userList != null ? userList.hashCode() : 0);
+        result = 31 * result + (urlIdList != null ? urlIdList.hashCode() : 0);
         return result;
     }
 
@@ -45,7 +45,7 @@ public class UrlResultList implements Serializable {
     public String toString() {
         return "UrlResultList{" +
                 "taskId=" + taskId +
-                ", userList=" + userList +
+                ", urlIdList=" + urlIdList +
                 '}';
     }
 }

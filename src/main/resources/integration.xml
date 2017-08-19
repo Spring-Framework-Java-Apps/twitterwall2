@@ -703,10 +703,6 @@
                 ref="mqUrFetcher"
                 method="fetchUrl" />
         <int:service-activator
-                id="transform.async.UpdateUrls"
-                ref="mqUrlTransformator"
-                method="transformUrl" />
-        <int:service-activator
                 id="persist.async.UpdateUrls"
                 ref="mqUrlPersistor"
                 method="persistUrl" />
@@ -729,10 +725,6 @@
                 id="fetch.UpdateUrls"
                 ref="mqUrFetcher"
                 method="fetchUrl" />
-        <int:service-activator
-                id="transform.UpdateUrls"
-                ref="mqUrlTransformator"
-                method="transformUrl" />
         <int:service-activator
                 id="persist.UpdateUrls"
                 ref="mqUrlPersistor"

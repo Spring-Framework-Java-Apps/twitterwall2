@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.model.Url;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithUrlTest {
@@ -68,6 +70,47 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
             log.debug(msg+" found: "+foundUrl);
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
+    }
+
+    @Commit
+    @Test
+    public void findRawUrlsFromDescription() throws Exception {
+        String msg = "findRawUrlsFromDescription: ";
+        List<Url> urlList = urlService.findRawUrlsFromDescription();
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.info(msg+" size: "+urlList.size());
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        Assert.assertTrue(urlList.size() >0 );
+        for(Url url:urlList){
+            Assert.assertTrue(url.isValid());
+            Assert.assertTrue(url.isRawUrlsFromDescription());
+            Assert.assertTrue(url.getExpanded().compareTo(Url.UNDEFINED)==0);
+            Assert.assertTrue(url.getDisplay().compareTo(Url.UNDEFINED)==0);
+            log.info(msg+"-----------------------------------------");
+            log.info(msg+url.getUniqueId());
+            log.info(msg+"-----------------------------------------");
+            log.trace(msg+url.toString());
+        }
+    }
+
+    @Commit
+    @Test
+    public void findUrlAndExpandedTheSame() throws Exception {
+        String msg = "findUrlAndExpandedTheSame: ";
+        List<Url> urlList = urlService.findUrlAndExpandedTheSame();
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.info(msg+" size: "+urlList.size());
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        Assert.assertTrue(urlList.size() >0 );
+        for(Url url:urlList){
+            Assert.assertTrue(url.isValid());
+            Assert.assertTrue(url.isUrlAndExpandedTheSame());
+            Assert.assertTrue(url.getUrl().compareTo(url.getExpanded())==0);
+            log.info(msg+"-----------------------------------------");
+            log.info(msg+url.getUniqueId());
+            log.info(msg+"-----------------------------------------");
+            log.trace(msg+url.toString());
         }
     }
 
