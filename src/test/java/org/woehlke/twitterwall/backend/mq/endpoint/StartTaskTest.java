@@ -1,9 +1,9 @@
 package org.woehlke.twitterwall.backend.mq.endpoint;
 
-import org.woehlke.twitterwall.backend.mq.endpoint.tasks.StartTask;
+import org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskStart;
 
 /**
- * @see StartTask
+ * @see TaskStart
  * @see StartTaskAsynchron
  */
 public interface StartTaskTest extends AsyncStartTaskTest {

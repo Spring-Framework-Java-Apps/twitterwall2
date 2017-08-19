@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.content.Symbols;
 import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.oodm.model.User;
-import org.woehlke.twitterwall.backend.mq.endpoint.tasks.StartTask;
+import org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskStart;
 
 
 /**
@@ -26,7 +26,7 @@ public class ImprintController {
         String title = "Imprint";
         String subtitle = frontendProperties.getImprintSubtitle();
         model = contentFactory.setupPage(model, title, subtitle, symbol);
-        User user = startTask.createImprintUser();
+        User user = taskStart.createImprintUser();
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
         return "imprint/imprint";
@@ -36,18 +36,18 @@ public class ImprintController {
 
     private final FrontendProperties frontendProperties;
 
-    private final StartTask startTask;
+    private final TaskStart taskStart;
 
     private final ContentFactory contentFactory;
 
     @Autowired
     public ImprintController(
             FrontendProperties frontendProperties,
-            StartTask startTask,
+            TaskStart taskStart,
             ContentFactory contentFactory
     ) {
         this.frontendProperties = frontendProperties;
-        this.startTask = startTask;
+        this.taskStart = taskStart;
         this.contentFactory = contentFactory;
     }
 

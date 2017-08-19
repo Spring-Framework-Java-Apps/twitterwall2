@@ -22,7 +22,7 @@ import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.backend.mq.endpoint.tasks.AsyncStartTask;
+import org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskStartFireAndForget;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -84,8 +84,8 @@ public class TaskController {
                 Symbols.GET_TEST_DATA.toString()
         );
         if(frontendProperties.getContextTest()){
-            Task taskTweets = mqAsyncStartTask.createTestDataForTweets();
-            Task taskUsers =  mqAsyncStartTask.createTestDataForUser();
+            Task taskTweets = mqTaskStartFireAndForget.createTestDataForTweets();
+            Task taskUsers =  mqTaskStartFireAndForget.createTestDataForUser();
             model.addAttribute("taskTweets", taskTweets);
             model.addAttribute("taskUsers",taskUsers);
         } else {
@@ -103,7 +103,7 @@ public class TaskController {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
         log.info(msg+"START startTask.fetchUsersFromList");
-        Task task = mqAsyncStartTask.fetchUsersFromList();
+        Task task = mqTaskStartFireAndForget.fetchUsersFromList();
         model.addAttribute("task",task);
         log.info(msg+"DONE startTask.fetchUsersFromList: ");
         log.info(msg+"START userService.findOnList(): ");
@@ -123,7 +123,7 @@ public class TaskController {
         String subtitle = "/start/tweets/search";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.fetchTweetsFromSearch();
+        Task task = mqTaskStartFireAndForget.fetchTweetsFromSearch();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -135,7 +135,7 @@ public class TaskController {
         String subtitle = "/start/tweets/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.updateTweets();
+        Task task = mqTaskStartFireAndForget.updateTweets();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -147,7 +147,7 @@ public class TaskController {
         String subtitle = "/start/users/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.updateUsers();
+        Task task = mqTaskStartFireAndForget.updateUsers();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -159,7 +159,7 @@ public class TaskController {
         String subtitle = "/start/users/list/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.fetchUsersFromList();
+        Task task = mqTaskStartFireAndForget.fetchUsersFromList();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -171,7 +171,7 @@ public class TaskController {
         String subtitle = "/start/users/follower/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.fetchFollower();
+        Task task = mqTaskStartFireAndForget.fetchFollower();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -183,7 +183,7 @@ public class TaskController {
         String subtitle = "/start/users/friends/fetch";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.fetchFriends();
+        Task task = mqTaskStartFireAndForget.fetchFriends();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -195,7 +195,7 @@ public class TaskController {
         String subtitle = "/start/users/mentions/update";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.updateUsersFromMentions();
+        Task task = mqTaskStartFireAndForget.updateUsersFromMentions();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -207,7 +207,7 @@ public class TaskController {
         String subtitle = "/start/tweets/timeline/home";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getHomeTimeline();
+        Task task = mqTaskStartFireAndForget.getHomeTimeline();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -219,7 +219,7 @@ public class TaskController {
         String subtitle = "/start/tweets/timeline/user";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getUserTimeline();
+        Task task = mqTaskStartFireAndForget.getUserTimeline();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -231,7 +231,7 @@ public class TaskController {
         String subtitle = "/start/tweets/mentions";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getMentions();
+        Task task = mqTaskStartFireAndForget.getMentions();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -243,7 +243,7 @@ public class TaskController {
         String subtitle = "/start/tweets/favorites";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getFavorites();
+        Task task = mqTaskStartFireAndForget.getFavorites();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -255,7 +255,7 @@ public class TaskController {
         String subtitle = "/start/tweets/myretweets";
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
-        Task task = mqAsyncStartTask.getRetweetsOfMe();
+        Task task = mqTaskStartFireAndForget.getRetweetsOfMe();
         model.addAttribute("task",task);
         return PATH+"/start/taskStarted";
     }
@@ -268,9 +268,9 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
         List<Task> listOfTasks = new ArrayList<>();
-        Task task1 = mqAsyncStartTask.getLists();
+        Task task1 = mqTaskStartFireAndForget.getLists();
         listOfTasks.add(task1);
-        Task task2 = mqAsyncStartTask.fetchUserlistOwners();
+        Task task2 = mqTaskStartFireAndForget.fetchUserlistOwners();
         listOfTasks.add(task2);
         model.addAttribute("listOfTasks",listOfTasks);
         return PATH+"/start/tasksStarted";
@@ -291,7 +291,7 @@ public class TaskController {
 
     private final ContentFactory contentFactory;
 
-    private final AsyncStartTask mqAsyncStartTask;
+    private final TaskStartFireAndForget mqTaskStartFireAndForget;
 
     private final TwitterProperties twitterProperties;
 
@@ -301,14 +301,14 @@ public class TaskController {
             TaskHistoryService taskHistoryService,
             FrontendProperties frontendProperties,
             ContentFactory contentFactory,
-            AsyncStartTask mqAsyncStartTask,
+            TaskStartFireAndForget mqTaskStartFireAndForget,
             TwitterProperties twitterProperties) {
         this.userService = userService;
         this.taskService = taskService;
         this.taskHistoryService = taskHistoryService;
         this.frontendProperties = frontendProperties;
         this.contentFactory = contentFactory;
-        this.mqAsyncStartTask = mqAsyncStartTask;
+        this.mqTaskStartFireAndForget = mqTaskStartFireAndForget;
         this.twitterProperties = twitterProperties;
     }
 

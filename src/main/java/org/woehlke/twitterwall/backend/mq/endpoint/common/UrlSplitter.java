@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.backend.mq.endpoint.common;
 
 import org.springframework.messaging.Message;
-import org.woehlke.twitterwall.backend.mq.msg.UrlMessage;
+import org.woehlke.twitterwall.backend.mq.endpoint.urls.msg.UrlMessage;
 
 import java.util.List;
 

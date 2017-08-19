@@ -13,7 +13,7 @@ import org.woehlke.twitterwall.backend.service.persist.CreatePersistentUrl;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
+import static org.woehlke.twitterwall.CronJobs.TWELVE_HOURS;
 
 /**
  * Created by tw on 09.07.17.
