@@ -54,7 +54,7 @@
                                         </a>
                                     </span>
                                     <span th:if="${myPageItem.idTwitter &gt; 0}">
-                                        <a href="" th:href="@{|/user/${myPageItem.screenName}|}">
+                                        <a href="" th:href="@{|/user/screenName/${myPageItem.screenName}|}">
                                             <span>@</span>
                                             <span th:text="${myPageItem.screenName}">screenName</span>
                                         </a>
@@ -65,7 +65,7 @@
                                 <div class="col-md-3">has User:</div>
                                 <div class="col-md-9">
                                     <span th:if="${myPageItem.hasUser()}">
-                                        <a href="" th:href="@{|/user/${myPageItem.idTwitter}|}">
+                                        <a href="" th:href="@{|/user/${myPageItem.idOfUser}|}">
                                             <span>@</span>
                                             <span th:text="${myPageItem.screenName}">myPageItem.screenName</span>
                                         </a>

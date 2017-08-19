@@ -42,4 +42,8 @@ public interface TaskStartFireAndForget {
     Task fetchUserlistOwners();
 
     Task startGarbageCollection();
+
+    Task startUpdateUrls();
+
+
 }

@@ -275,11 +275,24 @@
         </int:interceptors>
     </int:channel>
 
+    <int:channel id="channel.UpdateUrls" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.UpdateUrls" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
 
     <int:router id="router.TaskStart" input-channel="channel.TaskStart" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="channel.UpdateTweets"/>
         <int:mapping value="UPDATE_USERS" channel="channel.UpdateUser"/>
         <int:mapping value="UPDATE_MENTIONS_FOR_USERS" channel="channel.UpdateMentionsForUsers"/>
+        <int:mapping value="UPDATE_URLS" channel="channel.UpdateUrls"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="channel.FetchTweetsFromSearch"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="channel.FetchUsersFromList"/>
         <int:mapping value="FETCH_FOLLOWER" channel="channel.FetchFollower"/>
@@ -288,6 +301,7 @@
         <int:mapping value="CREATE_TESTDATA_TWEETS" channel="channel.CreateTestDataTweets"/>
         <int:mapping value="CREATE_IMPRINT_USER" channel="channel.CreateImprintUser"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="channel.RemoveOldDataFromStorage"/>
+        <int:mapping value="GARBAGE_COLLECTION" channel="channel.GarbageCollection"/>
         <int:mapping value="FETCH_HOME_TIMELINE" channel="channel.FetchHomeTimeline"/>
         <int:mapping value="FETCH_USER_TIMELINE" channel="channel.FetchUserTimeline"/>
         <int:mapping value="FETCH_MENTIONS" channel="channel.FetchMentions"/>
@@ -301,6 +315,7 @@
         <int:mapping value="UPDATE_TWEETS" channel="channel.async.UpdateTweets"/>
         <int:mapping value="UPDATE_USERS" channel="channel.async.UpdateUser"/>
         <int:mapping value="UPDATE_MENTIONS_FOR_USERS" channel="channel.async.UpdateMentionsForUsers"/>
+        <int:mapping value="UPDATE_URLS" channel="channel.async.UpdateUrls"/>
         <int:mapping value="FETCH_TWEETS_FROM_SEARCH" channel="channel.async.FetchTweetsFromSearch"/>
         <int:mapping value="FETCH_USERS_FROM_LIST" channel="channel.async.FetchUsersFromList"/>
         <int:mapping value="FETCH_FOLLOWER" channel="channel.async.FetchFollower"/>
@@ -309,6 +324,7 @@
         <int:mapping value="CREATE_TESTDATA_TWEETS" channel="channel.async.CreateTestDataTweets"/>
         <int:mapping value="CREATE_IMPRINT_USER" channel="channel.async.CreateImprintUser"/>
         <int:mapping value="REMOVE_OLD_DATA_FROM_STORAGE" channel="channel.async.RemoveOldDataFromStorage"/>
+        <int:mapping value="GARBAGE_COLLECTION" channel="channel.async.GarbageCollection"/>
         <int:mapping value="FETCH_HOME_TIMELINE" channel="channel.async.FetchHomeTimeline"/>
         <int:mapping value="FETCH_USER_TIMELINE" channel="channel.async.FetchUserTimeline"/>
         <int:mapping value="FETCH_MENTIONS" channel="channel.async.FetchMentions"/>
@@ -672,6 +688,62 @@
         <int:service-activator
                 id="finish.FetchLists"
                 ref="mqUserListsFinisher"
+                method="finish" />
+    </int:chain>
+
+
+
+    <int:chain id="chain.async.UpdateUrls" input-channel="channel.async.UpdateUrls">
+        <int:splitter
+                id="splitter.async.UpdateUrls"
+                ref="mqUpdateUrls"
+                method="splitUrlMessage"  />
+        <int:service-activator
+                id="fetch.async.UpdateUrls"
+                ref="mqUrFetcher"
+                method="fetchUrl" />
+        <int:service-activator
+                id="transform.async.UpdateUrls"
+                ref="mqUrlTransformator"
+                method="transformUrl" />
+        <int:service-activator
+                id="persist.async.UpdateUrls"
+                ref="mqUrlPersistor"
+                method="persistUrl" />
+        <int:aggregator
+                id="aggregator.async.UpdateUrls"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.UpdateUrls"
+                ref="mqUrlFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.UpdateUrls" input-channel="channel.UpdateUrls">
+        <int:splitter
+                id="splitter.UpdateUrls"
+                ref="mqUpdateUrls"
+                method="splitUrlMessage"  />
+        <int:service-activator
+                id="fetch.UpdateUrls"
+                ref="mqUrFetcher"
+                method="fetchUrl" />
+        <int:service-activator
+                id="transform.UpdateUrls"
+                ref="mqUrlTransformator"
+                method="transformUrl" />
+        <int:service-activator
+                id="persist.UpdateUrls"
+                ref="mqUrlPersistor"
+                method="persistUrl" />
+        <int:aggregator
+                id="aggregator.UpdateUrls"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.UpdateUrls"
+                ref="mqUrlFinisher"
                 method="finish" />
     </int:chain>
 
@@ -1206,8 +1278,40 @@
                 method="finish" />
     </int:chain>
 
-    <!--  Fire and Forget Chains -->
 
+
+    <int:chain id="chain.async.GarbageCollection" input-channel="channel.async.GarbageCollection">
+        <int:splitter
+                id="splitter.async.GarbageCollection"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.async.GarbageCollection"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.GarbageCollection"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.GarbageCollection" input-channel="channel.GarbageCollection">
+        <int:splitter
+                id="splitter.GarbageCollection"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.GarbageCollection"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.GarbageCollection"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+
+    <!--  Fire and Forget Chains -->
 
     <!--
     <int:chain id="fetchUserlistOwnersFireAndForgetChain" input-channel="fetchUserlistOwnersFireAndForgetChannel">

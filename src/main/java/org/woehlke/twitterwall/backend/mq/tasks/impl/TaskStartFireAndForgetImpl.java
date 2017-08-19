@@ -131,7 +131,14 @@ public class TaskStartFireAndForgetImpl implements TaskStartFireAndForget {
 
     @Override
     public Task startGarbageCollection() {
-        return null;
+        TaskType taskType = TaskType.GARBAGE_COLLECTION;
+        return send(taskType);
+    }
+
+    @Override
+    public Task startUpdateUrls() {
+        TaskType taskType = TaskType.UPDATE_URLS;
+        return send(taskType);
     }
 
     private Task send(TaskType taskType){

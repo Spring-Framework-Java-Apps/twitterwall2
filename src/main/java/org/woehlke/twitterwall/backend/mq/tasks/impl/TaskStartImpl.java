@@ -10,6 +10,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.backend.mq.tasks.TaskMessage;
+import org.woehlke.twitterwall.backend.mq.tasks.TaskResultList;
+import org.woehlke.twitterwall.backend.mq.urls.msg.UrlResultList;
 import org.woehlke.twitterwall.backend.mq.users.msg.UserMessage;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.User;
@@ -135,7 +137,64 @@ public class TaskStartImpl implements TaskStart {
 
     @Override
     public Task startGarbageCollection() {
-        return null;
+        TaskType taskType = TaskType.GARBAGE_COLLECTION;
+        return sendAndReceiveTask(taskType);
+    }
+
+    @Override
+    public Task startUpdateUrls() {
+        TaskType taskType = TaskType.UPDATE_URLS;
+        return sendAndReceiveUrl(taskType);
+    }
+
+    private Task sendAndReceiveTask(TaskType taskType){
+        TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
+        String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(channelTaskStart, mqMessage);
+        Object o = returnedMessage.getPayload();
+        countedEntities = countedEntitiesService.countAll();
+        if( o instanceof TaskResultList){
+            TaskResultList msg = (TaskResultList) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ taskSendType;
+            taskService.done(logMsg,task,countedEntities);
+        } else {
+            logMsg = "Finished with Error: task "+taskType+"via MQ by "+ taskSendType +": Wrong type of returnedMessage";
+            taskService.finalError(task,logMsg,countedEntities);
+            log.error(logMsg);
+        }
+        return task;
+    }
+
+    private Task sendAndReceiveUrl(TaskType taskType){
+        TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
+        String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
+        log.info(logMsg);
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
+        MessagingTemplate mqTemplate = new MessagingTemplate();
+        Message<?> returnedMessage = mqTemplate.sendAndReceive(channelTaskStart, mqMessage);
+        Object o = returnedMessage.getPayload();
+        countedEntities = countedEntitiesService.countAll();
+        if( o instanceof UrlResultList){
+            UrlResultList msg = (UrlResultList) o;
+            long taskId = msg.getTaskId();
+            task = taskService.findById(taskId);
+            logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ taskSendType;
+            taskService.done(logMsg,task,countedEntities);
+        } else {
+            logMsg = "Finished with Error: task "+taskType+"via MQ by "+ taskSendType +": Wrong type of returnedMessage";
+            taskService.finalError(task,logMsg,countedEntities);
+            log.error(logMsg);
+        }
+        return task;
     }
 
     private Task sendAndReceiveUserList(TaskType taskType){

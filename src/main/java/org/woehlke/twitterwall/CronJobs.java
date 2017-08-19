@@ -153,6 +153,25 @@ public class CronJobs {
         }
     }
 
+    @Scheduled(initialDelay= TEN_SECONDS * 16, fixedRate = ONE_DAY)
+    public void startUpdateUrls(){
+        String msg = "start UpdateUrls ";
+        if(!schedulerProperties.getSkipFortesting()) {
+            Task task = mqTaskStartFireAndForget.startUpdateUrls();
+            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
+    @Scheduled(initialDelay= TEN_SECONDS * 16, fixedRate = ONE_DAY)
+    public void startGarbageCollection(){
+        String msg = "start UpdateUrls ";
+        if(!schedulerProperties.getSkipFortesting()) {
+            //TODO:
+            //Task task = mqTaskStartFireAndForget.startGarbageCollection();
+            //log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+        }
+    }
+
     @Autowired
     public CronJobs(
         SchedulerProperties schedulerProperties,
