@@ -14,6 +14,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListFinisher;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.impl.UserFinisherImpl;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListResultList;
 
 import java.util.ArrayList;
@@ -55,14 +56,17 @@ public class ListFinisherImpl implements ListFinisher {
     }
 
     @Autowired
-    public ListFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public ListFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService, UserListMessageBuilder userListMessageBuilder) {
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.userListMessageBuilder = userListMessageBuilder;
     }
 
     private final TaskService taskService;
 
     private final CountedEntitiesService countedEntitiesService;
+
+    private final UserListMessageBuilder userListMessageBuilder;
 
     private static final Logger log = LoggerFactory.getLogger(UserFinisherImpl.class);
 }

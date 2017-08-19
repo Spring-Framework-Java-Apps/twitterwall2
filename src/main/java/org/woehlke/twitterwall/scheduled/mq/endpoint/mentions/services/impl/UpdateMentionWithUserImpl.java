@@ -9,9 +9,9 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UpdateMentionWithUser;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
 
 @Component("mqUpdateMentionWithUser")
 public class UpdateMentionWithUserImpl implements UpdateMentionWithUser {
@@ -35,7 +35,7 @@ public class UpdateMentionWithUserImpl implements UpdateMentionWithUser {
             mention.setIdOfUser(idOfUser);
             mention.setIdTwitterOfUser(idTwitterOfUser);
             mention = mentionService.store(mention,task);
-            Message<MentionMessage> mqMessageOut =twitterwallMessageBuilder.buildMentionMessage(incomingMessage,mention);
+            Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage,mention);
             return mqMessageOut;
         }
     }
@@ -44,12 +44,12 @@ public class UpdateMentionWithUserImpl implements UpdateMentionWithUser {
 
     private final MentionService mentionService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final MentionMessageBuilder mentionMessageBuilder;
 
     @Autowired
-    public UpdateMentionWithUserImpl(TaskService taskService, MentionService mentionService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UpdateMentionWithUserImpl(TaskService taskService, MentionService mentionService, MentionMessageBuilder mentionMessageBuilder) {
         this.taskService = taskService;
         this.mentionService = mentionService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.mentionMessageBuilder = mentionMessageBuilder;
     }
 }

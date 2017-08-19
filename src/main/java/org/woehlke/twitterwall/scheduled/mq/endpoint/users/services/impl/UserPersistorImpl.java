@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserPersistor;
 
@@ -18,10 +19,13 @@ public class UserPersistorImpl implements UserPersistor {
 
     private final StoreUserProcess storeUserProcess;
 
+    private final UserMessageBuilder userMessageBuilder;
+
     @Autowired
-    public UserPersistorImpl(TaskService taskService, StoreUserProcess storeUserProcess) {
+    public UserPersistorImpl(TaskService taskService, StoreUserProcess storeUserProcess, UserMessageBuilder userMessageBuilder) {
         this.taskService = taskService;
         this.storeUserProcess = storeUserProcess;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     @Override

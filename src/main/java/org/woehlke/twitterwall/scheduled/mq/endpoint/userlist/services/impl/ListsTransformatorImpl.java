@@ -8,6 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListsTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserListTransformService;
 
 @Component("mqUserListTransformator")
@@ -17,10 +18,13 @@ public class ListsTransformatorImpl implements ListsTransformator {
 
     private final UserListTransformService userListTransformService;
 
+    private final UserListMessageBuilder userListMessageBuilder;
+
     @Autowired
-    public ListsTransformatorImpl(TaskService taskService, UserListTransformService userListTransformService) {
+    public ListsTransformatorImpl(TaskService taskService, UserListTransformService userListTransformService, UserListMessageBuilder userListMessageBuilder) {
         this.taskService = taskService;
         this.userListTransformService = userListTransformService;
+        this.userListMessageBuilder = userListMessageBuilder;
     }
 
     //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252

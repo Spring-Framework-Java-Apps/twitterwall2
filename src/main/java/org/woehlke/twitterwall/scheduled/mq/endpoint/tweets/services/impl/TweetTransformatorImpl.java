@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.services.TweetTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 
 @Component("mqTweetTransformator")
@@ -18,10 +19,13 @@ public class TweetTransformatorImpl implements TweetTransformator {
 
     private final TaskService taskService;
 
+    private final TweetMessageBuilder tweetMessageBuilder;
+
     @Autowired
-    public TweetTransformatorImpl(TweetTransformService tweetTransformService, TaskService taskService) {
+    public TweetTransformatorImpl(TweetTransformService tweetTransformService, TaskService taskService, TweetMessageBuilder tweetMessageBuilder) {
         this.tweetTransformService = tweetTransformService;
         this.taskService = taskService;
+        this.tweetMessageBuilder = tweetMessageBuilder;
     }
 
     @Override

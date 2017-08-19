@@ -37,10 +37,6 @@ public class TaskInfo implements Serializable {
     private Boolean fetchUsersFromList = false;
 
     @NotNull
-    @Column(nullable = false,name="controller_add_user_for_screen_name")
-    private Boolean controllerAddUserForScreenName = false;
-
-    @NotNull
     @Column(nullable = false,name="controller_create_testdata_tweets")
     private Boolean controllerCreateTestdataTweets = false;
 
@@ -110,22 +106,19 @@ public class TaskInfo implements Serializable {
                 case UPDATE_USERS:
                     this.updatedUsers = true;
                     break;
-                case UPDATE_USERS_FROM_MENTIONS:
+                case UPDATE_MENTIONS_FOR_USERS:
                     this.updateUsersFromMentions = true;
                     break;
                 case FETCH_USERS_FROM_LIST:
                     this.fetchUsersFromList = true;
                     break;
-                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                    this.controllerAddUserForScreenName = true;
-                    break;
-                case CONTROLLER_CREATE_TESTDATA_TWEETS:
+                case CREATE_TESTDATA_TWEETS:
                     this.controllerCreateTestdataTweets = true;
                     break;
-                case CONTROLLER_CREATE_TESTDATA_USERS:
+                case CREATE_TESTDATA_USERS:
                     this.controllerCreateTestdataUsers = true;
                     break;
-                case CONTROLLER_CREATE_IMPRINT_USER:
+                case CREATE_IMPRINT_USER:
                     controllerCreateImprintUser = true;
                     break;
                 case REMOVE_OLD_DATA_FROM_STORAGE:
@@ -170,13 +163,12 @@ public class TaskInfo implements Serializable {
     protected TaskInfo() {
     }
 
-    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerAddUserForScreenName, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners) {
+    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updatedUsers = updatedUsers;
         this.updateUsersFromMentions = updateUsersFromMentions;
         this.fetchUsersFromList = fetchUsersFromList;
-        this.controllerAddUserForScreenName = controllerAddUserForScreenName;
         this.controllerCreateTestdataTweets = controllerCreateTestdataTweets;
         this.controllerCreateTestdataUsers = controllerCreateTestdataUsers;
         this.controllerCreateImprintUser = controllerCreateImprintUser;
@@ -204,10 +196,6 @@ public class TaskInfo implements Serializable {
 
     public Boolean getFetchUsersFromList() {
         return fetchUsersFromList;
-    }
-
-    public Boolean getControllerAddUserForScreenName() {
-        return controllerAddUserForScreenName;
     }
 
     public Boolean getControllerCreateTestdataTweets() {
@@ -283,8 +271,6 @@ public class TaskInfo implements Serializable {
             return false;
         if (fetchUsersFromList != null ? !fetchUsersFromList.equals(taskInfo.fetchUsersFromList) : taskInfo.fetchUsersFromList != null)
             return false;
-        if (controllerAddUserForScreenName != null ? !controllerAddUserForScreenName.equals(taskInfo.controllerAddUserForScreenName) : taskInfo.controllerAddUserForScreenName != null)
-            return false;
         if (controllerCreateTestdataTweets != null ? !controllerCreateTestdataTweets.equals(taskInfo.controllerCreateTestdataTweets) : taskInfo.controllerCreateTestdataTweets != null)
             return false;
         if (controllerCreateTestdataUsers != null ? !controllerCreateTestdataUsers.equals(taskInfo.controllerCreateTestdataUsers) : taskInfo.controllerCreateTestdataUsers != null)
@@ -320,7 +306,6 @@ public class TaskInfo implements Serializable {
         result = 31 * result + (updatedUsers != null ? updatedUsers.hashCode() : 0);
         result = 31 * result + (updateUsersFromMentions != null ? updateUsersFromMentions.hashCode() : 0);
         result = 31 * result + (fetchUsersFromList != null ? fetchUsersFromList.hashCode() : 0);
-        result = 31 * result + (controllerAddUserForScreenName != null ? controllerAddUserForScreenName.hashCode() : 0);
         result = 31 * result + (controllerCreateTestdataTweets != null ? controllerCreateTestdataTweets.hashCode() : 0);
         result = 31 * result + (controllerCreateTestdataUsers != null ? controllerCreateTestdataUsers.hashCode() : 0);
         result = 31 * result + (controllerCreateImprintUser != null ? controllerCreateImprintUser.hashCode() : 0);
@@ -346,7 +331,6 @@ public class TaskInfo implements Serializable {
                 ", updatedUsers=" + updatedUsers +
                 ", updateUsersFromMentions=" + updateUsersFromMentions +
                 ", fetchUsersFromList=" + fetchUsersFromList +
-                ", controllerAddUserForScreenName=" + controllerAddUserForScreenName +
                 ", controllerCreateTestdataTweets=" + controllerCreateTestdataTweets +
                 ", controllerCreateTestdataUsers=" + controllerCreateTestdataUsers +
                 ", controllerCreateImprintUser=" + controllerCreateImprintUser +

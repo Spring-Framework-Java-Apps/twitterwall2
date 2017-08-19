@@ -72,7 +72,7 @@ public class AsyncStartTaskTestImpl extends AbstractMqEndpointTest implements As
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.FIRE_AND_FORGET,task.getSendType());
-        Assert.assertEquals(TaskType.UPDATE_USERS_FROM_MENTIONS,task.getTaskType());
+        Assert.assertEquals(TaskType.UPDATE_MENTIONS_FOR_USERS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

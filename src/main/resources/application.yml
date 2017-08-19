@@ -48,7 +48,8 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: ${TWITTERWALL_JPA_HIBERNATE_DDL_AUTO}
+      #ddl-auto: ${TWITTERWALL_JPA_HIBERNATE_DDL_AUTO}
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect

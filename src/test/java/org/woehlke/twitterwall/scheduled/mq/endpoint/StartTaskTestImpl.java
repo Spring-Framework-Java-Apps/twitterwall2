@@ -78,7 +78,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
-        Assert.assertEquals(TaskType.UPDATE_USERS_FROM_MENTIONS,task.getTaskType());
+        Assert.assertEquals(TaskType.UPDATE_MENTIONS_FOR_USERS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -308,7 +308,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
-        Assert.assertEquals(TaskType.CONTROLLER_CREATE_TESTDATA_USERS,task.getTaskType());
+        Assert.assertEquals(TaskType.CREATE_TESTDATA_USERS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);
@@ -325,7 +325,7 @@ public class StartTaskTestImpl extends AbstractMqEndpointTest implements StartTa
         Assert.assertNotNull(task);
         Assert.assertNotNull(task.getUniqueId());
         Assert.assertEquals(SendType.SEND_AND_WAIT_FOR_RESULT,task.getSendType());
-        Assert.assertEquals(TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS,task.getTaskType());
+        Assert.assertEquals(TaskType.CREATE_TESTDATA_TWEETS,task.getTaskType());
         CountedEntities afterTest = countedEntitiesService.countAll();
         boolean ok = assertCountedEntities(beforeTest,afterTest);
         Assert.assertTrue(ok);

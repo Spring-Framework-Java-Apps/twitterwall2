@@ -86,22 +86,19 @@ public class TaskBasedCaching implements Serializable {
             case UPDATE_USERS:
                 lastApiCall = updateUsers;
                 break;
-            case UPDATE_USERS_FROM_MENTIONS:
+            case UPDATE_MENTIONS_FOR_USERS:
                 lastApiCall = updateUsersFromMentions;
                 break;
             case FETCH_USERS_FROM_LIST:
                 lastApiCall = fetchUsersFromList;
                 break;
-            case CONTROLLER_CREATE_TESTDATA_TWEETS:
+            case CREATE_TESTDATA_TWEETS:
                 lastApiCall = controllerGetTestdataTweets;
                 break;
-            case CONTROLLER_CREATE_TESTDATA_USERS:
+            case CREATE_TESTDATA_USERS:
                 lastApiCall = controllerGetTestdataUser;
                 break;
-            case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                lastApiCall = controllerAddUserForScreenName;
-                break;
-            case CONTROLLER_CREATE_IMPRINT_USER:
+            case CREATE_IMPRINT_USER:
                 lastApiCall = controllerCreateImprintUser;
                 break;
             case REMOVE_OLD_DATA_FROM_STORAGE:
@@ -169,22 +166,19 @@ public class TaskBasedCaching implements Serializable {
                 case UPDATE_USERS:
                     updateUsers = lastApiCall;
                     break;
-                case UPDATE_USERS_FROM_MENTIONS:
+                case UPDATE_MENTIONS_FOR_USERS:
                     updateUsersFromMentions = lastApiCall;
                     break;
                 case FETCH_USERS_FROM_LIST:
                     fetchUsersFromList = lastApiCall;
                     break;
-                case CONTROLLER_CREATE_TESTDATA_TWEETS:
+                case CREATE_TESTDATA_TWEETS:
                     controllerGetTestdataTweets = lastApiCall;
                     break;
-                case CONTROLLER_CREATE_TESTDATA_USERS:
+                case CREATE_TESTDATA_USERS:
                     controllerGetTestdataUser = lastApiCall;
                     break;
-                case CONTROLLER_ADD_USER_FOR_SCREEN_NAME:
-                    controllerAddUserForScreenName = lastApiCall;
-                    break;
-                case CONTROLLER_CREATE_IMPRINT_USER:
+                case CREATE_IMPRINT_USER:
                     controllerCreateImprintUser = lastApiCall;
                     break;
                 case REMOVE_OLD_DATA_FROM_STORAGE:

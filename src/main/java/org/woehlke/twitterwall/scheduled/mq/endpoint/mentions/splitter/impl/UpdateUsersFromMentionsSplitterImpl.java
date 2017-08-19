@@ -16,8 +16,8 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.UpdateUsersFromMentionsSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -41,15 +41,15 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final MentionMessageBuilder mentionMessageBuilder;
 
-    public UpdateUsersFromMentionsSplitterImpl(TwitterProperties twitterProperties, TaskService taskService, MentionService mentionService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UpdateUsersFromMentionsSplitterImpl(TwitterProperties twitterProperties, TaskService taskService, MentionService mentionService, UserService userService, CountedEntitiesService countedEntitiesService, MentionMessageBuilder mentionMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.taskService = taskService;
         this.mentionService = mentionService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.mentionMessageBuilder = mentionMessageBuilder;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class UpdateUsersFromMentionsSplitterImpl implements UpdateUsersFromMenti
                     if(foundUser == null) {
                         loopId++;
                         screenNames.add(screenName);
-                        Message<MentionMessage> mqMessageOut = twitterwallMessageBuilder.buildMentionMessageForTask(incomingTaskMessage,onePersMention);
+                        Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessageForTask(incomingTaskMessage,onePersMention);
                         resultList.add(mqMessageOut);
                     } else {
                         foundUser = userService.store(foundUser,task);

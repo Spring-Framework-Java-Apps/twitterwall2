@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UserforMentionTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
 @Component("mqUserforMentionTransformator")
@@ -20,7 +20,7 @@ public class UserforMentionTransformatorImpl implements UserforMentionTransforma
         long id = receivedMessage.getTaskMessage().getTaskId();
         Task task = taskService.findById(id);
         User user = userTransformService.transform(receivedMessage.getTwitterProfile(),task);
-        Message<MentionMessage> mqMessageOut =twitterwallMessageBuilder.buildMentionMessage(incomingMessage,user);
+        Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage,user);
         return mqMessageOut;
     }
 
@@ -28,12 +28,12 @@ public class UserforMentionTransformatorImpl implements UserforMentionTransforma
 
     private final TaskService taskService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final MentionMessageBuilder mentionMessageBuilder;
 
     @Autowired
-    public UserforMentionTransformatorImpl(UserTransformService userTransformService, TaskService taskService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UserforMentionTransformatorImpl(UserTransformService userTransformService, TaskService taskService, MentionMessageBuilder mentionMessageBuilder) {
         this.userTransformService = userTransformService;
         this.taskService = taskService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.mentionMessageBuilder = mentionMessageBuilder;
     }
 }

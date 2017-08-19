@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
@@ -18,10 +19,13 @@ public class UserTransformatorImpl implements UserTransformator {
 
     private final TaskService taskService;
 
+    private final UserMessageBuilder userMessageBuilder;
+
     @Autowired
-    public UserTransformatorImpl(UserTransformService userTransformService, TaskService taskService) {
+    public UserTransformatorImpl(UserTransformService userTransformService, TaskService taskService, UserMessageBuilder userMessageBuilder) {
         this.userTransformService = userTransformService;
         this.taskService = taskService;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     @Override

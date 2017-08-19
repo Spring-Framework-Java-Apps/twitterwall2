@@ -13,9 +13,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessageBuilder;
 
 @Component("mqAsyncStartTask")
 public class AsyncStartTaskImpl implements AsyncStartTask {
@@ -40,7 +40,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
     public Task updateUsersFromMentions() {
-        TaskType taskType = TaskType.UPDATE_USERS_FROM_MENTIONS;
+        TaskType taskType = TaskType.UPDATE_MENTIONS_FOR_USERS;
         return send(taskType);
     }
 
@@ -64,13 +64,13 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
     public Task createTestDataForTweets() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_TWEETS;
         return send(taskType);
     }
 
     @Override
     public Task createTestDataForUser() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         return send(taskType);
     }
 
@@ -118,7 +118,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
 
     @Override
     public Task createImprintUserAsync() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
+        TaskType taskType = TaskType.CREATE_IMPRINT_USER;
         return send(taskType);
     }
 
@@ -140,7 +140,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(msg, taskType, sendType, countedEntities);
 
-        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
 
         MessagingTemplate mqTemplate = new MessagingTemplate();
         mqTemplate.send(executorChannelForAsyncStart, mqMessage);
@@ -148,11 +148,11 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
     }
 
     @Autowired
-    public AsyncStartTaskImpl(TaskService taskService, CountedEntitiesService countedEntitiesService, ExecutorChannel executorChannelForAsyncStart, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public AsyncStartTaskImpl(TaskService taskService, CountedEntitiesService countedEntitiesService, ExecutorChannel executorChannelForAsyncStart, TaskMessageBuilder taskMessageBuilder) {
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
         this.executorChannelForAsyncStart = executorChannelForAsyncStart;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.taskMessageBuilder = taskMessageBuilder;
     }
 
     private final TaskService taskService;
@@ -161,7 +161,7 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
 
     private final ExecutorChannel executorChannelForAsyncStart;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final TaskMessageBuilder taskMessageBuilder;
 
     private static final Logger log = LoggerFactory.getLogger(AsyncStartTaskImpl.class);
 }

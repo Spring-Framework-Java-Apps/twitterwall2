@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.MentionFinisher;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.impl.UserFinisherImpl;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionResultList;
 
 import java.util.ArrayList;
@@ -20,9 +22,11 @@ import java.util.List;
 @Component("mqMentionFinisher")
 public class MentionFinisherImpl implements MentionFinisher {
 
-    public MentionFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    @Autowired
+    public MentionFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService, MentionMessageBuilder mentionMessageBuilder) {
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.mentionMessageBuilder = mentionMessageBuilder;
     }
 
     @Override
@@ -60,6 +64,8 @@ public class MentionFinisherImpl implements MentionFinisher {
     private final TaskService taskService;
 
     private final CountedEntitiesService countedEntitiesService;
+
+    private final MentionMessageBuilder mentionMessageBuilder;
 
     private static final Logger log = LoggerFactory.getLogger(UserFinisherImpl.class);
 }

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UserforMentionPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 
 @Component("mqUserforMentionPersistor")
@@ -28,7 +28,7 @@ public class UserforMentionPersistorImpl implements UserforMentionPersistor {
             Task task = taskService.findById(taskId);
             User user = receivedMessage.getUser();
             User userPers = storeUserProcess.storeUserProcess(user, task);
-            Message<MentionMessage> mqMessageOut =twitterwallMessageBuilder.buildMentionMessage(incomingMessage,userPers);
+            Message<MentionMessage> mqMessageOut = mentionMessageBuilder.buildMentionMessage(incomingMessage,userPers);
             return mqMessageOut;
         }
     }
@@ -37,12 +37,12 @@ public class UserforMentionPersistorImpl implements UserforMentionPersistor {
 
     private final StoreUserProcess storeUserProcess;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final MentionMessageBuilder mentionMessageBuilder;
 
     @Autowired
-    public UserforMentionPersistorImpl(TaskService taskService, StoreUserProcess storeUserProcess, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UserforMentionPersistorImpl(TaskService taskService, StoreUserProcess storeUserProcess, MentionMessageBuilder mentionMessageBuilder) {
         this.taskService = taskService;
         this.storeUserProcess = storeUserProcess;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.mentionMessageBuilder = mentionMessageBuilder;
     }
 }

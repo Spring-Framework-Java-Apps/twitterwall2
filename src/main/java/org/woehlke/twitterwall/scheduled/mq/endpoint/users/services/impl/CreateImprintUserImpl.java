@@ -8,9 +8,9 @@ import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.CreateImprintUser;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
@@ -24,14 +24,14 @@ public class CreateImprintUserImpl implements CreateImprintUser {
 
     private final UserService userService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final UserMessageBuilder userMessageBuilder;
 
     @Autowired
-    public CreateImprintUserImpl(TwitterApiService twitterApiService, FrontendProperties frontendProperties, UserService userService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public CreateImprintUserImpl(TwitterApiService twitterApiService, FrontendProperties frontendProperties, UserService userService, UserMessageBuilder userMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.frontendProperties = frontendProperties;
         this.userService = userService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CreateImprintUserImpl implements CreateImprintUser {
             return this.getMessageOut(mqMessageIn);
         } else {
             if (imprintUser.getTaskBasedCaching().isCached(receivedMessage.getTaskType(), TWELVE_HOURS)) {
-                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(mqMessageIn,imprintUser);
+                Message<UserMessage> mqMessageOut = userMessageBuilder.buildUserMessage(mqMessageIn,imprintUser);
                 return mqMessageOut;
             } else {
                 return this.getMessageOut(mqMessageIn);
@@ -55,7 +55,7 @@ public class CreateImprintUserImpl implements CreateImprintUser {
     private Message<UserMessage> getMessageOut(Message<TaskMessage> mqMessageIn){
         String screenName = frontendProperties.getImprintScreenName();
         TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-        Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(mqMessageIn,twitterProfile);
+        Message<UserMessage> mqMessageOut = userMessageBuilder.buildUserMessage(mqMessageIn,twitterProfile);
         return mqMessageOut;
     }
 }

@@ -55,7 +55,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     @Override
     public void getTestDataTweets(String msg){
         SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_TWEETS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(msg, taskType, sendType, countedEntities);
         List<Tweet> latest =  new ArrayList<>();
@@ -107,7 +107,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     @Override
     public void getTestDataUser(String msg){
         SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(msg, taskType,sendType,countedEntities);
         List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
@@ -179,7 +179,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
     @Override
     public User createUser(String screenName) {
         SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
         Task task = taskService.create(msg, taskType, sendType, countedEntities);

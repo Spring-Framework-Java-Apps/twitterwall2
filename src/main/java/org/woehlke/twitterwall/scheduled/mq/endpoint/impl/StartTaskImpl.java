@@ -14,7 +14,6 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.*;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -41,7 +40,7 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public Task updateUsersFromMentions() {
-        TaskType taskType = TaskType.UPDATE_USERS_FROM_MENTIONS;
+        TaskType taskType = TaskType.UPDATE_MENTIONS_FOR_USERS;
         return sendAndReceiveUser(taskType);
     }
 
@@ -65,13 +64,13 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public Task createTestDataForTweets() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_TWEETS;
         return sendAndReceiveTweet(taskType);
     }
 
     @Override
     public Task createTestDataForUser() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         return sendAndReceiveUser(taskType);
     }
 
@@ -119,7 +118,7 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public Task createImprintUserAsync() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
+        TaskType taskType = TaskType.CREATE_IMPRINT_USER;
         return sendAndReceiveUser(taskType);
     }
 
@@ -140,7 +139,7 @@ public class StartTaskImpl implements StartTask {
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType,sendType,countedEntities);
-        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
@@ -161,7 +160,7 @@ public class StartTaskImpl implements StartTask {
 
     @Override
     public User createImprintUser() {
-        TaskType taskType = TaskType.CONTROLLER_CREATE_IMPRINT_USER;
+        TaskType taskType = TaskType.CREATE_IMPRINT_USER;
         SendType sendType = SendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+" via MQ by "+sendType;
         log.info(logMsg);
@@ -201,7 +200,7 @@ public class StartTaskImpl implements StartTask {
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType,sendType,countedEntities);
-        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
@@ -226,7 +225,7 @@ public class StartTaskImpl implements StartTask {
         log.info(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(logMsg, taskType, sendType, countedEntities);
-        Message<TaskMessage> mqMessage = twitterwallMessageBuilder.buildTaskMessage(task);
+        Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
         MessagingTemplate mqTemplate = new MessagingTemplate();
         Message<?> returnedMessage = mqTemplate.sendAndReceive(startTaskChannel, mqMessage);
         Object o = returnedMessage.getPayload();
@@ -252,16 +251,16 @@ public class StartTaskImpl implements StartTask {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final TaskMessageBuilder taskMessageBuilder;
 
     private static final Logger log = LoggerFactory.getLogger(StartTaskImpl.class);
 
     @Autowired
-    public StartTaskImpl(MessageChannel startTaskChannel, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public StartTaskImpl(MessageChannel startTaskChannel, TaskService taskService, CountedEntitiesService countedEntitiesService, TaskMessageBuilder taskMessageBuilder) {
         this.startTaskChannel = startTaskChannel;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.taskMessageBuilder = taskMessageBuilder;
     }
 
 }

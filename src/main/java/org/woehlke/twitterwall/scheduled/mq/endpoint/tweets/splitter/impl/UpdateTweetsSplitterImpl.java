@@ -14,9 +14,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.splitter.UpdateTweetsSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -39,15 +39,15 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final TweetMessageBuilder tweetMessageBuilder;
 
-    public UpdateTweetsSplitterImpl(TwitterProperties twitterProperties, TweetService tweetService, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UpdateTweetsSplitterImpl(TwitterProperties twitterProperties, TweetService tweetService, TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TweetMessageBuilder tweetMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.tweetService = tweetService;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.tweetMessageBuilder = tweetMessageBuilder;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
             log.debug("### twitterApiService.findOneTweetById from Twiiter API ("+lfdNr+" of "+all+"): "+tweetTwitterId);
             Tweet foundTweetFromTwitter = twitterApiService.findOneTweetById(tweetTwitterId);
             TweetMessage result = new TweetMessage(msgIn,foundTweetFromTwitter);
-            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage,foundTweetFromTwitter,lfdNr,all);
+            Message<TweetMessage> mqMessageOut = tweetMessageBuilder.buildTweetMessage(incomingTaskMessage,foundTweetFromTwitter,lfdNr,all);
             tweets.add(mqMessageOut);
         }
         return tweets;

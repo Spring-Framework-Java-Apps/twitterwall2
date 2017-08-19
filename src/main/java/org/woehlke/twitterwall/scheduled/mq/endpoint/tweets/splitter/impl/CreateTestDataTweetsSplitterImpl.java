@@ -10,9 +10,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.splitter.CreateTestDataTweetsSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -34,16 +34,16 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final TweetMessageBuilder tweetMessageBuilder;
 
     @Autowired
-    public CreateTestDataTweetsSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public CreateTestDataTweetsSplitterImpl(TestdataProperties testdataProperties, TwitterApiService twitterApiService, TaskService taskService, TweetService tweetService, CountedEntitiesService countedEntitiesService, TweetMessageBuilder tweetMessageBuilder) {
         this.testdataProperties = testdataProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.tweetService = tweetService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.tweetMessageBuilder = tweetMessageBuilder;
     }
 
     @Override
@@ -69,9 +69,9 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
             Message<TweetMessage> outgoingMessage = null;
             if(fetchTweetFromApi) {
                 Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
-                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage, tweet, loopId, loopAll);
+                outgoingMessage = tweetMessageBuilder.buildTweetMessage(incomingTaskMessage, tweet, loopId, loopAll);
             } else {
-                outgoingMessage = twitterwallMessageBuilder.buildTweetMessage(incomingTaskMessage, tweetPers,loopId,loopAll);
+                outgoingMessage = tweetMessageBuilder.buildTweetMessage(incomingTaskMessage, tweetPers,loopId,loopAll);
             }
             tweets.add(outgoingMessage);
         }

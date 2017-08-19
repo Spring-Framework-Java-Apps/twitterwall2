@@ -18,9 +18,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.UpdateUsersSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -45,16 +45,16 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final UserMessageBuilder userMessageBuilder;
 
     @Autowired
-    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public UpdateUsersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, CountedEntitiesService countedEntitiesService, UserMessageBuilder userMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UpdateUsersSplitterImpl implements UpdateUsersSplitter {
                 log.error(msg + "### ERROR: twitterApiService.getUserProfileForTwitterId("+userProfileTwitterId+") "+counter,e);
             }
             if(userProfile != null){
-                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
+                Message<UserMessage> mqMessageOut = userMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,loopId,loopAll);
                 userProfileList.add(mqMessageOut);
             }
         }

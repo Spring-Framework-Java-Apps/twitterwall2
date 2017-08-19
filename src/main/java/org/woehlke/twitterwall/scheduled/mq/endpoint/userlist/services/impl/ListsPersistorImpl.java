@@ -10,6 +10,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserListService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListsPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
 
 @Component("mqUserListPersistor")
 public class ListsPersistorImpl implements ListsPersistor {
@@ -18,10 +19,13 @@ public class ListsPersistorImpl implements ListsPersistor {
 
     private final UserListService userListService;
 
+    private final UserListMessageBuilder userListMessageBuilder;
+
     @Autowired
-    public ListsPersistorImpl(TaskService taskService, UserListService userListService) {
+    public ListsPersistorImpl(TaskService taskService, UserListService userListService, UserListMessageBuilder userListMessageBuilder) {
         this.taskService = taskService;
         this.userListService = userListService;
+        this.userListMessageBuilder = userListMessageBuilder;
     }
 
     //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252

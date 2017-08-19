@@ -13,9 +13,9 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.splitter.FindTweetsToRemoveSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ public class FindTweetsToRemoveSplitterImpl implements FindTweetsToRemoveSplitte
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final TweetMessageBuilder tweetMessageBuilder;
 
     @Autowired
-    public FindTweetsToRemoveSplitterImpl(TweetService tweetService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public FindTweetsToRemoveSplitterImpl(TweetService tweetService, TaskService taskService, CountedEntitiesService countedEntitiesService, TweetMessageBuilder tweetMessageBuilder) {
         this.tweetService = tweetService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.tweetMessageBuilder = tweetMessageBuilder;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FindTweetsToRemoveSplitterImpl implements FindTweetsToRemoveSplitte
         int loopAll = tweetList.getContent().size();
         for (Tweet tweet: tweetList) {
             loopId++;
-            Message<TweetMessage> mqMessageOut = twitterwallMessageBuilder.buildTweetMessage(message,tweet,loopId,loopAll);
+            Message<TweetMessage> mqMessageOut = tweetMessageBuilder.buildTweetMessage(message,tweet,loopId,loopAll);
             tweets.add(mqMessageOut);
         }
         return tweets;

@@ -8,10 +8,10 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.splitter.ListsSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class ListsSplitterImpl implements ListsSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final UserListMessageBuilder userListMessageBuilder;
 
     @Autowired
-    public ListsSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public ListsSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, UserListMessageBuilder userListMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.userListMessageBuilder = userListMessageBuilder;
     }
 
     //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
@@ -50,7 +50,7 @@ public class ListsSplitterImpl implements ListsSplitter {
         int loopAll = fetchedUserList.size();
         for (UserList userList: fetchedUserList) {
             loopId++;
-            Message<UserListMessage> mqMessageOut = twitterwallMessageBuilder.buildUserListMessage(incomingTaskMessage,userList,loopId,loopAll);
+            Message<UserListMessage> mqMessageOut = userListMessageBuilder.buildUserListMessage(incomingTaskMessage,userList,loopId,loopAll);
             messageListOut.add(mqMessageOut);
         }
         return messageListOut;

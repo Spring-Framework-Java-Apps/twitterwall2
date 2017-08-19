@@ -18,11 +18,11 @@ import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserListService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.impl.UpdateUsersFromMentionsSplitterImpl;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.FetchUserlistOwnersSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class FetchUserlistOwnersSplitterImpl implements FetchUserlistOwnersSplit
             log.debug("### twitterApiService.getUserProfileForScreenName("+screenName+") from Twiiter API ("+lfdNr+" of "+all+")");
             TwitterProfile userProfile = twitterApiService.getUserProfileForScreenName(screenName);
             if(userProfile!=null) {
-                Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,lfdNr,all);
+                Message<UserMessage> mqMessageOut = userMessageBuilder.buildUserMessage(incomingTaskMessage,userProfile,lfdNr,all);
                 userProfileList.add(mqMessageOut);
             }
         }
@@ -95,16 +95,16 @@ public class FetchUserlistOwnersSplitterImpl implements FetchUserlistOwnersSplit
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final UserMessageBuilder userMessageBuilder;
 
     @Autowired
-    public FetchUserlistOwnersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, UserListService userListService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public FetchUserlistOwnersSplitterImpl(TwitterProperties twitterProperties, TwitterApiService twitterApiService, TaskService taskService, UserService userService, UserListService userListService, CountedEntitiesService countedEntitiesService, UserMessageBuilder userMessageBuilder) {
         this.twitterProperties = twitterProperties;
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.userService = userService;
         this.userListService = userListService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.userMessageBuilder = userMessageBuilder;
     }
 }

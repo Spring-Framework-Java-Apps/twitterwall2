@@ -12,6 +12,7 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserFinisher;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserResultList;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -64,14 +65,17 @@ public class UserFinisherImpl implements UserFinisher {
     }
 
     @Autowired
-    public UserFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService) {
+    public UserFinisherImpl(TaskService taskService, CountedEntitiesService countedEntitiesService, UserMessageBuilder userMessageBuilder) {
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     private final TaskService taskService;
 
     private final CountedEntitiesService countedEntitiesService;
+
+    private final UserMessageBuilder userMessageBuilder;
 
     private static final Logger log = LoggerFactory.getLogger(UserFinisherImpl.class);
 }

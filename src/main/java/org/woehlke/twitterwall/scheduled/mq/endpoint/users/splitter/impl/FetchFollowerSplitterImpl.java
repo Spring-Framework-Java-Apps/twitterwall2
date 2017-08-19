@@ -9,9 +9,9 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.FetchFollowerSplitter;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.common.TwitterwallMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
 
     private final CountedEntitiesService countedEntitiesService;
 
-    private final TwitterwallMessageBuilder twitterwallMessageBuilder;
+    private final UserMessageBuilder userMessageBuilder;
 
     @Autowired
-    public FetchFollowerSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, TwitterwallMessageBuilder twitterwallMessageBuilder) {
+    public FetchFollowerSplitterImpl(TwitterApiService twitterApiService, TaskService taskService, CountedEntitiesService countedEntitiesService, UserMessageBuilder userMessageBuilder) {
         this.twitterApiService = twitterApiService;
         this.taskService = taskService;
         this.countedEntitiesService = countedEntitiesService;
-        this.twitterwallMessageBuilder = twitterwallMessageBuilder;
+        this.userMessageBuilder = userMessageBuilder;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FetchFollowerSplitterImpl implements FetchFollowerSplitter {
         int loopAll = foundTwitterProfiles.size();
         for (Long twitterProfileId : foundTwitterProfiles) {
             loopId++;
-            Message<UserMessage> mqMessageOut = twitterwallMessageBuilder.buildUserMessage(incomingTaskMessage,twitterProfileId,loopId,loopAll);
+            Message<UserMessage> mqMessageOut = userMessageBuilder.buildUserMessage(incomingTaskMessage,twitterProfileId,loopId,loopAll);
             userProfileList.add(mqMessageOut);
         }
         return userProfileList;

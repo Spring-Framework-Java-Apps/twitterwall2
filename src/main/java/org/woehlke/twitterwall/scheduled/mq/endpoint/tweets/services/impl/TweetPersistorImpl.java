@@ -9,6 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.services.TweetPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweetPerform;
 
 @Component("mqTweetPersistor")
@@ -18,10 +19,13 @@ public class TweetPersistorImpl implements TweetPersistor {
 
     private final StoreOneTweetPerform storeOneTweetPerform;
 
+    private final TweetMessageBuilder tweetMessageBuilder;
+
     @Autowired
-    public TweetPersistorImpl(TaskService taskService, StoreOneTweetPerform storeOneTweetPerform) {
+    public TweetPersistorImpl(TaskService taskService, StoreOneTweetPerform storeOneTweetPerform, TweetMessageBuilder tweetMessageBuilder) {
         this.taskService = taskService;
         this.storeOneTweetPerform = storeOneTweetPerform;
+        this.tweetMessageBuilder = tweetMessageBuilder;
     }
 
     @Override
