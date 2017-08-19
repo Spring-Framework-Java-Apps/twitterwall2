@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.scheduled.mq.msg.builder.impl;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.builder.TaskMessageBuilder;
 

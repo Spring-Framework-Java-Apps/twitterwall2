@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.service.UrlService;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
-import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.model.Url;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 
 import java.net.MalformedURLException;

@@ -6,19 +6,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
-import org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper;
-import org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper;
-import org.woehlke.twitterwall.oodm.entities.transients.mapper.RowMapperCount;
+import org.woehlke.twitterwall.oodm.model.HashTag;
+import org.woehlke.twitterwall.oodm.model.transients.HashTagCounted;
+import org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllTweets2HashTagsRowMapper;
+import org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllUsers2HashTagsRowMapper;
+import org.woehlke.twitterwall.oodm.model.transients.mapper.RowMapperCount;
 import org.woehlke.twitterwall.oodm.repositories.custom.HashTagRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-import static org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper.SQL_COUNT_ALL_TWEET_2_HASHTAG;
-import static org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper.SQL_COUNT_ALL_USER_2_HASHTAG;
+import static org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllTweets2HashTagsRowMapper.SQL_COUNT_ALL_TWEET_2_HASHTAG;
+import static org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllUsers2HashTagsRowMapper.SQL_COUNT_ALL_USER_2_HASHTAG;
 
 @Repository
 public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
@@ -47,7 +47,7 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
     }
 
     /**
-     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
+     * @see org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
      */
     @Override
     public Page<HashTagCounted> countAllUser2HashTag(Pageable pageRequest) {
@@ -62,7 +62,7 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
     }
 
     /**
-     * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
+     * @see org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
      */
     @Override
     public Page<HashTagCounted> countAllTweet2HashTag(Pageable pageRequest) {

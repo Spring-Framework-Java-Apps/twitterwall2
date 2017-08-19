@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.scheduled.mq.msg;
 
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.Mention;
+import org.woehlke.twitterwall.oodm.model.User;
 
 import java.io.Serializable;
 

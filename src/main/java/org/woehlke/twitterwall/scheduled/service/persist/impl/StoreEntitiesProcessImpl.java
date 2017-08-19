@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.entities.Entities;
+import org.woehlke.twitterwall.oodm.model.*;
+import org.woehlke.twitterwall.oodm.model.entities.Entities;
 import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 

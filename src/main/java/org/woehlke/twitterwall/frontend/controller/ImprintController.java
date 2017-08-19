@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.frontend.common.Symbols;
+import org.woehlke.twitterwall.frontend.common.ControllerHelper;
+import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.StartTask;
 
 

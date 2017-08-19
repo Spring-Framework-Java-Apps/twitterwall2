@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.transients.*;
-import org.woehlke.twitterwall.oodm.entities.transients.mapper.*;
+import org.woehlke.twitterwall.oodm.model.User;
+import org.woehlke.twitterwall.oodm.model.transients.*;
+import org.woehlke.twitterwall.oodm.model.transients.mapper.*;
 import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
 import javax.persistence.EntityManager;

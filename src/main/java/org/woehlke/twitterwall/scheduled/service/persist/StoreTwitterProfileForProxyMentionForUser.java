@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.scheduled.service.persist;
 
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.model.User;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.Mention;
 
 /**
  * Created by tw on 14.07.17.

@@ -5,5 +5,5 @@ import org.woehlke.twitterwall.scheduled.service.transform.common.TransformServi
 /**
  * Created by tw on 28.06.17.
  */
-public interface TweetTransformService extends TransformService<org.woehlke.twitterwall.oodm.entities.Tweet, org.springframework.social.twitter.api.Tweet> {
+public interface TweetTransformService extends TransformService<org.woehlke.twitterwall.oodm.model.Tweet, org.springframework.social.twitter.api.Tweet> {
 }

@@ -3,8 +3,8 @@ package org.woehlke.twitterwall.scheduled.service.transform;
 import org.springframework.social.twitter.api.MentionEntity;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.Mention;
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Mention;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
 
 import java.util.Set;

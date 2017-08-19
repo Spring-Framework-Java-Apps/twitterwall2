@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.service.common;
 
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.common.DomainObjectWithTask;
 
 /**
  * Created by tw on 14.07.17.

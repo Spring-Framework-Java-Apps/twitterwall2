@@ -16,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
-import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.Url;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 import java.io.IOException;
 import java.net.URI;

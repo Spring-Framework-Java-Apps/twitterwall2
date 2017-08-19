@@ -8,7 +8,7 @@ public class UserListMessage implements Serializable {
 
     private final TaskMessage taskMessage;
     private final org.springframework.social.twitter.api.UserList userListTwitter;
-    private final org.woehlke.twitterwall.oodm.entities.UserList userList;
+    private final org.woehlke.twitterwall.oodm.model.UserList userList;
     private final long idTwitter;
 
     public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, long idTwitter) {
@@ -18,7 +18,7 @@ public class UserListMessage implements Serializable {
         this.userList = null;
     }
 
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.entities.UserList userList, long idTwitter) {
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.model.UserList userList, long idTwitter) {
         this.taskMessage = taskMessage;
         this.userListTwitter = userListTwitter;
         this.userList = userList;
@@ -32,7 +32,7 @@ public class UserListMessage implements Serializable {
         this.idTwitter = userListTwitter.getId();
     }
 
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.entities.UserList userListOut) {
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.model.UserList userListOut) {
         this.taskMessage = taskMessage;
         this.userListTwitter = userListTwitter;
         this.userList = userListOut;
@@ -47,7 +47,7 @@ public class UserListMessage implements Serializable {
         return userListTwitter;
     }
 
-    public org.woehlke.twitterwall.oodm.entities.UserList getUserList() {
+    public org.woehlke.twitterwall.oodm.model.UserList getUserList() {
         return userList;
     }
 

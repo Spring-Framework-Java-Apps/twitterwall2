@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.msg.results;
 
-import org.woehlke.twitterwall.oodm.entities.UserList;
+import org.woehlke.twitterwall.oodm.model.UserList;
 
 import java.util.List;
 

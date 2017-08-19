@@ -2,8 +2,8 @@ package org.woehlke.twitterwall.scheduled.service.transform;
 
 import org.springframework.social.twitter.api.MediaEntity;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.Media;
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Media;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
 
 import java.util.Set;

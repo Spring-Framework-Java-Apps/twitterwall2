@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.Entities;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.entities.Entities;
+import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
@@ -78,7 +78,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         userTarget.setShowAllInlineMedia(userSource.showAllInlineMedia());
         userTarget.setProfileBannerUrl(userSource.getProfileBannerUrl());
         Entities entities = this.entitiesTransformService.transformEntitiesForUser(userSource,task);
-        log.debug(msg+" entities = "+entities.getUniqueId());
+        log.debug(msg+" model = "+entities.getUniqueId());
         userTarget.setEntities(entities);
         log.debug(msg+" userTarget = "+userTarget.getUniqueId());
         log.trace(msg+" userTarget = "+userTarget.toString());

@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.msg;
 
-import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
-import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -10,7 +10,7 @@ public class TweetMessage implements Serializable {
     private final TaskMessage taskMessage;
     private final long tweetIdTwitter;
     private final org.springframework.social.twitter.api.Tweet tweetFromTwitter;
-    private final org.woehlke.twitterwall.oodm.entities.Tweet tweet;
+    private final org.woehlke.twitterwall.oodm.model.Tweet tweet;
     private final boolean ignoreTransformation;
 
     public TweetMessage(
@@ -26,7 +26,7 @@ public class TweetMessage implements Serializable {
 
     public TweetMessage(
             TaskMessage taskMessage,
-            org.woehlke.twitterwall.oodm.entities.Tweet tweet
+            org.woehlke.twitterwall.oodm.model.Tweet tweet
     ){
         this.taskMessage = taskMessage;
         this.tweetFromTwitter = null;
@@ -39,7 +39,7 @@ public class TweetMessage implements Serializable {
             TaskMessage taskMessage,
             long tweetIdTwitter,
             Tweet tweetFromTwitter,
-            org.woehlke.twitterwall.oodm.entities.Tweet tweet
+            org.woehlke.twitterwall.oodm.model.Tweet tweet
     ) {
         this.taskMessage = taskMessage;
         this.tweetIdTwitter = tweetIdTwitter;
@@ -50,7 +50,7 @@ public class TweetMessage implements Serializable {
 
     public TweetMessage(
             TaskMessage taskMessage,
-            org.woehlke.twitterwall.oodm.entities.Tweet myTweet,
+            org.woehlke.twitterwall.oodm.model.Tweet myTweet,
             org.springframework.social.twitter.api.Tweet tweetFromTwitter
     ) {
         this.taskMessage = taskMessage;
@@ -72,7 +72,7 @@ public class TweetMessage implements Serializable {
         return tweetFromTwitter;
     }
 
-    public org.woehlke.twitterwall.oodm.entities.Tweet getTweet() {
+    public org.woehlke.twitterwall.oodm.model.Tweet getTweet() {
         return tweet;
     }
 

@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.scheduled.service.transform;
 
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.scheduled.service.transform.common.TransformService;
 
 /**

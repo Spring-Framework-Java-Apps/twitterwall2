@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.BackendProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.Url;
 import org.woehlke.twitterwall.oodm.service.impl.UrlServiceImpl;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterUrlService;
 

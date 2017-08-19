@@ -5,8 +5,8 @@ import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.splitter.CreateTestDataTweetsSplitter;
@@ -60,7 +60,7 @@ public class CreateTestDataTweetsSplitterImpl implements CreateTestDataTweetsSpl
         for (long idTwitter : userIdTwitterList) {
             loopId++;
             boolean fetchTweetFromApi = true;
-            org.woehlke.twitterwall.oodm.entities.Tweet tweetPers = tweetService.findByIdTwitter(idTwitter);
+            org.woehlke.twitterwall.oodm.model.Tweet tweetPers = tweetService.findByIdTwitter(idTwitter);
             if(tweetPers == null){
                 fetchTweetFromApi = true;
             } else {

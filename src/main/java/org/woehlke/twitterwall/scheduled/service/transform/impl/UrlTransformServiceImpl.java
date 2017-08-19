@@ -6,9 +6,9 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.entities.EntitiesFilter;
-import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.entities.EntitiesFilter;
+import org.woehlke.twitterwall.oodm.model.Url;
 import org.woehlke.twitterwall.scheduled.service.transform.UrlTransformService;
 
 import java.util.*;
@@ -40,7 +40,7 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
         if(extraData.containsKey("status")){
             Object o = extraData.get("status");
             if(o != null && o instanceof Map) {
-                Object oo = ((Map) o).get("entities");
+                Object oo = ((Map) o).get("model");
                 if(oo != null && oo instanceof Map) {
                     Object ooo = ((Map) oo).get("urls");
                     if(ooo != null && ooo instanceof List) {
@@ -57,8 +57,8 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                 }
             }
         }
-        if(extraData.containsKey("entities")){
-            Object o = extraData.get("entities");
+        if(extraData.containsKey("model")){
+            Object o = extraData.get("model");
             if(o != null && o instanceof Map) {
                 Object oo = ((Map) o).get("url");
                 if(oo != null && oo instanceof Map) {

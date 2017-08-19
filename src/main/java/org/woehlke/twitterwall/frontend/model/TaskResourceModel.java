@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.frontend.model;
 
 import org.springframework.data.domain.Page;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.TaskHistory;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.TaskHistory;
 
 import java.io.Serializable;
 

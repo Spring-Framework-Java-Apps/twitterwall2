@@ -1,8 +1,8 @@
 package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.UserList;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.UserList;
 import org.woehlke.twitterwall.scheduled.service.transform.UserListTransformService;
 
 @Component

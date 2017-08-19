@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.service.common;
 
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
+import org.woehlke.twitterwall.oodm.model.common.DomainObjectWithIdTwitter;
 
 /**
  * Created by tw on 14.07.17.

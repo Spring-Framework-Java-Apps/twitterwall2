@@ -9,8 +9,8 @@ import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.splitter.UpdateTweetsSplitter;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;
-import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.common.ControllerHelper.FIRST_PAGE_NUMBER;
 
 @Component("mqUpdateTweetsSplitter")
 public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
@@ -63,8 +63,8 @@ public class UpdateTweetsSplitterImpl implements UpdateTweetsSplitter {
         int lfdNr = 0;
         int all = 0;
         while(hasNext) {
-            Page<org.woehlke.twitterwall.oodm.entities.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
-            for(org.woehlke.twitterwall.oodm.entities.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
+            Page<org.woehlke.twitterwall.oodm.model.Tweet> tweetTwitterIds = tweetService.getAll(pageRequest);
+            for(org.woehlke.twitterwall.oodm.model.Tweet tweetTwitterId:tweetTwitterIds.getContent()){
                 if(!tweetTwitterId.getTaskBasedCaching().isCached(task.getTaskType(), TWELVE_HOURS)) {
                     lfdNr++;
                     all++;

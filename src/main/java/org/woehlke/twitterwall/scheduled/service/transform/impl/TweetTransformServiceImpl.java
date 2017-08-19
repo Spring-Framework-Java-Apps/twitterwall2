@@ -3,8 +3,8 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.entities.Entities;
+import org.woehlke.twitterwall.oodm.model.*;
+import org.woehlke.twitterwall.oodm.model.entities.Entities;
 import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
@@ -29,9 +29,9 @@ public class TweetTransformServiceImpl implements TweetTransformService {
     }
 
     @Override
-    public org.woehlke.twitterwall.oodm.entities.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource,Task task) {
+    public org.woehlke.twitterwall.oodm.model.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource, Task task) {
         if (tweetSource == null) { return null; } else {
-            org.woehlke.twitterwall.oodm.entities.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus(),task);
+            org.woehlke.twitterwall.oodm.model.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus(),task);
             long idTwitter = tweetSource.getId();
             String idStr = tweetSource.getIdStr();
             String text = tweetSource.getText();
@@ -42,7 +42,7 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             long fromUserId = tweetSource.getFromUserId();
             String languageCode = tweetSource.getLanguageCode();
             String source = tweetSource.getSource();
-            org.woehlke.twitterwall.oodm.entities.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.entities.Tweet(task,null,idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
+            org.woehlke.twitterwall.oodm.model.Tweet tweetTarget = new org.woehlke.twitterwall.oodm.model.Tweet(task,null,idTwitter, idStr, text, createdAt, fromUser, profileImageUrl, toUserId, fromUserId, languageCode, source);
             tweetTarget.setFavoriteCount(tweetSource.getFavoriteCount());
             tweetTarget.setFavorited(tweetSource.isFavorited());
             tweetTarget.setInReplyToScreenName(tweetSource.getInReplyToScreenName());

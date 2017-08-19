@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint.tasks;
 
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Task;
 
 
 public interface AsyncStartTask {

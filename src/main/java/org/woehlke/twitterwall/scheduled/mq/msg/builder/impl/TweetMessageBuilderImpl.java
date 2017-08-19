@@ -12,7 +12,7 @@ import org.woehlke.twitterwall.scheduled.mq.msg.builder.TweetMessageBuilder;
 public class TweetMessageBuilderImpl implements TweetMessageBuilder {
 
     @Override
-    public Message<TweetMessage> buildTweetMessage(Message<TaskMessage> incomingTaskMessage, org.woehlke.twitterwall.oodm.entities.Tweet tweet, int loopId, int loopAll){
+    public Message<TweetMessage> buildTweetMessage(Message<TaskMessage> incomingTaskMessage, org.woehlke.twitterwall.oodm.model.Tweet tweet, int loopId, int loopAll){
         TweetMessage outputPayload = new TweetMessage(incomingTaskMessage.getPayload(),tweet);
         Message<TweetMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)

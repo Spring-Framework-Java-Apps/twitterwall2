@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.model.listener" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.repositor" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.model" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.rest" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.model" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.handler" level="DEBUG" />

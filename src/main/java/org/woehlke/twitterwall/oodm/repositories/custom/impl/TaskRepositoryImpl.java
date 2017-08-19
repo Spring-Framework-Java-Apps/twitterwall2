@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.repositories.custom.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.Task;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.repositories.custom.TaskRepositoryCustom;
 
 import javax.persistence.EntityManager;

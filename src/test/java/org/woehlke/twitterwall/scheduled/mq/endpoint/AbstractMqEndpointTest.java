@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 import org.junit.Assert;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 
 public abstract class AbstractMqEndpointTest {
 

@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.repositories;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.TickerSymbol;
+import org.woehlke.twitterwall.oodm.model.TickerSymbol;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.TickerSymbolRepositoryCustom;
 
