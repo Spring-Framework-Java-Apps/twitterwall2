@@ -56,11 +56,11 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             tweetTarget.setRetweetedStatus(retweetedStatus);
             TwitterProfile userSource = tweetSource.getUser();
 
-            org.woehlke.twitterwall.oodm.entities.parts.Entities entitiesTarget = entitiesTransformService.transform(tweetSource.getEntities(),task);
+            org.woehlke.twitterwall.oodm.entities.parts.Entities entitiesTarget = entitiesTransformService.transformEntitiesForTweet(tweetSource,task);
 
             tweetTarget.setEntities(entitiesTarget);
 
-            /* transform userTarget */
+            /* transformEntitiesForTweet userTarget */
             User userTarget = userTransformService.transform(userSource,task);
             tweetTarget.setUser(userTarget);
 

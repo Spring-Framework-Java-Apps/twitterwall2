@@ -30,7 +30,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             }
             /** Entities */
             Entities entities = tweet.getEntities();
-            entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
+            entities = storeEntitiesProcess.storeEntitiesProcessForTweet(entities, task);
             tweet.setEntities(entities);
             /** User */
             User user = tweet.getUser();

@@ -44,7 +44,7 @@ public class TaskController {
         String msg = "/task/all: ";
         String title = "Tasks";
         String subtitle = "List aller Tasks";
-        String symbol = Symbols.TASK.toString();
+        String symbol = Symbols.TASKS_ALL.toString();
         model = controllerHelper.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(
                 page, frontendProperties.getPageSize(),

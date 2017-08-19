@@ -10,6 +10,7 @@ import org.woehlke.twitterwall.oodm.service.*;
 import org.woehlke.twitterwall.scheduled.service.persist.CreatePersistentUrl;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,8 +22,8 @@ import java.util.Set;
 public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
-    public Entities storeEntitiesProcess(Entities entities, Task task) {
-        String msg = "storeEntitiesProcess "+task.getUniqueId()+" : ";
+    public Entities storeEntitiesProcessForTweet(Tweet tweet, Entities entities, Task task) {
+        String msg = "storeEntitiesProcessForTweet "+task.getUniqueId()+" : ";
         try {
             Set<Url> urls = new LinkedHashSet<>();
             Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
@@ -104,6 +105,24 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         return entities;
     }
 
+    @Override
+    public Entities updateEntitiesForUserProcess(User user, Entities entities, Task task) {
+        long userId = user.getId();
+        long userIdTwitter = user.getIdTwitter();
+        Set<Mention> newMentions = new HashSet<>();
+        Set<Mention> mentions = user.getEntities().getMentions();
+        for(Mention mention:mentions){
+            mention.setIdTwitterOfUser(userIdTwitter);
+            mention.setIdOfUser(userId);
+            mention = mentionService.store(mention,task);
+            newMentions.add(mention);
+        }
+        entities.addAllMentions(newMentions);
+        user.setEntities(entities);
+        user = userService.store(user,task);
+        return entities;
+    }
+
 
     private static final Logger log = LoggerFactory.getLogger(StoreEntitiesProcessImpl.class);
 
@@ -115,16 +134,19 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     private final MediaService mediaService;
 
+    private final UserService userService;
+
     private final TickerSymbolService tickerSymbolService;
 
     private final CreatePersistentUrl createPersistentUrl;
 
     @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, UserService userService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
         this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
+        this.userService = userService;
         this.tickerSymbolService = tickerSymbolService;
         this.createPersistentUrl = createPersistentUrl;
     }

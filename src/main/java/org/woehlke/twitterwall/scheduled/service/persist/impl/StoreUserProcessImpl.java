@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -14,13 +11,12 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreEntitiesProcess;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProcess;
 
+
 /**
  * Created by tw on 09.07.17.
  */
 
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreUserProcessImpl implements StoreUserProcess {
 
     @Override
@@ -28,9 +24,10 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         String msg = "User.storeUserProcess "+user.getUniqueId()+" : "+task.getUniqueId()+" : ";
         try {
             Entities entities = user.getEntities();
-            entities = storeEntitiesProcess.storeEntitiesProcess(entities, task);
+            entities = storeEntitiesProcess.storeEntitiesProcessForTweet(entities, task);
             user.setEntities(entities);
             user = userService.store(user, task);
+            entities = storeEntitiesProcess.updateEntitiesForUserProcess(user,entities, task);
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }

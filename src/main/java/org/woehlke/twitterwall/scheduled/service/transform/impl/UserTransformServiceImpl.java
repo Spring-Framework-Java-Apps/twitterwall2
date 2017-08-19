@@ -32,7 +32,7 @@ public class UserTransformServiceImpl implements UserTransformService {
 
     @Override
     public User transform(TwitterProfile userSource,Task task) {
-        String msg = "User.transform for "+userSource.getId();
+        String msg = "User.transformEntitiesForTweet for "+userSource.getId();
         long idTwitter = userSource.getId();
         String screenName = userSource.getScreenName();
         String name = userSource.getName();

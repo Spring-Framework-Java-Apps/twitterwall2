@@ -18,26 +18,30 @@ public class EntitiesFilter {
 
     protected Set<Mention> findByUserDescription(String description,Task task) {
         Set<Mention> mentions = new LinkedHashSet<>();
+        Set<String> screenNames = new LinkedHashSet<>();
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
-                "@("+ User.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
-                "@("+ User.SCREEN_NAME_PATTERN +")$"
+                    "@("+ User.SCREEN_NAME_PATTERN +")(" + Entities.stopChar + ")",
+                    "@("+ User.SCREEN_NAME_PATTERN +")$"
             };
 
             int USER_PROFILE_OUTPUT[] = {
-                1, 1
+                    1, 1
             };
 
             for(int i=0; i<2;i++){
                 Pattern mentionPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = mentionPattern.matcher(description);
                 while (m.find()) {
-                    Mention newMention = new Mention(task,null,m.group(USER_PROFILE_OUTPUT[i]));
-                    if(!mentions.contains(newMention)){
-                        mentions.add(newMention);
-                    }
+                    String screenName = m.group(USER_PROFILE_OUTPUT[i]);
+                    screenNames.add(screenName);
                 }
+            }
+
+            for(String screenName:screenNames){
+                Mention newMention = Mention.createFromUserDescriptionOrTweetText(task,screenName);
+                mentions.add(newMention);
             }
         }
         return mentions;
@@ -46,7 +50,7 @@ public class EntitiesFilter {
     protected String getFormattedTextForMentions(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
             if(mention != null) {
-                if (mention.isProxy() && mention.hasUser() && (!mention.getScreenName().isEmpty())) {
+                if(!mention.getScreenName().isEmpty()) {
 
                     String USER_PROFILE_INPUT[] = {
                             "@(" + mention.getScreenName() + ")(" + stopChar + ")",
@@ -54,8 +58,8 @@ public class EntitiesFilter {
                     };
 
                     String USER_PROFILE_OUTPUT[] = {
-                            " <a class=\"tweet-action tweet-profile1\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a>$2",
-                            " <a class=\"tweet-action tweet-profile2\" href=\"https://twitter.com/$1\" target=\"_blank\">@$1</a> "
+                            " <a class=\"tweet-action tweet-profile1\" href=\"/user/"+mention.getIdOfUser()+"\" target=\"_blank\">@$1</a>$2",
+                            " <a class=\"tweet-action tweet-profile2\" href=\"/user/"+mention.getIdOfUser()+"\" target=\"_blank\">@$1</a> "
                     };
 
                     String USER_PROFILE_OUTPUT_UNDEFINED[] = {
@@ -78,6 +82,7 @@ public class EntitiesFilter {
         return formattedText;
     }
 
+    /*
     protected String getFormattedTextForMentionsForTweets(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
             if(mention != null) {
@@ -112,6 +117,7 @@ public class EntitiesFilter {
         }
         return formattedText;
     }
+    */
 
     protected String getFormattedTextForUserProfiles(String formattedText) {
 

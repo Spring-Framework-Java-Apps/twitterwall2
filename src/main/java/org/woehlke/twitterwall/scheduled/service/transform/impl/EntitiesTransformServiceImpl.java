@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.*;
 import org.woehlke.twitterwall.oodm.entities.parts.Entities;
@@ -40,15 +41,15 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
     }
 
     @Override
-    public Entities transformEntitiesForUser(TwitterProfile userSource, Task task) {
-        String msg = "transformEntitiesForUser: "+userSource.getScreenName()+" : ";
-        String description = userSource.getDescription();
+    public Entities transformEntitiesForUser(TwitterProfile userFromTwitterApi, Task task) {
+        String msg = "transformEntitiesForUser: "+userFromTwitterApi.getScreenName()+" : ";
+        String description = userFromTwitterApi.getDescription();
         Entities entitiesTarget = new Entities();
-        Set<Url> urls = urlTransformService.getUrlsFor(userSource,task);
-        Set<HashTag> hashTags = hashTagTransformService.getHashTagsFor(userSource,task);
-        Set<Mention> mentions = mentionTransformService.findByUser(userSource,task);
-        Set<Media> media = mediaTransformService.getMediaFor(userSource,task);
-        Set<TickerSymbol> tickerSymbols = tickerSymbolTransformService.getTickerSymbolsFor(userSource,task);
+        Set<Url> urls = urlTransformService.getUrlsFor(userFromTwitterApi,task);
+        Set<HashTag> hashTags = hashTagTransformService.getHashTagsFor(userFromTwitterApi,task);
+        Set<Mention> mentions = mentionTransformService.findByUser(userFromTwitterApi,task);
+        Set<Media> media = mediaTransformService.getMediaFor(userFromTwitterApi,task);
+        Set<TickerSymbol> tickerSymbols = tickerSymbolTransformService.getTickerSymbolsFor(userFromTwitterApi,task);
         entitiesTarget.setMentions(mentions);
         entitiesTarget.addAllUrls(urls);
         entitiesTarget.setMedia(media);
@@ -64,14 +65,14 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
     }
 
     @Override
-    public Entities transform(org.springframework.social.twitter.api.Entities entitiesSource, Task task) {
-        String msg = "transform ";
+    public Entities transformEntitiesForTweet(Tweet tweetFromTwitterApi, Task task) {
+        String msg = "transformEntitiesForTweet ";
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        List<UrlEntity> listUrlEntity =  entitiesSource.getUrls();
-        List<HashTagEntity> listHashTagEntity = entitiesSource.getHashTags();
-        List<MentionEntity>  listMentionEntity = entitiesSource.getMentions();
-        List<MediaEntity> listMediaEntity = entitiesSource.getMedia();
-        List<TickerSymbolEntity> listTickerSymbolEntity =  entitiesSource.getTickerSymbols();
+        List<UrlEntity> listUrlEntity =  tweetFromTwitterApi.getEntities().getUrls();
+        List<HashTagEntity> listHashTagEntity = tweetFromTwitterApi.getEntities().getHashTags();
+        List<MentionEntity>  listMentionEntity = tweetFromTwitterApi.getEntities().getMentions();
+        List<MediaEntity> listMediaEntity = tweetFromTwitterApi.getEntities().getMedia();
+        List<TickerSymbolEntity> listTickerSymbolEntity =  tweetFromTwitterApi.getEntities().getTickerSymbols();
         log.debug(msg+"listUrlEntity = "+listUrlEntity.size());
         log.debug(msg+"listHashTagEntity = "+listHashTagEntity.size());
         log.debug(msg+"listMentionEntity = "+listMentionEntity.size());
@@ -104,8 +105,23 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
             log.debug(msg+"transformed TickerSymbol = "+tickerSymbol.getUniqueId());
             entitiesTarget.addTickerSymbol(tickerSymbol);
         }
+        Set<Mention> transformedMentions = entitiesTarget.getMentions();
+        Set<Mention> createdMentions = mentionTransformService.findByTweet(tweetFromTwitterApi,task);
+        for(Mention createdMention:createdMentions){
+            boolean insert = true;
+            for(Mention transformedMention:transformedMentions){
+                if(createdMention.getScreenNameUnique().compareTo(transformedMention.getScreenNameUnique())==0){
+                    insert = false;
+                }
+            }
+            if(insert){
+                log.debug(msg+"created Mention = "+createdMention.getUniqueId());
+                entitiesTarget.addMention(createdMention);
+            }
+        }
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.debug(msg+"entitiesSource: "+entitiesSource.toString());
+        log.debug(msg+"TweetId:        "+tweetFromTwitterApi.getId());
+        log.debug(msg+"entitiesSource: "+tweetFromTwitterApi.getEntities().toString());
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug(msg+"entitiesTarget: "+entitiesTarget.getUniqueId());
         log.trace(msg+"entitiesTarget: "+entitiesTarget.toString());

@@ -7,6 +7,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithIdTwitter;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.listener.MentionListener;
+import org.woehlke.twitterwall.oodm.entities.parts.MentionStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -100,6 +101,11 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @NotNull
     @Column(name = "fk_user",nullable = false)
     private Long idOfUser = 0L;
+
+    @NotNull
+    @Column(name="mention_status",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MentionStatus mentionStatus = MentionStatus.NULL;
 
     public Mention(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name) {
         super(createdBy,updatedBy);
@@ -217,11 +223,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
 
     @Transient
     public boolean isNotFetchedFromTwitter() {
-        if(this.isValid()) {
-            return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
-        } else {
-            return false;
-        }
+        return (this.getIdTwitter() == ID_TWITTER_UNDEFINED);
     }
 
     public static long getSerialVersionUID() {
@@ -269,6 +271,16 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.idTwitter = idTwitter;
     }
 
+    @Transient
+    public void setIdTwitteToUndefined() {
+        this.idTwitter = ID_TWITTER_UNDEFINED;
+    }
+
+    @Transient
+    public boolean isIdTwitterUndefined(){
+        return (this.idTwitter == ID_TWITTER_UNDEFINED);
+    }
+
     public Long getIdTwitterOfUser() {
         return idTwitterOfUser;
     }
@@ -295,17 +307,14 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         this.idOfUser = idOfUser;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "Mention{" +
-            " id=" + id +
-            ", idTwitter=" + idTwitter +
-            ", screenName='" + screenName + '\'' +
-            ", name='" + name + '\'' +
-                super.toString() +
-            " }\n";
-    }*/
+    public MentionStatus getMentionStatus() {
+        return mentionStatus;
+    }
+
+    public void setMentionStatus(MentionStatus mentionStatus) {
+        this.mentionStatus = mentionStatus;
+    }
+
 
     @Override
     public String toString() {
@@ -317,6 +326,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
                 ", name='" + name + '\'' +
                 ", idTwitterOfUser=" + idTwitterOfUser +
                 ", idOfUser=" + idOfUser +
+                ", mentionStatus=" + mentionStatus +
                 super.toString() +
                 '}';
     }
@@ -339,5 +349,25 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
         result = 31 * result + (screenNameUnique != null ? screenNameUnique.hashCode() : 0);
         return result;
+    }
+
+    public static Mention createByTransformService(Task task, long idTwitter, String screenName, String name) {
+        Mention mention = new Mention();
+        mention.setIdTwitter(idTwitter);
+        mention.setCreatedBy(task);
+        mention.setScreenName(screenName);
+        mention.setName(name);
+        mention.setMentionStatus(MentionStatus.FETCHED_FROM_TWITTER);
+        return mention;
+    }
+
+    public static Mention createFromUserDescriptionOrTweetText(Task task, String screenName) {
+        Mention mention = new Mention();
+        mention.setCreatedBy(task);
+        mention.setScreenName(screenName);
+        mention.setName(screenName);
+        mention.setMentionStatus(MentionStatus.CREATED_BY_TEXT);
+        mention.setIdTwitteToUndefined();
+        return mention;
     }
 }

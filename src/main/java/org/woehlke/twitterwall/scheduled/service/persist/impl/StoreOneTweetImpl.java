@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
@@ -18,8 +15,6 @@ import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService
  */
 
 @Component
-//@Service
-//@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 public class StoreOneTweetImpl implements StoreOneTweet {
 
     @Override

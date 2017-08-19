@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint;
 
 
 /**
- * @see org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask
+ * @see StartTaskAsynchron
  */
 public interface AsyncStartTaskTest {
 
