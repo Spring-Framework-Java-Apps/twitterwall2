@@ -58,8 +58,8 @@ public class EntitiesFilter {
                     };
 
                     String USER_PROFILE_OUTPUT[] = {
-                            " <a class=\"tweet-action tweet-profile1\" href=\"/user/"+mention.getIdOfUser()+"\" target=\"_blank\">@$1</a>$2",
-                            " <a class=\"tweet-action tweet-profile2\" href=\"/user/"+mention.getIdOfUser()+"\" target=\"_blank\">@$1</a> "
+                            " <a class=\"tweet-action tweet-profile1\" href=\"/user/"+mention.getIdOfUser()+"\" >@$1</a>$2",
+                            " <a class=\"tweet-action tweet-profile2\" href=\"/user/"+mention.getIdOfUser()+"\" >@$1</a> "
                     };
 
                     String USER_PROFILE_OUTPUT_UNDEFINED[] = {
@@ -82,6 +82,7 @@ public class EntitiesFilter {
         return formattedText;
     }
 
+    //TODO: remove dead code:
     /*
     protected String getFormattedTextForMentionsForTweets(Set<Mention> mentions, String formattedText) {
         for (Mention mention : mentions) {
