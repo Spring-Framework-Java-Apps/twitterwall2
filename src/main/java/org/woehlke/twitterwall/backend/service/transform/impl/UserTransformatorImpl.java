@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.backend.mq.endpoint.users.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.backend.mq.users.msg.UserMessageBuilder;
 import org.woehlke.twitterwall.backend.service.transform.UserTransformService;
-import org.woehlke.twitterwall.backend.mq.endpoint.users.endpoint.serviceactivator.UserTransformator;
-import org.woehlke.twitterwall.backend.mq.endpoint.users.msg.UserMessage;
+import org.woehlke.twitterwall.backend.mq.users.endpoint.serviceactivator.UserTransformator;
+import org.woehlke.twitterwall.backend.mq.users.msg.UserMessage;
 
 @Component("mqUserTransformator")
 public class UserTransformatorImpl implements UserTransformator {

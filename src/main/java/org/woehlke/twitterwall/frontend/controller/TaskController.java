@@ -22,7 +22,7 @@ import org.woehlke.twitterwall.oodm.model.User;
 import org.woehlke.twitterwall.oodm.service.TaskHistoryService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskStartFireAndForget;
+import org.woehlke.twitterwall.backend.mq.tasks.TaskStartFireAndForget;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;

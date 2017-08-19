@@ -20,7 +20,7 @@ twitterwall:
     twitter:
       millisToWaitForFetchTweetsFromTwitterSearch: 6000000
   contextTest: true
-  scheduler:
+  cronjobs:
     allowFetchTweetsFromTwitterSearch: true
     allowUpdateTweets: true
     allowUpdateUserProfiles: true

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Component
 @Validated
-@ConfigurationProperties(prefix="twitterwall.scheduler")
+@ConfigurationProperties(prefix="twitterwall.cronjobs")
 public class SchedulerProperties {
 
     @NotNull

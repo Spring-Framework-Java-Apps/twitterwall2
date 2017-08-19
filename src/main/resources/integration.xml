@@ -30,246 +30,246 @@
     <int:logging-channel-adapter id="logger" level="DEBUG"/>
 
 
-    <int:channel id="channel.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:dispatcher task-executor="myThreadPoolTaskExecutor"/>
     </int:channel>
 
 
-    <int:channel id="channel.UpdateTweets" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.UpdateTweets" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger" />
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.UpdateTweets" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.UpdateTweets" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger" />
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.FetchFollower" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchFollower" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.CreateTestDataTweets" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.CreateTestDataTweets" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.FetchFollower" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.FetchFollower" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.FetchMentions" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchMentions" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.FetchFavorites" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.FetchFavorites" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-
-    <int:channel id="channel.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.CreateTestDataTweets" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-
-    <int:channel id="channel.FetchLists" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
-        <int:interceptors>
-            <int:wire-tap channel="logger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <int:channel id="channel.async.FetchLists" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.CreateTestDataTweets" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
 
-    <int:channel id="channel.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
     </int:channel>
 
-    <int:channel id="channel.async.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.endpoint.tasks.TaskMessage">
+    <int:channel id="channel.async.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchMentions" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchMentions" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchFavorites" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchFavorites" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+
+    <int:channel id="channel.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchLists" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchLists" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:channel id="channel.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
         <int:interceptors>
             <int:wire-tap channel="logger"/>
         </int:interceptors>
