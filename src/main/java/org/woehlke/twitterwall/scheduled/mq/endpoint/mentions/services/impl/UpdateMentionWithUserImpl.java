@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.service.MentionService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UpdateMentionWithUser;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.MentionMessageBuilder;
 
 @Component("mqUpdateMentionWithUser")
 public class UpdateMentionWithUserImpl implements UpdateMentionWithUser {

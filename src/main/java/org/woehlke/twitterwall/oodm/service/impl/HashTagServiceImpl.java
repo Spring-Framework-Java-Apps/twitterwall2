@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
 import org.woehlke.twitterwall.oodm.repositories.HashTagRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
@@ -41,7 +42,7 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
      * @return HashTagCounted
      *
      * @see org.woehlke.twitterwall.oodm.entities.HashTag
-     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see Entities
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
      */
@@ -55,7 +56,7 @@ public class HashTagServiceImpl extends DomainServiceWithTaskImpl<HashTag> imple
      * @return HashTagCounted
      *
      * @see org.woehlke.twitterwall.oodm.entities.HashTag
-     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see Entities
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
      */

@@ -12,8 +12,8 @@ import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserFinisher;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserResultList;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.results.UserResultList;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
 import java.util.ArrayList;

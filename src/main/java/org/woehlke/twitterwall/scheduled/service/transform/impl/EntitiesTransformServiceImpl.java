@@ -7,7 +7,7 @@ import org.springframework.social.twitter.api.*;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.*;
-import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.scheduled.service.transform.*;
 
 import java.util.List;

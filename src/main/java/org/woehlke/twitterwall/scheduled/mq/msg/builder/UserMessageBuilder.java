@@ -1,8 +1,10 @@
-package org.woehlke.twitterwall.scheduled.mq.msg;
+package org.woehlke.twitterwall.scheduled.mq.msg.builder;
 
 import org.springframework.messaging.Message;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
+import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
 
 public interface UserMessageBuilder {
 

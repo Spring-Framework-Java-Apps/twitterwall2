@@ -6,7 +6,7 @@ import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
-import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.listener.UserListener;
 
 import javax.persistence.*;

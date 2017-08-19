@@ -17,10 +17,10 @@ import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -96,8 +96,8 @@ public class TaskControllerTest {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
-        Task task = taskService.create(msg,taskType,sendType,countedEntities);
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        Task task = taskService.create(msg,taskType, taskSendType,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())

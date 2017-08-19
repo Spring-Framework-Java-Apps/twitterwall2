@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
 
 import java.util.Date;
 
@@ -28,12 +28,12 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String descriptionTask = "start: ";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,sendType, timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus, taskSendType, timeStarted,timeLastUpdate,timeFinished);
 
         User user1 = User.getDummyUserForScreenName(screenName,task);
 
@@ -75,12 +75,12 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String descriptionTask = "start: ";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus, taskSendType,timeStarted,timeLastUpdate,timeFinished);
 
         Assert.assertFalse(msg,User.isValidScreenName(invalidScreenName));
 

@@ -14,8 +14,8 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListFinisher;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.impl.UserFinisherImpl;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListResultList;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserListMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.results.UserListResultList;
 
 import java.util.ArrayList;
 import java.util.List;

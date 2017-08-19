@@ -11,7 +11,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.splitter.ListsSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserListMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import java.util.ArrayList;

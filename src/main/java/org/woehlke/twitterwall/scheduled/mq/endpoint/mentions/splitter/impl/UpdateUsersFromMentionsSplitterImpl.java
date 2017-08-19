@@ -17,7 +17,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.UpdateUsersFromMentionsSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 

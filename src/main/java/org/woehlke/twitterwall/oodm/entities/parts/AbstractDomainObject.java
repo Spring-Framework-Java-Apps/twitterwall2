@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObject;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskBasedCaching;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 
 import javax.persistence.*;
 import javax.validation.Valid;

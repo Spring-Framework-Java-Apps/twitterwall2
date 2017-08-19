@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.conf.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.Symbols;
 import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
 import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.StartTask;
 
 
 /**

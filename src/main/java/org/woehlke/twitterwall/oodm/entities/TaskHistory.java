@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.oodm.entities;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskHistoryListener;
 
 import javax.persistence.*;

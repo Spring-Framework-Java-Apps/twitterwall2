@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;

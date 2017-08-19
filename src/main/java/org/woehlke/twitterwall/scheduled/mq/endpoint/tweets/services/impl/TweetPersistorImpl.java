@@ -9,7 +9,7 @@ import org.woehlke.twitterwall.oodm.entities.Tweet;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.services.TweetPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.TweetMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweetPerform;
 
 @Component("mqTweetPersistor")

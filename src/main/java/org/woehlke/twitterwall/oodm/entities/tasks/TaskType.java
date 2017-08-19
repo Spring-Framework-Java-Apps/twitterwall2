@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.parts;
+package org.woehlke.twitterwall.oodm.entities.tasks;
 
 /**
  * Created by tw on 09.07.17.

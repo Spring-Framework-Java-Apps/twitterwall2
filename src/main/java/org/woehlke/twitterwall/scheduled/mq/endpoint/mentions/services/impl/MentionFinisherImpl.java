@@ -13,8 +13,8 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.MentionFinisher;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.impl.UserFinisherImpl;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionResultList;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.MentionMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.results.MentionResultList;
 
 import java.util.ArrayList;
 import java.util.List;

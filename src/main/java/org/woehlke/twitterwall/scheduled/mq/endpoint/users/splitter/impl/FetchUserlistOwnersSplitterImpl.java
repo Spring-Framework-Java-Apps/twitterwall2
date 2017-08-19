@@ -22,7 +22,7 @@ import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.splitter.impl.Upda
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.splitter.FetchUserlistOwnersSplitter;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import java.util.ArrayList;

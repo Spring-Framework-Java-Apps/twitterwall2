@@ -18,9 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.Url;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 
 import java.io.IOException;
 import java.net.URI;
@@ -53,7 +53,7 @@ public class TwitterUrlServiceTest {
 
         String descriptionTask = "Make it so, Scotty";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         long taskId = 222L;
 
         TaskStatus taskStatus = TaskStatus.READY;
@@ -61,7 +61,7 @@ public class TwitterUrlServiceTest {
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
 
-        Task task = new Task(descriptionTask,taskType,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,taskType,taskStatus, taskSendType,timeStarted,timeLastUpdate,timeFinished);
 
         List<String> exprectedUrls = testdataProperties.getOodm().getEntities().getUrl().getUrl();
         for(String exprectedUrl:exprectedUrls){

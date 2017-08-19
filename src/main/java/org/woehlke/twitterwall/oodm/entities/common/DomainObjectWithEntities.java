@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities.common;
 
-import org.woehlke.twitterwall.oodm.entities.parts.Entities;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 
 public interface DomainObjectWithEntities<T extends DomainObjectWithEntities> extends DomainObjectWithIdTwitter<T>,DomainObjectWithTask<T>  {
 

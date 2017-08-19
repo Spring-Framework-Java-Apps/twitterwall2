@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.CreateImprintUser;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 import static org.woehlke.twitterwall.ScheduledTasks.TWELVE_HOURS;

@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.scheduled.mq.endpoint.tweets.services;
 
 import org.springframework.messaging.Message;
 import org.woehlke.twitterwall.scheduled.mq.msg.TweetMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TweetResultList;
+import org.woehlke.twitterwall.scheduled.mq.msg.results.TweetResultList;
 
 import java.util.List;
 

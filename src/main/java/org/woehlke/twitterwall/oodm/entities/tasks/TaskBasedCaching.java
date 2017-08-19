@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.parts;
+package org.woehlke.twitterwall.oodm.entities.tasks;
 
 import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.Task;

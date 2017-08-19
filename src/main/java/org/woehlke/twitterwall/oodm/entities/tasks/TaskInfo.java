@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.parts;
+package org.woehlke.twitterwall.oodm.entities.tasks;
 
 import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.entities.Task;
@@ -160,7 +160,7 @@ public class TaskInfo implements Serializable {
         }
     }
 
-    protected TaskInfo() {
+    public TaskInfo() {
     }
 
     public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners) {

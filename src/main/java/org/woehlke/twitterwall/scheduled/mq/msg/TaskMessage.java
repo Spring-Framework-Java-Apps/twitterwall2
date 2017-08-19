@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.scheduled.mq.msg;
 
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,12 +11,12 @@ public class TaskMessage implements Serializable {
     protected final long taskId;
     protected final TaskType taskType;
     protected final Date timeStarted;
-    protected final SendType sendType;
+    protected final TaskSendType taskSendType;
 
-    public TaskMessage(long taskId, TaskType taskType, SendType sendType,Date timeStarted) {
+    public TaskMessage(long taskId, TaskType taskType, TaskSendType taskSendType, Date timeStarted) {
         this.taskId = taskId;
         this.taskType = taskType;
-        this.sendType = sendType;
+        this.taskSendType = taskSendType;
         this.timeStarted = timeStarted;
     }
 
@@ -27,8 +28,8 @@ public class TaskMessage implements Serializable {
         return taskType;
     }
 
-    public SendType getSendType() {
-        return sendType;
+    public TaskSendType getTaskSendType() {
+        return taskSendType;
     }
 
     public Date getTimeStarted() {
@@ -45,7 +46,7 @@ public class TaskMessage implements Serializable {
         if (taskId != that.taskId) return false;
         if (taskType != that.taskType) return false;
         if (timeStarted != null ? !timeStarted.equals(that.timeStarted) : that.timeStarted != null) return false;
-        return sendType == that.sendType;
+        return taskSendType == that.taskSendType;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class TaskMessage implements Serializable {
         int result = (int) (taskId ^ (taskId >>> 32));
         result = 31 * result + (taskType != null ? taskType.hashCode() : 0);
         result = 31 * result + (timeStarted != null ? timeStarted.hashCode() : 0);
-        result = 31 * result + (sendType != null ? sendType.hashCode() : 0);
+        result = 31 * result + (taskSendType != null ? taskSendType.hashCode() : 0);
         return result;
     }
 
@@ -63,7 +64,7 @@ public class TaskMessage implements Serializable {
                 "taskId=" + taskId +
                 ", taskType=" + taskType +
                 ", timeStarted=" + timeStarted +
-                ", sendType=" + sendType +
+                ", taskSendType=" + taskSendType +
                 '}';
     }
 }

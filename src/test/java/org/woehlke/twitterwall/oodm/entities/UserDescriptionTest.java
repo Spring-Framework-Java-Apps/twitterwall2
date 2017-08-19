@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.parts.Entities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,14 +35,14 @@ public class UserDescriptionTest {
     public void printDescriptionsTest(){
 
         String descriptionTask = "Just another Task";
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = new Date();
         Date timeFinished = null;
 
-        Task task = new Task(descriptionTask,taskType,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,taskType,taskStatus, taskSendType,timeStarted,timeLastUpdate,timeFinished);
         int lfdNr = 0;
 
         List<String> descriptions = testdataProperties.getOodm().getEntities().getUser().getDescriptions();

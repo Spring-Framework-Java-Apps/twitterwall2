@@ -10,7 +10,7 @@ import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.UserListService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListsPersistor;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserListMessageBuilder;
 
 @Component("mqUserListPersistor")
 public class ListsPersistorImpl implements ListsPersistor {

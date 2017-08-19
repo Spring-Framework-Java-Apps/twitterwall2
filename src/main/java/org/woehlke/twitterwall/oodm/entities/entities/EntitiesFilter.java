@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.oodm.entities.parts;
+package org.woehlke.twitterwall.oodm.entities.entities;
 
 import org.woehlke.twitterwall.oodm.entities.*;
 

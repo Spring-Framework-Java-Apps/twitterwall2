@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.conf.properties.SchedulerProperties;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.AsyncStartTask;
 
 /**
  * Created by tw on 10.06.17.

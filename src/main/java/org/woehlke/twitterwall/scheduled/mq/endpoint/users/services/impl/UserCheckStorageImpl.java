@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.users.services.UserCheckStorage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 @Component("mqUserCheckStorage")

@@ -4,7 +4,7 @@ import org.springframework.social.twitter.api.HashTagEntity;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.EntitiesFilter;
+import org.woehlke.twitterwall.oodm.entities.entities.EntitiesFilter;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
 import org.woehlke.twitterwall.scheduled.service.transform.HashTagTransformService;
 

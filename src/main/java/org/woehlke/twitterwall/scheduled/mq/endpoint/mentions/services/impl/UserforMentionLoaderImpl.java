@@ -6,7 +6,7 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UserforMentionLoader;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
 
 @Component("mqUserforMentionLoader")

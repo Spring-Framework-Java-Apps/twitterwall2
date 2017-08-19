@@ -1,6 +1,4 @@
-package org.woehlke.twitterwall.scheduled.mq.msg;
-
-import org.woehlke.twitterwall.oodm.entities.Mention;
+package org.woehlke.twitterwall.scheduled.mq.msg.results;
 
 import java.io.Serializable;
 import java.util.List;

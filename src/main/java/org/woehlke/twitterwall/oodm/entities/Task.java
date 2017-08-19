@@ -2,10 +2,10 @@ package org.woehlke.twitterwall.oodm.entities;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.entities.listener.TaskListener;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -60,7 +60,7 @@ public class Task implements DomainObjectMinimal<Task> {
     @NotNull
     @Column(name="send_type",nullable = false)
     @Enumerated(EnumType.STRING)
-    private SendType sendType = SendType.NULL;
+    private TaskSendType taskSendType = TaskSendType.NULL;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -79,11 +79,11 @@ public class Task implements DomainObjectMinimal<Task> {
     private Task() {
     }
 
-    public Task(String description, TaskType taskType, TaskStatus taskStatus, SendType sendType, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
+    public Task(String description, TaskType taskType, TaskStatus taskStatus, TaskSendType taskSendType, Date timeStarted, Date timeLastUpdate, Date timeFinished) {
         this.description = description;
         this.taskType = taskType;
         this.taskStatus = taskStatus;
-        this.sendType = sendType;
+        this.taskSendType = taskSendType;
         this.timeStarted = timeStarted;
         this.timeLastUpdate = timeLastUpdate;
         this.timeFinished = timeFinished;
@@ -155,12 +155,12 @@ public class Task implements DomainObjectMinimal<Task> {
         this.taskStatus = taskStatus;
     }
 
-    public SendType getSendType() {
-        return sendType;
+    public TaskSendType getTaskSendType() {
+        return taskSendType;
     }
 
-    public void setSendType(SendType sendType) {
-        this.sendType = sendType;
+    public void setTaskSendType(TaskSendType taskSendType) {
+        this.taskSendType = taskSendType;
     }
 
     public String getDescription() {
@@ -191,7 +191,7 @@ public class Task implements DomainObjectMinimal<Task> {
                 ", description='" + description + '\'' +
                 ", taskType=" + taskType +
                 ", taskStatus=" + taskStatus +
-                ", sendType=" + sendType +
+                ", taskSendType=" + taskSendType +
                 ", timeStarted=" + timeStarted +
                 ", timeLastUpdate=" + timeLastUpdate +
                 ", timeFinished=" + timeFinished +

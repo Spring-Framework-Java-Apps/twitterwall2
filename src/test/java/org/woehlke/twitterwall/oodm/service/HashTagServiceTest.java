@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
 
 @RunWith(SpringRunner.class)
@@ -73,7 +74,7 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
      * @throws Exception
      *
      * @see org.woehlke.twitterwall.oodm.entities.HashTag
-     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see Entities
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllTweets2HashTagsRowMapper#SQL_COUNT_ALL_TWEET_2_HASHTAG
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllTweet2HashTag(Pageable)
      * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsTweets(Pageable)
@@ -95,7 +96,7 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
      * @throws Exception
      *
      * @see org.woehlke.twitterwall.oodm.entities.HashTag
-     * @see org.woehlke.twitterwall.oodm.entities.parts.Entities
+     * @see Entities
      * @see org.woehlke.twitterwall.oodm.entities.transients.mapper.CountAllUsers2HashTagsRowMapper#SQL_COUNT_ALL_USER_2_HASHTAG
      * @see org.woehlke.twitterwall.oodm.repositories.custom.impl.HashTagRepositoryImpl#countAllUser2HashTag(Pageable)
      * @see org.woehlke.twitterwall.oodm.service.impl.HashTagServiceImpl#getHashTagsUsers(Pageable)

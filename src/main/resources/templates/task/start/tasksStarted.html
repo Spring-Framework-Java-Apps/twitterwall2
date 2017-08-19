@@ -24,7 +24,7 @@
                         <li th:if="${task.timeFinished}">timeFinished: <span th:text="${#dates.format(task.timeFinished,'HH:mm:ss (dd.MM.yyyy)')}">timeFinished</span></li>
                         <li th:if="${task.taskType}">taskType: <span th:text="${task.taskType}">taskType</span></li>
                         <li th:if="${task.taskStatus}">taskStatus: <span th:text="${task.taskStatus}">taskStatus</span></li>
-                        <li th:if="${task.sendType}">sendType: <span th:text="${task.sendType}">sendType</span></li>
+                        <li th:if="${task.taskSendType}">taskSendType: <span th:text="${task.taskSendType}">taskSendType</span></li>
                     </ul>
                 </div>
                 <div class="well">

@@ -2,9 +2,9 @@ package org.woehlke.twitterwall.oodm.service;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.service.common.DomainObjectMinimalService;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
 
 /**
  * Created by tw on 09.07.17.
@@ -13,7 +13,7 @@ public interface TaskService extends DomainObjectMinimalService<Task> {
 
     Task findById(long id);
 
-    Task create(String msg, TaskType type, SendType sendType, CountedEntities countedEntities);
+    Task create(String msg, TaskType type, TaskSendType taskSendType, CountedEntities countedEntities);
 
     Task done(Task task,CountedEntities countedEntities);
 

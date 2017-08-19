@@ -1,6 +1,6 @@
 package org.woehlke.twitterwall.oodm.entities.common;
 
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 
 public interface DomainObjectWithApiCaching {
 

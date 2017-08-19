@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.*;
+import org.woehlke.twitterwall.oodm.entities.entities.Entities;
 import org.woehlke.twitterwall.scheduled.service.transform.EntitiesTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.TweetTransformService;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
@@ -56,7 +57,7 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             tweetTarget.setRetweetedStatus(retweetedStatus);
             TwitterProfile userSource = tweetSource.getUser();
 
-            org.woehlke.twitterwall.oodm.entities.parts.Entities entitiesTarget = entitiesTransformService.transformEntitiesForTweet(tweetSource,task);
+            Entities entitiesTarget = entitiesTransformService.transformEntitiesForTweet(tweetSource,task);
 
             tweetTarget.setEntities(entitiesTarget);
 

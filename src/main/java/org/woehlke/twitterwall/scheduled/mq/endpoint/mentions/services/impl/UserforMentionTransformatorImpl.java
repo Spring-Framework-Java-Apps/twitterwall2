@@ -8,7 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.mentions.services.UserforMentionTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.MentionMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.MentionMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserTransformService;
 
 @Component("mqUserforMentionTransformator")

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.mq.endpoint.impl;
+package org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +9,13 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.AsyncStartTask;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.scheduled.mq.endpoint.tasks.AsyncStartTask;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.TaskMessageBuilder;
 
 @Component("mqAsyncStartTask")
 public class AsyncStartTaskImpl implements AsyncStartTask {
@@ -134,11 +134,11 @@ public class AsyncStartTaskImpl implements AsyncStartTask {
     }
 
     private Task send(TaskType taskType){
-        SendType sendType = SendType.FIRE_AND_FORGET;
-        String msg = "START Task "+taskType+" via MQ by "+sendType;
+        TaskSendType taskSendType = TaskSendType.FIRE_AND_FORGET;
+        String msg = "START Task "+taskType+" via MQ by "+ taskSendType;
         log.info(msg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, taskType, sendType, countedEntities);
+        Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
 
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
 

@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.scheduled.mq.msg.impl;
+package org.woehlke.twitterwall.scheduled.mq.msg.builder.impl;
 
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.entities.User;
 import org.woehlke.twitterwall.scheduled.mq.msg.TaskMessage;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserMessageBuilder;
 
 @Component
 public class UserMessageBuilderImpl implements UserMessageBuilder {

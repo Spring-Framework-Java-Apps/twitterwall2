@@ -8,7 +8,7 @@ import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.scheduled.mq.endpoint.userlist.services.ListsTransformator;
 import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessage;
-import org.woehlke.twitterwall.scheduled.mq.msg.UserListMessageBuilder;
+import org.woehlke.twitterwall.scheduled.mq.msg.builder.UserListMessageBuilder;
 import org.woehlke.twitterwall.scheduled.service.transform.UserListTransformService;
 
 @Component("mqUserListTransformator")

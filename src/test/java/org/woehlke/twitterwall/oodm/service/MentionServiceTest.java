@@ -17,8 +17,8 @@ import org.woehlke.twitterwall.conf.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.entities.Mention;
 import org.woehlke.twitterwall.oodm.entities.Task;
 import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -70,8 +70,8 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
         String msg = "createProxyMention: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
-        Task task = taskService.create("MentionServiceTest."+msg,type,sendType,countedEntities);
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        Task task = taskService.create("MentionServiceTest."+msg,type, taskSendType,countedEntities);
         String mentionString = "ddhgcvdghvsdhg";
         Mention mention = new Mention(task,task, mentionString);
         Mention createdMention = mentionService.createProxyMention(mention,task);

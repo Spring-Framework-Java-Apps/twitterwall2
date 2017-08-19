@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.entities.common;
 
 import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskInfo;
+import org.woehlke.twitterwall.oodm.entities.tasks.TaskInfo;
 
 /**
  * Created by tw on 14.07.17.
