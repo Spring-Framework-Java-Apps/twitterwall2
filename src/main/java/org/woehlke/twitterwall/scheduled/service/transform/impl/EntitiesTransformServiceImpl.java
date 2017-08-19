@@ -45,7 +45,7 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
         String msg = "transformEntitiesForUser: "+userFromTwitterApi.getScreenName()+" : ";
         String description = userFromTwitterApi.getDescription();
         Entities entitiesTarget = new Entities();
-        Set<Url> urls = urlTransformService.getUrlsFor(userFromTwitterApi,task);
+        Set<Url> urls = urlTransformService.getUrlsForTwitterProfile(userFromTwitterApi,task);
         Set<HashTag> hashTags = hashTagTransformService.getHashTagsFor(userFromTwitterApi,task);
         Set<Mention> mentions = mentionTransformService.findByUser(userFromTwitterApi,task);
         Set<Media> media = mediaTransformService.getMediaFor(userFromTwitterApi,task);
@@ -117,6 +117,20 @@ public class EntitiesTransformServiceImpl implements EntitiesTransformService {
             if(insert){
                 log.debug(msg+"created Mention = "+createdMention.getUniqueId());
                 entitiesTarget.addMention(createdMention);
+            }
+        }
+        Set<Url> transformedUrls = entitiesTarget.getUrls();
+        Set<Url> createdUrls = urlTransformService.getUrlsForTweet(tweetFromTwitterApi,task);
+        for(Url createdUrl:createdUrls){
+            boolean insert = true;
+            for(Url transformedUrl:transformedUrls){
+                if(createdUrl.getUrl().compareTo(transformedUrl.getUrl())==0){
+                    insert = false;
+                }
+            }
+            if(insert){
+                log.debug(msg+"created Url = "+createdUrl.getUniqueId());
+                entitiesTarget.addUrl(createdUrl);
             }
         }
         log.debug(msg+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

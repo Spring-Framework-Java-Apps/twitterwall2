@@ -7,10 +7,8 @@ import org.woehlke.twitterwall.oodm.entities.parts.AbstractDomainObject;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.entities.common.DomainObjectWithUrl;
 import org.woehlke.twitterwall.oodm.entities.listener.UrlListener;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskBasedCaching;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.MalformedURLException;
 
@@ -61,11 +59,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
     @NotEmpty
     @Column(nullable = false,length=4096)
     private String url;
-
-    @Valid
-    @NotNull
-    @Embedded
-    private TaskBasedCaching taskBasedCaching = new TaskBasedCaching();
 
     @Transient
     public boolean isUrlAndExpandedTheSame(){
@@ -124,11 +117,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.display = display;
         this.expanded = expanded;
         this.url = url;
-        if(updatedBy != null){
-            taskBasedCaching.store(updatedBy.getTaskType());
-        } else {
-            taskBasedCaching.store(createdBy.getTaskType());
-        }
     }
 
     public Url(Task createdBy, Task updatedBy,String url) {
@@ -136,11 +124,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.display = Url.UNDEFINED;
         this.expanded = Url.UNDEFINED;
         this.url = url;
-        if(updatedBy != null){
-            taskBasedCaching.store(updatedBy.getTaskType());
-        } else {
-            taskBasedCaching.store(createdBy.getTaskType());
-        }
     }
 
     protected Url() {
@@ -182,14 +165,6 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         this.url = url;
     }
 
-    public TaskBasedCaching getTaskBasedCaching() {
-        return taskBasedCaching;
-    }
-
-    public void setTaskBasedCaching(TaskBasedCaching taskBasedCaching) {
-        this.taskBasedCaching = taskBasedCaching;
-    }
-
     @Override
     public String toString() {
         return "Url{" +
@@ -217,5 +192,19 @@ public class Url extends AbstractDomainObject<Url> implements DomainObjectEntity
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
+    }
+
+    public static Url createByTransformation(Task task, String display, String expanded, String urlStr) {
+        Task updatedBy = null;
+        Url myUrlEntity = new Url(task,updatedBy,display, expanded, urlStr);
+        return myUrlEntity;
+    }
+
+    public static Url createFromText(Task task, String urlString) {
+        Task updatedBy = null;
+        String display = Url.UNDEFINED;
+        String expanded = Url.UNDEFINED;
+        Url myUrlEntity = new Url(task,updatedBy,display, expanded, urlString);
+        return myUrlEntity;
     }
 }

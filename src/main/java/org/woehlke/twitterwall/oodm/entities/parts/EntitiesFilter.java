@@ -312,6 +312,7 @@ public class EntitiesFilter {
 
     protected Set<Url> getUrlsForDescription(String description,Task task) {
         Set<Url> urls = new LinkedHashSet<>();
+        Set<String> urlStrings = new LinkedHashSet<>();
         if (description != null) {
 
             String USER_PROFILE_INPUT[] = {
@@ -333,8 +334,14 @@ public class EntitiesFilter {
                 Pattern userPattern = Pattern.compile(USER_PROFILE_INPUT[i]);
                 Matcher m = userPattern.matcher(description);
                 while (m.find()) {
-                    urls.add(new Url(task,null, m.group(USER_PROFILE_OUTPUT[i])));
+                    String urlString = m.group(USER_PROFILE_OUTPUT[i]);
+                    urlStrings.add(urlString);
                 }
+            }
+
+            for(String urlString:urlStrings){
+                Url newUrl = Url.createFromText(task,urlString);
+                urls.add(newUrl);
             }
         }
         return urls;

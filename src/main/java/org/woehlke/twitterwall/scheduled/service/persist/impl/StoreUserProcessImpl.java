@@ -24,10 +24,9 @@ public class StoreUserProcessImpl implements StoreUserProcess {
         String msg = "User.storeUserProcess "+user.getUniqueId()+" : "+task.getUniqueId()+" : ";
         try {
             Entities entities = user.getEntities();
-            entities = storeEntitiesProcess.storeEntitiesProcessForTweet(entities, task);
+            entities = storeEntitiesProcess.updateEntitiesForUserProcess(user, entities, task);
             user.setEntities(entities);
             user = userService.store(user, task);
-            entities = storeEntitiesProcess.updateEntitiesForUserProcess(user,entities, task);
         } catch (Exception e){
             log.error(msg+e.getMessage());
         }

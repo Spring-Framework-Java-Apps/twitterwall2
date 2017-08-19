@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.scheduled.service.transform.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UrlEntity;
 import org.springframework.stereotype.Component;
@@ -23,14 +24,19 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
         String display = url.getDisplayUrl();
         String expanded = url.getExpandedUrl();
         String urlStr = url.getUrl();
-        Url myUrlEntity = new Url(task,null,display, expanded, urlStr);
+        Url myUrlEntity = Url.createByTransformation(task, display, expanded, urlStr);
         return myUrlEntity;
     }
 
     @Override
-    public Set<Url> getUrlsFor(TwitterProfile userSource,Task task) {
-        Set<Url> urlsTarget = new LinkedHashSet<>();
+    public Set<Url> getUrlsForTwitterProfile(TwitterProfile userSource, Task task) {
         Map<String, Object> extraData = userSource.getExtraData();
+        String description = userSource.getDescription();
+        return getUrlsFromExtraDataAndText(extraData,description,task);
+    }
+
+    private Set<Url> getUrlsFromExtraDataAndText(Map<String, Object> extraData, String description, Task task){
+        Set<Url> urlsTarget = new LinkedHashSet<>();
         if(extraData.containsKey("status")){
             Object o = extraData.get("status");
             if(o != null && o instanceof Map) {
@@ -71,10 +77,26 @@ public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransf
                 }
             }
         }
-        String description = userSource.getDescription();
         Set<Url> rawUrlsFromDescription = getUrlsForDescription(description,task);
-        urlsTarget.addAll(rawUrlsFromDescription);
+        for(Url rawUrlFromDescription:rawUrlsFromDescription){
+            boolean insert = true;
+            for(Url urlTarget :urlsTarget){
+                if(rawUrlFromDescription.getUrl().compareTo(urlTarget.getUrl())==0){
+                    insert = false;
+                }
+            }
+            if(insert){
+                urlsTarget.add(rawUrlFromDescription);
+            }
+        }
         return urlsTarget;
+    }
+
+    @Override
+    public Set<Url> getUrlsForTweet(Tweet tweetFromTwitterApi, Task task) {
+        Map<String, Object> extraData = tweetFromTwitterApi.getExtraData();
+        String text = tweetFromTwitterApi.getText();
+        return getUrlsFromExtraDataAndText(extraData,text,task);
     }
 
 
