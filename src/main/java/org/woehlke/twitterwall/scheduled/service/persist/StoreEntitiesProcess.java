@@ -15,4 +15,6 @@ public interface StoreEntitiesProcess {
     Entities storeEntitiesProcessForUser(User user, Task task);
 
     Entities updateEntitiesForUserProcess(User user, Task task);
+
+    Entities storeEntitiesProcess(Entities entities, Task task);
 }

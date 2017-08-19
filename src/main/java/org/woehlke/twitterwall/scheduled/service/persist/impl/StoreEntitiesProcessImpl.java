@@ -47,15 +47,14 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             mention = mentionService.store(mention,task);
             newMentions.add(mention);
         }
-        Entities entities = user.getEntities();
-        entities.removeAllMentions();
-        entities.addAllMentions(newMentions);
-        return entities;
+        user.getEntities().removeAllMentions();
+        user.getEntities().addAllMentions(newMentions);
+        return user.getEntities();
     }
 
-
-    private Entities storeEntitiesProcess(Entities entities, Task task) {
-        String msg = "storeEntitiesProcessForTweet "+task.getUniqueId()+" : ";
+    @Override
+    public Entities storeEntitiesProcess(Entities entities, Task task) {
+        String msg = "storeEntitiesProcess "+task.getUniqueId()+" : ";
         try {
             Set<Url> urls = new LinkedHashSet<>();
             Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
@@ -63,23 +62,10 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             Set<Media> media = new LinkedHashSet<Media>();
             Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
             for (Url myUrl : entities.getUrls()) {
-                if (myUrl != null) {
-                    if (myUrl.isValid()) {
-                        Url urlPers = urlService.findByUrl(myUrl.getUrl());
-                        if (urlPers != null) {
-                            urlPers.setDisplay(myUrl.getDisplay());
-                            urlPers.setExpanded(myUrl.getExpanded());
-                            urlPers = urlService.update(urlPers, task);
-                        } else {
-                            urlPers = urlService.create(myUrl, task);
-                        }
+                if (myUrl.isValid()) {
+                    Url urlPers = urlService.store(myUrl,task);
+                    if(urlPers != null) {
                         urls.add(urlPers);
-                    } else if (myUrl.isRawUrlsFromDescription()) {
-                        String urlStr = myUrl.getUrl();
-                        Url newUrlPers = createPersistentUrl.createPersistentUrlFor(urlStr, task);
-                        if ((newUrlPers != null) && (newUrlPers.isValid())) {
-                            urls.add(newUrlPers);
-                        }
                     }
                 }
             }
@@ -93,21 +79,8 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             }
             for (Mention mention : entities.getMentions()) {
                 if (mention.isValid()) {
-                    if (mention.isProxy()) {
-                        Mention mentionPers = mentionService.findByScreenName(mention.getScreenNameUnique());
-                        if (mentionPers == null) {
-                            mentionPers = mentionService.store(mention, task);
-                        } else {
-                            mentionPers = mentionService.store(mentionPers, task);
-                        }
-                        mentions.add(mentionPers);
-                    } else {
-                        Mention mentionPers = mentionService.findByScreenNameAndIdTwitter(mention.getScreenName(), mention.getIdTwitter());
-                        if (mentionPers == null) {
-                            mentionPers = mentionService.store(mention, task);
-                        } else {
-                            mentionPers = mentionService.store(mentionPers, task);
-                        }
+                    Mention mentionPers = mentionService.store(mention, task);
+                    if(mentionPers!= null){
                         mentions.add(mentionPers);
                     }
                 }
@@ -123,7 +96,9 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             for (TickerSymbol tickerSymbol : entities.getTickerSymbols()) {
                 if (tickerSymbol.isValid()) {
                     TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol, task);
-                    tickerSymbols.add(tickerSymbolPers);
+                    if(tickerSymbolPers != null){
+                        tickerSymbols.add(tickerSymbolPers);
+                    }
                 }
             }
             entities.setUrls(urls);
@@ -148,21 +123,15 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     private final MediaService mediaService;
 
-    private final UserService userService;
-
     private final TickerSymbolService tickerSymbolService;
 
-    private final CreatePersistentUrl createPersistentUrl;
-
     @Autowired
-    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, UserService userService, TickerSymbolService tickerSymbolService, CreatePersistentUrl createPersistentUrl) {
+    public StoreEntitiesProcessImpl(UrlService urlService, HashTagService hashTagService, MentionService mentionService, MediaService mediaService, TickerSymbolService tickerSymbolService) {
         this.urlService = urlService;
         this.hashTagService = hashTagService;
         this.mentionService = mentionService;
         this.mediaService = mediaService;
-        this.userService = userService;
         this.tickerSymbolService = tickerSymbolService;
-        this.createPersistentUrl = createPersistentUrl;
     }
 
 }
