@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchTweetsFromSearch" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:chain id="chain.async.FetchTweetsFromSearch" input-channel="channel.async.FetchTweetsFromSearch">
+        <int:splitter
+                id="splitter.async.FetchTweetsFromSearch"
+                ref="mqFetchTweetsFromTwitterSearchSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.async.FetchTweetsFromSearch"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.async.FetchTweetsFromSearch"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.async.FetchTweetsFromSearch"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchTweetsFromSearch"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchTweetsFromSearch" input-channel="channel.FetchTweetsFromSearch">
+        <int:splitter
+                id="splitter.FetchTweetsFromSearch"
+                ref="mqFetchTweetsFromTwitterSearchSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.FetchTweetsFromSearch"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.FetchTweetsFromSearch"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.FetchTweetsFromSearch"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchTweetsFromSearch"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

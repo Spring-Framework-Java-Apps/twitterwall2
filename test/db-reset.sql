@@ -15,6 +15,8 @@ delete from media;
 delete from hashtag;
 delete from tweet;
 delete from userprofile;
+delete from userlist_members;
+delete from userlist_subcriber;
 delete from userlist;
 delete from task_history;
 delete from task;

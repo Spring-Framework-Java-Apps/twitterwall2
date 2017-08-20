@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.backend.service.transform.impl;
+package org.woehlke.twitterwall.backend.mq.users.endpoint.serviceactivator.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;

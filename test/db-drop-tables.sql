@@ -15,6 +15,8 @@ drop table media;
 drop table hashtag;
 drop table tweet;
 drop table userprofile;
+drop table userlist_members;
+drop table userlist_subcriber;
 drop table userlist;
 drop table task_history;
 drop table task;

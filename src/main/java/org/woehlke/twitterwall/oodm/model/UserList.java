@@ -8,6 +8,14 @@ import org.woehlke.twitterwall.oodm.model.parts.AbstractDomainObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(
@@ -83,7 +91,34 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         return myuriPath.split("/")[1];
     }
 
-    public UserList(Task createdBy, Task updatedBy, long idTwitter, String name, String fullName, String uriPath, String description, String slug, boolean isPublic, boolean isFollowing, int memberCount, int subscriberCount) {
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="fk_user")
+    private User listOwner;
+
+
+    @NotNull
+    @JoinTable(
+        name="userlist_members"
+    )
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = LAZY
+    )
+    private Set<User> members = new LinkedHashSet<User>();
+
+
+    @NotNull
+    @JoinTable(
+        name="userlist_subcriber"
+    )
+    @ManyToMany(
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = LAZY
+    )
+    private Set<User> subscriber = new LinkedHashSet<User>();
+
+    public UserList(Task createdBy, Task updatedBy, long idTwitter, String name, String fullName, String uriPath, String description, String slug, boolean isPublic, boolean isFollowing, int memberCount, int subscriberCount, User listOwner,Set<User> members,Set<User> subscriber) {
         super(createdBy, updatedBy);
         this.idTwitter = idTwitter;
         this.name = name;
@@ -99,6 +134,9 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         } else {
             this.description = description;
         }
+        this.listOwner = listOwner;
+        this.members = members;
+        this.subscriber = subscriber;
     }
 
     protected UserList() {
@@ -213,6 +251,31 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         this.subscriberCount = subscriberCount;
     }
 
+
+    public User getListOwner() {
+        return listOwner;
+    }
+
+    public void setListOwner(User listOwner) {
+        this.listOwner = listOwner;
+    }
+
+    public Set<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(Set<User> members) {
+        this.members = members;
+    }
+
+    public Set<User> getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(Set<User> subscriber) {
+        this.subscriber = subscriber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -220,38 +283,42 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
 
         UserList userList = (UserList) o;
 
-        if (getId() != null ? !getId().equals(userList.getId()) : userList.getId() != null) return false;
-        if (getIdTwitter() != null ? !getIdTwitter().equals(userList.getIdTwitter()) : userList.getIdTwitter() != null)
+        if (id != null ? !id.equals(userList.id) : userList.id != null) return false;
+        if (idTwitter != null ? !idTwitter.equals(userList.idTwitter) : userList.idTwitter != null) return false;
+        if (name != null ? !name.equals(userList.name) : userList.name != null) return false;
+        if (fullName != null ? !fullName.equals(userList.fullName) : userList.fullName != null) return false;
+        if (uriPath != null ? !uriPath.equals(userList.uriPath) : userList.uriPath != null) return false;
+        if (description != null ? !description.equals(userList.description) : userList.description != null)
             return false;
-        if (getName() != null ? !getName().equals(userList.getName()) : userList.getName() != null) return false;
-        if (getFullName() != null ? !getFullName().equals(userList.getFullName()) : userList.getFullName() != null)
-            return false;
-        if (getUriPath() != null ? !getUriPath().equals(userList.getUriPath()) : userList.getUriPath() != null)
-            return false;
-        if (getDescription() != null ? !getDescription().equals(userList.getDescription()) : userList.getDescription() != null)
-            return false;
-        if (getSlug() != null ? !getSlug().equals(userList.getSlug()) : userList.getSlug() != null) return false;
+        if (slug != null ? !slug.equals(userList.slug) : userList.slug != null) return false;
         if (isPublic != null ? !isPublic.equals(userList.isPublic) : userList.isPublic != null) return false;
         if (isFollowing != null ? !isFollowing.equals(userList.isFollowing) : userList.isFollowing != null)
             return false;
-        if (getMemberCount() != null ? !getMemberCount().equals(userList.getMemberCount()) : userList.getMemberCount() != null)
+        if (memberCount != null ? !memberCount.equals(userList.memberCount) : userList.memberCount != null)
             return false;
-        return getSubscriberCount() != null ? getSubscriberCount().equals(userList.getSubscriberCount()) : userList.getSubscriberCount() == null;
+        if (subscriberCount != null ? !subscriberCount.equals(userList.subscriberCount) : userList.subscriberCount != null)
+            return false;
+        if (listOwner != null ? !listOwner.equals(userList.listOwner) : userList.listOwner != null) return false;
+        if (members != null ? !members.equals(userList.members) : userList.members != null) return false;
+        return subscriber != null ? subscriber.equals(userList.subscriber) : userList.subscriber == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getIdTwitter() != null ? getIdTwitter().hashCode() : 0);
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + (getFullName() != null ? getFullName().hashCode() : 0);
-        result = 31 * result + (getUriPath() != null ? getUriPath().hashCode() : 0);
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (getSlug() != null ? getSlug().hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (idTwitter != null ? idTwitter.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (uriPath != null ? uriPath.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (slug != null ? slug.hashCode() : 0);
         result = 31 * result + (isPublic != null ? isPublic.hashCode() : 0);
         result = 31 * result + (isFollowing != null ? isFollowing.hashCode() : 0);
-        result = 31 * result + (getMemberCount() != null ? getMemberCount().hashCode() : 0);
-        result = 31 * result + (getSubscriberCount() != null ? getSubscriberCount().hashCode() : 0);
+        result = 31 * result + (memberCount != null ? memberCount.hashCode() : 0);
+        result = 31 * result + (subscriberCount != null ? subscriberCount.hashCode() : 0);
+        result = 31 * result + (listOwner != null ? listOwner.hashCode() : 0);
+        result = 31 * result + (members != null ? members.hashCode() : 0);
+        result = 31 * result + (subscriber != null ? subscriber.hashCode() : 0);
         return result;
     }
 

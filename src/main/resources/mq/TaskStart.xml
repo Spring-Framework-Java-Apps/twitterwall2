@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <bean id="myMessageStore" class="org.springframework.integration.store.SimpleMessageStore">
+        <property name="messageGroupFactory">
+            <bean class="org.springframework.integration.store.SimpleMessageGroupFactory">
+                <constructor-arg value="BLOCKING_QUEUE"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="myThreadPoolTaskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+    </bean>
+
+    <bean id="releaserSequenceSizeReleaseStrategy"
+          class="org.springframework.integration.aggregator.SequenceSizeReleaseStrategy"/>
+
+    <bean id="releaserSimpleSequenceSizeReleaseStrategy"
+          class="org.springframework.integration.aggregator.SimpleSequenceSizeReleaseStrategy"/>
+
+    <!-- CHANNEL -->
+
+    <int:logging-channel-adapter id="logger" level="DEBUG"/>
+
+    <int:channel id="channel.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.TaskStart" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:dispatcher task-executor="myThreadPoolTaskExecutor"/>
+    </int:channel>
+
+</beans>

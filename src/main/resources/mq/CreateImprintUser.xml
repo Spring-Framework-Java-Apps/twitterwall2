@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.CreateImprintUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.CreateImprintUser" input-channel="channel.async.CreateImprintUser">
+        <int:service-activator
+                id="load.async.CreateImprintUser"
+                ref="mqCreateImprintUser"
+                method="createImprintUser" />
+        <int:service-activator
+                id="transform.async.CreateImprintUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.CreateImprintUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:service-activator
+                id="finish.async.CreateImprintUser"
+                ref="mqUserFinisher"
+                method="finishOneUserAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.CreateImprintUser" input-channel="channel.CreateImprintUser">
+        <int:service-activator
+                id="load.CreateImprintUser"
+                ref="mqCreateImprintUser"
+                method="createImprintUser" />
+        <int:service-activator
+                id="transform.CreateImprintUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.CreateImprintUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+    </int:chain>
+
+
+
+</beans>

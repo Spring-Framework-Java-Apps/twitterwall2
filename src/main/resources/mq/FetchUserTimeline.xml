@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+    <int:channel id="channel.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchUserTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.FetchUserTimeline" input-channel="channel.async.FetchUserTimeline">
+        <int:splitter
+                id="splitter.async.FetchUserTimeline"
+                ref="mqUserTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.async.FetchUserTimeline"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.async.FetchUserTimeline"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.async.FetchUserTimeline"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchUserTimeline"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchUserTimeline" input-channel="channel.FetchUserTimeline">
+        <int:splitter
+                id="splitter.FetchUserTimeline"
+                ref="mqUserTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.FetchUserTimeline"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.FetchUserTimeline"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.FetchUserTimeline"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchUserTimeline"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

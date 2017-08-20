@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.CreateTestDataUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.CreateTestDataUser" input-channel="channel.async.CreateTestDataUser">
+        <int:splitter
+                id="splitter.async.CreateTestDataUser"
+                ref="mqCreateTestDataForUsersSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="transform.async.CreateTestDataUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.CreateTestDataUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.async.CreateTestDataUser"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.CreateTestDataUser"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.CreateTestDataUser" input-channel="channel.CreateTestDataUser">
+        <int:splitter
+                id="splitter.CreateTestDataUser"
+                ref="mqCreateTestDataForUsersSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="transform.CreateTestDataUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.CreateTestDataUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.CreateTestDataUser"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.CreateTestDataUser"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

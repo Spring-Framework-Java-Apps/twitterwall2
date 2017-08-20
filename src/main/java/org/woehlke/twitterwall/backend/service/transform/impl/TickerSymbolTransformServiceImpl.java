@@ -19,11 +19,12 @@ import java.util.Set;
 public class TickerSymbolTransformServiceImpl extends EntitiesFilter implements TickerSymbolTransformService {
 
     @Override
-    public TickerSymbol transform(TickerSymbolEntity tickerSymbol,Task task) {
-        String tickerSymbolString = tickerSymbol.getTickerSymbol();
-        String url = tickerSymbol.getUrl();
-        TickerSymbol myTickerSymbolEntity = new TickerSymbol(task, null, tickerSymbolString, url);
-        return myTickerSymbolEntity;
+    public TickerSymbol transform(TickerSymbolEntity tickerSymbolSource,Task createdBy) {
+        String tickerSymbolString = tickerSymbolSource.getTickerSymbol();
+        String url = tickerSymbolSource.getUrl();
+        Task updatedBy = null;
+        TickerSymbol tickerSymboTarget = new TickerSymbol(createdBy, updatedBy, tickerSymbolString, url);
+        return tickerSymboTarget;
     }
 
     @Override

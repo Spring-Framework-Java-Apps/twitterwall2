@@ -16,7 +16,6 @@ import java.util.Date;
 /**
  * Created by tw on 28.06.17.
  */
-
 @Component
 public class UserTransformServiceImpl implements UserTransformService {
 
@@ -82,6 +81,7 @@ public class UserTransformServiceImpl implements UserTransformService {
         userTarget.setEntities(entities);
         log.debug(msg+" userTarget = "+userTarget.getUniqueId());
         log.trace(msg+" userTarget = "+userTarget.toString());
+        userTarget.setExtraData(userSource.getExtraData());
         return userTarget;
     }
 

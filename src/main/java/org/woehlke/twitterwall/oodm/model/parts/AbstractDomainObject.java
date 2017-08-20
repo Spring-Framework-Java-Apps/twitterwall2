@@ -1,6 +1,7 @@
 package org.woehlke.twitterwall.oodm.model.parts;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import org.hibernate.annotations.IndexColumn;
 import org.springframework.validation.annotation.Validated;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.common.DomainObject;
@@ -56,6 +57,9 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
     private Map<String, Object> extraData = new HashMap<>();
 
     @Transient
+    private int[] indices;
+
+    @Transient
     public Boolean isCached(TaskType taskType, long timeToLive){
         return this.taskBasedCaching.isCached(taskType,timeToLive);
     }
@@ -97,6 +101,13 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
         this.extraData = extraData;
     }
 
+    public int[] getIndices() {
+        return indices;
+    }
+
+    public void setIndices(int[] indices) {
+        this.indices = indices;
+    }
 
     @Override
     public String toString() {

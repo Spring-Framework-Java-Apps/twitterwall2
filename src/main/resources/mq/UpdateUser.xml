@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.UpdateUser" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:chain id="chain.async.UpdateUser" input-channel="channel.async.UpdateUser">
+        <int:splitter
+                id="splitter.async.UpdateUser"
+                ref="mqUpdateUserSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="transform.async.UpdateUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.UpdateUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.async.UpdateUser"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.UpdateUser"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.UpdateUser" input-channel="channel.UpdateUser">
+        <int:splitter
+                id="splitter.UpdateUser"
+                ref="mqUpdateUserSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="transform.UpdateUser"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.UpdateUser"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.UpdateUser"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.UpdateUser"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

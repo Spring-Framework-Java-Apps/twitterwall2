@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.UpdateMentionsForUsers" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:chain id="chain.async.UpdateMentionsForUsers" input-channel="channel.async.UpdateMentionsForUsers">
+        <int:splitter
+                id="splitter.async.UpdateMentionsForUsers"
+                ref="mqUpdateUserFromMentionsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="load.async.UpdateMentionsForUsers"
+                ref="mqUserforMentionLoader"
+                method="fetchUserforMentionfromTwitter" />
+        <int:service-activator
+                id="transform.async.UpdateMentionsForUsers"
+                ref="mqUserforMentionTransformator"
+                method="transformUserforMention" />
+        <int:service-activator
+                id="persist.async.UpdateMentionsForUsers"
+                ref="mqUserforMentionPersistor"
+                method="persistUserforMention" />
+        <int:service-activator
+                id="update.async.UpdateMentionsForUsers"
+                ref="mqUpdateMentionWithUser"
+                method="updateMentionWithUser" />
+        <int:aggregator
+                id="aggregator.async.UpdateMentionsForUsers"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.UpdateMentionsForUsers"
+                ref="mqMentionFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.UpdateMentionsForUsers" input-channel="channel.UpdateMentionsForUsers">
+        <int:splitter
+                id="splitter.UpdateMentionsForUsers"
+                ref="mqUpdateUserFromMentionsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="load.UpdateMentionsForUsers"
+                ref="mqUserforMentionLoader"
+                method="fetchUserforMentionfromTwitter" />
+        <int:service-activator
+                id="transform.UpdateMentionsForUsers"
+                ref="mqUserforMentionTransformator"
+                method="transformUserforMention" />
+        <int:service-activator
+                id="persist.UpdateMentionsForUsers"
+                ref="mqUserforMentionPersistor"
+                method="persistUserforMention" />
+        <int:service-activator
+                id="update.UpdateMentionsForUsers"
+                ref="mqUpdateMentionWithUser"
+                method="updateMentionWithUser" />
+        <int:aggregator
+                id="aggregator.UpdateMentionsForUsers"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.UpdateMentionsForUsers"
+                ref="mqMentionFinisher"
+                method="finish" />
+    </int:chain>
+
+
+</beans>

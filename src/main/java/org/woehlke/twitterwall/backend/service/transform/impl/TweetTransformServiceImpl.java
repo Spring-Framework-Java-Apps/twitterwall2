@@ -14,7 +14,6 @@ import java.util.Date;
 /**
  * Created by tw on 28.06.17.
  */
-
 @Component
 public class TweetTransformServiceImpl implements TweetTransformService {
 
@@ -31,7 +30,6 @@ public class TweetTransformServiceImpl implements TweetTransformService {
     @Override
     public org.woehlke.twitterwall.oodm.model.Tweet transform(org.springframework.social.twitter.api.Tweet tweetSource, Task task) {
         if (tweetSource == null) { return null; } else {
-            org.woehlke.twitterwall.oodm.model.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus(),task);
             long idTwitter = tweetSource.getId();
             String idStr = tweetSource.getIdStr();
             String text = tweetSource.getText();
@@ -54,17 +52,18 @@ public class TweetTransformServiceImpl implements TweetTransformService {
             tweetTarget.setFromUser(tweetSource.getFromUser());
             tweetTarget.setFavorited(tweetSource.isFavorited());
             tweetTarget.setInReplyToStatusId(tweetSource.getInReplyToStatusId());
+            /* retweetedStatus */
+            org.woehlke.twitterwall.oodm.model.Tweet retweetedStatus = transform(tweetSource.getRetweetedStatus(),task);
             tweetTarget.setRetweetedStatus(retweetedStatus);
-            TwitterProfile userSource = tweetSource.getUser();
-
+            /* Entities */
             Entities entitiesTarget = entitiesTransformService.transformEntitiesForTweet(tweetSource,task);
-
             tweetTarget.setEntities(entitiesTarget);
-
             /* transformEntitiesForTweet userTarget */
+            TwitterProfile userSource = tweetSource.getUser();
             User userTarget = userTransformService.transform(userSource,task);
             tweetTarget.setUser(userTarget);
-
+            /* ExtraData */
+            tweetTarget.setExtraData(tweetSource.getExtraData());
             return tweetTarget;
         }
     }

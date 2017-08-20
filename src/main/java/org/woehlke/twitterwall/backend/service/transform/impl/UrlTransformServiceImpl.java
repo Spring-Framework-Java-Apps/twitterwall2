@@ -20,12 +20,13 @@ import java.util.*;
 public class UrlTransformServiceImpl extends EntitiesFilter implements UrlTransformService {
 
     @Override
-    public Url transform(UrlEntity url, Task task) {
-        String display = url.getDisplayUrl();
-        String expanded = url.getExpandedUrl();
-        String urlStr = url.getUrl();
-        Url myUrlEntity = Url.createByTransformation(task, display, expanded, urlStr);
-        return myUrlEntity;
+    public Url transform(UrlEntity urlSource, Task task) {
+        String display = urlSource.getDisplayUrl();
+        String expanded = urlSource.getExpandedUrl();
+        String urlStr = urlSource.getUrl();
+        Url urlTarget = Url.createByTransformation(task, display, expanded, urlStr);
+        urlTarget.setExtraData(urlSource.getExtraData());
+        return urlTarget;
     }
 
     @Override
