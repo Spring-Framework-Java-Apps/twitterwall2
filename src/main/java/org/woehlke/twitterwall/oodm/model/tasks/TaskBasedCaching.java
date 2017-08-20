@@ -76,6 +76,9 @@ public class TaskBasedCaching implements Serializable {
     @Column(name=COLUMN_PREFIX+"start_garbage_collection")
     private Date startGarbageCollection;
 
+    @Column(name=COLUMN_PREFIX+"no_type")
+    private Date noType;
+
     @Transient
     public Boolean isCached(TaskType taskType, long timeToLive){
         Date lastApiCall = null;
@@ -139,6 +142,9 @@ public class TaskBasedCaching implements Serializable {
                 break;
             case GARBAGE_COLLECTION:
                 lastApiCall = startGarbageCollection;
+                break;
+            case NULL:
+                lastApiCall = noType;
                 break;
             default: break;
         }
@@ -222,13 +228,16 @@ public class TaskBasedCaching implements Serializable {
                 case GARBAGE_COLLECTION:
                     startGarbageCollection = lastApiCall;
                     break;
+                case NULL:
+                    noType = lastApiCall;
+                    break;
                 default:
                     break;
             }
         }
     }
 
-    public TaskBasedCaching(Date fetchTweetsFromSearch, Date updateTweets, Date updateUsers, Date updateUsersFromMentions, Date fetchUsersFromList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage, Date fetchFollower, Date fetchFriends, Date getHomeTimeline, Date getUserTimeline, Date getMentions, Date getFavorites, Date getRetweetsOfMe, Date getLists,Date fetchUserlistOwners,Date startGarbageCollection, Date updatedUrls) {
+    public TaskBasedCaching(Date fetchTweetsFromSearch, Date updateTweets, Date updateUsers, Date updateUsersFromMentions, Date fetchUsersFromList, Date controllerGetTestdataTweets, Date controllerGetTestdataUser, Date controllerAddUserForScreenName, Date controllerCreateImprintUser, Date removeOldDataFromStorage, Date fetchFollower, Date fetchFriends, Date getHomeTimeline, Date getUserTimeline, Date getMentions, Date getFavorites, Date getRetweetsOfMe, Date getLists,Date fetchUserlistOwners,Date startGarbageCollection, Date updatedUrls, Date noType) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updateUsers = updateUsers;
@@ -250,6 +259,7 @@ public class TaskBasedCaching implements Serializable {
         this.fetchUserlistOwners = fetchUserlistOwners;
         this.startGarbageCollection = startGarbageCollection;
         this.updatedUrls = updatedUrls;
+        this.noType = noType;
     }
 
     public TaskBasedCaching() {
@@ -273,6 +283,7 @@ public class TaskBasedCaching implements Serializable {
         this.fetchUserlistOwners = null;
         this.startGarbageCollection = null;
         this.updatedUrls = null;
+        this.noType = null;
     }
 
     public Date getFetchTweetsFromSearch() {
@@ -359,6 +370,10 @@ public class TaskBasedCaching implements Serializable {
         return updatedUrls;
     }
 
+    public Date getNoType() {
+        return noType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -399,7 +414,9 @@ public class TaskBasedCaching implements Serializable {
         if (getLists != null ? !getLists.equals(that.getLists) : that.getLists != null) return false;
         if (fetchUserlistOwners != null ? !fetchUserlistOwners.equals(that.fetchUserlistOwners) : that.fetchUserlistOwners != null)
             return false;
-        return startGarbageCollection != null ? startGarbageCollection.equals(that.startGarbageCollection) : that.startGarbageCollection == null;
+        if (startGarbageCollection != null ? !startGarbageCollection.equals(that.startGarbageCollection) : that.startGarbageCollection != null)
+            return false;
+        return noType != null ? noType.equals(that.noType) : that.noType == null;
     }
 
     @Override
@@ -425,6 +442,7 @@ public class TaskBasedCaching implements Serializable {
         result = 31 * result + (getLists != null ? getLists.hashCode() : 0);
         result = 31 * result + (fetchUserlistOwners != null ? fetchUserlistOwners.hashCode() : 0);
         result = 31 * result + (startGarbageCollection != null ? startGarbageCollection.hashCode() : 0);
+        result = 31 * result + (noType != null ? noType.hashCode() : 0);
         return result;
     }
 
@@ -452,6 +470,7 @@ public class TaskBasedCaching implements Serializable {
                 ", getLists=" + getLists +
                 ", fetchUserlistOwners=" + fetchUserlistOwners +
                 ", startGarbageCollection=" + startGarbageCollection +
+                ", noType=" + noType +
                 '}';
     }
 

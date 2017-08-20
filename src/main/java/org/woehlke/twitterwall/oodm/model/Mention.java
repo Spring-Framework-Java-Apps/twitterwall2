@@ -123,8 +123,8 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
         super(createdBy,updatedBy);
         this.idTwitter = ID_TWITTER_UNDEFINED;
         this.screenName = mentionString;
-        if(screenName!=null) {
-            this.screenNameUnique = screenName.toLowerCase();
+        if(mentionString!=null) {
+            this.screenNameUnique = mentionString.toLowerCase();
         }
         this.name = mentionString;
     }
@@ -136,13 +136,7 @@ public class Mention extends AbstractDomainObject<Mention> implements DomainObje
     @Override
     public String getUniqueId() {
 
-        boolean undefined = (idTwitter == ID_TWITTER_UNDEFINED);
-
-        String uniqueIdUndefined = "HAS_NO_USER_YET_" + id;
-
-        String uniqueIdHasUser = "" + idTwitter +"_"+ screenNameUnique;
-
-        return undefined ? uniqueIdUndefined : uniqueIdHasUser;
+        return "" + idTwitter +"_"+ screenNameUnique;
     }
 
     @Transient

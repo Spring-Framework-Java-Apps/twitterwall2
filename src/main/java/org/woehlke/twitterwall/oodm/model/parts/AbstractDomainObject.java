@@ -70,6 +70,10 @@ public abstract class AbstractDomainObject<T extends DomainObject> implements Do
     }
 
     protected AbstractDomainObject() {
+        this.createdBy = null;
+        this.updatedBy = null;
+        this.taskInfo = new TaskInfo();
+        this.taskBasedCaching = new TaskBasedCaching();
     }
 
     /**

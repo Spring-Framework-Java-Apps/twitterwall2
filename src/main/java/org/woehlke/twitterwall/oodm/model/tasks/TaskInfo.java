@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by tw on 10.07.17.
@@ -96,6 +97,10 @@ public class TaskInfo implements Serializable {
     @Column(nullable = false,name="start_garbage_collection")
     private Boolean startGarbageCollection = false;
 
+    @NotNull
+    @Column(nullable = false,name="no_type")
+    private Boolean noType = false;
+
     @Transient
     public void setTaskInfoFromTask(Task task) {
         if(task!=null) {
@@ -161,6 +166,9 @@ public class TaskInfo implements Serializable {
                 case GARBAGE_COLLECTION:
                     startGarbageCollection = true;
                     break;
+                case NULL:
+                    noType = true;
+                    break;
                 default:
                     break;
             }
@@ -170,7 +178,7 @@ public class TaskInfo implements Serializable {
     public TaskInfo() {
     }
 
-    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners, Boolean updatedUrls) {
+    public TaskInfo(Boolean fetchTweetsFromSearch, Boolean updateTweets, Boolean updatedUsers, Boolean updateUsersFromMentions, Boolean fetchUsersFromList, Boolean controllerCreateTestdataTweets, Boolean controllerCreateTestdataUsers, Boolean controllerCreateImprintUser, Boolean removeOldDataFromStorage, Boolean fetchFollower, Boolean fetchFriends,Boolean fetchUserlistOwners, Boolean updatedUrls, Boolean noType) {
         this.fetchTweetsFromSearch = fetchTweetsFromSearch;
         this.updateTweets = updateTweets;
         this.updatedUsers = updatedUsers;
@@ -184,6 +192,7 @@ public class TaskInfo implements Serializable {
         this.fetchFriends = fetchFriends;
         this.fetchUserlistOwners = fetchUserlistOwners;
         this.updatedUrls = updatedUrls;
+        this.noType = noType;
     }
 
     public Boolean getFetchTweetsFromSearch() {
@@ -266,6 +275,10 @@ public class TaskInfo implements Serializable {
         return updatedUrls;
     }
 
+    public Boolean getNoType() {
+        return noType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -310,7 +323,9 @@ public class TaskInfo implements Serializable {
         if (getLists != null ? !getLists.equals(taskInfo.getLists) : taskInfo.getLists != null) return false;
         if (fetchUserlistOwners != null ? !fetchUserlistOwners.equals(taskInfo.fetchUserlistOwners) : taskInfo.fetchUserlistOwners != null)
             return false;
-        return startGarbageCollection != null ? startGarbageCollection.equals(taskInfo.startGarbageCollection) : taskInfo.startGarbageCollection == null;
+        if (startGarbageCollection != null ? !startGarbageCollection.equals(taskInfo.startGarbageCollection) : taskInfo.startGarbageCollection != null)
+            return false;
+        return noType != null ? noType.equals(taskInfo.noType) : taskInfo.noType == null;
     }
 
     @Override
@@ -335,6 +350,7 @@ public class TaskInfo implements Serializable {
         result = 31 * result + (getLists != null ? getLists.hashCode() : 0);
         result = 31 * result + (fetchUserlistOwners != null ? fetchUserlistOwners.hashCode() : 0);
         result = 31 * result + (startGarbageCollection != null ? startGarbageCollection.hashCode() : 0);
+        result = 31 * result + (noType != null ? noType.hashCode() : 0);
         return result;
     }
 
@@ -361,6 +377,7 @@ public class TaskInfo implements Serializable {
                 ", getLists=" + getLists +
                 ", fetchUserlistOwners=" + fetchUserlistOwners +
                 ", startGarbageCollection=" + startGarbageCollection +
+                ", noType=" + noType +
                 '}';
     }
 

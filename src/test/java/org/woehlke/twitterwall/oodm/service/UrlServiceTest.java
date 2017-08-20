@@ -13,7 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
+import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.Url;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 import java.util.List;
 
@@ -25,6 +29,12 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private CountedEntitiesService countedEntitiesService;
 
     @Autowired
     private TestdataProperties testdataProperties;
@@ -77,11 +87,31 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
     @Test
     public void findRawUrlsFromDescription() throws Exception {
         String msg = "findRawUrlsFromDescription: ";
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
+        Task updatedBy=null;
+        String display=Url.UNDEFINED;
+        String expanded=Url.UNDEFINED;
+        String url1="http://woehlke.org/";
+        String url2="http://thomas-woehlke.de";
+        String url3="http://java.sun.com";
+        String url4="http://tomcat.apache.org";
+
+        Url urlTest1 = new Url(createdBy,updatedBy,display,expanded,url1);
+        Url urlTest2 = new Url(createdBy,updatedBy,display,expanded,url2);
+        Url urlTest3 = new Url(createdBy,updatedBy,url3,url3,url3);
+        Url urlTest4 = new Url(createdBy,updatedBy,url4,url4,url4);
+
+        urlService.store(urlTest1,createdBy);
+        urlService.store(urlTest2,createdBy);
+        urlService.store(urlTest3,createdBy);
+        urlService.store(urlTest4,createdBy);
+
         List<Url> urlList = urlService.findRawUrlsFromDescription();
         log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
         log.info(msg+" size: "+urlList.size());
         log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
-        Assert.assertTrue(urlList.size() >0 );
+        Assert.assertTrue(urlList.size()>0);
         for(Url url:urlList){
             Assert.assertTrue(url.isValid());
             Assert.assertTrue(url.isRawUrlsFromDescription());
@@ -98,11 +128,32 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
     @Test
     public void findUrlAndExpandedTheSame() throws Exception {
         String msg = "findUrlAndExpandedTheSame: ";
+
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
+        Task updatedBy=null;
+        String display=Url.UNDEFINED;
+        String expanded=Url.UNDEFINED;
+        String url1="http://woehlke.org/";
+        String url2="http://thomas-woehlke.de";
+        String url3="http://java.sun.com";
+        String url4="http://tomcat.apache.org";
+
+        Url urlTest1 = new Url(createdBy,updatedBy,display,expanded,url1);
+        Url urlTest2 = new Url(createdBy,updatedBy,display,expanded,url2);
+        Url urlTest3 = new Url(createdBy,updatedBy,url3,url3,url3);
+        Url urlTest4 = new Url(createdBy,updatedBy,url4,url4,url4);
+
+        urlService.store(urlTest1,createdBy);
+        urlService.store(urlTest2,createdBy);
+        urlService.store(urlTest3,createdBy);
+        urlService.store(urlTest4,createdBy);
+
         List<Url> urlList = urlService.findUrlAndExpandedTheSame();
         log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
         log.info(msg+" size: "+urlList.size());
         log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
-        Assert.assertTrue(urlList.size() >0 );
+        Assert.assertTrue(urlList.size()>0);
         for(Url url:urlList){
             Assert.assertTrue(url.isValid());
             Assert.assertTrue(url.isUrlAndExpandedTheSame());

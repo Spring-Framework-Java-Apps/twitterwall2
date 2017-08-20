@@ -19,7 +19,8 @@ public interface MentionRepository extends DomainRepository<Mention>,MentionRepo
 
     List<Mention> findByIdTwitter(long idTwitter);
 
-    Mention findByScreenNameUnique(String screenNameUnique);
+    @Query(name = "Mention.findByScreenNameUnique")
+    Mention findByScreenNameUnique(@Param("screenNameUnique") String screenNameUnique);
 
 
     @Query(

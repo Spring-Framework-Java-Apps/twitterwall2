@@ -32,11 +32,11 @@ public class MentionTest implements DomainObjectMinimalTest  {
         String name3 = "Java";
 
         Mention mention1 = new Mention(createdBy,updatedBy,idTwitter1,screenName1,name1);
-        String expectedUniqueId1 = idTwitter1.toString() +"_"+ screenNameUnique1.toString();
+        String expectedUniqueId1 = idTwitter1.toString() +"_"+ screenNameUnique1;
         Assert.assertEquals(msg,expectedUniqueId1,mention1.getUniqueId());
 
         Mention mention2 = new Mention(createdBy,updatedBy,screenName2);
-        String expectedUniqueId2 = idTwitter2.toString() +"_"+ screenNameUnique2.toString();
+        String expectedUniqueId2 = idTwitter2.toString() +"_"+ screenNameUnique2;
         Assert.assertEquals(msg,expectedUniqueId2,mention2.getUniqueId());
 
         Mention mention3 = new Mention(createdBy,updatedBy,idTwitter3,screenName3,name3);

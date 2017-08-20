@@ -38,11 +38,43 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     @Autowired
     private TestdataProperties testdataProperties;
 
+    @Commit
     @Test
     public void areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(mentionService);
         Assert.assertNotNull(testdataProperties);
         Assert.assertNotNull(countedEntitiesService);
+    }
+
+    @Commit
+    @Test
+    public void createTestData() throws Exception {
+        String msg = "createTestData: ";
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
+        Task updatedBy=null;
+
+        String screenName[] = {
+                "port80guru",
+                "ThomasWoehlke",
+                "OracleDevs",
+                "java"
+        };
+        long idTwitter[] = {242L, 1242L, 3242L, 4242L};
+        String name[] = {
+                "Natural Born Coder",
+                "Thomas Woehlke",
+                "Oracle Developer",
+                "Java"
+        };
+
+        for(int i=0;i<4;i++){
+            Mention mentionTest = new Mention(createdBy,updatedBy,idTwitter[i], screenName[i], name[i]);
+            mentionTest = mentionService.store(mentionTest,createdBy);
+            Assert.assertNotNull(mentionTest);
+            Assert.assertNotNull(mentionTest.getId());
+            Assert.assertTrue(mentionTest.isValid());
+        }
     }
 
     @Commit
@@ -98,25 +130,28 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     @Test
     public void findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
+        createTestData();
         int page=1;
         int size=20;
         Pageable pageRequest = new PageRequest(page,size);
         Page<Mention> myPage = mentionService.getAll(pageRequest);
         Assert.assertTrue(msg,myPage.getTotalElements()>0);
         for(Mention myMention:myPage.getContent()){
-            long idTwitter = myMention.getIdTwitter();
-            if(idTwitter > 0L) {
-                Mention myFoundMention = mentionService.findByIdTwitter(idTwitter);
+            long myIdTwitter = myMention.getIdTwitter();
+            if(myIdTwitter > 0L) {
+                Mention myFoundMention = mentionService.findByIdTwitter(myIdTwitter);
                 Assert.assertNotNull(myFoundMention);
-                Assert.assertEquals(msg, idTwitter, myFoundMention.getIdTwitter().longValue());
+                Assert.assertEquals(msg, myIdTwitter, myFoundMention.getIdTwitter().longValue());
             }
         }
     }
 
     @Commit
     @Test
+    @Override
     public void findByScreenName() throws Exception {
         String msg = "findByScreenName: ";
+        createTestData();
         int page=1;
         int size=1;
         Pageable pageRequest = new PageRequest(page,size);
