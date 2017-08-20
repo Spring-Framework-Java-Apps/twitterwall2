@@ -65,7 +65,7 @@ updates.
 Contribute your fixes and new features back to the main codebase using
 [GitHub pull requests][github-pull-req].
 
-[twitterwall-github]: http://github.com/andriusvelykis/reflow-maven-skin/
+[twitterwall-github]: https://github.com/phasenraum2010/twitterwall2/
 [github-pull-req]: http://help.github.com/articles/using-pull-requests
 
 ### Issues (bug and feature tracker)
@@ -103,6 +103,7 @@ If you _really really_ like it and want to support the author, I will be glad to
 + JavaScript goodies with [jQuery][jquery].
 + More icons by [fontawesome][fontawesome].
 + Twitterwall Backend is made with [Java][java] and [Spring-Boot][spring-boot].
++ Spring Frameworks used: [MQ][spring-integration], [JPA][spring-data-jpa], [Security][spring-security] and [Twitter][spring-social-twitter]
 + Database [PostgreSQL][postgresql] and jdbc by [PostgreSQL-JDBC][postgresql-jdbc].
 + Running on Cloud-Service [Heroku][heroku] with [Heroku PostegreSQL][postgresql-heroku].
 
@@ -113,6 +114,10 @@ If you _really really_ like it and want to support the author, I will be glad to
 [heroku]: https://heroku.com/
 [postgresql-heroku]: https://devcenter.heroku.com/categories/heroku-postgres/
 [spring-boot]: https://projects.spring.io/spring-boot/
+[spring-integration]: http://projects.spring.io/spring-integration/
+[spring-data-jpa]: http://projects.spring.io/spring-data-jpa/
+[spring-security]: http://projects.spring.io/spring-security/
+[spring-social-twitter]: http://projects.spring.io/spring-social-twitter/
 [bootstrap]: http://getbootstrap.com/
 [glyphicons]: http://glyphicons.com/
 [webfonts]: http://www.google.com/webfonts/
