@@ -20,6 +20,8 @@ import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class MentionServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithScreenNameTest,DomainServiceWithIdTwitterTest {
@@ -68,12 +70,22 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
                 "Java"
         };
 
+        int pageNr=1;
+        int pageSize=1;
+        Pageable pageRequest = new PageRequest(pageNr,pageSize);
+
         for(int i=0;i<4;i++){
-            Mention mentionTest = new Mention(createdBy,updatedBy,idTwitter[i], screenName[i], name[i]);
-            mentionTest = mentionService.store(mentionTest,createdBy);
-            Assert.assertNotNull(mentionTest);
-            Assert.assertNotNull(mentionTest.getId());
-            Assert.assertTrue(mentionTest.isValid());
+            Page<Mention> foundMentionsPage = mentionService.findAllByScreenName(screenName[i],pageRequest);
+            if(foundMentionsPage.getTotalElements() == 0){
+                waitFor500ms();
+                Date now = new Date();
+                long myIdTwitter = idTwitter[i] + now.getTime();
+                Mention mentionTest = new Mention(createdBy,updatedBy,myIdTwitter, screenName[i], name[i]);
+                mentionTest = mentionService.store(mentionTest,createdBy);
+                Assert.assertNotNull(mentionTest);
+                Assert.assertNotNull(mentionTest.getId());
+                Assert.assertTrue(mentionTest.isValid());
+            }
         }
     }
 
@@ -233,5 +245,14 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     @Test
     public void findByIdTwitterOfUser() throws Exception {
 
+    }
+
+    private void waitFor500ms(){
+        int millisToWait = 500;
+        log.debug("### waiting now for (ms): "+millisToWait);
+        try {
+            Thread.sleep(millisToWait);
+        } catch (InterruptedException e) {
+        }
     }
 }
