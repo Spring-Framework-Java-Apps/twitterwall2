@@ -41,7 +41,6 @@ public class MentionMessageBuilderImpl implements MentionMessageBuilder {
             Message<MentionMessage> mqMessageOut =
                     MessageBuilder.withPayload(outputPayload)
                             .copyHeaders(incomingMessage.getHeaders())
-                            .setHeader("twitter_profile_id", userFromTwitter.getId())
                             .build();
             return mqMessageOut;
         } else {
