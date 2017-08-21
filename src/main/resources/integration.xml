@@ -50,6 +50,9 @@
 
     <import resource="mq/FetchListOwner.xml" />
 
+    <import resource="mq/FetchListsForUsers.xml" />
+
+
     <int:router id="router.TaskStart" input-channel="channel.TaskStart" expression="payload.taskType">
         <int:mapping value="UPDATE_TWEETS" channel="channel.UpdateTweets"/>
         <int:mapping value="UPDATE_USERS" channel="channel.UpdateUser"/>
@@ -71,6 +74,7 @@
         <int:mapping value="FETCH_RETWEETS_OF_ME" channel="channel.FetchRetweetsOfMe"/>
         <int:mapping value="FETCH_LISTS" channel="channel.FetchLists"/>
         <int:mapping value="FETCH_USERLIST_OWNERS" channel="channel.FetchListOwner"/>
+        <int:mapping value="FETCH_LISTS_FOR_USERS" channel="channel.FetchListsForUsers"/>
     </int:router>
 
     <int:router id="router.async.TaskStart" input-channel="channel.async.TaskStart" expression="payload.taskType">
@@ -94,6 +98,7 @@
         <int:mapping value="FETCH_RETWEETS_OF_ME" channel="channel.async.FetchRetweetsOfMe"/>
         <int:mapping value="FETCH_LISTS" channel="channel.async.FetchLists"/>
         <int:mapping value="FETCH_USERLIST_OWNERS" channel="channel.async.FetchListOwner"/>
+        <int:mapping value="FETCH_LISTS_FOR_USERS" channel="channel.async.FetchListsForUsers"/>
     </int:router>
 
 </beans>

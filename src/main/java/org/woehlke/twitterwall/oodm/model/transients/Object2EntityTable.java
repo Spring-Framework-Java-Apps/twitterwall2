@@ -11,7 +11,9 @@ public enum Object2EntityTable {
     USERPROFILE_MEDIA,
     USERPROFILE_MENTION,
     USERPROFILE_TICKERSYMBOL,
-    USERPROFILE_URL;
+    USERPROFILE_URL,
+    USERLIST_MEMBERS,
+    USERLIST_SUBCRIBER;
 
     public String getTableName() {
         return this.name().toLowerCase();

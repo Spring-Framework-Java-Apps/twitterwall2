@@ -36,7 +36,6 @@ public class ListsSplitterImpl implements ListsSplitter {
         this.userListMessageBuilder = userListMessageBuilder;
     }
 
-    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public List<Message<UserListMessage>> splitUserListMessage(Message<TaskMessage> incomingTaskMessage) {
         CountedEntities countedEntities = countedEntitiesService.countAll();

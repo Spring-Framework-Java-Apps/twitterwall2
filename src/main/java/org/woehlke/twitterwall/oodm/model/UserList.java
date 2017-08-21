@@ -35,6 +35,16 @@ import static javax.persistence.FetchType.LAZY;
         query = "select t from UserList as t where t.idTwitter=:idTwitter"
     )
 })
+
+@NamedNativeQueries({
+    @NamedNativeQuery(
+        name = "UserList.countUserList2Subcriber",
+        query = "SELECT count(*) AS z FROM userlist_subcriber"
+    ),
+    @NamedNativeQuery(
+        ‚query = "SELECT count(*) AS z FROM userlist_members"
+    )
+})
 @EntityListeners(UserListListener.class)
 public class UserList extends AbstractDomainObject<UserList> implements DomainObjectWithTask<UserList>,DomainObjectWithIdTwitter<UserList> {
 

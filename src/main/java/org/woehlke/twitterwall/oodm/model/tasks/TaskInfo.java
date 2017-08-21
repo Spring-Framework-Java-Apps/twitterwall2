@@ -8,7 +8,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by tw on 10.07.17.
@@ -94,6 +93,10 @@ public class TaskInfo implements Serializable {
     private Boolean fetchUserlistOwners = false;
 
     @NotNull
+    @Column(nullable = false,name="fetch_userlists_for_users")
+    private Boolean fetchListsForUsers = true;
+
+    @NotNull
     @Column(nullable = false,name="start_garbage_collection")
     private Boolean startGarbageCollection = false;
 
@@ -162,6 +165,9 @@ public class TaskInfo implements Serializable {
                     break;
                 case FETCH_USERLIST_OWNERS:
                     fetchUserlistOwners = true;
+                    break;
+                case FETCH_LISTS_FOR_USERS:
+                    fetchListsForUsers = true;
                     break;
                 case GARBAGE_COLLECTION:
                     startGarbageCollection = true;
@@ -267,6 +273,10 @@ public class TaskInfo implements Serializable {
         return fetchUserlistOwners;
     }
 
+    public Boolean getFetchListsForUsers() {
+        return fetchListsForUsers;
+    }
+
     public Boolean getStartGarbageCollection() {
         return startGarbageCollection;
     }
@@ -323,6 +333,8 @@ public class TaskInfo implements Serializable {
         if (getLists != null ? !getLists.equals(taskInfo.getLists) : taskInfo.getLists != null) return false;
         if (fetchUserlistOwners != null ? !fetchUserlistOwners.equals(taskInfo.fetchUserlistOwners) : taskInfo.fetchUserlistOwners != null)
             return false;
+        if (fetchListsForUsers != null ? !fetchListsForUsers.equals(taskInfo.fetchListsForUsers) : taskInfo.fetchListsForUsers != null)
+            return false;
         if (startGarbageCollection != null ? !startGarbageCollection.equals(taskInfo.startGarbageCollection) : taskInfo.startGarbageCollection != null)
             return false;
         return noType != null ? noType.equals(taskInfo.noType) : taskInfo.noType == null;
@@ -349,6 +361,7 @@ public class TaskInfo implements Serializable {
         result = 31 * result + (getRetweetsOfMe != null ? getRetweetsOfMe.hashCode() : 0);
         result = 31 * result + (getLists != null ? getLists.hashCode() : 0);
         result = 31 * result + (fetchUserlistOwners != null ? fetchUserlistOwners.hashCode() : 0);
+        result = 31 * result + (fetchListsForUsers != null ? fetchListsForUsers.hashCode() : 0);
         result = 31 * result + (startGarbageCollection != null ? startGarbageCollection.hashCode() : 0);
         result = 31 * result + (noType != null ? noType.hashCode() : 0);
         return result;
@@ -376,6 +389,7 @@ public class TaskInfo implements Serializable {
                 ", getRetweetsOfMe=" + getRetweetsOfMe +
                 ", getLists=" + getLists +
                 ", fetchUserlistOwners=" + fetchUserlistOwners +
+                ", fetchListsForUsers=" + fetchListsForUsers +
                 ", startGarbageCollection=" + startGarbageCollection +
                 ", noType=" + noType +
                 '}';
