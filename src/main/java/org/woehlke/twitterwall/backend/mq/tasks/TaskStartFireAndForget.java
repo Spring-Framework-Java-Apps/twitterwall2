@@ -45,5 +45,7 @@ public interface TaskStartFireAndForget {
 
     Task startUpdateUrls();
 
+    Task startFetchListOwner();
 
+    Task startFetchListsForUsers();
 }

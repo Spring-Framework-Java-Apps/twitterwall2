@@ -147,6 +147,16 @@ public class TaskStartImpl implements TaskStart {
         return sendAndReceiveUrl(taskType);
     }
 
+    @Override
+    public Task startFetchListOwner() {
+        return null;
+    }
+
+    @Override
+    public Task startFetchListsForUsers() {
+        return null;
+    }
+
     private Task sendAndReceiveTask(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
