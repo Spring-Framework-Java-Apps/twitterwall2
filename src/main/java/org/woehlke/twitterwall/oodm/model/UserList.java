@@ -42,7 +42,8 @@ import static javax.persistence.FetchType.LAZY;
         query = "SELECT count(*) AS z FROM userlist_subcriber"
     ),
     @NamedNativeQuery(
-        ‚query = "SELECT count(*) AS z FROM userlist_members"
+        name = "UserList.countUserList2Members",
+        query = "SELECT count(*) AS z FROM userlist_members"
     )
 })
 @EntityListeners(UserListListener.class)
