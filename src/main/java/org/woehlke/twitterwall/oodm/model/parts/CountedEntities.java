@@ -76,6 +76,12 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
     @NotNull
     private Long userprofile2url=0L;
 
+    @NotNull
+    private Long userList2Members=0L;
+
+    @NotNull
+    private Long userList2Subcriber=0L;
+
     public CountedEntities() {
     }
 
@@ -100,7 +106,9 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
         userprofile2media +
         userprofile2mention +
         userprofile2tickersymbol +
-        userprofile2url;
+        userprofile2url +
+        userList2Members +
+        userList2Subcriber;
     }
 
     public Long getCountUser() {
@@ -263,6 +271,22 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
         this.userprofile2url = userprofile2url;
     }
 
+    public Long getUserList2Members() {
+        return userList2Members;
+    }
+
+    public void setUserList2Members(Long userList2Members) {
+        this.userList2Members = userList2Members;
+    }
+
+    public Long getUserList2Subcriber() {
+        return userList2Subcriber;
+    }
+
+    public void setUserList2Subcriber(Long userList2Subcriber) {
+        this.userList2Subcriber = userList2Subcriber;
+    }
+
     @Override
     public String toString() {
         return "CountedEntities{" +
@@ -286,6 +310,8 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
             ", userprofile2mention=" + userprofile2mention +
             ", userprofile2tickersymbol=" + userprofile2tickersymbol +
             ", userprofile2url=" + userprofile2url +
+            ", countUserList2Members=" + userList2Members +
+            ", countUserList2Subcriber=" + userList2Subcriber +
             '}';
     }
 
@@ -334,7 +360,11 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
             return false;
         if (getUserprofile2tickersymbol() != null ? !getUserprofile2tickersymbol().equals(that.getUserprofile2tickersymbol()) : that.getUserprofile2tickersymbol() != null)
             return false;
-        return getUserprofile2url() != null ? getUserprofile2url().equals(that.getUserprofile2url()) : that.getUserprofile2url() == null;
+        if (getUserprofile2url() != null ? !getUserprofile2url().equals(that.getUserprofile2url()) : that.getUserprofile2url() != null)
+            return false;
+        if (getUserList2Members() != null ? !getUserList2Members().equals(that.getUserList2Members()) : that.getUserList2Members() != null)
+            return false;
+        return getUserList2Subcriber() != null ? getUserList2Subcriber().equals(that.getUserList2Subcriber()) : that.getUserList2Subcriber() == null;
     }
 
     @Override
@@ -359,6 +389,8 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
         result = 31 * result + (getUserprofile2mention() != null ? getUserprofile2mention().hashCode() : 0);
         result = 31 * result + (getUserprofile2tickersymbol() != null ? getUserprofile2tickersymbol().hashCode() : 0);
         result = 31 * result + (getUserprofile2url() != null ? getUserprofile2url().hashCode() : 0);
+        result = 31 * result + (getUserList2Members() != null ? getUserList2Members().hashCode() : 0);
+        result = 31 * result + (getUserList2Subcriber() != null ? getUserList2Subcriber().hashCode() : 0);
         return result;
     }
 
@@ -425,6 +457,12 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
         if(userprofile2url == null){
             return false;
         }
+        if(userList2Members == null){
+            return false;
+        }
+        if(userList2Subcriber == null){
+            return false;
+        }
         if(countUser < 0){
             return false;
         }
@@ -477,6 +515,12 @@ public class CountedEntities implements Serializable,DomainObjectWithValidation 
             return false;
         }
         if(userprofile2url < 0){
+            return false;
+        }
+        if(userList2Members < 0){
+            return false;
+        }
+        if(userList2Subcriber < 0){
             return false;
         }
         return true;

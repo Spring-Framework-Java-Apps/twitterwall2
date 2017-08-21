@@ -67,6 +67,46 @@ public class UserListController {
         return "userlist/id";
     }
 
+    //TODO: jdscdgsv
+    @RequestMapping("/list/userList2Subcriber")
+    public String userList2Subcriber(
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.ASC,
+            "slug"
+        );
+        Page<UserList> userlists = userListService.getAll(pageRequest);
+        model.addAttribute("myPageContent", userlists);
+        String symbol = Symbols.USER_ALL.toString();
+        String subtitle = "All Users";
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
+        return "userlist/all";
+    }
+
+    //TODO: jdscdgsv
+    @RequestMapping("/list/userList2Members")
+    public String userList2Members(
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
+        Model model
+    ) {
+        Pageable pageRequest = new PageRequest(
+            page,
+            frontendProperties.getPageSize(),
+            Sort.Direction.ASC,
+            "slug"
+        );
+        Page<UserList> userlists = userListService.getAll(pageRequest);
+        model.addAttribute("myPageContent", userlists);
+        String symbol = Symbols.USER_ALL.toString();
+        String subtitle = "All Users";
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
+        return "userlist/all";
+    }
+
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserListService userListService;

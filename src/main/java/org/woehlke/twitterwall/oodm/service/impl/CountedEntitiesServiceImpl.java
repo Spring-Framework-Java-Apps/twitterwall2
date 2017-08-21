@@ -58,6 +58,9 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setUserprofile2tickersymbol(userRepository.countAllUser2TickerSymbol());
         c.setUserprofile2url(userRepository.countAllUser2Url());
 
+        c.setUserList2Subcriber(userListRepository.countUserList2Subcriber());
+        c.setUserList2Members(userListRepository.countUserList2Members());
+
         log.debug(msg+c.toString());
         return c;
     }

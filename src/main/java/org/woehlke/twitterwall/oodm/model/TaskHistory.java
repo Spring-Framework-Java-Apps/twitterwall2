@@ -68,7 +68,6 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
     @JoinColumn(name="task_id")
     private Task task;
 
-    //@NotNull
     @Valid
     @Embedded
     @AttributeOverrides({
@@ -91,7 +90,9 @@ public class TaskHistory implements DomainObjectMinimal<TaskHistory> {
         @AttributeOverride(name = "userprofile2media", column = @Column(name = "count_userprofile2media",nullable=false)),
         @AttributeOverride(name = "userprofile2mention", column = @Column(name = "count_userprofile2mention",nullable=false)),
         @AttributeOverride(name = "userprofile2tickersymbol", column = @Column(name = "count_userprofile2tickersymbol",nullable=false)),
-        @AttributeOverride(name = "userprofile2url", column = @Column(name = "count_userprofile2url",nullable=false))
+        @AttributeOverride(name = "userprofile2url", column = @Column(name = "count_userprofile2url",nullable=false)),
+        @AttributeOverride(name = "userList2Members", column = @Column(name = "count_userlist2members",nullable=false)),
+        @AttributeOverride(name = "userList2Subcriber", column = @Column(name = "count_userlist2subcriber",nullable=false))
     })
     private CountedEntities countedEntities = new CountedEntities();
 
