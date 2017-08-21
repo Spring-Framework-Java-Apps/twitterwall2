@@ -141,6 +141,18 @@ public class TaskStartFireAndForgetImpl implements TaskStartFireAndForget {
         return send(taskType);
     }
 
+    @Override
+    public Task startFetchListOwner() {
+        TaskType taskType = TaskType.FETCH_USERLIST_OWNERS;
+        return send(taskType);
+    }
+
+    @Override
+    public Task startFetchListsForUsers() {
+        TaskType taskType = TaskType.FETCH_LISTS_FOR_USERS;
+        return send(taskType);
+    }
+
     private Task send(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+ taskSendType;
