@@ -101,13 +101,11 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         return myuriPath.split("/")[1];
     }
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="fk_user")
     private User listOwner;
 
 
-    @NotNull
     @JoinTable(
         name="userlist_members"
     )
@@ -118,7 +116,6 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     private Set<User> members = new LinkedHashSet<User>();
 
 
-    @NotNull
     @JoinTable(
         name="userlist_subcriber"
     )
