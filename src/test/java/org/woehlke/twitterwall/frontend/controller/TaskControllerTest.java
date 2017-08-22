@@ -15,12 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -96,8 +96,8 @@ public class TaskControllerTest {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg ="getTaskByIdTest: ";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
-        Task task = taskService.create(msg,taskType,sendType,countedEntities);
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        Task task = taskService.create(msg,taskType, taskSendType,countedEntities);
         long id = task.getId();
         MvcResult result = this.mockMvc.perform(get("/task/"+id))
             .andExpect(status().isOk())
@@ -434,8 +434,8 @@ public class TaskControllerTest {
         String msg = "updateUserProfilesStartTaskTest: ";
         MvcResult result = this.mockMvc.perform(get("/task/start/userlists"))
             .andExpect(status().isOk())
-            .andExpect(view().name( PATH+"/start/taskStarted"))
-            .andExpect(model().attributeExists("task"))
+            .andExpect(view().name( PATH+"/start/tasksStarted"))
+            .andExpect(model().attributeExists("listOfTasks"))
             .andExpect(model().attributeExists("page"))
             .andReturn();
 

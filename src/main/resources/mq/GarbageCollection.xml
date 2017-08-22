@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+
+
+    <int:chain id="chain.async.GarbageCollection" input-channel="channel.async.GarbageCollection">
+        <int:splitter
+                id="splitter.async.GarbageCollection"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.async.GarbageCollection"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.GarbageCollection"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.GarbageCollection" input-channel="channel.GarbageCollection">
+        <int:splitter
+                id="splitter.GarbageCollection"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.GarbageCollection"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.GarbageCollection"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+
+</beans>

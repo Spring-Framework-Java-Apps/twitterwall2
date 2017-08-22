@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.*;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
@@ -50,6 +50,18 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
         countName = "User.countUsersForHashTag"
     )
     Page<User> findUsersForHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
+
+    @Query(name="User.getUsersForMedia")
+    Page<User> getUsersForMedia(@Param("media") Media media, Pageable pageRequestUser);
+
+    @Query(name="User.getUsersForMention")
+    Page<User> getUsersForMention(@Param("mention") Mention mention, Pageable pageRequestUser);
+
+    @Query(name="User.getUsersForUrl")
+    Page<User> getUsersForUrl(@Param("url") Url url, Pageable pageRequestUser);
+
+    @Query(name="User.getUsersForTickerSymbol")
+    Page<User> getUsersForTickerSymbol(@Param("tickerSymbol") TickerSymbol tickerSymbol, Pageable pageRequestUser);
 
     @Query(name="User.findUsersWhoAreFriendsButNotFollowers")
     Page<User> findUsersWhoAreFriendsButNotFollowers(Pageable pageRequest);

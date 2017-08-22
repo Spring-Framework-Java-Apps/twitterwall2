@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchFriends" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.FetchFriends" input-channel="channel.async.FetchFriends">
+        <int:splitter
+                id="splitter.async.FetchFriends"
+                ref="mqFetchFriendsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="check.async.FetchFriends"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="transform.async.FetchFriends"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.FetchFriends"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.async.FetchFriends"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchFriends"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchFriends" input-channel="channel.FetchFriends">
+        <int:splitter
+                id="splitter.FetchFriends"
+                ref="mqFetchFriendsSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="check.FetchFriends"
+                ref="mqUserCheckStorage"
+                method="checkIfUserIsInStorage" />
+        <int:service-activator
+                id="transform.FetchFriends"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.FetchFriends"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.FetchFriends"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchFriends"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

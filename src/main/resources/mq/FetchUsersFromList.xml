@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchUsersFromList" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:chain id="chain.async.FetchUsersFromList" input-channel="channel.async.FetchUsersFromList">
+        <int:splitter
+                id="splitter.async.FetchUsersFromList"
+                ref="mqFetchUserFromListSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="transform.async.FetchUsersFromList"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.FetchUsersFromList"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.async.FetchUsersFromList"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchUsersFromList"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchUsersFromList" input-channel="channel.FetchUsersFromList">
+        <int:splitter
+                id="splitter.FetchUsersFromList"
+                ref="mqFetchUserFromListSplitter"
+                method="splitUserMessage"  />
+        <int:service-activator
+                id="transform.FetchUsersFromList"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.FetchUsersFromList"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.FetchUsersFromList"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchUsersFromList"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+    <!--
+        <int:chain id="chain.async.FetchUsersFromList" input-channel="channel.async.FetchUsersFromList">
+            <int:splitter
+                    id="splitter.async.FetchUsersFromList"
+                    ref="mqFetchUserFromListSplitter"
+                    method="splitUserMessage"  />
+            <int:service-activator
+                    id="transform.async.FetchUsersFromList"
+                    ref="mqUserTransformator"
+                    method="transformUser" />
+            <int:service-activator
+                    id="persist.async.FetchUsersFromList"
+                    ref="mqUserPersistor"
+                    method="persistUser" />
+            <int:aggregator
+                    id="aggregator.async.FetchUsersFromList"
+                    message-store="myMessageStore"
+                    release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+            <int:service-activator
+                    id="finish.async.FetchUsersFromList"
+                    ref="mqUserFinisher"
+                    method="finishAsnyc" />
+        </int:chain>
+    -->
+
+</beans>

@@ -27,7 +27,14 @@
                         <tbody>
                             <tr th:each="myPageItem : ${myPageContent}">
                             <td>
-                                <span th:include="layoutDataview :: tw-data-view-id" th:with="myPageItem=${myPageItem}"></span>
+                                <span>
+                                    <span class="tw-vector">
+                                        <i class="fa fa-database" aria-hidden="true"></i>
+                                        <a href="" th:href="@{|/hashtag/${myPageItem.id}|}">
+                                            <span th:text="${myPageItem.id}">id</span>
+                                        </a>
+                                    </span>
+                                </span>
                             </td>
                             <td>
                                 <a href="" th:href="@{|/hashtag/${myPageItem.id}|}">

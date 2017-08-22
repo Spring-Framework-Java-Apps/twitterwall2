@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.service.common;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.woehlke.twitterwall.oodm.entities.common.DomainObjectMinimal;
+import org.woehlke.twitterwall.oodm.model.common.DomainObjectMinimal;
 
 public interface DomainObjectMinimalService<T extends DomainObjectMinimal> {
 

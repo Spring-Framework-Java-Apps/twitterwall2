@@ -8,22 +8,22 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Component;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
+import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.model.Tweet;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.User;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
-import org.woehlke.twitterwall.scheduled.service.remote.TwitterApiService;
+import org.woehlke.twitterwall.backend.service.remote.TwitterApiService;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreOneTweet;
-import org.woehlke.twitterwall.scheduled.service.persist.StoreUserProfile;
+import org.woehlke.twitterwall.backend.service.persist.StoreOneTweet;
+import org.woehlke.twitterwall.backend.service.persist.StoreUserProfile;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
@@ -54,10 +54,10 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public void getTestDataTweets(String msg){
-        SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_TWEETS;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        TaskType taskType = TaskType.CREATE_TESTDATA_TWEETS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, taskType, sendType, countedEntities);
+        Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
             log.info(msg + "--------------------------------------------------------------------");
@@ -65,7 +65,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
             List<Long> idTwitterListTweets = testdataProperties.getOodm().getEntities().getTweet().getIdTwitter();
             for (long idTwitter : idTwitterListTweets) {
                 try {
-                    org.woehlke.twitterwall.oodm.entities.Tweet persTweet = tweetService.findByIdTwitter(idTwitter);
+                    org.woehlke.twitterwall.oodm.model.Tweet persTweet = tweetService.findByIdTwitter(idTwitter);
                     if(persTweet != null){
                         loopId++;
                         log.info(msg + "--------------------------------------------------------------------");
@@ -106,17 +106,17 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public void getTestDataUser(String msg){
-        SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task task = taskService.create(msg, taskType,sendType,countedEntities);
-        List<org.woehlke.twitterwall.oodm.entities.User> user =  new ArrayList<>();
+        Task task = taskService.create(msg, taskType, taskSendType,countedEntities);
+        List<org.woehlke.twitterwall.oodm.model.User> user =  new ArrayList<>();
         try {
             int loopId = 0;
             List<Long> idTwitterListUsers = testdataProperties.getOodm().getEntities().getUser().getIdTwitter();
             for (long idTwitter : idTwitterListUsers) {
                 try {
-                    org.woehlke.twitterwall.oodm.entities.User persUser = userService.findByIdTwitter(idTwitter);
+                    org.woehlke.twitterwall.oodm.model.User persUser = userService.findByIdTwitter(idTwitter);
                     if(persUser != null){
                         loopId++;
                         user.add(persUser);
@@ -141,7 +141,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                 }
             }
             try {
-                org.woehlke.twitterwall.oodm.entities.User persUser = userService.findByScreenName(frontendProperties.getImprintScreenName());
+                org.woehlke.twitterwall.oodm.model.User persUser = userService.findByScreenName(frontendProperties.getImprintScreenName());
                 if(persUser!=null){
                     loopId++;
                     user.add(persUser);
@@ -169,7 +169,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         }
-        for(org.woehlke.twitterwall.oodm.entities.User oneUser:user){
+        for(org.woehlke.twitterwall.oodm.model.User oneUser:user){
             log.debug(msg + oneUser.toString());
         }
         countedEntities = countedEntitiesService.countAll();
@@ -178,11 +178,11 @@ public class PrepareDataTestImpl implements PrepareDataTest {
 
     @Override
     public User createUser(String screenName) {
-        SendType sendType = SendType.NO_MQ;
-        TaskType taskType = TaskType.CONTROLLER_CREATE_TESTDATA_USERS;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
+        TaskType taskType = TaskType.CREATE_TESTDATA_USERS;
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
-        Task task = taskService.create(msg, taskType, sendType, countedEntities);
+        Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
         log.info("-----------------------------------------");
         try {
             log.info("screenName = "+ screenName);

@@ -14,6 +14,8 @@ select count(*) from mention;
 select count(*) from media;
 select count(*) from hashtag;
 select count(*) from tweet;
+select count(*) from userlist_members;
+select count(*) from userlist_subcriber;
 select count(*) from userprofile;
 select count(*) from userlist;
 select count(*) from task_history;

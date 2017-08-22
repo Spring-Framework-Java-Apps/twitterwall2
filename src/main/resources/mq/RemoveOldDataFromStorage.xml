@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+    <int:channel id="channel.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.RemoveOldDataFromStorage" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+
+    <int:chain id="chain.async.RemoveOldDataFromStorage" input-channel="channel.async.RemoveOldDataFromStorage">
+        <int:splitter
+                id="splitter.async.RemoveOldDataFromStorage"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.async.RemoveOldDataFromStorage"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.RemoveOldDataFromStorage"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.RemoveOldDataFromStorage" input-channel="channel.RemoveOldDataFromStorage">
+        <int:splitter
+                id="splitter.RemoveOldDataFromStorage"
+                ref="mqFindTweetsToRemoveSplitter"
+                method="splitTweetMessage"  />
+        <int:aggregator
+                id="aggregator.RemoveOldDataFromStorage"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.RemoveOldDataFromStorage"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+
+
+
+</beans>

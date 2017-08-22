@@ -49,6 +49,7 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: ${TWITTERWALL_JPA_HIBERNATE_DDL_AUTO}
+      #ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
@@ -114,7 +115,7 @@ twitterwall:
         updateTweets:  43200000 # 12 Hours
         updateUserProfiles:  43200000 # 12 Hours
         updateUserProfilesFromMentions: 3600000 # One Hour
-  scheduler:
+  cronjobs:
     allowFetchTweetsFromTwitterSearch: true
     fetchUsersFromDefinedUserListAllow: true
     fetchUsersFromDefinedUserListName: ${TWITTERWALL_SCHEDULER_USER_LIST_NAME}

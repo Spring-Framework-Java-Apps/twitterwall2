@@ -12,12 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
+import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -64,9 +64,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void create() throws Exception {
         String msg = "TaskServiceTest.create";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task createdTask = taskService.create(msg,type,sendType,countedEntities);
+        Task createdTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(createdTask.getTaskStatus(),TaskStatus.READY);
     }
 
@@ -75,9 +75,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void done() throws Exception {
         String msg = "TaskServiceTest.done";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.done(myTask,countedEntities);
@@ -90,9 +90,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void error() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.error(myTask,msg,countedEntities);
@@ -105,9 +105,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void warn() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.warn(myTask,msg,countedEntities);
@@ -120,9 +120,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void event() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         TaskStatus oldStatus = myTask.getTaskStatus();
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
@@ -136,9 +136,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void start() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.start(myTask,countedEntities);
@@ -151,9 +151,9 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     public void finalError() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
-        SendType sendType = SendType.NO_MQ;
+        TaskSendType taskSendType = TaskSendType.NO_MQ;
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        Task myTask = taskService.create(msg,type,sendType,countedEntities);
+        Task myTask = taskService.create(msg,type, taskSendType,countedEntities);
         Assert.assertEquals(myTask.getTaskStatus(),TaskStatus.READY);
         countedEntities = countedEntitiesService.countAll();
         Task createdTask = taskService.finalError(myTask,msg,countedEntities);

@@ -4,16 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.transients.*;
+import org.woehlke.twitterwall.oodm.model.*;
+import org.woehlke.twitterwall.oodm.model.transients.*;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UserRepository;
 import org.woehlke.twitterwall.oodm.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -97,6 +100,26 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     }
 
     @Override
+    public Page<User> getUsersForMedia(Media media, Pageable pageRequestUser) {
+        return userRepository.getUsersForMedia(media, pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForMention(Mention mention, Pageable pageRequestUser) {
+        return userRepository.getUsersForMention(mention, pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForUrl(Url url, Pageable pageRequestUser) {
+        return userRepository.getUsersForUrl(url,pageRequestUser);
+    }
+
+    @Override
+    public Page<User> getUsersForTickerSymbol(TickerSymbol tickerSymbol, Pageable pageRequestUser) {
+        return userRepository.getUsersForTickerSymbol(tickerSymbol,pageRequestUser);
+    }
+
+    @Override
     public Page<User> getFriends(Pageable pageRequest) {
         return userRepository.findFriendUsers(pageRequest);
     }
@@ -139,6 +162,14 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     @Override
     public boolean isByIdTwitter(long userIdTwitter) {
         return ((userRepository.findByIdTwitter(userIdTwitter)) != null);
+    }
+
+    @Override
+    public Page<User> findUsersForUserList(UserList userList, Pageable pageRequest) {
+        List<User> userPageContent = new ArrayList<>();
+        long totalSize = 0L;
+        Page<User> page = new PageImpl<User>(userPageContent,pageRequest,totalSize);
+        return page;
     }
 
     @Override

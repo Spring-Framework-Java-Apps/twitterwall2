@@ -12,8 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.woehlke.twitterwall.conf.properties.TestdataProperties;
-import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.Url;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -23,6 +29,12 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private CountedEntitiesService countedEntitiesService;
 
     @Autowired
     private TestdataProperties testdataProperties;
@@ -68,6 +80,88 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
             log.debug(msg+" found: "+foundUrl);
         } else {
             log.debug(msg+" found: myPage.getTotalElements() == 0");
+        }
+    }
+
+    @Commit
+    @Test
+    public void findRawUrlsFromDescription() throws Exception {
+        String msg = "findRawUrlsFromDescription: ";
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
+        Task updatedBy=null;
+        String display=Url.UNDEFINED;
+        String expanded=Url.UNDEFINED;
+        String url1="http://woehlke.org/";
+        String url2="http://thomas-woehlke.de";
+        String url3="http://java.sun.com";
+        String url4="http://tomcat.apache.org";
+
+        Url urlTest1 = new Url(createdBy,updatedBy,display,expanded,url1);
+        Url urlTest2 = new Url(createdBy,updatedBy,display,expanded,url2);
+        Url urlTest3 = new Url(createdBy,updatedBy,url3,url3,url3);
+        Url urlTest4 = new Url(createdBy,updatedBy,url4,url4,url4);
+
+        urlService.store(urlTest1,createdBy);
+        urlService.store(urlTest2,createdBy);
+        urlService.store(urlTest3,createdBy);
+        urlService.store(urlTest4,createdBy);
+
+        List<Url> urlList = urlService.findRawUrlsFromDescription();
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.info(msg+" size: "+urlList.size());
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        Assert.assertTrue(urlList.size()>0);
+        for(Url url:urlList){
+            Assert.assertTrue(url.isValid());
+            Assert.assertTrue(url.isRawUrlsFromDescription());
+            Assert.assertTrue(url.getExpanded().compareTo(Url.UNDEFINED)==0);
+            Assert.assertTrue(url.getDisplay().compareTo(Url.UNDEFINED)==0);
+            log.info(msg+"-----------------------------------------");
+            log.info(msg+url.getUniqueId());
+            log.info(msg+"-----------------------------------------");
+            log.trace(msg+url.toString());
+        }
+    }
+
+    @Commit
+    @Test
+    public void findUrlAndExpandedTheSame() throws Exception {
+        String msg = "findUrlAndExpandedTheSame: ";
+
+        CountedEntities countedEntities = countedEntitiesService.countAll();
+        Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
+        Task updatedBy=null;
+        String display=Url.UNDEFINED;
+        String expanded=Url.UNDEFINED;
+        String url1="http://woehlke.org/";
+        String url2="http://thomas-woehlke.de";
+        String url3="http://java.sun.com";
+        String url4="http://tomcat.apache.org";
+
+        Url urlTest1 = new Url(createdBy,updatedBy,display,expanded,url1);
+        Url urlTest2 = new Url(createdBy,updatedBy,display,expanded,url2);
+        Url urlTest3 = new Url(createdBy,updatedBy,url3,url3,url3);
+        Url urlTest4 = new Url(createdBy,updatedBy,url4,url4,url4);
+
+        urlService.store(urlTest1,createdBy);
+        urlService.store(urlTest2,createdBy);
+        urlService.store(urlTest3,createdBy);
+        urlService.store(urlTest4,createdBy);
+
+        List<Url> urlList = urlService.findUrlAndExpandedTheSame();
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.info(msg+" size: "+urlList.size());
+        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        Assert.assertTrue(urlList.size()>0);
+        for(Url url:urlList){
+            Assert.assertTrue(url.isValid());
+            Assert.assertTrue(url.isUrlAndExpandedTheSame());
+            Assert.assertTrue(url.getUrl().compareTo(url.getExpanded())==0);
+            log.info(msg+"-----------------------------------------");
+            log.info(msg+url.getUniqueId());
+            log.info(msg+"-----------------------------------------");
+            log.trace(msg+url.toString());
         }
     }
 

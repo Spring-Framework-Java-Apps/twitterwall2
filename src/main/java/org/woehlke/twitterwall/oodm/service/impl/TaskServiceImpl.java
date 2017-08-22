@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.TaskHistory;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskStatus;
-import org.woehlke.twitterwall.oodm.entities.parts.TaskType;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.TaskHistory;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;
+import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 import org.woehlke.twitterwall.oodm.repositories.TaskHistoryRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.TaskService;
-import org.woehlke.twitterwall.scheduled.mq.msg.SendType;
 
 import java.util.Date;
 
@@ -61,13 +61,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-    public Task create(String msg, TaskType type, SendType sendType, CountedEntities countedEntities) {
+    public Task create(String msg, TaskType type, TaskSendType taskSendType, CountedEntities countedEntities) {
         String descriptionTask = "start: "+msg;
         TaskStatus taskStatus = TaskStatus.READY;
         Date timeStarted = new Date();
         Date timeLastUpdate = timeStarted;
         Date timeFinished = null;
-        Task task = new Task(descriptionTask,type,taskStatus,sendType,timeStarted,timeLastUpdate,timeFinished);
+        Task task = new Task(descriptionTask,type,taskStatus, taskSendType,timeStarted,timeLastUpdate,timeFinished);
         task = taskRepository.save(task);
         Date now = new Date();
         TaskHistory event = new TaskHistory("create: "+msg,TaskStatus.READY, TaskStatus.READY,now,task,countedEntities);

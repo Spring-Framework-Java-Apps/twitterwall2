@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.scheduled.mq.endpoint.StartTask;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
+import org.woehlke.twitterwall.frontend.content.Symbols;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
+import org.woehlke.twitterwall.oodm.model.User;
+import org.woehlke.twitterwall.backend.mq.tasks.TaskStart;
 
 
 /**
@@ -25,8 +25,8 @@ public class ImprintController {
         String symbol = Symbols.IMPRINT.toString();
         String title = "Imprint";
         String subtitle = frontendProperties.getImprintSubtitle();
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        User user = startTask.createImprintUser();
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
+        User user = taskStart.createImprintUser();
         model.addAttribute("user", user);
         log.info("-----------------------------------------");
         return "imprint/imprint";
@@ -36,19 +36,19 @@ public class ImprintController {
 
     private final FrontendProperties frontendProperties;
 
-    private final StartTask startTask;
+    private final TaskStart taskStart;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     @Autowired
     public ImprintController(
             FrontendProperties frontendProperties,
-            StartTask startTask,
-            ControllerHelper controllerHelper
+            TaskStart taskStart,
+            ContentFactory contentFactory
     ) {
         this.frontendProperties = frontendProperties;
-        this.startTask = startTask;
-        this.controllerHelper = controllerHelper;
+        this.taskStart = taskStart;
+        this.contentFactory = contentFactory;
     }
 
 }

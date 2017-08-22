@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" ></header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Mention</h3>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-3">idTwitter:</div>
+                        <div class="col-md-9">
+                            <span th:text="${mention.idTwitter}">idTwitter</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">screenName:</div>
+                        <div class="col-md-9">
+                            <span th:if="${mention.idTwitter &lt; 0}">
+                                <a href="" th:href="@{|https://twitter.com/${mention.screenName}|}">
+                                    <span>@</span>
+                                    <span th:text="${mention.screenName}">screenName</span>
+                                </a>
+                            </span>
+                            <span th:if="${mention.idTwitter &gt; 0}">
+                                <a href="" th:href="@{|/user/${mention.screenName}|}">
+                                    <span>@</span>
+                                    <span th:text="${mention.screenName}">screenName</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">has User:</div>
+                        <div class="col-md-9">
+                            <span th:if="${mention.hasUser()}">
+                                <a href="" th:href="@{|/user/${mention.idTwitter}|}">
+                                    <span>@</span>
+                                    <span th:text="${mention.screenName}">screenName</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">idTwitterOfUser:</div>
+                        <div class="col-md-9">
+                            <span th:text="${mention.idTwitterOfUser}">idTwitterOfUser</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Tweets with the Mention <span th:text="${mention.idTwitter}">Mention</span></h3>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span  class="tw-pager-arrow tw-pager-up"  th:if="${latestTweets.hasPrevious()}">
+                    <a href="" th:href="@{|/mention/${mention.id}?pageTweet=${latestTweets.previousPageable().pageNumber}&amp;pageUser=${users.number}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div th:include="layoutTweetList :: tw-tweet-list" ></div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${latestTweets.hasNext()}">
+                    <a href="" th:href="@{|/mention/${mention.id}?pageTweet=${latestTweets.nextPageable().pageNumber}&amp;pageUser=${users.number}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Users with the Mention <span th:text="${mention.idTwitter}">Mention</span></h3>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${users.hasPrevious()}">
+                    <a href="" th:href="@{|/mention/${mention.id}?pageUser=${users.previousPageable().pageNumber}&amp;pageTweet=${latestTweets.number}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div th:include="layoutUserList :: tw-user-list" >
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${users.hasNext()}">
+                    <a href="" th:href="@{|/mention/${mention.id}?pageUser=${users.nextPageable().pageNumber}&amp;pageTweet=${latestTweets.number}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+</footer>
+
+</body>
+</html>

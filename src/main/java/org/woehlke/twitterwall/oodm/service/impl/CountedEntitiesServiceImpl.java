@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
 import org.woehlke.twitterwall.oodm.repositories.*;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 
@@ -57,6 +57,9 @@ public class CountedEntitiesServiceImpl implements CountedEntitiesService {
         c.setUserprofile2mention(userRepository.countAllUser2Mention());
         c.setUserprofile2tickersymbol(userRepository.countAllUser2TickerSymbol());
         c.setUserprofile2url(userRepository.countAllUser2Url());
+
+        c.setUserList2Subcriber(userListRepository.countUserList2Subcriber());
+        c.setUserList2Members(userListRepository.countUserList2Members());
 
         log.debug(msg+c.toString());
         return c;

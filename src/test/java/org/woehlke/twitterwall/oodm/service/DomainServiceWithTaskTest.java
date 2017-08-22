@@ -8,4 +8,5 @@ public interface DomainServiceWithTaskTest {
     void create() throws Exception;
 
     void update() throws Exception;
+
 }

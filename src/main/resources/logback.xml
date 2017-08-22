@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.woehlke.twitterwall.oodm.entities" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.listener" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.oodm.entities.parts" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.model" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.model.listener" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.oodm.model.parts" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.repositories" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.oodm.service" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.rest" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.model" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller" level="DEBUG" />
     <logger name="org.woehlke.twitterwall.frontend.controller.common" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.remote" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.persist" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.service.transform" level="DEBUG" />
-    <logger name="org.woehlke.twitterwall.scheduled.mq" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.remote" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.persist" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.service.transform" level="DEBUG" />
+    <logger name="org.woehlke.twitterwall.backend.mq" level="DEBUG" />
     <logger name="org.woehlke.twitterwall" level="DEBUG" />
     <logger name="org.apache.http" level="INFO" />
     <logger name="org.apache.tomcat" level="INFO" />

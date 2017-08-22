@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+    <int:channel id="channel.UpdateUrls" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.UpdateUrls" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+
+    <int:chain id="chain.async.UpdateUrls" input-channel="channel.async.UpdateUrls">
+        <int:splitter
+                id="splitter.async.UpdateUrls"
+                ref="mqUpdateUrls"
+                method="splitUrlMessage"  />
+        <int:service-activator
+                id="fetch.async.UpdateUrls"
+                ref="mqUrFetcher"
+                method="fetchUrl" />
+        <int:service-activator
+                id="persist.async.UpdateUrls"
+                ref="mqUrlPersistor"
+                method="persistUrl" />
+        <int:aggregator
+                id="aggregator.async.UpdateUrls"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.UpdateUrls"
+                ref="mqUrlFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.UpdateUrls" input-channel="channel.UpdateUrls">
+        <int:splitter
+                id="splitter.UpdateUrls"
+                ref="mqUpdateUrls"
+                method="splitUrlMessage"  />
+        <int:service-activator
+                id="fetch.UpdateUrls"
+                ref="mqUrFetcher"
+                method="fetchUrl" />
+        <int:service-activator
+                id="persist.UpdateUrls"
+                ref="mqUrlPersistor"
+                method="persistUrl" />
+        <int:aggregator
+                id="aggregator.UpdateUrls"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.UpdateUrls"
+                ref="mqUrlFinisher"
+                method="finish" />
+    </int:chain>
+
+
+</beans>

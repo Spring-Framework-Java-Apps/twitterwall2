@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.frontend.controller.common;
 
 
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.User;
 
 @Deprecated
 public interface PrepareDataTest {

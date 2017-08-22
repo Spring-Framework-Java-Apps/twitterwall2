@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" ></header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>UserList</h3>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-3">idTwitter:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.idTwitter}">idTwitter</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">name:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.name}">name</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">fullName:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.fullName}">fullName</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">uriPath:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.uriPath}">uriPath</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">description:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.description}">description</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">slug:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.slug}">slug</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">isPublic:</div>
+                        <div class="col-md-9">
+                            <span th:if="${userList.public}">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                            </span>
+                            <span th:if="${!userList.public}">
+                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">isFollowing:</div>
+                        <div class="col-md-9">
+                            <span th:if="${userList.following}">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                            </span>
+                            <span th:if="${!userList.following}">
+                                <i class="fa fa-square-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">memberCount:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.memberCount}">memberCount</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">subscriberCount:</div>
+                        <div class="col-md-9">
+                            <span th:text="${userList.subscriberCount}">subscriberCount</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">listOwnersScreenName:</div>
+                        <div class="col-md-9">
+                            <a href="" th:href="@{|/user/screenName/${userList.getListOwnersScreenName()}|}">
+                                <span>@</span><span th:text="${userList.getListOwnersScreenName()}">listOwnersScreenName</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Users with the UserList <span th:text="${userList.fullName}">UserList</span></h3>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span  class="tw-pager-arrow tw-pager-up" th:if="${users.hasPrevious()}">
+                    <a href="" th:href="@{|/userlist/${userList.id}?pageUser=${users.previousPageable().pageNumber}&amp;pageTweet=${latestTweets.number}|}">
+                        <span>
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div th:include="layoutUserList :: tw-user-list" >
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="tw-pager-arrow tw-pager-down" th:if="${users.hasNext()}">
+                    <a href="" th:href="@{|/userlist/${userList.id}?pageUser=${users.nextPageable().pageNumber}&amp;pageTweet=${latestTweets.number}|}" >
+                        <span>
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+</footer>
+
+</body>
+</html>

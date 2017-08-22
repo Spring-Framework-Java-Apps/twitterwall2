@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchListOwner" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.FetchListOwner" input-channel="channel.async.FetchListOwner">
+        <int:splitter
+                id="splitter.async.FetchListOwner"
+                ref="mqFetchUserlistOwnersSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="transform.async.FetchListOwner"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.async.FetchListOwners"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.async.FetchListOwners"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchListOwners"
+                ref="mqUserFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchListOwner" input-channel="channel.FetchListOwner">
+        <int:splitter
+                id="splitter.FetchListOwner"
+                ref="mqFetchUserlistOwnersSplitter"
+                method="splitUserMessage" />
+        <int:service-activator
+                id="transform.FetchListOwner"
+                ref="mqUserTransformator"
+                method="transformUser" />
+        <int:service-activator
+                id="persist.FetchListOwners"
+                ref="mqUserPersistor"
+                method="persistUser" />
+        <int:aggregator
+                id="aggregator.FetchListOwners"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchListOwners"
+                ref="mqUserFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

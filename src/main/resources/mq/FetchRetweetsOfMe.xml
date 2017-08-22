@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+    <int:channel id="channel.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchRetweetsOfMe" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.FetchRetweetsOfMe" input-channel="channel.async.FetchRetweetsOfMe">
+        <int:splitter
+                id="splitter.async.FetchRetweetsOfMe"
+                ref="mqRetweetsOfMeSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.async.FetchRetweetsOfMe"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.async.FetchRetweetsOfMe"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.async.FetchRetweetsOfMe"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchRetweetsOfMe"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchRetweetsOfMe" input-channel="channel.FetchRetweetsOfMe">
+        <int:splitter
+                id="splitter.FetchRetweetsOfMe"
+                ref="mqRetweetsOfMeSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.FetchRetweetsOfMe"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.FetchRetweetsOfMe"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.FetchRetweetsOfMe"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchRetweetsOfMe"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

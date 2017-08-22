@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Task;
-import org.woehlke.twitterwall.oodm.entities.Mention;
+import org.woehlke.twitterwall.oodm.model.Task;
+import org.woehlke.twitterwall.oodm.model.Mention;
 import org.woehlke.twitterwall.oodm.repositories.MentionRepository;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.service.MentionService;
@@ -77,6 +77,22 @@ public class MentionServiceImpl extends DomainServiceWithTaskImpl<Mention> imple
     public Mention findByScreenNameAndIdTwitter(String screenName, Long idTwitter) {
         String screenNameUnique = screenName.toLowerCase();
         return mentionRepository.findByScreenNameUniqueAndIdTwitter(screenNameUnique, idTwitter);
+    }
+
+    @Override
+    public Page<Mention> findByUserId(long idOfUser, Pageable pageRequest) {
+        return mentionRepository.findByUserId(idOfUser,pageRequest);
+    }
+
+    @Override
+    public Page<Mention> findAllByScreenName(String screenName, Pageable pageRequest) {
+        String screenNameUnique = screenName.toLowerCase();
+        return mentionRepository.findAllByScreenNameUnique(screenNameUnique,pageRequest);
+    }
+
+    @Override
+    public Page<Mention> findByIdTwitterOfUser(long idOfUser, Pageable pageRequest) {
+        return mentionRepository.findByIdTwitterOfUser(idOfUser,pageRequest);
     }
 
     @Override

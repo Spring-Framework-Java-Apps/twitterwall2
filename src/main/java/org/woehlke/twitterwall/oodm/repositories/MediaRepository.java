@@ -1,7 +1,7 @@
 package org.woehlke.twitterwall.oodm.repositories;
 
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.Media;
+import org.woehlke.twitterwall.oodm.model.Media;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.MediaRepositoryCustom;
 

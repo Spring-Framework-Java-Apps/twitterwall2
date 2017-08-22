@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.entities.User;
+import org.woehlke.twitterwall.oodm.model.*;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.TweetRepositoryCustom;
 
@@ -25,6 +24,18 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
         countName="Tweet.countTweetsForHashTag"
     )
     Page<Tweet> findByHashTag(@Param("hashtagText") String hashtagText, Pageable pageRequest);
+
+    @Query(name = "Tweet.findTweetsForMedia")
+    Page<Tweet> findTweetsForMedia(@Param("media") Media media, Pageable pageRequestTweet);
+
+    @Query(name = "Tweet.findTweetsForMention")
+    Page<Tweet> findTweetsForMention(@Param("mention") Mention mention, Pageable pageRequestTweet);
+
+    @Query(name = "Tweet.findTweetsForUrl")
+    Page<Tweet> findTweetsForUrl(@Param("url") Url url, Pageable pageRequestTweet);
+
+    @Query(name = "Tweet.findTweetsForTickerSymbol")
+    Page<Tweet> findTweetsForTickerSymbol(@Param("tickerSymbol") TickerSymbol tickerSymbol, Pageable pageRequestTweet);
 
     @Query(name = "Tweet.findAllTwitterIds")
     Page<Long> findAllTwitterIds(Pageable pageRequest);
@@ -58,7 +69,5 @@ public interface TweetRepository extends DomainRepository<Tweet>,TweetRepository
 
     @Query(name="Tweet.getRetweetsOfMe",nativeQuery=true)
     Page<Tweet> getRetweetsOfMe(Pageable pageRequest);
-
-
 
 }

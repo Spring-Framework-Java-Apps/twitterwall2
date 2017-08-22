@@ -12,26 +12,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-//import org.woehlke.twitterwall.frontend.controller.common.HashTagsOverviewHelper;
-import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.oodm.entities.transients.HashTagCounted;
-//import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverview;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
-import org.woehlke.twitterwall.oodm.entities.User;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
-//import org.woehlke.twitterwall.oodm.entities.transients.HashTagOverviewPaged;
+import org.woehlke.twitterwall.configuration.properties.TwitterProperties;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
+import org.woehlke.twitterwall.frontend.content.Symbols;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
+import org.woehlke.twitterwall.oodm.model.transients.HashTagCounted;
+import org.woehlke.twitterwall.oodm.model.Tweet;
+import org.woehlke.twitterwall.oodm.model.User;
+import org.woehlke.twitterwall.oodm.model.HashTag;
 import org.woehlke.twitterwall.oodm.service.TweetService;
 import org.woehlke.twitterwall.oodm.service.UserService;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
-import static org.woehlke.twitterwall.oodm.entities.HashTag.HASHTAG_TEXT_PATTERN;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.oodm.model.HashTag.HASHTAG_TEXT_PATTERN;
 
 /**
  * Created by tw on 12.07.17.
@@ -48,7 +46,7 @@ public class HashTagController {
         String subtitle = "all";
         String title = "HashTag";
         String symbol = Symbols.HASHTAG.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         Pageable pageRequest = new PageRequest(
                 page,
                 frontendProperties.getPageSize(),
@@ -61,30 +59,34 @@ public class HashTagController {
     }
 
     @RequestMapping(path="/{id}")
-    public String findById(
+    public String findHashTagById(
             @PathVariable("id") HashTag hashTag,
             @RequestParam(name= "pageTweet" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageTweet,
             @RequestParam(name= "pageUser" ,defaultValue=""+ FIRST_PAGE_NUMBER) int pageUser,
             Model model
     ) {
-        String msg = "/hashtag/" + hashTag.getId()+ " ";
-        String msg2 = msg + " parameter IS valid - START ";
-        log.debug(msg2);
-        Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
-        Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
-        String subtitle = "Tweets und User für HashTag";
-        String title = hashTag.getText();
-        String symbol = Symbols.HASHTAG.toString();
-        model = controllerHelper.setupPage(model, title, subtitle, symbol);
-        model.addAttribute("hashTag",hashTag);
-        log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
-        Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
-        model.addAttribute("latestTweets", tweets);
-        log.debug(msg+" try to: userService.getUsersForHashTag: ");
-        Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
-        model.addAttribute("users", users);
-        log.debug(msg + " READY - DONE");
-        return "hashtag/id";
+        if(hashTag == null){
+            throw new EntityNotFoundException();
+        } else {
+            String msg = "/hashtag/" + hashTag.getId()+ " ";
+            String msg2 = msg + " parameter IS valid - START ";
+            log.debug(msg2);
+            Pageable pageRequestTweet = new PageRequest(pageTweet, frontendProperties.getPageSize());
+            Pageable pageRequestUser = new PageRequest(pageUser, frontendProperties.getPageSize());
+            String subtitle = "Tweets und User für HashTag";
+            String title = hashTag.getText();
+            String symbol = Symbols.HASHTAG.toString();
+            model = contentFactory.setupPage(model, title, subtitle, symbol);
+            model.addAttribute("hashTag",hashTag);
+            log.debug(msg+" try to: tweetService.findTweetsForHashTag: ");
+            Page<Tweet> tweets = tweetService.findTweetsForHashTag(hashTag,pageRequestTweet);
+            model.addAttribute("latestTweets", tweets);
+            log.debug(msg+" try to: userService.getUsersForHashTag: ");
+            Page<User> users = userService.getUsersForHashTag(hashTag,pageRequestUser);
+            model.addAttribute("users", users);
+            log.debug(msg + " READY - DONE");
+            return "hashtag/id";
+        }
     }
 
     @RequestMapping(path="/text/{text}")
@@ -105,7 +107,7 @@ public class HashTagController {
             String subtitle = "Tweets und User für HashTag";
             String title = text;
             String symbol = Symbols.HASHTAG.toString();
-            model = controllerHelper.setupPage(model, title, subtitle, symbol);
+            model = contentFactory.setupPage(model, title, subtitle, symbol);
             log.debug(msg + " try to: hashTagService.findByText ");
             HashTag hashTag = hashTagService.findByText(text);
             model.addAttribute("hashTag",hashTag);
@@ -134,7 +136,7 @@ public class HashTagController {
         String title = "HashTags";
         String subtitle = twitterProperties.getSearchQuery();
         String symbol = Symbols.HASHTAG.toString();
-        model = controllerHelper.setupPage(model,title,subtitle,symbol);
+        model = contentFactory.setupPage(model,title,subtitle,symbol);
         int size= frontendProperties.getPageSize() * 2;
         Pageable pageRequestTweets = new PageRequest(pageTweet,size);
         Pageable pageRequestUsers = new PageRequest(pageUser,size);
@@ -157,9 +159,7 @@ public class HashTagController {
 
     private final UserService userService;
 
-    private final ControllerHelper controllerHelper;
-
-    //private final HashTagsOverviewHelper hashTagsOverviewHelper;
+    private final ContentFactory contentFactory;
 
     @Autowired
     public HashTagController(
@@ -168,16 +168,14 @@ public class HashTagController {
             HashTagService hashTagService,
             TweetService tweetService,
             UserService userService,
-            ControllerHelper controllerHelper/*,
-            HashTagsOverviewHelper hashTagsOverviewHelper*/
+            ContentFactory contentFactory
     ) {
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
         this.hashTagService = hashTagService;
         this.tweetService = tweetService;
         this.userService = userService;
-        this.controllerHelper = controllerHelper;
-        //this.hashTagsOverviewHelper = hashTagsOverviewHelper;
+        this.contentFactory = contentFactory;
     }
 
 }

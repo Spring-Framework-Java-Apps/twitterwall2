@@ -12,12 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.woehlke.twitterwall.conf.properties.TwitterProperties;
-import org.woehlke.twitterwall.conf.properties.FrontendProperties;
-import org.woehlke.twitterwall.frontend.controller.common.Symbols;
-import org.woehlke.twitterwall.frontend.controller.common.ControllerHelper;
-import org.woehlke.twitterwall.oodm.entities.Tweet;
+import org.woehlke.twitterwall.configuration.properties.TwitterProperties;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
+import org.woehlke.twitterwall.frontend.content.Symbols;
+import org.woehlke.twitterwall.frontend.content.ContentFactory;
+import org.woehlke.twitterwall.oodm.model.Tweet;
 import org.woehlke.twitterwall.oodm.service.TweetService;
+
+import javax.persistence.EntityNotFoundException;
 
 
 /**
@@ -29,15 +31,15 @@ public class TweetController {
 
     @RequestMapping("/all")
     public String getLatestTweets(
-            @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+            @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
             Model model
     ) {
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             twitterProperties.getSearchQuery(),
-            Symbols.HOME.toString()
+            Symbols.STARTPAGE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -55,28 +57,32 @@ public class TweetController {
     public String getTweetById(
         @PathVariable("id") Tweet tweet, Model model
     ) {
-        String title = "Tweet";
-        model = controllerHelper.setupPage(
-            model,
-            title,
-            twitterProperties.getSearchQuery(),
-            Symbols.HOME.toString()
-        );
-        model.addAttribute("tweet", tweet);
-        return "tweet/id";
+        if(tweet == null){
+            throw new EntityNotFoundException();
+        } else {
+            String title = "Tweet";
+            model = contentFactory.setupPage(
+                    model,
+                    title,
+                    twitterProperties.getSearchQuery(),
+                    Symbols.HOME.toString()
+            );
+            model.addAttribute("tweet", tweet);
+            return "tweet/id";
+        }
     }
 
     @RequestMapping("/timeline/home")
     public String getHomeTimeline(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Home Timneline",
-            Symbols.HOME_TIMELINE_TWEETS.toString()
+            Symbols.TWEETS_HOME_TIMELINE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -92,15 +98,15 @@ public class TweetController {
 
     @RequestMapping("/timeline/user")
     public String getUserTimeline(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "User Timeline",
-            Symbols.USER_TIMELINE_TWEETS.toString()
+            Symbols.TWEETS_USER_TIMELINE.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -116,15 +122,15 @@ public class TweetController {
 
     @RequestMapping("/mentions")
     public String getMentions(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Mentions",
-            Symbols.MENTIONS_TWEETS.toString()
+            Symbols.TWEETS_MENTIONS.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -140,15 +146,15 @@ public class TweetController {
 
     @RequestMapping("/favorites")
     public String getFavorites(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Favorites",
-            Symbols.FAVORITES_TWEETS.toString()
+            Symbols.TWEETS_FAVORITES.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -164,15 +170,15 @@ public class TweetController {
 
     @RequestMapping("/retweets")
     public String getRetweetsOfMe(
-        @RequestParam(name= "page", defaultValue=""+ ControllerHelper.FIRST_PAGE_NUMBER) int page,
+        @RequestParam(name= "page", defaultValue=""+ ContentFactory.FIRST_PAGE_NUMBER) int page,
         Model model
     ){
         String title = "Tweets";
-        model = controllerHelper.setupPage(
+        model = contentFactory.setupPage(
             model,
             title,
             "Retweets Of Me",
-            Symbols.RETWEETS_OF_ME_FAVORITES_TWEETS.toString()
+            Symbols.TWEETS_RETWEETS_OF_ME.toString()
         );
         String sortByColumn = "createdAt";
         Pageable pageRequest = new PageRequest(
@@ -190,7 +196,7 @@ public class TweetController {
 
     private final TweetService tweetService;
 
-    private final ControllerHelper controllerHelper;
+    private final ContentFactory contentFactory;
 
     private final FrontendProperties frontendProperties;
 
@@ -199,12 +205,12 @@ public class TweetController {
     @Autowired
     public TweetController(
             TweetService tweetService,
-            ControllerHelper controllerHelper,
+            ContentFactory contentFactory,
             FrontendProperties frontendProperties,
             TwitterProperties twitterProperties
     ) {
         this.tweetService = tweetService;
-        this.controllerHelper = controllerHelper;
+        this.contentFactory = contentFactory;
         this.frontendProperties = frontendProperties;
         this.twitterProperties = twitterProperties;
     }

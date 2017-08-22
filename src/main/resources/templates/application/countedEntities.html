@@ -50,8 +50,10 @@
                             <td>
                                 <span class="tw-vector">
                                     <i class="fa fa-database" aria-hidden="true"></i>
-                                    <span th:text="${object2Entity.entityId}">entityId</span>
-                                    <span th:text="${object2Entity.entityInfo}" class="tw-left-space">entityInfo</span>
+                                    <a href="/tweet/id" th:href="@{|/${nameEntity}/${object2Entity.entityId}|}">
+                                        <span th:text="${object2Entity.entityId}">entityId</span>
+                                        <span th:text="${object2Entity.entityInfo}" class="tw-left-space">entityInfo</span>
+                                    </a>
                                 </span>
                             </td>
                         </tr>

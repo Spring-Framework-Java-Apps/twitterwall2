@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+    <int:channel id="channel.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="channel.async.FetchHomeTimeline" datatype="org.woehlke.twitterwall.backend.mq.tasks.TaskMessage">
+        <int:interceptors>
+            <int:wire-tap channel="logger"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:chain id="chain.async.FetchHomeTimeline" input-channel="channel.async.FetchHomeTimeline">
+        <int:splitter
+                id="spliter.async.FetchHomeTimeline"
+                ref="mqHomeTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.async.FetchHomeTimeline"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.async.FetchHomeTimeline"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.async.FetchHomeTimeline"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.async.FetchHomeTimeline"
+                ref="mqTweetFinisher"
+                method="finishAsnyc" />
+    </int:chain>
+
+    <int:chain id="chain.FetchtHomeTimeline" input-channel="channel.FetchHomeTimeline">
+        <int:splitter
+                id="splitter.FetchHomeTimeline"
+                ref="mqHomeTimelineSplitter"
+                method="splitTweetMessage"  />
+        <int:service-activator
+                id="transform.FetchHomeTimeline"
+                ref="mqTweetTransformator"
+                method="transformTweet" />
+        <int:service-activator
+                id="persist.FetchHomeTimeline"
+                ref="mqTweetPersistor"
+                method="persistTweet" />
+        <int:aggregator
+                id="aggregator.FetchHomeTimeline"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="finish.FetchHomeTimeline"
+                ref="mqTweetFinisher"
+                method="finish" />
+    </int:chain>
+
+</beans>

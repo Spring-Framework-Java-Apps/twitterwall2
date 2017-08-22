@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.woehlke.twitterwall.oodm.entities.Url;
+import org.woehlke.twitterwall.oodm.model.Url;
 import org.woehlke.twitterwall.oodm.repositories.TaskRepository;
 import org.woehlke.twitterwall.oodm.repositories.UrlRepository;
 import org.woehlke.twitterwall.oodm.service.UrlService;
+
+import java.util.List;
 
 /**
  * Created by tw on 12.06.17.
@@ -49,5 +51,15 @@ public class UrlServiceImpl extends DomainServiceWithTaskImpl<Url> implements Ur
     @Override
     public Url findByUniqueId(Url domainExampleObject) {
         return urlRepository.findByUniqueId(domainExampleObject);
+    }
+
+    @Override
+    public List<Url> findRawUrlsFromDescription() {
+        return urlRepository.findRawUrlsFromDescription();
+    }
+
+    @Override
+    public List<Url> findUrlAndExpandedTheSame() {
+        return urlRepository.findUrlAndExpandedTheSame();
     }
 }

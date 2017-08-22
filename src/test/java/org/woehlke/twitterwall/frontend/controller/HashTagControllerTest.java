@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.woehlke.twitterwall.*;
 import org.woehlke.twitterwall.frontend.controller.common.PrepareDataTest;
-import org.woehlke.twitterwall.oodm.entities.HashTag;
+import org.woehlke.twitterwall.oodm.model.HashTag;
 import org.woehlke.twitterwall.oodm.service.HashTagService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.woehlke.twitterwall.frontend.controller.common.ControllerHelper.FIRST_PAGE_NUMBER;
+import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE_NUMBER;
 
 /**
  * Created by tw on 01.07.17.
@@ -101,8 +101,8 @@ public class HashTagControllerTest {
     @Commit
     @WithAnonymousUser
     @Test
-    public void findByIdTest() throws Exception {
-        String msg ="findByIdTest: ";
+    public void findHashTagById() throws Exception {
+        String msg ="findHashTagById: ";
         HashTag hashTag = findOneHashTag();
         long id  = hashTag.getId();
         MvcResult result = this.mockMvc.perform(get("/hashtag/"+id))
