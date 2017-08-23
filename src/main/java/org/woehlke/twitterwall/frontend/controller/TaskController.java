@@ -270,10 +270,10 @@ public class TaskController {
         List<Task> listOfTasks = new ArrayList<>();
         //Task task1 = mqTaskStartFireAndForget.getLists();
         //listOfTasks.add(task1);
-        //Task task2 = mqTaskStartFireAndForget.fetchUserlistOwners();
-        //listOfTasks.add(task2);
-        Task task3 = mqTaskStartFireAndForget.startFetchListsForUsers();
-        listOfTasks.add(task3);
+        Task task1 = mqTaskStartFireAndForget.startFetchListsForUsers();
+        listOfTasks.add(task1);
+        Task task2 = mqTaskStartFireAndForget.fetchUserlistOwners();
+        listOfTasks.add(task2);
         model.addAttribute("listOfTasks",listOfTasks);
         return PATH+"/start/tasksStarted";
     }
