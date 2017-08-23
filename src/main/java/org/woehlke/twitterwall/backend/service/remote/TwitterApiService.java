@@ -3,7 +3,7 @@ package org.woehlke.twitterwall.backend.service.remote;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.TwitterProfile;
-import org.springframework.social.twitter.api.UserList;
+import org.woehlke.twitterwall.oodm.model.parts.User2UserList;
 
 import java.util.List;
 
@@ -36,5 +36,7 @@ public interface TwitterApiService {
 
     CursoredList<Long> getFriendIds();
 
-    List<UserList> getLists();
+    User2UserList getLists();
+
+    User2UserList getUserListForUser(long idTwitterOfListOwningUser);
 }

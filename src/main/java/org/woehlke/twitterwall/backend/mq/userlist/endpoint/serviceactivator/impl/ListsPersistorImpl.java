@@ -28,14 +28,20 @@ public class ListsPersistorImpl implements ListsPersistor {
         this.userListMessageBuilder = userListMessageBuilder;
     }
 
-    //TODO: #252 https://github.com/phasenraum2010/twitterwall2/issues/252
     @Override
     public Message<UserListMessage> persistList(Message<UserListMessage> incomingMessage) {
         UserListMessage receivedMessage = incomingMessage.getPayload();
         long taskId = receivedMessage.getTaskMessage().getTaskId();
         Task task = taskService.findById(taskId);
         UserList userListOut = userListService.store(receivedMessage.getUserList(),task);
-        UserListMessage newUserListMsg = new UserListMessage(receivedMessage.getTaskMessage(),receivedMessage.getUserListTwitter(),userListOut);
+        UserListMessage newUserListMsg = new UserListMessage(
+                receivedMessage.getTaskMessage(),
+                receivedMessage.getUserListTwitter(),
+                userListOut,
+                receivedMessage.getIdTwitterOfThisUserList(),
+                receivedMessage.getIdTwitterOfListOwningUser(),
+                receivedMessage.getUserListType()
+        );
         Message<UserListMessage> mqMessageOut = MessageBuilder.withPayload(newUserListMsg)
                 .copyHeaders(incomingMessage.getHeaders())
                 .setHeader("persisted",Boolean.TRUE)

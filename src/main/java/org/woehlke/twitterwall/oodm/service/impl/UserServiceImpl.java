@@ -176,4 +176,8 @@ public class UserServiceImpl extends DomainServiceWithTaskImpl<User> implements 
     public User findByUniqueId(User domainExampleObject) {
         return userRepository.findByUniqueId(domainExampleObject);
     }
+
+    public List<Long> getIdTwitterOfAllUsers(){
+        return userRepository.getIdTwitterOfAllUsers();
+    }
 }

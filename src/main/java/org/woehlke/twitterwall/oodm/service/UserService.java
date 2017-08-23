@@ -7,6 +7,8 @@ import org.woehlke.twitterwall.oodm.model.transients.*;
 import org.woehlke.twitterwall.oodm.service.common.DomainObjectWithEntitiesService;
 import org.woehlke.twitterwall.oodm.service.common.DomainServiceWithScreenName;
 
+import java.util.List;
+
 
 /**
  * Created by tw on 11.06.17.
@@ -60,4 +62,6 @@ public interface UserService extends DomainObjectWithEntitiesService<User>,Domai
     boolean isByIdTwitter(long userIdTwitter);
 
     Page<User> findUsersForUserList(UserList userList, Pageable pageRequest);
+
+    List<Long> getIdTwitterOfAllUsers();
 }

@@ -18,8 +18,7 @@ public class UserMessageBuilderImpl implements UserMessageBuilder {
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("loop_id",loopId)
-                        .setHeader("loop_all",loopAll)
+                        .setHeader("taskId",incomingTaskMessage.getPayload().getTaskId())
                         .build();
         return mqMessageOut;
     }
@@ -30,8 +29,7 @@ public class UserMessageBuilderImpl implements UserMessageBuilder {
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("loop_id",loopId)
-                        .setHeader("loop_all",loopAll)
+                        .setHeader("taskId",incomingTaskMessage.getPayload().getTaskId())
                         .build();
         return mqMessageOut;
     }
@@ -42,8 +40,7 @@ public class UserMessageBuilderImpl implements UserMessageBuilder {
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingTaskMessage.getHeaders())
-                        .setHeader("loop_id",loopId)
-                        .setHeader("loop_all",loopAll)
+                        .setHeader("taskId",incomingTaskMessage.getPayload().getTaskId())
                         .build();
         return mqMessageOut;
     }
@@ -76,6 +73,7 @@ public class UserMessageBuilderImpl implements UserMessageBuilder {
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingMessage.getHeaders())
+                        .setHeader("taskId",incomingMessage.getPayload().getTaskId())
                         .setHeader("twitter_profile_id", twitterProfile.getId())
                         .build();
         return mqMessageOut;
@@ -87,7 +85,20 @@ public class UserMessageBuilderImpl implements UserMessageBuilder {
         Message<UserMessage> mqMessageOut =
                 MessageBuilder.withPayload(outputPayload)
                         .copyHeaders(incomingMessage.getHeaders())
+                        .setHeader("taskId",incomingMessage.getPayload().getTaskId())
                         .setHeader("twitter_profile_id", imprintUser.getIdTwitter())
+                        .build();
+        return mqMessageOut;
+    }
+
+    @Override
+    public Message<UserMessage> buildUserMessageForUser(Message<TaskMessage> incomingTaskMessage, long userIdTwitter, int loopId, int loopAll) {
+        UserMessage outputPayload = new UserMessage(incomingTaskMessage.getPayload(),userIdTwitter);
+        Message<UserMessage> mqMessageOut =
+                MessageBuilder.withPayload(outputPayload)
+                        .copyHeaders(incomingTaskMessage.getHeaders())
+                        .setHeader("taskId",incomingTaskMessage.getPayload().getTaskId())
+                        .setHeader("userIdTwitter",userIdTwitter)
                         .build();
         return mqMessageOut;
     }

@@ -4,6 +4,36 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false" />
+        <fileset id="fileset2" name="Spring Application Context (2)" removed="false">
+          <dependency>fileset</dependency>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/CreateImprintUser.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/CreateTestDataTweets.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/CreateTestDataUser.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchFavorites.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchFollower.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchFriends.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchHomeTimeline.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchListOwner.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchLists.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchListsForUsers.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchMentions.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchRetweetsOfMe.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchTweetsFromSearch.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchUsersFromList.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/FetchUserTimeline.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/GarbageCollection.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/integration.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/RemoveOldDataFromStorage.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/TaskStart.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateMentionsForUsers.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateTweets.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateUrls.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateUser.xml</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/Application.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/DataSourceConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/WebMvcConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/WebSecurityConfig.java</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
