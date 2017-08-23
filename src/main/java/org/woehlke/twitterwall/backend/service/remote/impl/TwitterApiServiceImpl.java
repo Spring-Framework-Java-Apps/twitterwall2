@@ -420,7 +420,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     private void waitLongerForApi(){
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        millisToWaitBetweenTwoApiCalls *= 10;
+        millisToWaitBetweenTwoApiCalls *= 100;
         log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
         try {
             Thread.sleep(millisToWaitBetweenTwoApiCalls);
