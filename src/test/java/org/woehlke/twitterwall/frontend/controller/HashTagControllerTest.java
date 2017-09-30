@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HashTagControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagControllerTest.class);
@@ -52,26 +55,36 @@ public class HashTagControllerTest {
     private PrepareDataTest prepareDataTest;
 
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        String msg = "test001controllerIsPresentTest ";
+        log.debug(msg+"------------------------------------");
         assertThat(controller).isNotNull();
+        assertThat(mockMvc).isNotNull();
+        assertThat(hashTagService).isNotNull();
+        assertThat(prepareDataTest).isNotNull();
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @Test
-    public void setupTestData(){
-        String msg = "setupTestData: ";
+    public void test002setupTestData(){
+        String msg = "test002setupTestData: ";
+        log.debug(msg+"------------------------------------");
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @WithMockUser
     @Test
-    public void getAllTest() throws Exception {
-        String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/all"))
+    public void test003getAllTest() throws Exception {
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url ="/hashtag/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/all"))
                 .andExpect(model().attributeExists("myPageContent"))
@@ -80,15 +93,16 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
-    private HashTag findOneHashTag(){
+    private HashTag test004findOneHashTag(){
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, 1);
         Page<HashTag> hashTagPage = hashTagService.getAll(pageRequest);
         if(hashTagPage.getContent().size()>0){
@@ -101,11 +115,14 @@ public class HashTagControllerTest {
     @Commit
     @WithAnonymousUser
     @Test
-    public void findHashTagById() throws Exception {
-        String msg ="findHashTagById: ";
-        HashTag hashTag = findOneHashTag();
+    public void test005findHashTagById() throws Exception {
+        String msg ="test005findHashTagById: ";
+        log.debug(msg+"------------------------------------");
+        HashTag hashTag = test004findOneHashTag();
         long id  = hashTag.getId();
-        MvcResult result = this.mockMvc.perform(get("/hashtag/"+id))
+        String url ="/hashtag/"+id;
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/id"))
                 .andExpect(model().attributeExists("users"))
@@ -116,22 +133,26 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @WithAnonymousUser
     @Test
-    public void hashTagFromTweetsAndUsersTest() throws Exception {
-        String msg ="hashTagFromTweetsAndUsersTest: ";
-        HashTag hashTag = findOneHashTag();
+    public void test006hashTagFromTweetsAndUsersTest() throws Exception {
+        String msg ="test006hashTagFromTweetsAndUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        HashTag hashTag = test004findOneHashTag();
         String hashtagText = hashTag.getText();
-        MvcResult result = this.mockMvc.perform(get("/hashtag/text/"+hashtagText))
+        String url ="/hashtag/text/"+hashtagText;
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/id"))
                 .andExpect(model().attributeExists("users"))
@@ -142,20 +163,24 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @WithAnonymousUser
     @Test
-    public void hashTagsOverview()  throws Exception {
-        String msg ="hashTagsOverview: ";
-        MvcResult result = this.mockMvc.perform(get("/hashtag/overview"))
+    public void test007hashTagsOverview()  throws Exception {
+        String msg ="test007hashTagsOverview: ";
+        log.debug(msg+"------------------------------------");
+        String url ="/hashtag/overview";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("hashtag/overview"))
             .andExpect(model().attributeExists("hashTagsTweets"))
@@ -165,12 +190,13 @@ public class HashTagControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
 }

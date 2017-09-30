@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.FetchType.EAGER;
 

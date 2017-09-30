@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserListServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest  {
 
     private static final Logger log = LoggerFactory.getLogger(UserListServiceTest.class);
@@ -20,7 +23,7 @@ public class UserListServiceTest implements DomainObjectMinimalServiceTest,Domai
     private UserListService userListService;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         String msg = "areDependenciesLoaded: ";
         Assert.assertNotNull(userListService);
         log.debug(msg+" YES ");
@@ -29,56 +32,56 @@ public class UserListServiceTest implements DomainObjectMinimalServiceTest,Domai
     @Commit
     @Test
     @Override
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
+    public void test102update() throws Exception {
 
     }
 }

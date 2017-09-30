@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.woehlke.twitterwall.oodm.model.TaskHistory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaskHistoryServiceTest implements DomainObjectMinimalServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryServiceTest.class);
@@ -28,14 +31,14 @@ public class TaskHistoryServiceTest implements DomainObjectMinimalServiceTest {
     private TestdataProperties testdataProperties;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(taskHistoryService);
         Assert.assertNotNull(testdataProperties);
     }
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -53,34 +56,34 @@ public class TaskHistoryServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void store() throws Exception {}
+    public void test100store() throws Exception {}
 
 
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 

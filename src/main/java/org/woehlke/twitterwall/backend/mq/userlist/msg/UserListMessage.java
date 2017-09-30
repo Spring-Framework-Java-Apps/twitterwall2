@@ -2,6 +2,7 @@ package org.woehlke.twitterwall.backend.mq.userlist.msg;
 
 import org.springframework.social.twitter.api.UserList;
 import org.woehlke.twitterwall.backend.mq.tasks.TaskMessage;
+import org.woehlke.twitterwall.oodm.model.parts.UserListType;
 
 import java.io.Serializable;
 
@@ -10,34 +11,36 @@ public class UserListMessage implements Serializable {
     private final TaskMessage taskMessage;
     private final org.springframework.social.twitter.api.UserList userListTwitter;
     private final org.woehlke.twitterwall.oodm.model.UserList userList;
-    private final long idTwitter;
+    private final long idTwitterOfThisUserList;
+    private final long idTwitterOfListOwningUser;
+    private final UserListType userListType;
 
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, long idTwitter) {
+
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, long idTwitterOfThisUserList, long idTwitterOfListOwningUser, UserListType userListType) {
         this.taskMessage = taskMessage;
         this.userListTwitter = userListTwitter;
-        this.idTwitter = idTwitter;
+        this.idTwitterOfThisUserList = idTwitterOfThisUserList;
         this.userList = null;
+        this.idTwitterOfListOwningUser = idTwitterOfListOwningUser;
+        this.userListType = userListType;
     }
 
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.model.UserList userList, long idTwitter) {
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.model.UserList userList, long idTwitterOfThisUserList, long idTwitterOfListOwningUser, UserListType userListType) {
         this.taskMessage = taskMessage;
         this.userListTwitter = userListTwitter;
         this.userList = userList;
-        this.idTwitter = idTwitter;
+        this.idTwitterOfThisUserList = idTwitterOfThisUserList;
+        this.idTwitterOfListOwningUser = idTwitterOfListOwningUser;
+        this.userListType = userListType;
     }
 
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter) {
+    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, long idTwitterOfListOwningUser, UserListType userListType) {
         this.taskMessage = taskMessage;
         this.userListTwitter = userListTwitter;
         this.userList = null;
-        this.idTwitter = userListTwitter.getId();
-    }
-
-    public UserListMessage(TaskMessage taskMessage, UserList userListTwitter, org.woehlke.twitterwall.oodm.model.UserList userListOut) {
-        this.taskMessage = taskMessage;
-        this.userListTwitter = userListTwitter;
-        this.userList = userListOut;
-        this.idTwitter = userListTwitter.getId();
+        this.idTwitterOfThisUserList = userListTwitter.getId();
+        this.idTwitterOfListOwningUser = idTwitterOfListOwningUser;
+        this.userListType = userListType;
     }
 
     public TaskMessage getTaskMessage() {
@@ -52,8 +55,16 @@ public class UserListMessage implements Serializable {
         return userList;
     }
 
-    public long getIdTwitter() {
-        return idTwitter;
+    public long getIdTwitterOfThisUserList() {
+        return idTwitterOfThisUserList;
+    }
+
+    public long getIdTwitterOfListOwningUser() {
+        return idTwitterOfListOwningUser;
+    }
+
+    public UserListType getUserListType() {
+        return userListType;
     }
 
     @Override
@@ -63,30 +74,35 @@ public class UserListMessage implements Serializable {
 
         UserListMessage that = (UserListMessage) o;
 
-        if (getIdTwitter() != that.getIdTwitter()) return false;
-        if (getTaskMessage() != null ? !getTaskMessage().equals(that.getTaskMessage()) : that.getTaskMessage() != null)
+        if (idTwitterOfThisUserList != that.idTwitterOfThisUserList) return false;
+        if (idTwitterOfListOwningUser != that.idTwitterOfListOwningUser) return false;
+        if (taskMessage != null ? !taskMessage.equals(that.taskMessage) : that.taskMessage != null) return false;
+        if (userListTwitter != null ? !userListTwitter.equals(that.userListTwitter) : that.userListTwitter != null)
             return false;
-        if (getUserListTwitter() != null ? !getUserListTwitter().equals(that.getUserListTwitter()) : that.getUserListTwitter() != null)
-            return false;
-        return getUserList() != null ? getUserList().equals(that.getUserList()) : that.getUserList() == null;
+        if (userList != null ? !userList.equals(that.userList) : that.userList != null) return false;
+        return userListType == that.userListType;
     }
 
     @Override
     public int hashCode() {
-        int result = getTaskMessage() != null ? getTaskMessage().hashCode() : 0;
-        result = 31 * result + (getUserListTwitter() != null ? getUserListTwitter().hashCode() : 0);
-        result = 31 * result + (getUserList() != null ? getUserList().hashCode() : 0);
-        result = 31 * result + (int) (getIdTwitter() ^ (getIdTwitter() >>> 32));
+        int result = taskMessage != null ? taskMessage.hashCode() : 0;
+        result = 31 * result + (userListTwitter != null ? userListTwitter.hashCode() : 0);
+        result = 31 * result + (userList != null ? userList.hashCode() : 0);
+        result = 31 * result + (int) (idTwitterOfThisUserList ^ (idTwitterOfThisUserList >>> 32));
+        result = 31 * result + (int) (idTwitterOfListOwningUser ^ (idTwitterOfListOwningUser >>> 32));
+        result = 31 * result + (userListType != null ? userListType.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "UserListMessage{" +
-            "taskMessage=" + taskMessage +
-            ", userListTwitter=" + userListTwitter +
-            ", userList=" + userList +
-            ", idTwitter=" + idTwitter +
-            '}';
+                "taskMessage=" + taskMessage +
+                ", userListTwitter=" + userListTwitter +
+                ", userList=" + userList +
+                ", idTwitterOfThisUserList=" + idTwitterOfThisUserList +
+                ", idTwitterOfListOwningUser=" + idTwitterOfListOwningUser +
+                ", userListType=" + userListType +
+                '}';
     }
 }

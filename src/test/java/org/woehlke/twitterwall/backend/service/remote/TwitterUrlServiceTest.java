@@ -8,13 +8,16 @@ import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.woehlke.twitterwall.Application;
 import org.woehlke.twitterwall.configuration.properties.TestdataProperties;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.Url;
@@ -34,7 +37,8 @@ import java.util.Map;
  * Created by tw on 21.06.17.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(classes={Application.class},webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TwitterUrlServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterUrlServiceTest.class);
@@ -46,10 +50,9 @@ public class TwitterUrlServiceTest {
     private TwitterUrlService twitterUrlService;
 
     @Test
-    public void fetchUrlTest(){
+    public void test001fetchUrlTest(){
         String msg = "fetchUrlTest ";
-        log.info("------------------------------------");
-        log.info(msg);
+        log.debug(msg+"------------------------------------");
 
         String descriptionTask = "Make it so, Scotty";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
@@ -65,21 +68,23 @@ public class TwitterUrlServiceTest {
 
         List<String> exprectedUrls = testdataProperties.getOodm().getEntities().getUrl().getUrl();
         for(String exprectedUrl:exprectedUrls){
-                log.info(msg+"expected: " + exprectedUrl);
+                log.debug(msg+"expected: " + exprectedUrl);
                 Url foundUrl = twitterUrlService.fetchTransientUrl(exprectedUrl,task);
                 Assert.assertNotNull(foundUrl);
-                log.info(msg+"found:    " + foundUrl.toString());
+                log.debug(msg+"found:    " + foundUrl.toString());
                 Assert.assertEquals(exprectedUrl, foundUrl.getUrl());
         }
-        log.info("------------------------------------");
+        log.debug(msg+"------------------------------------");
     }
 
     @Test
-    public void fetchTransientUrlsTest(){
+    public void test002fetchTransientUrlsTest(){
+        String msg = "fetchTransientUrlsTest: ";
+        log.debug(msg+"------------------------------------");
         Map<String,String> urls = new HashMap<>();
         Map<String,String> hosts = new HashMap<>();
         for(String urlSrc : testdataProperties.getOodm().getEntities().getUrl().getUrl()){
-            log.info(urlSrc);
+            log.debug(msg+urlSrc);
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(urlSrc);
             try {
@@ -88,7 +93,7 @@ public class TwitterUrlServiceTest {
                 HttpHost target = context.getTargetHost();
                 List<URI> redirectLocations = context.getRedirectLocations();
                 URI location = URIUtils.resolve(httpGet.getURI(), target, redirectLocations);
-                log.info("Final HTTP location: " + location.toASCIIString());
+                log.debug(msg+"Final HTTP location: " + location.toASCIIString());
                 urls.put(urlSrc,location.toURL().toExternalForm());
                 hosts.put(urlSrc,location.toURL().getHost());
                 response1.close();
@@ -98,14 +103,15 @@ public class TwitterUrlServiceTest {
                 log.error(e.getMessage());
             }
         }
-        log.info("FETCHED HOST: Map<String,String> hosts = new HashMap<>()");
-        log.info("FETCHED URL: Map<String,String> URLS = new HashMap<>();");
+        log.debug(msg+"FETCHED HOST: Map<String,String> hosts = new HashMap<>()");
+        log.debug(msg+"FETCHED URL: Map<String,String> URLS = new HashMap<>();");
         for(Map.Entry<String,String> host:hosts.entrySet()){
-            log.info("FETCHED HOST: hosts.put(\""+host.getKey()+"\",\""+host.getValue()+"\");");
+            log.debug(msg+"FETCHED HOST: hosts.put(\""+host.getKey()+"\",\""+host.getValue()+"\");");
         }
         for(Map.Entry<String,String> url:urls.entrySet()){
-            log.info("FETCHED URL: URLS.put(\""+url.getKey()+"\",\""+url.getValue()+"\");");
+            log.debug(msg+"FETCHED URL: URLS.put(\""+url.getKey()+"\",\""+url.getValue()+"\");");
         }
+        log.debug(msg+"------------------------------------");
     }
 
 }

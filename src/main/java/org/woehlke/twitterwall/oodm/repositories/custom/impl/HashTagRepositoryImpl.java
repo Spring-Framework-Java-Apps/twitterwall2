@@ -15,6 +15,7 @@ import org.woehlke.twitterwall.oodm.repositories.custom.HashTagRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.sql.DataSource;
 import java.util.List;
 
 import static org.woehlke.twitterwall.oodm.model.transients.mapper.CountAllTweets2HashTagsRowMapper.SQL_COUNT_ALL_TWEET_2_HASHTAG;
@@ -28,9 +29,9 @@ public class HashTagRepositoryImpl implements HashTagRepositoryCustom {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public HashTagRepositoryImpl(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
+    public HashTagRepositoryImpl(EntityManager entityManager, DataSource dataSource) {
         this.entityManager = entityManager;
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override

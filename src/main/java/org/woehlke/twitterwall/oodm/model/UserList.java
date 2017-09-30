@@ -8,12 +8,12 @@ import org.woehlke.twitterwall.oodm.model.parts.AbstractDomainObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -101,30 +101,32 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         return myuriPath.split("/")[1];
     }
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="fk_user")
+    @ManyToOne(
+        fetch = FetchType.EAGER,
+        cascade =  { ALL }
+    )
+    @JoinColumn(
+        name="fk_user_owner"
+    )
     private User listOwner;
 
 
-    @NotNull
     @JoinTable(
         name="userlist_members"
     )
     @ManyToMany(
-        cascade = { DETACH, REFRESH, REMOVE },
-        fetch = LAZY
+        cascade = { ALL },
+        fetch = EAGER
     )
     private Set<User> members = new LinkedHashSet<User>();
 
 
-    @NotNull
     @JoinTable(
         name="userlist_subcriber"
     )
     @ManyToMany(
-        cascade = { DETACH, REFRESH, REMOVE },
-        fetch = LAZY
+        cascade = { ALL },
+        fetch = EAGER
     )
     private Set<User> subscriber = new LinkedHashSet<User>();
 

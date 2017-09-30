@@ -2,14 +2,14 @@ package org.woehlke.twitterwall.backend.mq.tasks;
 
 /**
  * @see TaskStart
- * @see StartTaskAsynchron
+ * @see TaskStartFireAndForget
  */
 public interface TaskStartTest extends TaskStartFireAndForgetTest {
 
-    void createImprintUserTest() throws Exception;
+    void test100createImprintUserTest() throws Exception;
 
-    void createTestDataUsersTest() throws Exception;
+    void test110createTestDataUsersTest() throws Exception;
 
-    void createTestDataTweetsTest() throws Exception;
+    void test120createTestDataTweetsTest() throws Exception;
 
 }

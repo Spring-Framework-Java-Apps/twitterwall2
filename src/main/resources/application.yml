@@ -33,7 +33,7 @@ spring:
     #initialSize: 5
     max-total: 20
     maxActive: 20
-    #maxIdle: 5
+    maxIdle: 20
     #minIdle: 2
     platform: POSTGRESQL
     #removeAbandoned: true
@@ -348,15 +348,8 @@ spring:
 spring:
   profiles: travis
   datasource:
-    driverClassName: org.h2.Driver
-    platform: H2
-    url: jdbc:h2:mem:test
+    url: 'jdbc:postgresql://localhost:5432/twitterwall2test?user=twitterwall2test&password=twitterwall2testpwd'
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-       dialect: org.hibernate.dialect.H2Dialect
-    show-sql: true
-hibernate:
-  dialect: org.hibernate.dialect.H2Dialect
+    show-sql: false

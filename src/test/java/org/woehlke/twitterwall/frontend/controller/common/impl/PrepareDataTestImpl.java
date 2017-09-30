@@ -60,7 +60,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
         List<Tweet> latest =  new ArrayList<>();
         try {
-            log.info(msg + "--------------------------------------------------------------------");
+            log.debug(msg + "--------------------------------------------------------------------");
             int loopId = 0;
             List<Long> idTwitterListTweets = testdataProperties.getOodm().getEntities().getTweet().getIdTwitter();
             for (long idTwitter : idTwitterListTweets) {
@@ -68,9 +68,9 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                     org.woehlke.twitterwall.oodm.model.Tweet persTweet = tweetService.findByIdTwitter(idTwitter);
                     if(persTweet != null){
                         loopId++;
-                        log.info(msg + "--------------------------------------------------------------------");
-                        log.info(msg + loopId + " " + persTweet.getUniqueId());
-                        log.info(msg + "--------------------------------------------------------------------");
+                        log.debug(msg + "--------------------------------------------------------------------");
+                        log.debug(msg + loopId + " " + persTweet.getUniqueId());
+                        log.debug(msg + "--------------------------------------------------------------------");
                         latest.add(persTweet);
                     } else {
                         org.springframework.social.twitter.api.Tweet tweet = twitterApiService.findOneTweetById(idTwitter);
@@ -78,9 +78,9 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                             persTweet = this.storeOneTweet.storeOneTweet(tweet, task);
                             if (persTweet != null) {
                                 loopId++;
-                                log.info(msg + "--------------------------------------------------------------------");
-                                log.info(msg + loopId + " " + persTweet.getUniqueId());
-                                log.info(msg + "--------------------------------------------------------------------");
+                                log.debug(msg + "--------------------------------------------------------------------");
+                                log.debug(msg + loopId + " " + persTweet.getUniqueId());
+                                log.debug(msg + "--------------------------------------------------------------------");
                                 latest.add(persTweet);
                             }
                         }
@@ -92,11 +92,11 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                 }
             }
         } catch (RateLimitExceededException e) {
-            log.info(msg + e.getMessage());
+            log.debug(msg + e.getMessage());
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         } finally {
-            log.info(msg + "--------------------------------------------------------------------");
+            log.debug(msg + "--------------------------------------------------------------------");
         }
         for(Tweet tweet:latest){
             log.debug(msg + tweet.toString());
@@ -165,7 +165,7 @@ public class PrepareDataTestImpl implements PrepareDataTest {
                 log.warn(msg + e.getMessage());
             }
         } catch (RateLimitExceededException e) {
-            log.info(msg + e.getMessage());
+            log.debug(msg + e.getMessage());
         } catch (Exception e) {
             log.warn(msg + e.getMessage());
         }
@@ -183,39 +183,39 @@ public class PrepareDataTestImpl implements PrepareDataTest {
         CountedEntities countedEntities = countedEntitiesService.countAll();
         String msg = "createUser for screenName="+screenName;
         Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
-        log.info("-----------------------------------------");
+        log.debug("-----------------------------------------");
         try {
-            log.info("screenName = "+ screenName);
+            log.debug("screenName = "+ screenName);
             User user = userService.findByScreenName(screenName);
-            log.info("userService.findByScreenName: found User = "+user.toString());
-            log.info("model.addAttribute user = "+user.toString());
+            log.debug("userService.findByScreenName: found User = "+user.toString());
+            log.debug("model.addAttribute user = "+user.toString());
             return user;
         } catch (EmptyResultDataAccessException e){
-            log.info("EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName);
+            log.debug("EmptyResultDataAccessException at userService.findByScreenName for screenName="+screenName);
             TwitterProfile twitterProfile = twitterApiService.getUserProfileForScreenName(screenName);
-            log.info("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
+            log.debug("twitterApiService.getUserProfileForScreenName: found TwitterProfile = "+twitterProfile.toString());
             try {
-                log.info("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
+                log.debug("try: persistDataFromTwitter.storeUserProfile for twitterProfile = "+twitterProfile.toString());
                 User user = storeUserProfile.storeUserProfile(twitterProfile,task);
-                log.info("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
-                log.info("model.addAttribute user = "+user.toString());
+                log.debug("persistDataFromTwitter.storeUserProfile: stored User = "+user.toString());
+                log.debug("model.addAttribute user = "+user.toString());
                 return user;
             } catch (EmptyResultDataAccessException ex){
                 log.warn("persistDataFromTwitter.storeUserProfile raised EmptyResultDataAccessException: "+ex.getMessage());
                 User user = getDummyUser(task);
-                log.info("model.addAttribute user = "+user.toString());
+                log.debug("model.addAttribute user = "+user.toString());
                 return user;
             } catch (NoResultException exe) {
                 log.warn("persistDataFromTwitter.storeUserProfile raised NoResultException: "+exe.getMessage());
                 User user = getDummyUser(task);
-                log.info("model.addAttribute user = "+user.toString());
+                log.debug("model.addAttribute user = "+user.toString());
                 return user;
             }
         }  finally {
             countedEntities = countedEntitiesService.countAll();
             taskService.done(task,countedEntities);
-            log.info("... finally done ...");
-            log.info("-----------------------------------------");
+            log.debug("... finally done ...");
+            log.debug("-----------------------------------------");
         }
     }
 

@@ -160,7 +160,7 @@ public class TaskStartImpl implements TaskStart {
     private Task sendAndReceiveTask(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
@@ -185,7 +185,7 @@ public class TaskStartImpl implements TaskStart {
     private Task sendAndReceiveUrl(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
@@ -210,7 +210,7 @@ public class TaskStartImpl implements TaskStart {
     private Task sendAndReceiveUserList(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
@@ -237,7 +237,7 @@ public class TaskStartImpl implements TaskStart {
         TaskType taskType = TaskType.CREATE_IMPRINT_USER;
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+" via MQ by "+ taskSendType;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ", taskType, taskSendType, countedEntities);
         TaskMessage taskMessage = new TaskMessage(task.getId(), taskType, taskSendType, task.getTimeStarted());
@@ -258,7 +258,7 @@ public class TaskStartImpl implements TaskStart {
             task = taskService.findById(taskId);
             logMsg = "Sucessfully finished task "+taskType+" via MQ by "+ taskSendType;
             taskService.done(logMsg, task, countedEntities);
-            log.info(logMsg);
+            log.debug(logMsg);
             return msg.getUser();
         } else {
             logMsg = "Finished with Error: task "+taskType+" via MQ by "+ taskSendType +": Wrong type of returnedMessage";
@@ -271,7 +271,7 @@ public class TaskStartImpl implements TaskStart {
     private Task sendAndReceiveTweet(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create("Start via MQ by Scheduler ", taskType, taskSendType,countedEntities);
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
@@ -296,7 +296,7 @@ public class TaskStartImpl implements TaskStart {
     private Task sendAndReceiveUser(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.SEND_AND_WAIT_FOR_RESULT;
         String logMsg = "Start task "+taskType+"via MQ by "+ taskSendType;;
-        log.info(logMsg);
+        log.debug(logMsg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(logMsg, taskType, taskSendType, countedEntities);
         Message<TaskMessage> mqMessage = taskMessageBuilder.buildTaskMessage(task);
@@ -310,7 +310,7 @@ public class TaskStartImpl implements TaskStart {
             task = taskService.findById(taskId);
             logMsg = "Sucessfully finished task "+taskType+"via MQ by "+ taskSendType;
             taskService.done(logMsg,task,countedEntities);
-            log.info(logMsg);
+            log.debug(logMsg);
         } else {
             logMsg = "Finished with Error: task "+taskType+"via MQ by "+ taskSendType +": Wrong type of returnedMessage";
             taskService.finalError(task,logMsg,countedEntities);

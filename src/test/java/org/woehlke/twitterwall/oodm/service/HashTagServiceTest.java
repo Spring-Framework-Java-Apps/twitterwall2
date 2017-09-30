@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.woehlke.twitterwall.oodm.model.transients.HashTagCounted;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HashTagServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(HashTagServiceTest.class);
@@ -30,14 +33,14 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
     private TestdataProperties testdataProperties;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(hashTagService);
         Assert.assertNotNull(testdataProperties);
     }
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -55,7 +58,7 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void findByText() throws Exception {
+    public void test002findByText() throws Exception {
         String msg = "findByText: ";
         int page=1;
         int size=1;
@@ -81,14 +84,14 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
      */
     @Commit
     @Test
-    public void getHashTagsTweets() throws Exception {
+    public void test003getHashTagsTweets() throws Exception {
         String msg = "getHashTagsTweets: ";
         int page=1;
         int size=30;
         Pageable pageRequestTweets = new PageRequest(page,size);
         Page<HashTagCounted> hashTagsTweets = hashTagService.getHashTagsTweets(pageRequestTweets);
         for(HashTagCounted counted:hashTagsTweets){
-            log.info(msg+" hashTagsTweets: "+counted.getText());
+            log.debug(msg+" hashTagsTweets: "+counted.getText());
         }
     }
 
@@ -103,63 +106,63 @@ public class HashTagServiceTest implements DomainObjectMinimalServiceTest,Domain
      */
     @Commit
     @Test
-    public void getHashTagsUsers() throws Exception {
+    public void test004getHashTagsUsers() throws Exception {
         String msg = "getHashTagsUsers: ";
         int page=1;
         int size=30;
         Pageable pageRequestUsers = new PageRequest(page,size);
         Page<HashTagCounted> hashTagsUsers = hashTagService.getHashTagsUsers(pageRequestUsers);
         for(HashTagCounted counted:hashTagsUsers){
-            log.info(msg+" hashTagsUsers: "+counted.getText());
+            log.debug(msg+" hashTagsUsers: "+counted.getText());
         }
     }
 
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
+    public void test102update() throws Exception {
 
     }
 }

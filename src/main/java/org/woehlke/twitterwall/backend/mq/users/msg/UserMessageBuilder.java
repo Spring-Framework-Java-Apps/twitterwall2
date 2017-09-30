@@ -21,4 +21,5 @@ public interface UserMessageBuilder {
 
     Message<UserMessage> buildUserMessage(Message<TaskMessage> mqMessageIn, User imprintUser);
 
+    Message<UserMessage> buildUserMessageForUser(Message<TaskMessage> incomingTaskMessage, long userIdTwitter, int loopId, int loopAll);
 }

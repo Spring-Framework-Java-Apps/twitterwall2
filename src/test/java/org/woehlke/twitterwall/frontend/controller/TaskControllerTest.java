@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaskControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskControllerTest.class);
@@ -54,14 +57,14 @@ public class TaskControllerTest {
     private CountedEntitiesService countedEntitiesService;
 
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @Commit
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -71,8 +74,12 @@ public class TaskControllerTest {
     @Commit
     @WithMockUser
     @Test
-    public void getAllTest()throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/task/all"))
+    public void test003getAllTest()throws Exception {
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "task/all"))
             .andExpect(model().attributeExists("tasks"))
@@ -81,25 +88,28 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.debug("#######################################");
+        log.debug("#######################################");
+        log.debug(content);
+        log.debug("#######################################");
+        log.debug("#######################################");
         Assert.assertTrue(true);
     }
 
     @Commit
     @WithMockUser
     @Test
-    public void getTaskByIdTest() throws Exception {
+    public void test004getTaskByIdTest() throws Exception {
+        String msg ="test004getTaskByIdTest: ";
+        log.debug(msg+"------------------------------------");
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        String msg ="getTaskByIdTest: ";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
         Task task = taskService.create(msg,taskType, taskSendType,countedEntities);
         long id = task.getId();
-        MvcResult result = this.mockMvc.perform(get("/task/"+id))
+        String url = "/task/"+id;
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "task/id"))
             .andExpect(model().attributeExists("task"))
@@ -109,19 +119,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.debug("#######################################");
+        log.debug("#######################################");
+        log.debug(content);
+        log.debug("#######################################");
+        log.debug("#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void createTestDataTest() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
+    public void test005createTestDataTest() throws Exception {
+        String msg ="test005createTestDataTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/createTestData";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/createTestData"))
                 .andExpect(model().attributeExists("taskTweets"))
@@ -131,20 +145,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info("#######################################");
-        log.info("#######################################");
-        log.info(content);
-        log.info("#######################################");
-        log.info("#######################################");
+        log.debug("#######################################");
+        log.debug("#######################################");
+        log.debug(content);
+        log.debug("#######################################");
+        log.debug("#######################################");
         Assert.assertTrue(true);
     }
 
     @Commit
     @WithMockUser
     @Test
-    public void getOnListRenewTest() throws Exception {
-        String msg = "getOnListRenewTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
+    public void test006getOnListRenewTest() throws Exception {
+        String msg ="test006getOnListRenewTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/user/onlist/renew";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("users"))
@@ -153,11 +170,11 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
@@ -166,9 +183,12 @@ public class TaskControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
-        String msg = "fetchTweetsFromTwitterSearchStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/search"))
+    public void test007fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
+        String msg ="test007fetchTweetsFromTwitterSearchStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/search";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -177,20 +197,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void fetchFollowerStartTaskTest() throws Exception {
-        String msg = "fetchFollowerStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/follower/fetch"))
+    public void test008fetchFollowerStartTaskTest() throws Exception {
+        String msg ="test008fetchFollowerStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/follower/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -199,20 +222,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void fetchFriendsStartTask() throws Exception {
-    String msg = "fetchFriendsStartTask: ";
-    MvcResult result = this.mockMvc.perform(get("/task/start/users/friends/fetch"))
+    public void test009fetchFriendsStartTask() throws Exception {
+        String msg ="test009fetchFriendsStartTask: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/friends/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -221,20 +247,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void updateTweetsStartTaskTest() throws Exception {
-        String msg = "updateTweetsStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
+    public void test010updateTweetsStartTaskTest() throws Exception {
+        String msg ="test010updateTweetsStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/user/onlist/renew";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("task"))
@@ -243,20 +272,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
-        String msg = "fetchUsersFromDefinedUserListStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
+    public void test011fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
+        String msg ="test011fetchUsersFromDefinedUserListStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/list/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -265,20 +297,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void updateUserProfilesFromMentionsStartTaskTest() throws Exception {
-        String msg = "updateUserProfilesFromMentionsStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
+    public void test012updateUserProfilesFromMentionsStartTaskTest() throws Exception {
+        String msg ="test012updateUserProfilesFromMentionsStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/list/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -287,20 +322,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void updateUserProfilesStartTaskTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/mentions/update"))
+    public void test013updateUserProfilesStartTaskTest() throws Exception {
+        String msg ="test013updateUserProfilesStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/mentions/update";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -309,20 +347,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getHomeTimelineTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/timeline/home"))
+    public void test014getHomeTimelineTest() throws Exception {
+        String msg ="test014getHomeTimelineTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/timeline/home";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -331,20 +372,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getUserTimelineTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/timeline/user"))
+    public void test015getUserTimelineTest() throws Exception {
+        String msg ="test015getUserTimelineTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/timeline/user";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -353,20 +397,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getMentionsTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/mentions"))
+    public void test016getMentionsTest() throws Exception {
+        String msg ="test016getMentionsTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/mentions";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -375,20 +422,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getFavoritesTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/favorites"))
+    public void test017getFavoritesTest() throws Exception {
+        String msg ="test017getFavoritesTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/favorites";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -397,20 +447,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getRetweetsOfMeTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/myretweets"))
+    public void test018getRetweetsOfMeTest() throws Exception {
+        String msg ="test018getRetweetsOfMeTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/myretweets";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -419,20 +472,23 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getListsTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/userlists"))
+    public void test019getListsTest() throws Exception {
+        String msg ="test019getListsTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/userlists";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/tasksStarted"))
             .andExpect(model().attributeExists("listOfTasks"))
@@ -441,11 +497,11 @@ public class TaskControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 

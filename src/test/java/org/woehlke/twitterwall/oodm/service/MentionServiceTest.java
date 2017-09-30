@@ -2,8 +2,10 @@ package org.woehlke.twitterwall.oodm.service;
 
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MentionServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithScreenNameTest,DomainServiceWithIdTwitterTest {
 
     private static final Logger log = LoggerFactory.getLogger(MentionServiceTest.class);
@@ -42,7 +45,7 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(mentionService);
         Assert.assertNotNull(testdataProperties);
         Assert.assertNotNull(countedEntitiesService);
@@ -50,7 +53,7 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void createTestData() throws Exception {
+    public void test000createTestData() throws Exception {
         String msg = "createTestData: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task createdBy= taskService.create(msg, TaskType.NULL, TaskSendType.NO_MQ,countedEntities);
@@ -91,7 +94,7 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -110,7 +113,7 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void createProxyMention() throws Exception {
+    public void test010createProxyMention() throws Exception {
         String msg = "createProxyMention: ";
         CountedEntities countedEntities = countedEntitiesService.countAll();
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
@@ -125,7 +128,7 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void getAllWithoutPersistentUser() throws Exception {
+    public void test011getAllWithoutPersistentUser() throws Exception {
         String msg = "getAllWithoutUser: ";
         int page=1;
         int size=100;
@@ -140,9 +143,9 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
 
     @Commit
     @Test
-    public void findByIdTwitter() throws Exception {
+    public void test020findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
-        createTestData();
+        test000createTestData();
         int page=1;
         int size=20;
         Pageable pageRequest = new PageRequest(page,size);
@@ -161,9 +164,9 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     @Commit
     @Test
     @Override
-    public void findByScreenName() throws Exception {
+    public void test030findByScreenName() throws Exception {
         String msg = "findByScreenName: ";
-        createTestData();
+        test000createTestData();
         int page=1;
         int size=1;
         Pageable pageRequest = new PageRequest(page,size);
@@ -183,55 +186,49 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
-
-    }
-
-    @Commit
-    @Test
-    public void findByUserId() throws Exception {
+    public void test102update() throws Exception {
 
     }
 
@@ -255,4 +252,5 @@ public class MentionServiceTest implements DomainObjectMinimalServiceTest,Domain
         } catch (InterruptedException e) {
         }
     }
+
 }

@@ -1,17 +1,20 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MentionTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(MentionTest.class);
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
         final long ID_TWITTER_UNDEFINED = -1L;
@@ -45,7 +48,7 @@ public class MentionTest implements DomainObjectMinimalTest  {
     }
 
     @Test
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
         final long ID_TWITTER_UNDEFINED = -1L;
@@ -84,13 +87,13 @@ public class MentionTest implements DomainObjectMinimalTest  {
         Mention mention2 = new Mention(createdBy,updatedBy,screenName2);
         Mention mention3 = new Mention(createdBy,updatedBy,idTwitter3,screenName3,name3);
 
-        log.info(msg+" mention1 "+mention1.toString()+" "+mention1.getUniqueId()+" "+mention1.isValid());
+        log.debug(msg+" mention1 "+mention1.toString()+" "+mention1.getUniqueId()+" "+mention1.isValid());
         Assert.assertTrue(msg,mention1.isValid());
 
-        log.info(msg+" mention2 "+mention2.toString()+" "+mention2.getUniqueId()+" "+mention2.isValid());
+        log.debug(msg+" mention2 "+mention2.toString()+" "+mention2.getUniqueId()+" "+mention2.isValid());
         Assert.assertTrue(msg,mention2.isValid());
 
-        log.info(msg+" mention3 "+mention3.toString()+" "+mention3.getUniqueId()+" "+mention3.isValid());
+        log.debug(msg+" mention3 "+mention3.toString()+" "+mention3.getUniqueId()+" "+mention3.isValid());
         Assert.assertTrue(msg,mention3.isValid());
 
         mention1.setScreenName(null);
@@ -103,19 +106,19 @@ public class MentionTest implements DomainObjectMinimalTest  {
         mention4.setIdTwitter(idTwitter4);
         mention5.setIdTwitter(idTwitter4);
 
-        log.info(msg+" mention1 "+mention1.toString()+" "+mention1.getUniqueId()+" "+mention1.isValid());
+        log.debug(msg+" mention1 "+mention1.toString()+" "+mention1.getUniqueId()+" "+mention1.isValid());
         Assert.assertFalse(msg,mention1.isValid());
 
-        log.info(msg+" mention2 "+mention2.toString()+" "+mention2.getUniqueId()+" "+mention2.isValid());
+        log.debug(msg+" mention2 "+mention2.toString()+" "+mention2.getUniqueId()+" "+mention2.isValid());
         Assert.assertFalse(msg,mention2.isValid());
 
-        log.info(msg+" mention3 "+mention3.toString()+" "+mention3.getUniqueId()+" "+mention3.isValid());
+        log.debug(msg+" mention3 "+mention3.toString()+" "+mention3.getUniqueId()+" "+mention3.isValid());
         Assert.assertFalse(msg,mention3.isValid());
 
-        log.info(msg+" mention4 "+mention4.toString()+" "+mention4.getUniqueId()+" "+mention4.isValid());
+        log.debug(msg+" mention4 "+mention4.toString()+" "+mention4.getUniqueId()+" "+mention4.isValid());
         Assert.assertFalse(msg,mention4.isValid());
 
-        log.info(msg+" mention5 "+mention5.toString()+" "+mention5.getUniqueId()+" "+mention5.isValid());
+        log.debug(msg+" mention5 "+mention5.toString()+" "+mention5.getUniqueId()+" "+mention5.isValid());
         Assert.assertFalse(msg,mention5.isValid());
     }
 }

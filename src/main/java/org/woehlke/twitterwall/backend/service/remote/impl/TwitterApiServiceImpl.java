@@ -4,17 +4,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.social.ApiException;
 import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.*;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
+import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.configuration.properties.TwitterProperties;
 import org.woehlke.twitterwall.backend.service.remote.TwitterApiService;
+import org.woehlke.twitterwall.oodm.model.parts.User2UserList;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tw on 19.06.17.
@@ -32,7 +37,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 fetchedTweets = getTwitterProxy().searchOperations().search(twitterProperties.getSearchQuery(), twitterProperties.getPageSize()).getTweets();
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
-                    log.error(msg + " result.size: 0");
+                    log.warn(msg + " result.size: 0");
                     return new ArrayList<>();
                 } else {
                     log.debug(msg + " result.size: " + fetchedTweets.size());
@@ -41,6 +46,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -64,6 +71,11 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded ");
                 waitLongerForApi();
+            } catch (ResourceNotFoundException ex){
+                log.warn(msg + ex.getMessage());
+                waitForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 e.printStackTrace();
@@ -79,10 +91,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getHomeTimeline();
+                fetchedTweets = getTwitterProxy().timelineOperations().getHomeTimeline(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
-                    log.error(msg + " result.size: 0");
+                    log.warn(msg + " result.size: 0");
                     return new ArrayList<>();
                 } else {
                     log.debug(msg + " result.size: " + fetchedTweets.size());
@@ -91,6 +103,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -105,10 +119,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getUserTimeline();
+                fetchedTweets = getTwitterProxy().timelineOperations().getUserTimeline(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
-                    log.error(msg + " result.size: 0");
+                    log.warn(msg + " result.size: 0");
                     //TODO: Why?
                     return new ArrayList<>();
                 } else {
@@ -118,6 +132,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -132,10 +148,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getMentions();
+                fetchedTweets = getTwitterProxy().timelineOperations().getMentions(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
-                    log.error(msg + " result.size: 0");
+                    log.warn(msg + " result.size: 0");
                     return new ArrayList<>();
                 } else {
                     log.debug(msg + " result.size: " + fetchedTweets.size());
@@ -143,6 +159,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
+                waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
                 waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
@@ -158,10 +177,10 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getFavorites();
+                fetchedTweets = getTwitterProxy().timelineOperations().getFavorites(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
-                    log.error(msg + " result.size: 0");
+                    log.warn(msg + " result.size: 0");
                     return new ArrayList<>();
                 } else {
                     log.debug(msg + " result.size: " + fetchedTweets.size());
@@ -169,6 +188,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 }
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
+                waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
                 waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
@@ -196,6 +218,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new ArrayList<>();
@@ -204,29 +229,113 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     }
 
     @Override
-    public List<UserList> getLists(){
+    public User2UserList getLists(){
         String msg = MSG+"getMentions: ";
         log.debug(msg);
-        List<UserList> fetchedUserLists;
-        while(true) {
+        long idTwitterOfListOwningUser  = getTwitterProxy().userOperations().getProfileId();
+        String exceptionMsg1 = "getTwitterProxy().listOperations().getLists("+idTwitterOfListOwningUser+") ";
+        boolean doTheJob = true;
+        while(doTheJob) {
             try {
-                fetchedUserLists = getTwitterProxy().listOperations().getLists();
-                msg += " result: ";
-                if (fetchedUserLists.size() == 0) {
-                    log.error(msg + " result.size: 0");
-                    return new ArrayList<>();
-                } else {
-                    log.debug(msg + " result.size: " + fetchedUserLists.size());
-                    return fetchedUserLists;
-                }
+                User2UserList result = getUserListForUser(idTwitterOfListOwningUser);
+                doTheJob = false;
+                return result;
             } catch (RateLimitExceededException e) {
-                log.warn(msg + "  Rate Limit Exceeded : ");
+                log.warn(msg + "  Rate Limit Exceeded : " + exceptionMsg1);
+                waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
                 waitLongerForApi();
             } catch (Exception e) {
-                log.error(msg + e.getMessage());
-                return new ArrayList<>();
+                log.error(msg + "Exception at: " + exceptionMsg1 + e.getMessage());
             }
         }
+        return null;
+    }
+
+
+    @Override
+    public User2UserList getUserListForUser(long idTwitterOfListOwningUser){
+        String msg = MSG+"getMentions: ";
+        String exceptionMsg1 = "getTwitterProxy().listOperations().getLists("+idTwitterOfListOwningUser+") ";
+        String exceptionMsg2 = "getTwitterProxy().listOperations().getSubscriptions("+idTwitterOfListOwningUser+") ";
+        String exceptionMsg3 = "getTwitterProxy().listOperations().getMemberships("+idTwitterOfListOwningUser+") ";
+        log.debug(msg);
+        Set<UserList> ownLists = new HashSet<>();
+        Set<UserList> userListSubcriptions = new HashSet<>();
+        Set<UserList> userListMemberships = new HashSet<>();
+        boolean doTheJob = true;
+        while(doTheJob) {
+            try {
+                List<UserList> fetchedLists= getTwitterProxy().listOperations().getLists(idTwitterOfListOwningUser);
+                msg += " result: ";
+                ownLists.addAll(fetchedLists);
+                log.debug(msg + " result.size: " + fetchedLists.size());
+                waitForApi();
+                doTheJob = false;
+            } catch (RateLimitExceededException e) {
+                log.warn(msg + "  Rate Limit Exceeded : "+exceptionMsg1);
+                waitLongerForApi();
+            } catch (ResourceNotFoundException ex){
+                log.warn(msg + ex.getMessage());
+                waitForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
+            } catch (Exception e) {
+                log.error(msg + "Exception at: "+exceptionMsg1+ e.getMessage());
+            }
+        }
+        doTheJob = true;
+        while(doTheJob) {
+            try {
+                List<UserList> fetchedLists= getTwitterProxy().listOperations().getSubscriptions(idTwitterOfListOwningUser);
+                msg += " result: ";
+                userListSubcriptions.addAll(fetchedLists);
+                log.debug(msg + " result.size: " + fetchedLists.size());
+                waitForApi();
+                doTheJob = false;
+            } catch (RateLimitExceededException e) {
+                log.warn(msg + "  Rate Limit Exceeded : "+exceptionMsg2);
+                waitLongerForApi();
+            } catch (ResourceNotFoundException ex){
+                log.warn(msg + ex.getMessage());
+                waitForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
+            }  catch (Exception e) {
+                log.error(msg + "Exception at: "+exceptionMsg2+ e.getMessage());
+            }
+        }
+        doTheJob = true;
+        while(doTheJob) {
+            try {
+                List<UserList> fetchedOwnLists = getTwitterProxy().listOperations().getMemberships(idTwitterOfListOwningUser);
+                msg += " result: ";
+                userListMemberships.addAll(fetchedOwnLists);
+                log.debug(msg + " result.size: " + fetchedOwnLists.size());
+                waitForApi();
+                doTheJob = false;
+            } catch (RateLimitExceededException e) {
+                log.warn(msg + "  Rate Limit Exceeded : "+exceptionMsg3);
+                waitLongerForApi();
+            } catch (ResourceNotFoundException ex){
+                log.warn(msg + ex.getMessage());
+                waitForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
+            } catch (Exception e) {
+                log.error(msg + "Exception at: "+exceptionMsg3+ e.getMessage());
+            }
+        }
+        User2UserList result = new User2UserList();
+        result.setIdTwitterOfListOwningUser(idTwitterOfListOwningUser);
+        result.setOwnLists(ownLists);
+        result.setUserListMemberships(userListSubcriptions);
+        result.setUserListMemberships(userListMemberships);
+        return result;
     }
 
     @Override
@@ -249,6 +358,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (ResourceNotFoundException e) {
                 log.warn(msg + "  User not found : " + userProfileTwitterId);
                 return null;
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return null;
@@ -275,6 +387,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (ResourceNotFoundException e) {
                 log.warn(msg + "  User not found : " + screenName);
                 return null;
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return null;
@@ -294,6 +409,12 @@ public class TwitterApiServiceImpl implements TwitterApiService {
                 return result;
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
+                waitLongerForApi();
+            } catch (ResourceNotFoundException ex){
+                log.warn(msg + ex.getMessage());
+                waitForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
                 waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
@@ -315,6 +436,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new CursoredList<>(new ArrayList<>(), 0L, 0L);
@@ -335,6 +459,9 @@ public class TwitterApiServiceImpl implements TwitterApiService {
             } catch (RateLimitExceededException e) {
                 log.warn(msg + "  Rate Limit Exceeded : ");
                 waitLongerForApi();
+            } catch (ApiException apiEx){
+                log.warn(msg + "  Api Exception : " + apiEx.getMessage());
+                waitLongerForApi();
             } catch (Exception e) {
                 log.error(msg + e.getMessage());
                 return new CursoredList<>(new ArrayList<>(), 0L, 0L);
@@ -353,7 +480,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     private void waitLongerForApi(){
         int millisToWaitBetweenTwoApiCalls = twitterProperties.getMillisToWaitBetweenTwoApiCalls();
-        millisToWaitBetweenTwoApiCalls *= 10;
+        millisToWaitBetweenTwoApiCalls *= 100;
         log.debug("### waiting now for (ms): "+millisToWaitBetweenTwoApiCalls);
         try {
             Thread.sleep(millisToWaitBetweenTwoApiCalls);
@@ -368,6 +495,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
 
     private final TwitterProperties twitterProperties;
 
+    private final FrontendProperties frontendProperties;
+
     private Twitter getTwitterProxy() {
         String consumerKey =  environment.getProperty("TWITTER_CONSUMER_KEY");
         String consumerSecret =   environment.getProperty("TWITTER_CONSUMER_SECRET");
@@ -380,7 +509,8 @@ public class TwitterApiServiceImpl implements TwitterApiService {
     private String MSG = "Remote API Call ";
 
     @Autowired
-    public TwitterApiServiceImpl(TwitterProperties twitterProperties) {
+    public TwitterApiServiceImpl(TwitterProperties twitterProperties, FrontendProperties frontendProperties) {
         this.twitterProperties = twitterProperties;
+        this.frontendProperties = frontendProperties;
     }
 }

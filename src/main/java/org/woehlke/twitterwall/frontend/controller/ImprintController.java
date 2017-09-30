@@ -21,14 +21,14 @@ public class ImprintController {
 
     @RequestMapping("/imprint")
     public String imprint(Model model) {
-        log.info("-----------------------------------------");
+        log.debug("-----------------------------------------");
         String symbol = Symbols.IMPRINT.toString();
         String title = "Imprint";
         String subtitle = frontendProperties.getImprintSubtitle();
         model = contentFactory.setupPage(model, title, subtitle, symbol);
         User user = taskStart.createImprintUser();
         model.addAttribute("user", user);
-        log.info("-----------------------------------------");
+        log.debug("-----------------------------------------");
         return "imprint/imprint";
     }
 

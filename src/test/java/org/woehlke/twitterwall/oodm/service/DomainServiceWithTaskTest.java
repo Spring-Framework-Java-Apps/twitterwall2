@@ -3,10 +3,10 @@ package org.woehlke.twitterwall.oodm.service;
 
 public interface DomainServiceWithTaskTest {
 
-    void store() throws Exception;
+    void test100store() throws Exception;
 
-    void create() throws Exception;
+    void test101create() throws Exception;
 
-    void update() throws Exception;
+    void test102update() throws Exception;
 
 }

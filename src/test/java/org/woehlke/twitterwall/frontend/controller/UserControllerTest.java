@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserControllerTest.class);
@@ -65,14 +68,14 @@ public class UserControllerTest {
 
     @Commit
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @Commit
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -82,9 +85,12 @@ public class UserControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getAllTest() throws Exception {
-        String msg = "getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/all"))
+    public void test003getAllTest() throws Exception {
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/all"))
             .andExpect(model().attributeExists("users"))
@@ -93,11 +99,11 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
@@ -114,10 +120,13 @@ public class UserControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getUserForIdTest() throws Exception {
-        String msg = "getUserForIdTest: ";
+    public void test004getUserForIdTest() throws Exception {
+        String msg ="test004getUserForIdTest: ";
+        log.debug(msg+"------------------------------------");
         User user = findOneUser();
-        MvcResult result = this.mockMvc.perform(get("/user/"+user.getId()))
+        String url = "/user/"+user.getId();
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/id"))
                 .andExpect(model().attributeExists("user"))
@@ -127,11 +136,11 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
 
     }
@@ -139,10 +148,13 @@ public class UserControllerTest {
     @WithAnonymousUser
     @Commit
     @Test
-    public void getUserForScreeNameTest() throws Exception {
-        String msg = "getUserForScreeNameTest: ";
+    public void test005getUserForScreeNameTest() throws Exception {
+        String msg ="test005getUserForScreeNameTest: ";
+        log.debug(msg+"------------------------------------");
         User user = findOneUser();
-        MvcResult result = this.mockMvc.perform(get("/user/screenName/"+ user.getScreenName()))
+        String url = "/user/screenName/"+ user.getScreenName();
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/id"))
             .andExpect(model().attributeExists("user"))
@@ -152,20 +164,23 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithAnonymousUser
     @Commit
     @Test
-    public void getTweetingUsersTest() throws Exception {
-        String msg = "getTweetingUsersTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/tweets"))
+    public void test006getTweetingUsersTest() throws Exception {
+        String msg ="test006getTweetingUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/tweets";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/allWithTweets"))
             .andExpect(model().attributeExists("users"))
@@ -174,20 +189,23 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getNotYetFriendUsersTest() throws Exception {
-        String msg = "getNotYetFriendUsersTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetfriends"))
+    public void test007getNotYetFriendUsersTest() throws Exception {
+        String msg ="test007getNotYetFriendUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetfriends";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/friendsNotYet"))
             .andExpect(model().attributeExists("users"))
@@ -196,21 +214,24 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getFriendUsersTest() throws Exception {
-        String msg = "getFriendUsersTest: ";
+    public void test008getFriendUsersTest() throws Exception {
+        String msg ="test008getFriendUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/friends";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/friends"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/friends"))
                 .andExpect(model().attributeExists("users"))
@@ -219,11 +240,11 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
 
     }
@@ -231,10 +252,13 @@ public class UserControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getFollowerTest() throws Exception {
-        String msg = "getFollowerTest: ";
+    public void test009getFollowerTest() throws Exception {
+        String msg ="test009getFollowerTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/follower";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/follower"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/follower"))
                 .andExpect(model().attributeExists("users"))
@@ -243,11 +267,11 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
 
     }
@@ -255,10 +279,13 @@ public class UserControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getNotYetFollowerTest() throws Exception {
-        String msg = "getNotYetFollowerTest: ";
+    public void test010getNotYetFollowerTest() throws Exception {
+        String msg ="test010getNotYetFollowerTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetfollower";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetfollower"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/followerNotYet"))
                 .andExpect(model().attributeExists("users"))
@@ -267,20 +294,23 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getOnListTest() throws Exception {
-        String msg = "getOnListTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/onlist"))
+    public void test011getOnListTest() throws Exception {
+        String msg ="test011getOnListTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/onlist";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/onlist"))
                 .andExpect(model().attributeExists("users"))
@@ -289,20 +319,23 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getNotYetOnListTest() throws Exception {
-        String msg = "getNotYetOnListTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetonlist"))
+    public void test012getNotYetOnListTest() throws Exception {
+        String msg ="test012getNotYetOnListTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetonlist";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/onlistNotYet"))
             .andExpect(model().attributeExists("users"))
@@ -311,11 +344,11 @@ public class UserControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 

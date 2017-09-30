@@ -1,13 +1,16 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MediaTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
         Task createdBy=null;
@@ -32,7 +35,7 @@ public class MediaTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
         Task createdBy=null;

@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.model;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.regex.Pattern;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserDescriptionTest {
 
     @Autowired
@@ -32,7 +35,7 @@ public class UserDescriptionTest {
     private static final Logger log = LoggerFactory.getLogger(UserDescriptionTest.class);
 
     @Test
-    public void printDescriptionsTest(){
+    public void test001printDescriptionsTest(){
 
         String descriptionTask = "Just another Task";
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -47,24 +50,24 @@ public class UserDescriptionTest {
 
         List<String> descriptions = testdataProperties.getOodm().getEntities().getUser().getDescriptions();
 
-        log.info("printDescriptionsTest");
-        log.info("++++++++++++++++++++");
-        log.info("found "+descriptions.size()+" descriptions");
+        log.debug("printDescriptionsTest");
+        log.debug("++++++++++++++++++++");
+        log.debug("found "+descriptions.size()+" descriptions");
         for(String description:descriptions){
-            log.info("--------------------");
+            log.debug("--------------------");
             lfdNr++;
-            log.info("description "+lfdNr+": "+description);
+            log.debug("description "+lfdNr+": "+description);
             for(HashTag hashTag:this.getHashTags(description,task)){
-                log.info("found hashTag: "+hashTag.getUniqueId());
+                log.debug("found hashTag: "+hashTag.getUniqueId());
             }
             for(Url url:this.getUrls(description,task)){
-                log.info("found url: "+ url.getUniqueId());
+                log.debug("found url: "+ url.getUniqueId());
             }
             for(Mention mention:this.getMentions(description,task)){
-                log.info("found mention: "+mention.getUniqueId());
+                log.debug("found mention: "+mention.getUniqueId());
             }
         }
-        log.info("++++++++++++++++++++");
+        log.debug("++++++++++++++++++++");
     }
 
     private List<HashTag> getHashTags(String description,Task task){

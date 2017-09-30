@@ -102,13 +102,13 @@ public class TaskController {
     ) {
         Pageable pageRequest = new PageRequest(page, frontendProperties.getPageSize());
         String msg = "getOnListRenew: ";
-        log.info(msg+"START startTask.fetchUsersFromList");
+        log.debug(msg+"START startTask.fetchUsersFromList");
         Task task = mqTaskStartFireAndForget.fetchUsersFromList();
         model.addAttribute("task",task);
-        log.info(msg+"DONE startTask.fetchUsersFromList: ");
-        log.info(msg+"START userService.findOnList(): ");
+        log.debug(msg+"DONE startTask.fetchUsersFromList: ");
+        log.debug(msg+"START userService.findOnList(): ");
         Page<User> usersOnList = userService.getOnList(pageRequest);
-        log.info(msg+"DONE userService.findOnList(): ");
+        log.debug(msg+"DONE userService.findOnList(): ");
         model.addAttribute("users", usersOnList);
         String symbol = Symbols.LEAF.toString();
         String title = "Renew List of Users On List";
@@ -268,7 +268,9 @@ public class TaskController {
         String symbol = Symbols.TASK.toString();
         model = contentFactory.setupPage(model,title,subtitle,symbol);
         List<Task> listOfTasks = new ArrayList<>();
-        Task task1 = mqTaskStartFireAndForget.getLists();
+        //Task task1 = mqTaskStartFireAndForget.getLists();
+        //listOfTasks.add(task1);
+        Task task1 = mqTaskStartFireAndForget.startFetchListsForUsers();
         listOfTasks.add(task1);
         Task task2 = mqTaskStartFireAndForget.fetchUserlistOwners();
         listOfTasks.add(task2);

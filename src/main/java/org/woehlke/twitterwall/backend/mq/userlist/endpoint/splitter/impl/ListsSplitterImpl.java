@@ -6,6 +6,8 @@ import org.springframework.social.twitter.api.UserList;
 import org.springframework.stereotype.Component;
 import org.woehlke.twitterwall.oodm.model.Task;
 import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
+import org.woehlke.twitterwall.oodm.model.parts.User2UserList;
+import org.woehlke.twitterwall.oodm.model.parts.UserListType;
 import org.woehlke.twitterwall.oodm.service.CountedEntitiesService;
 import org.woehlke.twitterwall.oodm.service.TaskService;
 import org.woehlke.twitterwall.backend.mq.userlist.endpoint.splitter.ListsSplitter;
@@ -44,12 +46,35 @@ public class ListsSplitterImpl implements ListsSplitter {
         long id = msgIn.getTaskId();
         Task task = taskService.findById(id);
         task =  taskService.start(task,countedEntities);
-        List<UserList> fetchedUserList = twitterApiService.getLists();
-        int loopId = 0;
-        int loopAll = fetchedUserList.size();
-        for (UserList userList: fetchedUserList) {
-            loopId++;
-            Message<UserListMessage> mqMessageOut = userListMessageBuilder.buildUserListMessage(incomingTaskMessage,userList,loopId,loopAll);
+        User2UserList fetchedUserList = twitterApiService.getLists();
+        for (UserList userList: fetchedUserList.getOwnLists()) {
+            UserListType type = UserListType.USERS_OWN_LIST;
+            Message<UserListMessage> mqMessageOut = userListMessageBuilder.buildUserListMessageFromTask(
+                    incomingTaskMessage,
+                    userList,
+                    fetchedUserList.getIdTwitterOfListOwningUser(),
+                    type
+            );
+            messageListOut.add(mqMessageOut);
+        }
+        for (UserList userList: fetchedUserList.getUserListSubcriptions()) {
+            UserListType type = UserListType.USER_IS_SUBSCRIBER;
+            Message<UserListMessage> mqMessageOut = userListMessageBuilder.buildUserListMessageFromTask(
+                    incomingTaskMessage,
+                    userList,
+                    fetchedUserList.getIdTwitterOfListOwningUser(),
+                    type
+            );
+            messageListOut.add(mqMessageOut);
+        }
+        for (UserList userList: fetchedUserList.getUserListMemberships()) {
+            UserListType type = UserListType.USER_IS_MEMBER;
+            Message<UserListMessage> mqMessageOut = userListMessageBuilder.buildUserListMessageFromTask(
+                    incomingTaskMessage,
+                    userList,
+                    fetchedUserList.getIdTwitterOfListOwningUser(),
+                    type
+            );
             messageListOut.add(mqMessageOut);
         }
         return messageListOut;

@@ -60,7 +60,7 @@ public class MentionFinisherImpl implements MentionFinisher {
         Task task = taskService.findById(taskId);
         String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by FIRE_AND_FORGET_SENDER";
         taskService.done(msgDone,task,countedEntities);
-        log.info(msgDone);
+        log.debug(msgDone);
     }
 
     private final TaskService taskService;

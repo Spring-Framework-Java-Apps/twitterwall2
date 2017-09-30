@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MediaControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(MediaControllerTest.class);
@@ -49,14 +52,14 @@ public class MediaControllerTest {
 
     @Commit
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @Commit
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -66,9 +69,12 @@ public class MediaControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getAllTest() throws Exception {
-        String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/media/all"))
+    public void test003getAllTest() throws Exception {
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/media/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("media/all"))
                 .andExpect(model().attributeExists("myPageContent"))
@@ -77,23 +83,26 @@ public class MediaControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @Commit
     @WithMockUser
     @Test
-    public void getMediaById() throws Exception {
-        String msg ="getMediaById: ";
+    public void test004getMediaById() throws Exception {
+        String msg ="test004getMediaById: ";
+        log.debug(msg+"------------------------------------");
         Media oneMedia = findOneMedia();
         if(oneMedia != null) {
             long id = oneMedia.getId();
-            MvcResult result = this.mockMvc.perform(get("/media/" + id))
+            String url = "/media/" + id;
+            log.info(msg+url);
+            MvcResult result = this.mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andExpect(view().name("media/id"))
                     .andExpect(model().attributeExists("users"))
@@ -104,11 +113,11 @@ public class MediaControllerTest {
 
             String content = result.getResponse().getContentAsString();
 
-            log.info(msg + "#######################################");
-            log.info(msg + "#######################################");
-            log.info(msg + content);
-            log.info(msg + "#######################################");
-            log.info(msg + "#######################################");
+            log.debug(msg + "#######################################");
+            log.debug(msg + "#######################################");
+            log.debug(msg + content);
+            log.debug(msg + "#######################################");
+            log.debug(msg + "#######################################");
             Assert.assertTrue(true);
         }
     }

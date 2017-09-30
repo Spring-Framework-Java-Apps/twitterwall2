@@ -156,7 +156,7 @@ public class TaskStartFireAndForgetImpl implements TaskStartFireAndForget {
     private Task send(TaskType taskType){
         TaskSendType taskSendType = TaskSendType.FIRE_AND_FORGET;
         String msg = "START Task "+taskType+" via MQ by "+ taskSendType;
-        log.info(msg);
+        log.debug(msg);
         CountedEntities countedEntities = countedEntitiesService.countAll();
         Task task = taskService.create(msg, taskType, taskSendType, countedEntities);
 

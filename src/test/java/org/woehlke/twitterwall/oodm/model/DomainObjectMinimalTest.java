@@ -2,7 +2,7 @@ package org.woehlke.twitterwall.oodm.model;
 
 public interface DomainObjectMinimalTest {
 
-    void getUniqueIdTest() throws Exception;
+    void test001getUniqueIdTest() throws Exception;
 
-    void isValidTest() throws Exception;
+    void test002isValidTest() throws Exception;
 }

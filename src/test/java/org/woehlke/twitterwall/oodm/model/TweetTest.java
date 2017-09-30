@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
@@ -10,13 +12,14 @@ import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 import java.util.Date;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TweetTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(TweetTest.class);
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String descriptionTask = "start: ";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -39,7 +42,7 @@ public class TweetTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
         String descriptionTask = "start: ";

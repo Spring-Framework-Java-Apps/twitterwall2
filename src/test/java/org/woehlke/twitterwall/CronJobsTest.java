@@ -1,85 +1,88 @@
 package org.woehlke.twitterwall;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CronJobsTest {
 
     @Autowired
     private CronJobs cronJobs;
 
     @Test
-    public void createImprintUserAsync() throws Exception {
+    public void test001createImprintUserAsync() throws Exception {
         cronJobs.createImprintUserAsync();
     }
 
     @Test
-    public void fetchTweetsFromTwitterSearch() throws Exception {
+    public void test002fetchTweetsFromTwitterSearch() throws Exception {
         cronJobs.fetchTweetsFromTwitterSearch();
     }
 
     @Test
-    public void updateTweets() throws Exception {
+    public void test003updateTweets() throws Exception {
         cronJobs.updateTweets();
     }
 
     @Test
-    public void updateUserProfiles() throws Exception {
+    public void test004updateUserProfiles() throws Exception {
         cronJobs.updateUserProfiles();
     }
 
     @Test
-    public void updateUserProfilesFromMentions() throws Exception {
+    public void test005updateUserProfilesFromMentions() throws Exception {
         cronJobs.updateUserProfilesFromMentions();
     }
 
     @Test
-    public void fetchUsersFromDefinedUserList() throws Exception {
+    public void test006fetchUsersFromDefinedUserList() throws Exception {
         cronJobs.fetchUsersFromDefinedUserList();
     }
 
     @Test
-    public void removeOldDataFromStorage() throws Exception {
+    public void test007removeOldDataFromStorage() throws Exception {
         cronJobs.removeOldDataFromStorage();
     }
 
     @Test
-    public void fetchFollower() throws Exception {
+    public void test008fetchFollower() throws Exception {
         cronJobs.fetchFollower();
     }
 
     @Test
-    public void getHomeTimeline() throws Exception {
+    public void test009getHomeTimeline() throws Exception {
         cronJobs.getHomeTimeline();
     }
 
     @Test
-    public void getUserTimeline() throws Exception {
+    public void test010getUserTimeline() throws Exception {
         cronJobs.getUserTimeline();
     }
 
     @Test
-    public void getMentions() throws Exception {
+    public void test011getMentions() throws Exception {
         cronJobs.getMentions();
     }
 
     @Test
-    public void getFavorites() throws Exception {
+    public void test012getFavorites() throws Exception {
         cronJobs.getFavorites();
     }
 
     @Test
-    public void getRetweetsOfMe() throws Exception {
+    public void test013getRetweetsOfMe() throws Exception {
         cronJobs.getRetweetsOfMe();
     }
 
     @Test
-    public void getLists() throws Exception {
+    public void test014getLists() throws Exception {
         cronJobs.getLists();
     }
 }

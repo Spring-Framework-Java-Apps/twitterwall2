@@ -8,13 +8,16 @@ import org.woehlke.twitterwall.oodm.model.common.DomainObjectWithScreenName;
 import org.woehlke.twitterwall.oodm.model.common.DomainObjectWithTask;
 import org.woehlke.twitterwall.oodm.model.entities.Entities;
 import org.woehlke.twitterwall.oodm.model.listener.UserListener;
+import org.woehlke.twitterwall.oodm.model.parts.User2UserList;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 /**
  * Created by tw on 10.06.17.
@@ -106,6 +109,10 @@ import java.util.regex.Pattern;
     @NamedQuery(
         name="User.getUsersForTickerSymbol",
         query="select t from User t join t.entities.tickerSymbols tickerSymbol where tickerSymbol=:tickerSymbol"
+    ),
+    @NamedQuery(
+        name="User.getIdTwitterOfAllUsers",
+        query = "select t.idTwitter from User t "
     )
 })
 @NamedNativeQueries({
@@ -290,6 +297,35 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
         )
     })
     private Entities entities = new Entities();
+
+    @NotNull
+    @OneToMany(
+        orphanRemoval = true,
+        mappedBy ="listOwner",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
+    )
+    private Set<UserList> ownLists = new HashSet<>();
+
+    @NotNull
+    @JoinTable(
+        name = "userlist_subcriber"
+    )
+    @ManyToMany(
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
+    )
+    private Set<UserList> userListSubcriptions = new HashSet<>();
+
+    @NotNull
+    @JoinTable(
+        name = "userlist_members"
+    )
+    @ManyToMany(
+        fetch = FetchType.EAGER,
+        cascade= CascadeType.ALL
+    )
+    private Set<UserList> userListMemberships = new HashSet<>();
 
     public User(Task createdBy, Task updatedBy, long idTwitter, String screenName, String name, String url, String profileImageUrl, String description, String location, Date createdDate) {
         super(createdBy,updatedBy);
@@ -771,6 +807,30 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
 
     public void setEntities(Entities entities) {
         this.entities = entities;
+    }
+
+    public Set<UserList> getOwnLists() {
+        return ownLists;
+    }
+
+    public void setOwnLists(Set<UserList> ownLists) {
+        this.ownLists = ownLists;
+    }
+
+    public Set<UserList> getUserListSubcriptions() {
+        return userListSubcriptions;
+    }
+
+    public void setUserListSubcriptions(Set<UserList> userListSubcriptions) {
+        this.userListSubcriptions = userListSubcriptions;
+    }
+
+    public Set<UserList> getUserListMemberships() {
+        return userListMemberships;
+    }
+
+    public void setUserListMemberships(Set<UserList> userListMemberships) {
+        this.userListMemberships = userListMemberships;
     }
 
     @Override

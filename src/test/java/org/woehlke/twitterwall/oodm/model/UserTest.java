@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;
@@ -14,15 +16,16 @@ import java.util.Date;
 /**
  * Created by tw on 22.06.17.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserTest implements DomainObjectMinimalTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserTest.class);
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
 
         String screenName = "port80guru";
 
@@ -39,7 +42,7 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String mygUniqueId1 = user1.getIdTwitter().toString()+"_"+user1.getScreenNameUnique();
 
-        log.info(msg+" Expected: "+mygUniqueId1+" == Found: "+user1.getUniqueId());
+        log.debug(msg+" Expected: "+mygUniqueId1+" == Found: "+user1.getUniqueId());
 
         Assert.assertEquals(msg,mygUniqueId1,user1.getUniqueId());
 
@@ -54,18 +57,18 @@ public class UserTest implements DomainObjectMinimalTest {
 
         String mygUniqueId2 = Long.toString(idTwitter)+"_"+user2.getScreenNameUnique();
 
-        log.info(msg+" Expected: "+mygUniqueId2+" == Found: "+user2.getUniqueId());
+        log.debug(msg+" Expected: "+mygUniqueId2+" == Found: "+user2.getUniqueId());
 
         Assert.assertEquals(msg,mygUniqueId2,user2.getUniqueId());
 
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
     }
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
 
         String invalidScreenName = "3765726öäöäß%$dsffsdf";
         Long idTwitter1 = null;
@@ -96,6 +99,6 @@ public class UserTest implements DomainObjectMinimalTest {
         user.setScreenName(invalidScreenName);
         Assert.assertFalse(msg,user.isValid());
 
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
     }
 }

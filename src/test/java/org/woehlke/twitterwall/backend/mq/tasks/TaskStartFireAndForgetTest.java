@@ -2,35 +2,35 @@ package org.woehlke.twitterwall.backend.mq.tasks;
 
 
 /**
- * @see StartTaskAsynchron
+ * @see TaskStartFireAndForget
  */
 public interface TaskStartFireAndForgetTest {
 
-    void updateTweetsTest() throws Exception;
+    void test010updateTweetsTest() throws Exception;
 
-    void updateUsersTest() throws Exception;
+    void test011updateUsersTest() throws Exception;
 
-    void updateUsersFromMentionsTest() throws Exception;
+    void test012updateUsersFromMentionsTest() throws Exception;
 
-    void fetchTweetsFromSearchTest() throws Exception;
+    void test013fetchTweetsFromSearchTest() throws Exception;
 
-    void fetchUsersFromListTest() throws Exception;
+    void test014fetchUsersFromListTest() throws Exception;
 
-    void fetchFollowerTest() throws Exception;
+    void test015fetchFollowerTest() throws Exception;
 
-    void fetchFriendsTest() throws Exception;
+    void test016fetchFriendsTest() throws Exception;
 
-    void removeOldDataFromStorageTest() throws Exception;
+    void test017removeOldDataFromStorageTest() throws Exception;
 
-    void getHomeTimeline() throws Exception;
+    void test018getHomeTimeline() throws Exception;
 
-    void getUserTimeline() throws Exception;
+    void test019getUserTimeline() throws Exception;
 
-    void getMentions() throws Exception;
+    void test020getMentions() throws Exception;
 
-    void getFavorites() throws Exception;
+    void test021getFavorites() throws Exception;
 
-    void getRetweetsOfMe() throws Exception;
+    void test022getRetweetsOfMe() throws Exception;
 
-    void getLists() throws Exception;
+    void test023getLists() throws Exception;
 }

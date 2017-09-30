@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest ,DomainServiceWithIdTwitterTest{
 
     private static final Logger log = LoggerFactory.getLogger(TweetServiceTest.class);
@@ -49,16 +52,16 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
     private TestdataProperties testdataProperties;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(tweetService);
         Assert.assertNotNull(testdataProperties);
     }
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
-        log.info(msg+"START TEST");
+        log.debug(msg+"START TEST");
         int page=1;
         int size=20;
         Pageable pageRequest = new PageRequest(page,size);
@@ -67,17 +70,17 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
             for(Tweet myTweet :myPage.getContent()){
                 Assert.assertNotNull(msg,myTweet);
                 Assert.assertNotNull(msg,myTweet.getUniqueId());
-                log.info(msg+" found: "+myTweet.getUniqueId());
+                log.debug(msg+" found: "+myTweet.getUniqueId());
             }
         } else {
-            log.info(msg+" found: myPage.getTotalElements() == 0");
+            log.debug(msg+" found: myPage.getTotalElements() == 0");
         }
-        log.info(msg+"FINISHED TEST");
+        log.debug(msg+"FINISHED TEST");
     }
 
     @Commit
     @Test
-    public void findByIdTwitter() throws Exception {
+    public void test020findByIdTwitter() throws Exception {
         String msg = "findByIdTwitter: ";
         int page=1;
         int size=20;
@@ -90,7 +93,7 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 if(myFoundTweet != null) {
                     long foundIdTwitter = myFoundTweet.getIdTwitter();
                     Assert.assertEquals(msg, expectedIdTwitter, foundIdTwitter);
-                    log.info(msg + " found: " + myFoundTweet.getUniqueId());
+                    log.debug(msg + " found: " + myFoundTweet.getUniqueId());
                 }
             }
         } else {
@@ -100,7 +103,7 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
 
     @Commit
     @Test
-    public void findTweetsForHashTag() throws Exception {
+    public void test030findTweetsForHashTag() throws Exception {
         String msg = "findTweetsForHashTag: ";
         int page=1;
         int size=10;
@@ -114,12 +117,12 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found HashTag: "+hashTag.getUniqueId());
             }
         }
-        log.info(msg);
+        log.debug(msg);
     }
 
     @Commit
     @Test
-    public void findTweetsForMedia() throws Exception {
+    public void test031findTweetsForMedia() throws Exception {
         String msg = "findTweetsForMedia: ";
         int page=1;
         int size=10;
@@ -133,12 +136,12 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Media: "+media.getUniqueId());
             }
         }
-        log.info(msg);
+        log.debug(msg);
     }
 
     @Commit
     @Test
-    public void findTweetsForMention() throws Exception {
+    public void test032findTweetsForMention() throws Exception {
         String msg = "findTweetsForMention: ";
         int page=1;
         int size=10;
@@ -152,12 +155,12 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Mention: "+mention.getUniqueId());
             }
         }
-        log.info(msg);
+        log.debug(msg);
     }
 
     @Commit
     @Test
-    public void findTweetsForUrl() throws Exception {
+    public void test033findTweetsForUrl() throws Exception {
         String msg = "findTweetsForUrl: ";
         int page=1;
         int size=10;
@@ -171,12 +174,12 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found Url: "+url.getUniqueId());
             }
         }
-        log.info(msg);
+        log.debug(msg);
     }
 
     @Commit
     @Test
-    public void findTweetsForTickerSymbol() throws Exception {
+    public void test034findTweetsForTickerSymbol() throws Exception {
         String msg = "findTweetsForTickerSymbol: ";
         int page=1;
         int size=10;
@@ -190,17 +193,17 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 log.debug(msg+" found Tweet: "+tweet.getUniqueId()+" found TickerSymbol: "+tickerSymbol.getUniqueId());
             }
         }
-        log.info(msg);
+        log.debug(msg);
     }
 
     @Commit
     @Test
-    public void findTweetsForUser() throws Exception {
+    public void test035findTweetsForUser() throws Exception {
         String msg = "findTweetsForUser: ";
         int page=1;
         int size=100;
         Pageable pageRequest = new PageRequest(page,size);
-        log.info(msg + "STARTED TEST");
+        log.debug(msg + "STARTED TEST");
         Page<User> foundTweetingUsers = userService.getTweetingUsers(pageRequest);
         long loopUser = 0L;
         long loopTweet = 0L;
@@ -213,16 +216,16 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 loopTweet++;
                 Assert.assertNotNull(msg,tweet.getUser());
                 Assert.assertEquals(msg,tweet.getUser().getUniqueId(), user.getUniqueId());
-                log.info(msg+" tweet: "+tweet.getUniqueId()+" user: "+tweet.getUser().getUniqueId());
+                log.debug(msg+" tweet: "+tweet.getUniqueId()+" user: "+tweet.getUser().getUniqueId());
             }
-            log.info(msg+" RUNNING TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
+            log.debug(msg+" RUNNING TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
         }
-        log.info(msg+" FINISHED TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
+        log.debug(msg+" FINISHED TEST. Tested Users "+loopUser+" and Tweets "+loopTweet);
     }
 
     @Commit
     @Test
-    public void findAllTweet2HashTag() throws Exception {
+    public void test036findAllTweet2HashTag() throws Exception {
         String msg = "findAllTweet2HashTag: ";
         int page=1;
         int size=10;
@@ -241,14 +244,14 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getHashTags().contains(foundEntity));
-                log.info(msg+" tweet: "+foundObject.getUniqueId()+" HashTag: "+foundEntity.getUniqueId());
+                log.debug(msg+" tweet: "+foundObject.getUniqueId()+" HashTag: "+foundEntity.getUniqueId());
             }
         }
     }
 
     @Commit
     @Test
-    public void findAllTweet2Media() throws Exception {
+    public void test037findAllTweet2Media() throws Exception {
         String msg = "findAllTweet2Media: ";
         int page=1;
         int size=10;
@@ -268,13 +271,13 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
             Set<Media> media = foundObject.getEntities().getMedia();
             Assert.assertTrue(msg,media.size()>0);
             Assert.assertTrue(msg,media.contains(foundEntity));
-            log.info(msg+" tweet: "+foundObject.getUniqueId()+" Media: "+foundEntity.getUniqueId());
+            log.debug(msg+" tweet: "+foundObject.getUniqueId()+" Media: "+foundEntity.getUniqueId());
         }
     }
 
     @Commit
     @Test
-    public void findAllTweet2Mention() throws Exception {
+    public void test038findAllTweet2Mention() throws Exception {
         String msg = "findAllTweet2Mention: ";
         int page=1;
         int size=20;
@@ -295,14 +298,14 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 Set<Mention> mentions = foundObject.getEntities().getMentions();
                 Assert.assertTrue(msg,mentions.size() >0);
                 Assert.assertTrue(msg,mentions.contains(foundEntity));
-                log.info(msg+" tweet: "+foundObject.getUniqueId()+" Mention: "+foundEntity.getUniqueId());
+                log.debug(msg+" tweet: "+foundObject.getUniqueId()+" Mention: "+foundEntity.getUniqueId());
             }
         }
     }
 
     @Commit
     @Test
-    public void findAllTweet2Url() throws Exception {
+    public void test039findAllTweet2Url() throws Exception {
         String msg = "findAllTweet2Url: ";
         int page=1;
         int size=20;
@@ -322,13 +325,13 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
             Set<Url> urls = foundObject.getEntities().getUrls();
             Assert.assertTrue(msg,urls.size()>0);
             Assert.assertTrue(msg,urls.contains(foundEntity));
-            log.info(msg+" tweet: "+foundObject.getUniqueId()+" Url: "+foundEntity.getUniqueId());
+            log.debug(msg+" tweet: "+foundObject.getUniqueId()+" Url: "+foundEntity.getUniqueId());
         }
     }
 
     @Commit
     @Test
-    public void findAllTweet2TickerSymbol() throws Exception {
+    public void test040findAllTweet2TickerSymbol() throws Exception {
         String msg = "findAllTweet2TickerSymbol: ";
         int page=1;
         int size=10;
@@ -347,7 +350,7 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
                 Assert.assertNull(objectInfo);
                 Assert.assertNull(entityInfo);
                 Assert.assertTrue(msg,foundObject.getEntities().getTickerSymbols().contains(foundEntity));
-                log.info(msg+" tweet: "+foundObject.getUniqueId()+" TickerSymbol: "+foundEntity.getUniqueId());
+                log.debug(msg+" tweet: "+foundObject.getUniqueId()+" TickerSymbol: "+foundEntity.getUniqueId());
             }
         }
     }
@@ -355,49 +358,49 @@ public class TweetServiceTest implements DomainObjectMinimalServiceTest,DomainSe
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
+    public void test102update() throws Exception {
 
     }
 }

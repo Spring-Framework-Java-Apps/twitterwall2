@@ -51,7 +51,7 @@ public class UserFinisherImpl implements UserFinisher {
         Task task = taskService.findById(taskId);
         String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by FIRE_AND_FORGET_SENDER";
         taskService.done(msgDone,task,countedEntities);
-        log.info(msgDone);
+        log.debug(msgDone);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UserFinisherImpl implements UserFinisher {
         Task task = taskService.findById(taskId);
         String msgDone = "Sucessfully finished task "+task.getTaskType()+" via MQ by FIRE_AND_FORGET_SENDER";
         taskService.done(msgDone,task,countedEntities);
-        log.info(msgDone);
+        log.debug(msgDone);
     }
 
     @Autowired

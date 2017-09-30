@@ -9,6 +9,8 @@ import org.woehlke.twitterwall.oodm.model.*;
 import org.woehlke.twitterwall.oodm.repositories.common.DomainRepository;
 import org.woehlke.twitterwall.oodm.repositories.custom.UserRepositoryCustom;
 
+import java.util.List;
+
 /**
  * Created by tw on 15.07.17.
  */
@@ -86,4 +88,7 @@ public interface UserRepository extends DomainRepository<User>,UserRepositoryCus
 
     @Query(name="User.countAllUser2Url",nativeQuery=true)
     long countAllUser2Url();
+
+    @Query(name="User.getIdTwitterOfAllUsers")
+    List<Long> getIdTwitterOfAllUsers();
 }

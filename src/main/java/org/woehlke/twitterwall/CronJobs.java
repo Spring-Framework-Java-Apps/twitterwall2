@@ -21,7 +21,7 @@ public class CronJobs {
         String msg = "create Imprint User (Async) ";
         if(!schedulerProperties.getSkipFortesting()) {
             Task task = mqTaskStartFireAndForget.createImprintUserAsync();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -30,7 +30,7 @@ public class CronJobs {
         String msg = "fetch Tweets From TwitterSearch ";
         if((schedulerProperties.getAllowFetchTweetsFromTwitterSearch())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.fetchTweetsFromSearch();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -39,7 +39,7 @@ public class CronJobs {
         String msg = "fetch Users from Defined User List ";
         if((schedulerProperties.getFetchUsersFromDefinedUserListAllow()) && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.fetchUsersFromList();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -48,7 +48,7 @@ public class CronJobs {
         String msg = "get Home Timeline Tweets ";
         if((schedulerProperties.getAllowGetHomeTimeline())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getHomeTimeline();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -57,7 +57,7 @@ public class CronJobs {
         String msg = " get User Timeline Tweets ";
         if((schedulerProperties.getAllowGetUserTimeline())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getUserTimeline();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -66,7 +66,7 @@ public class CronJobs {
         String msg = " get Mentions ";
         if((schedulerProperties.getAllowGetMentions())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getMentions();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -75,7 +75,7 @@ public class CronJobs {
         String msg = " get Favorites ";
         if((schedulerProperties.getAllowGetFavorites())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getFavorites();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -84,7 +84,7 @@ public class CronJobs {
         String msg = " get Retweets Of Me ";
         if((schedulerProperties.getAllowGetRetweetsOfMe())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getRetweetsOfMe();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -93,9 +93,9 @@ public class CronJobs {
         String msg = " get Lists ";
         if((schedulerProperties.getAllowGetLists())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.getLists();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
             task = mqTaskStartFireAndForget.fetchUserlistOwners();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -104,7 +104,7 @@ public class CronJobs {
         String msg = "fetch Follower ";
         if((schedulerProperties.getFetchFollowerAllow())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.fetchFollower();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -113,7 +113,7 @@ public class CronJobs {
         String msg = "fetch Friends ";
         if((schedulerProperties.getFetchFriendsAllow()) && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.fetchFriends();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -122,7 +122,7 @@ public class CronJobs {
         String msg = "remove Old Data From Storage: ";
         if((schedulerProperties.getRemoveOldDataFromStorageAllow())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.removeOldDataFromStorage();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -131,7 +131,7 @@ public class CronJobs {
         String msg = "update User Profiles From Mentions";
         if((schedulerProperties.getAllowUpdateUserProfilesFromMention()) && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.updateUsersFromMentions();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -140,7 +140,7 @@ public class CronJobs {
         String msg = "update Tweets ";
         if((schedulerProperties.getAllowUpdateTweets()) && (!schedulerProperties.getSkipFortesting())){
             Task task = mqTaskStartFireAndForget.updateTweets();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -149,7 +149,7 @@ public class CronJobs {
         String msg = "update User Profiles ";
         if((schedulerProperties.getAllowUpdateUserProfiles())  && (!schedulerProperties.getSkipFortesting())) {
             Task task = mqTaskStartFireAndForget.updateUsers();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -158,7 +158,7 @@ public class CronJobs {
         String msg = "start UpdateUrls ";
         if(!schedulerProperties.getSkipFortesting()) {
             Task task = mqTaskStartFireAndForget.startUpdateUrls();
-            log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 
@@ -168,7 +168,7 @@ public class CronJobs {
         if(!schedulerProperties.getSkipFortesting()) {
             //TODO:
             //Task task = mqTaskStartFireAndForget.startGarbageCollection();
-            //log.info(msg+ "SCHEDULED: task "+task.getUniqueId());
+            //log.debug(msg+ "SCHEDULED: task "+task.getUniqueId());
         }
     }
 

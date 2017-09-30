@@ -24,9 +24,13 @@
 
     <int:chain id="chain.async.FetchLists" input-channel="channel.async.FetchLists">
         <int:splitter
-                id="splitter.async.FetchLists"
+                id="splitter.async.user.FetchLists"
                 ref="mqUserListsSplitter"
                 method="splitUserListMessage"  />
+        <int:splitter
+                id="splitter.async.userlist.FetchLists"
+                ref="mqFetchUserListsForUsers"
+                method="splitUserListMessage" />
         <int:service-activator
                 id="transform.async.FetchLists"
                 ref="mqUserListTransformator"
@@ -36,20 +40,32 @@
                 ref="mqUserListPersistor"
                 method="persistList" />
         <int:aggregator
-                id="aggregator.async.FetchLists"
+                id="aggregator.async.userlist.FetchLists"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="collect.async.FetchLists"
+                ref="mqUserListCollector"
+                method="collectList" />
+        <int:aggregator
+                id="aggregator.async.user.FetchLists"
                 message-store="myMessageStore"
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="finish.async.FetchLists"
-                ref="mqUserListsFinisher"
+                ref="mqUserFinisher"
                 method="finishAsnyc" />
     </int:chain>
 
     <int:chain id="chain.FetchLists" input-channel="channel.FetchLists">
         <int:splitter
-                id="splitter.FetchLists"
+                id="splitter.user.FetchLists"
                 ref="mqUserListsSplitter"
                 method="splitUserListMessage"  />
+        <int:splitter
+                id="splitter.userlist.FetchLists"
+                ref="mqFetchUserListsForUsers"
+                method="splitUserListMessage" />
         <int:service-activator
                 id="transform.FetchLists"
                 ref="mqUserListTransformator"
@@ -59,12 +75,20 @@
                 ref="mqUserListPersistor"
                 method="persistList" />
         <int:aggregator
-                id="aggregator.FetchLists"
+                id="aggregator.userlist.FetchLists"
+                message-store="myMessageStore"
+                release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
+        <int:service-activator
+                id="collect.FetchLists"
+                ref="mqUserListCollector"
+                method="collectList" />
+        <int:aggregator
+                id="aggregator.user.FetchLists"
                 message-store="myMessageStore"
                 release-strategy="releaserSimpleSequenceSizeReleaseStrategy" />
         <int:service-activator
                 id="finish.FetchLists"
-                ref="mqUserListsFinisher"
+                ref="mqUserFinisher"
                 method="finish" />
     </int:chain>
 
