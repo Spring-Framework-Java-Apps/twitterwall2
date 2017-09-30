@@ -12,9 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
@@ -104,10 +102,11 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
     }
 
     @ManyToOne(
-            fetch = FetchType.EAGER
+        fetch = FetchType.EAGER,
+        cascade =  { ALL }
     )
     @JoinColumn(
-            name="fk_user_owner"
+        name="fk_user_owner"
     )
     private User listOwner;
 
@@ -116,7 +115,7 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         name="userlist_members"
     )
     @ManyToMany(
-        cascade = { DETACH, REFRESH },
+        cascade = { ALL },
         fetch = EAGER
     )
     private Set<User> members = new LinkedHashSet<User>();
@@ -126,7 +125,7 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         name="userlist_subcriber"
     )
     @ManyToMany(
-        cascade = { DETACH, REFRESH },
+        cascade = { ALL },
         fetch = EAGER
     )
     private Set<User> subscriber = new LinkedHashSet<User>();

@@ -44,17 +44,18 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test001controllerIsPresentTest(){
-        String msg = "controllerIsPresentTest: ";
+        String msg = "test001controllerIsPresentTest: ";
         log.debug(msg+"------------------------------------");
-        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
+        assertThat(prepareDataTest).isNotNull();
+        assertThat(mockMvc).isNotNull();
         log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @Test
     public void test002setupTestData() throws Exception {
-        String msg = "setupTestData: ";
+        String msg = "test002setupTestData: ";
         log.debug(msg+"------------------------------------");
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -69,10 +70,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test003domainCountTest() throws Exception {
-        String msg ="domainCountTest: ";
+        String msg ="test003domainCountTest: ";
         log.debug(msg+"------------------------------------");
         String url = "/application/countedEntities/domain/count";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "application/domain/count"))
@@ -95,10 +96,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test004domainCountTweet2hashtag() throws Exception {
-        String msg ="domainCountTweet2hashtag: ";
+        String msg ="test004domainCountTweet2hashtag: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/tweet/hashtag";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
@@ -124,10 +125,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test005domainCountTweet2media() throws Exception {
-        String msg ="domainCountTweet2media: ";
+        String msg ="test005domainCountTweet2media: ";
         log.debug(msg+"------------------------------------");
         String url = URL_PATH+"/tweet/media";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
@@ -153,10 +154,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test006domainCountTweet2mention() throws Exception {
-        String msg ="domainCountTweet2mention: ";
+        String msg ="test006domainCountTweet2mention: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/tweet/mention";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
@@ -182,10 +183,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test007domainCountTweet2tickersymbol() throws Exception {
-        String msg ="domainCountTweet2tickersymbol: ";
+        String msg ="test007domainCountTweet2tickersymbol: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/tweet/tickersymbol";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
@@ -211,10 +212,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test008domainCountTweet2url() throws Exception {
-        String msg ="domainCountTweet2url: ";
+        String msg ="test008domainCountTweet2url: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/tweet/url";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
@@ -241,10 +242,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test009domainCountUserprofile2hashtag() throws Exception {
-        String msg ="domainCountUserprofile2hashtag: ";
+        String msg ="test009domainCountUserprofile2hashtag: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/user/hashtag";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
@@ -271,10 +272,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test010domainCountUserprofile2media() throws Exception {
-        String msg ="domainCountUserprofile2media: ";
+        String msg ="test010domainCountUserprofile2media: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/user/media";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
@@ -301,10 +302,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test011domainCountUserprofile2mention() throws Exception {
-        String msg ="domainCountUserprofile2mention: ";
+        String msg ="test011domainCountUserprofile2mention: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/user/mention";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
@@ -331,10 +332,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test012domainCountUserprofile2Tickersymbol() throws Exception {
-        String msg ="domainCountUserprofile2Tickersymbol: ";
+        String msg ="test012domainCountUserprofile2Tickersymbol: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/user/tickersymbol";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
@@ -361,10 +362,10 @@ public class CountedEntitiesControllerTest {
     @Commit
     @Test
     public void test013domainCountUserprofile2Url() throws Exception {
-        String msg ="domainCountUserprofile2Url: ";
+        String msg ="test013domainCountUserprofile2Url: ";
         log.debug(msg+"------------------------------------");
         String url =URL_PATH+"/user/url";
-        log.debug(msg+url);
+        log.info(msg+url);
 
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())

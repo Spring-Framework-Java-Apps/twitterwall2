@@ -86,8 +86,11 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test003getAllTest() throws Exception {
-        String msg = "getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/all"))
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/all"))
             .andExpect(model().attributeExists("users"))
@@ -118,9 +121,12 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test004getUserForIdTest() throws Exception {
-        String msg = "getUserForIdTest: ";
+        String msg ="test004getUserForIdTest: ";
+        log.debug(msg+"------------------------------------");
         User user = findOneUser();
-        MvcResult result = this.mockMvc.perform(get("/user/"+user.getId()))
+        String url = "/user/"+user.getId();
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/id"))
                 .andExpect(model().attributeExists("user"))
@@ -143,9 +149,12 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test005getUserForScreeNameTest() throws Exception {
-        String msg = "getUserForScreeNameTest: ";
+        String msg ="test005getUserForScreeNameTest: ";
+        log.debug(msg+"------------------------------------");
         User user = findOneUser();
-        MvcResult result = this.mockMvc.perform(get("/user/screenName/"+ user.getScreenName()))
+        String url = "/user/screenName/"+ user.getScreenName();
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/id"))
             .andExpect(model().attributeExists("user"))
@@ -167,8 +176,11 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test006getTweetingUsersTest() throws Exception {
-        String msg = "getTweetingUsersTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/tweets"))
+        String msg ="test006getTweetingUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/tweets";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/allWithTweets"))
             .andExpect(model().attributeExists("users"))
@@ -189,8 +201,11 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test007getNotYetFriendUsersTest() throws Exception {
-        String msg = "getNotYetFriendUsersTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetfriends"))
+        String msg ="test007getNotYetFriendUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetfriends";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/friendsNotYet"))
             .andExpect(model().attributeExists("users"))
@@ -211,9 +226,12 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test008getFriendUsersTest() throws Exception {
-        String msg = "getFriendUsersTest: ";
+        String msg ="test008getFriendUsersTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/friends";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/friends"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/friends"))
                 .andExpect(model().attributeExists("users"))
@@ -235,9 +253,12 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test009getFollowerTest() throws Exception {
-        String msg = "getFollowerTest: ";
+        String msg ="test009getFollowerTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/follower";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/follower"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/follower"))
                 .andExpect(model().attributeExists("users"))
@@ -259,9 +280,12 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test010getNotYetFollowerTest() throws Exception {
-        String msg = "getNotYetFollowerTest: ";
+        String msg ="test010getNotYetFollowerTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetfollower";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetfollower"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/followerNotYet"))
                 .andExpect(model().attributeExists("users"))
@@ -282,8 +306,11 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test011getOnListTest() throws Exception {
-        String msg = "getOnListTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/onlist"))
+        String msg ="test011getOnListTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/onlist";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/list/onlist"))
                 .andExpect(model().attributeExists("users"))
@@ -304,8 +331,11 @@ public class UserControllerTest {
     @Commit
     @Test
     public void test012getNotYetOnListTest() throws Exception {
-        String msg = "getNotYetOnListTest: ";
-        MvcResult result = this.mockMvc.perform(get("/user/list/notyetonlist"))
+        String msg ="test012getNotYetOnListTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/user/list/notyetonlist";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("user/list/onlistNotYet"))
             .andExpect(model().attributeExists("users"))

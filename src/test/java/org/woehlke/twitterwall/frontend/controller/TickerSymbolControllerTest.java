@@ -56,6 +56,7 @@ public class TickerSymbolControllerTest {
         assertThat(controller).isNotNull();
     }
 
+    @Commit
     @Test
     public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
@@ -68,9 +69,12 @@ public class TickerSymbolControllerTest {
     @WithMockUser
     @Test
     public void test003getAllTest() throws Exception {
-        String msg = "getAllTest: ";
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tickersymbol/all";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tickersymbol/all"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "tickersymbol/all"))
                 .andExpect(model().attributeExists("myPageContent"))
@@ -91,11 +95,14 @@ public class TickerSymbolControllerTest {
     @WithMockUser
     @Test
     public void test004getTickerSymbolById() throws Exception {
-        String msg ="getTickerSymbolById: ";
+        String msg ="test004getTickerSymbolById: ";
+        log.debug(msg+"------------------------------------");
         TickerSymbol oneTickerSymbol = findOneTickerSymbol();
         if(oneTickerSymbol != null) {
             long id = oneTickerSymbol.getId();
-            MvcResult result = this.mockMvc.perform(get("/tickersymbol/" + id))
+            String url = "/tickersymbol/" + id;
+            log.info(msg+url);
+            MvcResult result = this.mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andExpect(view().name("tickersymbol/id"))
                     .andExpect(model().attributeExists("users"))

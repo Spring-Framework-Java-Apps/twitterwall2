@@ -56,7 +56,7 @@ public class HashTagControllerTest {
 
     @Test
     public void test001controllerIsPresentTest(){
-        String msg = "controllerIsPresentTest ";
+        String msg = "test001controllerIsPresentTest ";
         log.debug(msg+"------------------------------------");
         assertThat(controller).isNotNull();
         assertThat(mockMvc).isNotNull();
@@ -68,7 +68,7 @@ public class HashTagControllerTest {
     @Commit
     @Test
     public void test002setupTestData(){
-        String msg = "setupTestData: ";
+        String msg = "test002setupTestData: ";
         log.debug(msg+"------------------------------------");
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -80,10 +80,10 @@ public class HashTagControllerTest {
     @WithMockUser
     @Test
     public void test003getAllTest() throws Exception {
-        String msg ="getAllTest: ";
+        String msg ="test003getAllTest: ";
         log.debug(msg+"------------------------------------");
         String url ="/hashtag/all";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/all"))
@@ -116,12 +116,12 @@ public class HashTagControllerTest {
     @WithAnonymousUser
     @Test
     public void test005findHashTagById() throws Exception {
-        String msg ="findHashTagById: ";
+        String msg ="test005findHashTagById: ";
         log.debug(msg+"------------------------------------");
         HashTag hashTag = test004findOneHashTag();
         long id  = hashTag.getId();
         String url ="/hashtag/"+id;
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/id"))
@@ -146,12 +146,12 @@ public class HashTagControllerTest {
     @WithAnonymousUser
     @Test
     public void test006hashTagFromTweetsAndUsersTest() throws Exception {
-        String msg ="hashTagFromTweetsAndUsersTest: ";
+        String msg ="test006hashTagFromTweetsAndUsersTest: ";
         log.debug(msg+"------------------------------------");
         HashTag hashTag = test004findOneHashTag();
         String hashtagText = hashTag.getText();
         String url ="/hashtag/text/"+hashtagText;
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hashtag/id"))
@@ -176,10 +176,10 @@ public class HashTagControllerTest {
     @WithAnonymousUser
     @Test
     public void test007hashTagsOverview()  throws Exception {
-        String msg ="hashTagsOverview: ";
+        String msg ="test007hashTagsOverview: ";
         log.debug(msg+"------------------------------------");
         String url ="/hashtag/overview";
-        log.debug(msg+url);
+        log.info(msg+url);
         MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("hashtag/overview"))

@@ -16,6 +16,7 @@
     <logger name="org.woehlke.twitterwall.backend.service.backend" level="INFO" />
     <logger name="org.woehlke.twitterwall.backend.service.facade" level="INFO" />
     <logger name="org.woehlke.twitterwall.backend.service.persist" level="INFO" />
+    <logger name="org.woehlke.twitterwall.backend.service.persist.impl" level="ERROR" />
     <logger name="org.woehlke.twitterwall.backend.service.transform" level="INFO" />
     <logger name="org.woehlke.twitterwall" level="WARN" />
     <logger name="org.apache.http" level="WARN" />

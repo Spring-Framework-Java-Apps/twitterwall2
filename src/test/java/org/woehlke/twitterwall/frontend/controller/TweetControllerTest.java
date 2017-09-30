@@ -75,9 +75,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test003getLatestTweetsTest() throws Exception {
-        String msg ="getLatestTweetsTest: ";
+        String msg ="test003getLatestTweetsTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/all";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/all"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -108,10 +111,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test004getTweetById() throws Exception {
-        String msg ="getLatestTweetsById: ";
+        String msg ="test003getLatestTweetsTest: ";
+        log.debug(msg+"------------------------------------");
         Tweet tweet = findOneTweet();
-
-        MvcResult result = this.mockMvc.perform(get("/tweet/"+tweet.getId()))
+        String url = "/tweet/"+tweet.getId();
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "tweet/id"))
                 .andExpect(model().attributeExists("tweet"))
@@ -132,9 +137,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test005getHomeTimeline() throws Exception {
-        String msg ="getHomeTimeline: ";
+        String msg ="test005getHomeTimeline: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/timeline/home";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/timeline/home"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -155,9 +163,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test006getUserTimeline() throws Exception {
-        String msg ="getUserTimeline: ";
+        String msg ="test006getUserTimeline: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/timeline/user";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/timeline/user"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -178,9 +189,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test007getMentions() throws Exception {
-        String msg ="getMentions: ";
+        String msg ="test007getMentions: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/mentions";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/mentions"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -201,9 +215,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test008getFavorites() throws Exception {
-        String msg ="getFavorites: ";
+        String msg ="test008getFavorites: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/favorites";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/favorites"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))
@@ -224,9 +241,12 @@ public class TweetControllerTest {
     @Commit
     @Test
     public void test009getRetweetsOfMe() throws Exception {
-        String msg ="getRetweetsOfMe: ";
+        String msg ="test009getRetweetsOfMe: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/tweet/retweets";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/tweet/retweets"))
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "tweet/all"))
             .andExpect(model().attributeExists("latestTweets"))

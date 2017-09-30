@@ -61,9 +61,12 @@ public class TaskHistoryControllerTest {
     @Commit
     @Test
     public void test003getAllTest() throws Exception {
-        String msg = "getAllTest: ";
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/taskhistory/all";
+        log.info(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get("/taskhistory/all"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "taskhistory/all"))
                 .andExpect(model().attributeExists("myPageContent"))

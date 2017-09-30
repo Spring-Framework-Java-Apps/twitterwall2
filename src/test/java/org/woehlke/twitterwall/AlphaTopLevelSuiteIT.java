@@ -10,6 +10,8 @@ import org.woehlke.twitterwall.oodm.model.*;
 import org.woehlke.twitterwall.oodm.service.*;
 
 @Suite.SuiteClasses({
+
+
         HashTagTest.class,
         MediaTest.class,
         MentionTest.class,
@@ -37,22 +39,27 @@ import org.woehlke.twitterwall.oodm.service.*;
         CountedEntitiesControllerTest.class,
         HashTagControllerTest.class,
         ImprintControllerTest.class,
+         /*
         LoginControllerTest.class,
+        */
         MediaControllerTest.class,
         MentionControllerTest.class,
+        /*
         TaskControllerTest.class,
         TaskHistoryControllerTest.class,
+        */
         TickerSymbolControllerTest.class,
         TweetControllerTest.class,
         UrlControllerTest.class,
         UserControllerTest.class,
         UserListControllerTest.class,
 
-
+ /*
         TwitterUrlServiceTest.class,
 
         TaskStartFireAndForgetTestImpl.class,
         TaskStartTestImpl.class,
+        */
 
         CronJobsTest.class
 })

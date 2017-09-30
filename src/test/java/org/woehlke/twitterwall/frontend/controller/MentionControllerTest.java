@@ -70,10 +70,13 @@ public class MentionControllerTest {
     @Commit
     @Test
     public void test003getAllTest() throws Exception {
-        String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/media/all"))
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/mention/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
-                .andExpect(view().name("media/all"))
+                .andExpect(view().name("mention/all"))
                 .andExpect(model().attributeExists("myPageContent"))
                 .andExpect(model().attributeExists("page"))
                 .andReturn();
@@ -92,11 +95,14 @@ public class MentionControllerTest {
     @WithMockUser
     @Test
     public void test004getMentionById() throws Exception {
-        String msg ="getMentionById: ";
+        String msg ="test004getMentionById: ";
+        log.debug(msg+"------------------------------------");
         Mention oneMention = findOneMention();
         if(oneMention != null) {
             long id = oneMention.getId();
-            MvcResult result = this.mockMvc.perform(get("/mention/" + id))
+            String url = "/mention/" + id;
+            log.info(msg+url);
+            MvcResult result = this.mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andExpect(view().name("mention/id"))
                     .andExpect(model().attributeExists("users"))

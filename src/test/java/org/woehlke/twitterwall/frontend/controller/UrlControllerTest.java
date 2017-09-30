@@ -71,8 +71,11 @@ public class UrlControllerTest {
     @Commit
     @Test
     public void test003getAllTest() throws Exception {
-        String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/url/all"))
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/url/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("url/all"))
                 .andExpect(model().attributeExists("myPageContent"))
@@ -93,11 +96,14 @@ public class UrlControllerTest {
     @WithMockUser
     @Test
     public void test004getUrlById() throws Exception {
-        String msg ="getUrlById: ";
+        String msg ="test004getUrlById: ";
+        log.debug(msg+"------------------------------------");
         Url oneUrl = findOneUrl();
         if(oneUrl != null) {
             long id = oneUrl.getId();
-            MvcResult result = this.mockMvc.perform(get("/url/" + id))
+            String url = "/url/" + id;
+            log.info(msg+url);
+            MvcResult result = this.mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andExpect(view().name("url/id"))
                     .andExpect(model().attributeExists("users"))

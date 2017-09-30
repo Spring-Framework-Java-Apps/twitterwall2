@@ -300,23 +300,30 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
 
     @NotNull
     @OneToMany(
-            orphanRemoval = true,
-            mappedBy="listOwner",
-            fetch = FetchType.EAGER
+        orphanRemoval = true,
+        mappedBy ="listOwner",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
     )
     private Set<UserList> ownLists = new HashSet<>();
 
     @NotNull
+    @JoinTable(
+        name = "userlist_subcriber"
+    )
     @ManyToMany(
-            mappedBy="subscriber",
-            fetch = FetchType.EAGER
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
     )
     private Set<UserList> userListSubcriptions = new HashSet<>();
 
     @NotNull
+    @JoinTable(
+        name = "userlist_members"
+    )
     @ManyToMany(
-            mappedBy = "members",
-            fetch = FetchType.EAGER
+        fetch = FetchType.EAGER,
+        cascade= CascadeType.ALL
     )
     private Set<UserList> userListMemberships = new HashSet<>();
 

@@ -46,6 +46,10 @@ public class LoginControllerTest {
     @WithAnonymousUser
     @Test
     public void test002login() throws Exception {
+        String msg ="test002login: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/login";
+        log.info(msg+url);
         boolean ok = true;
         assertThat(ok).isTrue();
     }

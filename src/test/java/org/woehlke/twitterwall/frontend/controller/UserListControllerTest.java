@@ -54,8 +54,11 @@ public class UserListControllerTest {
     @Commit
     @Test
     public void test002getAllTest() throws Exception {
-        String msg = "getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/userlist/all"))
+        String msg ="test002getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/userlist/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name("userlist/all"))
             .andExpect(model().attributeExists("myPageContent"))
@@ -77,6 +80,10 @@ public class UserListControllerTest {
     @Commit
     @Test
     public void test003getUserListForIdTest() throws Exception {
+        String msg ="test003getUserListForIdTest: ";
+        log.debug(msg+"------------------------------------");
+        //String url = "/userlist/all";
+        //log.info(msg+url);
         Assert.assertTrue(true);
     }
 

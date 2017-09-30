@@ -70,8 +70,11 @@ public class MediaControllerTest {
     @Commit
     @Test
     public void test003getAllTest() throws Exception {
-        String msg ="getAllTest: ";
-        MvcResult result = this.mockMvc.perform(get("/media/all"))
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/media/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name("media/all"))
                 .andExpect(model().attributeExists("myPageContent"))
@@ -92,11 +95,14 @@ public class MediaControllerTest {
     @WithMockUser
     @Test
     public void test004getMediaById() throws Exception {
-        String msg ="getMediaById: ";
+        String msg ="test004getMediaById: ";
+        log.debug(msg+"------------------------------------");
         Media oneMedia = findOneMedia();
         if(oneMedia != null) {
             long id = oneMedia.getId();
-            MvcResult result = this.mockMvc.perform(get("/media/" + id))
+            String url = "/media/" + id;
+            log.info(msg+url);
+            MvcResult result = this.mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andExpect(view().name("media/id"))
                     .andExpect(model().attributeExists("users"))

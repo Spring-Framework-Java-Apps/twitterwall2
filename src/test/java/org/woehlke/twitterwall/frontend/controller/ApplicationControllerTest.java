@@ -45,7 +45,7 @@ public class ApplicationControllerTest {
     @Commit
     @Test
     public void test001controllerIsPresentTest(){
-        String msg = "fetchTransientUrlsTest: ";
+        String msg = "test001controllerIsPresentTest: ";
         log.debug(msg+"------------------------------------");
         log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
@@ -57,7 +57,7 @@ public class ApplicationControllerTest {
     @Commit
     @Test
     public void test002setupTestData() throws Exception {
-        String msg = "setupTestData: ";
+        String msg = "test002setupTestData: ";
         log.debug(msg+"------------------------------------");
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -69,9 +69,11 @@ public class ApplicationControllerTest {
     @Commit
     @Test
     public void test003managementPageTest() throws Exception {
-        String msg ="managementPageTest: ";
+        String msg ="test003managementPageTest: ";
         log.debug(msg+"------------------------------------");
-        MvcResult result = this.mockMvc.perform(get("/application/management"))
+        String url = "/application/management";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "application/management"))
                 .andExpect(model().attributeExists("page"))

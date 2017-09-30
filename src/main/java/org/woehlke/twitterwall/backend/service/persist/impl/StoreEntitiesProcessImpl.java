@@ -36,6 +36,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
     public Entities updateEntitiesForUserProcess(User user, Task task) {
+        String msg = "updateEntitiesForUserProcess " + user.getUniqueId() + " : "+task.getUniqueId() + " : ";
         long userId = user.getId();
         long userIdTwitter = user.getIdTwitter();
         Set<Mention> newMentions = new HashSet<>();
@@ -43,8 +44,12 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         for (Mention mention : mentions) {
             mention.setIdTwitterOfUser(userIdTwitter);
             mention.setIdOfUser(userId);
-            mention = mentionService.store(mention, task);
-            newMentions.add(mention);
+            try {
+                mention = mentionService.store(mention, task);
+                newMentions.add(mention);
+            } catch (Exception e) {
+                log.debug(msg + e.getMessage());
+            }
         }
         user.getEntities().removeAllMentions();
         user.getEntities().addAllMentions(newMentions);
@@ -68,7 +73,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                             urls.add(urlPers);
                         }
                     } catch (Exception e) {
-                        log.info(msg + e.getMessage());
+                        log.debug(msg + e.getMessage());
                     }
                 }
             }
@@ -80,7 +85,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                             hashTags.add(hashTagPers);
                         }
                     } catch (Exception e) {
-                        log.info(msg + e.getMessage());
+                        log.debug(msg + e.getMessage());
                     }
                 }
             }
@@ -92,7 +97,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                             mentions.add(mentionPers);
                         }
                     } catch (Exception e) {
-                        log.info(msg + e.getMessage());
+                        log.debug(msg + e.getMessage());
                     }
                 }
             }
@@ -104,7 +109,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                             media.add(mediumPers);
                         }
                     } catch (Exception e) {
-                        log.info(msg + e.getMessage());
+                        log.debug(msg + e.getMessage());
                     }
                 }
             }
@@ -116,7 +121,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
                             tickerSymbols.add(tickerSymbolPers);
                         }
                     } catch (Exception e) {
-                        log.info(msg + e.getMessage());
+                        log.debug(msg + e.getMessage());
                     }
                 }
             }
@@ -126,7 +131,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             entities.setMedia(media);
             entities.setTickerSymbols(tickerSymbols);
         } catch (Exception e) {
-            log.info(msg + e.getMessage());
+            log.warn(msg + e.getMessage());
         }
         return entities;
     }

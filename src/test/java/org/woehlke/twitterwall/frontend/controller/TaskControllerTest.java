@@ -75,7 +75,11 @@ public class TaskControllerTest {
     @WithMockUser
     @Test
     public void test003getAllTest()throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/task/all"))
+        String msg ="test003getAllTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/all";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "task/all"))
             .andExpect(model().attributeExists("tasks"))
@@ -96,13 +100,16 @@ public class TaskControllerTest {
     @WithMockUser
     @Test
     public void test004getTaskByIdTest() throws Exception {
+        String msg ="test004getTaskByIdTest: ";
+        log.debug(msg+"------------------------------------");
         CountedEntities countedEntities = countedEntitiesService.countAll();
-        String msg ="getTaskByIdTest: ";
         TaskType taskType = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
         Task task = taskService.create(msg,taskType, taskSendType,countedEntities);
         long id = task.getId();
-        MvcResult result = this.mockMvc.perform(get("/task/"+id))
+        String url = "/task/"+id;
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "task/id"))
             .andExpect(model().attributeExists("task"))
@@ -124,7 +131,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test005createTestDataTest() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/task/start/createTestData"))
+        String msg ="test005createTestDataTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/createTestData";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/createTestData"))
                 .andExpect(model().attributeExists("taskTweets"))
@@ -146,8 +157,11 @@ public class TaskControllerTest {
     @WithMockUser
     @Test
     public void test006getOnListRenewTest() throws Exception {
-        String msg = "getOnListRenewTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
+        String msg ="test006getOnListRenewTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/user/onlist/renew";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("users"))
@@ -170,8 +184,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test007fetchTweetsFromTwitterSearchStartTaskTest() throws Exception {
-        String msg = "fetchTweetsFromTwitterSearchStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/search"))
+        String msg ="test007fetchTweetsFromTwitterSearchStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/search";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -192,8 +209,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test008fetchFollowerStartTaskTest() throws Exception {
-        String msg = "fetchFollowerStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/follower/fetch"))
+        String msg ="test008fetchFollowerStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/follower/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -214,8 +234,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test009fetchFriendsStartTask() throws Exception {
-    String msg = "fetchFriendsStartTask: ";
-    MvcResult result = this.mockMvc.perform(get("/task/start/users/friends/fetch"))
+        String msg ="test009fetchFriendsStartTask: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/friends/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -236,8 +259,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test010updateTweetsStartTaskTest() throws Exception {
-        String msg = "updateTweetsStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/user/onlist/renew"))
+        String msg ="test010updateTweetsStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/user/onlist/renew";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "task/start/renew"))
                 .andExpect(model().attributeExists("task"))
@@ -258,8 +284,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test011fetchUsersFromDefinedUserListStartTaskTest() throws Exception {
-        String msg = "fetchUsersFromDefinedUserListStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
+        String msg ="test011fetchUsersFromDefinedUserListStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/list/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -280,8 +309,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test012updateUserProfilesFromMentionsStartTaskTest() throws Exception {
-        String msg = "updateUserProfilesFromMentionsStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/list/fetch"))
+        String msg ="test012updateUserProfilesFromMentionsStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/list/fetch";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -302,8 +334,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test013updateUserProfilesStartTaskTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/users/mentions/update"))
+        String msg ="test013updateUserProfilesStartTaskTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/users/mentions/update";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( PATH+"/start/taskStarted"))
                 .andExpect(model().attributeExists("task"))
@@ -324,8 +359,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test014getHomeTimelineTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/timeline/home"))
+        String msg ="test014getHomeTimelineTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/timeline/home";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -346,8 +384,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test015getUserTimelineTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/timeline/user"))
+        String msg ="test015getUserTimelineTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/timeline/user";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -368,8 +409,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test016getMentionsTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/mentions"))
+        String msg ="test016getMentionsTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/mentions";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -390,8 +434,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test017getFavoritesTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/favorites"))
+        String msg ="test017getFavoritesTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/favorites";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -412,8 +459,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test018getRetweetsOfMeTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/tweets/myretweets"))
+        String msg ="test018getRetweetsOfMeTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/tweets/myretweets";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/taskStarted"))
             .andExpect(model().attributeExists("task"))
@@ -434,8 +484,11 @@ public class TaskControllerTest {
     @Commit
     @Test
     public void test019getListsTest() throws Exception {
-        String msg = "updateUserProfilesStartTaskTest: ";
-        MvcResult result = this.mockMvc.perform(get("/task/start/userlists"))
+        String msg ="test019getListsTest: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/task/start/userlists";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( PATH+"/start/tasksStarted"))
             .andExpect(model().attributeExists("listOfTasks"))

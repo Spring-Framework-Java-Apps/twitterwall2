@@ -71,16 +71,35 @@ public class ImprintControllerTest {
     @WithAnonymousUser
     @Test
     public void test003imprintTest1() throws Exception {
-        this.mockMvc.perform(get("/imprint")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("port80guru")));
+        String msg ="test003imprintTest1: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/imprint";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("port80guru"))).andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        log.debug("#######################################");
+        log.debug("#######################################");
+        log.debug(content);
+        log.debug("#######################################");
+        log.debug("#######################################");
         Assert.assertTrue(true);
+
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @WithAnonymousUser
     @Test
     public void test004imprintTest2() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/imprint"))
+        String msg ="test004imprintTest2: ";
+        log.debug(msg+"------------------------------------");
+        String url = "/imprint";
+        log.info(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( "imprint/imprint"))
                 .andExpect(model().attributeExists("user"))
@@ -94,5 +113,6 @@ public class ImprintControllerTest {
         log.debug("#######################################");
         log.debug("#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 }

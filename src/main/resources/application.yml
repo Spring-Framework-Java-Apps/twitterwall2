@@ -33,7 +33,7 @@ spring:
     #initialSize: 5
     max-total: 20
     maxActive: 20
-    #maxIdle: 5
+    maxIdle: 20
     #minIdle: 2
     platform: POSTGRESQL
     #removeAbandoned: true
