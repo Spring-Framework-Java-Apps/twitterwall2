@@ -13,6 +13,7 @@ buildNumber.properties
 
 .idea
 *.iml
+twitterwall2.iml
 todo.txt
 tw.txt
 twitterwall.log
