@@ -107,7 +107,7 @@ public class TickerSymbolControllerTest {
                     .andExpect(view().name("tickersymbol/id"))
                     .andExpect(model().attributeExists("users"))
                     .andExpect(model().attributeExists("latestTweets"))
-                    .andExpect(model().attributeExists("tickersymbol"))
+                    .andExpect(model().attributeExists("tickerSymbol"))
                     .andExpect(model().attributeExists("page"))
                     .andReturn();
 
