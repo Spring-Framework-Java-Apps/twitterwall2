@@ -50,12 +50,10 @@ import org.woehlke.twitterwall.oodm.service.*;
         UserControllerTest.class,
         UserListControllerTest.class,
 
-        /*
-        TwitterUrlServiceTest.class,
+        //TwitterUrlServiceTest.class,
 
-        TaskStartFireAndForgetTestImpl.class,
-        TaskStartTestImpl.class,
-        */
+        //TaskStartFireAndForgetTestImpl.class,
+        //TaskStartTestImpl.class,
 
         CronJobsTest.class
 })
