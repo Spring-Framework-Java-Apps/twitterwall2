@@ -23,6 +23,17 @@ public class LoginController {
         return "login/login";
     }
 
+    @RequestMapping("/logout_success")
+    public String logout(Model model) {
+        log.debug("-----------------------------------------");
+        String symbol = Symbols.LOGIN.toString();
+        String title = "Logged Out";
+        String subtitle = "Enter your Credentials, to log in again";
+        model = contentFactory.setupPage(model, title, subtitle, symbol);
+        log.debug("-----------------------------------------");
+        return "login/login";
+    }
+
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     private final ContentFactory contentFactory;
