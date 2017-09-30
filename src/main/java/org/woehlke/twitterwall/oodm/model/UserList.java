@@ -101,13 +101,8 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         return myuriPath.split("/")[1];
     }
 
-    @ManyToOne(
-        fetch = FetchType.EAGER,
-        cascade =  { ALL }
-    )
-    @JoinColumn(
-        name="fk_user_owner"
-    )
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="fk_user")
     private User listOwner;
 
 
@@ -115,8 +110,8 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         name="userlist_members"
     )
     @ManyToMany(
-        cascade = { ALL },
-        fetch = EAGER
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = LAZY
     )
     private Set<User> members = new LinkedHashSet<User>();
 
@@ -125,8 +120,8 @@ public class UserList extends AbstractDomainObject<UserList> implements DomainOb
         name="userlist_subcriber"
     )
     @ManyToMany(
-        cascade = { ALL },
-        fetch = EAGER
+        cascade = { DETACH, REFRESH, REMOVE },
+        fetch = LAZY
     )
     private Set<User> subscriber = new LinkedHashSet<User>();
 

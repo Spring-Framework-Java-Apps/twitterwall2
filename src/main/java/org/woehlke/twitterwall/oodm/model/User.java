@@ -301,29 +301,22 @@ public class User extends AbstractDomainObject<User> implements DomainObjectWith
     @NotNull
     @OneToMany(
         orphanRemoval = true,
-        mappedBy ="listOwner",
-        fetch = FetchType.EAGER,
-        cascade = CascadeType.ALL
+        mappedBy="listOwner",
+        fetch = FetchType.EAGER
     )
     private Set<UserList> ownLists = new HashSet<>();
 
     @NotNull
-    @JoinTable(
-        name = "userlist_subcriber"
-    )
     @ManyToMany(
-        fetch = FetchType.EAGER,
-        cascade = CascadeType.ALL
+        mappedBy="subscriber",
+        fetch = FetchType.EAGER
     )
     private Set<UserList> userListSubcriptions = new HashSet<>();
 
     @NotNull
-    @JoinTable(
-        name = "userlist_members"
-    )
     @ManyToMany(
-        fetch = FetchType.EAGER,
-        cascade= CascadeType.ALL
+        mappedBy = "members",
+        fetch = FetchType.EAGER
     )
     private Set<UserList> userListMemberships = new HashSet<>();
 
