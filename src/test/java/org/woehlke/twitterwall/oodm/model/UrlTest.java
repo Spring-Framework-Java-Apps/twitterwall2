@@ -1,18 +1,21 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskSendType;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskStatus;
 import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 import java.util.Date;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UrlTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
         String descriptionTask = "start: ";
@@ -37,7 +40,7 @@ public class UrlTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
         String descriptionTask = "start: ";

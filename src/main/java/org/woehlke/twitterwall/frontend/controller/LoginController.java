@@ -14,12 +14,12 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(Model model) {
-        log.info("-----------------------------------------");
+        log.debug("-----------------------------------------");
         String symbol = Symbols.LOGIN.toString();
         String title = "Login";
         String subtitle = "Enter your Credentials";
         model = contentFactory.setupPage(model, title, subtitle, symbol);
-        log.info("-----------------------------------------");
+        log.debug("-----------------------------------------");
         return "login/login";
     }
 

@@ -1,17 +1,20 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TickerSymbolTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolTest.class);
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
         Task createdBy = null;
@@ -28,8 +31,8 @@ public class TickerSymbolTest implements DomainObjectMinimalTest  {
 
         TickerSymbol tickerSymbol2 = new TickerSymbol(createdBy,updatedBy, url2);
 
-        log.info(msg+" Expected: "+myUniqueId1+" == Found: "+tickerSymbol1.getUniqueId());
-        log.info(msg+" Expected: "+myUniqueId2+" == Found: "+tickerSymbol2.getUniqueId());
+        log.debug(msg+" Expected: "+myUniqueId1+" == Found: "+tickerSymbol1.getUniqueId());
+        log.debug(msg+" Expected: "+myUniqueId2+" == Found: "+tickerSymbol2.getUniqueId());
 
         Assert.assertEquals(msg,myUniqueId1,tickerSymbol1.getUniqueId());
         Assert.assertEquals(msg,myUniqueId2,tickerSymbol2.getUniqueId());
@@ -37,7 +40,7 @@ public class TickerSymbolTest implements DomainObjectMinimalTest  {
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
         Assert.assertTrue(msg,true);
     }

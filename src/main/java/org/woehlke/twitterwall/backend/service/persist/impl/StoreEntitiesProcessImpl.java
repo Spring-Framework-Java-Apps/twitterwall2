@@ -23,14 +23,14 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
     @Override
     public Entities storeEntitiesProcessForTweet(Tweet tweet, Task task) {
         Entities entities = tweet.getEntities();
-        entities = storeEntitiesProcess(entities,task);
+        entities = storeEntitiesProcess(entities, task);
         return entities;
     }
 
     @Override
     public Entities storeEntitiesProcessForUser(User user, Task task) {
-        Entities entities =  user.getEntities();
-        entities = storeEntitiesProcess(entities,task);
+        Entities entities = user.getEntities();
+        entities = storeEntitiesProcess(entities, task);
         return entities;
     }
 
@@ -40,10 +40,10 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
         long userIdTwitter = user.getIdTwitter();
         Set<Mention> newMentions = new HashSet<>();
         Set<Mention> mentions = user.getEntities().getMentions();
-        for(Mention mention:mentions){
+        for (Mention mention : mentions) {
             mention.setIdTwitterOfUser(userIdTwitter);
             mention.setIdOfUser(userId);
-            mention = mentionService.store(mention,task);
+            mention = mentionService.store(mention, task);
             newMentions.add(mention);
         }
         user.getEntities().removeAllMentions();
@@ -53,7 +53,7 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
 
     @Override
     public Entities storeEntitiesProcess(Entities entities, Task task) {
-        String msg = "storeEntitiesProcess "+task.getUniqueId()+" : ";
+        String msg = "storeEntitiesProcess " + task.getUniqueId() + " : ";
         try {
             Set<Url> urls = new LinkedHashSet<>();
             Set<HashTag> hashTags = new LinkedHashSet<HashTag>();
@@ -62,41 +62,61 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             Set<TickerSymbol> tickerSymbols = new LinkedHashSet<TickerSymbol>();
             for (Url myUrl : entities.getUrls()) {
                 if (myUrl.isValid()) {
-                    Url urlPers = urlService.store(myUrl,task);
-                    if(urlPers != null) {
-                        urls.add(urlPers);
+                    try {
+                        Url urlPers = urlService.store(myUrl, task);
+                        if (urlPers != null) {
+                            urls.add(urlPers);
+                        }
+                    } catch (Exception e) {
+                        log.info(msg + e.getMessage());
                     }
                 }
             }
             for (HashTag hashTag : entities.getHashTags()) {
                 if (hashTag.isValid()) {
-                    HashTag hashTagPers = hashTagService.store(hashTag, task);
-                    if (hashTagPers != null) {
-                        hashTags.add(hashTagPers);
+                    try {
+                        HashTag hashTagPers = hashTagService.store(hashTag, task);
+                        if (hashTagPers != null) {
+                            hashTags.add(hashTagPers);
+                        }
+                    } catch (Exception e) {
+                        log.info(msg + e.getMessage());
                     }
                 }
             }
             for (Mention mention : entities.getMentions()) {
                 if (mention.isValid()) {
-                    Mention mentionPers = mentionService.store(mention, task);
-                    if(mentionPers!= null){
-                        mentions.add(mentionPers);
+                    try {
+                        Mention mentionPers = mentionService.store(mention, task);
+                        if (mentionPers != null) {
+                            mentions.add(mentionPers);
+                        }
+                    } catch (Exception e) {
+                        log.info(msg + e.getMessage());
                     }
                 }
             }
             for (Media medium : entities.getMedia()) {
                 if (medium.isValid()) {
-                    Media mediumPers = mediaService.store(medium, task);
-                    if (mediumPers != null) {
-                        media.add(mediumPers);
+                    try {
+                        Media mediumPers = mediaService.store(medium, task);
+                        if (mediumPers != null) {
+                            media.add(mediumPers);
+                        }
+                    } catch (Exception e) {
+                        log.info(msg + e.getMessage());
                     }
                 }
             }
             for (TickerSymbol tickerSymbol : entities.getTickerSymbols()) {
                 if (tickerSymbol.isValid()) {
-                    TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol, task);
-                    if(tickerSymbolPers != null){
-                        tickerSymbols.add(tickerSymbolPers);
+                    try {
+                        TickerSymbol tickerSymbolPers = tickerSymbolService.store(tickerSymbol, task);
+                        if (tickerSymbolPers != null) {
+                            tickerSymbols.add(tickerSymbolPers);
+                        }
+                    } catch (Exception e) {
+                        log.info(msg + e.getMessage());
                     }
                 }
             }
@@ -105,8 +125,8 @@ public class StoreEntitiesProcessImpl implements StoreEntitiesProcess {
             entities.setMentions(mentions);
             entities.setMedia(media);
             entities.setTickerSymbols(tickerSymbols);
-        } catch (Exception e){
-            log.error(msg+e.getMessage());
+        } catch (Exception e) {
+            log.info(msg + e.getMessage());
         }
         return entities;
     }

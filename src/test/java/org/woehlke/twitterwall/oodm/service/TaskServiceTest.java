@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
 
@@ -36,14 +39,14 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     private CountedEntitiesService countedEntitiesService;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(taskService);
         Assert.assertNotNull(testdataProperties);
     }
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -61,7 +64,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void create() throws Exception {
+    public void test101create() throws Exception {
         String msg = "TaskServiceTest.create";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -72,7 +75,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void done() throws Exception {
+    public void test200done() throws Exception {
         String msg = "TaskServiceTest.done";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -87,7 +90,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void error() throws Exception {
+    public void test201error() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -102,7 +105,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void warn() throws Exception {
+    public void test202warn() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -117,7 +120,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void event() throws Exception {
+    public void test203event() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -133,7 +136,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void start() throws Exception {
+    public void test204start() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -148,7 +151,7 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
 
     @Commit
     @Test
-    public void finalError() throws Exception {
+    public void test205finalError() throws Exception {
         String msg = "TaskServiceTest.error";
         TaskType type = TaskType.FETCH_TWEETS_FROM_SEARCH;
         TaskSendType taskSendType = TaskSendType.NO_MQ;
@@ -165,28 +168,28 @@ public class TaskServiceTest implements DomainObjectMinimalServiceTest {
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 }

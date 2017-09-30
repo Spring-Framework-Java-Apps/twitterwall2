@@ -2,5 +2,5 @@ package org.woehlke.twitterwall.oodm.service;
 
 public interface DomainServiceWithIdTwitterTest {
 
-    void findByIdTwitter() throws Exception;
+    void test020findByIdTwitter() throws Exception;
 }

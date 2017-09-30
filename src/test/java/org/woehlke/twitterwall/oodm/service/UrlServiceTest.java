@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.oodm.service;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest,DomainServiceWithUrlTest {
 
     private static final Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
@@ -40,14 +43,14 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
     private TestdataProperties testdataProperties;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         Assert.assertNotNull(urlService);
         Assert.assertNotNull(testdataProperties);
     }
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -65,7 +68,7 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
 
     @Commit
     @Test
-    public void findByUrl() throws Exception {
+    public void test025findByUrl() throws Exception {
         String msg = "findByUrl: ";
         int page=1;
         int size=1;
@@ -108,18 +111,18 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
         urlService.store(urlTest4,createdBy);
 
         List<Url> urlList = urlService.findRawUrlsFromDescription();
-        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
-        log.info(msg+" size: "+urlList.size());
-        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.debug(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.debug(msg+" size: "+urlList.size());
+        log.debug(msg+"+++++++++++++++++++++++++++++++++++++++++");
         Assert.assertTrue(urlList.size()>0);
         for(Url url:urlList){
             Assert.assertTrue(url.isValid());
             Assert.assertTrue(url.isRawUrlsFromDescription());
             Assert.assertTrue(url.getExpanded().compareTo(Url.UNDEFINED)==0);
             Assert.assertTrue(url.getDisplay().compareTo(Url.UNDEFINED)==0);
-            log.info(msg+"-----------------------------------------");
-            log.info(msg+url.getUniqueId());
-            log.info(msg+"-----------------------------------------");
+            log.debug(msg+"-----------------------------------------");
+            log.debug(msg+url.getUniqueId());
+            log.debug(msg+"-----------------------------------------");
             log.trace(msg+url.toString());
         }
     }
@@ -150,17 +153,17 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
         urlService.store(urlTest4,createdBy);
 
         List<Url> urlList = urlService.findUrlAndExpandedTheSame();
-        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
-        log.info(msg+" size: "+urlList.size());
-        log.info(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.debug(msg+"+++++++++++++++++++++++++++++++++++++++++");
+        log.debug(msg+" size: "+urlList.size());
+        log.debug(msg+"+++++++++++++++++++++++++++++++++++++++++");
         Assert.assertTrue(urlList.size()>0);
         for(Url url:urlList){
             Assert.assertTrue(url.isValid());
             Assert.assertTrue(url.isUrlAndExpandedTheSame());
             Assert.assertTrue(url.getUrl().compareTo(url.getExpanded())==0);
-            log.info(msg+"-----------------------------------------");
-            log.info(msg+url.getUniqueId());
-            log.info(msg+"-----------------------------------------");
+            log.debug(msg+"-----------------------------------------");
+            log.debug(msg+url.getUniqueId());
+            log.debug(msg+"-----------------------------------------");
             log.trace(msg+url.toString());
         }
     }
@@ -168,49 +171,49 @@ public class UrlServiceTest implements DomainObjectMinimalServiceTest,DomainServ
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
+    public void test102update() throws Exception {
 
     }
 }

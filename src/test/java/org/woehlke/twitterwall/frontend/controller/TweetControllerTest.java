@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TweetControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(TweetControllerTest.class);
@@ -54,14 +57,14 @@ public class TweetControllerTest {
 
     @Commit
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @Commit
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -71,7 +74,7 @@ public class TweetControllerTest {
     @WithAnonymousUser
     @Commit
     @Test
-    public void getLatestTweetsTest() throws Exception {
+    public void test003getLatestTweetsTest() throws Exception {
         String msg ="getLatestTweetsTest: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/all"))
@@ -83,11 +86,11 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
@@ -104,7 +107,7 @@ public class TweetControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getTweetById() throws Exception {
+    public void test004getTweetById() throws Exception {
         String msg ="getLatestTweetsById: ";
         Tweet tweet = findOneTweet();
 
@@ -117,18 +120,18 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getHomeTimeline() throws Exception {
+    public void test005getHomeTimeline() throws Exception {
         String msg ="getHomeTimeline: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/timeline/home"))
@@ -140,18 +143,18 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getUserTimeline() throws Exception {
+    public void test006getUserTimeline() throws Exception {
         String msg ="getUserTimeline: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/timeline/user"))
@@ -163,18 +166,18 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getMentions() throws Exception {
+    public void test007getMentions() throws Exception {
         String msg ="getMentions: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/mentions"))
@@ -186,18 +189,18 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getFavorites() throws Exception {
+    public void test008getFavorites() throws Exception {
         String msg ="getFavorites: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/favorites"))
@@ -209,18 +212,18 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getRetweetsOfMe() throws Exception {
+    public void test009getRetweetsOfMe() throws Exception {
         String msg ="getRetweetsOfMe: ";
 
         MvcResult result = this.mockMvc.perform(get("/tweet/retweets"))
@@ -232,11 +235,11 @@ public class TweetControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 }

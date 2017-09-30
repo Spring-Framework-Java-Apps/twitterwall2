@@ -83,7 +83,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getHomeTimeline();
+                fetchedTweets = getTwitterProxy().timelineOperations().getHomeTimeline(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
                     log.error(msg + " result.size: 0");
@@ -109,7 +109,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getUserTimeline();
+                fetchedTweets = getTwitterProxy().timelineOperations().getUserTimeline(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
                     log.error(msg + " result.size: 0");
@@ -136,7 +136,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getMentions();
+                fetchedTweets = getTwitterProxy().timelineOperations().getMentions(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
                     log.error(msg + " result.size: 0");
@@ -162,7 +162,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> fetchedTweets;
         while(true) {
             try {
-                fetchedTweets = getTwitterProxy().timelineOperations().getFavorites();
+                fetchedTweets = getTwitterProxy().timelineOperations().getFavorites(twitterProperties.getPageSize());
                 msg += " result: ";
                 if (fetchedTweets.size() == 0) {
                     log.error(msg + " result.size: 0");

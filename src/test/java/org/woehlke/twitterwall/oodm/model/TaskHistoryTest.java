@@ -1,7 +1,9 @@
 package org.woehlke.twitterwall.oodm.model;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.woehlke.twitterwall.oodm.model.parts.CountedEntities;
@@ -11,13 +13,15 @@ import org.woehlke.twitterwall.oodm.model.tasks.TaskType;
 
 import java.util.Date;
 
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaskHistoryTest implements DomainObjectMinimalTest  {
 
     private static final Logger log = LoggerFactory.getLogger(TaskHistoryTest.class);
 
     @Test
     @Override
-    public void getUniqueIdTest() throws Exception {
+    public void test001getUniqueIdTest() throws Exception {
         String msg = "getUniqueIdTest: ";
 
         String descriptionTask = "Make it so, Scotty";
@@ -42,14 +46,14 @@ public class TaskHistoryTest implements DomainObjectMinimalTest  {
 
         String myUniqueId = "" + task.getId().toString()  +"_"+  timeEvent.getTime();
 
-        log.info(msg+" Expected: "+myUniqueId+" == Found: "+taskHistory.getUniqueId());
+        log.debug(msg+" Expected: "+myUniqueId+" == Found: "+taskHistory.getUniqueId());
 
         Assert.assertEquals(msg,myUniqueId,taskHistory.getUniqueId());
     }
 
     @Test
     @Override
-    public void isValidTest() throws Exception {
+    public void test002isValidTest() throws Exception {
         String msg = "isValidTest: ";
 
         String descriptionTask = "Make it so, Scotty";

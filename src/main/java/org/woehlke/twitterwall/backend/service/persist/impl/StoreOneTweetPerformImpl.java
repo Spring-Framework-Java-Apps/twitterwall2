@@ -40,7 +40,7 @@ public class StoreOneTweetPerformImpl implements StoreOneTweetPerform {
             tweet = tweetService.store(tweet, task);
             log.debug(msg + "tweetService.store: " + tweet.getUniqueId());
         } catch (Exception e){
-            log.error(msg+e.getMessage());
+            log.info(msg+e.getMessage());
         }
         return tweet;
     }

@@ -3,9 +3,7 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false" />
-        <fileset id="fileset2" name="Spring Application Context (2)" removed="false">
-          <dependency>fileset</dependency>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/mq/CreateImprintUser.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/mq/CreateTestDataTweets.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/mq/CreateTestDataUser.xml</file>
@@ -29,10 +27,6 @@
           <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateTweets.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateUrls.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/mq/UpdateUser.xml</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/Application.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/DataSourceConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/WebMvcConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/woehlke/twitterwall/configuration/WebSecurityConfig.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -177,6 +171,5 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.4.6.v20170531" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.4.6.v20170531" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
-    <orderEntry type="library" name="Spring-4.3.10.RELEASE" level="project" />
   </component>
 </module>

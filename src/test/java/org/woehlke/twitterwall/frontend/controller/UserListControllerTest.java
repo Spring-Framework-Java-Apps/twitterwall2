@@ -2,8 +2,10 @@ package org.woehlke.twitterwall.frontend.controller;
 
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserListControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserListControllerTest.class);
@@ -42,15 +45,15 @@ public class UserListControllerTest {
 
     @Commit
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void getAllTest() throws Exception {
+    public void test002getAllTest() throws Exception {
         String msg = "getAllTest: ";
         MvcResult result = this.mockMvc.perform(get("/userlist/all"))
             .andExpect(status().isOk())
@@ -61,11 +64,11 @@ public class UserListControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
@@ -73,7 +76,7 @@ public class UserListControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void getUserListForIdTest() throws Exception {
+    public void test003getUserListForIdTest() throws Exception {
         Assert.assertTrue(true);
     }
 

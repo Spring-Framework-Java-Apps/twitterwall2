@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TickerSymbolControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(TickerSymbolControllerTest.class);
@@ -48,13 +51,13 @@ public class TickerSymbolControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
     }
 
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
@@ -64,7 +67,7 @@ public class TickerSymbolControllerTest {
     @Commit
     @WithMockUser
     @Test
-    public void getAllTest() throws Exception {
+    public void test003getAllTest() throws Exception {
         String msg = "getAllTest: ";
 
         MvcResult result = this.mockMvc.perform(get("/tickersymbol/all"))
@@ -76,18 +79,18 @@ public class TickerSymbolControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
     }
 
     @Commit
     @WithMockUser
     @Test
-    public void getTickerSymbolById() throws Exception {
+    public void test004getTickerSymbolById() throws Exception {
         String msg ="getTickerSymbolById: ";
         TickerSymbol oneTickerSymbol = findOneTickerSymbol();
         if(oneTickerSymbol != null) {
@@ -103,11 +106,11 @@ public class TickerSymbolControllerTest {
 
             String content = result.getResponse().getContentAsString();
 
-            log.info(msg + "#######################################");
-            log.info(msg + "#######################################");
-            log.info(msg + content);
-            log.info(msg + "#######################################");
-            log.info(msg + "#######################################");
+            log.debug(msg + "#######################################");
+            log.debug(msg + "#######################################");
+            log.debug(msg + content);
+            log.debug(msg + "#######################################");
+            log.debug(msg + "#######################################");
             Assert.assertTrue(true);
         }
     }

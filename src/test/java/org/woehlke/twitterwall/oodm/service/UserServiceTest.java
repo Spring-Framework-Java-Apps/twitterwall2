@@ -2,8 +2,10 @@ package org.woehlke.twitterwall.oodm.service;
 
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import static org.woehlke.twitterwall.frontend.content.ContentFactory.FIRST_PAGE
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainServiceWithTaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
@@ -53,7 +56,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
     private TestdataProperties testdataProperties;
 
     @Test
-    public void areDependenciesLoaded() throws Exception {
+    public void test000areDependenciesLoaded() throws Exception {
         String msg = "areDependenciesLoaded: ";
         Assert.assertNotNull(userService);
         Assert.assertNotNull(testdataProperties);
@@ -63,7 +66,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
 
     @Commit
     @Test
-    public void fetchTestData() throws Exception {
+    public void test001fetchTestData() throws Exception {
         String msg = "fetchTestData: ";
         int page=1;
         int size=1;
@@ -83,7 +86,7 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
     @Test
     public void getAllDescriptionsTest() {
         String msg = "getAllDescriptionsTest";
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
         boolean hasNext;
         Pageable pageRequest = new PageRequest(FIRST_PAGE_NUMBER, twitterProperties.getPageSize());
         do {
@@ -91,15 +94,15 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
             hasNext = descriptions.hasNext();
             long totalNumber = descriptions.getTotalElements();
             int number = descriptions.getNumber();
-            log.info(msg+"found "+number+" descriptions (total: "+totalNumber+")");
+            log.debug(msg+"found "+number+" descriptions (total: "+totalNumber+")");
             for(String description:descriptions){
-                log.info(msg+"description: "+description);
+                log.debug(msg+"description: "+description);
             }
             pageRequest = pageRequest.next();
         } while (hasNext);
         String message = "userService.findAllDescriptions(); ";
         Assert.assertTrue(message,true);
-        log.info(msg+"------------------------------------------------");
+        log.debug(msg+"------------------------------------------------");
     }
 
     @Commit
@@ -375,17 +378,17 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
         Page<Object2Entity> foundPage = userService.findAllUser2Mentiong(pageRequest);
         for(Object2Entity object2Entity:foundPage.getContent()){
             long objectId = object2Entity.getObjectId();
-            log.info(msg+" objectId: "+objectId);
+            log.debug(msg+" objectId: "+objectId);
             String objectInfo = object2Entity.getObjectInfo();
-            log.info(msg+" objectInfo: "+objectInfo);
+            log.debug(msg+" objectInfo: "+objectInfo);
             long entityId = object2Entity.getEntityId();
-            log.info(msg+" entityId: "+entityId);
+            log.debug(msg+" entityId: "+entityId);
             String entityInfo = object2Entity.getObjectInfo();
-            log.info(msg+" entityInfo: "+entityInfo);
+            log.debug(msg+" entityInfo: "+entityInfo);
             User userPers = userService.findById(objectId);
-            log.info(msg+" userPers: "+userPers);
+            log.debug(msg+" userPers: "+userPers);
             Mention mentionPers = mentionService.findById(entityId);
-            log.info(msg+" mentionPers: "+mentionPers);
+            log.debug(msg+" mentionPers: "+mentionPers);
             Assert.assertNotNull(msg+" userPers: ",userPers);
             Assert.assertNotNull(msg+" mentionPers: ",mentionPers);
             Assert.assertNull(msg+" objectInfo: " ,objectInfo);
@@ -472,49 +475,49 @@ public class UserServiceTest implements DomainObjectMinimalServiceTest,DomainSer
     @Commit
     @Test
     @Override
-    public void findById() throws Exception {
+    public void test050findById() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void getAll() throws Exception {
+    public void test051getAll() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void count() throws Exception {
+    public void test052count() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void findByUniqueId() throws Exception {
+    public void test053findByUniqueId() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void store() throws Exception {
+    public void test100store() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void create() throws Exception {
+    public void test101create() throws Exception {
 
     }
 
     @Commit
     @Test
     @Override
-    public void update() throws Exception {
+    public void test102update() throws Exception {
 
     }
 }

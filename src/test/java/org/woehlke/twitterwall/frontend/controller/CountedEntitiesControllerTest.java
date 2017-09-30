@@ -1,8 +1,10 @@
 package org.woehlke.twitterwall.frontend.controller;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class},webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CountedEntitiesControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(CountedEntitiesControllerTest.class);
@@ -40,18 +43,23 @@ public class CountedEntitiesControllerTest {
 
     @Commit
     @Test
-    public void controllerIsPresentTest(){
-        log.info("controllerIsPresentTest");
+    public void test001controllerIsPresentTest(){
+        String msg = "controllerIsPresentTest: ";
+        log.debug(msg+"------------------------------------");
+        log.debug("controllerIsPresentTest");
         assertThat(controller).isNotNull();
+        log.debug(msg+"------------------------------------");
     }
 
     @Commit
     @Test
-    public void setupTestData() throws Exception {
+    public void test002setupTestData() throws Exception {
         String msg = "setupTestData: ";
+        log.debug(msg+"------------------------------------");
         prepareDataTest.getTestDataTweets(msg);
         prepareDataTest.getTestDataUser(msg);
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     private final static String URL_PATH = "/application/countedEntities";
@@ -60,10 +68,12 @@ public class CountedEntitiesControllerTest {
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTest() throws Exception {
+    public void test003domainCountTest() throws Exception {
         String msg ="domainCountTest: ";
-
-        MvcResult result = this.mockMvc.perform(get("/application/countedEntities/domain/count"))
+        log.debug(msg+"------------------------------------");
+        String url = "/application/countedEntities/domain/count";
+        log.debug(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
             .andExpect(status().isOk())
             .andExpect(view().name( "application/domain/count"))
             .andExpect(model().attributeExists("countedEntities"))
@@ -72,21 +82,24 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTweet2hashtag() throws Exception {
+    public void test004domainCountTweet2hashtag() throws Exception {
         String msg ="domainCountTweet2hashtag: ";
-
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/tweet/hashtag"))
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/tweet/hashtag";
+        log.debug(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -98,21 +111,24 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTweet2media() throws Exception {
+    public void test005domainCountTweet2media() throws Exception {
         String msg ="domainCountTweet2media: ";
-
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/tweet/media"))
+        log.debug(msg+"------------------------------------");
+        String url = URL_PATH+"/tweet/media";
+        log.debug(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -124,21 +140,24 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTweet2mention() throws Exception {
+    public void test006domainCountTweet2mention() throws Exception {
         String msg ="domainCountTweet2mention: ";
-
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/tweet/mention"))
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/tweet/mention";
+        log.debug(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -150,21 +169,24 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTweet2tickersymbol() throws Exception {
+    public void test007domainCountTweet2tickersymbol() throws Exception {
         String msg ="domainCountTweet2tickersymbol: ";
-
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/tweet/tickersymbol"))
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/tweet/tickersymbol";
+        log.debug(msg+url);
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -176,21 +198,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountTweet2url() throws Exception {
+    public void test008domainCountTweet2url() throws Exception {
         String msg ="domainCountTweet2url: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/tweet/url";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/tweet/url"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -202,21 +228,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountUserprofile2hashtag() throws Exception {
+    public void test009domainCountUserprofile2hashtag() throws Exception {
         String msg ="domainCountUserprofile2hashtag: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/user/hashtag";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/user/hashtag"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -228,21 +258,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountUserprofile2media() throws Exception {
+    public void test010domainCountUserprofile2media() throws Exception {
         String msg ="domainCountUserprofile2media: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/user/media";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/user/media"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -254,21 +288,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountUserprofile2mention() throws Exception {
+    public void test011domainCountUserprofile2mention() throws Exception {
         String msg ="domainCountUserprofile2mention: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/user/mention";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/user/mention"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -280,21 +318,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountUserprofile2Tickersymbol() throws Exception {
+    public void test012domainCountUserprofile2Tickersymbol() throws Exception {
         String msg ="domainCountUserprofile2Tickersymbol: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/user/tickersymbol";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/user/tickersymbol"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -306,21 +348,25 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
     @WithMockUser
     @Commit
     @Test
-    public void domainCountUserprofile2Url() throws Exception {
+    public void test013domainCountUserprofile2Url() throws Exception {
         String msg ="domainCountUserprofile2Url: ";
+        log.debug(msg+"------------------------------------");
+        String url =URL_PATH+"/user/url";
+        log.debug(msg+url);
 
-        MvcResult result = this.mockMvc.perform(get(URL_PATH+"/user/url"))
+        MvcResult result = this.mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(view().name( TEMPLATE_PATH ))
                 .andExpect(model().attributeExists("page"))
@@ -332,12 +378,13 @@ public class CountedEntitiesControllerTest {
 
         String content = result.getResponse().getContentAsString();
 
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
-        log.info(msg+content);
-        log.info(msg+"#######################################");
-        log.info(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
+        log.debug(msg+content);
+        log.debug(msg+"#######################################");
+        log.debug(msg+"#######################################");
         Assert.assertTrue(true);
+        log.debug(msg+"------------------------------------");
     }
 
 
