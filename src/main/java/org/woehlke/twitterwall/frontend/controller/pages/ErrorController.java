@@ -65,6 +65,7 @@ public class ErrorController extends AbstractErrorController {
         return new ResponseEntity<Map<String, Object>>(body, status);
     }
 
+    @Autowired
     public ErrorController(ErrorAttributes errorAttributes, ContentFactory contentFactory, BackendProperties backendProperties, FrontendProperties frontendProperties, SchedulerProperties schedulerProperties, TestdataProperties testdataProperties, TwitterProperties twitterProperties, OtherProperties otherProperties) {
         this(errorAttributes,
             Collections.<ErrorViewResolver>emptyList(),contentFactory, backendProperties, frontendProperties, schedulerProperties,testdataProperties, twitterProperties, otherProperties);
@@ -74,7 +75,6 @@ public class ErrorController extends AbstractErrorController {
     private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
 
 
-    @Autowired
     private ErrorController(ErrorAttributes errorAttributes, List<ErrorViewResolver> errorViewResolvers, ContentFactory contentFactory, BackendProperties backendProperties, FrontendProperties frontendProperties, SchedulerProperties schedulerProperties, TestdataProperties testdataProperties, TwitterProperties twitterProperties, OtherProperties otherProperties) {
         super(errorAttributes, errorViewResolvers);
         this.contentFactory = contentFactory;
