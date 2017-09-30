@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.configuration;
+package org.woehlke.twitterwall.configuration.spring;
 
 
 import org.springframework.context.annotation.Configuration;

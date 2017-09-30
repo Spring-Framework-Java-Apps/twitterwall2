@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.configuration;
+package org.woehlke.twitterwall.configuration.spring;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 
 @Configuration
@@ -19,15 +20,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers(
                 frontendProperties.getWebSecurityConfigPublicPathsAsArray()
-            ).permitAll()
+            )
+            .permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
             .loginPage("/login")
+            .failureForwardUrl("/login")
+            .defaultSuccessUrl("/adm")
             .permitAll()
             .and()
             .logout()
-            .logoutSuccessUrl("/")
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/logout_success")
             .permitAll();
     }
 

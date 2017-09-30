@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:include="layoutMain :: tw-head">
+</head>
+<body id="page-top" class="page-2" style="padding-top:50px; padding-bottom:200px;">
+<header th:include="layoutMain :: tw-header" >
+</header>
+<main class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Application Error, please contact <a href="/imprint" th:href="@{/imprint}"> Support</a>.</h2>
+                <h3>Debug Information:</h3>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-6">Requested URL=</div>
+                        <div class="col-md-6">
+                            <span th:text="${url}">url</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">Exception=</div>
+                        <div class="col-md-6">
+                            <span th:text="${exception.message}">exception.message</span>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong>Exception Stack Trace</strong><br/>
+                            <ul th:each="ste : ${exception.stackTrace}">
+                                <li th:text="${ste}">ste</li>
+                            </ul>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<section th:include="layoutMain :: tw-history-back-section" >
+</section>
+
+<footer th:include="layoutMain :: footer" >
+
+</footer>
+</body>
+</html>

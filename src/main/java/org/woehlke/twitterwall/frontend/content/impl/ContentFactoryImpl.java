@@ -11,6 +11,8 @@ import org.woehlke.twitterwall.configuration.properties.FrontendProperties;
 import org.woehlke.twitterwall.frontend.content.ContentFactory;
 import org.woehlke.twitterwall.frontend.content.Page;
 
+import java.util.Map;
+
 /**
  * Created by tw on 18.07.17.
  */
@@ -43,7 +45,22 @@ public class ContentFactoryImpl implements ContentFactory {
     public ModelAndView setupPage(ModelAndView mav, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.debug("page: "+page.toString());
+        page.setMenuAppName(frontendProperties.getMenuAppName());
+        page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
+        page.setInfoWebpage(frontendProperties.getInfoWebpage());
+        page.setTheme(frontendProperties.getTheme());
+        page.setContextTest(frontendProperties.getContextTest());
+        page.setHistoryBack(true);
+        if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
+            String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
+            page.setGoogleAnalyticScriptHtml(html);
+        } else {
+            page.setGoogleAnalyticScriptHtml("");
+        }
+        log.debug("--------------------------------------------------------------------");
+        log.debug("setupPage = "+page.toString());
+        log.debug("--------------------------------------------------------------------");
         mav.addObject("page", page);
         return mav;
     }
@@ -51,8 +68,47 @@ public class ContentFactoryImpl implements ContentFactory {
     public Model setupPage(Model model, String title, String subtitle, String symbol) {
         Page page = new Page();
         page = setupPage(page, title, subtitle, symbol);
-        log.debug("page: "+page.toString());
+        page.setMenuAppName(frontendProperties.getMenuAppName());
+        page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
+        page.setInfoWebpage(frontendProperties.getInfoWebpage());
+        page.setTheme(frontendProperties.getTheme());
+        page.setContextTest(frontendProperties.getContextTest());
+        page.setHistoryBack(true);
+        if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
+            String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
+            page.setGoogleAnalyticScriptHtml(html);
+        } else {
+            page.setGoogleAnalyticScriptHtml("");
+        }
+        log.debug("--------------------------------------------------------------------");
+        log.debug("setupPage = "+page.toString());
+        log.debug("--------------------------------------------------------------------");
         model.addAttribute("page", page);
+        return model;
+    }
+
+    @Override
+    public Map<String, Object> setupPage(Map<String, Object> model, String title, String subtitle, String symbol) {
+        Page page = new Page();
+        page = setupPage(page, title, subtitle, symbol);
+        page.setMenuAppName(frontendProperties.getMenuAppName());
+        page.setTwitterSearchTerm(twitterProperties.getSearchQuery());
+        page.setInfoWebpage(frontendProperties.getInfoWebpage());
+        page.setTheme(frontendProperties.getTheme());
+        page.setContextTest(frontendProperties.getContextTest());
+        page.setHistoryBack(true);
+        if(!frontendProperties.getIdGoogleAnalytics().isEmpty()){
+            String html = GOOGLE_ANALYTICS_SCRIPT_HTML;
+            html = html.replace("###GOOGLE_ANALYTICS_ID###", frontendProperties.getIdGoogleAnalytics());
+            page.setGoogleAnalyticScriptHtml(html);
+        } else {
+            page.setGoogleAnalyticScriptHtml("");
+        }
+        log.debug("--------------------------------------------------------------------");
+        log.debug("setupPage = "+page.toString());
+        log.debug("--------------------------------------------------------------------");
+        model.put("page", page);
         return model;
     }
 

@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
         return getTemplate(request, ex);
     }
 
+    /*
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView exception(final HttpServletRequest request, final Throwable throwable, final Model model) {
@@ -46,6 +47,7 @@ public class GlobalExceptionHandler {
         return mav;
     }
 
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleIllegalArgumentException(HttpServletRequest request, Exception ex) {
@@ -53,6 +55,7 @@ public class GlobalExceptionHandler {
         log.warn(ex.getMessage());
         return getTemplate(request, ex);
     }
+    */
 
     private ModelAndView getTemplate(HttpServletRequest request, Exception ex) {
         ModelAndView mav = new ModelAndView();

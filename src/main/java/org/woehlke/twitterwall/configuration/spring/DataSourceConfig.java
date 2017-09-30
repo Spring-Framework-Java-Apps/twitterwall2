@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.configuration;
+package org.woehlke.twitterwall.configuration.spring;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
