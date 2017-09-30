@@ -1,9 +1,13 @@
 # [Twitterwall2](https://github.com/phasenraum2010/twitterwall2)
 
+[![Build Status](https://travis-ci.org/phasenraum2010/twitterwall2.svg?branch=master)](https://travis-ci.org/phasenraum2010/twitterwall2)
+
+## Abstract
+
 + Twitterwall with [spring:boot](https://projects.spring.io/spring-boot/) for [heroku](https://heroku.com)
 + More Info: [https://phasenraum2010.github.io/twitterwall2/](https://phasenraum2010.github.io/twitterwall2/)
 
-## Development 
+## Development
 
 ### Repository
 - Get Source Code: git clone [https://github.com/phasenraum2010/twitterwall2.git](https://github.com/phasenraum2010/twitterwall2.git)
