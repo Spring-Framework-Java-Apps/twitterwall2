@@ -1,4 +1,4 @@
-package org.woehlke.twitterwall.frontend.controller.pages;
+package org.woehlke.twitterwall.frontend.errorhandling;
 
 
 import org.slf4j.Logger;
